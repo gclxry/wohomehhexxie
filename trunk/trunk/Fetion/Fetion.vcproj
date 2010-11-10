@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\BaseDlg\Include;..\Output\FetionSF\Include;..\Output\RichEdit\Include;..\Output\BaseCtrl\Lib\Debug;..\Output\BaseDlg\Lib\Debug;..\Output\FetionSF\Lib\Debug;..\Output\RichEdit\Lib\Debug"
+				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\BaseDlg\Include;..\Output\FetionSF\Include;..\Output\RichEdit\Include;..\Common\GDIPlus\Includes"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -62,8 +62,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="BaseCtrl.lib BaseDlg.lib FetionSF.lib RichEdit.lib"
+				AdditionalDependencies="BaseCtrl.lib BaseDlg.lib FetionSF.lib RichEdit.lib GdiPlus.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\Output\BaseCtrl\Lib\Debug;..\Output\BaseDlg\Lib\Debug;..\Output\FetionSF\Lib\Debug;..\Common\GDIPlus\Lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -119,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\BaseDlg\Include;..\Output\FetionSF\Include;..\Output\RichEdit\Include;..\Output\BaseCtrl\Lib\Release;..\Output\BaseDlg\Lib\Release;..\Output\FetionSF\Lib\Release;..\Output\RichEdit\Lib\Release"
+				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\BaseDlg\Include;..\Output\FetionSF\Include;..\Output\RichEdit\Include;..\Common\GDIPlus\Includes"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -138,8 +139,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="BaseCtrl.lib BaseDlg.lib FetionSF.lib RichEdit.lib"
+				AdditionalDependencies="BaseCtrl.lib BaseDlg.lib FetionSF.lib RichEdit.lib GdiPlus.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\Output\BaseCtrl\Lib\Release;..\Output\BaseDlg\Lib\Release;..\Output\FetionSF\Lib\Release;..\Common\GDIPlus\Lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"

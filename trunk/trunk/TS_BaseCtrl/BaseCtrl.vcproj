@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="FetionSF"
-	ProjectGUID="{CDEC508A-8BCB-451D-9BA7-C3B1B58428AD}"
-	RootNamespace="FetionSF"
+	Name="BaseCtrl"
+	ProjectGUID="{CDEC508A-8BCB-451D-9BA7-C3B1B584AD98}"
+	RootNamespace="BaseCtrl"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -17,8 +17,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\Output\$(ProjectName)\Lib\$(ConfigurationName)"
-			IntermediateDirectory="..\..\TEMP\$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="..\Output\$(ProjectName)\Lib\$(ConfigurationName)"
+			IntermediateDirectory="..\TEMP\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			UseOfATL="1"
 			CharacterSet="1"
@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\..\Output\FetionSF\Include;..\GDIPlus\Includes"
+				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\FetionSF\Include;..\Common\GDIPlus\Includes"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -62,8 +62,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="GdiPlus.lib"
-				AdditionalLibraryDirectories="..\GDIPlus\Lib"
+				AdditionalDependencies="FetionSF.lib"
+				AdditionalLibraryDirectories="..\Output\FetionSF\Lib\Debug;..\Common\GDIPlus\Lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -83,8 +83,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\Output\$(ProjectName)\Lib\$(ConfigurationName)"
-			IntermediateDirectory="..\..\TEMP\$(ProjectName)\$(ConfigurationName)"
+			OutputDirectory="..\Output\$(ProjectName)\Lib\$(ConfigurationName)"
+			IntermediateDirectory="..\TEMP\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			UseOfATL="1"
 			CharacterSet="1"
@@ -107,7 +107,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\;..\..\Output\FetionSF\Include;..\GDIPlus\Includes"
+				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\FetionSF\Include;..\Common\GDIPlus\Includes"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -126,8 +126,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="GdiPlus.lib"
-				AdditionalLibraryDirectories="..\GDIPlus\Lib"
+				AdditionalDependencies="FetionSF.lib"
+				AdditionalLibraryDirectories="..\Output\FetionSF\Lib\Release;..\Common\GDIPlus\Lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -149,30 +149,6 @@
 	<References>
 	</References>
 	<Files>
-		<Filter
-			Name="UiMethod"
-			>
-			<File
-				RelativePath=".\UiMethod.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Output\FetionSF\Include\UiMethod.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="ºê¡¢½á¹¹Ìå"
-			>
-			<File
-				RelativePath="..\..\Output\FetionSF\Include\GlobalDef.h"
-				>
-			</File>
-		</Filter>
-		<File
-			RelativePath="..\..\Output\FetionSF\Include\FetionSF.h"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
