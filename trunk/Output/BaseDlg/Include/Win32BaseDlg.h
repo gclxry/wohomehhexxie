@@ -1,0 +1,97 @@
+
+#pragma once
+#include "GlobalDef.h"
+#include "WindowBase.h"
+
+#pragma warning(disable:4800)
+
+
+//////// Win32BaseDlg 窗口属性 //////////////////////////////////////////////////////////////
+// 是否有最小化按钮
+#define BFS_HAVE_MIN_BTN								(0x00000001)
+// 是否有最大化按钮
+#define BFS_HAVE_MAX_BTN								(0x00000002)
+// 是否为最大化
+#define BFS_MAX_WND										(0x00000004)
+// 鼠标是否第一次进入窗口
+#define BFS_FIRST_IN_WND								(0x00000008)
+// 是否支持拉伸边框操作
+#define BFS_CAN_DRAW									(0x00000010)
+// 模式对话框
+#define BFS_MODAL_DLG									(0x00000020)
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+// 消息处理子类化
+LRESULT CALLBACK PuppetWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+class CWin32BaseDlg : public CWindowBase
+{
+public:
+	CWin32BaseDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId);
+	~CWin32BaseDlg(void);
+
+	// 消息处理
+	virtual LRESULT WndProc(UINT message, WPARAM wParam, LPARAM lParam);
+
+	// 模式对话框的现实方式
+	int DoModal();
+
+	// 非模式显示对话框
+	void OpenDialog();
+
+	// 对话框属性设置和判断
+	bool IsSetBfStyle(DWORD dwStyle) { return (m_dwBfStyle & dwStyle); };
+	void AddBfStyle(DWORD dwStyle) { m_dwBfStyle |= dwStyle; };
+	void DeleteBfStyle(DWORD dwStyle) { m_dwBfStyle &= (~dwStyle); };
+
+	// 设置冻结窗口状态，冻结状态下，不响应鼠标移动消息。
+	void SetFreezeDlg(bool bIsFreeze) { m_bIsFreeze = bIsFreeze; };
+
+	// 设置窗口标题文字
+	void SetWindowText(CString strText) { m_strWindowText = strText; };
+
+protected:
+	virtual void OnPaint(HDC hPaintDc) {};
+	virtual void OnDestroy() {};
+	virtual void OnCreate() {};
+	virtual LRESULT OnNcActive(UINT message, WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnNcCalcSize(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnKillFocus(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnEraseBkgnd(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnNcPaint(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnMouseLeave(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnMouseMove(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnLButtonDown(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnLButtonUp(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnLButtonDblClk(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnGetMinMaxInfo(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnNcHitTest(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnEnterSizeMove(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnExitSizeMove(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnMove(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnTimer(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnActivateApp(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnSizeProc(WPARAM wParam, LPARAM lParam);
+
+protected:
+	bool CreateDlg();
+	ATOM RegisterBfoClass();
+	bool InitInstance();
+	void EndThisDialog();
+
+protected:
+	// 父窗口句柄
+	HWND m_hParent;
+	// 窗口属性
+	DWORD m_dwBfStyle;
+	// 用户强制退出
+	bool m_bCoerceEnd;
+	// 窗口图标ID
+	int m_nIconId;
+	// 窗口标题文字
+	CString m_strWindowText;
+	// 是否冻结窗口
+	bool m_bIsFreeze;
+	// 窗口类名
+	static CString m_strWindowClass;
+};
