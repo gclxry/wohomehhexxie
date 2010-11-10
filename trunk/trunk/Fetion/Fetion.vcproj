@@ -184,6 +184,10 @@
 				RelativePath=".\Fetion.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\Fetion.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="其他"
@@ -193,10 +197,6 @@
 				Filter="h;hpp;hxx;hm;inl;inc;xsd"
 				UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 				>
-				<File
-					RelativePath=".\Fetion.h"
-					>
-				</File>
 				<File
 					RelativePath=".\Resource.h"
 					>
@@ -254,14 +254,50 @@
 		<Filter
 			Name="01 登录窗口"
 			>
+			<Filter
+				Name="1 创建布局"
+				>
+			</Filter>
+			<Filter
+				Name="2 窗口控制布局"
+				>
+			</Filter>
+			<Filter
+				Name="3 业务控制"
+				>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="02 主用户列表窗口"
 			>
+			<Filter
+				Name="1 创建布局"
+				>
+			</Filter>
+			<Filter
+				Name="2 窗口控制布局"
+				>
+			</Filter>
+			<Filter
+				Name="3 业务控制"
+				>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="03 聊天窗口"
 			>
+			<Filter
+				Name="1 创建布局"
+				>
+			</Filter>
+			<Filter
+				Name="2 窗口控制布局"
+				>
+			</Filter>
+			<Filter
+				Name="3 业务控制"
+				>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
