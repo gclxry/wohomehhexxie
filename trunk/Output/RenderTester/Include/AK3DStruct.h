@@ -2,7 +2,7 @@
 
 #define NAME_MAX_LEN 24
 
-#include "../AKListCommon/AKList.h"
+#include "AKList.h"
 
 //AK3D ¶¥µã½á¹¹
 struct AK3D_VERTEX

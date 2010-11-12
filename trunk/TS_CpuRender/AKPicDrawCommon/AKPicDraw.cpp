@@ -2,7 +2,7 @@
 
 #include "AKPicDraw.h"
 
-#include "../AKFileCommon/AKFile.h"
+#include "AKFile.h"
 
 CAKPicDraw::CAKPicDraw()
 {

@@ -1,8 +1,12 @@
+
 #include "stdafx.h"
+
+#include "gdiplus.h"
+using namespace Gdiplus;
 
 #include "AKLoadPic.h"
 
-#include <AFXPRIV2.H>
+//#include <AFXPRIV2.H>
 
 #include "sys/types.h"
 #include "sys/stat.h"
@@ -31,7 +35,7 @@ bool AKLoadPic(char *pFilePath,unsigned char **ppData,long *pWidth,long *pHeight
 		return FALSE;
 	
 	//临时空间
-	HGLOBAL hGlobal=GlobalAlloc(GMEM_MOVEABLE,file_len);
+	HGLOBAL hGlobal=GlobalAlloc(GMEM_MOVEABLE, file_len);
 	if(!hGlobal)
 		return FALSE;
 
@@ -40,18 +44,17 @@ bool AKLoadPic(char *pFilePath,unsigned char **ppData,long *pWidth,long *pHeight
 	if (g_spIPicture)
 		g_spIPicture.Release();
 
-	//打开JPG文件
-	BOOL rt;
-	CFile file;
-	rt=file.Open(pFilePath,CFile::modeRead|CFile::shareDenyWrite);
-	if(!rt)
+	//打开文件
+	FILE *pFile = NULL;
+	fopen_s(&pFile, pFilePath, "rb");
+	if (pFilePath == NULL)
 		return FALSE;
 
-	//载入JPG文件内容
-	file.Read(pData_Tmp,file_len);
+	//载入文件内容
+	fread(pData_Tmp, 1, file_len, pFile);
+	fclose(pFile);
 
 	IStream* pstm=NULL;
-
 	GlobalUnlock(hGlobal);
 	CreateStreamOnHGlobal(hGlobal,TRUE,&pstm);
 
@@ -69,31 +72,25 @@ bool AKLoadPic(char *pFilePath,unsigned char **ppData,long *pWidth,long *pHeight
 	OLE_HANDLE pHandle;
 	g_spIPicture->get_Handle(&pHandle);
 
-	//附加到CBitmap对象
-	CBitmap bmp;
-	bmp.Attach((HBITMAP)pHandle);
+	//取位图尺寸
+	USES_CONVERSION;
+	Image GetImg(A2W(pFilePath));
 
-	//取JPG位图尺寸
-	BITMAP bitmap;
-	bmp.GetBitmap(&bitmap);
 
 	//创建位图数组
 	unsigned long w,h;
-	w=bitmap.bmWidth;
-	h=bitmap.bmHeight;
+	w=GetImg.GetWidth();
+	h=GetImg.GetHeight();
 	//
 	unsigned long l=w*h*4*sizeof(unsigned char);
 	
 	unsigned char *pData=new unsigned char[l];
 	if(!pData)
-	{
 		return FALSE;
-	}
+
 	unsigned char *pData2=new unsigned char[l];
 	if(!pData2)
-	{
 		return FALSE;
-	}
 
 	BITMAPINFOHEADER bih;
 	bih.biBitCount=32;//bitmap.bmBitsPixel;
@@ -109,11 +106,9 @@ bool AKLoadPic(char *pFilePath,unsigned char **ppData,long *pWidth,long *pHeight
 	bih.biYPelsPerMeter=0;
 
 	//
-	HDC hDC=CreateDC("DISPLAY",NULL,NULL,NULL);
+	HDC hDC = CreateDC(_T("DISPLAY"),NULL,NULL,NULL);
 
 	GetDIBits(hDC,(HBITMAP)pHandle,0,bih.biHeight,pData,(BITMAPINFO*)&bih,DIB_RGB_COLORS);
-
-	//bmp.GetBitmapBits(l,pData);
 
 	//用GetDIBits取位图数据后,图像是倒置的,需要作一下处理
 	long i;
@@ -127,9 +122,6 @@ bool AKLoadPic(char *pFilePath,unsigned char **ppData,long *pWidth,long *pHeight
 	pic_height=h;
 
 	delete[] pData;
-
-	//关闭文件
-	file.Close();
 
 	GlobalFree(hGlobal);
 

@@ -2,8 +2,8 @@
 #ifndef _AK3DMODELMGR_H_
 #define _AK3DMODELMGR_H_
 
-#include "../AK3DCommon/AK3DBonesMgr.h"
-#include "../AK2DUICommon/AK2DUI.h"
+#include "AK3DBonesMgr.h"
+#include "AK2DUI.h"
 
 //AK3D 多边形结构
 struct AK3D_POLYGON

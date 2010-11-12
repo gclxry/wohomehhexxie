@@ -3,7 +3,7 @@
 #ifndef _AKMEM_H_
 #define _AKMEM_H_
 
-#include "../AKListCommon/AKList.h"
+#include "AKList.h"
 
 /*
 #ifdef _DEBUG
