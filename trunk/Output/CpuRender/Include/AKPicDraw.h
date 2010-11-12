@@ -162,8 +162,10 @@ public:
 	{
 		static CAKPicDraw AKPicDrawList[AK_PIC_DRAW_MAX_COUNT];
 
-		if(uID<AK_PIC_DRAW_MAX_COUNT)return &AKPicDrawList[uID];
-		else return NULL;
+		if(uID < AK_PIC_DRAW_MAX_COUNT)
+			return &AKPicDrawList[uID];
+		else
+			return NULL;
 	}
     
 public:

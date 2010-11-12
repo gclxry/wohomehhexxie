@@ -25,7 +25,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
                      LPTSTR    lpCmdLine,
                      int       nCmdShow)
 {
-	ULONG_PTR gdiplusToken;
+	ULONG_PTR gdiplusToken = NULL;
 	//初始化gdiplus的环境
 	GdiplusStartupInput gdiplusStartupInput;
 	// 初始化GDI+.
@@ -176,14 +176,24 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		OnSize(wParam, lParam);
 		break;
 
-//	case WM_ERASEBKGND:
-//		return 1;
+	case WM_ERASEBKGND:
+		return 1;
 
 	default:
 		break; 
 	}
 
 	return DefWindowProc(hWnd, message, wParam, lParam);
+}
+
+void OnTimer(WPARAM wParam, LPARAM lParam)
+{
+	int wTimerID = (int)wParam;
+	if (wTimerID == 0)
+	{
+		//::RedrawWindow(g_hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE);
+		::InvalidateRect(g_hWnd, NULL, true);
+	}
 }
 
 void OnSize(WPARAM wParam, LPARAM lParam)
@@ -195,15 +205,6 @@ void OnSize(WPARAM wParam, LPARAM lParam)
 	CAKPicDraw::GetInst()->SelectPic(m_pBmpData,m_BmpWidth,m_BmpHeight);
 
 	CAK3DRender::GetInst()->SelectPicDraw(CAKPicDraw::GetInst());
-}
-
-void OnTimer(WPARAM wParam, LPARAM lParam)
-{
-	int wTimerID = (int)wParam;
-	if (wTimerID == 0)
-	{
-		::InvalidateRect(g_hWnd, NULL, true);
-	}
 }
 
 void OnCreate()
@@ -254,6 +255,7 @@ void Draw(HWND hWnd, HDC hdc)
 		HBITMAP hMemoryBitmap = ::CreateCompatibleBitmap(hdc, WndRect.Width(), WndRect.Height());
 		if (hMemoryBitmap != NULL)
 		{
+			::SelectObject(hMemoryDC, hMemoryBitmap);
 			DrawGdiPlus(hWnd, hMemoryDC, hMemoryBitmap);
 			::BitBlt(hdc, 0, 0, WndRect.Width(), WndRect.Height(), hMemoryDC, 0, 0, SRCCOPY);
 			::DeleteObject(hMemoryBitmap);
@@ -272,7 +274,7 @@ void DrawGdiPlus(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	// 背景色，透明度：200
 	SolidBrush FillBrush(Color(200, 255, 0, 255));
 	Grap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());*/
-	
+
 	CRect rc;
 	::GetClientRect(g_hWnd, &rc);
 
@@ -307,13 +309,11 @@ void DrawGdiPlus(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	CAK3DRender::GetInst()->DrawRect2(&v1,&v2,&v3,&v4,uv1,uv2,uv3,uv4,true);
 
 	//把位图显示出来
-	DisplayBmpData(hMemoryDC, hMemoryBitmap,0,0,m_pBmpData,m_BmpHeight,m_BmpWidth);
+	DisplayBmpData(hMemoryDC,hMemoryBitmap,0,0,m_pBmpData,m_BmpHeight,m_BmpWidth);
 }
 
 void DisplayBmpData(HDC hMemoryDC, HBITMAP hMemoryBitmap, long x, long y, unsigned char *pBmp, long rows, long cols)
 {
-	::SetBkMode(hMemoryDC, 0);
-
 	//获取当前DC的像素显示位数(16/24/32)
 	int BitCount=::GetDeviceCaps(hMemoryDC, BITSPIXEL);
 	switch(BitCount)

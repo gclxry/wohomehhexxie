@@ -4,8 +4,6 @@
 
 #include <atlbase.h>
 
-//读取JPG图片文件用
-CComQIPtr<IPicture> g_spIPicture;
 
 
 //取文件大小

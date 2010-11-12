@@ -136,8 +136,10 @@ public:
 	{
 		static CAK3DRender AK3DRenderList[AK_3D_RENDER_MAX_COUNT];
 
-		if(uID<AK_3D_RENDER_MAX_COUNT)return &AK3DRenderList[uID];
-		else return NULL;
+		if(uID<AK_3D_RENDER_MAX_COUNT)
+			return &AK3DRenderList[uID];
+		else
+			return NULL;
 	}
 
 	CAK3DRender();

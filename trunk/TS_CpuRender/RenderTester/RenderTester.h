@@ -18,6 +18,7 @@ void OnSize(WPARAM wParam, LPARAM lParam);
 void Draw(HWND hWnd, HDC hdc);
 void DrawGdiPlus(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap);
 
+void OnPaint(HDC hDC);
 
 bool SetBmpData(long w,long h);
 void DisplayBmpData(HDC hMemoryDC, HBITMAP hMemoryBitmap, long x, long y, unsigned char *pBmp, long rows, long cols);
