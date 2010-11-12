@@ -76,6 +76,8 @@ bool AKLoadPic(char *pFilePath,unsigned char **ppData,long *pWidth,long *pHeight
 	USES_CONVERSION;
 	Image GetImg(A2W(pFilePath));
 
+	Graphics DoGrap(&GetImg);
+
 
 	//创建位图数组
 	unsigned long w,h;

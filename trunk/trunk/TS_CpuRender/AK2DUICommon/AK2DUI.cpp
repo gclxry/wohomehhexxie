@@ -663,10 +663,12 @@ void CAK2DUI::SetUIColor(struct AK_2D_UI *pUI,unsigned char r,unsigned char g,un
 
 bool CAK2DUI::SetUIText(struct AK_2D_UI *pUI,char *pStr)
 {
-	if(!pUI->pStr)return false;
+	if(!pUI->pStr)
+		return false;
 
 	unsigned long uLength=strlen(pStr);
-	if(uLength>pUI->uStrLength)return false;
+	if(uLength>pUI->uStrLength)
+		return false;
 
 	strcpy(pUI->pStr,pStr);
 	return true;
@@ -684,7 +686,7 @@ bool CAK2DUI::SetUITextLength(struct AK_2D_UI *pUI,unsigned long uLength)
 	}
 
 	pUI->uStrLength=uLength;
-	strcpy(pUI->pStr,"");
+	pUI->pStr[0] = '\0';
 
 	return true;
 }

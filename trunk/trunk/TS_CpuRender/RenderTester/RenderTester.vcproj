@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\..\Common\GDIPlus\Includes;..\AK2DUICommon;..\AK3DCommon;..\AKFileCommon;..\AKListCommon;..\AKLoadPic;..\AKMemCommon;..\AKPicDrawCommon;..\..\Output\RenderTester\Include"
+				AdditionalIncludeDirectories=".\;..\..\Common\GDIPlus\Includes;..\AK2DUICommon;..\AK3DCommon;..\AKFileCommon;..\AKListCommon;..\AKLoadPic;..\AKMemCommon;..\AKPicDrawCommon;..\..\Output\CpuRender\Include;..\..\Output\FetionSF\Include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -62,9 +62,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="GdiPlus.lib"
+				AdditionalDependencies="GdiPlus.lib FetionSF.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\Common\GDIPlus\Lib"
+				AdditionalLibraryDirectories="..\..\Common\GDIPlus\Lib;..\..\Output\FetionSF\Lib\Debug"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -120,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\;..\..\Common\GDIPlus\Includes;..\AK2DUICommon;..\AK3DCommon;..\AKFileCommon;..\AKListCommon;..\AKLoadPic;..\AKMemCommon;..\AKPicDrawCommon;..\..\Output\RenderTester\Include"
+				AdditionalIncludeDirectories=".\;..\..\Common\GDIPlus\Includes;..\AK2DUICommon;..\AK3DCommon;..\AKFileCommon;..\AKListCommon;..\AKLoadPic;..\AKMemCommon;..\AKPicDrawCommon;..\..\Output\CpuRender\Include;..\..\Output\FetionSF\Include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -139,9 +139,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="GdiPlus.lib"
+				AdditionalDependencies="GdiPlus.lib FetionSF.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\Common\GDIPlus\Lib"
+				AdditionalLibraryDirectories="..\..\Common\GDIPlus\Lib;..\..\Output\FetionSF\Lib\Release"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -181,6 +181,14 @@
 			Name="Ö÷º¯Êý"
 			>
 			<File
+				RelativePath="..\..\Output\CpuRender\Include\CpuRender.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\CpuRender\Include\CpuRenderDef.h"
+				>
+			</File>
+			<File
 				RelativePath=".\RenderTester.cpp"
 				>
 			</File>
@@ -197,7 +205,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Output\RenderTester\Include\AK2DUI.h"
+				RelativePath="..\..\Output\CpuRender\Include\AK2DUI.h"
 				>
 			</File>
 		</Filter>
@@ -209,7 +217,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Output\RenderTester\Include\AK3DBonesMgr.h"
+				RelativePath="..\..\Output\CpuRender\Include\AK3DBonesMgr.h"
 				>
 			</File>
 			<File
@@ -217,7 +225,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Output\RenderTester\Include\AK3DModelMgr.h"
+				RelativePath="..\..\Output\CpuRender\Include\AK3DModelMgr.h"
 				>
 			</File>
 			<File
@@ -225,11 +233,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Output\RenderTester\Include\AK3DRender.h"
+				RelativePath="..\..\Output\CpuRender\Include\AK3DRender.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Output\RenderTester\Include\AK3DStruct.h"
+				RelativePath="..\..\Output\CpuRender\Include\AK3DStruct.h"
 				>
 			</File>
 			<File
@@ -237,7 +245,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Output\RenderTester\Include\Matrix4X4Mgr.h"
+				RelativePath="..\..\Output\CpuRender\Include\Matrix4X4Mgr.h"
 				>
 			</File>
 		</Filter>
@@ -311,7 +319,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Output\RenderTester\Include\AKFile.h"
+				RelativePath="..\..\Output\CpuRender\Include\AKFile.h"
 				>
 			</File>
 		</Filter>
@@ -323,7 +331,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Output\RenderTester\Include\AKList.h"
+				RelativePath="..\..\Output\CpuRender\Include\AKList.h"
 				>
 			</File>
 		</Filter>
@@ -339,7 +347,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Output\RenderTester\Include\targetver.h"
+				RelativePath="..\..\Output\CpuRender\Include\targetver.h"
 				>
 			</File>
 		</Filter>
@@ -351,7 +359,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Output\RenderTester\Include\AKMem.h"
+				RelativePath="..\..\Output\CpuRender\Include\AKMem.h"
 				>
 			</File>
 		</Filter>
@@ -363,7 +371,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Output\RenderTester\Include\AKPicDraw.h"
+				RelativePath="..\..\Output\CpuRender\Include\AKPicDraw.h"
 				>
 			</File>
 		</Filter>

@@ -47,7 +47,7 @@ struct AK3D_BONES * CAK3DBonesMgr::CreateBones()
 
 	CMatrix4X4Mgr::GetSingle().SetIdentityMatrix(pNew->DestMatrix);
 
-	strcpy(pNew->Name,"");
+	pNew->Name[0] = '\0';
 
 	pNew->pFather=NULL;
 
