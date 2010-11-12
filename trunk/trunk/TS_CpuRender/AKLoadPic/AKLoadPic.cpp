@@ -11,6 +11,9 @@ using namespace Gdiplus;
 #include "sys/types.h"
 #include "sys/stat.h"
 
+//读取JPG图片文件用
+CComQIPtr<IPicture> g_spIPicture;
+
 unsigned long get_file_len(char *path_name)
 {
 	struct stat buf;
@@ -75,8 +78,6 @@ bool AKLoadPic(char *pFilePath,unsigned char **ppData,long *pWidth,long *pHeight
 	//取位图尺寸
 	USES_CONVERSION;
 	Image GetImg(A2W(pFilePath));
-
-	Graphics DoGrap(&GetImg);
 
 
 	//创建位图数组
