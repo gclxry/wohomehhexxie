@@ -25,10 +25,9 @@ bool CAKFile::Open(char *pFilePathName,char *pMethod)
 {
 	Close();
 
-	m_pFile=fopen(pFilePathName,pMethod);
+	fopen_s(&m_pFile,pFilePathName,pMethod);
 
-	if(m_pFile)return true;
-	else return false;
+	return (m_pFile != NULL);
 }
 
 bool CAKFile::Read(void *pBuf,unsigned long uSize)
