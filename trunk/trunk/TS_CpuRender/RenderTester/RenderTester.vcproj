@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\Common\GDIPlus\Includes"
+				AdditionalIncludeDirectories=".\;..\..\Common\GDIPlus\Includes;..\AK2DUICommon;..\AK3DCommon;..\AKFileCommon;..\AKListCommon;..\AKLoadPic;..\AKMemCommon;..\AKPicDrawCommon;..\..\Output\RenderTester\Include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -120,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\Common\GDIPlus\Includes"
+				AdditionalIncludeDirectories=".\;..\..\Common\GDIPlus\Includes;..\AK2DUICommon;..\AK3DCommon;..\AKFileCommon;..\AKListCommon;..\AKLoadPic;..\AKMemCommon;..\AKPicDrawCommon;..\..\Output\RenderTester\Include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -190,6 +190,58 @@
 			</File>
 		</Filter>
 		<Filter
+			Name="AK2DUICommon"
+			>
+			<File
+				RelativePath="..\AK2DUICommon\AK2DUI.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\RenderTester\Include\AK2DUI.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="AK3DCommon"
+			>
+			<File
+				RelativePath="..\AK3DCommon\AK3DBonesMgr.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\RenderTester\Include\AK3DBonesMgr.h"
+				>
+			</File>
+			<File
+				RelativePath="..\AK3DCommon\AK3DModelMgr.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\RenderTester\Include\AK3DModelMgr.h"
+				>
+			</File>
+			<File
+				RelativePath="..\AK3DCommon\AK3DRender.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\RenderTester\Include\AK3DRender.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\RenderTester\Include\AK3DStruct.h"
+				>
+			</File>
+			<File
+				RelativePath="..\AK3DCommon\Matrix4X4Mgr.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\RenderTester\Include\Matrix4X4Mgr.h"
+				>
+			</File>
+		</Filter>
+		<Filter
 			Name="ÆäËû"
 			>
 			<Filter
@@ -250,6 +302,70 @@
 					>
 				</File>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="AKFileCommon"
+			>
+			<File
+				RelativePath="..\AKFileCommon\AKFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\RenderTester\Include\AKFile.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="AKListCommon"
+			>
+			<File
+				RelativePath="..\AKListCommon\AKList.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\RenderTester\Include\AKList.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="AKLoadPic"
+			>
+			<File
+				RelativePath="..\AKLoadPic\AKLoadPic.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\AKLoadPic\AKLoadPic.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\RenderTester\Include\targetver.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="AKMemCommon"
+			>
+			<File
+				RelativePath="..\AKMemCommon\AKMem.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\RenderTester\Include\AKMem.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="AKPicDrawCommon"
+			>
+			<File
+				RelativePath="..\AKPicDrawCommon\AKPicDraw.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\RenderTester\Include\AKPicDraw.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

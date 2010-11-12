@@ -1,9 +1,9 @@
 #ifndef _AK2DUI_H_
 #define _AK2DUI_H_
 
-#include "../AKPicDrawCommon/AKPicDraw.h"
+#include "AKPicDraw.h"
 
-#include "../AKListCommon/AKList.h"
+#include "AKList.h"
 
 //UI贴图结构(表示一张贴图)
 struct AK_2D_UI_PIC

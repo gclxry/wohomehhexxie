@@ -3,7 +3,7 @@
 #ifndef _AKPICDRAW_H_
 #define _AKPICDRAW_H_
 
-#include "../AKListCommon/AKList.h"
+#include "AKList.h"
 
 /*
 #ifdef _DEBUG

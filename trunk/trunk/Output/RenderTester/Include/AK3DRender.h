@@ -3,8 +3,8 @@
 #ifndef _AK3DRENDER_H_
 #define _AK3DRENDER_H_
 
-#include "../AKPicDrawCommon/AKPicDraw.h"
-#include "../AK2DUICommon/AK2DUI.h"
+#include "AKPicDraw.h"
+#include "AK2DUI.h"
 #include "AK3DModelMgr.h"
 
 class CAK3DRender
