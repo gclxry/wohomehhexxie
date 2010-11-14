@@ -153,6 +153,10 @@
 			Name="01 Win32基本对话框"
 			>
 			<File
+				RelativePath="..\Output\BaseDlg\Include\BaseDlg.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Win32BaseDlg.cpp"
 				>
 			</File>
@@ -160,14 +164,54 @@
 				RelativePath="..\Output\BaseDlg\Include\Win32BaseDlg.h"
 				>
 			</File>
-			<File
-				RelativePath="..\Output\BaseDlg\Include\WindowBase.h"
+			<Filter
+				Name="基类"
 				>
-			</File>
+				<File
+					RelativePath=".\WindowBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\BaseDlg\Include\WindowBase.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="02 普通高效对话框"
 			>
+			<Filter
+				Name="高效对话框"
+				>
+				<File
+					RelativePath=".\HighEfficiencyDlg.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\BaseDlg\Include\HighEfficiencyDlg.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="子窗口消息回调函数"
+				>
+				<File
+					RelativePath="..\Output\BaseDlg\Include\DirectUiWndMsgCtrl.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="子窗口管理器"
+				>
+				<File
+					RelativePath=".\DirectUiManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\BaseDlg\Include\DirectUiManager.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="03 异形动态对话框"

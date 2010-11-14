@@ -40,15 +40,12 @@ public:
 	void OpenDialog();
 
 	// 对话框属性设置和判断
-	bool IsSetBfStyle(DWORD dwStyle) { return (m_dwBfStyle & dwStyle); };
-	void AddBfStyle(DWORD dwStyle) { m_dwBfStyle |= dwStyle; };
-	void DeleteBfStyle(DWORD dwStyle) { m_dwBfStyle &= (~dwStyle); };
+	bool IsSetBfStyle(DWORD dwStyle) { return (m_dwWndStyle & dwStyle); };
+	void AddBfStyle(DWORD dwStyle) { m_dwWndStyle |= dwStyle; };
+	void DeleteBfStyle(DWORD dwStyle) { m_dwWndStyle &= (~dwStyle); };
 
 	// 设置冻结窗口状态，冻结状态下，不响应鼠标移动消息。
 	void SetFreezeDlg(bool bIsFreeze) { m_bIsFreeze = bIsFreeze; };
-
-	// 设置窗口标题文字
-	void SetWindowText(CString strText) { m_strWindowText = strText; };
 
 protected:
 	virtual void OnPaint(HDC hPaintDc) {};
@@ -80,18 +77,10 @@ protected:
 	void EndThisDialog();
 
 protected:
-	// 父窗口句柄
-	HWND m_hParent;
-	// 窗口属性
-	DWORD m_dwBfStyle;
 	// 用户强制退出
 	bool m_bCoerceEnd;
 	// 窗口图标ID
 	int m_nIconId;
-	// 窗口标题文字
-	CString m_strWindowText;
 	// 是否冻结窗口
 	bool m_bIsFreeze;
-	// 窗口类名
-	static CString m_strWindowClass;
 };
