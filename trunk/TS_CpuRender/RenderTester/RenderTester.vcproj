@@ -375,6 +375,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="AKTrajectoryCommon"
+			>
+			<File
+				RelativePath="..\AKTrajectoryCommon\AKTrajectory.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\CpuRender\Include\AKTrajectory.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

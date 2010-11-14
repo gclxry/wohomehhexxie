@@ -27,19 +27,3 @@ using namespace Gdiplus;
 #define IS_SAVE_HANDLE(hHandle)					(((hHandle) != NULL) && ((hHandle) != INVALID_HANDLE_VALUE))
 #define SAVE_CLOSE_HANDLE(hHandle)				{if(IS_SAVE_HANDLE(hHandle)) ::CloseHandle(hHandle); (hHandle) = NULL;}
 
-
-// Õ÷‘≤πÏº£¿‡–Õ
-enum ELLIPSE_GET_TYPE
-{
-	// ◊Û∞Î≤øÕ÷‘≤πÏº£
-	EGT_LEFT	= 1,
-	// ”“∞Î≤øÕ÷‘≤πÏº£
-	EGT_RIGHT	= 2,
-	// …œ∞Î≤øÕ÷‘≤πÏº£
-	EGT_TOP		= 3,
-	// œ¬∞Î≤øÕ÷‘≤πÏº£
-	EGT_DOWN	= 4,
-};
-
-typedef std::vector<CPoint> POINT_VET;
-typedef std::list<CPoint> POINT_LIST;
