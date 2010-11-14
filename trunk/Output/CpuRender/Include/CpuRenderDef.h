@@ -11,6 +11,7 @@
 
 using namespace std;
 
+// 定义图片的四个顶点（四角坐标）
 #define DEF_VERTEX(varName,x,y,z)\
 	AK3D_VERTEX varName;\
 	varName.xDest=x;\
