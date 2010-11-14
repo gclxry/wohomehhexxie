@@ -216,7 +216,7 @@ void OnCreate()
 	long Width,Height;
 	struct AK_2D_UI_PIC *pUIPic;
 
-	CString strPath = GetAppPath() + _T("山水画.jpg");
+	CString strPath = CUiMethod::GetAppPath() + _T("山水画.jpg");
 	
 	AKLoadPic(W2A(strPath.LockBuffer()),&pData,&Width,&Height);
 	strPath.UnlockBuffer();

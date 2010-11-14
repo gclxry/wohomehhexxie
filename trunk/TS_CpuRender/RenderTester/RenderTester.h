@@ -2,13 +2,12 @@
 
 #include "resource.h"
 
-#include "atltypes.h"
 #include "GdiPlus.h"
 using namespace Gdiplus;
 
 #include "Fetionsf.h"
-
 #include "CpuRender.h"
+
 #include "AkLoadPic.h"
 
 void OnCreate();
