@@ -199,6 +199,26 @@
 					RelativePath="..\Output\BaseDlg\Include\DirectUiManager.h"
 					>
 				</File>
+				<Filter
+					Name="子窗口列表"
+					>
+					<File
+						RelativePath=".\TList.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\Output\BaseDlg\Include\TList.h"
+						>
+					</File>
+					<File
+						RelativePath=".\WndList.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\Output\BaseDlg\Include\WndList.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -244,6 +264,22 @@
 		<Filter
 			Name="201 图片资源管理"
 			>
+			<File
+				RelativePath=".\GifImage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseDlg\Include\GifImage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ResImage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseDlg\Include\ResImage.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath="..\Output\BaseDlg\Include\BaseDlg.h"
