@@ -2,12 +2,12 @@
 #include "HighEfficiencyDlg.h"
 #include "BfMenuHook.h"
 
-#define __base_super					CWin32BaseDlg
+#define __base_super					CDirectUiBaseDlg
 
 bool CHighEfficiency::m_bIsNeedLButtonUpMsg = false;
 
 CHighEfficiency::CHighEfficiency(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
-: CWin32BaseDlg(hInstance, hParentWnd, nIconId)
+: CDirectUiBaseDlg(hInstance, hParentWnd, nIconId)
 {
 	m_bIsHaveCaption = true;
 	m_pCaptionBar = NULL;
@@ -74,7 +74,7 @@ LRESULT CHighEfficiency::OnLButtonDown(WPARAM wParam, LPARAM lParam)
 	CPoint point(LOWORD(lParam), HIWORD(lParam));
 	m_UiManager.OnLButtonDown(nFlags, point);
 
-	if (CDirectUiWnd::IsWndLButtonDown())
+	if (CDirectUiWindow::IsWndLButtonDown())
 	{
 		SetCapture(m_hWnd);
 
@@ -263,7 +263,7 @@ LRESULT CHighEfficiency::OnTimer(WPARAM wParam, LPARAM lParam)
 LRESULT CHighEfficiency::OnActivateApp(WPARAM wParam, LPARAM lParam)
 {
 //	m_UiManager.OnActivateApp(wParam, lParam);
-	return CWin32BaseDlg::OnActivateApp(wParam, lParam);
+	return CDirectUiBaseDlg::OnActivateApp(wParam, lParam);
 }
 
 LRESULT CHighEfficiency::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
@@ -348,7 +348,7 @@ bool CHighEfficiency::IsReady()
 	return ((m_pCaptionBar != NULL || !m_bIsHaveCaption) && m_hWnd != NULL && ::IsWindow(m_hWnd));
 }
 
-bool CHighEfficiency::OnDirectUiWndMsgProc(int nMsgId, DWM_INFO &MsgInfo)
+bool CHighEfficiency::OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo)
 {
 	bool bRet = false;
 	if (IsReady())

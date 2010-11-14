@@ -6,7 +6,7 @@
 #pragma warning(disable:4800)
 
 
-//////// Win32BaseDlg 窗口属性 //////////////////////////////////////////////////////////////
+//////// DirectUiBaseDlg 窗口属性 //////////////////////////////////////////////////////////////
 // 是否有最小化按钮
 #define BFS_HAVE_MIN_BTN								(0x00000001)
 // 是否有最大化按钮
@@ -24,11 +24,11 @@
 // 消息处理子类化
 LRESULT CALLBACK PuppetWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-class CWin32BaseDlg : public CWindowBase
+class CDirectUiBaseDlg : public CWindowBase
 {
 public:
-	CWin32BaseDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId);
-	~CWin32BaseDlg(void);
+	CDirectUiBaseDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId);
+	~CDirectUiBaseDlg(void);
 
 	// 消息处理
 	virtual LRESULT WndProc(UINT message, WPARAM wParam, LPARAM lParam);

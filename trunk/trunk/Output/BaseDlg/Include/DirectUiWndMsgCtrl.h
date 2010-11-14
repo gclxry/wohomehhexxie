@@ -7,13 +7,13 @@ struct DWM_INFO
 	LPARAM lParam;
 };
 
-class CDirectUiWndMsgCtrl
+class CDirectUiWindowMsgCtrl
 {
 public:
-	CDirectUiWndMsgCtrl(void) {};
-	~CDirectUiWndMsgCtrl(void) {};
+	CDirectUiWindowMsgCtrl(void) {};
+	~CDirectUiWindowMsgCtrl(void) {};
 
-	virtual bool OnDirectUiWndMsgProc(int nMsgId, DWM_INFO &MsgInfo) = 0;
+	virtual bool OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo) = 0;
 };
 
 
