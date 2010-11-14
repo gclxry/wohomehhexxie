@@ -5,7 +5,7 @@
 #include "DirectUiDefs.h"
 #include "DirectUiWindowMsgCtrl.h"
 #include "ResImage.h"
-#include "Win32BaseDlg.h"
+#include "DirectUiDlg.h"
 
 class CDirectUiManager;
 
@@ -20,7 +20,7 @@ public:
 	static inline int GetDefaultWndId() { return ms_nDefaultWndId++; };
 
 	// 创建窗口
-	virtual bool CreateWnd(CWin32BaseDlg *pParentDlg, CDirectUiManager *pUiManager, CDirectUiWindowMsgCtrl *pMsgCtrl,
+	virtual bool CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManager, CDirectUiWindowMsgCtrl *pMsgCtrl,
 		CRect WndRect, int nWndId, WND_TYPE WndType, int nImageId = 0, CString strImagePath = _T(""), IMAGE_TYPE nImageType = IT_BMP);
 	// 移动窗口
 	virtual void MoveWindow(CRect ToRect, HDWP hWinPoslnfo);
@@ -59,8 +59,6 @@ public:
 	int GetWindowId() { return m_nWndId; };
 	// 删除背景图片
 	void DeleteBkgndImage();
-	// 取得定时器ID
-	static int GetTimerId() { return ms_nTimerId++; };
 
 	// 重回窗口
 	virtual void RedrawWindow(UINT flags = RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE);
@@ -156,8 +154,6 @@ private:
 	static int ms_nDefaultWndId;
 	// 取得焦点的窗口
 	static CDirectUiWindow* ms_pFocusWnd;
-	// 定时器ID号
-	static int ms_nTimerId;
 
 	static void UnloadDirectUiWindow()
 	{
@@ -176,7 +172,7 @@ protected:
 	DWORD m_dwWndAttr;
 	// 实体的父窗口
 	HWND m_hParent;
-	CWin32BaseDlg *m_pParentDlg;
+	CDirectUiDlg *m_pParentDlg;
 	// 消息处理类
 	CDirectUiWindowMsgCtrl *m_pMsgCtrl;
 	// 界面绘图管理

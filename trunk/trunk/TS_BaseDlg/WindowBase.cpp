@@ -1,7 +1,7 @@
 
 #include "WindowBase.h"
 
-HINSTANCE CWindowBase::m_hInstance = NULL;
+HINSTANCE CWindowBase::ms_hInstance = NULL;
 
 CWindowBase::CWindowBase(void)
 {
@@ -11,6 +11,7 @@ CWindowBase::CWindowBase(void)
 	m_PuppetWndType = PWT_WND;
 	m_dwWndStyle = 0;
 	m_strWindowText = _T("");
+	m_nTimerId = 5000;
 }
 
 CWindowBase::~CWindowBase(void)
@@ -85,4 +86,25 @@ void CWindowBase::CenterWindow(int cx, int cy)
 void CWindowBase::SetWindowText(CString strText)
 {
 	m_strWindowText = strText;
+}
+
+// 设置定时器
+int CWindowBase::SetTimer(UINT uElapse)
+{
+	int nId = -1;
+
+	if (IS_SAVE_HANDLE(m_hWnd))
+	{
+		nId = m_nTimerId++;
+		::SetTimer(m_hWnd, nId, uElapse, NULL);
+	}
+
+	return nId;
+}
+
+// 取消定时器
+void CWindowBase::KillTimer(int nId)
+{
+	if (IS_SAVE_HANDLE(m_hWnd))
+		::KillTimer(m_hWnd, nId);
 }

@@ -153,7 +153,7 @@ bool CDirectUiWindow::OnLButtonDblClkProc(UINT nFlags, CPoint point)
 	return bRet;
 }
 
-bool CDirectUiWindow::CreateWnd(CWin32BaseDlg *pParentDlg, CDirectUiManager *pUiManager, CDirectUiWindowMsgCtrl *pMsgCtrl,
+bool CDirectUiWindow::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManager, CDirectUiWindowMsgCtrl *pMsgCtrl,
 					   CRect WndRect, int nWndId, WND_TYPE WndType, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	bool bRet = false;

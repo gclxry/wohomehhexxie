@@ -37,8 +37,13 @@ public:
 	// 设置窗口标题文字
 	void SetWindowText(CString strText);
 
+	// 设置定时器
+	int SetTimer(UINT uElapse);
+	// 取消定时器
+	void KillTimer(int nId);
+
 protected:
-	static HINSTANCE m_hInstance;
+	static HINSTANCE ms_hInstance;
 
 	// 父窗口句柄
 	HWND m_hParent;
@@ -52,4 +57,6 @@ protected:
 	CString m_strWindowClass;
 	// 窗口标题文字
 	CString m_strWindowText;
+	// 定时器ID号
+	int m_nTimerId;
 };

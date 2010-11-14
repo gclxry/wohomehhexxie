@@ -333,7 +333,7 @@ CBfEdit* CDirectUiManager::CreateBfEdit(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect 
 	CBfEdit *pWnd = NULL;
 	if (IsReady())
 	{
-		pWnd = new CBfEdit(m_pParentDlg->m_hInstance);
+		pWnd = new CBfEdit(m_pParentDlg->ms_hInstance);
 		if (pWnd != NULL)
 		{
 			if (!pWnd->CreateWnd(m_pParentDlg, this, pMsgCtrl, WndRect, nWndId, DWT_EDIT, nImageId, strImagePath, nImageType))
