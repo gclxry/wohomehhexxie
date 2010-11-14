@@ -295,6 +295,7 @@ void DrawGdiPlus(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	//	DEF_VERTEX(v3,600,500,0);
 	//	DEF_VERTEX(v4,50,500,0);
 
+	// v1 左下，v2 右下，v3 右上，v4 左上
 	DEF_VERTEX(v1,200,100,0);
 	DEF_VERTEX(v2,400,50,0);
 	DEF_VERTEX(v3,400,500,0);
