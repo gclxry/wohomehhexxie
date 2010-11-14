@@ -46,7 +46,7 @@ CDirectUiBaseDlg::CDirectUiBaseDlg(HINSTANCE hInstance, HWND hParentWnd, int nIc
 	m_bIsFreeze = false;
 	m_PuppetWndType = PWT_WND;
 	m_hParent = hParentWnd;
-	m_hInstance = hInstance;
+	ms_hInstance = hInstance;
 	m_nIconId = nIconId;
 	m_strWindowText = _T("╥ипе");
 
@@ -66,7 +66,7 @@ int CDirectUiBaseDlg::DoModal()
 	memset(&msg, 0, sizeof(MSG));
 	if (CreateDlg())
 	{
-		hAccelTable = LoadAccelerators(m_hInstance, MAKEINTRESOURCE(m_nIconId));
+		hAccelTable = LoadAccelerators(ms_hInstance, MAKEINTRESOURCE(m_nIconId));
 
 		m_bCoerceEnd = false;
 		while (GetMessage(&msg, NULL, 0, 0) && !m_bCoerceEnd)
@@ -118,8 +118,8 @@ ATOM CDirectUiBaseDlg::RegisterBfoClass()
 	wcex.lpfnWndProc	= PuppetWndProc;
 	wcex.cbClsExtra		= 0;
 	wcex.cbWndExtra		= 0;
-	wcex.hInstance		= m_hInstance;
-	wcex.hIcon			= LoadIcon(m_hInstance, MAKEINTRESOURCE(m_nIconId));
+	wcex.hInstance		= ms_hInstance;
+	wcex.hIcon			= LoadIcon(ms_hInstance, MAKEINTRESOURCE(m_nIconId));
 	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW + 1);
 	wcex.lpszMenuName	= MAKEINTRESOURCE(m_nIconId);
@@ -134,7 +134,7 @@ bool CDirectUiBaseDlg::InitInstance()
 	DWORD dwStyle = WS_OVERLAPPEDWINDOW;
 
 	m_hWnd = ::CreateWindowEx(0, m_strWindowClass, m_strWindowText, dwStyle,
-		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, m_hParent, NULL, m_hInstance, this);
+		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, m_hParent, NULL, ms_hInstance, this);
 
 	if (!m_hWnd)
 		return false;

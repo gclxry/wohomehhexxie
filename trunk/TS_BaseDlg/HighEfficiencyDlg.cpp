@@ -11,7 +11,7 @@ CHighEfficiency::CHighEfficiency(HINSTANCE hInstance, HWND hParentWnd, int nIcon
 {
 	m_bIsHaveCaption = true;
 	m_pCaptionBar = NULL;
-	CBfMenuHook::InitMenuHook(m_hInstance);
+	CBfMenuHook::InitMenuHook(ms_hInstance);
 }
 
 CHighEfficiency::~CHighEfficiency(void)
