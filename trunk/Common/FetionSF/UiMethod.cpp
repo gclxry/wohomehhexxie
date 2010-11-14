@@ -1,23 +1,6 @@
 
 #include "UiMethod.h"
 
-CRect CUiMethod::GetWndRect(HWND hWnd)
-{
-	CRect WndRect(0, 0, 0, 0);
-	if (IS_SAVE_HANDLE(hWnd))
-	{
-		::GetWindowRect(hWnd, &WndRect);
-		int nW = WndRect.Width();
-		int nH = WndRect.Height();
-
-		WndRect.SetRectEmpty();
-		WndRect.right = nW;
-		WndRect.bottom = nH;
-	}
-
-	return WndRect;
-}
-
 CString CUiMethod::GetAppPath()
 {
 	CString strPath = _T("");
@@ -71,20 +54,6 @@ PointF CUiMethod::CPoint2PointF(CPoint &point)
 {
 	PointF ptF((REAL)point.x, (REAL)point.y);
 	return ptF;
-}
-
-CRect CUiMethod::CenterWnd(int cx, int cy)
-{
-	// 设置默认大小
-	CRect WorkArea(0, 0, 0, 0), CenterRect(0, 0, 0, 0);
-	::SystemParametersInfo(SPI_GETWORKAREA, 0, &WorkArea, 0);
-
-	CenterRect.left = (WorkArea.Width() - cx) / 2;
-	CenterRect.right = CenterRect.left + cx;
-	CenterRect.top = (WorkArea.Height() - cy) / 2;
-	CenterRect.bottom = CenterRect.top + cy;
-
-	return CenterRect;
 }
 
 void CUiMethod::SafeColor(int &nColor)

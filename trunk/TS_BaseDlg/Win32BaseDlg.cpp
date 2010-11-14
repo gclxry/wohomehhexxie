@@ -5,8 +5,6 @@
 #pragma warning(disable:4312)
 #pragma warning(disable:4244)
 
-HINSTANCE CWindowBase::m_hInstance = NULL;
-CString CWin32BaseDlg::m_strWindowClass = _T("BfBaseDlg");
 
 LRESULT CALLBACK PuppetWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -50,8 +48,6 @@ CWin32BaseDlg::CWin32BaseDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 	m_hParent = hParentWnd;
 	m_hInstance = hInstance;
 	m_nIconId = nIconId;
-	m_hWnd = NULL;
-	m_dwBfStyle = 0;
 	m_strWindowText = _T("╥ипе");
 
 	AddBfStyle(BFS_HAVE_MIN_BTN | BFS_HAVE_MAX_BTN | BFS_FIRST_IN_WND | BFS_CAN_DRAW);
