@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+
 #include "DirectUiManager.h"
 
 CDirectUiManager::CDirectUiManager(void)
@@ -13,7 +13,6 @@ CDirectUiManager::CDirectUiManager(void)
 	m_OutRingColor.SetValue(Color::MakeARGB(255, 163, 163, 163));
 	m_InRingColor.SetValue(Color::MakeARGB(255, 255, 255, 255));
 
-	m_bIsWndMax = false;
 	m_nTrueWndCtns = 0;
 }
 
@@ -24,7 +23,7 @@ CDirectUiManager::~CDirectUiManager(void)
 //-----------------------------------------------------------------------------
 // ÃèÊö: ³õÊ¼»¯GDIÒýÇæ
 //-----------------------------------------------------------------------------
-bool CDirectUiManager::InitManager(CWin32BaseDlg *pParentDlg)
+bool CDirectUiManager::InitManager(CDirectUiBaseDlg *pParentDlg)
 {
 	if (pParentDlg != NULL)
 	{
@@ -36,12 +35,12 @@ bool CDirectUiManager::InitManager(CWin32BaseDlg *pParentDlg)
 }
 
 // É¾³ýËùÓÐ´°¿Ú
-void CDirectUiManager::ClearAllDirectUiWnd()
+void CDirectUiManager::ClearAllDirectUiWindow()
 {
 	m_WndList.ClearAll();
 }
 
-void CDirectUiManager::ClearDirectUiWnd(CDirectUiWnd *pWnd)
+void CDirectUiManager::ClearDirectUiWindow(CDirectUiWindow *pWnd)
 {
 	if (pWnd != NULL)
 	{
@@ -54,7 +53,7 @@ bool CDirectUiManager::IsReady()
 	return IS_SAVE_HANDLE(m_hParent);
 }
 
-CBfComboSelBtnBar* CDirectUiManager::CreateBfComboSelBtnBar(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId)
+CBfComboSelBtnBar* CDirectUiManager::CreateBfComboSelBtnBar(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId)
 {
 	CBfComboSelBtnBar *pWnd = NULL;
 	if (IsReady())
@@ -77,7 +76,7 @@ CBfComboSelBtnBar* CDirectUiManager::CreateBfComboSelBtnBar(CDirectUiWndMsgCtrl 
 }
 
 
-CBfCaptionBar* CDirectUiManager::CreateBfCaptionBar(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, bool bHaveMinBtn, bool bHaveMaxBtn)
+CBfCaptionBar* CDirectUiManager::CreateBfCaptionBar(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, bool bHaveMinBtn, bool bHaveMaxBtn)
 {
 	CBfCaptionBar *pWnd = NULL;
 	if (IsReady())
@@ -101,7 +100,7 @@ CBfCaptionBar* CDirectUiManager::CreateBfCaptionBar(CDirectUiWndMsgCtrl *pMsgCtr
 	return pWnd;
 }
 
-CBfFlash* CDirectUiManager::CreateBfFlash(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, CString strFlashPath)
+CBfFlash* CDirectUiManager::CreateBfFlash(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, CString strFlashPath)
 {
 	CBfFlash *pWnd = NULL;
 	if (IsReady())
@@ -130,7 +129,7 @@ CBfFlash* CDirectUiManager::CreateBfFlash(CDirectUiWndMsgCtrl *pMsgCtrl, CRect W
 	return pWnd;
 }
 
-CBfStatic* CDirectUiManager::CreateBfStatic(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfStatic* CDirectUiManager::CreateBfStatic(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfStatic *pWnd = NULL;
 	if (IsReady())
@@ -152,7 +151,7 @@ CBfStatic* CDirectUiManager::CreateBfStatic(CDirectUiWndMsgCtrl *pMsgCtrl, CRect
 	return pWnd;
 }
 
-CBfPictureButton* CDirectUiManager::CreateBfPictureButton(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, BTN_STA_CTNS nPicStas, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfPictureButton* CDirectUiManager::CreateBfPictureButton(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, BTN_STA_CTNS nPicStas, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfPictureButton *pWnd = NULL;
 	if (IsReady())
@@ -175,7 +174,7 @@ CBfPictureButton* CDirectUiManager::CreateBfPictureButton(CDirectUiWndMsgCtrl *p
 	return pWnd;
 }
 
-CBfDropDownButton* CDirectUiManager::CreateBfDropDownButton(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfDropDownButton* CDirectUiManager::CreateBfDropDownButton(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfDropDownButton *pWnd = NULL;
 	if (IsReady())
@@ -197,7 +196,7 @@ CBfDropDownButton* CDirectUiManager::CreateBfDropDownButton(CDirectUiWndMsgCtrl 
 	return pWnd;
 }
 
-CBfGraduatedDropDownButton* CDirectUiManager::CreateBfGraduatedDropDownButton(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfGraduatedDropDownButton* CDirectUiManager::CreateBfGraduatedDropDownButton(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfGraduatedDropDownButton *pWnd = NULL;
 	if (IsReady())
@@ -219,7 +218,7 @@ CBfGraduatedDropDownButton* CDirectUiManager::CreateBfGraduatedDropDownButton(CD
 	return pWnd;
 }
 
-CBfNormalGraduatedButton* CDirectUiManager::CreateBfNormalGraduatedButton(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfNormalGraduatedButton* CDirectUiManager::CreateBfNormalGraduatedButton(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfNormalGraduatedButton *pWnd = NULL;
 	if (IsReady())
@@ -241,7 +240,7 @@ CBfNormalGraduatedButton* CDirectUiManager::CreateBfNormalGraduatedButton(CDirec
 	return pWnd;
 }
 
-CBfDrawButton* CDirectUiManager::CreateBfDrawButton(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfDrawButton* CDirectUiManager::CreateBfDrawButton(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfDrawButton *pWnd = NULL;
 	if (IsReady())
@@ -263,7 +262,7 @@ CBfDrawButton* CDirectUiManager::CreateBfDrawButton(CDirectUiWndMsgCtrl *pMsgCtr
 	return pWnd;
 }
 
-CBfGifStatic* CDirectUiManager::CreateBfGifStatic(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath)
+CBfGifStatic* CDirectUiManager::CreateBfGifStatic(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath)
 {
 	CBfGifStatic *pWnd = NULL;
 	if (IsReady())
@@ -285,7 +284,7 @@ CBfGifStatic* CDirectUiManager::CreateBfGifStatic(CDirectUiWndMsgCtrl *pMsgCtrl,
 	return pWnd;
 }
 
-CBfMouseMoveStatic* CDirectUiManager::CreateBfMouseMoveStatic(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfMouseMoveStatic* CDirectUiManager::CreateBfMouseMoveStatic(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfMouseMoveStatic *pWnd = NULL;
 	if (IsReady())
@@ -307,7 +306,7 @@ CBfMouseMoveStatic* CDirectUiManager::CreateBfMouseMoveStatic(CDirectUiWndMsgCtr
 	return pWnd;
 }
 
-CBfLinkStatic* CDirectUiManager::CreateBfLinkStatic(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfLinkStatic* CDirectUiManager::CreateBfLinkStatic(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfLinkStatic *pWnd = NULL;
 	if (IsReady())
@@ -329,7 +328,7 @@ CBfLinkStatic* CDirectUiManager::CreateBfLinkStatic(CDirectUiWndMsgCtrl *pMsgCtr
 	return pWnd;
 }
 
-CBfEdit* CDirectUiManager::CreateBfEdit(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfEdit* CDirectUiManager::CreateBfEdit(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfEdit *pWnd = NULL;
 	if (IsReady())
@@ -351,7 +350,7 @@ CBfEdit* CDirectUiManager::CreateBfEdit(CDirectUiWndMsgCtrl *pMsgCtrl, CRect Wnd
 	return pWnd;
 }
 
-CBfRichEdit* CDirectUiManager::CreateBfRichEdit(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId)
+CBfRichEdit* CDirectUiManager::CreateBfRichEdit(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId)
 {
 	CBfRichEdit *pWnd = NULL;
 	if (IsReady())
@@ -373,7 +372,7 @@ CBfRichEdit* CDirectUiManager::CreateBfRichEdit(CDirectUiWndMsgCtrl *pMsgCtrl, C
 	return pWnd;
 }
 
-CBfCheckBox* CDirectUiManager::CreateBfCheckBox(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfCheckBox* CDirectUiManager::CreateBfCheckBox(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfCheckBox *pWnd = NULL;
 	if (IsReady())
@@ -395,7 +394,7 @@ CBfCheckBox* CDirectUiManager::CreateBfCheckBox(CDirectUiWndMsgCtrl *pMsgCtrl, C
 	return pWnd;
 }
 
-CBfComboBox* CDirectUiManager::CreateBfComboBox(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfComboBox* CDirectUiManager::CreateBfComboBox(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfComboBox *pWnd = NULL;
 	if (IsReady())
@@ -430,7 +429,7 @@ void CDirectUiManager::OnPaint(HDC hMemoryDC, CRect &WndRect, UI_BK_TYPE UiBkTyp
 	for (WndObj *pWndObj = m_WndList.TopObj(); pWndObj != NULL; pWndObj = m_WndList.NextObj(pWndObj))
 	{
 		if (pWndObj->pWnd != NULL)
-			((CDirectUiWnd*)(pWndObj->pWnd))->OnPaintProc(m_pDoGrap, m_hMemoryDC);
+			((CDirectUiWindow*)(pWndObj->pWnd))->OnPaintProc(m_pDoGrap, m_hMemoryDC);
 	}
 
 	// Ìî³ä±³¾°ÏßÈ¦
@@ -472,7 +471,7 @@ void CDirectUiManager::OnPaintRgn(CRect &WndRect, Graphics *pGraphics)
 		for (WndObj *pWndObj = m_WndList.TopObj(); pWndObj != NULL; pWndObj = m_WndList.NextObj(pWndObj))
 		{
 			if (pWndObj->pWnd != NULL)
-				((CDirectUiWnd*)(pWndObj->pWnd))->OnPaintProc(m_pDoGrap, m_hMemoryDC);
+				((CDirectUiWindow*)(pWndObj->pWnd))->OnPaintProc(m_pDoGrap, m_hMemoryDC);
 		}
 	}
 }
@@ -581,7 +580,7 @@ bool CDirectUiManager::OnMouseMove(UINT nFlags, CPoint point)
 	for (WndObj *pWndObj = m_WndList.TopObj(); pWndObj != NULL; pWndObj = m_WndList.NextObj(pWndObj))
 	{
 		if (pWndObj->pWnd != NULL)
-			((CDirectUiWnd*)(pWndObj->pWnd))->OnMouseMoveProc(nFlags, point);
+			((CDirectUiWindow*)(pWndObj->pWnd))->OnMouseMoveProc(nFlags, point);
 	}
 
 	return bRet;
@@ -592,7 +591,7 @@ void CDirectUiManager::OnTimer(int nTimerId)
 	for (WndObj *pWndObj = m_WndList.TopObj(); pWndObj != NULL; pWndObj = m_WndList.NextObj(pWndObj))
 	{
 		if (pWndObj->pWnd != NULL)
-			((CDirectUiWnd*)(pWndObj->pWnd))->OnTimer(nTimerId);
+			((CDirectUiWindow*)(pWndObj->pWnd))->OnTimer(nTimerId);
 	}
 }
 
@@ -601,7 +600,7 @@ void CDirectUiManager::OnActivateApp(WPARAM wParam, LPARAM lParam)
 	for (WndObj *pWndObj = m_WndList.TopObj(); pWndObj != NULL; pWndObj = m_WndList.NextObj(pWndObj))
 	{
 		if (pWndObj->pWnd != NULL)
-			((CDirectUiWnd*)(pWndObj->pWnd))->OnActivateApp(wParam, lParam);
+			((CDirectUiWindow*)(pWndObj->pWnd))->OnActivateApp(wParam, lParam);
 	}
 }
 
@@ -610,10 +609,10 @@ void CDirectUiManager::OnDestroy()
 	for (WndObj *pWndObj = m_WndList.TopObj(); pWndObj != NULL; pWndObj = m_WndList.NextObj(pWndObj))
 	{
 		if (pWndObj->pWnd != NULL)
-			((CDirectUiWnd*)(pWndObj->pWnd))->OnDestroy();
+			((CDirectUiWindow*)(pWndObj->pWnd))->OnDestroy();
 	}
 
-	CDirectUiWnd::UnloadDirectUiWnd();
+	CDirectUiWindow::UnloadDirectUiWindow();
 }
 
 bool CDirectUiManager::OnLButtonDown(UINT nFlags, CPoint point)
@@ -622,7 +621,7 @@ bool CDirectUiManager::OnLButtonDown(UINT nFlags, CPoint point)
 
 	for (WndObj *pWndObj = m_WndList.TopObj(); pWndObj != NULL; pWndObj = m_WndList.NextObj(pWndObj))
 	{
-		CDirectUiWnd *pWnd = (CDirectUiWnd *)(pWndObj->pWnd);
+		CDirectUiWindow *pWnd = (CDirectUiWindow *)(pWndObj->pWnd);
 		if (pWnd != NULL)
 		{
 			if (pWnd->OnLButtonDownProc(nFlags, point))
@@ -639,14 +638,14 @@ bool CDirectUiManager::OnLButtonUp(UINT nFlags, CPoint point)
 
 	for (WndObj *pWndObj = m_WndList.TopObj(); pWndObj != NULL; pWndObj = m_WndList.NextObj(pWndObj))
 	{
-		CDirectUiWnd *pWnd = (CDirectUiWnd *)(pWndObj->pWnd);
+		CDirectUiWindow *pWnd = (CDirectUiWindow *)(pWndObj->pWnd);
 		if (pWnd != NULL)
 		{
 			if (pWnd->OnLButtonUpProc(nFlags, point))
 				break;
 		}
 	}
-	CDirectUiWnd::SetLButtonUp();
+	CDirectUiWindow::SetLButtonUp();
 
 	return bRet;
 }
@@ -657,7 +656,7 @@ bool CDirectUiManager::OnLButtonDblClk(UINT nFlags, CPoint point)
 
 	for (WndObj *pWndObj = m_WndList.TopObj(); pWndObj != NULL; pWndObj = m_WndList.NextObj(pWndObj))
 	{
-		CDirectUiWnd *pWnd = (CDirectUiWnd *)(pWndObj->pWnd);
+		CDirectUiWindow *pWnd = (CDirectUiWindow *)(pWndObj->pWnd);
 		if (pWnd != NULL)
 		{
 			if (pWnd->OnLButtonDblClkProc(nFlags, point))

@@ -6,7 +6,7 @@ public:
 	CDirectUiManager(void);
 	~CDirectUiManager(void);
 
-	virtual bool InitManager(CWin32BaseDlg *pParentDlg);
+	virtual bool InitManager(CDirectUiBaseDlg *pParentDlg);
 
 	virtual void OnPaint(HDC hMemoryDC, CRect &WndRect);
 	virtual void OnDestroy();
@@ -21,9 +21,9 @@ public:
 	int GetTrueWndCtns() { return m_nTrueWndCtns; };
 
 	// 删除所有窗口
-	void ClearAllDirectUiWnd();
+	void ClearAllDirectUiWindow();
 	// 删除指定窗口
-	void ClearDirectUiWnd(CDirectUiWnd *pWnd);
+	void ClearDirectUiWindow(CDirectUiWindow *pWnd);
 
 protected:
 	virtual bool IsReady();
@@ -40,7 +40,7 @@ protected:
 	// 绘图用的GDI
 	HDC m_hMemoryDC;
 	HWND m_hParent;
-	CWin32BaseDlg *m_pParentDlg;
+	CDirectUiBaseDlg *m_pParentDlg;
 	// 绘图DC的大小
 	CRect m_DcRect;
 

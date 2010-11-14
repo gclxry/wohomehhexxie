@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="BaseDlg"
-	ProjectGUID="{CDEC508A-8BCB-451D-9BA7-C3B1B5842898}"
+	ProjectGUID="{CDEC508A-8BCB-451D-9BA7-C3B1B58428A8}"
 	RootNamespace="BaseDlg"
 	Keyword="Win32Proj"
 	>
@@ -150,18 +150,18 @@
 	</References>
 	<Files>
 		<Filter
-			Name="01 Win32基本对话框"
+			Name="001 Win32基本对话框"
 			>
 			<File
 				RelativePath="..\Output\BaseDlg\Include\BaseDlg.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Win32BaseDlg.cpp"
+				RelativePath=".\DirectUiDlg.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Output\BaseDlg\Include\Win32BaseDlg.h"
+				RelativePath="..\Output\BaseDlg\Include\DirectUiDlg.h"
 				>
 			</File>
 			<Filter
@@ -178,7 +178,7 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="02 普通高效对话框"
+			Name="002 普通高效对话框"
 			>
 			<Filter
 				Name="高效对话框"
@@ -214,24 +214,36 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="03 异形动态对话框"
+			Name="003 异形动态对话框"
 			>
 		</Filter>
 		<Filter
-			Name="04 异形动态旋转对话框"
+			Name="004 异形动态旋转对话框"
 			>
 		</Filter>
 		<Filter
-			Name="05 普通菜单"
+			Name="005 普通菜单"
 			>
 		</Filter>
 		<Filter
-			Name="06 异形菜单"
+			Name="006 异形菜单"
 			>
 		</Filter>
 		<Filter
-			Name="07 动态菜单"
+			Name="007 动态菜单"
 			>
+		</Filter>
+		<Filter
+			Name="101 子窗口基类"
+			>
+			<File
+				RelativePath=".\DirectUiWindow.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseDlg\Include\DirectUiWindow.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
