@@ -153,10 +153,6 @@
 			Name="001 Win32基本对话框"
 			>
 			<File
-				RelativePath="..\Output\BaseDlg\Include\BaseDlg.h"
-				>
-			</File>
-			<File
 				RelativePath=".\DirectUiDlg.cpp"
 				>
 			</File>
@@ -249,6 +245,14 @@
 			Name="201 图片资源管理"
 			>
 		</Filter>
+		<File
+			RelativePath="..\Output\BaseDlg\Include\BaseDlg.h"
+			>
+		</File>
+		<File
+			RelativePath="..\Output\BaseDlg\Include\DirectUiDefs.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
