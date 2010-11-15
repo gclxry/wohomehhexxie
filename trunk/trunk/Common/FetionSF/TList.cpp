@@ -1,5 +1,4 @@
 
-#include "stdafx.h"
 #include "TList.h"
 
 CTList::CTList(void)

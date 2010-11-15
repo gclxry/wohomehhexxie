@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="gb2312"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="BaseDlg"
 	ProjectGUID="{CDEC508A-8BCB-451D-9BA7-C3B1B58428A8}"
 	RootNamespace="BaseDlg"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -202,14 +203,6 @@
 				<Filter
 					Name="子窗口列表"
 					>
-					<File
-						RelativePath=".\TList.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\Output\BaseDlg\Include\TList.h"
-						>
-					</File>
 					<File
 						RelativePath=".\WndList.cpp"
 						>
