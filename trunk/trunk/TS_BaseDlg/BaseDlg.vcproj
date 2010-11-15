@@ -245,14 +245,6 @@
 				RelativePath="..\Output\BaseDlg\Include\DirectUiWindow.h"
 				>
 			</File>
-			<Filter
-				Name="子窗口消息回调函数"
-				>
-				<File
-					RelativePath="..\Output\BaseDlg\Include\DirectUiWindowMsgCtrl.h"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="201 图片资源管理"
@@ -271,6 +263,14 @@
 			</File>
 			<File
 				RelativePath="..\Output\BaseDlg\Include\ResImage.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="#子窗口消息回调函数"
+			>
+			<File
+				RelativePath="..\Output\BaseDlg\Include\DirectUiWindowMsgCtrl.h"
 				>
 			</File>
 		</Filter>

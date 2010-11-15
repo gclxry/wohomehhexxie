@@ -2,11 +2,11 @@
 // 类似MFC CStatic，静态文本窗口
 
 #pragma once
-#include "DirectUiWnd.h"
+#include "BaseCtrlDefs.h"
 
 #define CHECK_BOX_HW						(10)
 
-class CBfCheckBox : public CDirectUiWnd
+class CBfCheckBox : public CDirectUiWindow
 {
 public:
 	CBfCheckBox(void);

@@ -17,7 +17,7 @@ public:
 	CBfComboBoxSelectDlg(HINSTANCE hInstance, HWND hParentWnd, CBfComboBox *pComboBox);
 	~CBfComboBoxSelectDlg(void);
 
-	bool OnDirectUiWndMsgProc(int nMsgId, DWM_INFO &MsgInfo);
+	bool OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo);
 	void SetComboBox(CBfComboBox *pComboBox) { m_pComboBox = pComboBox; };
 	void SetCloseButtonImage(BTN_STA_CTNS nStas, CString strImagePath, IMAGE_TYPE nImageType);
 

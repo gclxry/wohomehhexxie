@@ -146,7 +146,7 @@ bool CBfComboBox::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManag
 	return bRet;
 }
 
-bool CBfComboBox::OnDirectUiWndMsgProc(int nMsgId, DWM_INFO &MsgInfo)
+bool CBfComboBox::OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo)
 {
 	bool bRet = false;
 	if (IsReady())
@@ -197,7 +197,7 @@ void CBfComboBox::DUI_OnMouseHover(WPARAM wParam, LPARAM lParam)
 	MsgInfo.wParam = m_nWndId;
 	MsgInfo.lParam = NULL;
 
-	m_pMsgCtrl->OnDirectUiWndMsgProc(DWM_MOUSEHOVER, MsgInfo);
+	m_pMsgCtrl->OnDirectUiWindowMsgProc(DWM_MOUSEHOVER, MsgInfo);
 }
 
 // Êó±êÀë¿ª´°¿Ú
@@ -227,7 +227,7 @@ void CBfComboBox::SetCurrentComboData(COMBO_DATA &ComboData)
 	DWM_INFO m_MsgInfo;
 	m_MsgInfo.wParam = m_nWndId;
 	m_MsgInfo.lParam = NULL;
-	m_pMsgCtrl->OnDirectUiWndMsgProc(DWM_LBUTTONDOWN, m_MsgInfo);
+	m_pMsgCtrl->OnDirectUiWindowMsgProc(DWM_LBUTTONDOWN, m_MsgInfo);
 }
 
 void CBfComboBox::ClearData()

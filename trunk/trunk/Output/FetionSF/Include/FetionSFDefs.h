@@ -8,6 +8,7 @@
 #include <atltypes.h>
 #include <atlstr.h>
 #include <process.h>
+#include <commctrl.h>
 
 #include <vector>
 #include <list>

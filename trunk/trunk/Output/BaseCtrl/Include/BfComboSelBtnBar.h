@@ -47,7 +47,7 @@ public:
 protected:
 	virtual bool IsReady();
 
-	bool OnDirectUiWndMsgProc(int nMsgId, DWM_INFO &MsgInfo);
+	bool OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo);
 
 	virtual void OnMouseHover(CPoint point);
 	virtual void OnMouseLeave(CPoint point);
