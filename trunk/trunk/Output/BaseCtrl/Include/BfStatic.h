@@ -2,9 +2,9 @@
 // 类似MFC CStatic，静态文本窗口
 
 #pragma once
-#include "DirectUiWnd.h"
+#include "BaseCtrlDefs.h"
 
-class CBfStatic : public CDirectUiWnd
+class CBfStatic : public CDirectUiWindow
 {
 public:
 	CBfStatic(void);

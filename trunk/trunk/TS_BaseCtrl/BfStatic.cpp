@@ -1,6 +1,6 @@
-#include "StdAfx.h"
+
 #include "BfStatic.h"
-#include "DirectUiManager.h"
+
 
 CBfStatic::CBfStatic(void)
 {
@@ -18,7 +18,7 @@ void CBfStatic::OnPaint()
 	// »æÖÆ±³¾°É«
 	if (m_bIsDrawBkgndColor)
 	{
-		m_pUiManager->DrawColor(m_BkColor, m_WndRect);
+		CGdiPlusDraw::DrawColor(m_pDoGrap, m_BkColor, m_WndRect);
 	}
 
 	// »æÖÆ±³¾°Í¼
@@ -27,11 +27,11 @@ void CBfStatic::OnPaint()
 		if (m_bIsFullDraw)
 		{
 			CRect SrcRect(0, 0, m_BkgndImage.GetImage()->GetWidth(), m_BkgndImage.GetImage()->GetHeight());
-			m_pUiManager->DrawImage(m_pDoGrap, m_BkgndImage.GetImage(), m_WndRect, SrcRect);
+			CGdiPlusDraw::DrawImage(m_pDoGrap, m_BkgndImage.GetImage(), m_WndRect, SrcRect);
 		}
 		else
 		{
-			m_pUiManager->DrawCenterImage(m_pDoGrap, m_BkgndImage.GetImage(), m_WndRect, m_nWaneEllipse);
+			CGdiPlusDraw::DrawCenterImage(m_pDoGrap, m_BkgndImage.GetImage(), m_WndRect, m_nWaneEllipse);
 		}
 	}
 
@@ -45,6 +45,6 @@ void CBfStatic::OnPaint()
 		Font DefaultFont(&DefaultFamily, (REAL)m_WndTextInfo.nFontHeight, m_WndTextInfo.FStyle, UnitPixel);
 		SolidBrush DefaultBrush(m_WndTextInfo.TextColor);
 
-		m_pUiManager->DrawWndText(m_pDoGrap, m_WndTextInfo);
+		CGdiPlusDraw::DrawWndText(m_pDoGrap, m_WndTextInfo);
 	}
 }

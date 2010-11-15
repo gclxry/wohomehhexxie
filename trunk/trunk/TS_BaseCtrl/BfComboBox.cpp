@@ -69,7 +69,7 @@ void CBfComboBox::OnPaint()
 
 void CBfComboBox::MoveWindow(CRect ToRect, HDWP hWinPoslnfo)
 {
-	CDirectUiWnd::MoveWindow(ToRect, hWinPoslnfo);
+	CDirectUiWindow::MoveWindow(ToRect, hWinPoslnfo);
 
 	m_SelDlgPos = m_WndRect;
 	m_SelDlgPos.top = m_WndRect.bottom + 1;
@@ -132,7 +132,7 @@ bool CBfComboBox::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManag
 		}
 
 		if (bRet)
-			bRet = CDirectUiWnd::CreateWnd(pParentDlg, pUiManager, pMsgCtrl, WndRect, nWndId, WndType, nImageId, strImagePath, nImageType);
+			bRet = CDirectUiWindow::CreateWnd(pParentDlg, pUiManager, pMsgCtrl, WndRect, nWndId, WndType, nImageId, strImagePath, nImageType);
 
 		if (bRet)
 		{

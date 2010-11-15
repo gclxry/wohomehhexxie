@@ -1,6 +1,5 @@
-#include "StdAfx.h"
+
 #include "BfLinkStatic.h"
-#include "DirectUiManager.h"
 
 #pragma warning(disable:4311)
 

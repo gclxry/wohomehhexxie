@@ -7,7 +7,7 @@
 typedef vector<COMBO_DATA> COMBO_DATA_LIST;
 
 
-class CBfComboBox : public CDirectUiWnd, public CDirectUiWindowMsgCtrl
+class CBfComboBox : public CDirectUiWindow, public CDirectUiWindowMsgCtrl
 {
 	friend class CBfComboBoxSelectDlg;
 public:

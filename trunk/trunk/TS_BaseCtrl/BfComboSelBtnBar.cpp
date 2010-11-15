@@ -92,7 +92,7 @@ bool CBfComboSelBtnBar::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pU
 		if (bRet)
 		{
 			int nNewWndId = nWndId | COMBO_SEL_BTN_ID_SIGN;
-			bRet = CDirectUiWnd::CreateWnd(pParentDlg, pUiManager, pMsgCtrl, WndRect, nNewWndId, WndType, nImageId, strImagePath, nImageType);
+			bRet = CDirectUiWindow::CreateWnd(pParentDlg, pUiManager, pMsgCtrl, WndRect, nNewWndId, WndType, nImageId, strImagePath, nImageType);
 		}
 
 		if (bRet)

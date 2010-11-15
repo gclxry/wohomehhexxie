@@ -221,9 +221,61 @@
 		<Filter
 			Name="002 Static系列"
 			>
+			<Filter
+				Name="普通Static"
+				>
+				<File
+					RelativePath=".\BfStatic.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\BaseCtrl\Include\BfStatic.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="连接Static"
+				>
+				<File
+					RelativePath=".\BfLinkStatic.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\BaseCtrl\Include\BfLinkStatic.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GifStatic"
+				>
+				<File
+					RelativePath=".\BfGifStatic.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\BaseCtrl\Include\BfGifStatic.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="鼠标探测Static"
+				>
+				<File
+					RelativePath=".\BfMouseMoveStatic.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\BaseCtrl\Include\BfMouseMoveStatic.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="004 CheckBox"
+			>
+		</Filter>
+		<Filter
+			Name="005 Edit系列"
 			>
 		</Filter>
 		<File

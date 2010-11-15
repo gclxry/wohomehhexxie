@@ -1,7 +1,5 @@
-#include "StdAfx.h"
-#include <process.h>
+
 #include "BfGifStatic.h"
-#include "DirectUiManager.h"
 
 
 UINT WINAPI CBfGifStatic::DrawGifThread(LPVOID lpParameter)
@@ -30,7 +28,7 @@ CBfGifStatic::~CBfGifStatic(void)
 }
 
 // ´´½¨´°¿Ú
-bool CBfGifStatic::CreateWnd(CWin32BaseDlg *pParentDlg, CDirectUiManager *pUiManager, CDirectUiWndMsgCtrl *pMsgCtrl,
+bool CBfGifStatic::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManager, CDirectUiWindowMsgCtrl *pMsgCtrl,
 					   CRect WndRect, int nWndId, WND_TYPE WndType, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	bool bRet = CBfLinkStatic::CreateWnd(pParentDlg, pUiManager, pMsgCtrl, WndRect, nWndId, WndType, nImageId, strImagePath, nImageType);
@@ -75,7 +73,7 @@ void CBfGifStatic::OnPaint()
 	}
 
 	if (m_hThread != NULL && m_pGifImg != NULL)
-		m_pUiManager->DrawCenterImage(m_pDoGrap, m_pGifImg->GetImage(), m_WndRect);
+		CGdiPlusDraw::DrawCenterImage(m_pDoGrap, m_pGifImg->GetImage(), m_WndRect);
 }
 
 void CBfGifStatic::DrawGif()
