@@ -1,11 +1,6 @@
-//////////////////////////////////////////////////////////////////////////
-// 类似MFC CStatic，静态文本窗口
 
 #pragma once
-#include "DirectUiWnd.h"
-#include "FlashShow.h"
-
-//typedef CSvodSvrPluginObject* (__stdcall *GET_PLUGIN_OBJECT_PROC)() 
+#include "BaseCtrlDefs.h"
 
 
 class CBfFlash : public CDirectUiWindow
@@ -15,7 +10,7 @@ public:
 	virtual ~CBfFlash(void);
 
 	// 创建窗口
-	virtual bool CreateWnd(CWin32BaseDlg *pParentDlg, CDirectUiManager *pUiManager, CDirectUiWndMsgCtrl *pMsgCtrl,
+	virtual bool CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManager, CDirectUiWindowMsgCtrl *pMsgCtrl,
 		CRect WndRect, int nWndId, WND_TYPE WndType, int nImageId = 0, CString strImagePath = _T(""), IMAGE_TYPE nImageType = IT_BMP);
 
 	void PlayFlash(CString strFlashPath);
