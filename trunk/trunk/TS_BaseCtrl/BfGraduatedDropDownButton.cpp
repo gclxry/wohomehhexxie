@@ -1,7 +1,5 @@
-#include "StdAfx.h"
-#include <process.h>
+
 #include "BfGraduatedDropDownButton.h"
-#include "DirectUiManager.h"
 #include "BfPopupMenu.h"
 
 // 右侧下拉按钮所占的大小
@@ -183,7 +181,7 @@ void CBfGraduatedDropDownButton::OnDestroy()
 }
 
 // 创建窗口
-bool CBfGraduatedDropDownButton::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManager, CDirectUiWndMsgCtrl *pMsgCtrl,
+bool CBfGraduatedDropDownButton::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManager, CDirectUiWindowMsgCtrl *pMsgCtrl,
 								   CRect WndRect, int nWndId, WND_TYPE WndType, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	bool bRet = CBfGraduatedButton::CreateWnd(pParentDlg, pUiManager, pMsgCtrl, WndRect, nWndId, WndType, nImageId, strImagePath, nImageType);

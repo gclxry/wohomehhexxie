@@ -163,14 +163,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="ºê¡¢½á¹¹Ìå"
-			>
-			<File
-				RelativePath="..\..\Output\FetionSF\Include\FetionSFDefs.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="TList"
 			>
 			<File
@@ -196,6 +188,10 @@
 		</Filter>
 		<File
 			RelativePath="..\..\Output\FetionSF\Include\FetionSF.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Output\FetionSF\Include\FetionSFDefs.h"
 			>
 		</File>
 	</Files>

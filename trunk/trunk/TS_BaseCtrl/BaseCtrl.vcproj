@@ -189,6 +189,18 @@
 					>
 				</File>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="002 下拉列表框"
+			>
+			<File
+				RelativePath=".\BfPopupMenu.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseCtrl\Include\BfPopupMenu.h"
+				>
+			</File>
 			<Filter
 				Name="下拉列表框渐变按钮"
 				>
