@@ -1,6 +1,6 @@
-#include "StdAfx.h"
+
 #include "BfFlash.h"
-#include "DirectUiManager.h"
+
 
 CBfFlash::CBfFlash(void)
 {
@@ -28,14 +28,14 @@ bool CBfFlash::IsReady()
 		&& m_fpOnActivateApp != NULL);
 }
 
-bool CBfFlash::CreateWnd(CWin32BaseDlg *pParentDlg, CDirectUiManager *pUiManager, CDirectUiWndMsgCtrl *pMsgCtrl,
+bool CBfFlash::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManager, CDirectUiWindowMsgCtrl *pMsgCtrl,
 							 CRect WndRect, int nWndId, WND_TYPE WndType, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	bool bRet = CDirectUiWindow::CreateWnd(pParentDlg, pUiManager, pMsgCtrl, WndRect, nWndId, WndType, nImageId, strImagePath, nImageType);
 
 	if (bRet)
 	{
-		CString strDllPath = GetAppPath() + _T("FlashShowDll.dll");
+		CString strDllPath = CUiMethod::GetAppPath() + _T("FlashShowDll.dll");
 
 		m_hDllHandle = LoadLibrary(strDllPath);
 		if (m_hDllHandle != NULL)
