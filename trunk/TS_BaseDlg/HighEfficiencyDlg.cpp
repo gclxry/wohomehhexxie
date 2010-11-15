@@ -3,25 +3,25 @@
 
 #define __base_super					CDirectUiDlg
 
-bool CHighEfficiency::m_bIsNeedLButtonUpMsg = false;
+bool CHighEfficiencyDlg::m_bIsNeedLButtonUpMsg = false;
 
-CHighEfficiency::CHighEfficiency(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
+CHighEfficiencyDlg::CHighEfficiencyDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 : CDirectUiDlg(hInstance, hParentWnd, nIconId)
 {
 	m_pUiManager = NULL;
 }
 
-CHighEfficiency::~CHighEfficiency(void)
+CHighEfficiencyDlg::~CHighEfficiencyDlg(void)
 {
 }
 
-LRESULT CHighEfficiency::OnEnterSizeMove(WPARAM wParam, LPARAM lParam)
+LRESULT CHighEfficiencyDlg::OnEnterSizeMove(WPARAM wParam, LPARAM lParam)
 {
 	::SetFocus(m_hWnd);
 	return DefWindowProc(m_hWnd, WM_ENTERSIZEMOVE, wParam, lParam);
 }
 
-LRESULT CHighEfficiency::OnMouseLeave(WPARAM wParam, LPARAM lParam)
+LRESULT CHighEfficiencyDlg::OnMouseLeave(WPARAM wParam, LPARAM lParam)
 {
 	// 非冻结状态下才响应鼠标消息
 	if (!m_bIsFreeze && IsReady())
@@ -33,7 +33,7 @@ LRESULT CHighEfficiency::OnMouseLeave(WPARAM wParam, LPARAM lParam)
 	return 1;
 }
 
-LRESULT CHighEfficiency::OnMouseMove(WPARAM wParam, LPARAM lParam)
+LRESULT CHighEfficiencyDlg::OnMouseMove(WPARAM wParam, LPARAM lParam)
 {
 	// 非冻结状态下才响应鼠标消息
 	if (!m_bIsFreeze && IsReady())
@@ -57,7 +57,7 @@ LRESULT CHighEfficiency::OnMouseMove(WPARAM wParam, LPARAM lParam)
 	return 1;
 }
 
-LRESULT CHighEfficiency::OnLButtonDown(WPARAM wParam, LPARAM lParam)
+LRESULT CHighEfficiencyDlg::OnLButtonDown(WPARAM wParam, LPARAM lParam)
 {
 	::SetFocus(m_hWnd);
 
@@ -76,9 +76,9 @@ LRESULT CHighEfficiency::OnLButtonDown(WPARAM wParam, LPARAM lParam)
 		{
 			SetCapture(m_hWnd);
 
-			if (CHighEfficiency::m_bIsNeedLButtonUpMsg)
+			if (CHighEfficiencyDlg::m_bIsNeedLButtonUpMsg)
 			{
-				CHighEfficiency::m_bIsNeedLButtonUpMsg = false;
+				CHighEfficiencyDlg::m_bIsNeedLButtonUpMsg = false;
 				OnLButtonUp(wParam, lParam);
 			}
 		}
@@ -94,7 +94,7 @@ LRESULT CHighEfficiency::OnLButtonDown(WPARAM wParam, LPARAM lParam)
 	return 1;
 }
 
-LRESULT CHighEfficiency::OnLButtonUp(WPARAM wParam, LPARAM lParam)
+LRESULT CHighEfficiencyDlg::OnLButtonUp(WPARAM wParam, LPARAM lParam)
 {
 	ReleaseCapture();
 	
@@ -108,7 +108,7 @@ LRESULT CHighEfficiency::OnLButtonUp(WPARAM wParam, LPARAM lParam)
 	return 1;
 }
 
-LRESULT CHighEfficiency::OnLButtonDblClk(WPARAM wParam, LPARAM lParam)
+LRESULT CHighEfficiencyDlg::OnLButtonDblClk(WPARAM wParam, LPARAM lParam)
 {
 	if (IsReady())
 	{
@@ -119,7 +119,7 @@ LRESULT CHighEfficiency::OnLButtonDblClk(WPARAM wParam, LPARAM lParam)
 	return 1;
 }
 
-LRESULT CHighEfficiency::OnNcHitTest(WPARAM wParam, LPARAM lParam)
+LRESULT CHighEfficiencyDlg::OnNcHitTest(WPARAM wParam, LPARAM lParam)
 {
 	if (IsSetBfStyle(BFS_CAN_DRAW) && IsReady())
 	{
@@ -179,28 +179,28 @@ LRESULT CHighEfficiency::OnNcHitTest(WPARAM wParam, LPARAM lParam)
 	}
 }
 
-void CHighEfficiency::OnDestroy()
+void CHighEfficiencyDlg::OnDestroy()
 {
 	if (IsReady())
 		m_pUiManager->OnDestroy();
 }
 
-LRESULT CHighEfficiency::OnNcActive(UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CHighEfficiencyDlg::OnNcActive(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	return WM_PAINT;
 }
 
-LRESULT CHighEfficiency::OnEraseBkgnd(WPARAM wParam, LPARAM lParam)
+LRESULT CHighEfficiencyDlg::OnEraseBkgnd(WPARAM wParam, LPARAM lParam)
 {
 	return 1;
 }
 
-LRESULT CHighEfficiency::OnNcPaint(WPARAM wParam, LPARAM lParam)
+LRESULT CHighEfficiencyDlg::OnNcPaint(WPARAM wParam, LPARAM lParam)
 {
 	return 1;
 }
 
-void CHighEfficiency::OnCreate()
+void CHighEfficiencyDlg::OnCreate()
 {
 	if (IsReady())
 	{
@@ -211,12 +211,12 @@ void CHighEfficiency::OnCreate()
 	}
 }
 
-LRESULT CHighEfficiency::OnNcCalcSize(WPARAM wParam, LPARAM lParam)
+LRESULT CHighEfficiencyDlg::OnNcCalcSize(WPARAM wParam, LPARAM lParam)
 {
 	return 0;
 }
 
-LRESULT CHighEfficiency::OnSizeProc(WPARAM wParam, LPARAM lParam)
+LRESULT CHighEfficiencyDlg::OnSizeProc(WPARAM wParam, LPARAM lParam)
 {
 	LRESULT lRes = 0;
 	if (IsReady())
@@ -234,7 +234,7 @@ LRESULT CHighEfficiency::OnSizeProc(WPARAM wParam, LPARAM lParam)
 	return lRes;
 }
 
-LRESULT CHighEfficiency::OnTimer(WPARAM wParam, LPARAM lParam)
+LRESULT CHighEfficiencyDlg::OnTimer(WPARAM wParam, LPARAM lParam)
 {
 	if (IsReady())
 	{
@@ -244,7 +244,7 @@ LRESULT CHighEfficiency::OnTimer(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-LRESULT CHighEfficiency::OnActivateApp(WPARAM wParam, LPARAM lParam)
+LRESULT CHighEfficiencyDlg::OnActivateApp(WPARAM wParam, LPARAM lParam)
 {
 	if (IsReady())
 	{
@@ -254,7 +254,7 @@ LRESULT CHighEfficiency::OnActivateApp(WPARAM wParam, LPARAM lParam)
 	return CDirectUiDlg::OnActivateApp(wParam, lParam);
 }
 
-LRESULT CHighEfficiency::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
+LRESULT CHighEfficiencyDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 {
 	if (IsReady())
 	{
@@ -268,7 +268,7 @@ LRESULT CHighEfficiency::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 	return 1;
 }
 
-void CHighEfficiency::SetWndRgn(int cx, int cy)
+void CHighEfficiencyDlg::SetWndRgn(int cx, int cy)
 {
 	if (IS_SAVE_HANDLE(m_hWnd))
 	{
@@ -306,7 +306,7 @@ void CHighEfficiency::SetWndRgn(int cx, int cy)
 	}
 }
 
-void CHighEfficiency::OnPaint(HDC hPaintDc)
+void CHighEfficiencyDlg::OnPaint(HDC hPaintDc)
 {
 	if (IsReady())
 	{
@@ -334,12 +334,12 @@ void CHighEfficiency::OnPaint(HDC hPaintDc)
 }
 
 // 窗口是否初始化
-bool CHighEfficiency::IsReady()
+bool CHighEfficiencyDlg::IsReady()
 {
 	return (m_pUiManager != NULL && m_hWnd != NULL && ::IsWindow(m_hWnd));
 }
 
-bool CHighEfficiency::OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo)
+bool CHighEfficiencyDlg::OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo)
 {
 	bool bRet = false;
 	if (IsReady())
@@ -370,12 +370,12 @@ bool CHighEfficiency::OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo)
 }
 
 // 鼠标左键按下消息
-void CHighEfficiency::DUI_OnLButtonDown(WPARAM wParam, LPARAM lParam)
+void CHighEfficiencyDlg::DUI_OnLButtonDown(WPARAM wParam, LPARAM lParam)
 {
 }
 
 // 鼠标左键抬起消息
-void CHighEfficiency::DUI_OnLButtonUp(WPARAM wParam, LPARAM lParam)
+void CHighEfficiencyDlg::DUI_OnLButtonUp(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam == DWM_SYS_CMD_MIN && IsSetBfStyle(BFS_HAVE_MIN_BTN))
 	{
@@ -396,7 +396,7 @@ void CHighEfficiency::DUI_OnLButtonUp(WPARAM wParam, LPARAM lParam)
 }
 
 // 鼠标左键双击消息
-void CHighEfficiency::DUI_OnLButtonDblClk(WPARAM wParam, LPARAM lParam)
+void CHighEfficiencyDlg::DUI_OnLButtonDblClk(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam == DWM_SYS_CMD_MAX_RES)
 	{
@@ -406,18 +406,18 @@ void CHighEfficiency::DUI_OnLButtonDblClk(WPARAM wParam, LPARAM lParam)
 }
 
 // 鼠标进入窗口
-void CHighEfficiency::DUI_OnMouseHover(WPARAM wParam, LPARAM lParam)
+void CHighEfficiencyDlg::DUI_OnMouseHover(WPARAM wParam, LPARAM lParam)
 {
 
 }
 
 // 鼠标离开窗口
-void CHighEfficiency::DUI_OnMouseLeave(WPARAM wParam, LPARAM lParam)
+void CHighEfficiencyDlg::DUI_OnMouseLeave(WPARAM wParam, LPARAM lParam)
 {
 
 }
 
-void CHighEfficiency::MaxOrResWnd()
+void CHighEfficiencyDlg::MaxOrResWnd()
 {
 	if (IsSetBfStyle(BFS_HAVE_MAX_BTN))
 	{

@@ -1,7 +1,6 @@
-#include "StdAfx.h"
+
 #include "BfComboBox.h"
-#include "DirectUiManager.h"
-#include "BfBaseDlg.h"
+#include "BaseCtrlManager.h"
 
 //#include "resource.h"
 #define IDD_COMBO_BOX_SELECE_DLG					(129)
@@ -50,11 +49,11 @@ void CBfComboBox::OnPaint()
 {
 	// 绘制背景图
 	if (m_BkgndImage.IsReady())
-		m_pUiManager->DrawCenterImage(m_pDoGrap, m_BkgndImage.GetImage(), m_WndRect);
+		CGdiPlusDraw::DrawCenterImage(m_pDoGrap, m_BkgndImage.GetImage(), m_WndRect);
 	else
-		m_pUiManager->DrawColor(Color(255, 255, 255), m_WndRect);
+		CGdiPlusDraw::DrawColor(m_pDoGrap, Color(255, 255, 255), m_WndRect);
 
-	m_pUiManager->DrawRectLine(Color(192, 192, 192), m_WndRect);
+	CGdiPlusDraw::DrawRectLine(m_pDoGrap, Color(192, 192, 192), m_WndRect);
 
 	if (IsMouseHover())
 	{
@@ -63,7 +62,7 @@ void CBfComboBox::OnPaint()
 		OutRect.top++;
 		OutRect.right--;
 		OutRect.bottom--;
-		m_pUiManager->DrawRectLine(Color(133, 228, 255), OutRect);
+		CGdiPlusDraw::DrawRectLine(m_pDoGrap, Color(133, 228, 255), OutRect);
 	}
 }
 
@@ -112,20 +111,22 @@ bool CBfComboBox::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManag
 	bool bRet = false;
 	if (nWndId > 0 && pUiManager != NULL)
 	{
-		m_pLogoStatic = pUiManager->CreateBfMouseMoveStatic(this, CRect(0, 0, 0, 0), COMBO_BOX_LOGO_STATIC_ID);
+		CBaseCtrlManager *pBaseCMgr = (CBaseCtrlManager*)pUiManager;
+
+		m_pLogoStatic = pBaseCMgr->CreateBfMouseMoveStatic(this, CRect(0, 0, 0, 0), COMBO_BOX_LOGO_STATIC_ID);
 		bRet = (m_pLogoStatic != NULL);
 		if (bRet)
 			m_pLogoStatic->SetDrawImageWane(5);
 
 		if (bRet)
 		{
-			m_pDropDownBtn = pUiManager->CreateBfDropDownButton(this, CRect(0, 0, 0, 0), COMBO_BOX_DROP_DOWN_BTN_ID);
+			m_pDropDownBtn = pBaseCMgr->CreateBfDropDownButton(this, CRect(0, 0, 0, 0), COMBO_BOX_DROP_DOWN_BTN_ID);
 			bRet = (m_pDropDownBtn != NULL);
 		}
 
 		if (bRet)
 		{
-			m_pEdit = pUiManager->CreateBfEdit(this, CRect(0, 0, 0, 0), COMBO_BOX_EDIT_ID);
+			m_pEdit = pBaseCMgr->CreateBfEdit(this, CRect(0, 0, 0, 0), COMBO_BOX_EDIT_ID);
 			bRet = (m_pEdit != NULL);
 			if (bRet)
 				m_pEdit->SetDrawFrame(false);
@@ -136,7 +137,7 @@ bool CBfComboBox::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManag
 
 		if (bRet)
 		{
-			m_pSelectDlg = new CBfComboBoxSelectDlg(m_pSelectDlg->m_hInstance, m_hParent, this);
+			m_pSelectDlg = new CBfComboBoxSelectDlg(CWindowBase::ms_hInstance, m_hParent, this);
 			bRet = (m_pSelectDlg != NULL);
 			if (m_pSelectDlg != NULL)
 				m_pSelectDlg->SetComboBox(this);
@@ -182,7 +183,8 @@ void CBfComboBox::DUI_OnLButtonDown(WPARAM wParam, LPARAM lParam)
 
 			m_pSelectDlg->DoModal();
 
-			CBfBaseDlg::SetNeetLButtonUpMsg();
+			// TBD 这是不同窗口
+			CHighEfficiencyDlg::SetNeetLButtonUpMsg();
 			::SetActiveWindow(m_hParent);
 			// 解冻窗口，接受鼠标移动消息
 			m_pParentDlg->SetFreezeDlg(false);

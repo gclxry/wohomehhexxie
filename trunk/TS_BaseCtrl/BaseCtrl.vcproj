@@ -151,7 +151,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="#子窗口管理"
+			Name="#子窗口管理器"
 			>
 			<File
 				RelativePath=".\BaseCtrlManager.cpp"
@@ -186,6 +186,30 @@
 				</File>
 				<File
 					RelativePath="..\Output\BaseCtrl\Include\BfGraduatedButton.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="图片按钮"
+				>
+				<File
+					RelativePath=".\BfPictureButton.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\BaseCtrl\Include\BfPictureButton.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="下拉列表框按钮"
+				>
+				<File
+					RelativePath=".\BfDropDownButton.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\BaseCtrl\Include\BfDropDownButton.h"
 					>
 				</File>
 			</Filter>
@@ -319,6 +343,18 @@
 			</File>
 			<File
 				RelativePath="..\Output\BaseCtrl\Include\BfWindowsWnd.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="007 Bar系列"
+			>
+			<File
+				RelativePath=".\BfBaseBar.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseCtrl\Include\BfBaseBar.h"
 				>
 			</File>
 		</Filter>

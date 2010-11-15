@@ -1,7 +1,6 @@
 
-#include "StdAfx.h"
 #include "BfComboSelBtnBar.h"
-#include "DirectUiManager.h"
+#include "BaseCtrlManager.h"
 
 // 关闭按钮的大小
 #define CLOSE_BTN_W				(11)
@@ -26,12 +25,12 @@ void CBfComboSelBtnBar::ReleaseWindow()
 {
 	if (m_pUiManager != NULL)
 	{
-		m_pUiManager->ClearDirectUiWnd(m_pBkgndStatic);
-		m_pUiManager->ClearDirectUiWnd(m_pLogoStatic);
-		m_pUiManager->ClearDirectUiWnd(m_pIdStatic);
-		m_pUiManager->ClearDirectUiWnd(m_pNameStatic);
-		m_pUiManager->ClearDirectUiWnd(m_pCloseButton);
-		m_pUiManager->ClearDirectUiWnd(this);
+		m_pUiManager->ClearDirectUiWindow(m_pBkgndStatic);
+		m_pUiManager->ClearDirectUiWindow(m_pLogoStatic);
+		m_pUiManager->ClearDirectUiWindow(m_pIdStatic);
+		m_pUiManager->ClearDirectUiWindow(m_pNameStatic);
+		m_pUiManager->ClearDirectUiWindow(m_pCloseButton);
+		m_pUiManager->ClearDirectUiWindow(this);
 	}
 }
 
@@ -79,13 +78,15 @@ bool CBfComboSelBtnBar::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pU
 	bool bRet = false;
 	if (pUiManager != NULL)
 	{
-		m_pBkgndStatic = pUiManager->CreateBfStatic(pMsgCtrl, CRect(0, 0, 0, 0));
+		CBaseCtrlManager *pBaseCMgr = (CBaseCtrlManager*)pUiManager;
+
+		m_pBkgndStatic = pBaseCMgr->CreateBfStatic(pMsgCtrl, CRect(0, 0, 0, 0));
 		bRet = (m_pBkgndStatic != NULL);
 
 		if (bRet)
 		{
 			int nNewWndId = nWndId | COMBO_COLSE_BTN_ID_SIGN;
-			m_pCloseButton = pUiManager->CreateBfPictureButton(pMsgCtrl, CRect(0, 0, 0, 0), nNewWndId, BSC_THREE);
+			m_pCloseButton = pBaseCMgr->CreateBfPictureButton(pMsgCtrl, CRect(0, 0, 0, 0), nNewWndId, BSC_THREE);
 			bRet = (m_pCloseButton != NULL);
 		}
 
@@ -97,7 +98,7 @@ bool CBfComboSelBtnBar::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pU
 
 		if (bRet)
 		{
-			m_pLogoStatic = m_pUiManager->CreateBfStatic(pMsgCtrl, CRect(0, 0, 0, 0));
+			m_pLogoStatic = pBaseCMgr->CreateBfStatic(pMsgCtrl, CRect(0, 0, 0, 0));
 			bRet = (m_pLogoStatic != NULL);
 			if (bRet)
 				m_pLogoStatic->SetDrawImageWane();
@@ -105,7 +106,7 @@ bool CBfComboSelBtnBar::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pU
 
 		if (bRet)
 		{
-			m_pIdStatic = m_pUiManager->CreateBfStatic(pMsgCtrl, CRect(0, 0, 0, 0));
+			m_pIdStatic = pBaseCMgr->CreateBfStatic(pMsgCtrl, CRect(0, 0, 0, 0));
 			bRet = (m_pIdStatic != NULL);
 			if (bRet)
 				m_pIdStatic->SetWindowTextColor(Color(255, 255, 255));
@@ -113,7 +114,7 @@ bool CBfComboSelBtnBar::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pU
 
 		if (bRet)
 		{
-			m_pNameStatic = m_pUiManager->CreateBfStatic(pMsgCtrl, CRect(0, 0, 0, 0));
+			m_pNameStatic = pBaseCMgr->CreateBfStatic(pMsgCtrl, CRect(0, 0, 0, 0));
 			bRet = (m_pNameStatic != NULL);
 		}
 	}

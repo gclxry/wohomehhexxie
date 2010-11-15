@@ -1,8 +1,12 @@
-//////////////////////////////////////////////////////////////////////////
-// 类似MFC CStatic，静态文本窗口
+
 
 #pragma once
 #include "BaseCtrlDefs.h"
+#include "BfComboSelBtnBar.h"
+#include "BfEdit.h"
+#include "BfMouseMoveStatic.h"
+#include "BfDropDownButton.h"
+#include "BfComboBoxSelectDlg.h"
 
 typedef vector<COMBO_DATA> COMBO_DATA_LIST;
 

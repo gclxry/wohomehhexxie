@@ -4,11 +4,11 @@
 #include "DirectUiWindowMsgCtrl.h"
 #include "DirectUiManager.h"
 
-class CHighEfficiency : public CDirectUiDlg, public CDirectUiWindowMsgCtrl
+class CHighEfficiencyDlg : public CDirectUiDlg, public CDirectUiWindowMsgCtrl
 {
 public:
-	CHighEfficiency(HINSTANCE hInstance, HWND hParentWnd, int nIconId);
-	~CHighEfficiency(void);
+	CHighEfficiencyDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId);
+	~CHighEfficiencyDlg(void);
 
 	bool OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo);
 	static void SetNeetLButtonUpMsg() { m_bIsNeedLButtonUpMsg = true; };
