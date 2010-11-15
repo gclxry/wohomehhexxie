@@ -151,7 +151,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="BaseCtrlManager"
+			Name="#子窗口管理"
 			>
 			<File
 				RelativePath=".\BaseCtrlManager.cpp"
@@ -163,7 +163,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="001 按钮系列"
+			Name="001 Button系列"
 			>
 			<Filter
 				Name="基类"
@@ -191,28 +191,40 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="002 下拉列表框"
+			Name="003 下拉列表框"
 			>
 			<File
-				RelativePath=".\BfPopupMenu.cpp"
+				RelativePath=".\BfComboBox.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Output\BaseCtrl\Include\BfPopupMenu.h"
+				RelativePath="..\Output\BaseCtrl\Include\BfComboBox.h"
 				>
 			</File>
-			<Filter
-				Name="下拉列表框渐变按钮"
+			<File
+				RelativePath=".\BfComboBoxSelectDlg.cpp"
 				>
-				<File
-					RelativePath=".\BfGraduatedDropDownButton.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\Output\BaseCtrl\Include\BfGraduatedDropDownButton.h"
-					>
-				</File>
-			</Filter>
+			</File>
+			<File
+				RelativePath="..\Output\BaseCtrl\Include\BfComboBoxSelectDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\BfComboSelBtnBar.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseCtrl\Include\BfComboSelBtnBar.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="002 Static系列"
+			>
+		</Filter>
+		<Filter
+			Name="004 CheckBox"
+			>
 		</Filter>
 		<File
 			RelativePath="..\Output\BaseCtrl\Include\BaseCtrl.h"
