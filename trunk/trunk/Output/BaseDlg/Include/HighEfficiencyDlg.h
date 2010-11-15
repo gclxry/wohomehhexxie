@@ -31,14 +31,8 @@ protected:
 	virtual LRESULT OnNcHitTest(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnTimer(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnActivateApp(WPARAM wParam, LPARAM lParam);
-
-	virtual LRESULT OnMeasureItem(WPARAM wParam, LPARAM lParam);
-	virtual LRESULT OnDrawItem(WPARAM wParam, LPARAM lParam);
-
 	virtual LRESULT OnSizeProc(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam);
-
-	virtual void RedrawDlg();
 
 	// 窗口是否初始化
 	virtual bool IsReady();
@@ -56,14 +50,10 @@ protected:
 	// 鼠标离开窗口
 	virtual void DUI_OnMouseLeave(WPARAM wParam, LPARAM lParam);
 
-	// 是否有标准的标题栏
-	void HaveNormalCaptionBar(bool bIsHave) { m_bIsHaveCaption = bIsHave; };
-
 private:
 	void SetWndRgn(int cx, int cy);
 	static bool m_bIsNeedLButtonUpMsg;
 
 protected:
 	CDirectUiManager m_UiManager;
-	bool m_bIsHaveCaption;
 };

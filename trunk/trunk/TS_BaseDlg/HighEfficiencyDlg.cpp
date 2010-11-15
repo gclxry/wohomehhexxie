@@ -8,14 +8,10 @@ bool CHighEfficiency::m_bIsNeedLButtonUpMsg = false;
 CHighEfficiency::CHighEfficiency(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 : CDirectUiDlg(hInstance, hParentWnd, nIconId)
 {
-	m_bIsHaveCaption = true;
-	m_pCaptionBar = NULL;
-	CBfMenuHook::InitMenuHook(ms_hInstance);
 }
 
 CHighEfficiency::~CHighEfficiency(void)
 {
-	CBfMenuHook::UninitMenuHook();
 }
 
 LRESULT CHighEfficiency::OnEnterSizeMove(WPARAM wParam, LPARAM lParam)
@@ -198,39 +194,7 @@ void CHighEfficiency::OnCreate()
 	m_UiManager.InitManager(this);
 
 	// 设置默认大小
-	CRect CenterRect = CenterWnd(260, 480);
-	::MoveWindow(m_hWnd, CenterRect.left, CenterRect.top, CenterRect.Width(), CenterRect.Height(), FALSE);
-
-	// 设置标题栏
-	if (m_bIsHaveCaption)
-	{
-		m_pCaptionBar = m_UiManager.CreateBfCaptionBar(this, CRect(0, 0, 0, 0), IsSetBfStyle(BFS_HAVE_MIN_BTN), IsSetBfStyle(BFS_HAVE_MAX_BTN));
-		if (m_pCaptionBar != NULL)
-		{
-			CString strSkinDir = GetAppPath();
-			CString strPicPath = _T("");
-
-			strPicPath = strSkinDir + _T("FetionData\\UseFace\\LogoS.bmp");
-			m_pCaptionBar->SetLogoImage(0, strPicPath, IT_BMP);
-
-			strPicPath = strSkinDir + _T("FetionData\\UseFace\\tbmin.png");
-			m_pCaptionBar->SetMinBtnImage(0, strPicPath, IT_PNG);
-
-			strPicPath = strSkinDir + _T("FetionData\\UseFace\\tbmax.png");
-			m_pCaptionBar->SetMaxBtnImage(0, strPicPath, IT_PNG);
-
-			strPicPath = strSkinDir + _T("FetionData\\UseFace\\tbnormal.png");
-			m_pCaptionBar->SetResBtnImage(0, strPicPath, IT_PNG);
-
-			strPicPath = strSkinDir + _T("FetionData\\UseFace\\tbclose.png");
-			m_pCaptionBar->SetClsBtnImage(0, strPicPath, IT_PNG);
-		}
-	}
-
-	// 设置背景参数
-	m_UiManager.SetOutRingColor(Color(81, 154, 222));
-	m_UiManager.SetInRingColor(Color(100, 229, 245, 254));
-	m_UiManager.SetBkgndColor(Color(218, 241, 255));
+	this->CenterWindow(260, 480);
 }
 
 LRESULT CHighEfficiency::OnNcCalcSize(WPARAM wParam, LPARAM lParam)
@@ -272,9 +236,6 @@ LRESULT CHighEfficiency::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 	int cy = HIWORD(lParam);
 
 	SetWndRgn(cx, cy);
-
-	if (m_pCaptionBar != NULL)
-		m_pCaptionBar->MoveWindow(CRect(0, 0, cx, CAPTION_BAR_WND_H), hWinPoslnfo);
 
 	return 1;
 }
@@ -319,7 +280,7 @@ void CHighEfficiency::SetWndRgn(int cx, int cy)
 
 void CHighEfficiency::OnPaint(HDC hPaintDc)
 {
-	CRect WndRect = GetWndRect(m_hWnd);
+	CRect WndRect = this->GetClientRect();
 
 	HDC hMemoryDC = ::CreateCompatibleDC(hPaintDc);
 	if (hMemoryDC != NULL)
@@ -344,7 +305,7 @@ void CHighEfficiency::OnPaint(HDC hPaintDc)
 // 窗口是否初始化
 bool CHighEfficiency::IsReady()
 {
-	return ((m_pCaptionBar != NULL || !m_bIsHaveCaption) && m_hWnd != NULL && ::IsWindow(m_hWnd));
+	return (m_hWnd != NULL && ::IsWindow(m_hWnd));
 }
 
 bool CHighEfficiency::OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo)
@@ -432,7 +393,6 @@ void CHighEfficiency::MaxOrResWnd()
 		bool bIsMaxWnd = IsSetBfStyle(BFS_MAX_WND);
 		bIsMaxWnd = !bIsMaxWnd;
 
-		m_UiManager.SetWndMaxState(bIsMaxWnd);
 		if (bIsMaxWnd)
 		{
 			// 最大化
@@ -446,31 +406,4 @@ void CHighEfficiency::MaxOrResWnd()
 			::ShowWindow(m_hWnd, SW_RESTORE);
 		}
 	}
-}
-
-LRESULT CHighEfficiency::OnMeasureItem(WPARAM wParam, LPARAM lParam)
-{
-	int nIdCtl = (UINT)wParam;
-
-	// 此参数为0代表消息来源于菜单
-	if (nIdCtl == 0)
-		CBfPopupMenu::OnMeasureItem((LPMEASUREITEMSTRUCT)lParam);
-
-	return 0;
-}
-
-LRESULT CHighEfficiency::OnDrawItem(WPARAM wParam, LPARAM lParam)
-{
-	int nIdCtl = (UINT)wParam;
-
-	// 此参数为0代表消息来源于菜单
-	if (nIdCtl == 0)
-		CBfPopupMenu::OnDrawItem((LPDRAWITEMSTRUCT)lParam);
-
-	return 0;
-}
-
-void CHighEfficiency::RedrawDlg()
-{
-	RedrawWindow(m_hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE);
 }

@@ -89,6 +89,12 @@ void CDirectUiDlg::OpenDialog()
 	CreateDlg();
 }
 
+void CDirectUiDlg::RedrawDlg()
+{
+	if (IS_SAVE_HANDLE(m_hWnd))
+		::RedrawWindow(m_hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE);
+}
+
 void CDirectUiDlg::EndThisDialog()
 {
 	if (IS_SAVE_HANDLE(m_hWnd))

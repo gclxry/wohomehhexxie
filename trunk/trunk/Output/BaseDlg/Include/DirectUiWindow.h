@@ -3,9 +3,9 @@
 
 #pragma once
 #include "BaseDlgDefs.h"
+#include "DirectUiDlg.h"
 #include "DirectUiWindowMsgCtrl.h"
 #include "ResImage.h"
-#include "DirectUiDlg.h"
 
 class CDirectUiManager;
 
