@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\FetionSF\Include;..\Common\GDIPlus\Includes;..\Output\BaseDlg\Include"
+				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\FetionSF\Include;..\Common\GDIPlus\Includes;..\Output\BaseDlg\Include;..\Output\Flash\Include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -108,7 +108,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\FetionSF\Include;..\Common\GDIPlus\Includes;..\Output\BaseDlg\Include"
+				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\FetionSF\Include;..\Common\GDIPlus\Includes;..\Output\BaseDlg\Include;..\Output\Flash\Include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -303,6 +303,10 @@
 			</File>
 			<File
 				RelativePath="..\Output\BaseCtrl\Include\BfFlash.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\Flash\Include\FlashShow.h"
 				>
 			</File>
 		</Filter>

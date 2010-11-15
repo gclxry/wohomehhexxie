@@ -1,7 +1,7 @@
 
 #pragma once
 #include "BaseCtrlDefs.h"
-
+#include "FlashShow.h"
 
 class CBfFlash : public CDirectUiWindow
 {
