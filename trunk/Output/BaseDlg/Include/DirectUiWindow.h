@@ -2,7 +2,7 @@
 // DirectUi 窗口的基类
 
 #pragma once
-#include "DirectUiDefs.h"
+#include "BaseDlgDefs.h"
 #include "DirectUiWindowMsgCtrl.h"
 #include "ResImage.h"
 #include "DirectUiDlg.h"

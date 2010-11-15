@@ -1,5 +1,4 @@
 
-#include "stdafx.h"
 #include "GifImage.h"
 
 CGifImage::CGifImage(void)

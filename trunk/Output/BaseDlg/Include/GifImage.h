@@ -1,5 +1,5 @@
 #pragma once
-#include "DirectUiDefs.h"
+#include "BaseDlgDefs.h"
 
 class CResImage;
 

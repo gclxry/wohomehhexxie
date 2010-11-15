@@ -279,7 +279,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\Output\BaseDlg\Include\DirectUiDefs.h"
+			RelativePath="..\Output\BaseDlg\Include\BaseDlgDefs.h"
 			>
 		</File>
 	</Files>

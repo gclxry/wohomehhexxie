@@ -1,6 +1,6 @@
 
 #pragma once
-#include "GlobalDef.h"
+#include "FetionSFDefs.h"
 
 // 子类化窗口类型
 enum PWND_TYPE
@@ -42,8 +42,10 @@ public:
 	// 取消定时器
 	void KillTimer(int nId);
 
-protected:
+public:
 	static HINSTANCE ms_hInstance;
+
+protected:
 
 	// 父窗口句柄
 	HWND m_hParent;

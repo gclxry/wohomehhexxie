@@ -27,3 +27,13 @@ using namespace Gdiplus;
 #define IS_SAVE_HANDLE(hHandle)					(((hHandle) != NULL) && ((hHandle) != INVALID_HANDLE_VALUE))
 #define SAVE_CLOSE_HANDLE(hHandle)				{if(IS_SAVE_HANDLE(hHandle)) ::CloseHandle(hHandle); (hHandle) = NULL;}
 
+
+// 加载的图片类型
+enum IMAGE_TYPE
+{
+	IT_NON	= 0,
+	IT_BMP	= 1,
+	IT_PNG	= 2,
+	IT_JPG	= 3,
+	IT_GIF	= 4,
+};

@@ -154,3 +154,12 @@ GraphicsPath* CUiMethod::MakeRoundRect(Point topLeft, Point bottomRight, INT per
 
 	return path;
 }   
+
+// 取得图片类型
+IMAGE_TYPE CUiMethod::GetImageTypeFromLocal(CString strPath)
+{
+	IMAGE_TYPE ImgType = IT_NON;
+
+
+	return ImgType;
+}

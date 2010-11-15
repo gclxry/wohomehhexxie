@@ -1,5 +1,5 @@
 
-#include "DirectUiBaseDlg.h"
+#include "DirectUiDlg.h"
 
 
 #pragma warning(disable:4312)
@@ -40,7 +40,7 @@ LRESULT CALLBACK PuppetWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-CDirectUiBaseDlg::CDirectUiBaseDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
+CDirectUiDlg::CDirectUiDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 {
 	m_bCoerceEnd = false;
 	m_bIsFreeze = false;
@@ -53,11 +53,11 @@ CDirectUiBaseDlg::CDirectUiBaseDlg(HINSTANCE hInstance, HWND hParentWnd, int nIc
 	AddBfStyle(BFS_HAVE_MIN_BTN | BFS_HAVE_MAX_BTN | BFS_FIRST_IN_WND | BFS_CAN_DRAW);
 }
 
-CDirectUiBaseDlg::~CDirectUiBaseDlg(void)
+CDirectUiDlg::~CDirectUiDlg(void)
 {
 }
 
-int CDirectUiBaseDlg::DoModal()
+int CDirectUiDlg::DoModal()
 {
 	MSG msg;
 	HACCEL hAccelTable;
@@ -83,13 +83,13 @@ int CDirectUiBaseDlg::DoModal()
 	return (int)msg.wParam;
 }
 
-void CDirectUiBaseDlg::OpenDialog()
+void CDirectUiDlg::OpenDialog()
 {
 	DeleteBfStyle(BFS_MODAL_DLG);
 	CreateDlg();
 }
 
-void CDirectUiBaseDlg::EndThisDialog()
+void CDirectUiDlg::EndThisDialog()
 {
 	if (IS_SAVE_HANDLE(m_hWnd))
 	{
@@ -99,7 +99,7 @@ void CDirectUiBaseDlg::EndThisDialog()
 	m_bCoerceEnd = true;
 }
 
-bool CDirectUiBaseDlg::CreateDlg()
+bool CDirectUiDlg::CreateDlg()
 {
 	// 初始化全局字符串
 	RegisterBfoClass();
@@ -108,7 +108,7 @@ bool CDirectUiBaseDlg::CreateDlg()
 	return InitInstance();
 }
 
-ATOM CDirectUiBaseDlg::RegisterBfoClass()
+ATOM CDirectUiDlg::RegisterBfoClass()
 {
 	WNDCLASSEX wcex;
 
@@ -129,7 +129,7 @@ ATOM CDirectUiBaseDlg::RegisterBfoClass()
 	return RegisterClassEx(&wcex);
 }
 
-bool CDirectUiBaseDlg::InitInstance()
+bool CDirectUiDlg::InitInstance()
 {
 	DWORD dwStyle = WS_OVERLAPPEDWINDOW;
 
@@ -147,97 +147,97 @@ bool CDirectUiBaseDlg::InitInstance()
 	return true;
 }
 
-LRESULT CDirectUiBaseDlg::OnNcActive(UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnNcActive(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, message, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnNcCalcSize(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnNcCalcSize(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_NCCALCSIZE, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnEraseBkgnd(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnEraseBkgnd(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_ERASEBKGND, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnNcPaint(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnNcPaint(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_NCPAINT, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnMouseLeave(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnMouseLeave(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_MOUSELEAVE, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnMouseMove(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnMouseMove(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_MOUSEMOVE, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnLButtonDown(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnLButtonDown(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_LBUTTONDOWN, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnLButtonUp(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnLButtonUp(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_LBUTTONUP, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnLButtonDblClk(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnLButtonDblClk(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_LBUTTONDBLCLK, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnGetMinMaxInfo(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnGetMinMaxInfo(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_GETMINMAXINFO, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnNcHitTest(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnNcHitTest(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_NCHITTEST, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnSizeProc(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnSizeProc(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_SIZE, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnEnterSizeMove(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnEnterSizeMove(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_ENTERSIZEMOVE, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnExitSizeMove(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnExitSizeMove(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_EXITSIZEMOVE, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnMove(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnMove(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_MOVE, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnTimer(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnTimer(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_TIMER, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnActivateApp(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnActivateApp(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_ACTIVATEAPP, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::OnKillFocus(WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::OnKillFocus(WPARAM wParam, LPARAM lParam)
 {
 	return DefWindowProc(m_hWnd, WM_KILLFOCUS, wParam, lParam);
 }
 
-LRESULT CDirectUiBaseDlg::WndProc(UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CDirectUiDlg::WndProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	LRESULT nRet = 0;
 	PAINTSTRUCT ps;

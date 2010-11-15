@@ -1,5 +1,5 @@
 #pragma once
-#include "DirectUiDefs.h"
+#include "BaseDlgDefs.h"
 #include "GifImage.h"
 
 // 加载的图片类型
@@ -23,6 +23,8 @@ public:
 	Image *GetImage();
 	CGifImage *GetGifImage();
 	void FreeResImage();
+
+	static IMAGE_TYPE GetImageTypeFromLocal(CString strPath);
 
 private:
 	Bitmap * LoadBmpImage(CString strPath);

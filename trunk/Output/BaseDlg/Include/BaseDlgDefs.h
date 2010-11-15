@@ -1,24 +1,12 @@
 
 #pragma once
-
-#pragma warning(disable:4100)
-
-#include <CRTDBG.H>
-#include <atltypes.h>
-
-
-#include "..\..\..\..\..\TDDK\GDIPlus\Includes\gdiplus.h"
-using namespace Gdiplus;
+#include "FetionSFDefs.h"
 
 // 下拉三角形的大小
 #define DROP_SJ_H								(4)
 #define DROP_SJ_W								(7)
 
 #define MSG_TITLE								_T("奇幻科技")
-
-#define SAVE_DELETE(pMem)						{if((pMem) != NULL) delete (pMem); (pMem) = NULL;}
-#define IS_SAVE_HANDLE(hHandle)					(((hHandle) != NULL) && ((hHandle) != INVALID_HANDLE_VALUE))
-#define SAVE_CLOSE_HANDLE(hHandle)				{if(IS_SAVE_HANDLE(hHandle)) ::CloseHandle(hHandle); (hHandle) = NULL;}
 
 // 窗口类型
 enum WND_TYPE

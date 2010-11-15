@@ -1,13 +1,12 @@
 
 #include "HighEfficiencyDlg.h"
-#include "BfMenuHook.h"
 
-#define __base_super					CDirectUiBaseDlg
+#define __base_super					CDirectUiDlg
 
 bool CHighEfficiency::m_bIsNeedLButtonUpMsg = false;
 
 CHighEfficiency::CHighEfficiency(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
-: CDirectUiBaseDlg(hInstance, hParentWnd, nIconId)
+: CDirectUiDlg(hInstance, hParentWnd, nIconId)
 {
 	m_bIsHaveCaption = true;
 	m_pCaptionBar = NULL;
@@ -263,7 +262,7 @@ LRESULT CHighEfficiency::OnTimer(WPARAM wParam, LPARAM lParam)
 LRESULT CHighEfficiency::OnActivateApp(WPARAM wParam, LPARAM lParam)
 {
 //	m_UiManager.OnActivateApp(wParam, lParam);
-	return CDirectUiBaseDlg::OnActivateApp(wParam, lParam);
+	return CDirectUiDlg::OnActivateApp(wParam, lParam);
 }
 
 LRESULT CHighEfficiency::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
