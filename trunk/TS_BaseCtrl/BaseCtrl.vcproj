@@ -151,18 +151,6 @@
 	</References>
 	<Files>
 		<Filter
-			Name="BfButton"
-			>
-			<File
-				RelativePath=".\BfButton.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Output\BaseCtrl\Include\BfButton.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="BaseCtrlManager"
 			>
 			<File
@@ -173,6 +161,46 @@
 				RelativePath="..\Output\BaseCtrl\Include\BaseCtrlManager.h"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="001 按钮系列"
+			>
+			<Filter
+				Name="基类"
+				>
+				<File
+					RelativePath=".\BfButton.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\BaseCtrl\Include\BfButton.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="渐变按钮"
+				>
+				<File
+					RelativePath=".\BfGraduatedButton.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\BaseCtrl\Include\BfGraduatedButton.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="下拉列表框渐变按钮"
+				>
+				<File
+					RelativePath=".\BfGraduatedDropDownButton.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\BaseCtrl\Include\BfGraduatedDropDownButton.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath="..\Output\BaseCtrl\Include\BaseCtrl.h"

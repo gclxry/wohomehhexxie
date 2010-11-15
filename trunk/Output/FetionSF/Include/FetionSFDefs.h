@@ -7,6 +7,7 @@
 #include <atlbase.h>
 #include <atltypes.h>
 #include <atlstr.h>
+#include <process.h>
 
 #include <vector>
 #include <list>
