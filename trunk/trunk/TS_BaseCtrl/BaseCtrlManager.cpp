@@ -9,7 +9,6 @@ CBaseCtrlManager::~CBaseCtrlManager(void)
 {
 }
 
-/*
 CBfComboSelBtnBar* CBaseCtrlManager::CreateBfComboSelBtnBar(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId)
 {
 	CBfComboSelBtnBar *pWnd = NULL;
@@ -128,29 +127,7 @@ CBfDropDownButton* CBaseCtrlManager::CreateBfDropDownButton(CDirectUiWindowMsgCt
 
 	return pWnd;
 }
-
-CBfGraduatedDropDownButton* CBaseCtrlManager::CreateBfGraduatedDropDownButton(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
-{
-	CBfGraduatedDropDownButton *pWnd = NULL;
-	if (IsReady())
-	{
-		pWnd = new CBfGraduatedDropDownButton;
-		if (pWnd != NULL)
-		{
-			if (!pWnd->CreateWnd(m_pParentDlg, this, pMsgCtrl, WndRect, nWndId, DWT_DROPDOWN_GRADIENT_BUTTON, nImageId, strImagePath, nImageType))
-			{
-				SAVE_DELETE(pWnd);
-			}
-			else
-			{
-				m_WndList.NewWndObj(pWnd);
-			}
-		}
-	}
-
-	return pWnd;
-}
-
+/*
 CBfNormalGraduatedButton* CBaseCtrlManager::CreateBfNormalGraduatedButton(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfNormalGraduatedButton *pWnd = NULL;
@@ -194,7 +171,7 @@ CBfDrawButton* CBaseCtrlManager::CreateBfDrawButton(CDirectUiWindowMsgCtrl *pMsg
 
 	return pWnd;
 }
-
+*/
 CBfGifStatic* CBaseCtrlManager::CreateBfGifStatic(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath)
 {
 	CBfGifStatic *pWnd = NULL;
@@ -266,32 +243,10 @@ CBfEdit* CBaseCtrlManager::CreateBfEdit(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect 
 	CBfEdit *pWnd = NULL;
 	if (IsReady())
 	{
-		pWnd = new CBfEdit(m_pParentDlg->m_hInstance);
+		pWnd = new CBfEdit(CWindowBase::ms_hInstance);
 		if (pWnd != NULL)
 		{
 			if (!pWnd->CreateWnd(m_pParentDlg, this, pMsgCtrl, WndRect, nWndId, DWT_EDIT, nImageId, strImagePath, nImageType))
-			{
-				SAVE_DELETE(pWnd);
-			}
-			else
-			{
-				m_WndList.NewWndObj(pWnd);
-			}
-		}
-	}
-
-	return pWnd;
-}
-
-CBfRichEdit* CBaseCtrlManager::CreateBfRichEdit(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId)
-{
-	CBfRichEdit *pWnd = NULL;
-	if (IsReady())
-	{
-		pWnd = new CBfRichEdit();
-		if (pWnd != NULL)
-		{
-			if (!pWnd->CreateWnd(m_pParentDlg, this, pMsgCtrl, WndRect, nWndId, DWT_RICH_EDIT))
 			{
 				SAVE_DELETE(pWnd);
 			}
@@ -342,4 +297,4 @@ CBfComboBox* CBaseCtrlManager::CreateBfComboBox(CDirectUiWindowMsgCtrl *pMsgCtrl
 
 	return pWnd;
 }
-*/
+

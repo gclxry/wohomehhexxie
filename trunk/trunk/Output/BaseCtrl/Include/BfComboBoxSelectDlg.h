@@ -1,7 +1,6 @@
 
 #pragma once
-#include "Win32BaseDlg.h"
-#include "DirectUiWndMsgCtrl.h"
+#include "BaseCtrlDefs.h"
 #include "BfComboSelBtnBar.h"
 
 class CDirectUiManager;

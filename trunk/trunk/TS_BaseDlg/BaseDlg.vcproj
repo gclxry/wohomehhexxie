@@ -177,42 +177,14 @@
 		<Filter
 			Name="002 普通高效对话框"
 			>
-			<Filter
-				Name="高效对话框"
+			<File
+				RelativePath=".\HighEfficiencyDlg.cpp"
 				>
-				<File
-					RelativePath=".\HighEfficiencyDlg.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\Output\BaseDlg\Include\HighEfficiencyDlg.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="子窗口管理器"
+			</File>
+			<File
+				RelativePath="..\Output\BaseDlg\Include\HighEfficiencyDlg.h"
 				>
-				<File
-					RelativePath=".\DirectUiManager.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\Output\BaseDlg\Include\DirectUiManager.h"
-					>
-				</File>
-				<Filter
-					Name="子窗口列表"
-					>
-					<File
-						RelativePath=".\WndList.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\Output\BaseDlg\Include\WndList.h"
-						>
-					</File>
-				</Filter>
-			</Filter>
+			</File>
 		</Filter>
 		<Filter
 			Name="003 异形动态对话框"
@@ -267,12 +239,40 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="#子窗口消息回调函数"
+			Name="#子窗口管理"
 			>
-			<File
-				RelativePath="..\Output\BaseDlg\Include\DirectUiWindowMsgCtrl.h"
+			<Filter
+				Name="子窗口列表"
 				>
-			</File>
+				<File
+					RelativePath=".\WndList.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\BaseDlg\Include\WndList.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="子窗口消息回调函数"
+				>
+				<File
+					RelativePath="..\Output\BaseDlg\Include\DirectUiWindowMsgCtrl.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="子窗口管理器"
+				>
+				<File
+					RelativePath=".\DirectUiManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\BaseDlg\Include\DirectUiManager.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath="..\Output\BaseDlg\Include\BaseDlg.h"

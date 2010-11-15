@@ -1,8 +1,10 @@
+
 #pragma once
+
+#include "BaseCtrlDefs.h"
 #include "BfBaseBar.h"
 #include "BfStatic.h"
 #include "BfPictureButton.h"
-#include "DirectUiWndMsgCtrl.h"
 
 struct COMBO_DATA 
 {

@@ -1,8 +1,7 @@
-#include "StdAfx.h"
-#include <assert.h>
+
 #include "BfComboBoxSelectDlg.h"
 #include "BfComboBox.h"
-#include "DirectUiManager.h"
+#include "BaseCtrlManager.h"
 
 // 被选择的按钮的大小
 #define CBSB_SELECT_BTN_H						(45)
@@ -61,7 +60,7 @@ CBfComboBoxSelectDlg::~CBfComboBoxSelectDlg(void)
 void CBfComboBoxSelectDlg::ReleaseBtnList()
 {
 	if (m_pUiManager != NULL)
-		m_pUiManager->ClearAllDirectUiWnd();
+		m_pUiManager->ClearAllDirectUiWindow();
 
 	m_SelBtnList.clear();
 }
@@ -145,7 +144,8 @@ void CBfComboBoxSelectDlg::OnCreate()
 			{
 				// 初始化引擎
 				m_pUiManager->InitManager(this);
-				m_pUiManager->SetBkgndColor(Color(255, 255, 255));
+				// TBD 背景需要自绘为白色啦！
+				//m_pUiManager->SetBkgndColor(Color(255, 255, 255));
 			}
 		}
 
@@ -158,7 +158,7 @@ void CBfComboBoxSelectDlg::OnCreate()
 			for (COMBO_DATA_LIST::iterator pItem = pComList->begin(); pItem != pComList->end(); pItem++)
 			{
 				COMBO_DATA ComData = *pItem;
-				CBfComboSelBtnBar* pBtn = m_pUiManager->CreateBfComboSelBtnBar(this, CRect(0, 0, 0, 0), nId);
+				CBfComboSelBtnBar* pBtn = ((CBaseCtrlManager*)m_pUiManager)->CreateBfComboSelBtnBar(this, CRect(0, 0, 0, 0), nId);
 				if (pBtn != NULL)
 				{
 					if (nId == m_nSelectBtnId)
@@ -174,7 +174,7 @@ void CBfComboBoxSelectDlg::OnCreate()
 
 			// 2. 设置窗口默认大小
 			CRect DlgRect = m_pComboBox->GetSelectDlgPos();
-			ClientToScreen(m_hParent, DlgRect);
+			CUiMethod::ClientToScreen(m_hParent, DlgRect);
 			int nWndH = (CBSB_DLG_FRAME * 2);
 			if (pComList->size() <= 1)
 			{
@@ -204,7 +204,7 @@ void CBfComboBoxSelectDlg::OnCreate()
 
 void CBfComboBoxSelectDlg::OnPaint(HDC hPaintDc)
 {
-	CRect WndRect = GetWndRect(m_hWnd);
+	CRect WndRect = this->GetClientRect();
 	HDC hMemoryDC = ::CreateCompatibleDC(hPaintDc);
 	if (hMemoryDC != NULL && IsReady())
 	{
@@ -214,7 +214,7 @@ void CBfComboBoxSelectDlg::OnPaint(HDC hPaintDc)
 			::SelectObject(hMemoryDC, hMemoryBitmap);
 
 			// 开始画图
-			m_pUiManager->OnPaint(hMemoryDC, WndRect, UBT_NORMAL);
+			m_pUiManager->OnPaint(hMemoryDC, WndRect);
 
 			::BitBlt(hPaintDc, 0, 0, WndRect.Width(), WndRect.Height(),
 				hMemoryDC, 0, 0, SRCCOPY);
@@ -387,7 +387,7 @@ void CBfComboBoxSelectDlg::SetSelectButtonPos(int nSelBtnId)
 	m_nSelectBtnId = nSelBtnId;
 
 	int nBtnNum = 1, nBtnTop = CBSB_DLG_FRAME;
-	CRect WndRect = GetWndRect(m_hWnd);
+	CRect WndRect = this->GetClientRect();
 
 	for (COMBO_SEL_BTN_LIST::iterator pBtnItem = m_SelBtnList.begin();
 		pBtnItem != m_SelBtnList.end(); pBtnItem++)
@@ -426,7 +426,7 @@ void CBfComboBoxSelectDlg::DrawGraduatedSelBtn()
 			while (!m_bIsDestroy && nOldSelId == m_nSelectBtnId)
 			{
 				int nBtnNum = 1, nBtnTop = CBSB_DLG_FRAME;
-				CRect WndRect = GetWndRect(m_hWnd);
+				CRect WndRect = this->GetClientRect();
 				bool bHaveMove = false;
 
 				for (COMBO_SEL_BTN_LIST::iterator pBtnItem = m_SelBtnList.begin();
