@@ -277,7 +277,7 @@ void CBfComboBoxSelectDlg::DUI_OnMouseLeave(WPARAM wParam, LPARAM lParam)
 
 }
 
-bool CBfComboBoxSelectDlg::OnDirectUiWndMsgProc(int nMsgId, DWM_INFO &MsgInfo)
+bool CBfComboBoxSelectDlg::OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo)
 {
 	bool bRet = false;
 	if (IsReady())

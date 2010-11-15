@@ -14,7 +14,7 @@ public:
 	CBfComboBox(void);
 	virtual ~CBfComboBox(void);
 
-	virtual bool OnDirectUiWndMsgProc(int nMsgId, DWM_INFO &MsgInfo);
+	virtual bool OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo);
 
 	// ´´½¨´°¿Ú
 	virtual bool CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManager, CDirectUiWindowMsgCtrl *pMsgCtrl,

@@ -1,6 +1,6 @@
-#include "StdAfx.h"
+
 #include "BfCheckBox.h"
-#include "DirectUiManager.h"
+
 
 CBfCheckBox::CBfCheckBox(void)
 {
@@ -53,7 +53,7 @@ void CBfCheckBox::OnPaint()
 	// »æÖÆ±³¾°Í¼
 	if (m_BkgndImage.IsReady())
 	{
-		m_pUiManager->DrawCenterImage(m_pDoGrap, m_BkgndImage.GetImage(), m_WndRect);
+		CGdiPlusDraw::DrawCenterImage(m_pDoGrap, m_BkgndImage.GetImage(), m_WndRect);
 	}
 
 	// »æÖÆ·½¿ò
@@ -61,7 +61,7 @@ void CBfCheckBox::OnPaint()
 	fkRect.right = fkRect.left + CHECK_BOX_HW;
 	fkRect.top += 2;
 	fkRect.bottom = fkRect.top + CHECK_BOX_HW;
-	m_pUiManager->DrawRectLine(Color(137, 166, 184), fkRect);
+	CGdiPlusDraw::DrawRectLine(m_pDoGrap, Color(137, 166, 184), fkRect);
 
 	if (IsMouseHover())
 	{
@@ -70,7 +70,7 @@ void CBfCheckBox::OnPaint()
 		OutRect.right += 1;
 		OutRect.top -= 1;
 		OutRect.bottom += 1;
-		m_pUiManager->DrawRectLine(Color(156, 204, 237), OutRect);
+		CGdiPlusDraw::DrawRectLine(m_pDoGrap, Color(156, 204, 237), OutRect);
 	}
 
 	// »æÖÆ ¡Ì
@@ -81,7 +81,7 @@ void CBfCheckBox::OnPaint()
 		fkRect.left -= 3;
 		fkRect.right += 10;
 
-		m_pUiManager->DrawText(m_pDoGrap, _T("¡Ì"), fkRect, m_WndTextInfo.strFontName, nFontHeight, FStyle,
+		CGdiPlusDraw::DrawText(m_pDoGrap, _T("¡Ì"), fkRect, m_WndTextInfo.strFontName, nFontHeight, FStyle,
 			Color(104, 159, 21), m_WndTextInfo.OutFormat);
 	}
 
@@ -91,6 +91,6 @@ void CBfCheckBox::OnPaint()
 		if (m_WndTextInfo.IsEmpty())
 			SetDefaultFont();
 
-		m_pUiManager->DrawWndText(m_pDoGrap, m_WndTextInfo);
+		CGdiPlusDraw::DrawWndText(m_pDoGrap, m_WndTextInfo);
 	}
 }

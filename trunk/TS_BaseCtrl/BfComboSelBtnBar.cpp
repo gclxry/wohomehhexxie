@@ -130,7 +130,7 @@ void CBfComboSelBtnBar::SetCloseButtonImage(BTN_STA_CTNS nStas, CString strImage
 	}
 }
 
-bool CBfComboSelBtnBar::OnDirectUiWndMsgProc(int nMsgId, DWM_INFO &MsgInfo)
+bool CBfComboSelBtnBar::OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo)
 {
 	bool bRet = false;
 	if (IsReady())
@@ -138,7 +138,7 @@ bool CBfComboSelBtnBar::OnDirectUiWndMsgProc(int nMsgId, DWM_INFO &MsgInfo)
 		bRet = true;
 		if (nMsgId == DWM_LBUTTONUP)
 		{
-			m_pMsgCtrl->OnDirectUiWndMsgProc(DWM_LBUTTONUP, MsgInfo);
+			m_pMsgCtrl->OnDirectUiWindowMsgProc(DWM_LBUTTONUP, MsgInfo);
 		}
 		else if (nMsgId == DWM_MOUSEHOVER)
 		{
@@ -160,7 +160,7 @@ void CBfComboSelBtnBar::OnMouseHover(CPoint point)
 	DWM_INFO MsgInfo;
 	MsgInfo.wParam = m_nWndId;
 	MsgInfo.lParam = NULL;
-	m_pMsgCtrl->OnDirectUiWndMsgProc(DWM_MOUSEHOVER, MsgInfo);
+	m_pMsgCtrl->OnDirectUiWindowMsgProc(DWM_MOUSEHOVER, MsgInfo);
 }
 
 void CBfComboSelBtnBar::OnMouseLeave(CPoint point)

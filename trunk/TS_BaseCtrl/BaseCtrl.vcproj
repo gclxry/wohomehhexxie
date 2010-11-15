@@ -273,10 +273,50 @@
 		<Filter
 			Name="004 CheckBox"
 			>
+			<File
+				RelativePath=".\BfCheckBox.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseCtrl\Include\BfCheckBox.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="005 Edit系列"
 			>
+			<File
+				RelativePath=".\BfEdit.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseCtrl\Include\BfEdit.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="006 Flash窗口"
+			>
+			<File
+				RelativePath=".\BfFlash.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseCtrl\Include\BfFlash.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="#Windows实际窗口"
+			>
+			<File
+				RelativePath=".\BfWindowsWnd.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseCtrl\Include\BfWindowsWnd.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath="..\Output\BaseCtrl\Include\BaseCtrl.h"
