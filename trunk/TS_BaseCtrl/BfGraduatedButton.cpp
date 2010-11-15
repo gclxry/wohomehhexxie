@@ -36,7 +36,7 @@ CBfGraduatedButton::~CBfGraduatedButton(void)
 }
 
 // ´´½¨´°¿Ú
-bool CBfGraduatedButton::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManager, CDirectUiWndMsgCtrl *pMsgCtrl,
+bool CBfGraduatedButton::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManager, CDirectUiWindowMsgCtrl *pMsgCtrl,
 					   CRect WndRect, int nWndId, WND_TYPE WndType, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	bool bRet = CBfButton::CreateWnd(pParentDlg, pUiManager, pMsgCtrl, WndRect, nWndId, WndType, nImageId, strImagePath, nImageType);
@@ -111,8 +111,8 @@ void CBfGraduatedButton::SetDrawButtonParam()
 			{
 				bIsMouseHoveSta = true;
 				int nUpAlpha = nAUp * m_nDrawCtns, nDownAlpha = nADown * m_nDrawCtns;
-				SafeColor(nUpAlpha);
-				SafeColor(nDownAlpha);
+				CUiMethod::SafeColor(nUpAlpha);
+				CUiMethod::SafeColor(nDownAlpha);
 
 				m_UpColor = Color(nUpAlpha, m_UpGraduateColor.GetR(), m_UpGraduateColor.GetG(), m_UpGraduateColor.GetB());
 				m_DownColor = Color(nDownAlpha, m_DownGraduateColor.GetR(), m_DownGraduateColor.GetG(), m_DownGraduateColor.GetB());
@@ -132,8 +132,8 @@ void CBfGraduatedButton::SetDrawButtonParam()
 				while (m_nDrawCtns >= 1)
 				{
 					int nUpAlpha = nAUp * m_nDrawCtns, nDownAlpha = nADown * m_nDrawCtns;
-					SafeColor(nUpAlpha);
-					SafeColor(nDownAlpha);
+					CUiMethod::SafeColor(nUpAlpha);
+					CUiMethod::SafeColor(nDownAlpha);
 
 					m_UpColor = Color(nUpAlpha, m_UpGraduateColor.GetR(), m_UpGraduateColor.GetG(), m_UpGraduateColor.GetB());
 					m_DownColor = Color(nDownAlpha, m_DownGraduateColor.GetR(), m_DownGraduateColor.GetG(), m_DownGraduateColor.GetB());

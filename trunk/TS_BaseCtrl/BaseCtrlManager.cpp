@@ -10,7 +10,7 @@ CBaseCtrlManager::~CBaseCtrlManager(void)
 }
 
 /*
-CBfComboSelBtnBar* CBaseCtrlManager::CreateBfComboSelBtnBar(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId)
+CBfComboSelBtnBar* CBaseCtrlManager::CreateBfComboSelBtnBar(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId)
 {
 	CBfComboSelBtnBar *pWnd = NULL;
 	if (IsReady())
@@ -33,7 +33,7 @@ CBfComboSelBtnBar* CBaseCtrlManager::CreateBfComboSelBtnBar(CDirectUiWndMsgCtrl 
 }
 
 
-CBfFlash* CBaseCtrlManager::CreateBfFlash(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, CString strFlashPath)
+CBfFlash* CBaseCtrlManager::CreateBfFlash(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, CString strFlashPath)
 {
 	CBfFlash *pWnd = NULL;
 	if (IsReady())
@@ -62,7 +62,7 @@ CBfFlash* CBaseCtrlManager::CreateBfFlash(CDirectUiWndMsgCtrl *pMsgCtrl, CRect W
 	return pWnd;
 }
 
-CBfStatic* CBaseCtrlManager::CreateBfStatic(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfStatic* CBaseCtrlManager::CreateBfStatic(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfStatic *pWnd = NULL;
 	if (IsReady())
@@ -84,7 +84,7 @@ CBfStatic* CBaseCtrlManager::CreateBfStatic(CDirectUiWndMsgCtrl *pMsgCtrl, CRect
 	return pWnd;
 }
 
-CBfPictureButton* CBaseCtrlManager::CreateBfPictureButton(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, BTN_STA_CTNS nPicStas, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfPictureButton* CBaseCtrlManager::CreateBfPictureButton(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, BTN_STA_CTNS nPicStas, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfPictureButton *pWnd = NULL;
 	if (IsReady())
@@ -107,7 +107,7 @@ CBfPictureButton* CBaseCtrlManager::CreateBfPictureButton(CDirectUiWndMsgCtrl *p
 	return pWnd;
 }
 
-CBfDropDownButton* CBaseCtrlManager::CreateBfDropDownButton(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfDropDownButton* CBaseCtrlManager::CreateBfDropDownButton(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfDropDownButton *pWnd = NULL;
 	if (IsReady())
@@ -129,7 +129,7 @@ CBfDropDownButton* CBaseCtrlManager::CreateBfDropDownButton(CDirectUiWndMsgCtrl 
 	return pWnd;
 }
 
-CBfGraduatedDropDownButton* CBaseCtrlManager::CreateBfGraduatedDropDownButton(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfGraduatedDropDownButton* CBaseCtrlManager::CreateBfGraduatedDropDownButton(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfGraduatedDropDownButton *pWnd = NULL;
 	if (IsReady())
@@ -151,7 +151,7 @@ CBfGraduatedDropDownButton* CBaseCtrlManager::CreateBfGraduatedDropDownButton(CD
 	return pWnd;
 }
 
-CBfNormalGraduatedButton* CBaseCtrlManager::CreateBfNormalGraduatedButton(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfNormalGraduatedButton* CBaseCtrlManager::CreateBfNormalGraduatedButton(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfNormalGraduatedButton *pWnd = NULL;
 	if (IsReady())
@@ -173,7 +173,7 @@ CBfNormalGraduatedButton* CBaseCtrlManager::CreateBfNormalGraduatedButton(CDirec
 	return pWnd;
 }
 
-CBfDrawButton* CBaseCtrlManager::CreateBfDrawButton(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfDrawButton* CBaseCtrlManager::CreateBfDrawButton(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfDrawButton *pWnd = NULL;
 	if (IsReady())
@@ -195,7 +195,7 @@ CBfDrawButton* CBaseCtrlManager::CreateBfDrawButton(CDirectUiWndMsgCtrl *pMsgCtr
 	return pWnd;
 }
 
-CBfGifStatic* CBaseCtrlManager::CreateBfGifStatic(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath)
+CBfGifStatic* CBaseCtrlManager::CreateBfGifStatic(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath)
 {
 	CBfGifStatic *pWnd = NULL;
 	if (IsReady())
@@ -217,7 +217,7 @@ CBfGifStatic* CBaseCtrlManager::CreateBfGifStatic(CDirectUiWndMsgCtrl *pMsgCtrl,
 	return pWnd;
 }
 
-CBfMouseMoveStatic* CBaseCtrlManager::CreateBfMouseMoveStatic(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfMouseMoveStatic* CBaseCtrlManager::CreateBfMouseMoveStatic(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfMouseMoveStatic *pWnd = NULL;
 	if (IsReady())
@@ -239,7 +239,7 @@ CBfMouseMoveStatic* CBaseCtrlManager::CreateBfMouseMoveStatic(CDirectUiWndMsgCtr
 	return pWnd;
 }
 
-CBfLinkStatic* CBaseCtrlManager::CreateBfLinkStatic(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfLinkStatic* CBaseCtrlManager::CreateBfLinkStatic(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfLinkStatic *pWnd = NULL;
 	if (IsReady())
@@ -261,7 +261,7 @@ CBfLinkStatic* CBaseCtrlManager::CreateBfLinkStatic(CDirectUiWndMsgCtrl *pMsgCtr
 	return pWnd;
 }
 
-CBfEdit* CBaseCtrlManager::CreateBfEdit(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfEdit* CBaseCtrlManager::CreateBfEdit(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfEdit *pWnd = NULL;
 	if (IsReady())
@@ -283,7 +283,7 @@ CBfEdit* CBaseCtrlManager::CreateBfEdit(CDirectUiWndMsgCtrl *pMsgCtrl, CRect Wnd
 	return pWnd;
 }
 
-CBfRichEdit* CBaseCtrlManager::CreateBfRichEdit(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId)
+CBfRichEdit* CBaseCtrlManager::CreateBfRichEdit(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId)
 {
 	CBfRichEdit *pWnd = NULL;
 	if (IsReady())
@@ -305,7 +305,7 @@ CBfRichEdit* CBaseCtrlManager::CreateBfRichEdit(CDirectUiWndMsgCtrl *pMsgCtrl, C
 	return pWnd;
 }
 
-CBfCheckBox* CBaseCtrlManager::CreateBfCheckBox(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfCheckBox* CBaseCtrlManager::CreateBfCheckBox(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfCheckBox *pWnd = NULL;
 	if (IsReady())
@@ -327,7 +327,7 @@ CBfCheckBox* CBaseCtrlManager::CreateBfCheckBox(CDirectUiWndMsgCtrl *pMsgCtrl, C
 	return pWnd;
 }
 
-CBfComboBox* CBaseCtrlManager::CreateBfComboBox(CDirectUiWndMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+CBfComboBox* CBaseCtrlManager::CreateBfComboBox(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfComboBox *pWnd = NULL;
 	if (IsReady())
