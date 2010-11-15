@@ -1,6 +1,6 @@
-#include "StdAfx.h"
+
 #include "BfMouseMoveStatic.h"
-#include "DirectUiManager.h"
+
 
 CBfMouseMoveStatic::CBfMouseMoveStatic(void)
 {
