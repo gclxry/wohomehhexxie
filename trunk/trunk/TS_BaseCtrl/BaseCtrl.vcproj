@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="gb2312"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="BaseCtrl"
-	ProjectGUID="{CDEC508A-8BCB-451D-9BA7-C3B1B584AD98}"
+	ProjectGUID="{CDEC508A-8BCB-451D-9BA7-C3B1B584C8AD}"
 	RootNamespace="BaseCtrl"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -41,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\FetionSF\Include;..\Common\GDIPlus\Includes"
+				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\FetionSF\Include;..\Common\GDIPlus\Includes;..\Output\BaseDlg\Include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -62,8 +63,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="FetionSF.lib"
-				AdditionalLibraryDirectories="..\Output\FetionSF\Lib\Debug;..\Common\GDIPlus\Lib"
+				AdditionalDependencies="FetionSF.lib BaseDlg.lib"
+				AdditionalLibraryDirectories="..\Output\FetionSF\Lib\Debug;..\Common\GDIPlus\Lib;..\Output\BaseDlg\Lib\Debug"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -107,7 +108,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\FetionSF\Include;..\Common\GDIPlus\Includes"
+				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\FetionSF\Include;..\Common\GDIPlus\Includes;..\Output\BaseDlg\Include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -126,8 +127,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="FetionSF.lib"
-				AdditionalLibraryDirectories="..\Output\FetionSF\Lib\Release;..\Common\GDIPlus\Lib"
+				AdditionalDependencies="FetionSF.lib BaseDlg.lib"
+				AdditionalLibraryDirectories="..\Output\FetionSF\Lib\Release;..\Common\GDIPlus\Lib;..\Output\BaseDlg\Lib\Release"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -149,6 +150,26 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="BfButton"
+			>
+			<File
+				RelativePath=".\BfButton.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseCtrl\Include\BfButton.h"
+				>
+			</File>
+		</Filter>
+		<File
+			RelativePath="..\Output\BaseCtrl\Include\BaseCtrl.h"
+			>
+		</File>
+		<File
+			RelativePath="..\Output\BaseCtrl\Include\BaseCtrlDefs.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

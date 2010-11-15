@@ -8,6 +8,7 @@ bool CHighEfficiency::m_bIsNeedLButtonUpMsg = false;
 CHighEfficiency::CHighEfficiency(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 : CDirectUiDlg(hInstance, hParentWnd, nIconId)
 {
+	m_pUiManager = NULL;
 }
 
 CHighEfficiency::~CHighEfficiency(void)
@@ -23,11 +24,11 @@ LRESULT CHighEfficiency::OnEnterSizeMove(WPARAM wParam, LPARAM lParam)
 LRESULT CHighEfficiency::OnMouseLeave(WPARAM wParam, LPARAM lParam)
 {
 	// 非冻结状态下才响应鼠标消息
-	if (!m_bIsFreeze)
+	if (!m_bIsFreeze && IsReady())
 	{
 		AddBfStyle(BFS_FIRST_IN_WND);
 		CPoint point(-1, -1);
-		m_UiManager.OnMouseMove(0, point);
+		m_pUiManager->OnMouseMove(0, point);
 	}
 	return 1;
 }
@@ -35,7 +36,7 @@ LRESULT CHighEfficiency::OnMouseLeave(WPARAM wParam, LPARAM lParam)
 LRESULT CHighEfficiency::OnMouseMove(WPARAM wParam, LPARAM lParam)
 {
 	// 非冻结状态下才响应鼠标消息
-	if (!m_bIsFreeze)
+	if (!m_bIsFreeze && IsReady())
 	{
 		// 请求取得鼠标离开窗口的消息
 		if (IsSetBfStyle(BFS_FIRST_IN_WND))
@@ -50,7 +51,7 @@ LRESULT CHighEfficiency::OnMouseMove(WPARAM wParam, LPARAM lParam)
 
 		int nFlags = (int)wParam;
 		CPoint point(LOWORD(lParam), HIWORD(lParam));
-		m_UiManager.OnMouseMove(nFlags, point);
+		m_pUiManager->OnMouseMove(nFlags, point);
 	}
 
 	return 1;
@@ -65,25 +66,28 @@ LRESULT CHighEfficiency::OnLButtonDown(WPARAM wParam, LPARAM lParam)
 	//禁止显示移动矩形窗体框
 	::SystemParametersInfo(SPI_SETDRAGFULLWINDOWS, TRUE, NULL, 0);
 
-	int nFlags = (int)wParam;
-	CPoint point(LOWORD(lParam), HIWORD(lParam));
-	m_UiManager.OnLButtonDown(nFlags, point);
-
-	if (CDirectUiWindow::IsWndLButtonDown())
+	if (IsReady())
 	{
-		SetCapture(m_hWnd);
+		int nFlags = (int)wParam;
+		CPoint point(LOWORD(lParam), HIWORD(lParam));
+		m_pUiManager->OnLButtonDown(nFlags, point);
 
-		if (CHighEfficiency::m_bIsNeedLButtonUpMsg)
+		if (CDirectUiWindow::IsWndLButtonDown())
 		{
-			CHighEfficiency::m_bIsNeedLButtonUpMsg = false;
-			OnLButtonUp(wParam, lParam);
+			SetCapture(m_hWnd);
+
+			if (CHighEfficiency::m_bIsNeedLButtonUpMsg)
+			{
+				CHighEfficiency::m_bIsNeedLButtonUpMsg = false;
+				OnLButtonUp(wParam, lParam);
+			}
 		}
-	}
-	else
-	{
-		if (!IsSetBfStyle(BFS_MAX_WND))
+		else
 		{
-			::PostMessage(m_hWnd, WM_NCLBUTTONDOWN, HTCAPTION, lParam);
+			if (!IsSetBfStyle(BFS_MAX_WND))
+			{
+				::PostMessage(m_hWnd, WM_NCLBUTTONDOWN, HTCAPTION, lParam);
+			}
 		}
 	}
 
@@ -93,24 +97,31 @@ LRESULT CHighEfficiency::OnLButtonDown(WPARAM wParam, LPARAM lParam)
 LRESULT CHighEfficiency::OnLButtonUp(WPARAM wParam, LPARAM lParam)
 {
 	ReleaseCapture();
+	
+	if (IsReady())
+	{
+		int nFlags = (int)wParam;
+		CPoint point(LOWORD(lParam), HIWORD(lParam));
+		m_pUiManager->OnLButtonUp(nFlags, point);
+	}
 
-	int nFlags = (int)wParam;
-	CPoint point(LOWORD(lParam), HIWORD(lParam));
-	m_UiManager.OnLButtonUp(nFlags, point);
 	return 1;
 }
 
 LRESULT CHighEfficiency::OnLButtonDblClk(WPARAM wParam, LPARAM lParam)
 {
-	int nFlags = (int)wParam;
-	CPoint point(LOWORD(lParam), HIWORD(lParam));
-	m_UiManager.OnLButtonDblClk(nFlags, point);
+	if (IsReady())
+	{
+		int nFlags = (int)wParam;
+		CPoint point(LOWORD(lParam), HIWORD(lParam));
+		m_pUiManager->OnLButtonDblClk(nFlags, point);
+	}
 	return 1;
 }
 
 LRESULT CHighEfficiency::OnNcHitTest(WPARAM wParam, LPARAM lParam)
 {
-	if (IsSetBfStyle(BFS_CAN_DRAW))
+	if (IsSetBfStyle(BFS_CAN_DRAW) && IsReady())
 	{
 		CPoint point(LOWORD(lParam), HIWORD(lParam));
 
@@ -170,7 +181,8 @@ LRESULT CHighEfficiency::OnNcHitTest(WPARAM wParam, LPARAM lParam)
 
 void CHighEfficiency::OnDestroy()
 {
-	m_UiManager.OnDestroy();
+	if (IsReady())
+		m_pUiManager->OnDestroy();
 }
 
 LRESULT CHighEfficiency::OnNcActive(UINT message, WPARAM wParam, LPARAM lParam)
@@ -190,11 +202,13 @@ LRESULT CHighEfficiency::OnNcPaint(WPARAM wParam, LPARAM lParam)
 
 void CHighEfficiency::OnCreate()
 {
-	// 初始化引擎
-	m_UiManager.InitManager(this);
-
-	// 设置默认大小
-	this->CenterWindow(260, 480);
+	if (IsReady())
+	{
+		// 初始化引擎
+		m_pUiManager->InitManager(this);
+		// 设置默认大小
+		this->CenterWindow(260, 480);
+	}
 }
 
 LRESULT CHighEfficiency::OnNcCalcSize(WPARAM wParam, LPARAM lParam)
@@ -204,38 +218,52 @@ LRESULT CHighEfficiency::OnNcCalcSize(WPARAM wParam, LPARAM lParam)
 
 LRESULT CHighEfficiency::OnSizeProc(WPARAM wParam, LPARAM lParam)
 {
-	int nCtns = m_UiManager.GetTrueWndCtns();
+	LRESULT lRes = 0;
+	if (IsReady())
+	{
+		int nCtns = m_pUiManager->GetTrueWndCtns();
 
-	HDWP hWinPoslnfo = NULL;
-	hWinPoslnfo = BeginDeferWindowPos(nCtns);
+		HDWP hWinPoslnfo = NULL;
+		hWinPoslnfo = BeginDeferWindowPos(nCtns);
 
-	LRESULT lRes = OnSize(hWinPoslnfo, wParam, lParam);
+		lRes = OnSize(hWinPoslnfo, wParam, lParam);
 
-	EndDeferWindowPos(hWinPoslnfo);
+		EndDeferWindowPos(hWinPoslnfo);
+	}
 
 	return lRes;
 }
 
 LRESULT CHighEfficiency::OnTimer(WPARAM wParam, LPARAM lParam)
 {
-	int nTimerId = (int)wParam;
-	m_UiManager.OnTimer(nTimerId);
+	if (IsReady())
+	{
+		int nTimerId = (int)wParam;
+		m_pUiManager->OnTimer(nTimerId);
+	}
 	return 0;
 }
 
 LRESULT CHighEfficiency::OnActivateApp(WPARAM wParam, LPARAM lParam)
 {
-//	m_UiManager.OnActivateApp(wParam, lParam);
+	if (IsReady())
+	{
+		//m_pUiManager->OnActivateApp(wParam, lParam);
+	}
+
 	return CDirectUiDlg::OnActivateApp(wParam, lParam);
 }
 
 LRESULT CHighEfficiency::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 {
-	int nType = (int)wParam;
-	int cx = LOWORD(lParam); 
-	int cy = HIWORD(lParam);
+	if (IsReady())
+	{
+		int nType = (int)wParam;
+		int cx = LOWORD(lParam); 
+		int cy = HIWORD(lParam);
 
-	SetWndRgn(cx, cy);
+		SetWndRgn(cx, cy);
+	}
 
 	return 1;
 }
@@ -280,32 +308,35 @@ void CHighEfficiency::SetWndRgn(int cx, int cy)
 
 void CHighEfficiency::OnPaint(HDC hPaintDc)
 {
-	CRect WndRect = this->GetClientRect();
-
-	HDC hMemoryDC = ::CreateCompatibleDC(hPaintDc);
-	if (hMemoryDC != NULL)
+	if (IsReady())
 	{
-		HBITMAP hMemoryBitmap = ::CreateCompatibleBitmap(hPaintDc, WndRect.Width(), WndRect.Height());
-		if (hMemoryBitmap != NULL)
+		CRect WndRect = this->GetClientRect();
+
+		HDC hMemoryDC = ::CreateCompatibleDC(hPaintDc);
+		if (hMemoryDC != NULL)
 		{
-			::SelectObject(hMemoryDC, hMemoryBitmap);
+			HBITMAP hMemoryBitmap = ::CreateCompatibleBitmap(hPaintDc, WndRect.Width(), WndRect.Height());
+			if (hMemoryBitmap != NULL)
+			{
+				::SelectObject(hMemoryDC, hMemoryBitmap);
 
-			// 开始画图
-			m_UiManager.OnPaint(hMemoryDC, WndRect);
+				// 开始画图
+				m_pUiManager->OnPaint(hMemoryDC, WndRect);
 
-			::BitBlt(hPaintDc, 0, 0, WndRect.Width(), WndRect.Height(),
-				hMemoryDC, 0, 0, SRCCOPY);
+				::BitBlt(hPaintDc, 0, 0, WndRect.Width(), WndRect.Height(),
+					hMemoryDC, 0, 0, SRCCOPY);
 
-			::DeleteObject(hMemoryBitmap);
+				::DeleteObject(hMemoryBitmap);
+			}
+			::DeleteDC(hMemoryDC);
 		}
-		::DeleteDC(hMemoryDC);
 	}
 }
 
 // 窗口是否初始化
 bool CHighEfficiency::IsReady()
 {
-	return (m_hWnd != NULL && ::IsWindow(m_hWnd));
+	return (m_pUiManager != NULL && m_hWnd != NULL && ::IsWindow(m_hWnd));
 }
 
 bool CHighEfficiency::OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo)

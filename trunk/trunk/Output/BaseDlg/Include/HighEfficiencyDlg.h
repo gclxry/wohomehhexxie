@@ -55,5 +55,5 @@ private:
 	static bool m_bIsNeedLButtonUpMsg;
 
 protected:
-	CDirectUiManager m_UiManager;
+	CDirectUiManager *m_pUiManager;
 };
