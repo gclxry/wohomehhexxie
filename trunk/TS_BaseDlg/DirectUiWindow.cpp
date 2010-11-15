@@ -271,7 +271,7 @@ void CDirectUiWindow::OnPaintProc(Graphics *pDoGrap, HDC hMemoryDC)
 
 void CDirectUiWindow::SetTextRect(CRect TextRect)
 {
-	m_WndTextInfo.TextRectF = CRect2RectF(TextRect);
+	m_WndTextInfo.TextRectF = CUiMethod::CRect2RectF(TextRect);
 }
 
 CRect CDirectUiWindow::GetWndTextRect()

@@ -70,6 +70,8 @@ protected:
 	virtual LRESULT OnActivateApp(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnSizeProc(WPARAM wParam, LPARAM lParam);
 
+	virtual void RedrawDlg();
+
 protected:
 	bool CreateDlg();
 	ATOM RegisterBfoClass();
