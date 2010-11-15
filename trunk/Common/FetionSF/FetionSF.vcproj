@@ -182,6 +182,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="GdiPlusDraw"
+			>
+			<File
+				RelativePath=".\GdiPlusDraw.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\FetionSF\Include\GdiPlusDraw.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\Output\FetionSF\Include\FetionSF.h"
 			>
