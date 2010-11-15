@@ -1,13 +1,11 @@
-#include "StdAfx.h"
+
 #include "DirectUiWindow.h"
-#include "DirectUiMethod.h"
 #include "DirectUiManager.h"
 
 bool CDirectUiWindow::ms_bIsWndLButtonDown = false;
 CDirectUiWindow* CDirectUiWindow::ms_pLButtonDownWnd = NULL;
 CDirectUiWindow* CDirectUiWindow::ms_pFocusWnd = NULL;
 int CDirectUiWindow::ms_nDefaultWndId = 4;
-int CDirectUiWindow::ms_nTimerId = 2;
 
 CDirectUiWindow::CDirectUiWindow(void)
 {

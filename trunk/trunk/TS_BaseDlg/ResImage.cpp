@@ -1,7 +1,6 @@
 
-#include "stdafx.h"
 #include "ResImage.h"
-#include "Win32BaseDlg.h"
+#include "DirectUiDlg.h"
 
 CResImage::CResImage(void)
 {
@@ -131,7 +130,7 @@ bool CResImage::LoadImageFromRes(UINT nID, IMAGE_TYPE nType)
 
 Bitmap * CResImage::LoadBmpImage(UINT nBmpId)
 {
-	Bitmap * pBmp = Bitmap::FromResource(CWin32BaseDlg::m_hInstance, MAKEINTRESOURCE(nBmpId));
+	Bitmap * pBmp = Bitmap::FromResource(CWindowBase::ms_hInstance, MAKEINTRESOURCE(nBmpId));
 	Status st = pBmp->GetLastStatus();
 	if (st != Ok)
 		SAVE_DELETE(pBmp);
@@ -142,7 +141,7 @@ Bitmap * CResImage::LoadBmpImage(UINT nBmpId)
 Image* CResImage::LoadImage(UINT nID)
 {
 	Image* pImg = NULL;
-	HINSTANCE hInst = CWin32BaseDlg::m_hInstance;
+	HINSTANCE hInst = CWindowBase::ms_hInstance;
 	HRSRC hRsrc = NULL;
 
 	if (m_ImgType == IT_PNG)

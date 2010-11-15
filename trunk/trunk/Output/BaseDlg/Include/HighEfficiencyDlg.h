@@ -1,10 +1,10 @@
 
 #pragma once
-#include "DirectUiBaseDlg.h"
-#include "DirectUi.h"
+#include "DirectUiDlg.h"
 #include "DirectUiWindowMsgCtrl.h"
+#include "DirectUiManager.h"
 
-class CHighEfficiency : public CDirectUiBaseDlg, public CDirectUiWindowMsgCtrl
+class CHighEfficiency : public CDirectUiDlg, public CDirectUiWindowMsgCtrl
 {
 public:
 	CHighEfficiency(HINSTANCE hInstance, HWND hParentWnd, int nIconId);

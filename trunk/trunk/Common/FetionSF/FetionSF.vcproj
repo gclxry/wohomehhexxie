@@ -166,7 +166,7 @@
 			Name="ºê¡¢½á¹¹Ìå"
 			>
 			<File
-				RelativePath="..\..\Output\FetionSF\Include\GlobalDef.h"
+				RelativePath="..\..\Output\FetionSF\Include\FetionSFDefs.h"
 				>
 			</File>
 		</Filter>

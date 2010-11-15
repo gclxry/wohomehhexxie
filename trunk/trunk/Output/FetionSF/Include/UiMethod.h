@@ -1,6 +1,6 @@
 
 #pragma once
-#include "GlobalDef.h"
+#include "FetionSFDefs.h"
 
 class CUiMethod
 {
@@ -30,6 +30,8 @@ public:
 	// 屏幕指定区域截图
 	static HBITMAP WINAPI GetScreenBitmap(CRect &GetRect);
 
+	// 取得图片类型
+	static IMAGE_TYPE GetImageTypeFromLocal(CString strPath);
 private:
 
 };

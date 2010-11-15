@@ -1,12 +1,12 @@
 
 #pragma once
-#include "GlobalDef.h"
+#include "FetionSFDefs.h"
 #include "WindowBase.h"
 
 #pragma warning(disable:4800)
 
 
-//////// DirectUiBaseDlg 窗口属性 //////////////////////////////////////////////////////////////
+//////// DirectUiDlg 窗口属性 //////////////////////////////////////////////////////////////
 // 是否有最小化按钮
 #define BFS_HAVE_MIN_BTN								(0x00000001)
 // 是否有最大化按钮
@@ -24,11 +24,11 @@
 // 消息处理子类化
 LRESULT CALLBACK PuppetWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-class CDirectUiBaseDlg : public CWindowBase
+class CDirectUiDlg : public CWindowBase
 {
 public:
-	CDirectUiBaseDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId);
-	~CDirectUiBaseDlg(void);
+	CDirectUiDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId);
+	~CDirectUiDlg(void);
 
 	// 消息处理
 	virtual LRESULT WndProc(UINT message, WPARAM wParam, LPARAM lParam);

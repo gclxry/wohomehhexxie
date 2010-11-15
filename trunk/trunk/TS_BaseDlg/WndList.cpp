@@ -1,5 +1,4 @@
 
-#include "stdafx.h"
 #include "WndList.h"
 
 CWndList::CWndList(void)

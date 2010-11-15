@@ -1,4 +1,6 @@
 #pragma once
+#include "DirectUiWindow.h"
+#include "WndList.h"
 
 class CDirectUiManager
 {
@@ -6,16 +8,16 @@ public:
 	CDirectUiManager(void);
 	~CDirectUiManager(void);
 
-	virtual bool InitManager(CDirectUiBaseDlg *pParentDlg);
+	virtual bool InitManager(CDirectUiDlg *pParentDlg);
 
-	virtual void OnPaint(HDC hMemoryDC, CRect &WndRect);
-	virtual void OnDestroy();
+	virtual void OnPaint(HDC hMemoryDC, CRect &DrawRect);
 	virtual bool OnMouseMove(UINT nFlags, CPoint point);
-	virtual bool OnLButtonDown(UINT nFlags, CPoint point);
-	virtual bool OnLButtonUp(UINT nFlags, CPoint point);
-	virtual bool OnLButtonDblClk(UINT nFlags, CPoint point);
 	virtual void OnTimer(int nTimerId);
 	virtual void OnActivateApp(WPARAM wParam, LPARAM lParam);
+	virtual bool OnLButtonDown(UINT nFlags, CPoint point);
+	virtual void OnDestroy();
+	virtual bool OnLButtonUp(UINT nFlags, CPoint point);
+	virtual bool OnLButtonDblClk(UINT nFlags, CPoint point);
 
 	// 取得实体子窗口的个数
 	int GetTrueWndCtns() { return m_nTrueWndCtns; };
@@ -28,19 +30,13 @@ public:
 protected:
 	virtual bool IsReady();
 
-	void DrawNormalBkgnd();
-	void DrawNormalBkgndLine();
-
-	void DrawFetionBkgnd();
-	void DrawFetionBkgndLine();
-
 protected:
 	// 绘图用的GID+
 	Graphics *m_pDoGrap;
 	// 绘图用的GDI
 	HDC m_hMemoryDC;
 	HWND m_hParent;
-	CDirectUiBaseDlg *m_pParentDlg;
+	CDirectUiDlg *m_pParentDlg;
 	// 绘图DC的大小
 	CRect m_DcRect;
 
