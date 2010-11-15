@@ -64,7 +64,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="FetionSF.lib"
-				AdditionalLibraryDirectories="..\Output\FetionSF\Lib\Debug;..\Common\GDIPlus\Lib"
+				AdditionalLibraryDirectories="..\Output\FetionSF\Lib\Debug"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -128,7 +128,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="FetionSF.lib"
-				AdditionalLibraryDirectories="..\Output\FetionSF\Lib\Release;..\Common\GDIPlus\Lib"
+				AdditionalLibraryDirectories="..\Output\FetionSF\Lib\Release"
 			/>
 			<Tool
 				Name="VCALinkTool"

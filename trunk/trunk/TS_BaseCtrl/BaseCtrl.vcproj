@@ -63,8 +63,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="FetionSF.lib BaseDlg.lib"
-				AdditionalLibraryDirectories="..\Output\FetionSF\Lib\Debug;..\Common\GDIPlus\Lib;..\Output\BaseDlg\Lib\Debug"
+				AdditionalDependencies="BaseDlg.lib"
+				AdditionalLibraryDirectories="..\Output\BaseDlg\Lib\Debug"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -127,8 +127,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="FetionSF.lib BaseDlg.lib"
-				AdditionalLibraryDirectories="..\Output\FetionSF\Lib\Release;..\Common\GDIPlus\Lib;..\Output\BaseDlg\Lib\Release"
+				AdditionalDependencies="BaseDlg.lib"
+				AdditionalLibraryDirectories="..\Output\BaseDlg\Lib\Release"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -159,6 +159,18 @@
 			</File>
 			<File
 				RelativePath="..\Output\BaseCtrl\Include\BfButton.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="BaseCtrlManager"
+			>
+			<File
+				RelativePath=".\BaseCtrlManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseCtrl\Include\BaseCtrlManager.h"
 				>
 			</File>
 		</Filter>

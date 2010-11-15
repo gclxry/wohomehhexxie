@@ -14,7 +14,7 @@ void CBfButton::OnPaint()
 	// 绘制背景图
 	if (m_BkgndImage.IsReady())
 	{
-		m_pUiManager->DrawCenterImage(m_pDoGrap, m_BkgndImage.GetImage(), m_WndRect);
+		CGdiPlusDraw::DrawCenterImage(m_pDoGrap, m_BkgndImage.GetImage(), m_WndRect);
 	}
 
 	// 绘制文字信息
@@ -30,7 +30,7 @@ void CBfButton::OnPaint()
 		Font DefaultFont(&DefaultFamily, (REAL)m_WndTextInfo.nFontHeight, m_WndTextInfo.FStyle, UnitPixel);
 		SolidBrush DefaultBrush(m_WndTextInfo.TextColor);
 
-		m_pUiManager->DrawWndText(m_pDoGrap, m_WndTextInfo);
+		CGdiPlusDraw::DrawWndText(m_pDoGrap, m_WndTextInfo);
 	}
 }
 
