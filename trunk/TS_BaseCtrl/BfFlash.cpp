@@ -35,7 +35,7 @@ bool CBfFlash::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManager,
 
 	if (bRet)
 	{
-		CString strDllPath = CUiMethod::GetAppPath() + _T("FlashShowDll.dll");
+		CString strDllPath = CSysUnit::GetAppPath() + _T("FlashShowDll.dll");
 
 		m_hDllHandle = LoadLibrary(strDllPath);
 		if (m_hDllHandle != NULL)
