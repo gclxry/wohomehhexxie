@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="03_BaseDlg"
+	Name="BaseDlg"
 	ProjectGUID="{CDEC508A-8BCB-451D-9BA7-C3B1B58428A8}"
 	RootNamespace="BaseDlg"
 	Keyword="Win32Proj"
