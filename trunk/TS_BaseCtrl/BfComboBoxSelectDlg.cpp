@@ -144,8 +144,6 @@ void CBfComboBoxSelectDlg::OnCreate()
 			{
 				// 初始化引擎
 				m_pUiManager->InitManager(this);
-				// TBD 背景需要自绘为白色啦！
-				//m_pUiManager->SetBkgndColor(Color(255, 255, 255));
 			}
 		}
 
@@ -212,9 +210,19 @@ void CBfComboBoxSelectDlg::OnPaint(HDC hPaintDc)
 		if (hMemoryDC != NULL)
 		{
 			::SelectObject(hMemoryDC, hMemoryBitmap);
+			Graphics DoGrap(hMemoryDC);
+
+			// 填充背景色
+			SolidBrush FillBrush(Color(255, 255, 255));
+			DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
 
 			// 开始画图
 			m_pUiManager->OnPaint(hMemoryDC, WndRect);
+
+			// 画边框线
+			Pen OutPen(Color(193, 211, 251));
+			DoGrap.DrawRectangle(&OutPen, WndRect.left, WndRect.top, WndRect.Width() - 1, WndRect.Height() - 1);
+			DoGrap.DrawRectangle(&OutPen, WndRect.left + 1, WndRect.top + 1, WndRect.Width() - 3, WndRect.Height() - 3);
 
 			::BitBlt(hPaintDc, 0, 0, WndRect.Width(), WndRect.Height(),
 				hMemoryDC, 0, 0, SRCCOPY);
