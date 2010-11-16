@@ -25,11 +25,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
                      LPTSTR    lpCmdLine,
                      int       nCmdShow)
 {
-	ULONG_PTR gdiplusToken = NULL;
-	//初始化gdiplus的环境
-	GdiplusStartupInput gdiplusStartupInput;
-	// 初始化GDI+.
-	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+	CUiMethod::InitGdiPlus();
 
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
@@ -62,7 +58,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 	}
 
-	GdiplusShutdown(gdiplusToken);
+	CUiMethod::UnInitGdiPlus();
 
 	if(m_pBmpData)
 		delete [] m_pBmpData;

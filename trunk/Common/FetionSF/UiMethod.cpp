@@ -1,6 +1,29 @@
 
 #include "UiMethod.h"
 
+ULONG_PTR CUiMethod::gdiplusToken = NULL;
+
+// 初始化GDI+
+void CUiMethod::InitGdiPlus()
+{
+	if (gdiplusToken == NULL)
+	{
+		GdiplusStartupInput gdiplusStartupInput;
+		// 初始化GDI+.
+		GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+	}
+}
+
+// 卸载GDI+
+void CUiMethod::UnInitGdiPlus()
+{
+	if (gdiplusToken != NULL)
+	{
+		GdiplusShutdown(gdiplusToken);
+		gdiplusToken = NULL;
+	}
+}
+
 Rect CUiMethod::CRect2Rect(CRect &InRect)
 {
 	Rect RetRect;
