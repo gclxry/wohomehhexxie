@@ -183,7 +183,6 @@ void CBfComboBox::DUI_OnLButtonDown(WPARAM wParam, LPARAM lParam)
 
 			m_pSelectDlg->DoModal();
 
-			// TBD 这是不同窗口
 			CHighEfficiencyDlg::SetNeetLButtonUpMsg();
 			::SetActiveWindow(m_hParent);
 			// 解冻窗口，接受鼠标移动消息
