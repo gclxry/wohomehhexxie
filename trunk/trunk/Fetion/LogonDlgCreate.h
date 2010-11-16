@@ -1,7 +1,6 @@
 
 #pragma once
-#include "BaseDlg.h"
-#include "BaseCtrl.h"
+#include "Fetion.h"
 
 #define WND_ID_LOGON_USER_LOGO					(65535)
 #define WND_ID_LOGON_LINK_1						(65536)
@@ -52,4 +51,6 @@ private:
 	CBfCheckBox *m_pCheckBox2;
 
 	CBfDrawButton *m_pLogonBtn;
+
+	CBaseCtrlManager m_UiManager;
 };

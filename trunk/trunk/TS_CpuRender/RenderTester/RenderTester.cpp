@@ -183,7 +183,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break; 
 	}
 
-	return DefWindowProc(hWnd, message, wParam, lParam);
+	return ::DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 void OnTimer(WPARAM wParam, LPARAM lParam)
@@ -216,7 +216,7 @@ void OnCreate()
 	long Width,Height;
 	struct AK_2D_UI_PIC *pUIPic;
 
-	CString strPath = CUiMethod::GetAppPath() + _T("山水画.jpg");
+	CString strPath = CSysUnit::GetAppPath() + _T("山水画.jpg");
 	
 	AKLoadPic(W2A(strPath.LockBuffer()),&pData,&Width,&Height);
 	strPath.UnlockBuffer();

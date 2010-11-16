@@ -37,7 +37,7 @@ LRESULT CALLBACK PuppetWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 		break;
 	}
 
-	return DefWindowProc(hWnd, message, wParam, lParam);
+	return ::DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 CDirectUiDlg::CDirectUiDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
@@ -83,7 +83,7 @@ int CDirectUiDlg::DoModal()
 	return (int)msg.wParam;
 }
 
-void CDirectUiDlg::OpenDialog()
+void CDirectUiDlg::ShowWindow()
 {
 	DeleteBfStyle(BFS_MODAL_DLG);
 	CreateDlg();
@@ -147,100 +147,100 @@ bool CDirectUiDlg::InitInstance()
 
 	OnCreate();
 
-	ShowWindow(m_hWnd, SW_SHOW);
-	UpdateWindow(m_hWnd);
+	::ShowWindow(m_hWnd, SW_SHOW);
+	::UpdateWindow(m_hWnd);
 
 	return true;
 }
 
 LRESULT CDirectUiDlg::OnNcActive(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, message, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, message, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnNcCalcSize(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_NCCALCSIZE, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_NCCALCSIZE, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnEraseBkgnd(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_ERASEBKGND, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_ERASEBKGND, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnNcPaint(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_NCPAINT, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_NCPAINT, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnMouseLeave(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_MOUSELEAVE, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_MOUSELEAVE, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnMouseMove(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_MOUSEMOVE, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_MOUSEMOVE, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnLButtonDown(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_LBUTTONDOWN, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_LBUTTONDOWN, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnLButtonUp(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_LBUTTONUP, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_LBUTTONUP, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnLButtonDblClk(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_LBUTTONDBLCLK, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_LBUTTONDBLCLK, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnGetMinMaxInfo(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_GETMINMAXINFO, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_GETMINMAXINFO, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnNcHitTest(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_NCHITTEST, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_NCHITTEST, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnSizeProc(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_SIZE, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_SIZE, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnEnterSizeMove(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_ENTERSIZEMOVE, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_ENTERSIZEMOVE, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnExitSizeMove(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_EXITSIZEMOVE, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_EXITSIZEMOVE, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnMove(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_MOVE, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_MOVE, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnTimer(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_TIMER, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_TIMER, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnActivateApp(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_ACTIVATEAPP, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_ACTIVATEAPP, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnKillFocus(WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(m_hWnd, WM_KILLFOCUS, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_KILLFOCUS, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::WndProc(UINT message, WPARAM wParam, LPARAM lParam)
@@ -318,7 +318,7 @@ LRESULT CDirectUiDlg::WndProc(UINT message, WPARAM wParam, LPARAM lParam)
 		return OnKillFocus(wParam, lParam);
 
 	default:
-		nRet = DefWindowProc(m_hWnd, message, wParam, lParam);
+		nRet = ::DefWindowProc(m_hWnd, message, wParam, lParam);
 	}
 
 	return nRet;

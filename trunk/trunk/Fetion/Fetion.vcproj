@@ -268,10 +268,26 @@
 			<Filter
 				Name="2 窗口控制布局"
 				>
+				<File
+					RelativePath=".\LogonDlgCtrl.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\LogonDlgCtrl.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="3 业务控制"
 				>
+				<File
+					RelativePath=".\LogonDlgBusiness.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\LogonDlgBusiness.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
