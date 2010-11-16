@@ -8,9 +8,6 @@ public:
 	CUiMethod();
 	virtual ~CUiMethod();
 
-	// 取得当前exe的目录路径，最后'\'结束
-	static CString GetAppPath();
-
 	// GDI+ 的坐标类型和windows常用坐标类型转换
 	static Rect CRect2Rect(CRect &InRect);
 	static RectF CRect2RectF(CRect &InRect);

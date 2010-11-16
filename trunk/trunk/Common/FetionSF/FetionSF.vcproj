@@ -186,6 +186,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="SysUnit"
+			>
+			<File
+				RelativePath=".\SysUnit.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\FetionSF\Include\SysUnit.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\Output\FetionSF\Include\FetionSF.h"
 			>
