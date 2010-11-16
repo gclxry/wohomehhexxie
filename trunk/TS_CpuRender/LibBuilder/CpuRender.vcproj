@@ -249,10 +249,14 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="对外输出"
+			Name="AKTrajectoryCommon"
 			>
 			<File
-				RelativePath="..\..\Output\CpuRender\Include\CpuRender.h"
+				RelativePath="..\AKTrajectoryCommon\AKTrajectory.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\CpuRender\Include\AKTrajectory.h"
 				>
 			</File>
 		</Filter>
@@ -268,18 +272,18 @@
 				>
 			</File>
 		</Filter>
-		<Filter
-			Name="头文件"
+		<File
+			RelativePath="..\..\Output\CpuRender\Include\CpuRender.h"
 			>
-			<File
-				RelativePath="..\..\Output\CpuRender\Include\CpuRenderDef.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Output\CpuRender\Include\targetver.h"
-				>
-			</File>
-		</Filter>
+		</File>
+		<File
+			RelativePath="..\..\Output\CpuRender\Include\CpuRenderDef.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Output\CpuRender\Include\targetver.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
