@@ -189,6 +189,14 @@
 		<Filter
 			Name="003 异形动态对话框"
 			>
+			<File
+				RelativePath=".\DynamicRgnDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseDlg\Include\DynamicRgnDlg.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="004 异形动态旋转对话框"
