@@ -149,7 +149,7 @@ CBfNormalGraduatedButton* CBaseCtrlManager::CreateBfNormalGraduatedButton(CDirec
 
 	return pWnd;
 }
-
+*/
 CBfDrawButton* CBaseCtrlManager::CreateBfDrawButton(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
 {
 	CBfDrawButton *pWnd = NULL;
@@ -171,7 +171,7 @@ CBfDrawButton* CBaseCtrlManager::CreateBfDrawButton(CDirectUiWindowMsgCtrl *pMsg
 
 	return pWnd;
 }
-*/
+
 CBfGifStatic* CBaseCtrlManager::CreateBfGifStatic(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId, int nImageId, CString strImagePath)
 {
 	CBfGifStatic *pWnd = NULL;

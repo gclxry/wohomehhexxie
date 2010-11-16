@@ -213,6 +213,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="普通绘制按钮"
+				>
+				<File
+					RelativePath=".\BfDrawButton.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\BaseCtrl\Include\BfDrawButton.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="003 下拉列表框"
