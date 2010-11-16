@@ -18,7 +18,7 @@ CHighEfficiencyDlg::~CHighEfficiencyDlg(void)
 LRESULT CHighEfficiencyDlg::OnEnterSizeMove(WPARAM wParam, LPARAM lParam)
 {
 	::SetFocus(m_hWnd);
-	return DefWindowProc(m_hWnd, WM_ENTERSIZEMOVE, wParam, lParam);
+	return ::DefWindowProc(m_hWnd, WM_ENTERSIZEMOVE, wParam, lParam);
 }
 
 LRESULT CHighEfficiencyDlg::OnMouseLeave(WPARAM wParam, LPARAM lParam)
@@ -175,7 +175,7 @@ LRESULT CHighEfficiencyDlg::OnNcHitTest(WPARAM wParam, LPARAM lParam)
 	}
 	else
 	{
-		return DefWindowProc(m_hWnd, WM_NCHITTEST, wParam, lParam);
+		return ::DefWindowProc(m_hWnd, WM_NCHITTEST, wParam, lParam);
 	}
 }
 

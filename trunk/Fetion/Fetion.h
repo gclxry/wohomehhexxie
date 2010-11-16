@@ -1,5 +1,6 @@
 #pragma once
 
 #include "resource.h"
-
-#in
+#include "BaseCtrl.h"
+#include "BaseDlg.h"
+#include "FetionSF.h"

@@ -1,7 +1,7 @@
 
 #include "StdAfx.h"
 #include "LogonDlgCreate.h"
-#include "shellapi.h"
+
 
 #define __base_super					CHighEfficiencyDlg
 
@@ -22,6 +22,8 @@ CLogonDlgCreate::CLogonDlgCreate(HINSTANCE hInstance, HWND hParentWnd, int nIcon
 	m_pCheckBox1 = NULL;
 	m_pCheckBox2 = NULL;
 	m_pLogonBtn = NULL;
+
+	m_pUiManager = &m_UiManager;
 }
 
 CLogonDlgCreate::~CLogonDlgCreate(void)
@@ -46,7 +48,7 @@ void CLogonDlgCreate::OnCreate()
 {
 	__base_super::OnCreate();
 
-	CString strSkinDir = GetAppPath();
+	CString strSkinDir = CSysUnit::GetAppPath();
 	CString strPicPath = strSkinDir + _T("FetionData\\UseFace\\LogoB.png");
 
 	m_pBigLogo = m_UiManager.CreateBfStatic(this, CRect(0, 0, 0, 0), 0, strPicPath, IT_PNG);

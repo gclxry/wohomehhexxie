@@ -37,7 +37,7 @@ public:
 	int DoModal();
 
 	// 非模式显示对话框
-	void OpenDialog();
+	void ShowWindow();
 
 	// 对话框属性设置和判断
 	bool IsSetBfStyle(DWORD dwStyle) { return (m_dwWndStyle & dwStyle); };
