@@ -10,6 +10,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
 	// 初始化
+	CUiMethod::InitGdiPlus();
 
 	// 业务开始
 	CLogonDlgBusiness LogonDlg(hInstance, NULL, IDI_FETION);
@@ -30,7 +31,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	}
 
 	// 释放资源
-
+	CUiMethod::UnInitGdiPlus();
 
 	// 退出
 	return (int)msg.wParam;

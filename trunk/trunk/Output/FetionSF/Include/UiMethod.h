@@ -8,6 +8,11 @@ public:
 	CUiMethod();
 	virtual ~CUiMethod();
 
+	// 初始化GDI+
+	static void InitGdiPlus();
+	// 卸载GDI+
+	static void UnInitGdiPlus();
+
 	// GDI+ 的坐标类型和windows常用坐标类型转换
 	static Rect CRect2Rect(CRect &InRect);
 	static RectF CRect2RectF(CRect &InRect);
@@ -29,7 +34,10 @@ public:
 
 	// 取得图片类型
 	static IMAGE_TYPE GetImageTypeFromLocal(CString strPath);
+
 private:
+	//初始化gdiplus的环境
+	static ULONG_PTR gdiplusToken;
 
 };
 

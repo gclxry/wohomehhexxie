@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="Fetion"
+	Name="06_Fetion"
 	ProjectGUID="{0352C01D-57AD-46FC-B5E0-C6BF7D9CBC80}"
 	RootNamespace="Fetion"
 	Keyword="Win32Proj"
