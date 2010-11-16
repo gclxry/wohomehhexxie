@@ -13,8 +13,12 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	CUiMethod::InitGdiPlus();
 
 	// 业务开始
-	CLogonDlgBusiness LogonDlg(hInstance, NULL, IDI_FETION);
-	LogonDlg.ShowWindow();
+
+	// 登录窗口
+//	CLogonDlgBusiness LogonDlg(hInstance, NULL, IDI_FETION);
+//	LogonDlg.ShowWindow();
+
+	// 
 
 
 	// 主消息循环:
