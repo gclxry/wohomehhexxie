@@ -43,6 +43,8 @@ void CBitmapDC::Create(int nWidth, int nHeight)
 	m_hBmp	= ::CreateDIBSection(GetSafeHdc(), (BITMAPINFO*)&bih,
 		DIB_RGB_COLORS, (void**)(&m_pBits), NULL, 0);
 
+//	memset(m_pBits, 0, nWidth * nHeight * 4);
+
 	SelectObject(m_hDC, m_hBmp);
 }
 
