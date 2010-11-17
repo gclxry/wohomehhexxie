@@ -20,8 +20,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 //	LogonDlg.ShowWindow();
 
 	// RGN测试
-	CRgnDlg RgnDlg(hInstance, NULL, IDI_FETION);
-	RgnDlg.ShowWindow();
+	CRgnDlg *pRgnDlg = new CRgnDlg(hInstance, NULL, IDI_FETION);
+	pRgnDlg->ShowWindow();
 
 
 	// 主消息循环:
@@ -36,6 +36,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 			DispatchMessage(&msg);
 		}
 	}
+	delete pRgnDlg;
 
 	// 释放资源
 	CUiMethod::UnInitGdiPlus();

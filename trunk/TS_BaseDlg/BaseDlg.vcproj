@@ -282,6 +282,18 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="MemDc"
+			>
+			<File
+				RelativePath=".\BitmapDC.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseDlg\Include\BitmapDC.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\Output\BaseDlg\Include\BaseDlg.h"
 			>
