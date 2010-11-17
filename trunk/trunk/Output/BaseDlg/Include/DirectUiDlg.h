@@ -73,7 +73,7 @@ protected:
 	virtual LRESULT OnActivateApp(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnSizeProc(WPARAM wParam, LPARAM lParam);
 
-	virtual void RedrawDlg();
+	virtual void RedrawWindow();
 
 protected:
 	bool CreateDlg();
