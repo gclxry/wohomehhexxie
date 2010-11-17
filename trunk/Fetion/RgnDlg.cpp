@@ -288,10 +288,16 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 		SetWindowLong(m_hWnd, GWL_EXSTYLE, dwExStyle^WS_EX_LAYERED);
 
 	CRect WndRect = this->GetClientRect();
-	HDC hMemoryDC = ::CreateCompatibleDC(hPaintDc);
+
+	CBitmapDC BmpDc;
+	BmpDc.Create(WndRect.Width(), WndRect.Height());
+
+	//HDC hMemoryDC = ::CreateCompatibleDC(hPaintDc);
+	HDC hMemoryDC = BmpDc.GetSafeHdc();
 	if (hMemoryDC != NULL)
 	{
-		HBITMAP hMemoryBitmap = ::CreateCompatibleBitmap(hPaintDc, WndRect.Width(), WndRect.Height());
+		//HBITMAP hMemoryBitmap = ::CreateCompatibleBitmap(hPaintDc, WndRect.Width(), WndRect.Height());
+		HBITMAP hMemoryBitmap = BmpDc.GetBmpHandle();
 		if (hMemoryBitmap != NULL)
 		{
 			::SelectObject(hMemoryDC, hMemoryBitmap);
