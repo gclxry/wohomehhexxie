@@ -23,6 +23,11 @@ protected:
 	// 鼠标左键抬起消息
 	virtual void DUI_OnLButtonUp(WPARAM wParam, LPARAM lParam);
 
+
+	void CRgnDlg::DrawGdiPlus(HDC hMemoryDC, HBITMAP hMemoryBitmap);
+
+	void CRgnDlg::DisplayBmpData(HDC hMemoryDC, HBITMAP hMemoryBitmap, long x, long y, unsigned char *pBmp, long rows, long cols);
+
 protected:
 	double m_dbFactor;
 	int m_nTimerId;
@@ -30,6 +35,8 @@ protected:
 	POINT_VET m_PointList;
 
 	CResImage m_TImage;
+
+	unsigned char *m_pBmpData;
 
 private:
 	CBfNormalGraduatedButton *m_pZhuanBtn;

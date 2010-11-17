@@ -25,11 +25,19 @@ CRgnDlg::CRgnDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 	m_PointList.clear();
 
 	m_pUiManager = &m_UiManager;
+
+	m_pBmpData = NULL;
 }
 
 CRgnDlg::~CRgnDlg(void)
 {
 	m_PointList.clear();
+
+	if (m_pBmpData != NULL)
+	{
+		delete [] m_pBmpData;
+		m_pBmpData = NULL;
+	}
 }
 
 void CRgnDlg::OnCreate()
@@ -91,6 +99,23 @@ LRESULT CRgnDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 {
 	int cx = LOWORD(lParam);
 	int cy = HIWORD(lParam);
+
+
+	if (m_pBmpData != NULL)
+	{
+		delete [] m_pBmpData;
+		m_pBmpData = NULL;
+	}
+
+	CRect WndRect = this->GetClientRect();
+	long lSize = WndRect.Width() * WndRect.Height() * 4 * sizeof(unsigned char);
+	m_pBmpData = new unsigned char[lSize];
+
+	if (m_pBmpData != NULL)
+	{
+		CAKPicDraw::GetInst()->SelectPic(m_pBmpData, WndRect.Width(), WndRect.Height());
+		CAK3DRender::GetInst()->SelectPicDraw(CAKPicDraw::GetInst());
+	}
 
 	CRect GifStatic(100, 20, 229, 170);
 	if (m_pGifStatic != NULL)
@@ -280,6 +305,107 @@ GetImageEncoderClsid(L"image/png", &pngClsid);
 image.Save(L"Mosaic2.png", &pngClsid, NULL);
 */
 
+void CRgnDlg::DrawGdiPlus(HDC hMemoryDC, HBITMAP hMemoryBitmap)
+{
+	CRect rc = this->GetClientRect();
+
+	//清屏
+	CAKPicDraw::GetInst()->SelectPic(m_pBmpData, rc.Width(), rc.Height());
+	memset(m_pBmpData, 0, rc.Width() * rc.Height()*4);
+
+	//重置深度缓冲
+	CAK3DRender::GetInst()->ResetZBuffer(-10000);
+
+	//选择使用的贴图
+	AK_2D_UI_PIC *pUIPic=CAK2DUI::GetSingle().FindUIPic(1);
+	CAKPicDraw::GetInst(AK_PIC_DRAW_MAX_COUNT-1)->SelectPic(pUIPic->pData, pUIPic->uWidth, pUIPic->uHeight);
+
+	//定义顶点和uv
+	//	DEF_VERTEX(v1,200,100,0);
+	//	DEF_VERTEX(v2,400,100,0);
+	//	DEF_VERTEX(v3,600,500,0);
+	//	DEF_VERTEX(v4,50,500,0);
+
+	// v1 左下，v2 右下，v3 右上，v4 左上
+	DEF_VERTEX(v1,200,100,0);
+	DEF_VERTEX(v2,400,50,0);
+	DEF_VERTEX(v3,400,500,0);
+	DEF_VERTEX(v4,200,450,0);
+
+	DEF_UV(uv1,0,0);
+	DEF_UV(uv2,1023,0);
+	DEF_UV(uv3,1023,767);
+	DEF_UV(uv4,0,767);
+
+	//渲染
+	CAK3DRender::GetInst()->DrawRect2(&v1,&v2,&v3,&v4,uv1,uv2,uv3,uv4,true);
+
+	//把位图显示出来
+	DisplayBmpData(hMemoryDC,hMemoryBitmap,0,0,m_pBmpData, rc.Width(), rc.Height());
+}
+
+void CRgnDlg::DisplayBmpData(HDC hMemoryDC, HBITMAP hMemoryBitmap, long x, long y, unsigned char *pBmp, long rows, long cols)
+{
+	//获取当前DC的像素显示位数(16/24/32)
+	int BitCount=::GetDeviceCaps(hMemoryDC, BITSPIXEL);
+	switch(BitCount)
+	{
+	case 16://16位色
+		{
+			long i,index1,index2;
+			long total=rows*cols;
+			unsigned short r,g,b;
+			unsigned short *pValue;
+
+			for(i=0,index1=0,index2=0;i<total;++i)
+			{
+				index1+=4;
+				index2+=2;
+
+				b=pBmp[index1];
+				g=pBmp[index1+1];
+				r=pBmp[index1+2];
+
+				pValue=(unsigned short *)&pBmp[index2];
+
+				*pValue=(r/8<<11)|(g/4<<5)|(b/8);
+			}
+
+			::SetBitmapBits(hMemoryBitmap, cols*rows*2*sizeof(unsigned char), pBmp);
+			break;
+		}
+
+	case 24://24位色
+		{
+			long i,index1,index2;
+			long total=rows*cols;
+
+			for(i=0,index1=0,index2=0;i<total;++i)
+			{
+				index1+=4;
+				index2+=3;
+
+				memcpy(&pBmp[index2],&pBmp[index1],sizeof(unsigned char)*3);
+			}
+
+			::SetBitmapBits(hMemoryBitmap, cols*rows*3*sizeof(unsigned char),pBmp);
+			break;
+		}
+
+	case 32://32位色
+		{
+			::SetBitmapBits(hMemoryBitmap, cols*rows*4*sizeof(unsigned char),pBmp);
+			break;
+		}
+
+	default://其它位色
+		{
+			::TextOut(hMemoryDC, (cols-7*16)/2, rows/2, _T("显示模式不支持"), 7);
+			break;
+		}
+	}
+}
+
 void CRgnDlg::OnPaint(HDC hPaintDc)
 {
 	//设置窗体的透明特性
@@ -303,7 +429,7 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 			::SelectObject(hMemoryDC, hMemoryBitmap);
 			Graphics MemDcGrap(hMemoryDC);
 
-			::GetWindowRect(m_hWnd, WndRect);
+			WndRect = this->GetWindowRect();
 			POINT ptWinPos = {WndRect.left, WndRect.top};
 			POINT ptSrc = {0, 0};
 			SIZE sizeWindow = {WndRect.Width(), WndRect.Height()};
@@ -316,6 +442,32 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 			}
 			else
 			{
+				m_UiManager.OnPaintRgn(WndRect, &MemDcGrap);
+
+				struct AK_2D_UI_PIC *pUIPic = CAK2DUI::GetSingle().CreateUIPic(1, WndRect.Width(), WndRect.Height());
+				if(pUIPic)
+				{
+					memcpy(pUIPic->pData, BmpDc.GetBits(), WndRect.Width() * WndRect.Height() * 4);
+
+					// 设置alpha值
+					//unsigned char *pDataA = NULL;
+					//for(int i=0;i<(WndRect.Width() * WndRect.Height());++i)
+					//{
+					//	pDataA = &pUIPic->pData[i*4];
+					//	pDataA[3] = 255;
+					//}
+				}
+
+				DrawGdiPlus(hMemoryDC, hMemoryBitmap);
+
+
+
+
+
+				::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, hMemoryDC, &ptSrc, 0, &m_Blend, ULW_ALPHA);
+				CAK2DUI::GetSingle().FreePicList();
+
+				/*
 				if (m_TImage.IsReady())
 				{
 					// 导入背景图片
@@ -366,6 +518,7 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 						delete pDrawImg;
 					}
 				}
+				*/
 			}
 			::DeleteObject(hMemoryBitmap);
 		}
