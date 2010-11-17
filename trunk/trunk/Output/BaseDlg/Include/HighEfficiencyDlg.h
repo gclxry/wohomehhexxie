@@ -1,16 +1,15 @@
 
 #pragma once
 #include "DirectUiDlg.h"
-#include "DirectUiWindowMsgCtrl.h"
 #include "DirectUiManager.h"
 
-class CHighEfficiencyDlg : public CDirectUiDlg, public CDirectUiWindowMsgCtrl
+class CHighEfficiencyDlg : public CDirectUiDlg
 {
 public:
 	CHighEfficiencyDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId);
 	~CHighEfficiencyDlg(void);
 
-	bool OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo);
+	virtual bool OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo);
 	static void SetNeetLButtonUpMsg() { m_bIsNeedLButtonUpMsg = true; };
 
 protected:

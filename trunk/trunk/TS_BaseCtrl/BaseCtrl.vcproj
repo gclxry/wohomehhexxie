@@ -225,6 +225,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="普通绘制渐变按钮"
+				>
+				<File
+					RelativePath=".\BfNormalGraduatedButton.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\BaseCtrl\Include\BfNormalGraduatedButton.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="003 下拉列表框"

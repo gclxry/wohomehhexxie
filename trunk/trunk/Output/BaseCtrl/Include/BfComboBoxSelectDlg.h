@@ -10,13 +10,13 @@ class CBfComboBox;
 using namespace std;
 typedef vector<CBfComboSelBtnBar*> COMBO_SEL_BTN_LIST;
 
-class CBfComboBoxSelectDlg : public CDirectUiDlg, public CDirectUiWindowMsgCtrl
+class CBfComboBoxSelectDlg : public CDirectUiDlg
 {
 public:
 	CBfComboBoxSelectDlg(HINSTANCE hInstance, HWND hParentWnd, CBfComboBox *pComboBox);
 	~CBfComboBoxSelectDlg(void);
 
-	bool OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo);
+	virtual bool OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo);
 	void SetComboBox(CBfComboBox *pComboBox) { m_pComboBox = pComboBox; };
 	void SetCloseButtonImage(BTN_STA_CTNS nStas, CString strImagePath, IMAGE_TYPE nImageType);
 
