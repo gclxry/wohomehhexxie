@@ -10,6 +10,7 @@ public:
 
 	virtual bool InitManager(CDirectUiDlg *pParentDlg);
 
+	virtual void OnPaintRgn(CRect &WndRect, Graphics *pGraphics);
 	virtual void OnPaint(HDC hMemoryDC, CRect &DrawRect);
 	virtual bool OnMouseMove(UINT nFlags, CPoint point);
 	virtual void OnTimer(int nTimerId);

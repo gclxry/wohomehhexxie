@@ -61,6 +61,39 @@ void CDirectUiManager::OnPaint(HDC hMemoryDC, CRect &DrawRect)
 	}
 }
 
+void CDirectUiManager::OnPaintRgn(CRect &WndRect, Graphics *pGraphics)
+{
+	if (pGraphics != NULL)
+	{
+		m_pDoGrap = pGraphics;
+
+		//	m_hMemoryDC = pGraphics->GetHDC();
+		//	HBRUSH hbr = (HBRUSH)::GetStockObject(LTGRAY_BRUSH);
+		//	CRect FillR(0, 0, 50, 50);
+		//	::FillRect(m_hMemoryDC, &FillR, hbr);
+		//	pGraphics->ReleaseHDC(m_hMemoryDC);
+
+		m_DcRect = WndRect;
+
+		int nCut = 100;
+
+		SolidBrush FillBrush(Color(0, 255, 255, 255));
+		m_pDoGrap->FillRectangle(&FillBrush, 0, 0, m_DcRect.Width(), m_DcRect.Height());
+
+		SolidBrush FillBrush1(Color(90, 255, 130, 100));
+		m_pDoGrap->FillRectangle(&FillBrush1, nCut, nCut, m_DcRect.Width() - nCut * 2, m_DcRect.Height() - nCut * 2);
+
+		SolidBrush FillBrush2(Color(253, 0, 0, 255));
+		m_pDoGrap->FillRectangle(&FillBrush2, nCut, 200, m_DcRect.Width() - nCut * 2, m_DcRect.Height() - nCut * 3);
+
+		for (WndObj *pWndObj = m_WndList.TopObj(); pWndObj != NULL; pWndObj = m_WndList.NextObj(pWndObj))
+		{
+			if (pWndObj->pWnd != NULL)
+				((CDirectUiWindow*)(pWndObj->pWnd))->OnPaintProc(m_pDoGrap, m_hMemoryDC);
+		}
+	}
+}
+
 bool CDirectUiManager::OnMouseMove(UINT nFlags, CPoint point)
 {
 	bool bRet = false;

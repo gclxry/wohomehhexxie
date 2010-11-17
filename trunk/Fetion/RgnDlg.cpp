@@ -23,6 +23,8 @@ CRgnDlg::CRgnDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 	m_dbFactor = 0.0;
 
 	m_PointList.clear();
+
+	m_pUiManager = &m_UiManager;
 }
 
 CRgnDlg::~CRgnDlg(void)
@@ -34,8 +36,7 @@ void CRgnDlg::OnCreate()
 {
 	__base_super::OnCreate();
 
-	// 设置默认大小
-	this->CenterWindow(500, 400);
+	m_UiManager.InitManager(this);
 
 	CString strSkinDir = CSysUnit::GetAppPath();
 
@@ -81,6 +82,9 @@ void CRgnDlg::OnCreate()
 	m_Blend.BlendFlags = 0;
 	m_Blend.AlphaFormat = AC_SRC_ALPHA;
 	m_Blend.SourceConstantAlpha = 255;
+
+	// 设置默认大小
+	this->CenterWindow(500, 400);
 }
 
 LRESULT CRgnDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
@@ -123,7 +127,7 @@ LRESULT CRgnDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 		m_pZhuanBtn->MoveWindow(ZhuanRect, hWinPoslnfo);
 	}
 
-	RedrawDlg();
+	RedrawWindow();
 	return __base_super::OnSize(hWinPoslnfo, wParam, lParam);
 }
 
@@ -376,7 +380,7 @@ LRESULT CRgnDlg::OnTimer(WPARAM wParam, LPARAM lParam)
 		{
 			this->KillTimer(m_nTimerId);
 		}
-		RedrawDlg();
+		RedrawWindow();
 
 	}
 
