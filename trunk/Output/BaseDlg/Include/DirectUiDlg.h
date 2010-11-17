@@ -2,6 +2,7 @@
 #pragma once
 #include "FetionSFDefs.h"
 #include "WindowBase.h"
+#include "DirectUiWindowMsgCtrl.h"
 
 #pragma warning(disable:4800)
 
@@ -24,11 +25,13 @@
 // 消息处理子类化
 LRESULT CALLBACK PuppetWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-class CDirectUiDlg : public CWindowBase
+class CDirectUiDlg : public CWindowBase, public CDirectUiWindowMsgCtrl
 {
 public:
 	CDirectUiDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId);
 	~CDirectUiDlg(void);
+
+	virtual bool OnDirectUiWindowMsgProc(int nMsgId, DWM_INFO &MsgInfo) = 0;
 
 	// 消息处理
 	virtual LRESULT WndProc(UINT message, WPARAM wParam, LPARAM lParam);

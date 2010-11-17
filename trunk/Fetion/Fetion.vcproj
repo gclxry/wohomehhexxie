@@ -322,6 +322,22 @@
 				>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="00 ²âÊÔ´°¿Ú"
+			>
+			<Filter
+				Name="RGN"
+				>
+				<File
+					RelativePath=".\RgnDlg.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RgnDlg.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
