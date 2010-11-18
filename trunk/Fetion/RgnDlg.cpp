@@ -1,8 +1,6 @@
 
 #include "StdAfx.h"
 #include "RgnDlg.h"
-#include "shellapi.h"
-#include "math.h"
 
 #define __base_super					CHighEfficiencyDlg
 
@@ -26,18 +24,14 @@ CRgnDlg::CRgnDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 
 	m_pUiManager = &m_UiManager;
 
-	m_pBmpData = NULL;
+	m_pSEffectsBmpData = NULL;
 }
 
 CRgnDlg::~CRgnDlg(void)
 {
 	m_PointList.clear();
 
-	if (m_pBmpData != NULL)
-	{
-		delete [] m_pBmpData;
-		m_pBmpData = NULL;
-	}
+	SAVE_DELETE_LIST(m_pSEffectsBmpData);
 }
 
 void CRgnDlg::OnCreate()
@@ -100,20 +94,15 @@ LRESULT CRgnDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 	int cx = LOWORD(lParam);
 	int cy = HIWORD(lParam);
 
-
-	if (m_pBmpData != NULL)
-	{
-		delete [] m_pBmpData;
-		m_pBmpData = NULL;
-	}
+	SAVE_DELETE_LIST(m_pSEffectsBmpData);
 
 	CRect WndRect = this->GetClientRect();
 	long lSize = WndRect.Width() * WndRect.Height() * 4 * sizeof(unsigned char);
-	m_pBmpData = new unsigned char[lSize];
+	m_pSEffectsBmpData = new unsigned char[lSize];
 
-	if (m_pBmpData != NULL)
+	if (m_pSEffectsBmpData != NULL)
 	{
-		CAKPicDraw::GetInst()->SelectPic(m_pBmpData, WndRect.Width(), WndRect.Height());
+		CAKPicDraw::GetInst()->SelectPic(m_pSEffectsBmpData, WndRect.Width(), WndRect.Height());
 		CAK3DRender::GetInst()->SelectPicDraw(CAKPicDraw::GetInst());
 	}
 
@@ -161,8 +150,8 @@ void CRgnDlg::DrawGdiPlus(HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	CRect rc = this->GetClientRect();
 
 	//清屏
-	CAKPicDraw::GetInst()->SelectPic(m_pBmpData, rc.Width(), rc.Height());
-	memset(m_pBmpData, 0, rc.Width() * rc.Height()*4);
+	CAKPicDraw::GetInst()->SelectPic(m_pSEffectsBmpData, rc.Width(), rc.Height());
+	memset(m_pSEffectsBmpData, 0, rc.Width() * rc.Height() * 4);
 
 	//重置深度缓冲
 	CAK3DRender::GetInst()->ResetZBuffer(-10000);
@@ -192,16 +181,17 @@ void CRgnDlg::DrawGdiPlus(HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	CAK3DRender::GetInst()->DrawRect2(&v1,&v2,&v3,&v4,uv1,uv2,uv3,uv4,true);
 
 	//把位图显示出来
-	DisplayBmpData(hMemoryDC,hMemoryBitmap,0,0,m_pBmpData, rc.Width(), rc.Height());
+	DisplayBmpData(hMemoryDC,hMemoryBitmap,0,0,m_pSEffectsBmpData, rc.Width(), rc.Height());
 }
 
 void CRgnDlg::DisplayBmpData(HDC hMemoryDC, HBITMAP hMemoryBitmap, long x, long y, unsigned char *pBmp, long rows, long cols)
 {
-	//获取当前DC的像素显示位数(16/24/32)
+	// 获取当前DC的像素显示位数(16/24/32)
 	int BitCount=::GetDeviceCaps(hMemoryDC, BITSPIXEL);
-	switch(BitCount)
+	switch (BitCount)
 	{
-	case 16://16位色
+		// 16位色
+	case 16:
 		{
 			long i,index1,index2;
 			long total=rows*cols;
@@ -226,7 +216,8 @@ void CRgnDlg::DisplayBmpData(HDC hMemoryDC, HBITMAP hMemoryBitmap, long x, long 
 			break;
 		}
 
-	case 24://24位色
+		// 24位色
+	case 24:
 		{
 			long i,index1,index2;
 			long total=rows*cols;
@@ -243,13 +234,15 @@ void CRgnDlg::DisplayBmpData(HDC hMemoryDC, HBITMAP hMemoryBitmap, long x, long 
 			break;
 		}
 
-	case 32://32位色
+		// 32位色
+	case 32:
 		{
 			::SetBitmapBits(hMemoryBitmap, cols*rows*4*sizeof(unsigned char),pBmp);
 			break;
 		}
 
-	default://其它位色
+		// 其它位色
+	default:
 		{
 			::TextOut(hMemoryDC, (cols-7*16)/2, rows/2, _T("显示模式不支持"), 7);
 			break;
@@ -260,9 +253,7 @@ void CRgnDlg::DisplayBmpData(HDC hMemoryDC, HBITMAP hMemoryBitmap, long x, long 
 void CRgnDlg::OnPaint(HDC hPaintDc)
 {
 	// 设置窗体的透明特性
-	DWORD dwExStyle = GetWindowLong(m_hWnd, GWL_EXSTYLE);
-	if ((dwExStyle & WS_EX_LAYERED) != WS_EX_LAYERED)
-		SetWindowLong(m_hWnd, GWL_EXSTYLE, dwExStyle^WS_EX_LAYERED);
+	CSysUnit::SetWindowToTransparence(m_hWnd, true);
 
 	CRect WndRect = this->GetClientRect();
 
@@ -368,7 +359,6 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 		}
 	}
 }
-
 
 LRESULT CRgnDlg::OnTimer(WPARAM wParam, LPARAM lParam)
 {
