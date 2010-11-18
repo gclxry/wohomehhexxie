@@ -36,7 +36,7 @@ protected:
 
 	CResImage m_TImage;
 
-	unsigned char *m_pBmpData;
+	unsigned char *m_pSEffectsBmpData;
 
 private:
 	CBfNormalGraduatedButton *m_pZhuanBtn;

@@ -16,3 +16,25 @@ CString CSysUnit::GetAppPath()
 
 	return strPath;
 }
+
+// 设置窗体的透明特性
+void CSysUnit::SetWindowToTransparence(HWND hWnd, bool bIsTrans)
+{
+	DWORD dwExStyle = GetWindowLong(hWnd, GWL_EXSTYLE);
+
+	if (bIsTrans)
+	{
+		// 透明
+		if ((dwExStyle & WS_EX_LAYERED) != WS_EX_LAYERED)
+			::SetWindowLong(hWnd, GWL_EXSTYLE, dwExStyle^WS_EX_LAYERED);
+	}
+	else
+	{
+		// 不透明
+		if ((dwExStyle & WS_EX_LAYERED) == WS_EX_LAYERED)
+		{
+			dwExStyle &= (~WS_EX_LAYERED);
+			::SetWindowLong(hWnd, GWL_EXSTYLE, dwExStyle);
+		}
+	}
+}
