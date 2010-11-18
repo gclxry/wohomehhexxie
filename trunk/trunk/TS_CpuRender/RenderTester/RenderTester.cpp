@@ -212,7 +212,7 @@ void OnCreate()
 	long Width,Height;
 	struct AK_2D_UI_PIC *pUIPic;
 
-	CString strPath = CSysUnit::GetAppPath() + _T("山水画.jpg");
+	CString strPath = CSysUnit::GetAppPath() + _T("test.jpg");
 	
 	AKLoadPic(W2A(strPath.LockBuffer()),&pData,&Width,&Height);
 	strPath.UnlockBuffer();
@@ -286,10 +286,6 @@ void DrawGdiPlus(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	CAKPicDraw::GetInst(AK_PIC_DRAW_MAX_COUNT-1)->SelectPic(pUIPic->pData,pUIPic->uWidth,pUIPic->uHeight);
 
 	//定义顶点和uv
-	//	DEF_VERTEX(v1,200,100,0);
-	//	DEF_VERTEX(v2,400,100,0);
-	//	DEF_VERTEX(v3,600,500,0);
-	//	DEF_VERTEX(v4,50,500,0);
 
 	// v1 左下，v2 右下，v3 右上，v4 左上
 	DEF_VERTEX(v1,200,100,0);
@@ -298,9 +294,9 @@ void DrawGdiPlus(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	DEF_VERTEX(v4,200,450,0);
 
 	DEF_UV(uv1,0,0);
-	DEF_UV(uv2,1023,0);
-	DEF_UV(uv3,1023,767);
-	DEF_UV(uv4,0,767);
+	DEF_UV(uv2,499,0);
+	DEF_UV(uv3,499,399);
+	DEF_UV(uv4,0,399);
 
 	//渲染
 	CAK3DRender::GetInst()->DrawRect2(&v1,&v2,&v3,&v4,uv1,uv2,uv3,uv4,true);

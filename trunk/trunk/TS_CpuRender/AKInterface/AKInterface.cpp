@@ -27,7 +27,7 @@ void CAKDraw2DTo3D::SetDrawBuffer(int Width, int nHeight)
 }
 
 void CAKDraw2DTo3D::Draw2DTo3D(HDC hMemoryDC, HBITMAP hMemoryBitmap, unsigned char* pMemoryBitmapBits, CRect &PicRect,
-								CPoint &ShowLeftTop, CPoint &ShowRightTop, CPoint &ShowLeftDown, CPoint &ShowRightDown)
+								CPoint &ptLeftUp, CPoint &ptRightUp, CPoint &ptLeftDown, CPoint &ptRightDown)
 {
 	if (!IS_SAVE_HANDLE(hMemoryDC) || !IS_SAVE_HANDLE(hMemoryBitmap) || pMemoryBitmapBits == NULL || m_pSEffectsBmpData == NULL || PicRect.IsRectEmpty())
 		return;
@@ -46,14 +46,14 @@ void CAKDraw2DTo3D::Draw2DTo3D(HDC hMemoryDC, HBITMAP hMemoryBitmap, unsigned ch
 	CAK3DRender::GetInst()->ResetZBuffer(-10000);
 
 	//选择使用的贴图
-	//AK_2D_UI_PIC *pUIPic = CAK2DUI::GetSingle().FindUIPic(1);
 	CAKPicDraw::GetInst(AK_PIC_DRAW_MAX_COUNT-1)->SelectPic(pUIPic->pData, pUIPic->uWidth, pUIPic->uHeight);
 
+	// 图片数据的显示和实际看见的效果是反着的
 	// 顶点，输出矩阵 v1 左下，v2 右下，v3 右上，v4 左上
-	DEF_VERTEX(v1, 200, 100, 0);
-	DEF_VERTEX(v2, 400, 50, 0);
-	DEF_VERTEX(v3, 400, 500, 0);
-	DEF_VERTEX(v4, 200, 450, 0);
+	DEF_VERTEX(v1, ptLeftDown.x, ptLeftDown.y, 0);
+	DEF_VERTEX(v2, ptRightDown.x, ptRightDown.y, 0);
+	DEF_VERTEX(v3, ptRightUp.x, ptRightUp.y, 0);
+	DEF_VERTEX(v4, ptLeftUp.x, ptLeftUp.y, 0);
 
 	// 图片矩阵，即图片的大小，大小值以0开始，如：宽位1024，值为 1023
 	// uv1 左下，uv2 右下，uv3 右上，uv4 左上
@@ -62,13 +62,8 @@ void CAKDraw2DTo3D::Draw2DTo3D(HDC hMemoryDC, HBITMAP hMemoryBitmap, unsigned ch
 	DEF_UV(uv3, (float)(PicRect.Width() - 1), (float)(PicRect.Height() - 1));
 	DEF_UV(uv4, 0, (float)(PicRect.Height() - 1));
 
-//	DEF_UV(uv1, 0, 0);
-//	DEF_UV(uv2, 1023, 0);
-//	DEF_UV(uv3, 1023, 767);
-//	DEF_UV(uv4, 0, 767);
-
 	//渲染
-	CAK3DRender::GetInst()->DrawRect2(&v1, &v2, &v3, &v4, uv1, uv2, uv3, uv4, true);
+	CAK3DRender::GetInst()->DrawRect2(&v1, &v2, &v3, &v4, uv1, uv2, uv3, uv4, false);
 
 	//把位图显示出来 
 	DisplayBmpData(hMemoryDC, hMemoryBitmap, 0, 0, m_pSEffectsBmpData, PicRect.Width(), PicRect.Height());

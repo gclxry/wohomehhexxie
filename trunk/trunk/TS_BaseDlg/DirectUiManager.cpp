@@ -77,7 +77,7 @@ void CDirectUiManager::OnPaintRgn(CRect &WndRect, Graphics *pGraphics)
 
 		int nCut = 100;
 
-		SolidBrush FillBrush(Color(0, 255, 255, 255));
+		SolidBrush FillBrush(Color(255, 255, 255, 255));
 		m_pDoGrap->FillRectangle(&FillBrush, 0, 0, m_DcRect.Width(), m_DcRect.Height());
 
 		SolidBrush FillBrush1(Color(90, 255, 130, 100));

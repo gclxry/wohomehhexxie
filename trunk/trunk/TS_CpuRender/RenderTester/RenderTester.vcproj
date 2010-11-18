@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\..\Common\GDIPlus\Includes;..\AK2DUICommon;..\AK3DCommon;..\AKFileCommon;..\AKListCommon;..\AKLoadPic;..\AKMemCommon;..\AKPicDrawCommon;..\..\Output\CpuRender\Include;..\..\Output\FetionSF\Include"
+				AdditionalIncludeDirectories=".\;..\..\Common\GDIPlus\Includes;..\AK2DUICommon;..\AK3DCommon;..\AKFileCommon;..\AKListCommon;..\AKLoadPic;..\AKMemCommon;..\AKPicDrawCommon;..\..\Output\CpuRender\Include;..\..\Output\FetionSF\Include;..\AKInterface"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -120,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\;..\..\Common\GDIPlus\Includes;..\AK2DUICommon;..\AK3DCommon;..\AKFileCommon;..\AKListCommon;..\AKLoadPic;..\AKMemCommon;..\AKPicDrawCommon;..\..\Output\CpuRender\Include;..\..\Output\FetionSF\Include"
+				AdditionalIncludeDirectories=".\;..\..\Common\GDIPlus\Includes;..\AK2DUICommon;..\AK3DCommon;..\AKFileCommon;..\AKListCommon;..\AKLoadPic;..\AKMemCommon;..\AKPicDrawCommon;..\..\Output\CpuRender\Include;..\..\Output\FetionSF\Include;..\AKInterface"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -383,6 +383,18 @@
 			</File>
 			<File
 				RelativePath="..\..\Output\CpuRender\Include\AKTrajectory.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="AKInterface"
+			>
+			<File
+				RelativePath="..\AKInterface\AKInterface.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\CpuRender\Include\AKInterface.h"
 				>
 			</File>
 		</Filter>

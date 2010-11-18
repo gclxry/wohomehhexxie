@@ -99,7 +99,7 @@ LRESULT CRgnDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 	CRect GifStatic(100, 20, 229, 170);
 	if (m_pGifStatic != NULL)
 	{
-		m_pGifStatic->MoveWindow(GifStatic, hWinPoslnfo);
+//		m_pGifStatic->MoveWindow(GifStatic, hWinPoslnfo);
 	}
 
 	CRect CloseRect(0, 0, 0, 0);
@@ -141,7 +141,6 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 	CSysUnit::SetWindowToTransparence(m_hWnd, true);
 
 	CRect WndRect = this->GetClientRect();
-
 	CBitmapDC BmpDc;
 	BmpDc.Create(WndRect.Width(), WndRect.Height());
 
@@ -164,6 +163,7 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 		}
 		else
 		{
+			// 绘图
 			m_UiManager.OnPaintRgn(WndRect, &MemDcGrap);
 
 			// 计算扭曲位置
@@ -179,24 +179,25 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 
 			WndRect = this->GetClientRect();
 
-			// 方式1：椭圆旋转
-			CPoint PtUpTop = m_PointList[nSize];
-			CPoint PtUpBottom(PtUpTop.x + ((WndRect.left + (WndRect.Width() / 2)) - PtUpTop.x) * 2,
-				PtUpTop.y + (WndRect.top - PtUpTop.y) * 2);
-			CPoint PtDownTop(PtUpTop.x, PtUpTop.y + WndRect.Height());
-
-			Point destinationPoints[] =
-			{
-				Point(PtUpTop.x, PtUpTop.y),
-				Point(PtUpBottom.x, PtUpBottom.y),
-				Point(PtDownTop.x, PtDownTop.y)
-			};
+			// 方式：梯形旋转
+			// 轨迹点
+			CPoint ptTraj = m_PointList[nSize];
+			CPoint ptLeftUp(ptTraj.x, WndRect.top + ptTraj.y);
+			CPoint ptLeftDown(ptLeftUp.x, WndRect.bottom - ptTraj.y);
+			CPoint ptRightUp(WndRect.right - ptTraj.x, WndRect.top - ptTraj.y);
+			CPoint ptRightDown(ptRightUp.x, WndRect.bottom + ptTraj.y);
 
 			// 绘制3D图案
 			m_3DDraw.Draw2DTo3D(hMemoryDC, hMemoryBitmap, (unsigned char *)BmpDc.GetBits(), WndRect,
-				CPoint(0, 0), CPoint(0, 0), CPoint(0, 0), CPoint(0, 0));
+				ptLeftUp, ptRightUp, ptLeftDown, ptRightDown);
 
 			::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, hMemoryDC, &ptSrc, 0, &m_Blend, ULW_ALPHA);
+
+			if (m_dbFactor >= 1.0)
+			{
+				m_PointList.clear();
+				this->RedrawWindow();
+			}
 
 			/*
 			if (m_TImage.IsReady())
@@ -223,7 +224,7 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 
 					WndRect = this->GetClientRect();
 
-					// 方式1：椭圆旋转
+					// 方式1：平行四边形旋转
 					CPoint PtUpTop = m_PointList[nSize];
 					CPoint PtUpBottom(PtUpTop.x + ((WndRect.left + (WndRect.Width() / 2)) - PtUpTop.x) * 2,
 						PtUpTop.y + (WndRect.top - PtUpTop.y) * 2);
@@ -236,9 +237,6 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 						Point(PtDownTop.x, PtDownTop.y)
 					};
 					MemDcGrap.DrawImage(pDrawImg, destinationPoints, 3);
-
-					// 方式2：梯形旋转
-
 
 					// 窗口透明贴图
 					::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, hMemoryDC, &ptSrc, 0, &m_Blend, ULW_ALPHA);
@@ -278,7 +276,7 @@ void CRgnDlg::DUI_OnLButtonUp(WPARAM wParam, LPARAM lParam)
 	if (wParam == 100)
 	{
 		CRect WndRect = this->GetClientRect();
-		CAKTrajectory::EllipseMidPoint(CPoint(WndRect.left + WndRect.Width() / 2, WndRect.top ), WndRect.Width() / 2, WndRect.Width() / 20, EGT_TOP, m_PointList);
+		CAKTrajectory::EllipseMidPoint(CPoint(WndRect.Width() / 2, 0), WndRect.Width() / 2, WndRect.Width() / 20, EGT_TOP, m_PointList);
 
 		m_dbFactor = 0.0;
 		m_nTimerId = this->SetTimer(10);
