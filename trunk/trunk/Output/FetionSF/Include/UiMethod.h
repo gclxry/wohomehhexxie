@@ -35,9 +35,15 @@ public:
 	// 取得图片类型
 	static IMAGE_TYPE GetImageTypeFromLocal(CString strPath);
 
+	// 将图片保存到本地
+	static bool SaveToBitmap(HBITMAP hBitmap, CString strPath);
+
+	// 通过GDI+取得保存图片的clsid
+	static int GetImageEncoderClsid(const WCHAR* format, CLSID* pClsid);
+
+	// 保存DC到图片文件
+	static void SaveHdcToFile(HDC hdc, CString strPath);
 private:
 	//初始化gdiplus的环境
 	static ULONG_PTR gdiplusToken;
-
 };
-

@@ -45,7 +45,16 @@ void CBitmapDC::Create(int nWidth, int nHeight)
 			DIB_RGB_COLORS, (void**)(&m_pBits), NULL, 0);
 
 		if (m_hBmp != NULL && m_pBits != NULL)
+		{
 			SelectObject(m_hDC, m_hBmp);
+		}
+		else
+		{
+			DeleteDC(m_hDC);
+			m_pBits = NULL;
+			m_hBmp = NULL;
+			m_hDC = NULL;
+		}
 	}
 }
 
@@ -63,5 +72,5 @@ void CBitmapDC::Delete()
 		m_hDC = NULL;
 	}
 
-	m_hDC = NULL;
+	m_pBits = NULL;
 }
