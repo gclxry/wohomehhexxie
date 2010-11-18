@@ -1,7 +1,9 @@
-#include "stdafx.h"
 
+#include "stdafx.h"
 #include "AK3DRender.h"
-#include "math.h"
+#include <math.h>
+
+#pragma warning(disable:4244)
 
 CAK3DRender::CAK3DRender()
 {
