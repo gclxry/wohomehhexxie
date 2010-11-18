@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\..\Output\CpuRender\Include;..\AK2DUICommon;..\AK3DCommon;..\AKFileCommon;..\AKListCommon;..\AKMemCommon;..\AKPicDrawCommon"
+				AdditionalIncludeDirectories=".\;..\..\Output\CpuRender\Include;..\AK2DUICommon;..\AK3DCommon;..\AKFileCommon;..\AKListCommon;..\AKMemCommon;..\AKPicDrawCommon;..\AKInterface"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -107,7 +107,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\;..\..\Output\CpuRender\Include;..\AK2DUICommon;..\AK3DCommon;..\AKFileCommon;..\AKListCommon;..\AKMemCommon;..\AKPicDrawCommon"
+				AdditionalIncludeDirectories=".\;..\..\Output\CpuRender\Include;..\AK2DUICommon;..\AK3DCommon;..\AKFileCommon;..\AKListCommon;..\AKMemCommon;..\AKPicDrawCommon;..\AKInterface"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="1"
@@ -269,6 +269,18 @@
 			</File>
 			<File
 				RelativePath=".\stdafx.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="AKInterface"
+			>
+			<File
+				RelativePath="..\AKInterface\AKInterface.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\CpuRender\Include\AKInterface.h"
 				>
 			</File>
 		</Filter>
