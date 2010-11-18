@@ -36,7 +36,7 @@ protected:
 
 	CResImage m_TImage;
 
-	unsigned char *m_pSEffectsBmpData;
+	CAKDraw2DTo3D m_3DDraw;
 
 private:
 	CBfNormalGraduatedButton *m_pZhuanBtn;

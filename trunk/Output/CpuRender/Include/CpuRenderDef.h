@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "FetionSF.h"
 #include <assert.h>
 #include <atlbase.h>
 #include <atltypes.h>

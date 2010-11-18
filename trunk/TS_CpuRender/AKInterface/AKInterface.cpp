@@ -2,41 +2,51 @@
 #include "stdafx.h"
 #include "AKInterface.h"
 
-
 CAKDraw2DTo3D::CAKDraw2DTo3D()
 {
-
+	m_pSEffectsBmpData = NULL;
 }
 
 CAKDraw2DTo3D::~CAKDraw2DTo3D()
 {
-
+	SAVE_DELETE_LIST(m_pSEffectsBmpData);
 }
 
-void CAKDraw2DTo3D::SetDrawBuffer(unsigned char *pBmpData, int Width, int nHeight)
+void CAKDraw2DTo3D::SetDrawBuffer(int Width, int nHeight)
 {
-	if (pBmpData != NULL)
+	SAVE_DELETE_LIST(m_pSEffectsBmpData);
+
+	long lSize = Width * nHeight * 4 * sizeof(unsigned char);
+	m_pSEffectsBmpData = new unsigned char[lSize];
+
+	if (m_pSEffectsBmpData != NULL)
 	{
-		CAKPicDraw::GetInst()->SelectPic(pBmpData, Width, nHeight);
+		CAKPicDraw::GetInst()->SelectPic(m_pSEffectsBmpData, Width, nHeight);
 		CAK3DRender::GetInst()->SelectPicDraw(CAKPicDraw::GetInst());
 	}
 }
 
-void CAKDraw2DTo3D::Draw2DTo3D(HDC hMemoryDC, HBITMAP hMemoryBitmap, unsigned char *pBmpData, CRect &PicRect,
+void CAKDraw2DTo3D::Draw2DTo3D(HDC hMemoryDC, HBITMAP hMemoryBitmap, unsigned char* pMemoryBitmapBits, CRect &PicRect,
 								CPoint &ShowLeftTop, CPoint &ShowRightTop, CPoint &ShowLeftDown, CPoint &ShowRightDown)
 {
-	if (!IS_SAVE_HANDLE(hMemoryDC) || !IS_SAVE_HANDLE(hMemoryBitmap) || pBmpData == NULL || PicRect.IsRectEmpty())
+	if (!IS_SAVE_HANDLE(hMemoryDC) || !IS_SAVE_HANDLE(hMemoryBitmap) || pMemoryBitmapBits == NULL || m_pSEffectsBmpData == NULL || PicRect.IsRectEmpty())
 		return;
 
+	AK_2D_UI_PIC *pUIPic = CAK2DUI::GetSingle().CreateUIPic(1, PicRect.Width(), PicRect.Height());
+	if (pUIPic == NULL)
+		return;
+
+	memcpy(pUIPic->pData, pMemoryBitmapBits, PicRect.Width() * PicRect.Height() * 4);
+
 	//清屏
-	CAKPicDraw::GetInst()->SelectPic(pBmpData, PicRect.Width(), PicRect.Height());
-	memset(pBmpData, 0, PicRect.Width() * PicRect.Height() * 4);
+	CAKPicDraw::GetInst()->SelectPic(m_pSEffectsBmpData, PicRect.Width(), PicRect.Height());
+	memset(m_pSEffectsBmpData, 0, PicRect.Width() * PicRect.Height() * 4);
 
 	//重置深度缓冲
 	CAK3DRender::GetInst()->ResetZBuffer(-10000);
 
 	//选择使用的贴图
-	AK_2D_UI_PIC *pUIPic = CAK2DUI::GetSingle().FindUIPic(1);
+	//AK_2D_UI_PIC *pUIPic = CAK2DUI::GetSingle().FindUIPic(1);
 	CAKPicDraw::GetInst(AK_PIC_DRAW_MAX_COUNT-1)->SelectPic(pUIPic->pData, pUIPic->uWidth, pUIPic->uHeight);
 
 	// 顶点，输出矩阵 v1 左下，v2 右下，v3 右上，v4 左上
@@ -48,15 +58,22 @@ void CAKDraw2DTo3D::Draw2DTo3D(HDC hMemoryDC, HBITMAP hMemoryBitmap, unsigned ch
 	// 图片矩阵，即图片的大小，大小值以0开始，如：宽位1024，值为 1023
 	// uv1 左下，uv2 右下，uv3 右上，uv4 左上
 	DEF_UV(uv1, 0, 0);
-	DEF_UV(uv2, 1023, 0);
-	DEF_UV(uv3, 1023, 767);
-	DEF_UV(uv4, 0, 767);
+	DEF_UV(uv2, (float)(PicRect.Width() - 1), 0);
+	DEF_UV(uv3, (float)(PicRect.Width() - 1), (float)(PicRect.Height() - 1));
+	DEF_UV(uv4, 0, (float)(PicRect.Height() - 1));
+
+//	DEF_UV(uv1, 0, 0);
+//	DEF_UV(uv2, 1023, 0);
+//	DEF_UV(uv3, 1023, 767);
+//	DEF_UV(uv4, 0, 767);
 
 	//渲染
 	CAK3DRender::GetInst()->DrawRect2(&v1, &v2, &v3, &v4, uv1, uv2, uv3, uv4, true);
 
-	//把位图显示出来
-	DisplayBmpData(hMemoryDC,hMemoryBitmap,0,0,m_pSEffectsBmpData, rc.Width(), rc.Height());
+	//把位图显示出来 
+	DisplayBmpData(hMemoryDC, hMemoryBitmap, 0, 0, m_pSEffectsBmpData, PicRect.Width(), PicRect.Height());
+
+	CAK2DUI::GetSingle().FreePicList();
 }
 
 void CAKDraw2DTo3D::DisplayBmpData(HDC hMemoryDC, HBITMAP hMemoryBitmap, long x, long y, unsigned char *pBmp, long rows, long cols)

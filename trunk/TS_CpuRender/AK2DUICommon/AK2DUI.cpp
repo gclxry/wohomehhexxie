@@ -1,6 +1,10 @@
-#include "stdafx.h"
 
+#include "stdafx.h"
 #include "AK2DUI.h"
+
+#pragma warning(disable:4244)
+#pragma warning(disable:4267)
+#pragma warning(disable:4996)
 
 CAK2DUI::CAK2DUI()
 {

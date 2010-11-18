@@ -1,6 +1,10 @@
-#include "stdafx.h"
 
+#include "stdafx.h"
 #include "AK3DBonesMgr.h"
+
+#pragma warning(disable:4311)
+#pragma warning(disable:4244)
+#pragma warning(disable:4312)
 
 CAK3DBonesMgr::CAK3DBonesMgr()
 {
