@@ -17,7 +17,7 @@ public:
 
 	// 将2D的图以3D形式展现
 	void Draw2DTo3D(HDC hMemoryDC, HBITMAP hMemoryBitmap, unsigned char* pMemoryBitmapBits, CRect &PicRect,
-		CPoint &ShowLeftTop, CPoint &ShowRightTop, CPoint &ShowLeftDown, CPoint &ShowRightDown);
+		CPoint &ptLeftUp, CPoint &ptRightUp, CPoint &ptLeftDown, CPoint &ptRightDown);
 
 private:
 	// 将3D图片显示到指定DC上

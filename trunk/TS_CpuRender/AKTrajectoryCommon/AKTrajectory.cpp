@@ -7,13 +7,13 @@ void CAKTrajectory::EllipsePoints(int nX, int nY, CPoint &MidPoint,
 				   POINT_LIST &RightUpList, POINT_LIST &RightDownList)
 {
 	// вСио╡Ю
-	CPoint LeftUp(MidPoint.x - nX, MidPoint.y - nY);
+	CPoint LeftUp(MidPoint.x - nX, MidPoint.y + nY);
 	// вСоб╡Ю
-	CPoint LeftDown(MidPoint.x - nX, MidPoint.y + nY);
+	CPoint LeftDown(MidPoint.x - nX, MidPoint.y - nY);
 	// срио╡Ю
-	CPoint RightUp(MidPoint.x + nX, MidPoint.y - nY);
+	CPoint RightUp(MidPoint.x + nX, MidPoint.y + nY);
 	// сроб╡Ю
-	CPoint RightDown(MidPoint.x + nX, MidPoint.y + nY);
+	CPoint RightDown(MidPoint.x + nX, MidPoint.y - nY);
 
 	LeftUpList.push_front(LeftUp);
 	RightUpList.push_back(RightUp);
