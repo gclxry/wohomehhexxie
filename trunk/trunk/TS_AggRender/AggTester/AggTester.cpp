@@ -49,6 +49,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			DispatchMessage(&msg);
 		}
 	}
+
 	return (int) msg.wParam;
 }
 
@@ -181,9 +182,14 @@ void OnSize(WPARAM wParam, LPARAM lParam)
 	int cy = HIWORD(lParam);
 }
 
+pixel_map PixMapImg;
+rendering_buffer DstBuf;
+
 void OnCreate()
 {
 	USES_CONVERSION;
+
+	CAggInterface::load_pmap(PixMapImg, "spheres.bmp", &DstBuf);
 }
 
 void Draw(HWND hWnd, HDC hdc)
@@ -207,4 +213,42 @@ void Draw(HWND hWnd, HDC hdc)
 
 void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 {
+	typedef agg::pixfmt_bgra32 pixfmt;
+	typedef pixfmt::color_type color_type;
+	typedef agg::image_accessor_clone<pixfmt> img_accessor_type;
+	typedef agg::span_interpolator_trans<agg::trans_perspective> interpolator_type;
+	typedef agg::span_image_filter_rgba_2x2<img_accessor_type, interpolator_type> span_gen_type;
+
+	agg::span_allocator<color_type> sa;
+	agg::image_filter_bilinear filter_kernel;
+	agg::image_filter_lut filter(filter_kernel, false);
+
+	pixfmt pixf_img(DstBuf);
+	img_accessor_type ia(pixf_img);
+
+	agg::trans_perspective tr(m_quad.polygon(), g_x1, g_y1, g_x2, g_y2);
+	if (tr.is_valid())
+	{
+		// Subdivision and linear interpolation (faster, but less accurate)
+		//-----------------------
+		//typedef agg::span_interpolator_linear<agg::trans_perspective> interpolator_type;
+		//typedef agg::span_subdiv_adaptor<interpolator_type> subdiv_adaptor_type;
+		//interpolator_type interpolator(tr);
+		//subdiv_adaptor_type subdiv_adaptor(interpolator);
+		//
+		//typedef agg::span_image_filter_rgba_2x2<img_accessor_type,
+		//                                        subdiv_adaptor_type> span_gen_type;
+		//span_gen_type sg(ia, subdiv_adaptor, filter);
+		//-----------------------
+
+		// Direct calculations of the coordinates
+		//-----------------------
+		interpolator_type interpolator(tr);
+		span_gen_type sg(ia, interpolator, filter);
+		//-----------------------
+
+		agg::render_scanlines_aa(g_rasterizer, g_scanline, rb_pre, sa, sg);
+	}
+
+	PixMapImg.draw(hMemoryDC);
 }

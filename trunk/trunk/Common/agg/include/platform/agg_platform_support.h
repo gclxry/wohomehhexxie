@@ -415,6 +415,7 @@ namespace agg
     // The demo applications are simple and their use is restricted, so, 
     // this approach is quite reasonable.
     // 
+
     class platform_support
     {
     public:
@@ -670,11 +671,6 @@ namespace agg
         int              m_initial_height;
         trans_affine     m_resize_mtx;
     };
-
-
 }
 
-
-
 #endif
-

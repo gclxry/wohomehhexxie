@@ -491,9 +491,10 @@ namespace agg
     //------------------------------------------------------------------------
     bool pixel_map::load_from_bmp(const char *filename)
     {
-        FILE *fd = fopen(filename, "rb");
+        FILE *fd = NULL;
+		fopen_s(&fd, filename, "rb");
         bool ret = false;
-        if(fd)
+        if (fd != NULL)
         {
             ret = load_from_bmp(fd);
             fclose(fd);
@@ -526,9 +527,10 @@ namespace agg
     //------------------------------------------------------------------------
     bool pixel_map::save_as_bmp(const char *filename) const
     {
-        FILE *fd = fopen(filename, "wb");
+        FILE *fd = NULL;
+		fopen_s(&fd, filename, "wb");
         bool ret = false;
-        if(fd)
+        if (fd != NULL)
         {
             ret = save_as_bmp(fd);
             fclose(fd);
