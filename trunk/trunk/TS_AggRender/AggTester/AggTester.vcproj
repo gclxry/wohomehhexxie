@@ -47,7 +47,7 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
@@ -122,7 +122,7 @@
 				AdditionalIncludeDirectories=".\;..\..\Common\agg\font_freetype;..\..\Common\agg\font_win32_tt;..\..\Common\agg\gpc;..\..\Common\agg\include;..\..\Common\agg\src;..\..\Common\agg\src\platform\win32;..\..\Common\agg\src\ctrl;..\..\Output\AggRender\Include;..\LibBuilder"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
@@ -213,6 +213,18 @@
 		<Filter
 			Name="Agg源文件"
 			>
+			<File
+				RelativePath="..\..\Common\agg\src\platform\win32\agg_platform_support.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Common\agg\src\agg_trans_affine.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Common\agg\src\platform\win32\agg_win32_bmp.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="其他"
