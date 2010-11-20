@@ -23,6 +23,7 @@
 //----------------------------------------------------------------------------
 
 #include <windows.h>
+#include <tchar.h>
 #include <string.h>
 #include "platform/agg_platform_support.h"
 #include "platform/win32/agg_win32_bmp.h"
@@ -371,7 +372,9 @@ namespace agg
                                       rendering_buffer* dst)
     {
         pixel_map pmap_tmp;
-        if(!pmap_tmp.load_from_bmp(fn)) return false;
+
+        if(!pmap_tmp.load_from_bmp(fn))
+			return false;
 
         rendering_buffer rbuf_tmp;
         rbuf_tmp.attach(pmap_tmp.buf(),
@@ -497,9 +500,15 @@ namespace agg
         case pix_format_rgba32:
             switch(pmap_tmp.bpp())
             {
-            case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_rgba32()); break;
-            case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_rgba32()); break;
-            case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_rgba32()); break;
+            case 16:
+				color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_rgba32());
+				break;
+            case 24:
+				color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_rgba32());
+				break;
+            case 32:
+				color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_rgba32());
+				break;
             }
             break;
 
@@ -588,7 +597,7 @@ namespace agg
         strcpy(m_caption, cap);
         if(m_specific->m_hwnd)
         {
-            SetWindowText(m_specific->m_hwnd, m_caption);
+			::SetWindowTextA(m_specific->m_hwnd, m_caption);
         }
     }
 
@@ -994,7 +1003,7 @@ namespace agg
     //------------------------------------------------------------------------
     void platform_support::message(const char* msg)
     {
-        ::MessageBox(m_specific->m_hwnd, msg, "AGG Message", MB_OK);
+        ::MessageBoxA(m_specific->m_hwnd, msg, "AGG Message", MB_OK);
     }
 
 
@@ -1011,14 +1020,14 @@ namespace agg
         int wflags = CS_OWNDC | CS_VREDRAW | CS_HREDRAW;
 
         WNDCLASS wc;
-        wc.lpszClassName = "AGGAppClass";
+        wc.lpszClassName = _T("AGGAppClass");
         wc.lpfnWndProc = window_proc;
         wc.style = wflags;
         wc.hInstance = g_windows_instance;
         wc.hIcon = LoadIcon(0, IDI_APPLICATION);
         wc.hCursor = LoadCursor(0, IDC_ARROW);
         wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
-        wc.lpszMenuName = "AGGAppMenu";
+        wc.lpszMenuName = _T("AGGAppMenu");
         wc.cbClsExtra = 0;
         wc.cbWndExtra = 0;
         ::RegisterClass(&wc);
@@ -1030,7 +1039,7 @@ namespace agg
             wflags |= WS_THICKFRAME | WS_MAXIMIZEBOX;
         }
 
-        m_specific->m_hwnd = ::CreateWindow("AGGAppClass",
+        m_specific->m_hwnd = ::CreateWindowA("AGGAppClass",
                                             m_caption,
                                             wflags,
                                             100,
