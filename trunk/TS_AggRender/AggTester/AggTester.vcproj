@@ -263,10 +263,6 @@
 				Name="AggÔ´ÎÄ¼þ"
 				>
 				<File
-					RelativePath="..\..\Common\agg\src\platform\win32\agg_platform_support.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\Common\agg\src\agg_trans_affine.cpp"
 					>
 				</File>

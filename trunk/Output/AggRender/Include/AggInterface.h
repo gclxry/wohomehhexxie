@@ -9,5 +9,5 @@ public:
 	CAggInterface();
 	virtual ~CAggInterface();
 
-	bool load_pmap(const char* fn, unsigned idx, rendering_buffer* dst);
+	static bool load_pmap(pixel_map &PixMapImg, const char* fn, rendering_buffer* dst, pix_format_e format = agg::pix_format_bgra32, bool IsFlipY = true);
 };

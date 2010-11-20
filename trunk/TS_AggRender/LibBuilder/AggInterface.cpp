@@ -9,34 +9,79 @@ CAggInterface::~CAggInterface()
 {
 }
 
-bool CAggInterface::load_pmap(const char* fn, unsigned idx, rendering_buffer* dst)
+bool CAggInterface::load_pmap(pixel_map &PixMapImg, const char* fn, rendering_buffer* dst, pix_format_e format, bool IsFlipY)
 {
 	pixel_map pmap_tmp;
 
 	if(!pmap_tmp.load_from_bmp(fn))
 		return false;
 
+	unsigned nBpp = 0;
+	switch (format)
+	{
+	case pix_format_bw:
+		nBpp = 1;
+		break;
+
+	case pix_format_gray8:
+		nBpp = 8;
+		break;
+
+	case pix_format_gray16:
+		nBpp = 16;
+		break;
+
+	case pix_format_rgb565:
+	case pix_format_rgb555:
+		nBpp = 16;
+		break;
+
+	case pix_format_rgbAAA:
+	case pix_format_bgrAAA:
+	case pix_format_rgbBBA:
+	case pix_format_bgrABB:
+		nBpp = 32;
+		break;
+
+	case pix_format_rgb24:
+	case pix_format_bgr24:
+		nBpp = 24;
+		break;
+
+	case pix_format_rgb48:
+	case pix_format_bgr48:
+		nBpp = 48;
+		break;
+
+	case pix_format_bgra32:
+	case pix_format_abgr32:
+	case pix_format_argb32:
+	case pix_format_rgba32:
+		nBpp = 32;
+		break;
+
+	case pix_format_bgra64:
+	case pix_format_abgr64:
+	case pix_format_argb64:
+	case pix_format_rgba64:
+		nBpp = 64;
+		break;
+	}
+
 	rendering_buffer rbuf_tmp;
 	rbuf_tmp.attach(pmap_tmp.buf(),
 		pmap_tmp.width(),
 		pmap_tmp.height(),
-		m_flip_y ?
-		pmap_tmp.stride() :
-	-pmap_tmp.stride());
+		IsFlipY ? pmap_tmp.stride() : -pmap_tmp.stride());
 
-	m_pmap_img[idx].create(pmap_tmp.width(), 
-		pmap_tmp.height(), 
-		org_e(m_bpp),
-		0);
+	PixMapImg.create(pmap_tmp.width(), pmap_tmp.height(), org_e(nBpp), 0);
 
-	dst->attach(m_pmap_img[idx].buf(),
-		m_pmap_img[idx].width(),
-		m_pmap_img[idx].height(),
-		m_flip_y ?
-		m_pmap_img[idx].stride() :
-	-m_pmap_img[idx].stride());
+	dst->attach(PixMapImg.buf(),
+		PixMapImg.width(),
+		PixMapImg.height(),
+		IsFlipY ? PixMapImg.stride() : -PixMapImg.stride());
 
-	switch(m_format)
+	switch (format)
 	{
 	case pix_format_gray8:
 		switch(pmap_tmp.bpp())
@@ -187,9 +232,7 @@ bool CAggInterface::load_pmap(const char* fn, unsigned idx, rendering_buffer* ds
 			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_rgba64()); break;
 		}
 		break;
-
 	}
 
 	return true;
 }
-
