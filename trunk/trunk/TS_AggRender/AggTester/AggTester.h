@@ -1,23 +1,12 @@
 #pragma once
 
 #include "resource.h"
+#include "AggRender.h"
 
-#include "GdiPlus.h"
-using namespace Gdiplus;
+#include "atltypes.h"
 
-#include "Fetionsf.h"
-#include "CpuRender.h"
-
-#include "AkLoadPic.h"
-
-void OnCreate();
-void OnTimer(WPARAM wParam, LPARAM lParam);
+void OnTimer(HWND hWnd, WPARAM wParam, LPARAM lParam);
 void OnSize(WPARAM wParam, LPARAM lParam);
-
+void OnCreate();
 void Draw(HWND hWnd, HDC hdc);
-void DrawGdiPlus(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap);
-
-void OnPaint(HDC hDC);
-
-bool SetBmpData(long w,long h);
-void DisplayBmpData(HDC hMemoryDC, HBITMAP hMemoryBitmap, long x, long y, unsigned char *pBmp, long rows, long cols);
+void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap);
