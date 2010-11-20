@@ -185,46 +185,18 @@
 				RelativePath=".\AggTester.h"
 				>
 			</File>
-		</Filter>
-		<Filter
-			Name="对外接口"
-			>
-			<File
-				RelativePath="..\..\Output\AggRender\Include\AggRender.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Output\AggRender\Include\AggRenderDefs.h"
-				>
-			</File>
 			<Filter
-				Name="AggDraw2DTo3D"
+				Name="对外接口"
 				>
 				<File
-					RelativePath="..\LibBuilder\AggDraw2DTo3D.cpp"
+					RelativePath="..\..\Output\AggRender\Include\AggRender.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\Output\AggRender\Include\AggDraw2DTo3D.h"
+					RelativePath="..\..\Output\AggRender\Include\AggRenderDefs.h"
 					>
 				</File>
 			</Filter>
-		</Filter>
-		<Filter
-			Name="Agg源文件"
-			>
-			<File
-				RelativePath="..\..\Common\agg\src\platform\win32\agg_platform_support.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Common\agg\src\agg_trans_affine.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Common\agg\src\platform\win32\agg_win32_bmp.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="其他"
@@ -287,6 +259,46 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Agg源文件"
+				>
+				<File
+					RelativePath="..\..\Common\agg\src\platform\win32\agg_platform_support.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Common\agg\src\agg_trans_affine.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Common\agg\src\platform\win32\agg_win32_bmp.cpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="AggInterface"
+			>
+			<File
+				RelativePath="..\LibBuilder\AggInterface.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\AggRender\Include\AggInterface.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="AggDraw2DTo3D"
+			>
+			<File
+				RelativePath="..\LibBuilder\AggDraw2DTo3D.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Output\AggRender\Include\AggDraw2DTo3D.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
