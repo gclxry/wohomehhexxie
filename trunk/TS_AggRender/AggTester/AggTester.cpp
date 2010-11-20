@@ -1,6 +1,6 @@
 
 #include "stdafx.h"
-#include "RenderTester.h"
+#include "AggTester.h"
 
 #define MAX_LOADSTRING 100
 
@@ -8,12 +8,6 @@
 HINSTANCE hInst;								// 当前实例
 TCHAR szTitle[MAX_LOADSTRING];					// 标题栏文本
 TCHAR szWindowClass[MAX_LOADSTRING];			// 主窗口类名
-HWND g_hWnd = NULL;
-
-//显示缓存位图
-unsigned char *m_pBmpData = NULL;
-//显示缓存位图宽高
-long m_BmpWidth = 0, m_BmpHeight = 0;
 
 // 此代码模块中包含的函数的前向声明:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -25,8 +19,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
                      LPTSTR    lpCmdLine,
                      int       nCmdShow)
 {
-	CUiMethod::InitGdiPlus();
-
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
@@ -57,12 +49,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			DispatchMessage(&msg);
 		}
 	}
-
-	CUiMethod::UnInitGdiPlus();
-
-	if(m_pBmpData)
-		delete [] m_pBmpData;
-
 	return (int) msg.wParam;
 }
 
@@ -144,7 +130,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	g_hWnd = hWnd;
 	PAINTSTRUCT ps;
 	HDC hdc;
 
@@ -165,7 +150,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_TIMER:
-		OnTimer(wParam, lParam);
+		OnTimer(hWnd, wParam, lParam);
 		break;
 
 	case WM_SIZE:
@@ -182,13 +167,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return ::DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-void OnTimer(WPARAM wParam, LPARAM lParam)
+void OnTimer(HWND hWnd, WPARAM wParam, LPARAM lParam)
 {
 	int wTimerID = (int)wParam;
 	if (wTimerID == 0)
 	{
-		//::RedrawWindow(g_hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE);
-		::InvalidateRect(g_hWnd, NULL, true);
 	}
 }
 
@@ -196,49 +179,11 @@ void OnSize(WPARAM wParam, LPARAM lParam)
 {
 	int cx = LOWORD(lParam); 
 	int cy = HIWORD(lParam);
-
-	SetBmpData(cx,cy);
-	CAKPicDraw::GetInst()->SelectPic(m_pBmpData,m_BmpWidth,m_BmpHeight);
-
-	CAK3DRender::GetInst()->SelectPicDraw(CAKPicDraw::GetInst());
 }
 
 void OnCreate()
 {
 	USES_CONVERSION;
-
-	//加载贴图
-	unsigned char *pData;
-	long Width,Height;
-	struct AK_2D_UI_PIC *pUIPic;
-
-	CString strPath = CSysUnit::GetAppPath() + _T("test.jpg");
-	
-	AKLoadPic(W2A(strPath.LockBuffer()),&pData,&Width,&Height);
-	strPath.UnlockBuffer();
-
-	pUIPic=CAK2DUI::GetSingle().CreateUIPic(1,Width,Height);
-	if(pUIPic)
-	{
-		memcpy(pUIPic->pData, pData, Width*Height*4);
-
-		// 设置alpha值
-		unsigned char *pDataA = NULL;
-		for(int i=0;i<(Width*Height);++i)
-		{
-			pDataA=&pUIPic->pData[i*4];
-			pDataA[3]=255;
-		}
-	}
-	else
-	{
-		::PostQuitMessage(0);
-		return;
-	}
-	delete [] pData;
-
-	::MoveWindow(g_hWnd, 0, 0, 800, 600, TRUE);
-	::SetTimer(g_hWnd, 0, 0, NULL);
 }
 
 void Draw(HWND hWnd, HDC hdc)
@@ -252,7 +197,7 @@ void Draw(HWND hWnd, HDC hdc)
 		if (hMemoryBitmap != NULL)
 		{
 			::SelectObject(hMemoryDC, hMemoryBitmap);
-			DrawGdiPlus(hWnd, hMemoryDC, hMemoryBitmap);
+			AggDraw(hWnd, hMemoryDC, hMemoryBitmap);
 			::BitBlt(hdc, 0, 0, WndRect.Width(), WndRect.Height(), hMemoryDC, 0, 0, SRCCOPY);
 			::DeleteObject(hMemoryBitmap);
 		}
@@ -260,123 +205,6 @@ void Draw(HWND hWnd, HDC hdc)
 	}
 }
 
-void DrawGdiPlus(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
+void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 {
-/*	CRect WndRect(0, 0, 0, 0);
-	::GetClientRect(hWnd, WndRect);
-
-	Graphics Grap(hMemoryDC);
-
-	// 背景色，透明度：200
-	SolidBrush FillBrush(Color(200, 255, 0, 255));
-	Grap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());*/
-
-	CRect rc;
-	::GetClientRect(g_hWnd, &rc);
-
-	//清屏
-	CAKPicDraw::GetInst()->SelectPic(m_pBmpData, m_BmpWidth, m_BmpHeight);
-	memset(m_pBmpData, 0, m_BmpWidth*m_BmpHeight*4);
-
-	//重置深度缓冲
-	CAK3DRender::GetInst()->ResetZBuffer(-10000);
-
-	//选择使用的贴图
-	AK_2D_UI_PIC *pUIPic=CAK2DUI::GetSingle().FindUIPic(1);
-	CAKPicDraw::GetInst(AK_PIC_DRAW_MAX_COUNT-1)->SelectPic(pUIPic->pData,pUIPic->uWidth,pUIPic->uHeight);
-
-	//定义顶点和uv
-
-	// v1 左下，v2 右下，v3 右上，v4 左上
-	DEF_VERTEX(v1,200,100,0);
-	DEF_VERTEX(v2,400,50,0);
-	DEF_VERTEX(v3,400,500,0);
-	DEF_VERTEX(v4,200,450,0);
-
-	DEF_UV(uv1,0,0);
-	DEF_UV(uv2,499,0);
-	DEF_UV(uv3,499,399);
-	DEF_UV(uv4,0,399);
-
-	//渲染
-	CAK3DRender::GetInst()->DrawRect2(&v1,&v2,&v3,&v4,uv1,uv2,uv3,uv4,true);
-
-	//把位图显示出来
-	DisplayBmpData(hMemoryDC,hMemoryBitmap,0,0,m_pBmpData,m_BmpHeight,m_BmpWidth);
-}
-
-void DisplayBmpData(HDC hMemoryDC, HBITMAP hMemoryBitmap, long x, long y, unsigned char *pBmp, long rows, long cols)
-{
-	//获取当前DC的像素显示位数(16/24/32)
-	int BitCount=::GetDeviceCaps(hMemoryDC, BITSPIXEL);
-	switch(BitCount)
-	{
-	case 16://16位色
-		{
-			long i,index1,index2;
-			long total=rows*cols;
-			unsigned short r,g,b;
-			unsigned short *pValue;
-
-			for(i=0,index1=0,index2=0;i<total;++i)
-			{
-				index1+=4;
-				index2+=2;
-
-				b=pBmp[index1];
-				g=pBmp[index1+1];
-				r=pBmp[index1+2];
-
-				pValue=(unsigned short *)&pBmp[index2];
-
-				*pValue=(r/8<<11)|(g/4<<5)|(b/8);
-			}
-
-			::SetBitmapBits(hMemoryBitmap, cols*rows*2*sizeof(unsigned char), pBmp);
-			break;
-		}
-
-	case 24://24位色
-		{
-			long i,index1,index2;
-			long total=rows*cols;
-
-			for(i=0,index1=0,index2=0;i<total;++i)
-			{
-				index1+=4;
-				index2+=3;
-
-				memcpy(&pBmp[index2],&pBmp[index1],sizeof(unsigned char)*3);
-			}
-
-			::SetBitmapBits(hMemoryBitmap, cols*rows*3*sizeof(unsigned char),pBmp);
-			break;
-		}
-
-	case 32://32位色
-		{
-			::SetBitmapBits(hMemoryBitmap, cols*rows*4*sizeof(unsigned char),pBmp);
-			break;
-		}
-
-	default://其它位色
-		{
-			::TextOut(hMemoryDC, (cols-7*16)/2, rows/2, _T("显示模式不支持"), 7);
-			break;
-		}
-	}
-}
-
-bool SetBmpData(long w,long h)
-{
-	if(m_pBmpData)delete[] m_pBmpData;
-
-	m_BmpWidth=w;
-	m_BmpHeight=h;
-
-	long size=w*h*4*sizeof(unsigned char);
-
-	m_pBmpData = new unsigned char[size];
-
-	return (m_pBmpData != NULL);
 }
