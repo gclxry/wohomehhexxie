@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "AggRenderDefs.h"
+#include "AggInterface.h"
 
 class CAggDraw2DTo3D
 {
@@ -14,5 +14,4 @@ public:
 		CPoint &ptLeftUp, CPoint &ptRightUp, CPoint &ptLeftDown, CPoint &ptRightDown);
 
 private:
-	bool CAggDraw2DTo3D::load_pmap(const char* fn, unsigned idx, rendering_buffer* dst)
 };
