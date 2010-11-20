@@ -3,8 +3,6 @@
 #include "resource.h"
 #include "AggRender.h"
 
-#include "atltypes.h"
-
 void OnTimer(HWND hWnd, WPARAM wParam, LPARAM lParam);
 void OnSize(WPARAM wParam, LPARAM lParam);
 void OnCreate();

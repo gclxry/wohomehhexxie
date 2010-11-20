@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\..\Common\agg\font_freetype;..\..\Common\agg\font_win32_tt;..\..\Common\agg\gpc;..\..\Common\agg\include;..\..\Common\agg\src;..\..\Common\agg\src\platform\win32;..\..\Common\agg\src\ctrl;..\..\Output\AggRender\Include"
+				AdditionalIncludeDirectories=".\;..\..\Common\agg\font_freetype;..\..\Common\agg\font_win32_tt;..\..\Common\agg\gpc;..\..\Common\agg\include;..\..\Common\agg\src;..\..\Common\agg\src\platform\win32;..\..\Common\agg\src\ctrl;..\..\Output\AggRender\Include;..\LibBuilder"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -119,7 +119,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\;..\..\Common\agg\font_freetype;..\..\Common\agg\font_win32_tt;..\..\Common\agg\gpc;..\..\Common\agg\include;..\..\Common\agg\src;..\..\Common\agg\src\platform\win32;..\..\Common\agg\src\ctrl;..\..\Output\AggRender\Include"
+				AdditionalIncludeDirectories=".\;..\..\Common\agg\font_freetype;..\..\Common\agg\font_win32_tt;..\..\Common\agg\gpc;..\..\Common\agg\include;..\..\Common\agg\src;..\..\Common\agg\src\platform\win32;..\..\Common\agg\src\ctrl;..\..\Output\AggRender\Include;..\LibBuilder"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -197,6 +197,22 @@
 				RelativePath="..\..\Output\AggRender\Include\AggRenderDefs.h"
 				>
 			</File>
+			<Filter
+				Name="AggDraw2DTo3D"
+				>
+				<File
+					RelativePath="..\LibBuilder\AggDraw2DTo3D.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Output\AggRender\Include\AggDraw2DTo3D.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="Agg源文件"
+			>
 		</Filter>
 		<Filter
 			Name="其他"
