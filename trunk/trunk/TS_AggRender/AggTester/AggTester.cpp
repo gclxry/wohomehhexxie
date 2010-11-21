@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "AggTester.h"
 
+
 #define MAX_LOADSTRING 100
 
 // 全局变量:
@@ -213,6 +214,17 @@ void Draw(HWND hWnd, HDC hdc)
 
 void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 {
+	// agg 固定处理步骤
+	// 1.顶点源 (Vertex Source)
+	// 2.坐标转换管道 (Coordinate conversion pipeline)
+	// 3.水平扫描线光栅(Scanline Rasterizer)
+	// 4.渲染器(Renderers)
+	// 5.渲染缓存(Rendering Buffer)
+
+
+
+
+
 	typedef agg::pixfmt_bgra32 pixfmt;
 	typedef agg::pixfmt_bgra32_pre pixfmt_pre;
 	typedef agg::renderer_base<pixfmt_pre> renderer_base_pre;
@@ -246,14 +258,18 @@ void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	m_quad.yn(3) = DstBuf.height() - 100;
 
 	agg::trans_perspective tr(m_quad.polygon(), g_x1, g_y1, g_x2, g_y2);
+
+	pixfmt            pixf(DstBuf);
+	renderer_base     rb(pixf);
+
+	pixfmt_pre        pixf_pre(DstBuf);
+	renderer_base_pre rb_pre(pixf_pre);
+
+	agg::rasterizer_scanline_aa<> g_rasterizer;
+	agg::scanline_u8  g_scanline;
+
 	if (tr.is_valid())
 	{
-		pixfmt_pre        pixf_pre(DstBuf);
-		renderer_base_pre rb_pre(pixf_pre);
-
-		agg::rasterizer_scanline_aa<> g_rasterizer;
-		agg::scanline_u8  g_scanline;
-
 		// Subdivision and linear interpolation (faster, but less accurate)
 		//-----------------------
 		//typedef agg::span_interpolator_linear<agg::trans_perspective> interpolator_type;
@@ -275,5 +291,260 @@ void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 		agg::render_scanlines_aa(g_rasterizer, g_scanline, rb_pre, sa, sg);
 	}
 
+	g_rasterizer.add_path(pt);
+	agg::render_scanlines_aa_solid(g_rasterizer, g_scanline, rb, agg::rgba(0,0,0));
+
+	//--------------------------
+	agg::render_ctrl(g_rasterizer, g_scanline, rb, m_trans_type);
+
 	PixMapImg.draw(hMemoryDC);
 }
+
+CAggInterface::CAggInterface()
+{
+}
+
+CAggInterface::~CAggInterface()
+{
+}
+
+bool CAggInterface::load_pmap(pixel_map &PixMapImg, const char* fn, rendering_buffer* dst, pix_format_e format, bool IsFlipY)
+{
+	pixel_map pmap_tmp;
+
+	if(!pmap_tmp.load_from_bmp(fn))
+		return false;
+
+	unsigned nBpp = 0;
+	switch (format)
+	{
+	case pix_format_bw:
+		nBpp = 1;
+		break;
+
+	case pix_format_gray8:
+		nBpp = 8;
+		break;
+
+	case pix_format_gray16:
+		nBpp = 16;
+		break;
+
+	case pix_format_rgb565:
+	case pix_format_rgb555:
+		nBpp = 16;
+		break;
+
+	case pix_format_rgbAAA:
+	case pix_format_bgrAAA:
+	case pix_format_rgbBBA:
+	case pix_format_bgrABB:
+		nBpp = 32;
+		break;
+
+	case pix_format_rgb24:
+	case pix_format_bgr24:
+		nBpp = 24;
+		break;
+
+	case pix_format_rgb48:
+	case pix_format_bgr48:
+		nBpp = 48;
+		break;
+
+	case pix_format_bgra32:
+	case pix_format_abgr32:
+	case pix_format_argb32:
+	case pix_format_rgba32:
+		nBpp = 32;
+		break;
+
+	case pix_format_bgra64:
+	case pix_format_abgr64:
+	case pix_format_argb64:
+	case pix_format_rgba64:
+		nBpp = 64;
+		break;
+	}
+
+	rendering_buffer rbuf_tmp;
+	rbuf_tmp.attach(pmap_tmp.buf(),
+		pmap_tmp.width(),
+		pmap_tmp.height(),
+		IsFlipY ? pmap_tmp.stride() : -pmap_tmp.stride());
+
+	PixMapImg.create(pmap_tmp.width(), pmap_tmp.height(), org_e(nBpp), 0);
+
+	dst->attach(PixMapImg.buf(),
+		PixMapImg.width(),
+		PixMapImg.height(),
+		IsFlipY ? PixMapImg.stride() : -PixMapImg.stride());
+
+	switch (format)
+	{
+	case pix_format_gray8:
+		switch(pmap_tmp.bpp())
+		{
+			//case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_gray8()); break;
+		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_gray8()); break;
+			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_gray8()); break;
+		}
+		break;
+
+	case pix_format_gray16:
+		switch(pmap_tmp.bpp())
+		{
+			//case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_gray16()); break;
+		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_gray16()); break;
+			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_gray16()); break;
+		}
+		break;
+
+	case pix_format_rgb555:
+		switch(pmap_tmp.bpp())
+		{
+		case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_rgb555()); break;
+		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_rgb555()); break;
+		case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_rgb555()); break;
+		}
+		break;
+
+	case pix_format_rgb565:
+		switch(pmap_tmp.bpp())
+		{
+		case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_rgb565()); break;
+		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_rgb565()); break;
+		case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_rgb565()); break;
+		}
+		break;
+
+	case pix_format_rgb24:
+		switch(pmap_tmp.bpp())
+		{
+		case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_rgb24()); break;
+		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_rgb24()); break;
+		case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_rgb24()); break;
+		}
+		break;
+
+	case pix_format_bgr24:
+		switch(pmap_tmp.bpp())
+		{
+		case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_bgr24()); break;
+		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_bgr24()); break;
+		case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_bgr24()); break;
+		}
+		break;
+
+	case pix_format_rgb48:
+		switch(pmap_tmp.bpp())
+		{
+			//case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_rgb48()); break;
+		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_rgb48()); break;
+			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_rgb48()); break;
+		}
+		break;
+
+	case pix_format_bgr48:
+		switch(pmap_tmp.bpp())
+		{
+			//case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_bgr48()); break;
+		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_bgr48()); break;
+			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_bgr48()); break;
+		}
+		break;
+
+	case pix_format_abgr32:
+		switch(pmap_tmp.bpp())
+		{
+		case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_abgr32()); break;
+		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_abgr32()); break;
+		case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_abgr32()); break;
+		}
+		break;
+
+	case pix_format_argb32:
+		switch(pmap_tmp.bpp())
+		{
+		case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_argb32()); break;
+		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_argb32()); break;
+		case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_argb32()); break;
+		}
+		break;
+
+	case pix_format_bgra32:
+		switch(pmap_tmp.bpp())
+		{
+		case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_bgra32()); break;
+		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_bgra32()); break;
+		case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_bgra32()); break;
+		}
+		break;
+
+	case pix_format_rgba32:
+		switch(pmap_tmp.bpp())
+		{
+		case 16:
+			color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_rgba32());
+			break;
+		case 24:
+			color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_rgba32());
+			break;
+		case 32:
+			color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_rgba32());
+			break;
+		}
+		break;
+
+	case pix_format_abgr64:
+		switch(pmap_tmp.bpp())
+		{
+			//case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_abgr64()); break;
+		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_abgr64()); break;
+			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_abgr64()); break;
+		}
+		break;
+
+	case pix_format_argb64:
+		switch(pmap_tmp.bpp())
+		{
+			//case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_argb64()); break;
+		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_argb64()); break;
+			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_argb64()); break;
+		}
+		break;
+
+	case pix_format_bgra64:
+		switch(pmap_tmp.bpp())
+		{
+			//case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_bgra64()); break;
+		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_bgra64()); break;
+			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_bgra64()); break;
+		}
+		break;
+
+	case pix_format_rgba64:
+		switch(pmap_tmp.bpp())
+		{
+			//case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_rgba64()); break;
+		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_rgba64()); break;
+			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_rgba64()); break;
+		}
+		break;
+	}
+
+	return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+CAggDraw2DTo3D::CAggDraw2DTo3D()
+{
+
+}
+
+CAggDraw2DTo3D::~CAggDraw2DTo3D()
+{
+
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////

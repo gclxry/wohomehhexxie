@@ -183,11 +183,15 @@ namespace agg
         }
     }
 
-    //=====================================================render_scanlines_aa
-    template<class Rasterizer, class Scanline, class BaseRenderer, 
-             class SpanAllocator, class SpanGenerator>
-    void render_scanlines_aa(Rasterizer& ras, Scanline& sl, BaseRenderer& ren, 
-                             SpanAllocator& alloc, SpanGenerator& span_gen)
+    //===================================================== render_scanlines_aa
+	// 参数：
+	// Rasterizer：光栅控制器
+	// Scanline：span容器
+	// BaseRenderer：渲染器
+	// SpanAllocator：线段分配器
+	// SpanGenerator：指定算法的色段创建器
+    template<class Rasterizer, class Scanline, class BaseRenderer, class SpanAllocator, class SpanGenerator>
+    void render_scanlines_aa(Rasterizer& ras, Scanline& sl, BaseRenderer& ren, SpanAllocator& alloc, SpanGenerator& span_gen)
     {
         if(ras.rewind_scanlines())
         {
