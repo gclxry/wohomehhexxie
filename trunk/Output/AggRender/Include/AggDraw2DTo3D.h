@@ -1,6 +1,6 @@
 
 #pragma once
-
+/*
 #include "AggInterface.h"
 
 class CAggDraw2DTo3D
@@ -15,3 +15,4 @@ public:
 
 private:
 };
+*/

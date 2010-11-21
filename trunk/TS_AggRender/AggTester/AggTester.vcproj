@@ -202,20 +202,6 @@
 			Name="其他"
 			>
 			<Filter
-				Name="头文件"
-				Filter="h;hpp;hxx;hm;inl;inc;xsd"
-				UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-				>
-				<File
-					RelativePath=".\Resource.h"
-					>
-				</File>
-				<File
-					RelativePath=".\stdafx.h"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="源文件"
 				Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 				UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
@@ -283,10 +269,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\Common\agg\include\agg_trans_perspective.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\Common\agg\src\agg_vcgen_stroke.cpp"
 					>
 				</File>
@@ -296,6 +278,20 @@
 				</File>
 				<File
 					RelativePath="..\LibBuilder\interactive_polygon.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="头文件"
+				Filter="h;hpp;hxx;hm;inl;inc;xsd"
+				UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+				>
+				<File
+					RelativePath=".\Resource.h"
+					>
+				</File>
+				<File
+					RelativePath=".\stdafx.h"
 					>
 				</File>
 			</Filter>
