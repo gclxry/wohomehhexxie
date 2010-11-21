@@ -214,6 +214,8 @@ void Draw(HWND hWnd, HDC hdc)
 void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 {
 	typedef agg::pixfmt_bgra32 pixfmt;
+	typedef agg::pixfmt_bgra32_pre pixfmt_pre;
+	typedef agg::renderer_base<pixfmt_pre> renderer_base_pre;
 	typedef pixfmt::color_type color_type;
 	typedef agg::image_accessor_clone<pixfmt> img_accessor_type;
 	typedef agg::span_interpolator_trans<agg::trans_perspective> interpolator_type;
@@ -226,9 +228,32 @@ void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	pixfmt pixf_img(DstBuf);
 	img_accessor_type ia(pixf_img);
 
+	agg::interactive_polygon m_quad(4, 5.0);
+
+	double d = 0.0;
+	double g_x1 = d;
+	double g_y1 = d;
+	double g_x2 = DstBuf.width() - d;
+	double g_y2 = DstBuf.height() - d;
+
+	m_quad.xn(0) = 100;
+	m_quad.yn(0) = 100;
+	m_quad.xn(1) = DstBuf.width() - 100;
+	m_quad.yn(1) = 100;
+	m_quad.xn(2) = DstBuf.width() - 100;
+	m_quad.yn(2) = DstBuf.height() - 100;
+	m_quad.xn(3) = 100;
+	m_quad.yn(3) = DstBuf.height() - 100;
+
 	agg::trans_perspective tr(m_quad.polygon(), g_x1, g_y1, g_x2, g_y2);
 	if (tr.is_valid())
 	{
+		pixfmt_pre        pixf_pre(DstBuf);
+		renderer_base_pre rb_pre(pixf_pre);
+
+		agg::rasterizer_scanline_aa<> g_rasterizer;
+		agg::scanline_u8  g_scanline;
+
 		// Subdivision and linear interpolation (faster, but less accurate)
 		//-----------------------
 		//typedef agg::span_interpolator_linear<agg::trans_perspective> interpolator_type;
