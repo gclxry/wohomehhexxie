@@ -550,8 +550,9 @@ namespace agg
     void gsv_text::load_font(const char* file)
     {
         m_loaded_font.resize(0);
-        FILE* fd = fopen(file, "rb");
-        if(fd)
+        FILE* fd = NULL;
+		fopen_s(&fd, file, "rb");
+        if (fd != NULL)
         {
             unsigned len;
 
