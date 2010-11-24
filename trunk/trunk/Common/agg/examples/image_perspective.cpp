@@ -80,130 +80,128 @@ public:
     }
 
     virtual void on_draw()
-    {
-        pixfmt            pixf(rbuf_window());
-        pixfmt_pre        pixf_pre(rbuf_window());
+	{
+		pixfmt            pixf(rbuf_window());
+		pixfmt_pre        pixf_pre(rbuf_window());
 		// 中层渲染器
-        renderer_base     rb(pixf);
+		renderer_base     rb(pixf);
 		// 加强型中层渲染器
-        renderer_base_pre rb_pre(pixf_pre);
+		renderer_base_pre rb_pre(pixf_pre);
 		// 实色抗锯齿渲染
-        renderer_solid r(rb);
+		renderer_solid r(rb);
 
 		// 
-        rb.clear(agg::rgba(1, 1, 1));
+		rb.clear(agg::rgba(1, 1, 1));
 
-        if(m_trans_type.cur_item() == 0)
-        {
-            // For the affine parallelogram transformations we
-            // calculate the 4-th (implicit) point of the parallelogram
-            m_quad.xn(3) = m_quad.xn(0) + (m_quad.xn(2) - m_quad.xn(1));
-            m_quad.yn(3) = m_quad.yn(0) + (m_quad.yn(2) - m_quad.yn(1));
-        }
+		if(m_trans_type.cur_item() == 0)
+		{
+			// For the affine parallelogram transformations we
+			// calculate the 4-th (implicit) point of the parallelogram
+			m_quad.xn(3) = m_quad.xn(0) + (m_quad.xn(2) - m_quad.xn(1));
+			m_quad.yn(3) = m_quad.yn(0) + (m_quad.yn(2) - m_quad.yn(1));
+		}
 
-        //--------------------------
-        // Render the "quad" tool and controls
-        g_rasterizer.add_path(m_quad);
-        agg::render_scanlines_aa_solid(g_rasterizer, g_scanline, rb, agg::rgba(0, 0.3, 0.5, 0.6));
+		//--------------------------
+		// Render the "quad" tool and controls
+		g_rasterizer.add_path(m_quad);
+		agg::render_scanlines_aa_solid(g_rasterizer, g_scanline, rb, agg::rgba(0, 0.3, 0.5, 0.6));
 
-        // Prepare the polygon to rasterize. Here we need to fill
-        // the destination (transformed) polygon.
-        g_rasterizer.clip_box(0, 0, width(), height());
-        g_rasterizer.reset();
-        g_rasterizer.move_to_d(m_quad.xn(0), m_quad.yn(0));
-        g_rasterizer.line_to_d(m_quad.xn(1), m_quad.yn(1));
-        g_rasterizer.line_to_d(m_quad.xn(2), m_quad.yn(2));
-        g_rasterizer.line_to_d(m_quad.xn(3), m_quad.yn(3));
+		// Prepare the polygon to rasterize. Here we need to fill
+		// the destination (transformed) polygon.
+		g_rasterizer.clip_box(0, 0, width(), height());
+		g_rasterizer.reset();
+		g_rasterizer.move_to_d(m_quad.xn(0), m_quad.yn(0));
+		g_rasterizer.line_to_d(m_quad.xn(1), m_quad.yn(1));
+		g_rasterizer.line_to_d(m_quad.xn(2), m_quad.yn(2));
+		g_rasterizer.line_to_d(m_quad.xn(3), m_quad.yn(3));
 
 		// 线段分配器
-        agg::span_allocator<color_type> sa;
+		agg::span_allocator<color_type> sa;
 		// 双线性插值法滤波器
-        agg::image_filter_bilinear filter_kernel;
+		agg::image_filter_bilinear filter_kernel;
 		// 滤波器控制器
-        agg::image_filter_lut filter(filter_kernel, false);
+		agg::image_filter_lut filter(filter_kernel, false);
 
-        pixfmt pixf_img(rbuf_img(0));
+		pixfmt pixf_img(rbuf_img(0));
 
-        //typedef agg::image_accessor_wrap<pixfmt, 
-        //                                 agg::wrap_mode_reflect,
-        //                                 agg::wrap_mode_reflect> img_accessor_type;
-        //img_accessor_type ia(pixf_img);
+		//typedef agg::image_accessor_wrap<pixfmt, 
+		//                                 agg::wrap_mode_reflect,
+		//                                 agg::wrap_mode_reflect> img_accessor_type;
+		//img_accessor_type ia(pixf_img);
 
-        //typedef agg::image_accessor_clip<pixfmt> img_accessor_type;
-        //img_accessor_type ia(pixf_img, agg::rgba(1,1,1));
+		//typedef agg::image_accessor_clip<pixfmt> img_accessor_type;
+		//img_accessor_type ia(pixf_img, agg::rgba(1,1,1));
 
 		// 图片访问器克隆
-        typedef agg::image_accessor_clone<pixfmt> img_accessor_type;
-        img_accessor_type ia(pixf_img);
+		typedef agg::image_accessor_clone<pixfmt> img_accessor_type;
+		img_accessor_type ia(pixf_img);
 
-        start_timer();
-        switch(m_trans_type.cur_item())
-        {
-            case 0:
-            {
-                // Note that we consruct an affine matrix that transforms
-                // a parallelogram to a rectangle, i.e., it's inverted.
-                // It's actually the same as:
-                // tr(g_x1, g_y1, g_x2, g_y2, m_triangle.polygon());
-                // tr.invert();
-                agg::trans_affine tr(m_quad.polygon(), g_x1, g_y1, g_x2, g_y2);
+		start_timer();
+		switch(m_trans_type.cur_item())
+		{
+		case 0:
+			{
+				// Note that we consruct an affine matrix that transforms
+				// a parallelogram to a rectangle, i.e., it's inverted.
+				// It's actually the same as:
+				// tr(g_x1, g_y1, g_x2, g_y2, m_triangle.polygon());
+				// tr.invert();
+				agg::trans_affine tr(m_quad.polygon(), g_x1, g_y1, g_x2, g_y2);
 
-                // Also note that we can use the linear interpolator instead of 
-                // arbitrary span_interpolator_trans. It works much faster, 
-                // but the transformations must be linear and parellel.
-                typedef agg::span_interpolator_linear<agg::trans_affine> interpolator_type;
-                interpolator_type interpolator(tr);
+				// Also note that we can use the linear interpolator instead of 
+				// arbitrary span_interpolator_trans. It works much faster, 
+				// but the transformations must be linear and parellel.
+				typedef agg::span_interpolator_linear<agg::trans_affine> interpolator_type;
+				interpolator_type interpolator(tr);
 
-                typedef agg::span_image_filter_rgba_nn<img_accessor_type,
-                                                       interpolator_type> span_gen_type;
-                span_gen_type sg(ia, interpolator);
-                agg::render_scanlines_aa(g_rasterizer, g_scanline, rb_pre, sa, sg);
-                break;
-            }
+				typedef agg::span_image_filter_rgba_nn<img_accessor_type, interpolator_type> span_gen_type;
+				span_gen_type sg(ia, interpolator);
+				agg::render_scanlines_aa(g_rasterizer, g_scanline, rb_pre, sa, sg);
+				break;
+			}
 
-            case 1:
-            {
-                agg::trans_bilinear tr(m_quad.polygon(), g_x1, g_y1, g_x2, g_y2);
-                if(tr.is_valid())
-                {
-                    typedef agg::span_interpolator_linear<agg::trans_bilinear> interpolator_type;
-                    interpolator_type interpolator(tr);
+		case 1:
+			{
+				agg::trans_bilinear tr(m_quad.polygon(), g_x1, g_y1, g_x2, g_y2);
+				if(tr.is_valid())
+				{
+					typedef agg::span_interpolator_linear<agg::trans_bilinear> interpolator_type;
+					interpolator_type interpolator(tr);
 
-                    typedef agg::span_image_filter_rgba_2x2<img_accessor_type,
-                                                            interpolator_type> span_gen_type;
-                    span_gen_type sg(ia, interpolator, filter);
-                    agg::render_scanlines_aa(g_rasterizer, g_scanline, rb_pre, sa, sg);
-                }
-                break;
-            }
+					typedef agg::span_image_filter_rgba_2x2<img_accessor_type, interpolator_type> span_gen_type;
+					span_gen_type sg(ia, interpolator, filter);
+					agg::render_scanlines_aa(g_rasterizer, g_scanline, rb_pre, sa, sg);
+				}
+				break;
+			}
 
-            case 2:
-            {
+		case 2:
+			{
 				// 远景渲染，四边形 -> 矩形
-                agg::trans_perspective tr(m_quad.polygon(), g_x1, g_y1, g_x2, g_y2);
-                if(tr.is_valid())
-                {
+				agg::trans_perspective tr(m_quad.polygon(), g_x1, g_y1, g_x2, g_y2);
+				if(tr.is_valid())
+				{
 					// 方法一：速度快，但损失精度
-                    // Subdivision and linear interpolation (faster, but less accurate)
-                    //-----------------------
-                    //typedef agg::span_interpolator_linear<agg::trans_perspective> interpolator_type;
-                    //typedef agg::span_subdiv_adaptor<interpolator_type> subdiv_adaptor_type;
-                    //interpolator_type interpolator(tr);
-                    //subdiv_adaptor_type subdiv_adaptor(interpolator);
-                    //typedef agg::span_image_filter_rgba_2x2<img_accessor_type, subdiv_adaptor_type> span_gen_type;
-                    //span_gen_type sg(ia, subdiv_adaptor, filter);
-                    //-----------------------
+					// Subdivision and linear interpolation (faster, but less accurate)
+					//-----------------------
+					//typedef agg::span_interpolator_linear<agg::trans_perspective> interpolator_type;
+					//typedef agg::span_subdiv_adaptor<interpolator_type> subdiv_adaptor_type;
+					//interpolator_type interpolator(tr);
+					//subdiv_adaptor_type subdiv_adaptor(interpolator);
+					//typedef agg::span_image_filter_rgba_2x2<img_accessor_type, subdiv_adaptor_type> span_gen_type;
+					//span_gen_type sg(ia, subdiv_adaptor, filter);
+					//-----------------------
 
 					// 方法二：精度高，但速度慢(测试结果感觉这个快)
-                    // Direct calculations of the coordinates
-                    //-----------------------
+					// Direct calculations of the coordinates
+					//-----------------------
 					// 色段插值服务
-                    typedef agg::span_interpolator_trans<agg::trans_perspective> interpolator_type;
-                    interpolator_type interpolator(tr);
+					typedef agg::span_interpolator_trans<agg::trans_perspective> interpolator_type;
+					interpolator_type interpolator(tr);
 					// 色段创建器
-                    typedef agg::span_image_filter_rgba_2x2<img_accessor_type, interpolator_type> span_gen_type;
-                    span_gen_type sg(ia, interpolator, filter);
-                    //-----------------------
+					typedef agg::span_image_filter_rgba_2x2<img_accessor_type, interpolator_type> span_gen_type;
+					span_gen_type sg(ia, interpolator, filter);
+					//-----------------------
 
 					// 参数：
 					// Rasterizer：光栅控制器
@@ -213,10 +211,10 @@ public:
 					// SpanGenerator：指定算法的色段创建器
 
 					// 抗锯齿渲染
-                    agg::render_scanlines_aa(g_rasterizer, g_scanline, rb_pre, sa, sg);
-                }
-                break;
-            }
+					agg::render_scanlines_aa(g_rasterizer, g_scanline, rb_pre, sa, sg);
+				}
+				break;
+			}
 		}
 		double tm = elapsed_time();
 
