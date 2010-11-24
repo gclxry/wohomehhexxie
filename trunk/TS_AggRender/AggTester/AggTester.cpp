@@ -190,7 +190,7 @@ void OnCreate()
 {
 	USES_CONVERSION;
 
-	CAggInterface::load_pmap(PixMapImg, "spheres.bmp", &DstBuf);
+	CAggInterface::load_pmap(PixMapImg, "test.bmp", &DstBuf);
 }
 
 void Draw(HWND hWnd, HDC hdc)
@@ -220,7 +220,6 @@ void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	// 3.ÀÆ∆Ω…®√Ëœﬂπ‚’§(Scanline Rasterizer)
 	// 4.‰÷»æ∆˜(Renderers)
 	// 5.‰÷»æª∫¥Ê(Rendering Buffer)
-
 
 
 
