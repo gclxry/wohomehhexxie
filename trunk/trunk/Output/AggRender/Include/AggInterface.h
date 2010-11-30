@@ -1,6 +1,7 @@
 
 #pragma once
-/*
+
+#include <windows.h>
 #include <atlbase.h>
 #include <atltypes.h>
 
@@ -31,21 +32,5 @@ public:
 	virtual ~CAggInterface();
 
 	static bool load_pmap(pixel_map &PixMapImg, const char* fn, rendering_buffer* dst, pix_format_e format = agg::pix_format_bgra32, bool IsFlipY = true);
+	static void CreatePixelMap(HBITMAP hBitmap, pixel_map &PixMap, rendering_buffer &RenderBuf);
 };
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-class CAggDraw2DTo3D
-{
-public:
-	CAggDraw2DTo3D();
-	virtual ~CAggDraw2DTo3D();
-
-	// 将2D的图以3D形式展现
-	void Draw2DTo3D(HDC hMemoryDC, HBITMAP hMemoryBitmap, unsigned char* pMemoryBitmapBits, CRect &PicRect,
-		CPoint &ptLeftUp, CPoint &ptRightUp, CPoint &ptLeftDown, CPoint &ptRightDown);
-
-private:
-};
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-*/
