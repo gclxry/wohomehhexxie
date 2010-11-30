@@ -319,21 +319,21 @@ namespace agg
         }
         else
         {
-            pixel_map pmap_tmp;
-            pmap_tmp.create(m_pmap_window.width(), 
-                            m_pmap_window.height(),
-                            org_e(m_sys_bpp));
+			pixel_map pmap_tmp;
+			pmap_tmp.create(m_pmap_window.width(), 
+				m_pmap_window.height(),
+				org_e(m_sys_bpp));
 
-            rendering_buffer rbuf_tmp;
-            rbuf_tmp.attach(pmap_tmp.buf(),
-                            pmap_tmp.width(),
-                            pmap_tmp.height(),
-                            m_flip_y ?
-                              pmap_tmp.stride() :
-                             -pmap_tmp.stride());
+			rendering_buffer rbuf_tmp;
+			rbuf_tmp.attach(pmap_tmp.buf(),
+				pmap_tmp.width(),
+				pmap_tmp.height(),
+				m_flip_y ?
+				pmap_tmp.stride() :
+			-pmap_tmp.stride());
 
-            convert_pmap(&rbuf_tmp, src, m_format);
-            pmap_tmp.draw(dc);
+			convert_pmap(&rbuf_tmp, src, m_format);
+			pmap_tmp.draw(dc);
         }
     }
 
@@ -969,12 +969,17 @@ namespace agg
         case WM_PAINT:
             paintDC = ::BeginPaint(hWnd, &ps);
             app->m_specific->m_current_dc = paintDC;
+
             if(app->m_specific->m_redraw_flag)
             {
                 app->on_draw();
                 app->m_specific->m_redraw_flag = false;
             }
-            app->m_specific->display_pmap(paintDC, &app->rbuf_window());
+
+			//app->m_specific->display_pmap(paintDC, &app->rbuf_window());
+
+			app->m_specific->display_pmap(paintDC, &app->rbuf_img(0));
+
             app->on_post_draw(paintDC);
             app->m_specific->m_current_dc = 0;
             ::EndPaint(hWnd, &ps);
