@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\..\Common\agg\font_freetype;..\..\Common\agg\font_win32_tt;..\..\Common\agg\gpc;..\..\Common\agg\include;..\..\Common\agg\src;..\..\Common\agg\src\platform\win32;..\..\Common\agg\src\ctrl;..\..\Output\AggRender\Include;..\LibBuilder"
+				AdditionalIncludeDirectories=".\;..\..\Common\agg\font_freetype;..\..\Common\agg\font_win32_tt;..\..\Common\agg\gpc;..\..\Common\agg\include;..\..\Common\agg\src;..\..\Common\agg\src\platform\win32;..\..\Common\agg\src\ctrl;..\..\Output\AggRender\Include;..\LibBuilder;..\..\Common\GDIPlus\Includes;..\..\Output\FetionSF\Include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,6 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="GdiPlus.lib FetionSF.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\Common\GDIPlus\Lib;..\..\Output\FetionSF\Lib\Debug"
 				GenerateDebugInformation="true"
@@ -119,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\;..\..\Common\agg\font_freetype;..\..\Common\agg\font_win32_tt;..\..\Common\agg\gpc;..\..\Common\agg\include;..\..\Common\agg\src;..\..\Common\agg\src\platform\win32;..\..\Common\agg\src\ctrl;..\..\Output\AggRender\Include;..\LibBuilder"
+				AdditionalIncludeDirectories=".\;..\..\Common\agg\font_freetype;..\..\Common\agg\font_win32_tt;..\..\Common\agg\gpc;..\..\Common\agg\include;..\..\Common\agg\src;..\..\Common\agg\src\platform\win32;..\..\Common\agg\src\ctrl;..\..\Output\AggRender\Include;..\LibBuilder;..\..\Common\GDIPlus\Includes;..\..\Output\FetionSF\Include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -138,6 +139,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="GdiPlus.lib FetionSF.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\Common\GDIPlus\Lib;..\..\Output\FetionSF\Lib\Release"
 				GenerateDebugInformation="true"
@@ -242,6 +244,10 @@
 				</File>
 				<File
 					RelativePath=".\small.ico"
+					>
+				</File>
+				<File
+					RelativePath=".\spheres.bmp"
 					>
 				</File>
 			</Filter>

@@ -5,6 +5,7 @@
 
 #define MAX_LOADSTRING 100
 
+HINSTANCE g_hInstance = NULL;
 // 全局变量:
 HINSTANCE hInst;								// 当前实例
 TCHAR szTitle[MAX_LOADSTRING];					// 标题栏文本
@@ -24,6 +25,9 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
 	// TODO: 在此放置代码。
+	CUiMethod::InitGdiPlus();
+
+	g_hInstance = hInstance;
 
 	MSG msg;
 	HACCEL hAccelTable;
@@ -50,6 +54,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			DispatchMessage(&msg);
 		}
 	}
+	CUiMethod::UnInitGdiPlus();
 
 	return (int) msg.wParam;
 }
@@ -185,12 +190,20 @@ void OnSize(WPARAM wParam, LPARAM lParam)
 
 pixel_map PixMapImg;
 rendering_buffer DstBuf;
+HBITMAP hBmp = NULL;
 
 void OnCreate()
 {
 	USES_CONVERSION;
 
-	CAggInterface::load_pmap(PixMapImg, "test.bmp", &DstBuf);
+//	CAggInterface::load_pmap(PixMapImg, "spheres.bmp", &DstBuf);
+
+	Gdiplus::Bitmap GBmp(_T("spheres.bmp"));
+
+	Color colorBackground;
+	HBITMAP hbmReturn = NULL;
+	GBmp.GetHBITMAP(colorBackground, &hbmReturn);
+	CAggInterface::CreatePixelMap(hbmReturn, PixMapImg, DstBuf);
 }
 
 void Draw(HWND hWnd, HDC hdc)
@@ -255,20 +268,20 @@ void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	renderer_base_pre OutPreRender(OutPixfPre);
 
 	// 清除背景
-	OutBaseRender.clear(agg::rgba(0.0, 1, 1));
-
+	OutBaseRender.clear(agg::rgba(0.0, 1, 1, 1.0));
 
 	//----------------------------------------
 	agg::interactive_polygon Polygon4(4, 0.0);
 
+	int nCut = 100;
 	Polygon4.xn(0) = 0;
-	Polygon4.yn(0) = 0;
-	Polygon4.xn(1) = DstBuf.width() - 100;
-	Polygon4.yn(1) = 100;
-	Polygon4.xn(2) = DstBuf.width() - 100;
-	Polygon4.yn(2) = DstBuf.height() - 100;
-	Polygon4.xn(3) = 100;
-	Polygon4.yn(3) = DstBuf.height() - 100;
+	Polygon4.yn(0) = WndRect.Height() - DstBuf.height() + nCut;
+	Polygon4.xn(1) = DstBuf.width();
+	Polygon4.yn(1) = WndRect.Height() - DstBuf.height();
+	Polygon4.xn(2) = DstBuf.width();
+	Polygon4.yn(2) = WndRect.Height();
+	Polygon4.xn(3) = 0;
+	Polygon4.yn(3) = WndRect.Height() - nCut;
 
 	//-------------------------------------------------
 	// 行扫描抗锯齿光栅控制器
@@ -322,252 +335,3 @@ void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	OutPixImg.draw(hMemoryDC);
 	OutPixImg.clear();
 }
-
-CAggInterface::CAggInterface()
-{
-}
-
-CAggInterface::~CAggInterface()
-{
-}
-
-bool CAggInterface::load_pmap(pixel_map &PixMapImg, const char* fn, rendering_buffer* dst, pix_format_e format, bool IsFlipY)
-{
-	pixel_map pmap_tmp;
-
-	if(!pmap_tmp.load_from_bmp(fn))
-		return false;
-
-	unsigned nBpp = 0;
-	switch (format)
-	{
-	case pix_format_bw:
-		nBpp = 1;
-		break;
-
-	case pix_format_gray8:
-		nBpp = 8;
-		break;
-
-	case pix_format_gray16:
-		nBpp = 16;
-		break;
-
-	case pix_format_rgb565:
-	case pix_format_rgb555:
-		nBpp = 16;
-		break;
-
-	case pix_format_rgbAAA:
-	case pix_format_bgrAAA:
-	case pix_format_rgbBBA:
-	case pix_format_bgrABB:
-		nBpp = 32;
-		break;
-
-	case pix_format_rgb24:
-	case pix_format_bgr24:
-		nBpp = 24;
-		break;
-
-	case pix_format_rgb48:
-	case pix_format_bgr48:
-		nBpp = 48;
-		break;
-
-	case pix_format_bgra32:
-	case pix_format_abgr32:
-	case pix_format_argb32:
-	case pix_format_rgba32:
-		nBpp = 32;
-		break;
-
-	case pix_format_bgra64:
-	case pix_format_abgr64:
-	case pix_format_argb64:
-	case pix_format_rgba64:
-		nBpp = 64;
-		break;
-	}
-
-	rendering_buffer rbuf_tmp;
-	rbuf_tmp.attach(pmap_tmp.buf(),
-		pmap_tmp.width(),
-		pmap_tmp.height(),
-		IsFlipY ? pmap_tmp.stride() : -pmap_tmp.stride());
-
-	PixMapImg.create(pmap_tmp.width(), pmap_tmp.height(), org_e(nBpp), 0);
-
-	dst->attach(PixMapImg.buf(),
-		PixMapImg.width(),
-		PixMapImg.height(),
-		IsFlipY ? PixMapImg.stride() : -PixMapImg.stride());
-
-	switch (format)
-	{
-	case pix_format_gray8:
-		switch(pmap_tmp.bpp())
-		{
-			//case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_gray8()); break;
-		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_gray8()); break;
-			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_gray8()); break;
-		}
-		break;
-
-	case pix_format_gray16:
-		switch(pmap_tmp.bpp())
-		{
-			//case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_gray16()); break;
-		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_gray16()); break;
-			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_gray16()); break;
-		}
-		break;
-
-	case pix_format_rgb555:
-		switch(pmap_tmp.bpp())
-		{
-		case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_rgb555()); break;
-		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_rgb555()); break;
-		case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_rgb555()); break;
-		}
-		break;
-
-	case pix_format_rgb565:
-		switch(pmap_tmp.bpp())
-		{
-		case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_rgb565()); break;
-		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_rgb565()); break;
-		case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_rgb565()); break;
-		}
-		break;
-
-	case pix_format_rgb24:
-		switch(pmap_tmp.bpp())
-		{
-		case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_rgb24()); break;
-		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_rgb24()); break;
-		case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_rgb24()); break;
-		}
-		break;
-
-	case pix_format_bgr24:
-		switch(pmap_tmp.bpp())
-		{
-		case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_bgr24()); break;
-		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_bgr24()); break;
-		case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_bgr24()); break;
-		}
-		break;
-
-	case pix_format_rgb48:
-		switch(pmap_tmp.bpp())
-		{
-			//case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_rgb48()); break;
-		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_rgb48()); break;
-			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_rgb48()); break;
-		}
-		break;
-
-	case pix_format_bgr48:
-		switch(pmap_tmp.bpp())
-		{
-			//case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_bgr48()); break;
-		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_bgr48()); break;
-			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_bgr48()); break;
-		}
-		break;
-
-	case pix_format_abgr32:
-		switch(pmap_tmp.bpp())
-		{
-		case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_abgr32()); break;
-		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_abgr32()); break;
-		case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_abgr32()); break;
-		}
-		break;
-
-	case pix_format_argb32:
-		switch(pmap_tmp.bpp())
-		{
-		case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_argb32()); break;
-		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_argb32()); break;
-		case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_argb32()); break;
-		}
-		break;
-
-	case pix_format_bgra32:
-		switch(pmap_tmp.bpp())
-		{
-		case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_bgra32()); break;
-		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_bgra32()); break;
-		case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_bgra32()); break;
-		}
-		break;
-
-	case pix_format_rgba32:
-		switch(pmap_tmp.bpp())
-		{
-		case 16:
-			color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_rgba32());
-			break;
-		case 24:
-			color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_rgba32());
-			break;
-		case 32:
-			color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_rgba32());
-			break;
-		}
-		break;
-
-	case pix_format_abgr64:
-		switch(pmap_tmp.bpp())
-		{
-			//case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_abgr64()); break;
-		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_abgr64()); break;
-			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_abgr64()); break;
-		}
-		break;
-
-	case pix_format_argb64:
-		switch(pmap_tmp.bpp())
-		{
-			//case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_argb64()); break;
-		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_argb64()); break;
-			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_argb64()); break;
-		}
-		break;
-
-	case pix_format_bgra64:
-		switch(pmap_tmp.bpp())
-		{
-			//case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_bgra64()); break;
-		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_bgra64()); break;
-			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_bgra64()); break;
-		}
-		break;
-
-	case pix_format_rgba64:
-		switch(pmap_tmp.bpp())
-		{
-			//case 16: color_conv(dst, &rbuf_tmp, color_conv_rgb555_to_rgba64()); break;
-		case 24: color_conv(dst, &rbuf_tmp, color_conv_bgr24_to_rgba64()); break;
-			//case 32: color_conv(dst, &rbuf_tmp, color_conv_bgra32_to_rgba64()); break;
-		}
-		break;
-	}
-
-	return true;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-CAggDraw2DTo3D::CAggDraw2DTo3D()
-{
-
-}
-
-CAggDraw2DTo3D::~CAggDraw2DTo3D()
-{
-
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
