@@ -1,6 +1,7 @@
 
 #include "StdAfx.h"
 #include "RgnDlg.h"
+#include "AggRender.h"
 
 #define __base_super					CHighEfficiencyDlg
 
@@ -94,7 +95,6 @@ LRESULT CRgnDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 	int cy = HIWORD(lParam);
 
 	CRect WndRect = this->GetClientRect();
-	m_3DDraw.SetDrawBuffer(WndRect.Width(), WndRect.Height());
 
 	CRect GifStatic(100, 20, 229, 170);
 	if (m_pGifStatic != NULL)
@@ -187,11 +187,28 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 			CPoint ptRightUp(WndRect.right - ptTraj.x, WndRect.top - ptTraj.y);
 			CPoint ptRightDown(ptRightUp.x, WndRect.bottom + ptTraj.y);
 
+
+			CPoint vP[4];
+			vP[0] = ptLeftDown;
+			vP[1] = ptRightDown;
+			vP[2] = ptRightUp;
+			vP[3] = ptLeftUp;
+
+			pixel_map SrcMapImg;
+			rendering_buffer SrcImgBuf;
+			pixel_map DstMapImg;
+			rendering_buffer DstImgBuf;
+
+			HANDLE g_hMem = CAggInterface::CreatePixelMap(hMemoryBitmap, SrcMapImg, SrcImgBuf);
+			CAggInterface::CreatePixelMap(DstMapImg, DstImgBuf, WndRect.Width(), WndRect.Height());
+
 			// »æÖÆ3DÍ¼°¸
-			m_3DDraw.Draw2DTo3D(hMemoryDC, hMemoryBitmap, (unsigned char *)BmpDc.GetBits(), WndRect,
-				ptLeftUp, ptRightUp, ptLeftDown, ptRightDown);
+			CAggDraw2DTo3D::Draw2DTo3D(DstImgBuf, SrcImgBuf, vP);
 
 			::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, hMemoryDC, &ptSrc, 0, &m_Blend, ULW_ALPHA);
+
+			CAggInterface::ClosePixelMap(g_hMem);
+			CAggInterface::ClosePixelMap(DstMapImg);
 
 			if (m_dbFactor >= 1.0)
 			{
