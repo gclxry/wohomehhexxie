@@ -23,6 +23,7 @@
 
 using namespace agg;
 
+#include "FetionSF.h"
 
 
 class CAggInterface
@@ -32,5 +33,9 @@ public:
 	virtual ~CAggInterface();
 
 	static bool load_pmap(pixel_map &PixMapImg, const char* fn, rendering_buffer* dst, pix_format_e format = agg::pix_format_bgra32, bool IsFlipY = true);
-	static void CreatePixelMap(HBITMAP hBitmap, pixel_map &PixMap, rendering_buffer &RenderBuf);
+	static HANDLE CreatePixelMap(HBITMAP hBitmap, pixel_map &PixMap, rendering_buffer &RenderBuf);
+	static void ClosePixelMap(HANDLE &hGMem);
+	static bool CreatePixelMap(pixel_map &OutPixImg, rendering_buffer &OutBuf,
+		unsigned unWidth, unsigned unHeight, org_e org = org_color32, unsigned unClearVal = 256);
+	static void ClosePixelMap(pixel_map &OutPixImg);
 };

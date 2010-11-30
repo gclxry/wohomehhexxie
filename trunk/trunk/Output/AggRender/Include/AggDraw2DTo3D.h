@@ -9,9 +9,8 @@ public:
 	CAggDraw2DTo3D();
 	virtual ~CAggDraw2DTo3D();
 
-//	// 将2D的图以3D形式展现
-//	void Draw2DTo3D(HDC hMemoryDC, HBITMAP hMemoryBitmap, unsigned char* pMemoryBitmapBits, CRect &PicRect,
-//		CPoint &ptLeftUp, CPoint &ptRightUp, CPoint &ptLeftDown, CPoint &ptRightDown);
+	// 将2D的图以3D形式展现
+	void CAggDraw2DTo3D::Draw2DTo3D(rendering_buffer &DstImgBuf, rendering_buffer &SrcImgBuf, CPoint vP[4]);
 
 private:
 };

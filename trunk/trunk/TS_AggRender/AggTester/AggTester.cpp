@@ -188,22 +188,23 @@ void OnSize(WPARAM wParam, LPARAM lParam)
 	int cy = HIWORD(lParam);
 }
 
-pixel_map PixMapImg;
-rendering_buffer DstBuf;
-HBITMAP hBmp = NULL;
+pixel_map SrcMapImg;
+rendering_buffer SrcImgBuf;
+pixel_map DstMapImg;
+rendering_buffer DstImgBuf;
+HANDLE g_hMem = NULL;
 
 void OnCreate()
 {
 	USES_CONVERSION;
 
-//	CAggInterface::load_pmap(PixMapImg, "spheres.bmp", &DstBuf);
-
 	Gdiplus::Bitmap GBmp(_T("spheres.bmp"));
-
 	Color colorBackground;
 	HBITMAP hbmReturn = NULL;
 	GBmp.GetHBITMAP(colorBackground, &hbmReturn);
-	CAggInterface::CreatePixelMap(hbmReturn, PixMapImg, DstBuf);
+
+	g_hMem = CAggInterface::CreatePixelMap(hbmReturn, SrcMapImg, SrcImgBuf);
+	CAggInterface::CreatePixelMap(DstMapImg, DstImgBuf, 500, 400);
 }
 
 void Draw(HWND hWnd, HDC hdc)
@@ -226,6 +227,24 @@ void Draw(HWND hWnd, HDC hdc)
 }
 
 void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
+{
+	if (g_hMem != NULL)
+	{
+		CAggDraw2DTo3D Agg;
+		CPoint vP[4];
+		int nCut = 50;
+		vP[0] = CPoint(0, SrcImgBuf.height() - nCut);
+		vP[1] = CPoint(SrcImgBuf.width(), SrcImgBuf.height());
+		vP[2] = CPoint(SrcImgBuf.width(), 0);
+		vP[3] = CPoint(0, nCut);
+
+		Agg.Draw2DTo3D(DstImgBuf, SrcImgBuf, vP);
+
+		DstMapImg.draw(hMemoryDC);
+	}
+}
+
+/*
 {
 	// agg 固定处理步骤
 	// 1.顶点源 (Vertex Source)
@@ -335,3 +354,4 @@ void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	OutPixImg.draw(hMemoryDC);
 	OutPixImg.clear();
 }
+*/

@@ -245,60 +245,93 @@ bool CAggInterface::load_pmap(pixel_map &PixMapImg, const char* fn, rendering_bu
 	return true;
 }
 
-void CAggInterface::CreatePixelMap(HBITMAP hBitmap, pixel_map &PixMap, rendering_buffer &RenderBuf)
+HANDLE CAggInterface::CreatePixelMap(HBITMAP hBitmap, pixel_map &PixMap, rendering_buffer &RenderBuf)
 {
-	// 位图中每个像素所占字节数。 
-	WORD wbitsCount = 0;
-	// 调色板大小 
-	DWORD dwpalettelsize = 0;
-	DWORD dwbmdibitsize = 0; 
-	// 定义了位图的各种的信息。 
-	BITMAP bitmap;
-	// 定义了大小、类型等BMP文件的信息。 
-	BITMAPINFOHEADER bi; 
-	LPBITMAPINFOHEADER lpbi; 
-	HANDLE fdib;
+	// 位图中每个像素所占字节数
+	WORD wBitsCount = 0;
+	// 调色板大小
+	DWORD dwPalettelSize = 0;
+	DWORD dwBmdibitSize = 0;
+	// 定义了位图的各种的信息
+	BITMAP bmp;
+	// 定义了大小、类型等BMP文件的信息
+	BITMAPINFOHEADER BmpInfoHead;
+	LPBITMAPINFOHEADER lpBmpInfoHead = NULL;
+	HANDLE hFdib = NULL;
 
 	// 得到BITMAP结构。
-	::GetObject(hBitmap, sizeof(BITMAP), (void *)&bitmap);
+	int nRet = ::GetObject(hBitmap, sizeof(BITMAP), (void *)&bmp);
+	if (nRet != 0)
+	{
+		// 以下代码是用BITMAP的信息填充BITMAPINFOHEADER结构
+		wBitsCount = bmp.bmBitsPixel;
+		BmpInfoHead.biSize = sizeof(BITMAPINFOHEADER);
+		BmpInfoHead.biWidth = bmp.bmWidth;
+		BmpInfoHead.biHeight = bmp.bmHeight;
+		BmpInfoHead.biPlanes = 1;
+		BmpInfoHead.biBitCount = wBitsCount;
+		BmpInfoHead.biClrImportant=0;
+		BmpInfoHead.biClrUsed = 0;
+		BmpInfoHead.biCompression = BI_RGB;
+		BmpInfoHead.biSizeImage=0;
+		BmpInfoHead.biYPelsPerMeter=0;
+		BmpInfoHead.biXPelsPerMeter=0;
 
-	// 以下代码是用BITMAP的信息填充BITMAPINFOHEADER结构 
-	wbitsCount = bitmap.bmBitsPixel; 
-	bi.biSize = sizeof(BITMAPINFOHEADER); 
-	bi.biWidth = bitmap.bmWidth; 
-	bi.biHeight = bitmap.bmHeight; 
-	bi.biPlanes = 1; 
-	bi.biBitCount = wbitsCount;
-	bi.biClrImportant=0; 
-	bi.biClrUsed=0; 
-	bi.biCompression=BI_RGB; 
-	bi.biSizeImage=0; 
-	bi.biYPelsPerMeter=0; 
-	bi.biXPelsPerMeter=0; 
+		// 以下代码是获取调色板的长度，调色板现在的用处很少，因为256色的位图已经不多了
+		if(wBitsCount <= 8)
+			dwPalettelSize = (1 << wBitsCount)*sizeof(RGBQUAD);
 
-	// 以下代码是获取调色板的长度，调色板现在的用处很少，因为256色的位图已经不多了。 
-	if(wbitsCount <= 8)
-		dwpalettelsize = (1 << wbitsCount)*sizeof(RGBQUAD);
+		// 计算位图的大小，并分配相应的内存空间，注意的是没有分配BITMAPFILEHEADER
+		dwBmdibitSize=((bmp.bmWidth*wBitsCount+31)/8)*bmp.bmHeight;
+		int nLen = dwBmdibitSize + dwPalettelSize + sizeof(BITMAPINFOHEADER);
+		if (nLen > 0)
+		{
+			hFdib = GlobalAlloc(GHND, nLen);
+			if (IS_SAVE_HANDLE(hFdib))
+			{
+				lpBmpInfoHead = (LPBITMAPINFOHEADER)::GlobalLock(hFdib);
+				if (lpBmpInfoHead != NULL)
+				{
+					// 将BmpInfoHead中的数据写入分配的内存中
+					*lpBmpInfoHead = BmpInfoHead;
+					HDC hdc=::GetDC(NULL);
+					BYTE *pData = (BYTE*)((LPSTR)lpBmpInfoHead + sizeof(BITMAPINFOHEADER) + dwPalettelSize);
+					nRet = ::GetDIBits(hdc, hBitmap, 0, (UINT)bmp.bmHeight, pData, (BITMAPINFO *)lpBmpInfoHead, DIB_RGB_COLORS);
+					if (nRet > 0)
+					{
+						PixMap.attach_to_bmp((BITMAPINFO *)lpBmpInfoHead);
+						RenderBuf.attach(PixMap.buf(), PixMap.width(), PixMap.height(), PixMap.stride());
+					}
 
-	// 计算位图的大小，并分配相应的内存空间，注意的是没有分配BITMAPFILEHEADER。 
-	dwbmdibitsize=((bitmap.bmWidth*wbitsCount+31)/8)*bitmap.bmHeight; 
-	int nLen = dwbmdibitsize + dwpalettelsize + sizeof(BITMAPINFOHEADER);
-	fdib = GlobalAlloc(GHND, nLen); 
-	lpbi = (LPBITMAPINFOHEADER)::GlobalLock(fdib); 
-	// 将bi中的数据写入分配的内存中。 
-	*lpbi = bi;
-	HDC hdc=::GetDC(NULL); 
-	BYTE *pData = (BYTE*)((LPSTR)lpbi + sizeof(BITMAPINFOHEADER) + dwpalettelsize);
-	int nRet = ::GetDIBits(hdc, hBitmap, 0, (UINT)bitmap.bmHeight, pData, (BITMAPINFO *)lpbi, DIB_RGB_COLORS); 
-	// GetDIBits是最重要的函数，真正获得位图数据的工作就由它完成，它第一个参数为HDC,第二个参数为位图句柄，
-	// 第三个参数为扫描行的开始行，一般为0，第四个为结束行，一般就是高度，第四个参数最重要，它表示接收数据的起始地址，
-	// 这个地址一般是在调色板之后。第五个参数指的是接收BITMAPINFO结构的地址，这个结构上面没有写，它其实就是BITMAPINFO结构加上调色板信息。
-	// 最后一个参数是格式。一般是DIB_RGB_COLORS
+					::GlobalUnlock(hFdib);
+				}
+				//	::GlobalFree(hFdib);
+			}
+		}
+	}
 
-	PixMap.attach_to_bmp((BITMAPINFO *)lpbi);
-	RenderBuf.attach(PixMap.buf(), PixMap.width(), PixMap.height(), PixMap.stride());
+	return hFdib;
+}
 
-	// 关闭相关句柄
-	::GlobalUnlock(fdib);
-//	::GlobalFree(fdib);
+void CAggInterface::ClosePixelMap(HANDLE &hGMem)
+{
+	if (IS_SAVE_HANDLE(hGMem))
+	{
+		::GlobalFree(hGMem);
+		hGMem = NULL;
+	}
+}
+
+bool CAggInterface::CreatePixelMap(pixel_map &OutPixImg, rendering_buffer &OutBuf,
+								   unsigned unWidth, unsigned unHeight, org_e org, unsigned unClearVal)
+{
+	OutPixImg.create(unWidth, unHeight, org, unClearVal);
+	OutBuf.attach(OutPixImg.buf(), OutPixImg.width(), OutPixImg.height(), OutPixImg.stride());
+
+	return (OutBuf.height() > 0 && OutBuf.width() > 0);
+}
+
+void CAggInterface::ClosePixelMap(pixel_map &OutPixImg)
+{
+	OutPixImg.clear();
 }
