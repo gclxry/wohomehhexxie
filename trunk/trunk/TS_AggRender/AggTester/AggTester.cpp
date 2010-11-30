@@ -221,19 +221,19 @@ void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	// 4.渲染器(Renderers)
 	// 5.渲染缓存(Rendering Buffer)
 
-
-
-
+	// agg 类型定义
 	typedef agg::pixfmt_bgra32 pixfmt;
 	typedef agg::pixfmt_bgra32_pre pixfmt_pre;
 	typedef agg::renderer_base<pixfmt_pre> renderer_base_pre;
 	typedef agg::renderer_base<pixfmt> renderer_base;
-
 	typedef pixfmt::color_type color_type;
 	typedef agg::image_accessor_clone<pixfmt> img_accessor_type;
 	typedef agg::span_interpolator_trans<agg::trans_perspective> interpolator_type;
 	typedef agg::span_image_filter_rgba_2x2<img_accessor_type, interpolator_type> span_gen_type;
-
+	// 色段插值服务
+	typedef agg::span_interpolator_trans<agg::trans_perspective> interpolator_type;
+	// 色段创建器
+	typedef agg::span_image_filter_rgba_2x2<img_accessor_type, interpolator_type> span_gen_type;
 
 
 	//----------------------------------------
@@ -246,72 +246,67 @@ void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	OutBuf.attach(OutPixImg.buf(), OutPixImg.width(), OutPixImg.height(), OutPixImg.stride());
 
 	// 基本中层渲染结果缓存
-	pixfmt            pixf(OutBuf);
+	pixfmt            OutPixf(OutBuf);
 	// 加强型中层渲染结果缓存
-	pixfmt_pre        pixf_pre(OutBuf);
+	pixfmt_pre        OutPixfPre(OutBuf);
 	// 基本中层渲染器，用于清除背景
-	renderer_base     rb(pixf);
+	renderer_base     OutBaseRender(OutPixf);
 	// 加强型中层渲染器
-	renderer_base_pre rb_pre(pixf_pre);
+	renderer_base_pre OutPreRender(OutPixfPre);
 
 	// 清除背景
-	rb.clear(agg::rgba(0.0, 1, 1));
-
+	OutBaseRender.clear(agg::rgba(0.0, 1, 1));
 
 
 	//----------------------------------------
-	agg::interactive_polygon m_quad(4, 5.0);
+	agg::interactive_polygon Polygon4(4, 0.0);
 
-	m_quad.xn(0) = 0;
-	m_quad.yn(0) = 0;
-	m_quad.xn(1) = DstBuf.width() - 100;
-	m_quad.yn(1) = 100;
-	m_quad.xn(2) = DstBuf.width() - 100;
-	m_quad.yn(2) = DstBuf.height() - 100;
-	m_quad.xn(3) = 100;
-	m_quad.yn(3) = DstBuf.height() - 100;
+	Polygon4.xn(0) = 0;
+	Polygon4.yn(0) = 0;
+	Polygon4.xn(1) = DstBuf.width() - 100;
+	Polygon4.yn(1) = 100;
+	Polygon4.xn(2) = DstBuf.width() - 100;
+	Polygon4.yn(2) = DstBuf.height() - 100;
+	Polygon4.xn(3) = 100;
+	Polygon4.yn(3) = DstBuf.height() - 100;
 
 	//-------------------------------------------------
 	// 行扫描抗锯齿光栅控制器
-	agg::rasterizer_scanline_aa<> g_rasterizer;
+	agg::rasterizer_scanline_aa<> AaRasterizer;
 	// 色段类型
-	agg::scanline_u8  g_scanline;
-	g_rasterizer.add_path(m_quad);
-	g_rasterizer.clip_box(0, 0, OutBuf.width(), OutBuf.height());
-	g_rasterizer.reset();
-	g_rasterizer.move_to_d(m_quad.xn(0), m_quad.yn(0));
-	g_rasterizer.line_to_d(m_quad.xn(1), m_quad.yn(1));
-	g_rasterizer.line_to_d(m_quad.xn(2), m_quad.yn(2));
-	g_rasterizer.line_to_d(m_quad.xn(3), m_quad.yn(3));
+	agg::scanline_u8  U8Scanline;
+	AaRasterizer.add_path(Polygon4);
+	AaRasterizer.clip_box(0, 0, OutBuf.width(), OutBuf.height());
+	AaRasterizer.reset();
+	AaRasterizer.move_to_d(Polygon4.xn(0), Polygon4.yn(0));
+	AaRasterizer.line_to_d(Polygon4.xn(1), Polygon4.yn(1));
+	AaRasterizer.line_to_d(Polygon4.xn(2), Polygon4.yn(2));
+	AaRasterizer.line_to_d(Polygon4.xn(3), Polygon4.yn(3));
 
 
 	//------------------------------------------------------------------------
 	// 线段分配器
-	agg::span_allocator<color_type> sa;
+	agg::span_allocator<color_type> SaAlloc;
 	// 双线性插值法滤波器
-	agg::image_filter_bilinear filter_kernel;
+	agg::image_filter_bilinear FilterKernel;
 	// 滤波器控制器
-	agg::image_filter_lut filter(filter_kernel, false);
+	agg::image_filter_lut FilterLut(FilterKernel, false);
 
 	// 渲染源
-	pixfmt pixf_img(DstBuf);
+	pixfmt PixfSrcImg(DstBuf);
 	// 图片访问器克隆
 	typedef agg::image_accessor_clone<pixfmt> img_accessor_type;
 	// 渲染源访问器
-	img_accessor_type ia(pixf_img);
+	img_accessor_type ImgAcc(PixfSrcImg);
 
 	// 远景渲染服务器，四边形 -> 矩形
-	agg::trans_perspective tr(m_quad.polygon(), 0.0, 0.0, DstBuf.width(), DstBuf.height());
-	if(tr.is_valid())
+	agg::trans_perspective PerspectiveTranser(Polygon4.polygon(), 0.0, 0.0, DstBuf.width(), DstBuf.height());
+	if(PerspectiveTranser.is_valid())
 	{
-		//-----------------------
-		// 色段插值服务
-		typedef agg::span_interpolator_trans<agg::trans_perspective> interpolator_type;
-		// 远景渲染色段插值服务器
-		interpolator_type interpolator(tr);
+		// 远景渲染色段插值服务器，校对类型
+		interpolator_type InterpolatorType(PerspectiveTranser);
 		// 色段创建器
-		typedef agg::span_image_filter_rgba_2x2<img_accessor_type, interpolator_type> span_gen_type;
-		span_gen_type sg(ia, interpolator, filter);
+		span_gen_type SaGen(ImgAcc, InterpolatorType, FilterLut);
 
 		// 参数：
 		// Rasterizer：光栅控制器
@@ -320,11 +315,9 @@ void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 		// SpanAllocator：线段分配器
 		// SpanGenerator：指定算法的色段创建器
 
-		// 抗锯齿渲染，把sg通过sa渲染到rb_pre上，
-		agg::render_scanlines_aa(g_rasterizer, g_scanline, rb_pre, sa, sg);
+		// 抗锯齿渲染，把SaGen通过SaAlloc渲染到OutPreRender上
+		agg::render_scanlines_aa(AaRasterizer, U8Scanline, OutPreRender, SaAlloc, SaGen);
 	}
-
-	//PixMapImg.draw(hMemoryDC);
 
 	OutPixImg.draw(hMemoryDC);
 	OutPixImg.clear();
