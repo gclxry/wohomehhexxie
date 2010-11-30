@@ -49,7 +49,7 @@ void CAggDraw2DTo3D::Draw2DTo3D(rendering_buffer &DstImgBuf, rendering_buffer &S
 	renderer_base_pre OutPreRender(OutPixfPre);
 
 	// Çå³ý±³¾°
-	OutBaseRender.clear(agg::rgba(1, 1, 1, 0.0));
+	OutBaseRender.clear(agg::rgba(0.0, 1, 1, 0.0));
 
 	//----------------------------------------
 	agg::interactive_polygon Polygon4(4, 0.0);

@@ -204,7 +204,7 @@ void OnCreate()
 	GBmp.GetHBITMAP(colorBackground, &hbmReturn);
 
 	g_hMem = CAggInterface::CreatePixelMap(hbmReturn, SrcMapImg, SrcImgBuf);
-	CAggInterface::CreatePixelMap(DstMapImg, DstImgBuf, 500, 400);
+	CAggInterface::CreatePixelMap(DstMapImg, DstImgBuf, 380, 400);
 }
 
 void Draw(HWND hWnd, HDC hdc)

@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\Output\BaseDlg\Include;..\Output\FetionSF\Include;..\Common\GDIPlus\Includes"
+				AdditionalIncludeDirectories=".\;..\Output\BaseDlg\Include;..\Output\FetionSF\Include;..\Common\GDIPlus\Includes;..\Output\AggRender\Include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,8 +63,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="FetionSF.lib"
-				AdditionalLibraryDirectories="..\Output\FetionSF\Lib\Debug"
+				AdditionalDependencies="FetionSF.lib AggRender.lib"
+				AdditionalLibraryDirectories="..\Output\FetionSF\Lib\Debug;..\Output\AggRender\Lib\Debug"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -108,7 +108,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\;..\Output\BaseDlg\Include;..\Output\FetionSF\Include;..\Common\GDIPlus\Includes"
+				AdditionalIncludeDirectories=".\;..\Output\BaseDlg\Include;..\Output\FetionSF\Include;..\Common\GDIPlus\Includes;..\Output\AggRender\Include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -127,8 +127,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				AdditionalDependencies="FetionSF.lib"
-				AdditionalLibraryDirectories="..\Output\FetionSF\Lib\Release"
+				AdditionalDependencies="FetionSF.lib AggRender.lib"
+				AdditionalLibraryDirectories="..\Output\FetionSF\Lib\Release;..\Output\AggRender\Lib\Release"
 			/>
 			<Tool
 				Name="VCALinkTool"

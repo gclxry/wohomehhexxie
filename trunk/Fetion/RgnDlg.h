@@ -36,8 +36,6 @@ protected:
 
 	CResImage m_TImage;
 
-	CAKDraw2DTo3D m_3DDraw;
-
 private:
 	CBfNormalGraduatedButton *m_pZhuanBtn;
 	CBfGifStatic *m_pGifStatic;
