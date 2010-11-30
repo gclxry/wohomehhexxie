@@ -970,15 +970,14 @@ namespace agg
             paintDC = ::BeginPaint(hWnd, &ps);
             app->m_specific->m_current_dc = paintDC;
 
-            if(app->m_specific->m_redraw_flag)
+            //if(app->m_specific->m_redraw_flag)
             {
                 app->on_draw();
                 app->m_specific->m_redraw_flag = false;
             }
 
-			//app->m_specific->display_pmap(paintDC, &app->rbuf_window());
-
-			app->m_specific->display_pmap(paintDC, &app->rbuf_img(0));
+			app->m_specific->display_pmap(paintDC, &app->rbuf_window());
+			//app->m_specific->display_pmap(paintDC, &app->rbuf_img(0));
 
             app->on_post_draw(paintDC);
             app->m_specific->m_current_dc = 0;

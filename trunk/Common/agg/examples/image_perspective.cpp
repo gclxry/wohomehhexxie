@@ -24,14 +24,14 @@
 
 
 enum flip_y_e { flip_y = true };
-
+/*
 agg::rasterizer_scanline_aa<> g_rasterizer;
 agg::scanline_u8  g_scanline;
 double            g_x1 = 0;
 double            g_y1 = 0;
 double            g_x2 = 0;
 double            g_y2 = 0;
-
+*/
 
 
 class the_application : public agg::platform_support
@@ -64,10 +64,10 @@ public:
     virtual void on_init()
     {
         double d = 0.0;
-        g_x1 = d;
+        /*g_x1 = d;
         g_y1 = d;
         g_x2 = rbuf_img(0).width() - d;
-        g_y2 = rbuf_img(0).height() - d;
+        g_y2 = rbuf_img(0).height() - d;*/
 
         m_quad.xn(0) = 100;
         m_quad.yn(0) = 100;
@@ -81,30 +81,47 @@ public:
 
     virtual void on_draw()
 	{
+		// 行扫描抗锯齿光栅控制器
+		agg::rasterizer_scanline_aa<> g_rasterizer;
+		// 色段类型
+		agg::scanline_u8  g_scanline;
+		double            g_x1 = 0;
+		double            g_y1 = 0;
+		double            g_x2 = 0;
+		double            g_y2 = 0;
+
+		double d = 0.0;
+		g_x1 = d;
+		g_y1 = d;
+		g_x2 = rbuf_img(0).width() - d;
+		g_y2 = rbuf_img(0).height() - d;
+
+		// 基本中层渲染结果缓存
 		pixfmt            pixf(rbuf_window());
+		// 加强型中层渲染结果缓存
 		pixfmt_pre        pixf_pre(rbuf_window());
-		// 中层渲染器
+		// 基本中层渲染器，用于清除背景
 		renderer_base     rb(pixf);
 		// 加强型中层渲染器
 		renderer_base_pre rb_pre(pixf_pre);
-		// 实色抗锯齿渲染
-		renderer_solid r(rb);
+		// 基本实色抗锯齿渲染
+//		renderer_solid r(rb);
 
-		// 
-		rb.clear(agg::rgba(1, 1, 1));
+		// 清除背景
+		rb.clear(agg::rgba(0.0, 1, 1));
 
-		if(m_trans_type.cur_item() == 0)
+/*		if(m_trans_type.cur_item() == 0)
 		{
 			// For the affine parallelogram transformations we
 			// calculate the 4-th (implicit) point of the parallelogram
 			m_quad.xn(3) = m_quad.xn(0) + (m_quad.xn(2) - m_quad.xn(1));
 			m_quad.yn(3) = m_quad.yn(0) + (m_quad.yn(2) - m_quad.yn(1));
-		}
+		}*/
 
 		//--------------------------
 		// Render the "quad" tool and controls
 		g_rasterizer.add_path(m_quad);
-		agg::render_scanlines_aa_solid(g_rasterizer, g_scanline, rb, agg::rgba(0, 0.3, 0.5, 0.6));
+//		agg::render_scanlines_aa_solid(g_rasterizer, g_scanline, rb, agg::rgba(0, 0.3, 0.5, 0.6));
 
 		// Prepare the polygon to rasterize. Here we need to fill
 		// the destination (transformed) polygon.
@@ -122,6 +139,7 @@ public:
 		// 滤波器控制器
 		agg::image_filter_lut filter(filter_kernel, false);
 
+		// 渲染源
 		pixfmt pixf_img(rbuf_img(0));
 
 		//typedef agg::image_accessor_wrap<pixfmt, 
@@ -134,11 +152,12 @@ public:
 
 		// 图片访问器克隆
 		typedef agg::image_accessor_clone<pixfmt> img_accessor_type;
+		// 渲染源访问器
 		img_accessor_type ia(pixf_img);
 
 		start_timer();
 		switch(m_trans_type.cur_item())
-		{
+		{/*
 		case 0:
 			{
 				// Note that we consruct an affine matrix that transforms
@@ -174,10 +193,12 @@ public:
 				}
 				break;
 			}
-
+*/
 		case 2:
 			{
-				// 远景渲染，四边形 -> 矩形
+				const double* pdbPolygon = m_quad.polygon();
+				double dbWh = this->rbuf_window().height();
+				// 远景渲染服务器，四边形 -> 矩形
 				agg::trans_perspective tr(m_quad.polygon(), g_x1, g_y1, g_x2, g_y2);
 				if(tr.is_valid())
 				{
@@ -197,6 +218,7 @@ public:
 					//-----------------------
 					// 色段插值服务
 					typedef agg::span_interpolator_trans<agg::trans_perspective> interpolator_type;
+					// 远景渲染色段插值服务器
 					interpolator_type interpolator(tr);
 					// 色段创建器
 					typedef agg::span_image_filter_rgba_2x2<img_accessor_type, interpolator_type> span_gen_type;
@@ -210,13 +232,13 @@ public:
 					// SpanAllocator：线段分配器
 					// SpanGenerator：指定算法的色段创建器
 
-					// 抗锯齿渲染
+					// 抗锯齿渲染，把sg通过sa渲染到rb_pre上，
 					agg::render_scanlines_aa(g_rasterizer, g_scanline, rb_pre, sa, sg);
 				}
 				break;
 			}
 		}
-		double tm = elapsed_time();
+/*		double tm = elapsed_time();
 
 		char buf[128]; 
 		agg::gsv_text t;
@@ -233,7 +255,7 @@ public:
 		agg::render_scanlines_aa_solid(g_rasterizer, g_scanline, rb, agg::rgba(0,0,0));
 
 		//--------------------------
-		agg::render_ctrl(g_rasterizer, g_scanline, rb, m_trans_type);
+		agg::render_ctrl(g_rasterizer, g_scanline, rb, m_trans_type);*/
     }
 
 
