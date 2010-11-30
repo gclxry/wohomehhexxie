@@ -227,28 +227,43 @@ void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	typedef agg::pixfmt_bgra32 pixfmt;
 	typedef agg::pixfmt_bgra32_pre pixfmt_pre;
 	typedef agg::renderer_base<pixfmt_pre> renderer_base_pre;
+	typedef agg::renderer_base<pixfmt> renderer_base;
+
 	typedef pixfmt::color_type color_type;
 	typedef agg::image_accessor_clone<pixfmt> img_accessor_type;
 	typedef agg::span_interpolator_trans<agg::trans_perspective> interpolator_type;
 	typedef agg::span_image_filter_rgba_2x2<img_accessor_type, interpolator_type> span_gen_type;
 
-	agg::span_allocator<color_type> sa;
-	agg::image_filter_bilinear filter_kernel;
-	agg::image_filter_lut filter(filter_kernel, false);
 
-	pixfmt pixf_img(DstBuf);
-	img_accessor_type ia(pixf_img);
 
+	//----------------------------------------
+	pixel_map OutPixImg;
+	rendering_buffer OutBuf;
+
+	CRect WndRect(0, 0, 0, 0);
+	::GetClientRect(hWnd, &WndRect);
+	OutPixImg.create(WndRect.Width(), WndRect.Height(), org_color32);
+	OutBuf.attach(OutPixImg.buf(), OutPixImg.width(), OutPixImg.height(), OutPixImg.stride());
+
+	// 基本中层渲染结果缓存
+	pixfmt            pixf(OutBuf);
+	// 加强型中层渲染结果缓存
+	pixfmt_pre        pixf_pre(OutBuf);
+	// 基本中层渲染器，用于清除背景
+	renderer_base     rb(pixf);
+	// 加强型中层渲染器
+	renderer_base_pre rb_pre(pixf_pre);
+
+	// 清除背景
+	rb.clear(agg::rgba(0.0, 1, 1));
+
+
+
+	//----------------------------------------
 	agg::interactive_polygon m_quad(4, 5.0);
 
-	double d = 0.0;
-	double g_x1 = d;
-	double g_y1 = d;
-	double g_x2 = DstBuf.width() - d;
-	double g_y2 = DstBuf.height() - d;
-
-	m_quad.xn(0) = 100;
-	m_quad.yn(0) = 100;
+	m_quad.xn(0) = 0;
+	m_quad.yn(0) = 0;
 	m_quad.xn(1) = DstBuf.width() - 100;
 	m_quad.yn(1) = 100;
 	m_quad.xn(2) = DstBuf.width() - 100;
@@ -256,47 +271,63 @@ void AggDraw(HWND hWnd, HDC hMemoryDC, HBITMAP hMemoryBitmap)
 	m_quad.xn(3) = 100;
 	m_quad.yn(3) = DstBuf.height() - 100;
 
-	agg::trans_perspective tr(m_quad.polygon(), g_x1, g_y1, g_x2, g_y2);
-
-	pixfmt            pixf(DstBuf);
-	renderer_base     rb(pixf);
-
-	pixfmt_pre        pixf_pre(DstBuf);
-	renderer_base_pre rb_pre(pixf_pre);
-
+	//-------------------------------------------------
+	// 行扫描抗锯齿光栅控制器
 	agg::rasterizer_scanline_aa<> g_rasterizer;
+	// 色段类型
 	agg::scanline_u8  g_scanline;
+	g_rasterizer.add_path(m_quad);
+	g_rasterizer.clip_box(0, 0, OutBuf.width(), OutBuf.height());
+	g_rasterizer.reset();
+	g_rasterizer.move_to_d(m_quad.xn(0), m_quad.yn(0));
+	g_rasterizer.line_to_d(m_quad.xn(1), m_quad.yn(1));
+	g_rasterizer.line_to_d(m_quad.xn(2), m_quad.yn(2));
+	g_rasterizer.line_to_d(m_quad.xn(3), m_quad.yn(3));
 
-	if (tr.is_valid())
+
+	//------------------------------------------------------------------------
+	// 线段分配器
+	agg::span_allocator<color_type> sa;
+	// 双线性插值法滤波器
+	agg::image_filter_bilinear filter_kernel;
+	// 滤波器控制器
+	agg::image_filter_lut filter(filter_kernel, false);
+
+	// 渲染源
+	pixfmt pixf_img(DstBuf);
+	// 图片访问器克隆
+	typedef agg::image_accessor_clone<pixfmt> img_accessor_type;
+	// 渲染源访问器
+	img_accessor_type ia(pixf_img);
+
+	// 远景渲染服务器，四边形 -> 矩形
+	agg::trans_perspective tr(m_quad.polygon(), 0.0, 0.0, DstBuf.width(), DstBuf.height());
+	if(tr.is_valid())
 	{
-		// Subdivision and linear interpolation (faster, but less accurate)
 		//-----------------------
-		//typedef agg::span_interpolator_linear<agg::trans_perspective> interpolator_type;
-		//typedef agg::span_subdiv_adaptor<interpolator_type> subdiv_adaptor_type;
-		//interpolator_type interpolator(tr);
-		//subdiv_adaptor_type subdiv_adaptor(interpolator);
-		//
-		//typedef agg::span_image_filter_rgba_2x2<img_accessor_type,
-		//                                        subdiv_adaptor_type> span_gen_type;
-		//span_gen_type sg(ia, subdiv_adaptor, filter);
-		//-----------------------
-
-		// Direct calculations of the coordinates
-		//-----------------------
+		// 色段插值服务
+		typedef agg::span_interpolator_trans<agg::trans_perspective> interpolator_type;
+		// 远景渲染色段插值服务器
 		interpolator_type interpolator(tr);
+		// 色段创建器
+		typedef agg::span_image_filter_rgba_2x2<img_accessor_type, interpolator_type> span_gen_type;
 		span_gen_type sg(ia, interpolator, filter);
-		//-----------------------
 
+		// 参数：
+		// Rasterizer：光栅控制器
+		// Scanline：span容器
+		// BaseRenderer：渲染器
+		// SpanAllocator：线段分配器
+		// SpanGenerator：指定算法的色段创建器
+
+		// 抗锯齿渲染，把sg通过sa渲染到rb_pre上，
 		agg::render_scanlines_aa(g_rasterizer, g_scanline, rb_pre, sa, sg);
 	}
 
-	g_rasterizer.add_path(pt);
-	agg::render_scanlines_aa_solid(g_rasterizer, g_scanline, rb, agg::rgba(0,0,0));
+	//PixMapImg.draw(hMemoryDC);
 
-	//--------------------------
-	agg::render_ctrl(g_rasterizer, g_scanline, rb, m_trans_type);
-
-	PixMapImg.draw(hMemoryDC);
+	OutPixImg.draw(hMemoryDC);
+	OutPixImg.clear();
 }
 
 CAggInterface::CAggInterface()
