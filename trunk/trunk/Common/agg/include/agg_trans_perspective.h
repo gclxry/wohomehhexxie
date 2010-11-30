@@ -109,23 +109,49 @@ namespace agg
         // Multiply "m" by "this" and assign the result to "this"
         const trans_perspective& premultiply(const trans_perspective& m);
 
-        // Multiply matrix to inverse of another one
-        const trans_perspective& multiply_inv(const trans_perspective& m);
-
-        // Multiply inverse of "m" by "this" and assign the result to "this"
-        const trans_perspective& premultiply_inv(const trans_perspective& m);
-
         // Multiply the matrix by another one
         const trans_perspective& multiply(const trans_affine& m);
 
         // Multiply "m" by "this" and assign the result to "this"
         const trans_perspective& premultiply(const trans_affine& m);
 
-        // Multiply the matrix by inverse of another one
-        const trans_perspective& multiply_inv(const trans_affine& m);
+		//------------------------------------------------------------------------
+        // Multiply matrix to inverse of another one
+		const trans_perspective& multiply_inv(const trans_perspective& m)
+		{
+			trans_perspective t = m;
+			t.invert();
+			return multiply(t);
+		}
 
+		//------------------------------------------------------------------------
+        // Multiply the matrix by inverse of another one
+		const trans_perspective& multiply_inv(const trans_affine& m)
+		{
+			trans_affine t = m;
+			t.invert();
+			return multiply(t);
+		}
+
+
+		//------------------------------------------------------------------------
         // Multiply inverse of "m" by "this" and assign the result to "this"
-        const trans_perspective& premultiply_inv(const trans_affine& m);
+		const trans_perspective& premultiply_inv(const trans_perspective& m)
+		{
+			trans_perspective t = m;
+			t.invert();
+			return *this = t.multiply(*this);
+		}
+
+		//------------------------------------------------------------------------
+        // Multiply inverse of "m" by "this" and assign the result to "this"
+		const trans_perspective& premultiply_inv(const trans_affine& m)
+		{
+			trans_perspective t(m);
+			t.invert();
+			return *this = t.multiply(*this);
+		}
+
 
         //--------------------------------------------------------- Load/Store
         void store_to(double* m) const;
@@ -225,9 +251,35 @@ namespace agg
         // considering possible degenerate cases.
         double scale() const;
         double rotation() const;
-        void   translation(double* dx, double* dy) const;
-        void   scaling(double* x, double* y) const;
-        void   scaling_abs(double* x, double* y) const;
+
+		//------------------------------------------------------------------------
+		void translation(double* dx, double* dy) const
+		{
+			*dx = tx;
+			*dy = ty;
+		};
+
+		//------------------------------------------------------------------------
+		void scaling(double* x, double* y) const
+		{
+			double x1 = 0.0;
+			double y1 = 0.0;
+			double x2 = 1.0;
+			double y2 = 1.0;
+			trans_perspective t(*this);
+			t *= trans_affine_rotation(-rotation());
+			t.transform(&x1, &y1);
+			t.transform(&x2, &y2);
+			*x = x2 - x1;
+			*y = y2 - y1;
+		};
+
+		//------------------------------------------------------------------------
+		void scaling_abs(double* x, double* y) const
+		{
+			*x = sqrt(sx  * sx  + shx * shx);
+			*y = sqrt(shy * shy + sy  * sy);
+		};
 
 
 
@@ -459,8 +511,7 @@ namespace agg
     }
 
     //------------------------------------------------------------------------
-    inline const trans_perspective& 
-    trans_perspective::multiply(const trans_affine& a)
+    inline const trans_perspective& trans_perspective::multiply(const trans_affine& a)
     {
         trans_perspective b = *this;
         sx  = a.sx *b.sx  + a.shx*b.shy + a.tx*b.w0;
@@ -473,8 +524,7 @@ namespace agg
     }
 
     //------------------------------------------------------------------------
-    inline const trans_perspective& 
-    trans_perspective::premultiply(const trans_perspective& b)
+    inline const trans_perspective& trans_perspective::premultiply(const trans_perspective& b)
     {
         trans_perspective a = *this;
         sx  = a.sx *b.sx  + a.shx*b.shy + a.tx*b.w0;
@@ -490,8 +540,7 @@ namespace agg
     }
 
     //------------------------------------------------------------------------
-    inline const trans_perspective& 
-    trans_perspective::premultiply(const trans_affine& b)
+    inline const trans_perspective& trans_perspective::premultiply(const trans_affine& b)
     {
         trans_perspective a = *this;
         sx  = a.sx *b.sx  + a.shx*b.shy;
@@ -507,44 +556,7 @@ namespace agg
     }
 
     //------------------------------------------------------------------------
-    const trans_perspective& 
-    trans_perspective::multiply_inv(const trans_perspective& m)
-    {
-        trans_perspective t = m;
-        t.invert();
-        return multiply(t);
-    }
-
-    //------------------------------------------------------------------------
-    const trans_perspective&
-    trans_perspective::multiply_inv(const trans_affine& m)
-    {
-        trans_affine t = m;
-        t.invert();
-        return multiply(t);
-    }
-
-    //------------------------------------------------------------------------
-    const trans_perspective&
-    trans_perspective::premultiply_inv(const trans_perspective& m)
-    {
-        trans_perspective t = m;
-        t.invert();
-        return *this = t.multiply(*this);
-    }
-
-    //------------------------------------------------------------------------
-    const trans_perspective&
-    trans_perspective::premultiply_inv(const trans_affine& m)
-    {
-        trans_perspective t(m);
-        t.invert();
-        return *this = t.multiply(*this);
-    }
-
-    //------------------------------------------------------------------------
-    inline const trans_perspective& 
-    trans_perspective::translate(double x, double y)
+    inline const trans_perspective& trans_perspective::translate(double x, double y)
     {
         tx += x;
         ty += y;
@@ -700,37 +712,6 @@ namespace agg
         transform(&x2, &y2);
         return atan2(y2-y1, x2-x1);
     }
-
-    //------------------------------------------------------------------------
-    void trans_perspective::translation(double* dx, double* dy) const
-    {
-        *dx = tx;
-        *dy = ty;
-    }
-
-    //------------------------------------------------------------------------
-    void trans_perspective::scaling(double* x, double* y) const
-    {
-        double x1 = 0.0;
-        double y1 = 0.0;
-        double x2 = 1.0;
-        double y2 = 1.0;
-        trans_perspective t(*this);
-        t *= trans_affine_rotation(-rotation());
-        t.transform(&x1, &y1);
-        t.transform(&x2, &y2);
-        *x = x2 - x1;
-        *y = y2 - y1;
-    }
-
-    //------------------------------------------------------------------------
-    void trans_perspective::scaling_abs(double* x, double* y) const
-    {
-        *x = sqrt(sx  * sx  + shx * shx);
-        *y = sqrt(shy * shy + sy  * sy);
-    }
-
-
 }
 
 #endif
