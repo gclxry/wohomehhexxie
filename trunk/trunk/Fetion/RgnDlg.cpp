@@ -2,6 +2,7 @@
 #include "StdAfx.h"
 #include "RgnDlg.h"
 #include "AggRender.h"
+#include "gl.h"
 
 #define __base_super					CHighEfficiencyDlg
 
@@ -18,6 +19,7 @@ CRgnDlg::CRgnDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 	m_pMinButton = NULL;
 	m_pCloseButton = NULL;
 	m_pZhuanBtn = NULL;
+	m_hRC = NULL;
 
 	m_dbFactor = 0.0;
 
@@ -135,10 +137,52 @@ LRESULT CRgnDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 	return __base_super::OnSize(hWinPoslnfo, wParam, lParam);
 }
 
+HANDLE g_hMem = NULL;
+pixel_map SrcMapImg;
+rendering_buffer SrcImgBuf;
+pixel_map DstMapImg;
+rendering_buffer DstImgBuf;
+
 void CRgnDlg::OnPaint(HDC hPaintDc)
 {
 	// 设置窗体的透明特性
 	CSysUnit::SetWindowToTransparence(m_hWnd, true);
+
+	if (m_PointList.size() > 0 && IS_SAVE_HANDLE(m_RgnBmpDc.GetSafeHdc()))
+	{
+		CRect WndRect = this->GetClientRect();
+		POINT ptWinPos = {WndRect.left, WndRect.top};
+		POINT ptSrc = {0, 0};
+		SIZE sizeWindow = {WndRect.Width(), WndRect.Height()};
+
+
+		Graphics MemDcGrap(m_RgnBmpDc.GetSafeHdc());
+
+		m_UiManager.OnPaintRgn(WndRect, &MemDcGrap);
+
+
+
+
+		::glFinish();
+		::SwapBuffers(m_RgnBmpDc.GetSafeHdc());
+		::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, m_RgnBmpDc.GetSafeHdc(), &ptSrc, 0, &m_Blend, ULW_ALPHA);
+
+		if (m_dbFactor >= 1.0)
+		{
+			if (IS_SAVE_HANDLE(m_hRC))
+			{
+				::wglMakeCurrent(NULL, NULL);
+				::wglDeleteContext(m_hRC);
+				m_hRC = NULL;
+			}
+
+			m_PointList.clear();
+			this->RedrawWindow();
+		}
+		return;
+	}
+
+
 
 	CRect WndRect = this->GetClientRect();
 	CBitmapDC BmpDc;
@@ -194,21 +238,22 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 			vP[2] = ptRightUp;
 			vP[3] = ptLeftUp;
 
-			pixel_map SrcMapImg;
-			rendering_buffer SrcImgBuf;
-			pixel_map DstMapImg;
-			rendering_buffer DstImgBuf;
 
-			HANDLE g_hMem = CAggInterface::CreatePixelMap(hMemoryBitmap, SrcMapImg, SrcImgBuf);
-			CAggInterface::CreatePixelMap(DstMapImg, DstImgBuf, WndRect.Width(), WndRect.Height());
+			if (!IS_SAVE_HANDLE(g_hMem))
+			{
+				g_hMem = CAggInterface::CreatePixelMap(hMemoryBitmap, SrcMapImg, SrcImgBuf);
+				CAggInterface::CreatePixelMap(DstMapImg, DstImgBuf, WndRect.Width(), WndRect.Height());
+			}
 
 			// 绘制3D图案
 			CAggDraw2DTo3D::Draw2DTo3D(DstImgBuf, SrcImgBuf, vP);
 
+			DstMapImg.draw(hMemoryDC);
+
 			::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, hMemoryDC, &ptSrc, 0, &m_Blend, ULW_ALPHA);
 
-			CAggInterface::ClosePixelMap(g_hMem);
-			CAggInterface::ClosePixelMap(DstMapImg);
+			//CAggInterface::ClosePixelMap(g_hMem);
+			//CAggInterface::ClosePixelMap(DstMapImg);
 
 			if (m_dbFactor >= 1.0)
 			{
@@ -293,7 +338,52 @@ void CRgnDlg::DUI_OnLButtonUp(WPARAM wParam, LPARAM lParam)
 	if (wParam == 100)
 	{
 		CRect WndRect = this->GetClientRect();
-		CAKTrajectory::EllipseMidPoint(CPoint(WndRect.Width() / 2, 0), WndRect.Width() / 2, WndRect.Width() / 20, EGT_TOP, m_PointList);
+		CAKTrajectory::EllipseMidPoint(CPoint(WndRect.Width() / 2, 0), WndRect.Width() / 2, WndRect.Width() / 5, EGT_TOP, m_PointList);
+
+//////////////////////////////////////////////////////////////////////////
+		m_RgnBmpDc.Create(WndRect.Width(), WndRect.Height());
+
+		if (IS_SAVE_HANDLE(m_RgnBmpDc.GetSafeHdc()))
+		{
+			if (IS_SAVE_HANDLE(m_hRC))
+			{
+				::wglMakeCurrent(NULL, NULL);
+				::wglDeleteContext(m_hRC);
+				m_hRC = NULL;
+			}
+
+			static PIXELFORMATDESCRIPTOR pfd = 
+			{
+				sizeof(PIXELFORMATDESCRIPTOR),				// Size Of This Pixel Format Descriptor
+				1,											// Version Number
+				PFD_DRAW_TO_WINDOW |						// Format Must Support Window
+				PFD_SUPPORT_OPENGL |						// Format Must Support OpenGL
+				PFD_DOUBLEBUFFER,							// Must Support Double Buffering
+				PFD_TYPE_RGBA,								// Request An RGBA Format
+				32,											// Select Our Color Depth
+				0, 0, 0, 0, 0, 0,							// Color Bits Ignored
+				0,											// No Alpha Buffer
+				0,											// Shift Bit Ignored
+				0,											// No Accumulation Buffer
+				0, 0, 0, 0,									// Accumulation Bits Ignored
+				16,											// 16Bit Z-Buffer (Depth Buffer)  
+				0,											// No Stencil Buffer
+				0,											// No Auxiliary Buffer
+				PFD_MAIN_PLANE,								// Main Drawing Layer
+				0,											// Reserved
+				0, 0, 0	
+			};
+
+		//	int m_PixelFormat;
+		//	m_PixelFormat = ::ChoosePixelFormat(m_RgnBmpDc.GetSafeHdc(), &pfd);
+		//	::SetPixelFormat(m_RgnBmpDc.GetSafeHdc(), m_PixelFormat, &pfd); 
+
+			m_hRC = ::wglCreateContext(m_RgnBmpDc.GetSafeHdc()); 
+			::wglMakeCurrent(m_RgnBmpDc.GetSafeHdc(), m_hRC); 
+		}
+
+//////////////////////////////////////////////////////////////////////////
+
 
 		m_dbFactor = 0.0;
 		m_nTimerId = this->SetTimer(10);

@@ -27,6 +27,8 @@ CBitmapDC::~CBitmapDC()
 
 void CBitmapDC::Create(int nWidth, int nHeight)
 {
+	Delete();
+
 	BITMAPINFOHEADER bih;
 	memset(&bih, 0, sizeof(BITMAPINFOHEADER));
 	bih.biSize = sizeof(BITMAPINFOHEADER);
