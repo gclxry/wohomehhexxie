@@ -36,6 +36,10 @@ protected:
 
 	CResImage m_TImage;
 
+	// Ðý×ªÓÃDC
+	CBitmapDC m_RgnBmpDc;
+	HGLRC m_hRC;
+
 private:
 	CBfNormalGraduatedButton *m_pZhuanBtn;
 	CBfGifStatic *m_pGifStatic;
