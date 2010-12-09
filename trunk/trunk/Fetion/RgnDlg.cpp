@@ -2,7 +2,7 @@
 #include "StdAfx.h"
 #include "RgnDlg.h"
 #include "AggRender.h"
-#include "gl.h"
+#include "DX9Render.h"
 
 #define __base_super					CHighEfficiencyDlg
 
@@ -148,12 +148,31 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 	// 设置窗体的透明特性
 	CSysUnit::SetWindowToTransparence(m_hWnd, true);
 
-	if (m_PointList.size() > 0 && IS_SAVE_HANDLE(m_RgnBmpDc.GetSafeHdc()))
+	if (m_PointList.size() > 0)// && IS_SAVE_HANDLE(m_RgnBmpDc.GetSafeHdc()))
 	{
 		CRect WndRect = this->GetClientRect();
 		POINT ptWinPos = {WndRect.left, WndRect.top};
 		POINT ptSrc = {0, 0};
 		SIZE sizeWindow = {WndRect.Width(), WndRect.Height()};
+
+		g_pD3D->GetDeviceCaps()
+
+
+		//获取后台缓冲区的指针
+		ddscaps.dwCaps = DDSCAPS_BACKBUFFER;
+		ddrval = lpDDSPrimary->GetAttachedSurface(&ddscaps, &lpDDSBack);
+		if( ddrval == DD_OK )
+		{
+			// 画出一些文本
+			if (lpDDSPrimary->GetDC(&hdc) == DD_OK) 
+			{
+				SetBkColor( hdc, RGB( 0, 0, 255 ) );
+				SetTextColor( hdc, RGB( 255, 255, 0 ) );
+				TextOut( hdc, 0, 0, szFrontMsg, lstrlen(szFrontMsg) );
+				lpDDSPrimary->ReleaseDC(hdc);
+			}
+		}
+
 
 
 		Graphics MemDcGrap(m_RgnBmpDc.GetSafeHdc());
@@ -162,7 +181,14 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 
 
 
+		if (m_dbFactor >= 1.0)
+		{
+			Cleanup();
+			m_PointList.clear();
+			this->RedrawWindow();
+		}
 
+/*
 		::glFinish();
 		::SwapBuffers(m_RgnBmpDc.GetSafeHdc());
 		::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, m_RgnBmpDc.GetSafeHdc(), &ptSrc, 0, &m_Blend, ULW_ALPHA);
@@ -178,7 +204,7 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 
 			m_PointList.clear();
 			this->RedrawWindow();
-		}
+		}*/
 		return;
 	}
 
@@ -341,7 +367,8 @@ void CRgnDlg::DUI_OnLButtonUp(WPARAM wParam, LPARAM lParam)
 		CAKTrajectory::EllipseMidPoint(CPoint(WndRect.Width() / 2, 0), WndRect.Width() / 2, WndRect.Width() / 5, EGT_TOP, m_PointList);
 
 //////////////////////////////////////////////////////////////////////////
-		m_RgnBmpDc.Create(WndRect.Width(), WndRect.Height());
+		InitD3D(m_hWnd);
+/*		m_RgnBmpDc.Create(WndRect.Width(), WndRect.Height());
 
 		if (IS_SAVE_HANDLE(m_RgnBmpDc.GetSafeHdc()))
 		{
@@ -381,7 +408,7 @@ void CRgnDlg::DUI_OnLButtonUp(WPARAM wParam, LPARAM lParam)
 			m_hRC = ::wglCreateContext(m_RgnBmpDc.GetSafeHdc()); 
 			::wglMakeCurrent(m_RgnBmpDc.GetSafeHdc(), m_hRC); 
 		}
-
+*/
 //////////////////////////////////////////////////////////////////////////
 
 
