@@ -2,42 +2,62 @@
 #include "stdafx.h"
 #include "TestDx9.h"
 
-LPDIRECT3D9 g_pD3d9;                       // Direct3D interface
-LPDIRECT3DDEVICE9 g_pD3d9Device;              // Device class
-LPDIRECT3DVERTEXBUFFER9 vertex_buffer; // Vertex buffer
-LPDIRECT3DTEXTURE9 texture_1;          // Texture for single large solid
-IDirect3DSurface9 * mesh; 
+LPDIRECT3D9 g_pD3d9 = NULL;
+LPDIRECT3DDEVICE9 g_pD3d9Device = NULL;
+LPDIRECT3DVERTEXBUFFER9 g_pVertexBuffer = NULL;
+LPDIRECT3DTEXTURE9 g_pTexture = NULL;
+IDirect3DSurface9 *g_pD3d9Surface = NULL; 
 
-#define RELEASE_COM_OBJECT(i) if(i!=NULL&& i) i->Release();
-struct MYVERTEXTYPE {FLOAT X, Y, Z; D3DVECTOR NORMAL; FLOAT U, V;};
-#define CUSTOMFVF (D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1)
+#define RELEASE_COM_OBJECT(obj)					{if((obj) != NULL) {(obj)->Release(); (obj) = NULL;}}
+// 顶点格式
+#define CUSTOMFVF								(D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1)
 
-#define CUBE_ACCEL 1.0025
-#define CUBE_START_SPEED 0.02
-#define CUBE_MAX_SPEED 0.10
-#define CAMERA_DISTANCE 19.5
-#define AMBIENT_BRIGHTNESS 140
-#define TEXTURE_SIZE 512 //NEW VALUE
-#define VERTICAL_VIEWFIELD_DEGREES 45.0
-#define FRUSTUM_NEAR_Z 1.0f
-#define FRUSTUM_FAR_Z 100.0f
-#define LIGHT_DISTANCE 40.0f
-#define LIGHT_RANGE 60.0f
-#define LIGHT_CONE_RADIANS_INNER 0.405f; 
-#define LIGHT_CONE_RADIANS_OUTER 0.425f; 
-#define TEXTURE_FILE_NAME _T("textwrap.bmp")
-#define CUBE_VERTICES 24
-#define DEMO_TEXT_COLOR  D3DCOLOR_ARGB(255,108,108,228)
-#define TEXT_SCROLL_SPEED 5
-#define TEXT_POINTS 70
-#define TEXT_TOP 210  
+struct MY_VERTEX_TYPE
+{
+	FLOAT X, Y, Z;
+	D3DVECTOR NORMAL;
+	FLOAT U, V;
+};
 
-// 初始化D3d设备
+void InitDrawGraphics()
+{
+	// --------- 从文件创建纹理
+	D3DXCreateTextureFromFileEx(
+		g_pD3d9Device, 
+		_T("D:\\TestSkin\\textwrap.bmp"), 
+		512,
+		512, 
+		D3DX_DEFAULT, D3DUSAGE_RENDERTARGET, 
+		D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT,    
+		D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL,
+		&g_pTexture);
+
+	// 渲染顶点样例
+	MY_VERTEX_TYPE DemoVertices[] =
+	{
+		{ -5.0f, 5.0f, -5.0f, 0, 0, -1, 0, 0 },
+		{ 5.0f, 5.0f, -5.0f, 0, 0, -1, 1, 0 },
+		{ -5.0f, -5.0f, -5.0f, 0, 0, -1, 0, 1 },
+		{ 5.0f, -5.0f, -5.0f, 0, 0, -1, 1, 1 },
+	};
+
+	// 创建一个能容纳24个顶点数据的buffer
+	g_pD3d9Device->CreateVertexBuffer(24 * sizeof(MY_VERTEX_TYPE), 0,
+		CUSTOMFVF, D3DPOOL_MANAGED, &g_pVertexBuffer, NULL);
+
+	// 设置顶点数据
+	VOID* pVoid = NULL;    
+	g_pVertexBuffer->Lock(0, 0, (void**)&pVoid, 0);
+	memcpy(pVoid, DemoVertices, sizeof(DemoVertices));
+	g_pVertexBuffer->Unlock();
+}
+
 void InitD3d9Device(HWND hWnd)
 {
 	CRect ClientRect;
 	::GetClientRect(hWnd, ClientRect);
 
+//////////////////////////////////////////////////////////////////////////
 	// 初始化D3d设备
 	g_pD3d9 = Direct3DCreate9(D3D_SDK_VERSION);
 
@@ -65,156 +85,107 @@ void InitD3d9Device(HWND hWnd)
 	g_pD3d9Device->SetRenderState(D3DRS_ZENABLE, TRUE);
 	// 不剔除任何面（D3DCULL_NONE：图片背面也渲染）
 	g_pD3d9Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+
 //////////////////////////////////////////////////////////////////////////
+	// 设置视觉矩阵（摄像机矩阵 D3DTS_VIEW）
 
 	// 视觉改变矩阵
-	D3DXMATRIX MatView;    // the view transform matrix
-
-	// 摄像机（眼球）点
-	D3DXVECTOR3 CameraVct(0.0f, 0.0f, -CAMERA_DISTANCE);
-	// 观察点
+	D3DXMATRIX MatView;
+	// 摄像机点（眼球位置）
+	D3DXVECTOR3 CameraVct(0.0f, 0.0f, -19.5);
+	// 观察点，目标位置向量
 	D3DXVECTOR3 LookatVct(0.0f, 0.0f, 0.0f);
-	// 头顶方向点
+	// 当前世界坐标系向上方向向量
 	D3DXVECTOR3 UpVct(0.0f, 1.0f, 0.0f);
-
+	// 设置观察矩阵
 	D3DXMatrixLookAtLH(&MatView, &CameraVct, &LookatVct, &UpVct);
-
+	// 设置变换矩阵
 	g_pD3d9Device->SetTransform(D3DTS_VIEW, &MatView);
 
-	// This is the projection transform.. the last parameter to the call 
-	// is the point in positive Z-dimension that things become invisible
-	D3DXMATRIX matProjection;  
+//////////////////////////////////////////////////////////////////////////
+	// 设置Z轴投影矩阵（透视矩阵 D3DTS_PROJECTION）
 
-	D3DXMatrixPerspectiveFovLH
-		(&matProjection,
-		D3DXToRadian(VERTICAL_VIEWFIELD_DEGREES),  
-		(FLOAT)ClientRect.Width() / (FLOAT)ClientRect.Height(), 
-		FRUSTUM_NEAR_Z,     //Defined near top of file    
-		FRUSTUM_FAR_Z);   
+	// Z轴投影操作矩阵
+	D3DXMATRIX MatZProjection;  
 
-	g_pD3d9Device->SetTransform(D3DTS_PROJECTION, &matProjection);
+	// 创建一个左手坐标系的透视投影矩阵
+	// 参数一：指向D3DXMATRIX 结构的操作结果矩阵。
+	// 参数二：观察时y轴方向的角度（弧度），就是观察范围夹角。
+	// 参数三：纵横比，在视空间宽度除以高度。
+	// 参数四：近裁剪面位置Z值。
+	// 参数五：远裁剪面位置Z值。
+	D3DXMatrixPerspectiveFovLH(&MatZProjection, D3DXToRadian(45.0f),  
+		(FLOAT)ClientRect.Width() / (FLOAT)ClientRect.Height(), 1.0f, 100.0f);   
 
+	g_pD3d9Device->SetTransform(D3DTS_PROJECTION, &MatZProjection);
+
+	// 设置固定渲染管道的顶点格式
 	g_pD3d9Device->SetFVF(CUSTOMFVF);
 
-	//Create "mesh"... the basic background layer of the texture 
-	g_pD3d9Device->CreateOffscreenPlainSurface 
-		(TEXTURE_SIZE, TEXTURE_SIZE, D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT, &mesh,
-		NULL);
+	// 取得用于渲染的纹理表面
+	g_pD3d9Device->CreateOffscreenPlainSurface(512, 512, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &g_pD3d9Surface, NULL);
 
-	//Scales from basis size to texture size if necess.
-	D3DXLoadSurfaceFromFile
-		(mesh, NULL, NULL, TEXTURE_FILE_NAME,NULL,
-		D3DX_DEFAULT, 0, NULL);
-
+	// --------- 从文件创建纹理表面
+	D3DXLoadSurfaceFromFile(g_pD3d9Surface, NULL, NULL, _T("D:\\TestSkin\\textwrap.bmp"), NULL, D3DX_DEFAULT, 0, NULL);
 }
 
-// This is the function used to render a single frame
-void render()
+void Render()
 {
-
-	static float index = 0.0 ;
-
-	//Clear output buffer and vertex buffer 
-	g_pD3d9Device->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
-	g_pD3d9Device->Clear(0, NULL, D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
-
+	g_pD3d9Device->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
+	g_pD3d9Device->Clear(0, NULL, D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
 	g_pD3d9Device->BeginScene();
 
-	//NEW call
-	//do_2D_work ();
+	static float sfSpeed = (float)0.02;
+	sfSpeed *= (float)1.0025;
 
-	//
-	//Index is used to spin the main cube... a rotation of index is applied in
-	// each dimension to make things interesting
-	//
-	static float speed = CUBE_START_SPEED;
-	speed *= CUBE_ACCEL;
+	if (sfSpeed > (float)0.10)
+		sfSpeed = (float)0.10;
 
-	if(speed>CUBE_MAX_SPEED) speed=CUBE_MAX_SPEED;
+	static float sfIndex = (float)0.0;
+	sfIndex += sfSpeed;
 
-	index+=speed;  
+	D3DXMATRIX MatRotateX;
 
-	D3DXMATRIX matRotateX;
+	// 用指定的绕Y轴角度，绕X轴角度和Z轴角度创建旋转矩阵
+	// 参数一：指向D3DXMATRIX结构的操作结果矩阵
+	// 参数二：绕着Y轴旋转角度（单位弧度）
+	// 参数三：绕着X轴旋转角度（单位弧度）
+	// 参数四：绕着Z轴旋转角度（单位弧度）
+	// 这个矩阵的变换顺序是先绕着Z轴旋转，接着是绕着X轴旋转，最后是绕着Y轴旋转。这些都是相对于物体的本地坐标系来说的
+	D3DXMatrixRotationYawPitchRoll(&MatRotateX, sfIndex, sfIndex / (float)4.0, sfIndex / (float)4.0);
 
-	//We rotate 4x faster in Yaw to show off scrolling text at start 
-	D3DXMatrixRotationYawPitchRoll (&matRotateX, index, index / 4.0,
-		index / 4.0);
+	// 设置世界坐标
+	g_pD3d9Device->SetTransform(D3DTS_WORLDMATRIX(0), &MatRotateX);
+	// 绑定顶点缓冲到设备数据流
+	g_pD3d9Device->SetStreamSource(0, g_pVertexBuffer, 0, sizeof(MY_VERTEX_TYPE));
 
-	// Set the world transform
-	g_pD3d9Device->SetTransform(D3DTS_WORLDMATRIX(0), &(matRotateX));    
-	g_pD3d9Device->SetStreamSource(0, vertex_buffer, 0, sizeof(MYVERTEXTYPE));
+	// 设置过滤器（过滤器是一种Direct3D用它来帮助变形图片的平滑技术），第三个参数即过滤器
+	g_pD3d9Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR); 
+	g_pD3d9Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);   
 
-	g_pD3d9Device->SetSamplerState (0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR); 
-	g_pD3d9Device->SetSamplerState (0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);   
+	// 设置纹理
+	g_pD3d9Device->SetTexture(0, g_pTexture);
 
-	g_pD3d9Device->SetTexture (0, texture_1);
+	// 设置3D渲染模式
+	// 从第0个点开始用 D3DPT_TRIANGLESTRIP 模式渲染2个三角形
+	g_pD3d9Device->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 
-	g_pD3d9Device->DrawPrimitive (D3DPT_TRIANGLESTRIP, 0, 2);
-
-	g_pD3d9Device->EndScene(); 
-	g_pD3d9Device->Present(NULL, NULL, NULL, NULL) ;
+	g_pD3d9Device->EndScene();
+	// 交换前后缓冲
+	g_pD3d9Device->Present(NULL, NULL, NULL, NULL);
 }
 
-// This is the function that cleans up Direct3D and COM
-void cleanup()
+void CleanupD3d9()
 {
-	RELEASE_COM_OBJECT(vertex_buffer)
-		RELEASE_COM_OBJECT(texture_1)
-		RELEASE_COM_OBJECT(mesh)
-		RELEASE_COM_OBJECT(g_pD3d9)    
-		RELEASE_COM_OBJECT(g_pD3d9Device)  
+	RELEASE_COM_OBJECT(g_pVertexBuffer);
+	RELEASE_COM_OBJECT(g_pTexture);
+	RELEASE_COM_OBJECT(g_pD3d9Surface);
+	RELEASE_COM_OBJECT(g_pD3d9);
+	RELEASE_COM_OBJECT(g_pD3d9Device);
 }
 
-// This is the function that defines the 3D cube
-void InitDrawGraphics()
+void RestoreSurfaces(HWND hWnd)
 {
-
-	D3DXCreateTextureFromFileEx (
-		g_pD3d9Device, 
-		TEXTURE_FILE_NAME, 
-		TEXTURE_SIZE,
-		TEXTURE_SIZE, 
-		D3DX_DEFAULT, D3DUSAGE_RENDERTARGET, 
-		D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT,    
-		D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL,
-		&texture_1 
-		);
-
-	//
-	// This defines the shape of our single large polyhedron
-	//
-	MYVERTEXTYPE demo_vertices[] =
-	{
-		//
-		//Each of these groups-of-four is a face of our solid
-		//
-		{ -5.0f, 5.0f, -5.0f, 0, 0, -1, 0, 0 },  // Front face  
-		{ 5.0f, 5.0f, -5.0f, 0, 0, -1, 1, 0 },
-		{ -5.0f, -5.0f, -5.0f, 0, 0, -1, 0, 1 },
-		{ 5.0f, -5.0f, -5.0f, 0, 0, -1, 1, 1 },
-
-	};    
-
-	// COM creation of vertex buffer
-	g_pD3d9Device->CreateVertexBuffer(
-		CUBE_VERTICES*sizeof(MYVERTEXTYPE),  //Cube has 24 vertices
-		0,
-		CUSTOMFVF,
-		D3DPOOL_MANAGED,
-		&vertex_buffer,
-		NULL);
-
-	VOID* pVoid;    
-
-	// Lock vertex_buffer and load the vertices into it
-	vertex_buffer->Lock(0, 0, (void**)&pVoid, 0);
-	memcpy(pVoid, demo_vertices, sizeof(demo_vertices));
-	vertex_buffer->Unlock();
-
-}
-
-void restore_surfaces(HWND hWnd)
-{
-	cleanup();   
+	CleanupD3d9();   
 	InitD3d9Device(hWnd);    
 }
