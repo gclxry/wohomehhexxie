@@ -22,7 +22,7 @@ struct MY_VERTEX_TYPE
 void InitDrawGraphics()
 {
 	// --------- 从文件创建纹理
-	D3DXCreateTextureFromFileEx(
+	HRESULT hRet = D3DXCreateTextureFromFileEx(
 		g_pD3d9Device, 
 		_T("D:\\TestSkin\\textwrap.bmp"), 
 		512,
@@ -42,7 +42,7 @@ void InitDrawGraphics()
 	};
 
 	// 创建一个能容纳24个顶点数据的buffer
-	g_pD3d9Device->CreateVertexBuffer(24 * sizeof(MY_VERTEX_TYPE), 0,
+	hRet = g_pD3d9Device->CreateVertexBuffer(24 * sizeof(MY_VERTEX_TYPE), 0,
 		CUSTOMFVF, D3DPOOL_MANAGED, &g_pVertexBuffer, NULL);
 
 	// 设置顶点数据
@@ -70,7 +70,7 @@ void InitD3d9Device(HWND hWnd)
 	D3dPp.BackBufferWidth = ClientRect.Width();
 	D3dPp.BackBufferHeight = ClientRect.Height();
 
-	g_pD3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL,
+	HRESULT hRet = g_pD3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL,
 		hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &D3dPp, &g_pD3d9Device);
 
 	// 初始化绘图内容
@@ -92,7 +92,7 @@ void InitD3d9Device(HWND hWnd)
 	// 视觉改变矩阵
 	D3DXMATRIX MatView;
 	// 摄像机点（眼球位置）
-	D3DXVECTOR3 CameraVct(0.0f, 0.0f, -19.5);
+	D3DXVECTOR3 CameraVct(0.0f, 0.0f, -19.5f);
 	// 观察点，目标位置向量
 	D3DXVECTOR3 LookatVct(0.0f, 0.0f, 0.0f);
 	// 当前世界坐标系向上方向向量
@@ -115,7 +115,7 @@ void InitD3d9Device(HWND hWnd)
 	// 参数四：近裁剪面位置Z值。
 	// 参数五：远裁剪面位置Z值。
 	D3DXMatrixPerspectiveFovLH(&MatZProjection, D3DXToRadian(45.0f),  
-		(FLOAT)ClientRect.Width() / (FLOAT)ClientRect.Height(), 1.0f, 100.0f);   
+		(FLOAT)ClientRect.Width() / (FLOAT)ClientRect.Height(), 0.0f, 100.0f);   
 
 	g_pD3d9Device->SetTransform(D3DTS_PROJECTION, &MatZProjection);
 
@@ -126,11 +126,14 @@ void InitD3d9Device(HWND hWnd)
 	g_pD3d9Device->CreateOffscreenPlainSurface(512, 512, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &g_pD3d9Surface, NULL);
 
 	// --------- 从文件创建纹理表面
-	D3DXLoadSurfaceFromFile(g_pD3d9Surface, NULL, NULL, _T("D:\\TestSkin\\textwrap.bmp"), NULL, D3DX_DEFAULT, 0, NULL);
+	hRet = D3DXLoadSurfaceFromFile(g_pD3d9Surface, NULL, NULL, _T("D:\\TestSkin\\textwrap.bmp"), NULL, D3DX_DEFAULT, 0, NULL);
 }
 
 void Render()
 {
+	if (g_pD3d9Device == NULL)
+		return;
+
 	g_pD3d9Device->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
 	g_pD3d9Device->Clear(0, NULL, D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
 	g_pD3d9Device->BeginScene();
@@ -186,6 +189,6 @@ void CleanupD3d9()
 
 void RestoreSurfaces(HWND hWnd)
 {
-	CleanupD3d9();   
-	InitD3d9Device(hWnd);    
+	CleanupD3d9();
+	InitD3d9Device(hWnd);
 }
