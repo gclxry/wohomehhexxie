@@ -143,24 +143,33 @@ rendering_buffer SrcImgBuf;
 pixel_map DstMapImg;
 rendering_buffer DstImgBuf;
 
+LPDIRECT3DSURFACE9 g_psysSurface = NULL;
 void CRgnDlg::OnPaint(HDC hPaintDc)
 {
-	if (m_PointList.size() > 0)// && IS_SAVE_HANDLE(m_RgnBmpDc.GetSafeHdc()))
+	if (m_PointList.size() > 0 && IS_SAVE_HANDLE(m_RgnBmpDc.GetSafeHdc()))
 	{
-		CSysUnit::SetWindowToTransparence(m_hWnd, false);
+		//CSysUnit::SetWindowToTransparence(m_hWnd, false);
 
-		CRect WndRect = this->GetClientRect();
+		CRect WndRect = this->GetWindowRect();
 		POINT ptWinPos = {WndRect.left, WndRect.top};
 		POINT ptSrc = {0, 0};
 		SIZE sizeWindow = {WndRect.Width(), WndRect.Height()};
 
-
 		Render();
 
+		D3DLOCKED_RECT	lockedRect;
+		RECT rcSurface = {0, 0, WndRect.Width(), WndRect.Height()};
 
+		g_pD3d9Device->CreateOffscreenPlainSurface(WndRect.Width(), WndRect.Height(), 
+			D3DFMT_A8R8G8B8, D3DPOOL_SYSTEMMEM, &g_psysSurface, NULL);
+		g_pD3d9Device->GetRenderTargetData(g_pD3dTargetSurface, g_psysSurface);
+		g_psysSurface->LockRect(&lockedRect, &rcSurface, D3DLOCK_READONLY);
+		memcpy(m_RgnBmpDc.GetBits(), lockedRect.pBits, 4 * WndRect.Width() * WndRect.Height());
 
+		::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, m_RgnBmpDc.GetSafeHdc(), &ptSrc, 0, &m_Blend, ULW_ALPHA);
 
-
+		g_psysSurface->UnlockRect();
+		g_psysSurface->Release();
 
 
 		if (m_dbFactor >= 1.0)
@@ -174,8 +183,6 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 
 	// 设置窗体的透明特性
 	CSysUnit::SetWindowToTransparence(m_hWnd, true);
-
-
 
 	CRect WndRect = this->GetClientRect();
 	CBitmapDC BmpDc;
@@ -335,10 +342,11 @@ void CRgnDlg::DUI_OnLButtonUp(WPARAM wParam, LPARAM lParam)
 
 //////////////////////////////////////////////////////////////////////////
 
+		m_RgnBmpDc.Create(WndRect.Width(), WndRect.Height());
 		InitD3d9Device(m_hWnd);
 
 
-/*		m_RgnBmpDc.Create(WndRect.Width(), WndRect.Height());
+/*		
 
 		if (IS_SAVE_HANDLE(m_RgnBmpDc.GetSafeHdc()))
 		{
