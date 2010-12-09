@@ -2,7 +2,7 @@
 #include "StdAfx.h"
 #include "RgnDlg.h"
 #include "AggRender.h"
-#include "DX9Render.h"
+#include "TestDx9.h"
 
 #define __base_super					CHighEfficiencyDlg
 
@@ -155,35 +155,18 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 		POINT ptSrc = {0, 0};
 		SIZE sizeWindow = {WndRect.Width(), WndRect.Height()};
 
-		g_pD3D->GetDeviceCaps()
-
-
-		//获取后台缓冲区的指针
-		ddscaps.dwCaps = DDSCAPS_BACKBUFFER;
-		ddrval = lpDDSPrimary->GetAttachedSurface(&ddscaps, &lpDDSBack);
-		if( ddrval == DD_OK )
-		{
-			// 画出一些文本
-			if (lpDDSPrimary->GetDC(&hdc) == DD_OK) 
-			{
-				SetBkColor( hdc, RGB( 0, 0, 255 ) );
-				SetTextColor( hdc, RGB( 255, 255, 0 ) );
-				TextOut( hdc, 0, 0, szFrontMsg, lstrlen(szFrontMsg) );
-				lpDDSPrimary->ReleaseDC(hdc);
-			}
-		}
 
 
 
-		Graphics MemDcGrap(m_RgnBmpDc.GetSafeHdc());
 
-		m_UiManager.OnPaintRgn(WndRect, &MemDcGrap);
+
+		Render();
 
 
 
 		if (m_dbFactor >= 1.0)
 		{
-			Cleanup();
+			CleanupD3d9();
 			m_PointList.clear();
 			this->RedrawWindow();
 		}
@@ -367,7 +350,9 @@ void CRgnDlg::DUI_OnLButtonUp(WPARAM wParam, LPARAM lParam)
 		CAKTrajectory::EllipseMidPoint(CPoint(WndRect.Width() / 2, 0), WndRect.Width() / 2, WndRect.Width() / 5, EGT_TOP, m_PointList);
 
 //////////////////////////////////////////////////////////////////////////
-		InitD3D(m_hWnd);
+
+		InitD3d9Device(m_hWnd);
+
 /*		m_RgnBmpDc.Create(WndRect.Width(), WndRect.Height());
 
 		if (IS_SAVE_HANDLE(m_RgnBmpDc.GetSafeHdc()))
