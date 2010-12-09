@@ -10,6 +10,7 @@ extern LPDIRECT3DDEVICE9 g_pD3d9Device;
 extern LPDIRECT3DVERTEXBUFFER9 g_pVertexBuffer;
 extern LPDIRECT3DTEXTURE9 g_pTexture;
 extern IDirect3DSurface9 * g_pD3d9Surface;
+extern LPDIRECT3DSURFACE9 g_pD3dTargetSurface;
 
 
 void InitD3d9Device(HWND hWnd);

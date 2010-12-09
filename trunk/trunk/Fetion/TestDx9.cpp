@@ -6,7 +6,8 @@ LPDIRECT3D9 g_pD3d9 = NULL;
 LPDIRECT3DDEVICE9 g_pD3d9Device = NULL;
 LPDIRECT3DVERTEXBUFFER9 g_pVertexBuffer = NULL;
 LPDIRECT3DTEXTURE9 g_pTexture = NULL;
-IDirect3DSurface9 *g_pD3d9Surface = NULL; 
+IDirect3DSurface9 *g_pD3d9Surface = NULL;
+LPDIRECT3DSURFACE9 g_pD3dTargetSurface = NULL;
 
 #define RELEASE_COM_OBJECT(obj)					{if((obj) != NULL) {(obj)->Release(); (obj) = NULL;}}
 // 顶点格式
@@ -72,6 +73,20 @@ void InitD3d9Device(HWND hWnd)
 
 	HRESULT hRet = g_pD3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL,
 		hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &D3dPp, &g_pD3d9Device);
+
+
+
+	if (FAILED(g_pD3d9Device->CreateRenderTarget(ClientRect.Width(), ClientRect.Height(), 
+		D3DFMT_A8R8G8B8, D3DMULTISAMPLE_NONE, 0, false, &g_pD3dTargetSurface, NULL)))
+	{
+		return;
+	}
+	g_pD3d9Device->SetRenderTarget(0, g_pD3dTargetSurface);
+
+
+
+
+
 
 	// 初始化绘图内容
 	InitDrawGraphics();
@@ -183,6 +198,7 @@ void CleanupD3d9()
 	RELEASE_COM_OBJECT(g_pVertexBuffer);
 	RELEASE_COM_OBJECT(g_pTexture);
 	RELEASE_COM_OBJECT(g_pD3d9Surface);
+	RELEASE_COM_OBJECT(g_pD3dTargetSurface);
 	RELEASE_COM_OBJECT(g_pD3d9);
 	RELEASE_COM_OBJECT(g_pD3d9Device);
 }
