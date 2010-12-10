@@ -45,10 +45,21 @@ void CDxD3DRender::CreateTextureFromHBITMAP(HBITMAP hBmp)
 	if (m_pTexture != NULL)
 	{
 		D3DLOCKED_RECT LockedRect;
-		RECT rcSurface = {0, 0, m_RenderRect.Width(), m_RenderRect.Height()};
+		hRet = m_pTexture->LockRect(0, &LockedRect, NULL, D3DLOCK_READONLY);
 
-		hRet = m_pTexture->LockRect(0, &LockedRect, &rcSurface, D3DLOCK_READONLY);
-		memcpy(LockedRect.pBits, m_RgnBmpDc.GetBits(), 4 * m_RenderRect.Width() * m_RenderRect.Height());
+		// 拷贝内存数据到纹理
+		//memcpy(LockedRect.pBits, m_RgnBmpDc.GetBits(), 4 * m_RenderRect.Width() * m_RenderRect.Height());
+		DWORD* pDestData = (DWORD*)LockedRect.pBits;
+		DWORD *pSrcData = m_RgnBmpDc.GetBits();
+		for (int nLine = 0; nLine < m_RenderRect.Height(); nLine++)
+		{
+			// 拷贝一行
+			memcpy(pDestData, pSrcData, m_RenderRect.Width() * sizeof(DWORD));
+			// 跳过已经读入的数据
+			pDestData += (LockedRect.Pitch / 4);
+			pSrcData += m_RenderRect.Width();
+		}
+
 		hRet = m_pTexture->UnlockRect(0);
 	}
 }
@@ -58,25 +69,26 @@ void CDxD3DRender::InitDrawGraphics()
 /*	// --------- 从文件创建纹理
 	HRESULT hRet = D3DXCreateTextureFromFileEx(
 		m_pD3d9Device, 
-		_T("D:\\TestSkin\\textwrap.bmp"), 
+		//_T("D:\\TestSkin\\textwrap.bmp"), 
+		_T("D:\\TestSkin\\Finish.png"), 
 		m_RenderRect.Width(), m_RenderRect.Height(),
-		D3DX_DEFAULT, D3DUSAGE_RENDERTARGET, 
-		D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT,    
+		D3DX_DEFAULT, D3DUSAGE_RENDERTARGET,
+		D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT,
 		D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL,
 		&m_pTexture);*/
 
 	// 渲染顶点样例
 	MY_VERTEX_TYPE DemoVertices[] =
 	{
-		{ -5.0f, 5.0f, -5.0f, 0, 0, -1, 0, 0 },
-		{ 5.0f, 5.0f, -5.0f, 0, 0, -1, 1, 0 },
-		{ -5.0f, -5.0f, -5.0f, 0, 0, -1, 0, 1 },
-		{ 5.0f, -5.0f, -5.0f, 0, 0, -1, 1, 1 },
+		{ -5.0f, 5.0f, -5.0f, 0, 0, -1, 1, 1 },
+		{ 5.0f, 5.0f, -5.0f, 0, 0, -1, 0, 1 },
+		{ -5.0f, -5.0f, -5.0f, 0, 0, -1, 1, 0 },
+		{ 5.0f, -5.0f, -5.0f, 0, 0, -1, 0, 0 },
 	};
 
 	// 创建一个能容纳24个顶点数据的buffer
 	m_pD3d9Device->CreateVertexBuffer(24 * sizeof(MY_VERTEX_TYPE), 0,
-		CUSTOMFVF, D3DPOOL_MANAGED, &m_pVertexBuffer, NULL);
+		CUSTOMFVF, D3DPOOL_DEFAULT, &m_pVertexBuffer, NULL);
 
 	// 设置顶点数据
 	VOID* pVoid = NULL;    
@@ -94,10 +106,8 @@ void CDxD3DRender::InitD3d9Device(HWND hWnd, HBITMAP hBmp)
 	::GetClientRect(hWnd, m_RenderRect);
 
 	m_RgnBmpDc.Create(m_RenderRect.Width(), m_RenderRect.Height());
-
 	if (m_RgnBmpDc.GetSafeHdc() == NULL)
 		return;
-
 
 //////////////////////////////////////////////////////////////////////////
 	// 初始化D3d设备
@@ -124,10 +134,6 @@ void CDxD3DRender::InitD3d9Device(HWND hWnd, HBITMAP hBmp)
 
 	m_pD3d9Device->CreateOffscreenPlainSurface(m_RenderRect.Width(), m_RenderRect.Height(), 
 		D3DFMT_A8R8G8B8, D3DPOOL_SYSTEMMEM, &m_pSysSurface, NULL);
-
-
-
-
 
 
 	// 初始化绘图内容
@@ -184,10 +190,9 @@ void CDxD3DRender::InitD3d9Device(HWND hWnd, HBITMAP hBmp)
 HDC CDxD3DRender::GetD3dRenderTargetData()
 {
 	D3DLOCKED_RECT LockedRect;
-	RECT rcSurface = {0, 0, m_RenderRect.Width(), m_RenderRect.Height()};
 
 	m_pD3d9Device->GetRenderTargetData(m_pD3dTargetSurface, m_pSysSurface);
-	m_pSysSurface->LockRect(&LockedRect, &rcSurface, D3DLOCK_READONLY);
+	m_pSysSurface->LockRect(&LockedRect, NULL, D3DLOCK_READONLY);
 	memcpy(m_RgnBmpDc.GetBits(), LockedRect.pBits, 4 * m_RenderRect.Width() * m_RenderRect.Height());
 	m_pSysSurface->UnlockRect();
 
@@ -229,8 +234,8 @@ void CDxD3DRender::D3dRender()
 	m_pD3d9Device->SetStreamSource(0, m_pVertexBuffer, 0, sizeof(MY_VERTEX_TYPE));
 
 	// 设置过滤器（过滤器是一种Direct3D用它来帮助变形图片的平滑技术），第三个参数即过滤器
-	m_pD3d9Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR); 
-	m_pD3d9Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);   
+	m_pD3d9Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	m_pD3d9Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
 
 	// 设置纹理
 	m_pD3d9Device->SetTexture(0, m_pTexture);
