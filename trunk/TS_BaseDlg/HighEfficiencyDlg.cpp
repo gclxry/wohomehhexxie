@@ -9,6 +9,7 @@ CHighEfficiencyDlg::CHighEfficiencyDlg(HINSTANCE hInstance, HWND hParentWnd, int
 : CDirectUiDlg(hInstance, hParentWnd, nIconId)
 {
 	m_pUiManager = NULL;
+	m_bIsMistDlg = false;
 }
 
 CHighEfficiencyDlg::~CHighEfficiencyDlg(void)
@@ -86,6 +87,9 @@ LRESULT CHighEfficiencyDlg::OnLButtonDown(WPARAM wParam, LPARAM lParam)
 		{
 			if (!IsSetBfStyle(BFS_MAX_WND))
 			{
+				if (m_bIsMistDlg)
+					MistDown();
+
 				::PostMessage(m_hWnd, WM_NCLBUTTONDOWN, HTCAPTION, lParam);
 			}
 		}
@@ -105,7 +109,18 @@ LRESULT CHighEfficiencyDlg::OnLButtonUp(WPARAM wParam, LPARAM lParam)
 		m_pUiManager->OnLButtonUp(nFlags, point);
 	}
 
+	if (m_bIsMistDlg)
+		MistUp();
+
 	return 1;
+}
+
+LRESULT CHighEfficiencyDlg::OnExitSizeMove(WPARAM wParam, LPARAM lParam)
+{
+	if (m_bIsMistDlg)
+		MistUp();
+
+	return __base_super::OnExitSizeMove(wParam, lParam);
 }
 
 LRESULT CHighEfficiencyDlg::OnLButtonDblClk(WPARAM wParam, LPARAM lParam)
@@ -116,6 +131,10 @@ LRESULT CHighEfficiencyDlg::OnLButtonDblClk(WPARAM wParam, LPARAM lParam)
 		CPoint point(LOWORD(lParam), HIWORD(lParam));
 		m_pUiManager->OnLButtonDblClk(nFlags, point);
 	}
+
+	if (m_bIsMistDlg)
+		MistUp();
+
 	return 1;
 }
 
@@ -206,8 +225,6 @@ void CHighEfficiencyDlg::OnCreate()
 	{
 		// 初始化引擎
 		m_pUiManager->InitManager(this);
-		// 设置默认大小
-		this->CenterWindow(260, 480);
 	}
 }
 
@@ -319,6 +336,11 @@ void CHighEfficiencyDlg::OnPaint(HDC hPaintDc)
 			if (hMemoryBitmap != NULL)
 			{
 				::SelectObject(hMemoryDC, hMemoryBitmap);
+
+				Graphics DoGrap(hMemoryDC);
+
+				SolidBrush brush(Color(255, 0, 0, 255));
+				DoGrap.FillRectangle(&brush, 0, 0, WndRect.Width(), WndRect.Height());
 
 				// 开始画图
 				m_pUiManager->OnPaint(hMemoryDC, WndRect);

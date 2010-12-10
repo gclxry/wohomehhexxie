@@ -32,4 +32,5 @@ protected:
 	HBITMAP m_hBmp;
 	HDC m_hDC;
 	unsigned char* m_pBits;
+	CSize m_DcSize;
 };

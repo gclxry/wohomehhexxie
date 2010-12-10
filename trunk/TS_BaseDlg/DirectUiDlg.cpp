@@ -49,6 +49,8 @@ CDirectUiDlg::CDirectUiDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 	ms_hInstance = hInstance;
 	m_nIconId = nIconId;
 	m_strWindowText = _T("飞信");
+	m_bIsMoveMistDlg = false;
+	m_WndRect.SetRectEmpty();
 
 	AddBfStyle(BFS_HAVE_MIN_BTN | BFS_HAVE_MAX_BTN | BFS_FIRST_IN_WND | BFS_CAN_DRAW);
 }
@@ -100,9 +102,11 @@ void CDirectUiDlg::EndThisDialog()
 	if (IS_SAVE_HANDLE(m_hWnd))
 	{
 		::DestroyWindow(m_hWnd);
+		m_hWnd = NULL;
 	}
 
 	m_bCoerceEnd = true;
+	m_WndRect.SetRectEmpty();
 }
 
 bool CDirectUiDlg::CreateDlg()
@@ -112,6 +116,15 @@ bool CDirectUiDlg::CreateDlg()
 
 	// 执行应用程序初始化:
 	return InitInstance();
+}
+
+void CDirectUiDlg::MoveWindow(CRect WndRect)
+{
+	if (IS_SAVE_HANDLE(m_hWnd))
+	{
+		::MoveWindow(m_hWnd, WndRect.left, WndRect.top, WndRect.Width(), WndRect.Height(), TRUE);
+		::UpdateWindow(m_hWnd);
+	}
 }
 
 ATOM CDirectUiDlg::RegisterBfoClass()
@@ -138,9 +151,11 @@ ATOM CDirectUiDlg::RegisterBfoClass()
 bool CDirectUiDlg::InitInstance()
 {
 	DWORD dwStyle = WS_OVERLAPPEDWINDOW;
+	if (m_bIsMoveMistDlg)
+		dwStyle = WS_BORDER;
 
 	m_hWnd = ::CreateWindowEx(0, m_strWindowClass, m_strWindowText, dwStyle,
-		CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, m_hParent, NULL, ms_hInstance, this);
+		m_WndRect.left, m_WndRect.top, m_WndRect.Width(), m_WndRect.Height(), m_hParent, NULL, ms_hInstance, this);
 
 	if (!m_hWnd)
 		return false;
@@ -191,6 +206,11 @@ LRESULT CDirectUiDlg::OnLButtonDown(WPARAM wParam, LPARAM lParam)
 LRESULT CDirectUiDlg::OnLButtonUp(WPARAM wParam, LPARAM lParam)
 {
 	return ::DefWindowProc(m_hWnd, WM_LBUTTONUP, wParam, lParam);
+}
+
+LRESULT CDirectUiDlg::OnNcLButtonUp(WPARAM wParam, LPARAM lParam)
+{
+	return ::DefWindowProc(m_hWnd, WM_NCLBUTTONUP, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnLButtonDblClk(WPARAM wParam, LPARAM lParam)
@@ -295,6 +315,9 @@ LRESULT CDirectUiDlg::WndProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 	case WM_LBUTTONUP:
 		return OnLButtonUp(wParam, lParam);
+
+	case WM_NCLBUTTONUP:
+		return OnNcLButtonUp(wParam, lParam);
 
 	case WM_LBUTTONDBLCLK:
 		return OnLButtonDblClk(wParam, lParam);

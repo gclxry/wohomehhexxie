@@ -349,6 +349,26 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="MistDlg"
+				>
+				<File
+					RelativePath=".\MistDlg.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MistDlg.h"
+					>
+				</File>
+				<File
+					RelativePath=".\MoveMistDlg.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\MoveMistDlg.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
