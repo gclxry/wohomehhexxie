@@ -8,7 +8,7 @@
 #pragma warning( default : 4996 )
 
 extern LPDIRECT3D9         g_pD3D; // Used to create the D3DDevice
-extern LPDIRECT3DDEVICE9   g_pd3dDevice; // Our rendering g_pD3d9Device
+extern LPDIRECT3DDEVICE9   g_pd3dDevice; // Our rendering m_pD3d9Device
 
 
 //-----------------------------------------------------------------------------
