@@ -12,14 +12,15 @@ public:
 	CDxD3DRender();
 	virtual ~CDxD3DRender();
 
+	bool IsInit() { return (m_pD3d9 != NULL); };
 	void InitD3d9Device(HWND hWnd, HBITMAP hBmp);
 	void D3dRender();
 	void CleanupD3d9();
 
 	HDC GetD3dRenderTargetData();
-	void ReleaseD3dRenderTargetData();
 
 private:
+	void CreateTextureFromHBITMAP(HBITMAP hBmp);
 	void InitDrawGraphics();
 
 private:
@@ -27,7 +28,6 @@ private:
 	LPDIRECT3DDEVICE9 m_pD3d9Device;
 	LPDIRECT3DVERTEXBUFFER9 m_pVertexBuffer;
 	LPDIRECT3DTEXTURE9 m_pTexture;
-	IDirect3DSurface9 *m_pD3d9Surface;
 	LPDIRECT3DSURFACE9 m_pD3dTargetSurface;
 	LPDIRECT3DSURFACE9 m_pSysSurface;
 

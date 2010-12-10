@@ -21,7 +21,7 @@ public:
     virtual ~CBitmapDC();
 
 	void Delete();
-	void Create(int nWidth, int nHeight);
+	void Create(int nWidth, int nHeight, bool bIsAlign = false);
 
 	HDC GetSafeHdc(void) { return m_hDC; };
 	HBITMAP GetBmpHandle(void) { return m_hBmp; };
