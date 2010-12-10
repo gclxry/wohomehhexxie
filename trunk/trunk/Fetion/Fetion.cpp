@@ -3,6 +3,7 @@
 #include "Fetion.h"
 #include "LogonDlgBusiness.h"
 #include "RgnDlg.h"
+#include "MistDlg.h"
 
 
 int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
@@ -20,8 +21,11 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 //	LogonDlg.ShowWindow();
 
 	// RGN测试
-	CRgnDlg *pRgnDlg = new CRgnDlg(hInstance, NULL, IDI_FETION);
-	pRgnDlg->ShowWindow();
+//	CRgnDlg *pRgnDlg = new CRgnDlg(hInstance, NULL, IDI_FETION);
+//	pRgnDlg->ShowWindow();
+
+	CMistDlg *pMistDlg = new CMistDlg(hInstance, NULL, IDI_FETION);;
+	pMistDlg->ShowWindow();
 
 
 	// 主消息循环:
@@ -36,7 +40,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 			DispatchMessage(&msg);
 		}
 	}
-	delete pRgnDlg;
+//	delete pRgnDlg;
+	delete pMistDlg;
 
 	// 释放资源
 	CUiMethod::UnInitGdiPlus();

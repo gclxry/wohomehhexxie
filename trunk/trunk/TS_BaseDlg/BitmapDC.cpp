@@ -18,6 +18,7 @@ CBitmapDC::CBitmapDC()
     m_pBits = NULL;
     m_hBmp = NULL;
 	m_hDC = NULL;
+	m_DcSize.cx = m_DcSize.cy = 0;
 }
 
 CBitmapDC::~CBitmapDC()
@@ -27,37 +28,46 @@ CBitmapDC::~CBitmapDC()
 
 void CBitmapDC::Create(int nWidth, int nHeight, bool bIsAlign)
 {
-	Delete();
+	if (nWidth <= 0 || nHeight<= 0)
+		return;
 
-	BITMAPINFOHEADER bih;
-	memset(&bih, 0, sizeof(BITMAPINFOHEADER));
-	bih.biSize = sizeof(BITMAPINFOHEADER);
-	bih.biHeight = nHeight;
-	bih.biPlanes = 1;
-	bih.biBitCount = 32;
-	bih.biCompression = BI_RGB;
-
-	if (bIsAlign)
-		bih.biWidth = ((((int)nWidth * 8) + 31) & ~31) >> 3;
-	else
-		bih.biWidth = nWidth;
-	
-	m_hDC = CreateCompatibleDC(NULL);
-	if (m_hDC != NULL)
+	if (nWidth != m_DcSize.cx || nHeight != m_DcSize.cy)
 	{
-		m_hBmp	= ::CreateDIBSection(GetSafeHdc(), (BITMAPINFO*)&bih,
-			DIB_RGB_COLORS, (void**)(&m_pBits), NULL, 0);
+		Delete();
+		
+		m_DcSize.cx = nWidth;
+		m_DcSize.cy = nHeight;
 
-		if (m_hBmp != NULL && m_pBits != NULL)
-		{
-			SelectObject(m_hDC, m_hBmp);
-		}
+		BITMAPINFOHEADER bih;
+		memset(&bih, 0, sizeof(BITMAPINFOHEADER));
+		bih.biSize = sizeof(BITMAPINFOHEADER);
+		bih.biHeight = nHeight;
+		bih.biPlanes = 1;
+		bih.biBitCount = 32;
+		bih.biCompression = BI_RGB;
+
+		if (bIsAlign)
+			bih.biWidth = ((((int)nWidth * 8) + 31) & ~31) >> 3;
 		else
+			bih.biWidth = nWidth;
+
+		m_hDC = CreateCompatibleDC(NULL);
+		if (m_hDC != NULL)
 		{
-			DeleteDC(m_hDC);
-			m_pBits = NULL;
-			m_hBmp = NULL;
-			m_hDC = NULL;
+			m_hBmp	= ::CreateDIBSection(GetSafeHdc(), (BITMAPINFO*)&bih,
+				DIB_RGB_COLORS, (void**)(&m_pBits), NULL, 0);
+
+			if (m_hBmp != NULL && m_pBits != NULL)
+			{
+				SelectObject(m_hDC, m_hBmp);
+			}
+			else
+			{
+				DeleteDC(m_hDC);
+				m_pBits = NULL;
+				m_hBmp = NULL;
+				m_hDC = NULL;
+			}
 		}
 	}
 }

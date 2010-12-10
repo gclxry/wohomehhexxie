@@ -46,7 +46,6 @@ public:
 	static HINSTANCE ms_hInstance;
 
 protected:
-
 	// ¸¸´°¿Ú¾ä±ú
 	HWND m_hParent;
 	// ´°¿ÚÊôĞÔ

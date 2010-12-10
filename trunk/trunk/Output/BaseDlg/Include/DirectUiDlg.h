@@ -39,8 +39,12 @@ public:
 	// 模式对话框的现实方式
 	int DoModal();
 
+	void SetWindowPos(CRect WndRect) { m_WndRect = WndRect; };
+
 	// 非模式显示对话框
 	void ShowWindow();
+	void CloseWindow() { EndThisDialog(); };
+	void MoveWindow(CRect WndRect);
 
 	// 对话框属性设置和判断
 	bool IsSetBfStyle(DWORD dwStyle) { return (m_dwWndStyle & dwStyle); };
@@ -63,6 +67,7 @@ protected:
 	virtual LRESULT OnMouseMove(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnLButtonDown(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnLButtonUp(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnNcLButtonUp(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnLButtonDblClk(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnGetMinMaxInfo(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnNcHitTest(WPARAM wParam, LPARAM lParam);
@@ -88,4 +93,6 @@ protected:
 	int m_nIconId;
 	// 是否冻结窗口
 	bool m_bIsFreeze;
+	bool m_bIsMoveMistDlg;
+	CRect m_WndRect;
 };
