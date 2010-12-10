@@ -49,13 +49,14 @@ void CDxD3DRender::CreateTextureFromHBITMAP(HBITMAP hBmp)
 
 		// 拷贝内存数据到纹理
 		//memcpy(LockedRect.pBits, m_RgnBmpDc.GetBits(), 4 * m_RenderRect.Width() * m_RenderRect.Height());
-		DWORD* pDestData = (DWORD*)LockedRect.pBits;
+		DWORD *pDestData = (DWORD*)LockedRect.pBits;
 		DWORD *pSrcData = m_RgnBmpDc.GetBits();
 		for (int nLine = 0; nLine < m_RenderRect.Height(); nLine++)
 		{
 			// 拷贝一行
 			memcpy(pDestData, pSrcData, m_RenderRect.Width() * sizeof(DWORD));
-			// 跳过已经读入的数据
+			
+			// 读取下一行数据
 			pDestData += (LockedRect.Pitch / 4);
 			pSrcData += m_RenderRect.Width();
 		}
@@ -80,10 +81,10 @@ void CDxD3DRender::InitDrawGraphics()
 	// 渲染顶点样例
 	MY_VERTEX_TYPE DemoVertices[] =
 	{
-		{ -5.0f, 5.0f, -5.0f, 0, 0, -1, 1, 1 },
-		{ 5.0f, 5.0f, -5.0f, 0, 0, -1, 0, 1 },
-		{ -5.0f, -5.0f, -5.0f, 0, 0, -1, 1, 0 },
-		{ 5.0f, -5.0f, -5.0f, 0, 0, -1, 0, 0 },
+		{ -5.0f, 5.0f, -0.0f, 0, 0, -1, 1, 1 },
+		{ 5.0f, 5.0f, -0.0f, 0, 0, -1, 0, 1 },
+		{ -5.0f, -5.0f, -0.0f, 0, 0, -1, 1, 0 },
+		{ 5.0f, -5.0f, -0.0f, 0, 0, -1, 0, 0 },
 	};
 
 	// 创建一个能容纳24个顶点数据的buffer
@@ -156,7 +157,7 @@ void CDxD3DRender::InitD3d9Device(HWND hWnd, HBITMAP hBmp)
 	// 视觉改变矩阵
 	D3DXMATRIX MatView;
 	// 摄像机点（眼球位置）
-	D3DXVECTOR3 CameraVct(0.0f, 0.0f, -19.5f);
+	D3DXVECTOR3 CameraVct(0.0f, 0.0f, -12.0f);
 	// 观察点，目标位置向量
 	D3DXVECTOR3 LookatVct(0.0f, 0.0f, 0.0f);
 	// 当前世界坐标系向上方向向量
@@ -226,7 +227,10 @@ void CDxD3DRender::D3dRender()
 	// 参数三：绕着X轴旋转角度（单位弧度）
 	// 参数四：绕着Z轴旋转角度（单位弧度）
 	// 这个矩阵的变换顺序是先绕着Z轴旋转，接着是绕着X轴旋转，最后是绕着Y轴旋转。这些都是相对于物体的本地坐标系来说的
-	D3DXMatrixRotationYawPitchRoll(&MatRotateX, sfIndex, sfIndex / (float)4.0, sfIndex / (float)4.0);
+	//D3DXMatrixRotationYawPitchRoll(&MatRotateX, sfIndex, sfIndex / (float)4.0, sfIndex / (float)4.0);
+	//D3DXMatrixTranslation(&MatRotateX,0,0,5);
+	::D3DXMatrixRotationY(&MatRotateX, sfIndex / (float)4.0);
+	//D3DXMatrixTranslation(&MatRotateX,0,0,-5);
 
 	// 设置世界坐标
 	m_pD3d9Device->SetTransform(D3DTS_WORLDMATRIX(0), &MatRotateX);
