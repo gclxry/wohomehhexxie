@@ -1,6 +1,7 @@
 
 #pragma once
 #include "Fetion.h"
+#include "TestDx9.h"
 
 typedef std::vector<CResImage*> RES_IMAGE_LIST;
 
@@ -38,7 +39,8 @@ protected:
 
 	// Ðý×ªÓÃDC
 	CBitmapDC m_RgnBmpDc;
-	HGLRC m_hRC;
+
+	CDxD3DRender m_DxD3d;
 
 private:
 	CBfNormalGraduatedButton *m_pZhuanBtn;

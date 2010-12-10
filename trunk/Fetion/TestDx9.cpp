@@ -2,17 +2,12 @@
 #include "stdafx.h"
 #include "TestDx9.h"
 
-LPDIRECT3D9 g_pD3d9 = NULL;
-LPDIRECT3DDEVICE9 g_pD3d9Device = NULL;
-LPDIRECT3DVERTEXBUFFER9 g_pVertexBuffer = NULL;
-LPDIRECT3DTEXTURE9 g_pTexture = NULL;
-IDirect3DSurface9 *g_pD3d9Surface = NULL;
-LPDIRECT3DSURFACE9 g_pD3dTargetSurface = NULL;
 
 #define RELEASE_COM_OBJECT(obj)					{if((obj) != NULL) {(obj)->Release(); (obj) = NULL;}}
 // 顶点格式
 #define CUSTOMFVF								(D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1)
 
+// 自定义顶点格式
 struct MY_VERTEX_TYPE
 {
 	FLOAT X, Y, Z;
@@ -20,18 +15,36 @@ struct MY_VERTEX_TYPE
 	FLOAT U, V;
 };
 
-void InitDrawGraphics()
+CDxD3DRender::CDxD3DRender()
+{
+	m_pD3d9 = NULL;
+	m_pD3d9Device = NULL;
+	m_pVertexBuffer = NULL;
+	m_pTexture = NULL;
+	m_pD3d9Surface = NULL;
+	m_pD3dTargetSurface = NULL;
+	m_pSysSurface = NULL;
+
+	m_RenderRect.SetRectEmpty();
+}
+
+CDxD3DRender::~CDxD3DRender()
+{
+
+}
+
+void CDxD3DRender::InitDrawGraphics()
 {
 	// --------- 从文件创建纹理
 	HRESULT hRet = D3DXCreateTextureFromFileEx(
-		g_pD3d9Device, 
+		m_pD3d9Device, 
 		_T("D:\\TestSkin\\textwrap.bmp"), 
-		512,
-		512, 
+		m_RenderRect.Width(),
+		m_RenderRect.Height(),
 		D3DX_DEFAULT, D3DUSAGE_RENDERTARGET, 
 		D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT,    
 		D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL,
-		&g_pTexture);
+		&m_pTexture);
 
 	// 渲染顶点样例
 	MY_VERTEX_TYPE DemoVertices[] =
@@ -43,24 +56,32 @@ void InitDrawGraphics()
 	};
 
 	// 创建一个能容纳24个顶点数据的buffer
-	hRet = g_pD3d9Device->CreateVertexBuffer(24 * sizeof(MY_VERTEX_TYPE), 0,
-		CUSTOMFVF, D3DPOOL_MANAGED, &g_pVertexBuffer, NULL);
+	hRet = m_pD3d9Device->CreateVertexBuffer(24 * sizeof(MY_VERTEX_TYPE), 0,
+		CUSTOMFVF, D3DPOOL_MANAGED, &m_pVertexBuffer, NULL);
 
 	// 设置顶点数据
 	VOID* pVoid = NULL;    
-	g_pVertexBuffer->Lock(0, 0, (void**)&pVoid, 0);
+	m_pVertexBuffer->Lock(0, 0, (void**)&pVoid, 0);
 	memcpy(pVoid, DemoVertices, sizeof(DemoVertices));
-	g_pVertexBuffer->Unlock();
+	m_pVertexBuffer->Unlock();
 }
 
-void InitD3d9Device(HWND hWnd)
+void CDxD3DRender::InitD3d9Device(HWND hWnd, HBITMAP hBmp)
 {
-	CRect ClientRect;
-	::GetClientRect(hWnd, ClientRect);
+	if (!::IsWindow(hWnd))
+		return;
+
+	m_RenderRect.SetRectEmpty();
+	::GetClientRect(hWnd, m_RenderRect);
+
+	m_RgnBmpDc.Create(m_RenderRect.Width(), m_RenderRect.Height());
+
+	if (m_RgnBmpDc.GetSafeHdc() == NULL)
+		return;
 
 //////////////////////////////////////////////////////////////////////////
 	// 初始化D3d设备
-	g_pD3d9 = Direct3DCreate9(D3D_SDK_VERSION);
+	m_pD3d9 = Direct3DCreate9(D3D_SDK_VERSION);
 
 	D3DPRESENT_PARAMETERS D3dPp;
 	ZeroMemory(&D3dPp, sizeof(D3dPp));
@@ -68,20 +89,20 @@ void InitD3d9Device(HWND hWnd)
 	D3dPp.SwapEffect = D3DSWAPEFFECT_DISCARD;
 	D3dPp.hDeviceWindow = hWnd;
 	D3dPp.BackBufferFormat = D3DFMT_X8R8G8B8;
-	D3dPp.BackBufferWidth = ClientRect.Width();
-	D3dPp.BackBufferHeight = ClientRect.Height();
+	D3dPp.BackBufferWidth = m_RenderRect.Width();
+	D3dPp.BackBufferHeight = m_RenderRect.Height();
 
-	HRESULT hRet = g_pD3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL,
-		hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &D3dPp, &g_pD3d9Device);
+	HRESULT hRet = m_pD3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL,
+		hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &D3dPp, &m_pD3d9Device);
 
 
 
-	if (FAILED(g_pD3d9Device->CreateRenderTarget(ClientRect.Width(), ClientRect.Height(), 
-		D3DFMT_A8R8G8B8, D3DMULTISAMPLE_NONE, 0, false, &g_pD3dTargetSurface, NULL)))
+	if (FAILED(m_pD3d9Device->CreateRenderTarget(m_RenderRect.Width(), m_RenderRect.Height(), 
+		D3DFMT_A8R8G8B8, D3DMULTISAMPLE_NONE, 0, false, &m_pD3dTargetSurface, NULL)))
 	{
 		return;
 	}
-	g_pD3d9Device->SetRenderTarget(0, g_pD3dTargetSurface);
+	m_pD3d9Device->SetRenderTarget(0, m_pD3dTargetSurface);
 
 
 
@@ -95,11 +116,11 @@ void InitD3d9Device(HWND hWnd)
 	// 设置渲染状态
 
 	// 关闭光照效果
-	g_pD3d9Device->SetRenderState(D3DRS_LIGHTING, FALSE);
+	m_pD3d9Device->SetRenderState(D3DRS_LIGHTING, FALSE);
 	// 启用深度测试
-	g_pD3d9Device->SetRenderState(D3DRS_ZENABLE, TRUE);
+	m_pD3d9Device->SetRenderState(D3DRS_ZENABLE, TRUE);
 	// 不剔除任何面（D3DCULL_NONE：图片背面也渲染）
-	g_pD3d9Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+	m_pD3d9Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
 //////////////////////////////////////////////////////////////////////////
 	// 设置视觉矩阵（摄像机矩阵 D3DTS_VIEW）
@@ -115,7 +136,7 @@ void InitD3d9Device(HWND hWnd)
 	// 设置观察矩阵
 	D3DXMatrixLookAtLH(&MatView, &CameraVct, &LookatVct, &UpVct);
 	// 设置变换矩阵
-	g_pD3d9Device->SetTransform(D3DTS_VIEW, &MatView);
+	m_pD3d9Device->SetTransform(D3DTS_VIEW, &MatView);
 
 //////////////////////////////////////////////////////////////////////////
 	// 设置Z轴投影矩阵（透视矩阵 D3DTS_PROJECTION）
@@ -130,28 +151,48 @@ void InitD3d9Device(HWND hWnd)
 	// 参数四：近裁剪面位置Z值。
 	// 参数五：远裁剪面位置Z值。
 	D3DXMatrixPerspectiveFovLH(&MatZProjection, D3DXToRadian(45.0f),  
-		(FLOAT)ClientRect.Width() / (FLOAT)ClientRect.Height(), 0.0f, 100.0f);   
+		(FLOAT)m_RenderRect.Width() / (FLOAT)m_RenderRect.Height(), 0.0f, 100.0f);   
 
-	g_pD3d9Device->SetTransform(D3DTS_PROJECTION, &MatZProjection);
+	m_pD3d9Device->SetTransform(D3DTS_PROJECTION, &MatZProjection);
 
 	// 设置固定渲染管道的顶点格式
-	g_pD3d9Device->SetFVF(CUSTOMFVF);
+	m_pD3d9Device->SetFVF(CUSTOMFVF);
 
 	// 取得用于渲染的纹理表面
-	g_pD3d9Device->CreateOffscreenPlainSurface(512, 512, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &g_pD3d9Surface, NULL);
+	m_pD3d9Device->CreateOffscreenPlainSurface(512, 512, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &m_pD3d9Surface, NULL);
 
 	// --------- 从文件创建纹理表面
-	hRet = D3DXLoadSurfaceFromFile(g_pD3d9Surface, NULL, NULL, _T("D:\\TestSkin\\textwrap.bmp"), NULL, D3DX_DEFAULT, 0, NULL);
+	hRet = D3DXLoadSurfaceFromFile(m_pD3d9Surface, NULL, NULL, _T("D:\\TestSkin\\textwrap.bmp"), NULL, D3DX_DEFAULT, 0, NULL);
 }
 
-void Render()
+HDC CDxD3DRender::GetD3dRenderTargetData()
 {
-	if (g_pD3d9Device == NULL)
+	D3DLOCKED_RECT LockedRect;
+	RECT rcSurface = {0, 0, m_RenderRect.Width(), m_RenderRect.Height()};
+
+	m_pD3d9Device->CreateOffscreenPlainSurface(m_RenderRect.Width(), m_RenderRect.Height(), 
+		D3DFMT_A8R8G8B8, D3DPOOL_SYSTEMMEM, &m_pSysSurface, NULL);
+	m_pD3d9Device->GetRenderTargetData(m_pD3dTargetSurface, m_pSysSurface);
+	m_pSysSurface->LockRect(&LockedRect, &rcSurface, D3DLOCK_READONLY);
+	memcpy(m_RgnBmpDc.GetBits(), LockedRect.pBits, 4 * m_RenderRect.Width() * m_RenderRect.Height());
+
+	return m_RgnBmpDc.GetSafeHdc();
+}
+
+void CDxD3DRender::ReleaseD3dRenderTargetData()
+{
+	m_pSysSurface->UnlockRect();
+	m_pSysSurface->Release();
+}
+
+void CDxD3DRender::D3dRender()
+{
+	if (m_pD3d9Device == NULL)
 		return;
 
-	g_pD3d9Device->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
-	g_pD3d9Device->Clear(0, NULL, D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
-	g_pD3d9Device->BeginScene();
+	m_pD3d9Device->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
+	m_pD3d9Device->Clear(0, NULL, D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
+	m_pD3d9Device->BeginScene();
 
 	static float sfSpeed = (float)0.02;
 	sfSpeed *= (float)1.0025;
@@ -173,38 +214,32 @@ void Render()
 	D3DXMatrixRotationYawPitchRoll(&MatRotateX, sfIndex, sfIndex / (float)4.0, sfIndex / (float)4.0);
 
 	// 设置世界坐标
-	g_pD3d9Device->SetTransform(D3DTS_WORLDMATRIX(0), &MatRotateX);
+	m_pD3d9Device->SetTransform(D3DTS_WORLDMATRIX(0), &MatRotateX);
 	// 绑定顶点缓冲到设备数据流
-	g_pD3d9Device->SetStreamSource(0, g_pVertexBuffer, 0, sizeof(MY_VERTEX_TYPE));
+	m_pD3d9Device->SetStreamSource(0, m_pVertexBuffer, 0, sizeof(MY_VERTEX_TYPE));
 
 	// 设置过滤器（过滤器是一种Direct3D用它来帮助变形图片的平滑技术），第三个参数即过滤器
-	g_pD3d9Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR); 
-	g_pD3d9Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);   
+	m_pD3d9Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR); 
+	m_pD3d9Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);   
 
 	// 设置纹理
-	g_pD3d9Device->SetTexture(0, g_pTexture);
+	m_pD3d9Device->SetTexture(0, m_pTexture);
 
 	// 设置3D渲染模式
 	// 从第0个点开始用 D3DPT_TRIANGLESTRIP 模式渲染2个三角形
-	g_pD3d9Device->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+	m_pD3d9Device->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 
-	g_pD3d9Device->EndScene();
+	m_pD3d9Device->EndScene();
 	// 交换前后缓冲
-	g_pD3d9Device->Present(NULL, NULL, NULL, NULL);
+	m_pD3d9Device->Present(NULL, NULL, NULL, NULL);
 }
 
-void CleanupD3d9()
+void CDxD3DRender::CleanupD3d9()
 {
-	RELEASE_COM_OBJECT(g_pVertexBuffer);
-	RELEASE_COM_OBJECT(g_pTexture);
-	RELEASE_COM_OBJECT(g_pD3d9Surface);
-	RELEASE_COM_OBJECT(g_pD3dTargetSurface);
-	RELEASE_COM_OBJECT(g_pD3d9);
-	RELEASE_COM_OBJECT(g_pD3d9Device);
-}
-
-void RestoreSurfaces(HWND hWnd)
-{
-	CleanupD3d9();
-	InitD3d9Device(hWnd);
+	RELEASE_COM_OBJECT(m_pVertexBuffer);
+	RELEASE_COM_OBJECT(m_pTexture);
+	RELEASE_COM_OBJECT(m_pD3d9Surface);
+	RELEASE_COM_OBJECT(m_pD3dTargetSurface);
+	RELEASE_COM_OBJECT(m_pD3d9Device);
+	RELEASE_COM_OBJECT(m_pD3d9);
 }

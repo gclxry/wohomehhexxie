@@ -4,19 +4,40 @@
 #include <atltypes.h>
 #include <d3d9.h>
 #include <d3dx9math.h>
+#include "BitmapDC.h"
 
-extern LPDIRECT3D9 g_pD3d9;
-extern LPDIRECT3DDEVICE9 g_pD3d9Device;
-extern LPDIRECT3DVERTEXBUFFER9 g_pVertexBuffer;
-extern LPDIRECT3DTEXTURE9 g_pTexture;
-extern IDirect3DSurface9 * g_pD3d9Surface;
-extern LPDIRECT3DSURFACE9 g_pD3dTargetSurface;
+class CDxD3DRender
+{
+public:
+	CDxD3DRender();
+	virtual ~CDxD3DRender();
+
+	void InitD3d9Device(HWND hWnd, HBITMAP hBmp);
+	void D3dRender();
+	void CleanupD3d9();
+
+	HDC GetD3dRenderTargetData();
+	void ReleaseD3dRenderTargetData();
+
+private:
+	void InitDrawGraphics();
+
+private:
+	LPDIRECT3D9 m_pD3d9;
+	LPDIRECT3DDEVICE9 m_pD3d9Device;
+	LPDIRECT3DVERTEXBUFFER9 m_pVertexBuffer;
+	LPDIRECT3DTEXTURE9 m_pTexture;
+	IDirect3DSurface9 *m_pD3d9Surface;
+	LPDIRECT3DSURFACE9 m_pD3dTargetSurface;
+	LPDIRECT3DSURFACE9 m_pSysSurface;
+
+	CRect m_RenderRect;
+	// Ðý×ªÓÃDC
+	CBitmapDC m_RgnBmpDc;
+};
 
 
-void InitD3d9Device(HWND hWnd);
-void Render();
-void CleanupD3d9();
-void RestoreSurfaces(HWND hWnd);
+
 
 
 /*

@@ -19,7 +19,6 @@ CRgnDlg::CRgnDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 	m_pMinButton = NULL;
 	m_pCloseButton = NULL;
 	m_pZhuanBtn = NULL;
-	m_hRC = NULL;
 
 	m_dbFactor = 0.0;
 
@@ -143,7 +142,6 @@ rendering_buffer SrcImgBuf;
 pixel_map DstMapImg;
 rendering_buffer DstImgBuf;
 
-LPDIRECT3DSURFACE9 g_psysSurface = NULL;
 void CRgnDlg::OnPaint(HDC hPaintDc)
 {
 	if (m_PointList.size() > 0 && IS_SAVE_HANDLE(m_RgnBmpDc.GetSafeHdc()))
@@ -155,26 +153,27 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 		POINT ptSrc = {0, 0};
 		SIZE sizeWindow = {WndRect.Width(), WndRect.Height()};
 
-		Render();
+		m_DxD3d.D3dRender();
 
-		D3DLOCKED_RECT	lockedRect;
+/*		D3DLOCKED_RECT	lockedRect;
 		RECT rcSurface = {0, 0, WndRect.Width(), WndRect.Height()};
 
-		g_pD3d9Device->CreateOffscreenPlainSurface(WndRect.Width(), WndRect.Height(), 
+		m_pD3d9Device->CreateOffscreenPlainSurface(WndRect.Width(), WndRect.Height(), 
 			D3DFMT_A8R8G8B8, D3DPOOL_SYSTEMMEM, &g_psysSurface, NULL);
-		g_pD3d9Device->GetRenderTargetData(g_pD3dTargetSurface, g_psysSurface);
+		m_pD3d9Device->GetRenderTargetData(m_pD3dTargetSurface, g_psysSurface);
 		g_psysSurface->LockRect(&lockedRect, &rcSurface, D3DLOCK_READONLY);
-		memcpy(m_RgnBmpDc.GetBits(), lockedRect.pBits, 4 * WndRect.Width() * WndRect.Height());
+		memcpy(m_RgnBmpDc.GetBits(), lockedRect.pBits, 4 * WndRect.Width() * WndRect.Height());*/
 
-		::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, m_RgnBmpDc.GetSafeHdc(), &ptSrc, 0, &m_Blend, ULW_ALPHA);
+		::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, m_DxD3d.GetD3dRenderTargetData(), &ptSrc, 0, &m_Blend, ULW_ALPHA);
+		m_DxD3d.ReleaseD3dRenderTargetData();
 
-		g_psysSurface->UnlockRect();
-		g_psysSurface->Release();
+//		g_psysSurface->UnlockRect();
+//		g_psysSurface->Release();
 
 
 		if (m_dbFactor >= 1.0)
 		{
-			CleanupD3d9();
+			m_DxD3d.CleanupD3d9();
 			m_PointList.clear();
 			this->RedrawWindow();
 		}
@@ -343,7 +342,7 @@ void CRgnDlg::DUI_OnLButtonUp(WPARAM wParam, LPARAM lParam)
 //////////////////////////////////////////////////////////////////////////
 
 		m_RgnBmpDc.Create(WndRect.Width(), WndRect.Height());
-		InitD3d9Device(m_hWnd);
+		m_DxD3d.InitD3d9Device(m_hWnd, NULL);
 
 
 /*		

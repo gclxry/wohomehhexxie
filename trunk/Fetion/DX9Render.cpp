@@ -5,7 +5,7 @@
 
 
 LPDIRECT3D9         g_pD3D = NULL; // Used to create the D3DDevice
-LPDIRECT3DDEVICE9   g_pd3dDevice = NULL; // Our rendering g_pD3d9Device
+LPDIRECT3DDEVICE9   g_pd3dDevice = NULL; // Our rendering m_pD3d9Device
 
 
 
@@ -32,10 +32,10 @@ HRESULT InitD3D( HWND hWnd )
     D3dPp.SwapEffect = D3DSWAPEFFECT_DISCARD;
     D3dPp.BackBufferFormat = D3DFMT_UNKNOWN;
 
-    // Create the Direct3D g_pD3d9Device. Here we are using the default adapter (most
+    // Create the Direct3D m_pD3d9Device. Here we are using the default adapter (most
     // systems only have one, unless they have multiple graphics hardware cards
     // installed) and requesting the HAL (which is saying we want the hardware
-    // g_pD3d9Device rather than a software one). Software vertex processing is 
+    // m_pD3d9Device rather than a software one). Software vertex processing is 
     // specified since we know it will work on all cards. On cards that support 
     // hardware vertex processing, though, we would see a big performance gain 
     // by specifying hardware vertex processing.
