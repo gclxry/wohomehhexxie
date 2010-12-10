@@ -37,9 +37,6 @@ protected:
 
 	CResImage m_TImage;
 
-	// Ðý×ªÓÃDC
-	CBitmapDC m_RgnBmpDc;
-
 	CDxD3DRender m_DxD3d;
 
 private:

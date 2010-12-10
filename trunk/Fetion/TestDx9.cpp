@@ -21,7 +21,6 @@ CDxD3DRender::CDxD3DRender()
 	m_pD3d9Device = NULL;
 	m_pVertexBuffer = NULL;
 	m_pTexture = NULL;
-	m_pD3d9Surface = NULL;
 	m_pD3dTargetSurface = NULL;
 	m_pSysSurface = NULL;
 
@@ -33,18 +32,38 @@ CDxD3DRender::~CDxD3DRender()
 
 }
 
+void CDxD3DRender::CreateTextureFromHBITMAP(HBITMAP hBmp)
+{
+	if (hBmp == NULL || m_RgnBmpDc.GetBits() == NULL)
+		return;
+
+	GetBitmapBits(hBmp, 4 * m_RenderRect.Width() * m_RenderRect.Height(), m_RgnBmpDc.GetBits());
+
+	HRESULT hRet = m_pD3d9Device->CreateTexture(m_RenderRect.Width(), m_RenderRect.Height(),
+		1, D3DUSAGE_DYNAMIC, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &m_pTexture, NULL);
+
+	if (m_pTexture != NULL)
+	{
+		D3DLOCKED_RECT LockedRect;
+		RECT rcSurface = {0, 0, m_RenderRect.Width(), m_RenderRect.Height()};
+
+		hRet = m_pTexture->LockRect(0, &LockedRect, &rcSurface, D3DLOCK_READONLY);
+		memcpy(LockedRect.pBits, m_RgnBmpDc.GetBits(), 4 * m_RenderRect.Width() * m_RenderRect.Height());
+		hRet = m_pTexture->UnlockRect(0);
+	}
+}
+
 void CDxD3DRender::InitDrawGraphics()
 {
-	// --------- 从文件创建纹理
+/*	// --------- 从文件创建纹理
 	HRESULT hRet = D3DXCreateTextureFromFileEx(
 		m_pD3d9Device, 
 		_T("D:\\TestSkin\\textwrap.bmp"), 
-		m_RenderRect.Width(),
-		m_RenderRect.Height(),
+		m_RenderRect.Width(), m_RenderRect.Height(),
 		D3DX_DEFAULT, D3DUSAGE_RENDERTARGET, 
 		D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT,    
 		D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL,
-		&m_pTexture);
+		&m_pTexture);*/
 
 	// 渲染顶点样例
 	MY_VERTEX_TYPE DemoVertices[] =
@@ -56,7 +75,7 @@ void CDxD3DRender::InitDrawGraphics()
 	};
 
 	// 创建一个能容纳24个顶点数据的buffer
-	hRet = m_pD3d9Device->CreateVertexBuffer(24 * sizeof(MY_VERTEX_TYPE), 0,
+	m_pD3d9Device->CreateVertexBuffer(24 * sizeof(MY_VERTEX_TYPE), 0,
 		CUSTOMFVF, D3DPOOL_MANAGED, &m_pVertexBuffer, NULL);
 
 	// 设置顶点数据
@@ -79,6 +98,7 @@ void CDxD3DRender::InitD3d9Device(HWND hWnd, HBITMAP hBmp)
 	if (m_RgnBmpDc.GetSafeHdc() == NULL)
 		return;
 
+
 //////////////////////////////////////////////////////////////////////////
 	// 初始化D3d设备
 	m_pD3d9 = Direct3DCreate9(D3D_SDK_VERSION);
@@ -95,8 +115,6 @@ void CDxD3DRender::InitD3d9Device(HWND hWnd, HBITMAP hBmp)
 	HRESULT hRet = m_pD3d9->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL,
 		hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &D3dPp, &m_pD3d9Device);
 
-
-
 	if (FAILED(m_pD3d9Device->CreateRenderTarget(m_RenderRect.Width(), m_RenderRect.Height(), 
 		D3DFMT_A8R8G8B8, D3DMULTISAMPLE_NONE, 0, false, &m_pD3dTargetSurface, NULL)))
 	{
@@ -104,12 +122,16 @@ void CDxD3DRender::InitD3d9Device(HWND hWnd, HBITMAP hBmp)
 	}
 	m_pD3d9Device->SetRenderTarget(0, m_pD3dTargetSurface);
 
+	m_pD3d9Device->CreateOffscreenPlainSurface(m_RenderRect.Width(), m_RenderRect.Height(), 
+		D3DFMT_A8R8G8B8, D3DPOOL_SYSTEMMEM, &m_pSysSurface, NULL);
+
 
 
 
 
 
 	// 初始化绘图内容
+	CreateTextureFromHBITMAP(hBmp);
 	InitDrawGraphics();
 
 //////////////////////////////////////////////////////////////////////////
@@ -157,12 +179,6 @@ void CDxD3DRender::InitD3d9Device(HWND hWnd, HBITMAP hBmp)
 
 	// 设置固定渲染管道的顶点格式
 	m_pD3d9Device->SetFVF(CUSTOMFVF);
-
-	// 取得用于渲染的纹理表面
-	m_pD3d9Device->CreateOffscreenPlainSurface(512, 512, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &m_pD3d9Surface, NULL);
-
-	// --------- 从文件创建纹理表面
-	hRet = D3DXLoadSurfaceFromFile(m_pD3d9Surface, NULL, NULL, _T("D:\\TestSkin\\textwrap.bmp"), NULL, D3DX_DEFAULT, 0, NULL);
 }
 
 HDC CDxD3DRender::GetD3dRenderTargetData()
@@ -170,19 +186,12 @@ HDC CDxD3DRender::GetD3dRenderTargetData()
 	D3DLOCKED_RECT LockedRect;
 	RECT rcSurface = {0, 0, m_RenderRect.Width(), m_RenderRect.Height()};
 
-	m_pD3d9Device->CreateOffscreenPlainSurface(m_RenderRect.Width(), m_RenderRect.Height(), 
-		D3DFMT_A8R8G8B8, D3DPOOL_SYSTEMMEM, &m_pSysSurface, NULL);
 	m_pD3d9Device->GetRenderTargetData(m_pD3dTargetSurface, m_pSysSurface);
 	m_pSysSurface->LockRect(&LockedRect, &rcSurface, D3DLOCK_READONLY);
 	memcpy(m_RgnBmpDc.GetBits(), LockedRect.pBits, 4 * m_RenderRect.Width() * m_RenderRect.Height());
+	m_pSysSurface->UnlockRect();
 
 	return m_RgnBmpDc.GetSafeHdc();
-}
-
-void CDxD3DRender::ReleaseD3dRenderTargetData()
-{
-	m_pSysSurface->UnlockRect();
-	m_pSysSurface->Release();
 }
 
 void CDxD3DRender::D3dRender()
@@ -192,6 +201,7 @@ void CDxD3DRender::D3dRender()
 
 	m_pD3d9Device->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
 	m_pD3d9Device->Clear(0, NULL, D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
+
 	m_pD3d9Device->BeginScene();
 
 	static float sfSpeed = (float)0.02;
@@ -238,8 +248,9 @@ void CDxD3DRender::CleanupD3d9()
 {
 	RELEASE_COM_OBJECT(m_pVertexBuffer);
 	RELEASE_COM_OBJECT(m_pTexture);
-	RELEASE_COM_OBJECT(m_pD3d9Surface);
+	RELEASE_COM_OBJECT(m_pSysSurface);
 	RELEASE_COM_OBJECT(m_pD3dTargetSurface);
 	RELEASE_COM_OBJECT(m_pD3d9Device);
 	RELEASE_COM_OBJECT(m_pD3d9);
+	m_RgnBmpDc.Delete();
 }
