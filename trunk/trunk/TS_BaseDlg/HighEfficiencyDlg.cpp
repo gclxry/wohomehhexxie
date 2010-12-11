@@ -9,7 +9,9 @@ CHighEfficiencyDlg::CHighEfficiencyDlg(HINSTANCE hInstance, HWND hParentWnd, int
 : CDirectUiDlg(hInstance, hParentWnd, nIconId)
 {
 	m_pUiManager = NULL;
-	m_bIsMistDlg = false;
+	m_bSupportMoveMist = false;
+	m_bSupportSizeMist = false;
+	m_bIsEnterSizeInMouseDown = false;
 }
 
 CHighEfficiencyDlg::~CHighEfficiencyDlg(void)
@@ -19,8 +21,26 @@ CHighEfficiencyDlg::~CHighEfficiencyDlg(void)
 LRESULT CHighEfficiencyDlg::OnEnterSizeMove(WPARAM wParam, LPARAM lParam)
 {
 	::SetFocus(m_hWnd);
-	return ::DefWindowProc(m_hWnd, WM_ENTERSIZEMOVE, wParam, lParam);
+
+	if (!m_bIsEnterSizeInMouseDown)
+		SizeMistBegin();
+
+	return __base_super::OnEnterSizeMove(wParam, lParam);
 }
+
+
+LRESULT CHighEfficiencyDlg::OnExitSizeMove(WPARAM wParam, LPARAM lParam)
+{
+	if (m_bSupportMoveMist)
+		MoveMistEnd();
+
+	if (m_bSupportSizeMist)
+		SizeMistEnd();
+
+	m_bIsEnterSizeInMouseDown = false;
+	return __base_super::OnExitSizeMove(wParam, lParam);
+}
+
 
 LRESULT CHighEfficiencyDlg::OnMouseLeave(WPARAM wParam, LPARAM lParam)
 {
@@ -62,6 +82,7 @@ LRESULT CHighEfficiencyDlg::OnLButtonDown(WPARAM wParam, LPARAM lParam)
 {
 	::SetFocus(m_hWnd);
 
+	m_bIsEnterSizeInMouseDown = false;
 	SetFreezeDlg(false);
 
 	//½ûÖ¹ÏÔÊ¾ÒÆ¶¯¾ØÐÎ´°Ìå¿ò
@@ -87,8 +108,9 @@ LRESULT CHighEfficiencyDlg::OnLButtonDown(WPARAM wParam, LPARAM lParam)
 		{
 			if (!IsSetBfStyle(BFS_MAX_WND))
 			{
-				if (m_bIsMistDlg)
-					MistDown();
+				m_bIsEnterSizeInMouseDown = true;
+				if (m_bSupportMoveMist)
+					MoveMistBegin();
 
 				::PostMessage(m_hWnd, WM_NCLBUTTONDOWN, HTCAPTION, lParam);
 			}
@@ -100,6 +122,7 @@ LRESULT CHighEfficiencyDlg::OnLButtonDown(WPARAM wParam, LPARAM lParam)
 
 LRESULT CHighEfficiencyDlg::OnLButtonUp(WPARAM wParam, LPARAM lParam)
 {
+	m_bIsEnterSizeInMouseDown = false;
 	ReleaseCapture();
 	
 	if (IsReady())
@@ -109,18 +132,10 @@ LRESULT CHighEfficiencyDlg::OnLButtonUp(WPARAM wParam, LPARAM lParam)
 		m_pUiManager->OnLButtonUp(nFlags, point);
 	}
 
-	if (m_bIsMistDlg)
-		MistUp();
+	if (m_bSupportMoveMist)
+		MoveMistEnd();
 
 	return 1;
-}
-
-LRESULT CHighEfficiencyDlg::OnExitSizeMove(WPARAM wParam, LPARAM lParam)
-{
-	if (m_bIsMistDlg)
-		MistUp();
-
-	return __base_super::OnExitSizeMove(wParam, lParam);
 }
 
 LRESULT CHighEfficiencyDlg::OnLButtonDblClk(WPARAM wParam, LPARAM lParam)
@@ -132,8 +147,8 @@ LRESULT CHighEfficiencyDlg::OnLButtonDblClk(WPARAM wParam, LPARAM lParam)
 		m_pUiManager->OnLButtonDblClk(nFlags, point);
 	}
 
-	if (m_bIsMistDlg)
-		MistUp();
+	if (m_bSupportMoveMist)
+		MoveMistEnd();
 
 	return 1;
 }

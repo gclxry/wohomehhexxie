@@ -2,6 +2,7 @@
 #pragma once
 #include "Fetion.h"
 #include "MoveMistDlg.h"
+#include "SizeMistDlg.h"
 
 #define WND_ID_LOGON_USER_LOGO					(65535)
 #define WND_ID_LOGON_LINK_1						(65536)
@@ -23,6 +24,7 @@ protected:
 	virtual void OnPaint(HDC hPaintDc);
 	virtual void OnCreate();
 	virtual LRESULT OnGetMinMaxInfo(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnSizing(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam);
 
 	// 鼠标左键按下消息
@@ -36,8 +38,11 @@ protected:
 	// 鼠标离开窗口
 	virtual void DUI_OnMouseLeave(WPARAM wParam, LPARAM lParam);
 
-	virtual void MistDown();
-	virtual void MistUp();
+	virtual void MoveMistBegin();
+	virtual void MoveMistEnd();
+
+	virtual void SizeMistBegin();
+	virtual void SizeMistEnd();
 
 private:
 	CBfMouseMoveStatic *m_pUserLogo;
@@ -62,10 +67,14 @@ private:
 
 
 	CBitmapDC m_BmpDc;
+	BLENDFUNCTION m_Blend;
 
 
 	CMoveMistDlg m_MoveMistDlg;
-	bool m_bIsInMist;
-	BLENDFUNCTION m_Blend;
+	bool m_bInMoveMist;
 	CRect m_MistDlgShowRect;
+
+////////////////////////////////////////////
+	CSizeMistDlg m_SizeMistDlg;
+	bool m_bInSizeMist;
 };

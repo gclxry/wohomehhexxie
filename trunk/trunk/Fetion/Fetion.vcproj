@@ -361,13 +361,25 @@
 					>
 				</File>
 				<File
-					RelativePath=".\MoveMistDlg.cpp"
+					RelativePath=".\SizeMistDlg.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\MoveMistDlg.h"
+					RelativePath=".\SizeMistDlg.h"
 					>
 				</File>
+				<Filter
+					Name="Áé»ê³öÇÏ"
+					>
+					<File
+						RelativePath=".\MoveMistDlg.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\MoveMistDlg.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 	</Files>

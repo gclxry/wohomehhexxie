@@ -7,7 +7,8 @@
 
 CMistDlg::CMistDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 : __base_super(hInstance, hParentWnd, nIconId),
-m_MoveMistDlg(hInstance, hParentWnd, nIconId)
+m_MoveMistDlg(hInstance, hParentWnd, nIconId),
+m_SizeMistDlg(hInstance, hParentWnd, nIconId)
 {
 	m_pPassWordEdit = NULL;
 	m_pUserComboBox = NULL;
@@ -26,8 +27,10 @@ m_MoveMistDlg(hInstance, hParentWnd, nIconId)
 
 	m_pUiManager = &m_UiManager;
 
-	m_bIsMistDlg = true;
-	m_bIsInMist = false;
+	m_bSupportMoveMist = true;
+	m_bSupportSizeMist = true;
+	m_bInMoveMist = false;
+	m_bInSizeMist = false;
 }
 
 CMistDlg::~CMistDlg(void)
@@ -422,7 +425,7 @@ void CMistDlg::OnPaint(HDC hPaintDc)
 		// ¿ªÊ¼»­Í¼
 		m_pUiManager->OnPaint(hMemoryDC, WndRect);
 
-		if (m_bIsInMist)
+		if (m_bInMoveMist || m_bInSizeMist)
 		{
 			CSysUnit::SetWindowToTransparence(m_hWnd, true);
 			WndRect = this->GetWindowRect();
@@ -444,7 +447,7 @@ LRESULT CMistDlg::OnMoving(WPARAM wParam, LPARAM lParam)
 {
 	LRESULT lRet = __base_super::OnMoving(wParam, lParam);
 
-	if (m_bIsInMist && m_MoveMistDlg.GetSafeHandle() != NULL)
+	if (m_bInMoveMist && m_MoveMistDlg.GetSafeHandle() != NULL)
 	{
 		::SetWindowPos(m_MoveMistDlg.GetSafeHandle(), m_hWnd,
 			m_MistDlgShowRect.left, m_MistDlgShowRect.top, m_MistDlgShowRect.Width(), m_MistDlgShowRect.Height(), TRUE);
@@ -457,9 +460,9 @@ LRESULT CMistDlg::OnMoving(WPARAM wParam, LPARAM lParam)
 	return lRet;
 }
 
-void CMistDlg::MistDown()
+void CMistDlg::MoveMistBegin()
 {
-	m_bIsInMist = true;
+	m_bInMoveMist = true;
 	m_MistDlgShowRect = this->GetWindowRect();
 	
 	m_MoveMistDlg.CloseWindowImd();
@@ -470,9 +473,46 @@ void CMistDlg::MistDown()
 	m_MoveMistDlg.ShowWindow(SW_HIDE);
 }
 
-void CMistDlg::MistUp()
+void CMistDlg::MoveMistEnd()
 {
+	m_bInMoveMist = false;
 	m_MoveMistDlg.CloseWindow();
-	m_bIsInMist = false;
+	this->RedrawWindow();
+}
+
+LRESULT CMistDlg::OnSizing(WPARAM wParam, LPARAM lParam)
+{
+//	LRESULT lRet = __base_super::OnSizing(wParam, lParam);
+
+	if (m_bInSizeMist && m_SizeMistDlg.GetSafeHandle() != NULL)
+	{
+		::SetWindowPos(m_SizeMistDlg.GetSafeHandle(), m_hWnd,
+			m_MistDlgShowRect.left, m_MistDlgShowRect.top, m_MistDlgShowRect.Width(), m_MistDlgShowRect.Height(), TRUE);
+		::ShowWindow(m_SizeMistDlg.GetSafeHandle(), SW_SHOW);
+		::UpdateWindow(m_SizeMistDlg.GetSafeHandle());
+
+		this->RedrawWindow();
+	}
+
+	return 1;
+}
+
+void CMistDlg::SizeMistBegin()
+{
+	m_bInSizeMist = true;
+	m_MistDlgShowRect = this->GetWindowRect();
+
+	m_SizeMistDlg.CloseWindowImd();
+	m_SizeMistDlg.SetBmpDc(&m_BmpDc);
+
+	CRect WndRect = this->GetWindowRect();
+	m_SizeMistDlg.SetWindowPos(WndRect);
+	m_SizeMistDlg.ShowWindow(SW_HIDE);
+}
+
+void CMistDlg::SizeMistEnd()
+{
+	m_bInSizeMist = false;
+	m_SizeMistDlg.CloseWindow();
 	this->RedrawWindow();
 }

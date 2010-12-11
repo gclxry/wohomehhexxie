@@ -24,9 +24,9 @@ protected:
 	virtual LRESULT OnMouseLeave(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnMouseMove(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnEnterSizeMove(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnExitSizeMove(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnLButtonDown(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnLButtonUp(WPARAM wParam, LPARAM lParam);
-	virtual LRESULT OnExitSizeMove(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnLButtonDblClk(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnNcHitTest(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnTimer(WPARAM wParam, LPARAM lParam);
@@ -50,14 +50,19 @@ protected:
 	// Êó±êÀë¿ª´°¿Ú
 	virtual void DUI_OnMouseLeave(WPARAM wParam, LPARAM lParam);
 
-	virtual void MistDown() {};
-	virtual void MistUp() {};
+	virtual void MoveMistBegin() {};
+	virtual void MoveMistEnd() {};
+
+	virtual void SizeMistBegin() {};
+	virtual void SizeMistEnd() {};
 
 private:
 	void SetWndRgn(int cx, int cy);
 	static bool m_bIsNeedLButtonUpMsg;
+	bool m_bIsEnterSizeInMouseDown;
 
 protected:
 	CDirectUiManager *m_pUiManager;
-	bool m_bIsMistDlg;
+	bool m_bSupportMoveMist;
+	bool m_bSupportSizeMist;
 };
