@@ -43,7 +43,7 @@ public:
 
 	// 非模式显示对话框
 	void ShowWindow();
-	void CloseWindow() { EndThisDialog(); };
+	virtual void CloseWindow() { EndThisDialog(); };
 	void MoveWindow(CRect WndRect);
 
 	// 对话框属性设置和判断
