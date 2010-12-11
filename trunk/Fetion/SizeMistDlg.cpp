@@ -1,27 +1,26 @@
 
 #include "StdAfx.h"
-#include "MoveMistDlg.h"
+#include "SizeMistDlg.h"
 #include "shobjidl.h"
 
 #define __base_super					CHighEfficiencyDlg
 
 
-CMoveMistDlg::CMoveMistDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
+CSizeMistDlg::CSizeMistDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 : __base_super(hInstance, hParentWnd, nIconId)
 {
 	::CoInitialize(NULL);
 	AddBfStyle(BFS_MODAL_DLG);
 
 	m_pUiManager = &m_UiManager;
-	m_pBmpDc = NULL;
-	m_bIsMoveMistDlg = true;
+	m_bIsSizeMistDlg = true;
 }
 
-CMoveMistDlg::~CMoveMistDlg(void)
+CSizeMistDlg::~CSizeMistDlg(void)
 {
 }
 
-void CMoveMistDlg::OnCreate()
+void CSizeMistDlg::OnCreate()
 {
 	__base_super::OnCreate();
 
@@ -34,13 +33,13 @@ void CMoveMistDlg::OnCreate()
 	HidenTaskbar();
 }
 
-void CMoveMistDlg::CloseWindow()
+void CSizeMistDlg::CloseWindow()
 {
 	m_nCloseAlpha = m_Blend.SourceConstantAlpha = 255;
 	m_nCloseTimer = this->SetTimer(25);
 }
 
-LRESULT CMoveMistDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
+LRESULT CSizeMistDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 {
 	int cx = LOWORD(lParam);
 	int cy = HIWORD(lParam);
@@ -51,20 +50,33 @@ LRESULT CMoveMistDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 	return __base_super::OnSize(hWinPoslnfo, wParam, lParam);
 }
 
-void CMoveMistDlg::OnPaint(HDC hPaintDc)
+void CSizeMistDlg::SetBmpDc(CBitmapDC *pBmpDc)
 {
-	if (m_pBmpDc != NULL && m_pBmpDc->GetSafeHdc() != NULL)
+	if (pBmpDc != NULL)
+	{
+		m_BmpDc.Create(pBmpDc->GetDcSize().cx, pBmpDc->GetDcSize().cy);
+		if (m_BmpDc.GetBits() != NULL)
+		{
+			memcpy(m_BmpDc.GetBits(), pBmpDc->GetBits(), pBmpDc->GetDcSize().cx * pBmpDc->GetDcSize().cy * 4);
+		}
+	}
+}
+
+void CSizeMistDlg::OnPaint(HDC hPaintDc)
+{
+	if (m_BmpDc.GetSafeHdc() != NULL)
 	{
 		CSysUnit::SetWindowToTransparence(m_hWnd, true);
+
 		CRect WndRect = this->GetWindowRect();
 		POINT ptWinPos = {WndRect.left, WndRect.top};
 		POINT ptSrc = {0, 0};
 		SIZE sizeWindow = {WndRect.Width(), WndRect.Height()};
-		::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, m_pBmpDc->GetSafeHdc(), &ptSrc, 0, &m_Blend, ULW_ALPHA);
+		::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, m_BmpDc.GetSafeHdc(), &ptSrc, 0, &m_Blend, ULW_ALPHA);
 	}
 }
 
-LRESULT CMoveMistDlg::OnTimer(WPARAM wParam, LPARAM lParam)
+LRESULT CSizeMistDlg::OnTimer(WPARAM wParam, LPARAM lParam)
 {
 	if (m_nCloseTimer == (int)wParam)
 	{
@@ -81,7 +93,7 @@ LRESULT CMoveMistDlg::OnTimer(WPARAM wParam, LPARAM lParam)
 	return __base_super::OnTimer(wParam, lParam);
 }
 
-void CMoveMistDlg::HidenTaskbar()
+void CSizeMistDlg::HidenTaskbar()
 {
 	HRESULT hr = NULL;
 	ITaskbarList* pTaskbarList = NULL;

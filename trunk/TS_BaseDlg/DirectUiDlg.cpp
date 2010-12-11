@@ -5,7 +5,6 @@
 #pragma warning(disable:4312)
 #pragma warning(disable:4244)
 
-
 LRESULT CALLBACK PuppetWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	CWindowBase *pDlg = NULL;
@@ -50,6 +49,7 @@ CDirectUiDlg::CDirectUiDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 	m_nIconId = nIconId;
 	m_strWindowText = _T("╥ипе");
 	m_bIsMoveMistDlg = false;
+	m_bIsSizeMistDlg = false;
 	m_WndRect.SetRectEmpty();
 	m_nShowType = SW_SHOW;
 
@@ -153,7 +153,8 @@ ATOM CDirectUiDlg::RegisterBfoClass()
 bool CDirectUiDlg::InitInstance()
 {
 	DWORD dwStyle = WS_OVERLAPPEDWINDOW;
-	if (m_bIsMoveMistDlg)
+
+	if (m_bIsMoveMistDlg || m_bIsSizeMistDlg)
 		dwStyle = WS_EX_TOOLWINDOW;
 
 	m_hWnd = ::CreateWindowEx(0, m_strWindowClass, m_strWindowText, dwStyle,
@@ -228,6 +229,11 @@ LRESULT CDirectUiDlg::OnGetMinMaxInfo(WPARAM wParam, LPARAM lParam)
 LRESULT CDirectUiDlg::OnNcHitTest(WPARAM wParam, LPARAM lParam)
 {
 	return ::DefWindowProc(m_hWnd, WM_NCHITTEST, wParam, lParam);
+}
+
+LRESULT CDirectUiDlg::OnSizing(WPARAM wParam, LPARAM lParam)
+{
+	return ::DefWindowProc(m_hWnd, WM_SIZING, wParam, lParam);
 }
 
 LRESULT CDirectUiDlg::OnSizeProc(WPARAM wParam, LPARAM lParam)
@@ -337,6 +343,9 @@ LRESULT CDirectUiDlg::WndProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 	case WM_NCHITTEST:
 		return OnNcHitTest(wParam, lParam);
+
+	case WM_SIZING:
+		return OnSizing(wParam, lParam);
 
 	case WM_SIZE:
 		return OnSizeProc(wParam, lParam);

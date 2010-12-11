@@ -6,7 +6,6 @@
 
 #pragma warning(disable:4800)
 
-
 //////// DirectUiDlg 窗口属性 //////////////////////////////////////////////////////////////
 // 是否有最小化按钮
 #define BFS_HAVE_MIN_BTN								(0x00000001)
@@ -77,6 +76,7 @@ protected:
 	virtual LRESULT OnMoving(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnTimer(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnActivateApp(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnSizing(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnSizeProc(WPARAM wParam, LPARAM lParam);
 
 	virtual void RedrawWindow();
@@ -95,6 +95,7 @@ protected:
 	// 是否冻结窗口
 	bool m_bIsFreeze;
 	bool m_bIsMoveMistDlg;
+	bool m_bIsSizeMistDlg;
 	CRect m_WndRect;
 	int m_nShowType;
 };

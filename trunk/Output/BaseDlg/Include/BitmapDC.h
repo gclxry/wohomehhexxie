@@ -20,6 +20,7 @@ public:
     CBitmapDC();
     virtual ~CBitmapDC();
 
+	CSize GetDcSize() { return m_DcSize; };
 	void Delete();
 	void Create(int nWidth, int nHeight, bool bIsAlign = false);
 
