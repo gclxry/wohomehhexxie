@@ -38,14 +38,13 @@ protected:
 	virtual void MistDown();
 	virtual void MistUp();
 
-	CBitmapDC m_BmpDc;
 private:
-	CBfStatic *m_pBigLogo;
 	CBfMouseMoveStatic *m_pUserLogo;
 	CBfLinkStatic *m_pLink1;
 	CBfLinkStatic *m_pLink2;
 	CBfLinkStatic *m_pLink3;
 	CBfLinkStatic *m_pLink4;
+	CBfStatic *m_pStatic;
 
 	CBfStatic *m_pL1;
 	CBfStatic *m_pL2;
@@ -61,4 +60,6 @@ private:
 	CBaseCtrlManager m_UiManager;
 
 	CMoveMistDlg m_MoveMistDlg;
+
+	CBitmapDC m_BmpDc;
 };
