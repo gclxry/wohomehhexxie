@@ -11,12 +11,12 @@ m_MoveMistDlg(hInstance, hParentWnd, nIconId)
 {
 	m_pPassWordEdit = NULL;
 	m_pUserComboBox = NULL;
-	m_pBigLogo = NULL;
 	m_pUserLogo = NULL;
 	m_pLink1 = NULL;
 	m_pLink2 = NULL;
 	m_pLink3 = NULL;
 	m_pLink4 = NULL;
+	m_pStatic = NULL;
 	m_pL1 = NULL;
 	m_pL2 = NULL;
 	m_pYdLogo = NULL;
@@ -55,17 +55,18 @@ void CMistDlg::OnCreate()
 	this->CenterWindow(260, 480);
 
 	CString strSkinDir = CSysUnit::GetAppPath();
-	CString strPicPath = strSkinDir + _T("FetionData\\UseFace\\LogoB.png");
 
-	m_pBigLogo = m_UiManager.CreateBfStatic(this, CRect(0, 0, 0, 0), 0, strPicPath, IT_PNG);
-	if (m_pBigLogo == NULL)
+	CString strPicPath = strSkinDir + _T("SkinImage\\bj1.png");
+	m_pStatic = m_UiManager.CreateBfStatic(this, CRect(0, 0, 0, 0), 0, strPicPath, IT_PNG);
+	if (m_pStatic == NULL)
 	{
-		::MessageBox(m_hParent, _T("初始化 m_pBigLogo 失败，程序无法启动！"), MSG_TITLE, MB_OK | MB_ICONSTOP);
+		::MessageBox(m_hParent, _T("初始化 m_pStatic 失败，程序无法启动！"), MSG_TITLE, MB_OK | MB_ICONSTOP);
 		::PostMessage(m_hParent, WM_CLOSE, NULL, NULL);
 		return;
 	}
+	m_pStatic->SetFullDrawImage(true);
 
-	strPicPath = strSkinDir + _T("FetionData\\UseFace\\YDLogo.png");
+	strPicPath = strSkinDir + _T("SkinImage\\YDLogo.png");
 	m_pYdLogo = m_UiManager.CreateBfStatic(this, CRect(0, 0, 0, 0), 0, strPicPath, IT_PNG);
 	if (m_pYdLogo == NULL)
 	{
@@ -147,31 +148,31 @@ void CMistDlg::OnCreate()
 	}
 	COMBO_DATA ComData;
 	ComData.nImageType = IT_PNG;
-	ComData.strImagePath = strSkinDir + _T("FetionData\\UseFace\\Cool.png");
+	ComData.strImagePath = strSkinDir + _T("SkinImage\\Earth.png");
+	ComData.strTextId = _T("11111111");
+	ComData.strTextName = _T("太子");
+	m_pUserComboBox->AddComboItem(ComData);
+	ComData.strImagePath = strSkinDir + _T("SkinImage\\Cool.png");
 	ComData.strTextId = _T("778428399");
 	ComData.strTextName = _T("山大王");
 	m_pUserComboBox->AddComboItem(ComData);
 	ComData.nImageType = IT_PNG;
-	ComData.strImagePath = strSkinDir + _T("FetionData\\UseFace\\Earth.png");
-	ComData.strTextId = _T("11111111");
-	ComData.strTextName = _T("太子");
-	m_pUserComboBox->AddComboItem(ComData);
 	ComData.nImageType = IT_PNG;
-	ComData.strImagePath = strSkinDir + _T("FetionData\\UseFace\\Child.png");
+	ComData.strImagePath = strSkinDir + _T("SkinImage\\Child.png");
 	ComData.strTextId = _T("22223333");
 	ComData.strTextName = _T("天子");
 	m_pUserComboBox->AddComboItem(ComData);
 	ComData.nImageType = IT_PNG;
-	ComData.strImagePath = strSkinDir + _T("FetionData\\UseFace\\Spice.png");
+	ComData.strImagePath = strSkinDir + _T("SkinImage\\Spice.png");
 	ComData.strTextId = _T("4567890");
 	ComData.strTextName = _T("有神仙吗");
 	m_pUserComboBox->AddComboItem(ComData);
 	ComData.nImageType = IT_PNG;
-	ComData.strImagePath = strSkinDir + _T("FetionData\\UseFace\\Cartoon.png");
+	ComData.strImagePath = strSkinDir + _T("SkinImage\\Cartoon.png");
 	ComData.strTextId = _T("765837458");
 	ComData.strTextName = _T("夜来丑");
 	m_pUserComboBox->AddComboItem(ComData);
-	strPicPath = strSkinDir + _T("FetionData\\UseFace\\closed.png");
+	strPicPath = strSkinDir + _T("SkinImage\\closed.png");
 	m_pUserComboBox->SetCloseButtonImage(BSC_THREE, strPicPath, IT_PNG);
 
 	ComData = m_pUserComboBox->GetSelectData();
@@ -181,7 +182,7 @@ void CMistDlg::OnCreate()
 	}
 	else
 	{
-		strPicPath = strSkinDir + _T("FetionData\\UseFace\\Cartoon.png");
+		strPicPath = strSkinDir + _T("SkinImage\\Cartoon.png");
 		m_pUserLogo = m_UiManager.CreateBfMouseMoveStatic(this, CRect(0, 0, 0, 0), WND_ID_LOGON_USER_LOGO, 0, strPicPath, IT_PNG);
 	}
 	if (m_pUserLogo == NULL)
@@ -225,22 +226,9 @@ LRESULT CMistDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 	int cx = LOWORD(lParam); 
 	int cy = HIWORD(lParam);
 
-	if (m_pBigLogo != NULL)
+	if (m_pStatic != NULL)
 	{
-		CResImage *pRes = m_pBigLogo->GetResImage();
-		if (pRes != NULL)
-		{
-			Image *pImage = pRes->GetImage();
-			if (pImage != NULL)
-			{
-				int nH = pImage->GetHeight();
-				int nW = pImage->GetWidth();
-				int nLeft = (cx - nW) / 2;
-				int nTop = 55;
-
-				m_pBigLogo->MoveWindow(CRect(nLeft, nTop, nLeft + nW, nTop + nH), hWinPoslnfo);
-			}
-		}
+		m_pStatic->MoveWindow(CRect(0, 0, cx, cy), hWinPoslnfo);
 	}
 
 	if (m_pUserLogo != NULL)

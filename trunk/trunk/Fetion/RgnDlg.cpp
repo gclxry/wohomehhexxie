@@ -40,7 +40,7 @@ void CRgnDlg::OnCreate()
 
 	CString strSkinDir = CSysUnit::GetAppPath();
 
-	CString strPicPath = strSkinDir + _T("FetionData\\UseFace\\tbclose.png");
+	CString strPicPath = strSkinDir + _T("SkinImage\\tbclose.png");
 	m_pCloseButton = m_UiManager.CreateBfPictureButton(this, CRect(0, 0, 0, 0), DWM_SYS_CMD_CLOSE, BSC_THREE, 0, strPicPath, IT_PNG);
 	if (m_pCloseButton == NULL)
 	{
@@ -48,7 +48,7 @@ void CRgnDlg::OnCreate()
 		::PostMessage(m_hParent, WM_CLOSE, NULL, NULL);
 	}
 
-	strPicPath = strSkinDir + _T("FetionData\\UseFace\\tbmin.png");
+	strPicPath = strSkinDir + _T("SkinImage\\tbmin.png");
 	m_pMinButton = m_UiManager.CreateBfPictureButton(this, CRect(0, 0, 0, 0), DWM_SYS_CMD_MIN, BSC_THREE, 0, strPicPath, IT_PNG);
 	if (m_pMinButton == NULL)
 	{
@@ -56,7 +56,7 @@ void CRgnDlg::OnCreate()
 		::PostMessage(m_hParent, WM_CLOSE, NULL, NULL);
 	}
 
-	strPicPath = strSkinDir + _T("FetionData\\UseFace\\转.png");
+	strPicPath = strSkinDir + _T("SkinImage\\转.png");
 	m_pZhuanBtn = m_UiManager.CreateBfNormalGraduatedButton(this, CRect(0, 0, 0, 0), 100, 0, strPicPath, IT_PNG);
 	if (m_pZhuanBtn == NULL)
 	{
@@ -64,7 +64,7 @@ void CRgnDlg::OnCreate()
 		::PostMessage(m_hParent, WM_CLOSE, NULL, NULL);
 	}
 
-	strPicPath = strSkinDir + _T("FetionData\\UseFace\\Test1.gif");
+	strPicPath = strSkinDir + _T("SkinImage\\Test1.gif");
 	m_pGifStatic = m_UiManager.CreateBfGifStatic(this, CRect(0, 0, 0, 0), 0, 0, strPicPath);
 	if (m_pGifStatic == NULL)
 	{
@@ -74,7 +74,7 @@ void CRgnDlg::OnCreate()
 	}
 	m_pGifStatic->SetMouseActive(false);
 
-	strPicPath = strSkinDir + _T("FetionData\\UseFace\\T255_50.png");
+	strPicPath = strSkinDir + _T("SkinImage\\T255_50.png");
 	m_TImage.LoadImageFromFile(strPicPath, IT_PNG);
 
 	//m_Blend是结构体BLENDFUNCTION的对象，用于指定两个DC(画图设备)的融合方式。
