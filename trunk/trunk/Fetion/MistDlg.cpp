@@ -440,20 +440,34 @@ void CMistDlg::OnPaint(HDC hPaintDc)
 	}
 }
 
+LRESULT CMistDlg::OnMoving(WPARAM wParam, LPARAM lParam)
+{
+	LRESULT lRet = __base_super::OnMoving(wParam, lParam);
+
+	if (m_bIsInMist && m_MoveMistDlg.GetSafeHandle() != NULL)
+	{
+		::SetWindowPos(m_MoveMistDlg.GetSafeHandle(), m_hWnd,
+			m_MistDlgShowRect.left, m_MistDlgShowRect.top, m_MistDlgShowRect.Width(), m_MistDlgShowRect.Height(), TRUE);
+		::ShowWindow(m_MoveMistDlg.GetSafeHandle(), SW_SHOW);
+		::UpdateWindow(m_MoveMistDlg.GetSafeHandle());
+
+		this->RedrawWindow();
+	}
+
+	return lRet;
+}
+
 void CMistDlg::MistDown()
 {
+	m_bIsInMist = true;
+	m_MistDlgShowRect = this->GetWindowRect();
+	
 	m_MoveMistDlg.CloseWindowImd();
 	m_MoveMistDlg.SetBmpDc(&m_BmpDc);
 
 	CRect WndRect = this->GetWindowRect();
 	m_MoveMistDlg.SetWindowPos(WndRect);
-	m_MoveMistDlg.ShowWindow();
-	m_bIsInMist = true;
-	this->RedrawWindow();
-
-//	::SetWindowPos(m_MoveMistDlg.GetSafeHandle(), m_hWnd, WndRect.left, WndRect.top, WndRect.Width(), WndRect.Height(), TRUE);
-//	::UpdateWindow(m_MoveMistDlg.GetSafeHandle());
-
+	m_MoveMistDlg.ShowWindow(SW_HIDE);
 }
 
 void CMistDlg::MistUp()
