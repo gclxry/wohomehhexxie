@@ -16,7 +16,8 @@ protected:
 	virtual void OnCreate();
 	virtual LRESULT OnTimer(WPARAM wParam, LPARAM lParam);
 
-	BLENDFUNCTION m_Blend;//结构体BLENDFUNCTION用于指定两个DC(画图设备)的融合方式。
+	// 结构体BLENDFUNCTION用于指定两个DC(画图设备)的融合方式。
+	BLENDFUNCTION m_Blend;
 
 	virtual void OnPaint(HDC hPaintDc);
 	virtual LRESULT OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam);

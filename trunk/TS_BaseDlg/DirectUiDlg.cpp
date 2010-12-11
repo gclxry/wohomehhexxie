@@ -152,7 +152,7 @@ bool CDirectUiDlg::InitInstance()
 {
 	DWORD dwStyle = WS_OVERLAPPEDWINDOW;
 	if (m_bIsMoveMistDlg)
-		dwStyle = WS_BORDER;
+		dwStyle = WS_EX_TOOLWINDOW;
 
 	m_hWnd = ::CreateWindowEx(0, m_strWindowClass, m_strWindowText, dwStyle,
 		m_WndRect.left, m_WndRect.top, m_WndRect.Width(), m_WndRect.Height(), m_hParent, NULL, ms_hInstance, this);

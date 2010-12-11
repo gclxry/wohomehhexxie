@@ -62,4 +62,9 @@ private:
 	CMoveMistDlg m_MoveMistDlg;
 
 	CBitmapDC m_BmpDc;
+	CBitmapDC m_MistBmpDc;
+	bool m_bIsInMist;
+
+	// 结构体BLENDFUNCTION用于指定两个DC(画图设备)的融合方式。
+	BLENDFUNCTION m_Blend;
 };

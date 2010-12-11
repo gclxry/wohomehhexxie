@@ -27,6 +27,7 @@ m_MoveMistDlg(hInstance, hParentWnd, nIconId)
 	m_pUiManager = &m_UiManager;
 
 	m_bIsMistDlg = true;
+	m_bIsInMist = false;
 }
 
 CMistDlg::~CMistDlg(void)
@@ -50,6 +51,12 @@ LRESULT CMistDlg::OnGetMinMaxInfo(WPARAM wParam, LPARAM lParam)
 void CMistDlg::OnCreate()
 {
 	__base_super::OnCreate();
+
+	//m_Blend是结构体BLENDFUNCTION的对象，用于指定两个DC(画图设备)的融合方式。
+	m_Blend.BlendOp = AC_SRC_OVER;
+	m_Blend.BlendFlags = 0;
+	m_Blend.AlphaFormat = AC_SRC_ALPHA;
+	m_Blend.SourceConstantAlpha = 100;
 
 	// 设置默认大小
 	this->CenterWindow(260, 480);
@@ -412,25 +419,38 @@ void CMistDlg::OnPaint(HDC hPaintDc)
 	{
 		Graphics DoGrap(hMemoryDC);
 
-		SolidBrush brush(Color(255, 0, 0, 255));
-		DoGrap.FillRectangle(&brush, 0, 0, WndRect.Width(), WndRect.Height());
-
 		// 开始画图
 		m_pUiManager->OnPaint(hMemoryDC, WndRect);
 
-		::BitBlt(hPaintDc, 0, 0, WndRect.Width(), WndRect.Height(),
-			hMemoryDC, 0, 0, SRCCOPY);
+		if (m_bIsInMist)
+		{
+			CSysUnit::SetWindowToTransparence(m_hWnd, true);
+			WndRect = this->GetWindowRect();
+			POINT ptWinPos = {WndRect.left, WndRect.top};
+			POINT ptSrc = {0, 0};
+			SIZE sizeWindow = {WndRect.Width(), WndRect.Height()};
+			::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, hMemoryDC, &ptSrc, 0, &m_Blend, ULW_ALPHA);
+		}
+		else
+		{
+			CSysUnit::SetWindowToTransparence(m_hWnd, false);
+			::BitBlt(hPaintDc, 0, 0, WndRect.Width(), WndRect.Height(),
+				hMemoryDC, 0, 0, SRCCOPY);
+		}
 	}
 }
 
 void CMistDlg::MistDown()
 {
+	m_MoveMistDlg.CloseWindowImd();
 	m_MoveMistDlg.SetBmpDc(&m_BmpDc);
 
 	CRect WndRect = this->GetWindowRect();
 	m_MoveMistDlg.SetWindowPos(WndRect);
 	m_MoveMistDlg.ShowWindow();
-	//m_MoveMistDlg.MoveWindow(WndRect);
+	m_bIsInMist = true;
+	this->RedrawWindow();
+
 //	::SetWindowPos(m_MoveMistDlg.GetSafeHandle(), m_hWnd, WndRect.left, WndRect.top, WndRect.Width(), WndRect.Height(), TRUE);
 //	::UpdateWindow(m_MoveMistDlg.GetSafeHandle());
 
@@ -439,4 +459,6 @@ void CMistDlg::MistDown()
 void CMistDlg::MistUp()
 {
 	m_MoveMistDlg.CloseWindow();
+	m_bIsInMist = false;
+	this->RedrawWindow();
 }

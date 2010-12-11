@@ -77,7 +77,7 @@ void CRgnDlg::OnCreate()
 	strPicPath = strSkinDir + _T("SkinImage\\T255_50.png");
 	m_TImage.LoadImageFromFile(strPicPath, IT_PNG);
 
-	//m_Blend是结构体BLENDFUNCTION的对象，用于指定两个DC(画图设备)的融合方式。
+	// m_Blend是结构体BLENDFUNCTION的对象，用于指定两个DC(画图设备)的融合方式。
 	m_Blend.BlendOp = AC_SRC_OVER;
 	m_Blend.BlendFlags = 0;
 	m_Blend.AlphaFormat = AC_SRC_ALPHA;
