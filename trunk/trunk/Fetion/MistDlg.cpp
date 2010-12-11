@@ -482,7 +482,7 @@ void CMistDlg::MoveMistEnd()
 
 LRESULT CMistDlg::OnSizing(WPARAM wParam, LPARAM lParam)
 {
-//	LRESULT lRet = __base_super::OnSizing(wParam, lParam);
+	LRESULT lRet = __base_super::OnSizing(wParam, lParam);
 
 	if (m_bInSizeMist && m_SizeMistDlg.GetSafeHandle() != NULL)
 	{
@@ -494,7 +494,7 @@ LRESULT CMistDlg::OnSizing(WPARAM wParam, LPARAM lParam)
 		this->RedrawWindow();
 	}
 
-	return 1;
+	return lRet;
 }
 
 void CMistDlg::SizeMistBegin()
