@@ -42,7 +42,7 @@ public:
 	void SetWindowPos(CRect WndRect) { m_WndRect = WndRect; };
 
 	// 非模式显示对话框
-	void ShowWindow();
+	void ShowWindow(int nShowType = SW_SHOW);
 	virtual void CloseWindow() { EndThisDialog(); };
 	void MoveWindow(CRect WndRect);
 
@@ -74,6 +74,7 @@ protected:
 	virtual LRESULT OnEnterSizeMove(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnExitSizeMove(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnMove(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnMoving(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnTimer(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnActivateApp(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnSizeProc(WPARAM wParam, LPARAM lParam);
@@ -95,4 +96,5 @@ protected:
 	bool m_bIsFreeze;
 	bool m_bIsMoveMistDlg;
 	CRect m_WndRect;
+	int m_nShowType;
 };

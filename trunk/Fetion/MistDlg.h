@@ -19,6 +19,7 @@ public:
 	~CMistDlg(void);
 
 protected:
+	virtual LRESULT OnMoving(WPARAM wParam, LPARAM lParam);
 	virtual void OnPaint(HDC hPaintDc);
 	virtual void OnCreate();
 	virtual LRESULT OnGetMinMaxInfo(WPARAM wParam, LPARAM lParam);
@@ -59,12 +60,12 @@ private:
 
 	CBaseCtrlManager m_UiManager;
 
-	CMoveMistDlg m_MoveMistDlg;
 
 	CBitmapDC m_BmpDc;
-	CBitmapDC m_MistBmpDc;
-	bool m_bIsInMist;
 
-	// 结构体BLENDFUNCTION用于指定两个DC(画图设备)的融合方式。
+
+	CMoveMistDlg m_MoveMistDlg;
+	bool m_bIsInMist;
 	BLENDFUNCTION m_Blend;
+	CRect m_MistDlgShowRect;
 };

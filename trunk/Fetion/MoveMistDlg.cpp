@@ -102,11 +102,7 @@ void CMoveMistDlg::HidenTaskbar()
 		::SetWindowLong(m_hWnd, GWL_EXSTYLE, GetWindowLong(m_hWnd, GWL_EXSTYLE) & (~WS_EX_APPWINDOW));
 		::SetWindowLong(m_hWnd, GWL_EXSTYLE, GetWindowLong(m_hWnd, GWL_EXSTYLE) | WS_EX_TOOLWINDOW);
 
-//		m_pDepositDlg->ModifyStyle(WS_CAPTION, 0);
-//
-//		m_pDepositDlg->ModifyStyleEx(WS_EX_APPWINDOW, WS_EX_TOOLWINDOW);
 		pTaskbarList->DeleteTab(m_hWnd);
-
 		pTaskbarList->Release();
 	}
 }

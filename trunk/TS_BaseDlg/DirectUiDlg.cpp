@@ -51,6 +51,7 @@ CDirectUiDlg::CDirectUiDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 	m_strWindowText = _T("╥ипе");
 	m_bIsMoveMistDlg = false;
 	m_WndRect.SetRectEmpty();
+	m_nShowType = SW_SHOW;
 
 	AddBfStyle(BFS_HAVE_MIN_BTN | BFS_HAVE_MAX_BTN | BFS_FIRST_IN_WND | BFS_CAN_DRAW);
 }
@@ -85,8 +86,9 @@ int CDirectUiDlg::DoModal()
 	return (int)msg.wParam;
 }
 
-void CDirectUiDlg::ShowWindow()
+void CDirectUiDlg::ShowWindow(int nShowType)
 {
+	m_nShowType = nShowType;
 	DeleteBfStyle(BFS_MODAL_DLG);
 	CreateDlg();
 }
@@ -162,7 +164,7 @@ bool CDirectUiDlg::InitInstance()
 
 	OnCreate();
 
-	::ShowWindow(m_hWnd, SW_SHOW);
+	::ShowWindow(m_hWnd, m_nShowType);
 	::UpdateWindow(m_hWnd);
 
 	return true;
@@ -248,6 +250,11 @@ LRESULT CDirectUiDlg::OnMove(WPARAM wParam, LPARAM lParam)
 	return ::DefWindowProc(m_hWnd, WM_MOVE, wParam, lParam);
 }
 
+LRESULT CDirectUiDlg::OnMoving(WPARAM wParam, LPARAM lParam)
+{
+	return ::DefWindowProc(m_hWnd, WM_MOVING, wParam, lParam);
+}
+
 LRESULT CDirectUiDlg::OnTimer(WPARAM wParam, LPARAM lParam)
 {
 	return ::DefWindowProc(m_hWnd, WM_TIMER, wParam, lParam);
@@ -279,6 +286,9 @@ LRESULT CDirectUiDlg::WndProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 	case WM_MOVE:
 		return OnMove(wParam, lParam);
+
+	case WM_MOVING:
+		return OnMoving(wParam, lParam);
 
 	case 0x00AE:	// WM_NCUAHDRAWCAPTION
 	case 0x00AF:	// WM_NCUAHDRAWFRAME
