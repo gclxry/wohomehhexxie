@@ -1,7 +1,6 @@
 
 #include "StdAfx.h"
 #include "RgnDlg.h"
-#include "AggRender.h"
 #include "TestDx9.h"
 
 #define __base_super					CHighEfficiencyDlg
@@ -22,14 +21,11 @@ CRgnDlg::CRgnDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 
 	m_dbFactor = 0.0;
 
-	m_PointList.clear();
-
 	m_pUiManager = &m_UiManager;
 }
 
 CRgnDlg::~CRgnDlg(void)
 {
-	m_PointList.clear();
 }
 
 void CRgnDlg::OnCreate()
@@ -136,12 +132,6 @@ LRESULT CRgnDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 	return __base_super::OnSize(hWinPoslnfo, wParam, lParam);
 }
 
-HANDLE g_hMem = NULL;
-pixel_map SrcMapImg;
-rendering_buffer SrcImgBuf;
-pixel_map DstMapImg;
-rendering_buffer DstImgBuf;
-
 void CRgnDlg::OnPaint(HDC hPaintDc)
 {
 	CRect WndRect = this->GetClientRect();
@@ -151,7 +141,7 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 	HDC hMemoryDC = BmpDc.GetSafeHdc();
 	HBITMAP hMemoryBitmap = BmpDc.GetBmpHandle();
 
-	if (m_PointList.size() > 0)
+	if (m_dbFactor > 0.0)
 	{
 		//CSysUnit::SetWindowToTransparence(m_hWnd, false);
 
@@ -175,7 +165,7 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 		if (m_dbFactor >= 1.0)
 		{
 			m_DxD3d.CleanupD3d9();
-			m_PointList.clear();
+			m_dbFactor = 0.0;
 			this->RedrawWindow();
 		}
 		return;
@@ -193,7 +183,7 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 		POINT ptSrc = {0, 0};
 		SIZE sizeWindow = {WndRect.Width(), WndRect.Height()};
 
-		if (m_PointList.size() <= 0)
+		if (m_dbFactor <= 0.0)
 		{
 			// 开始画图
 			m_UiManager.OnPaintRgn(WndRect, &MemDcGrap);
@@ -201,57 +191,6 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 		}
 		else
 		{
-			// 绘图
-			m_UiManager.OnPaintRgn(WndRect, &MemDcGrap);
-
-			// 计算扭曲位置
-			int nSize = (int)m_PointList.size();
-			double dbNum = m_dbFactor * (double)nSize;
-			nSize = (int)dbNum;
-
-			if (nSize < 0)
-				nSize = 0;
-
-			if (nSize >= (int)m_PointList.size())
-				nSize = (int)m_PointList.size() - 1;
-
-			WndRect = this->GetClientRect();
-
-			// 方式：梯形旋转
-			// 轨迹点
-			CPoint ptTraj = m_PointList[nSize];
-			CPoint ptLeftUp(ptTraj.x, WndRect.top + ptTraj.y);
-			CPoint ptLeftDown(ptLeftUp.x, WndRect.bottom - ptTraj.y);
-			CPoint ptRightUp(WndRect.right - ptTraj.x, WndRect.top - ptTraj.y);
-			CPoint ptRightDown(ptRightUp.x, WndRect.bottom + ptTraj.y);
-
-
-			CPoint vP[4];
-			vP[0] = ptLeftDown;
-			vP[1] = ptRightDown;
-			vP[2] = ptRightUp;
-			vP[3] = ptLeftUp;
-
-
-			if (!IS_SAVE_HANDLE(g_hMem))
-			{
-				g_hMem = CAggInterface::CreatePixelMap(hMemoryBitmap, SrcMapImg, SrcImgBuf);
-				CAggInterface::CreatePixelMap(DstMapImg, DstImgBuf, WndRect.Width(), WndRect.Height());
-			}
-
-			// 绘制3D图案
-			CAggDraw2DTo3D::Draw2DTo3D(DstImgBuf, SrcImgBuf, vP);
-
-			DstMapImg.draw(hMemoryDC);
-
-			::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, hMemoryDC, &ptSrc, 0, &m_Blend, ULW_ALPHA);
-
-			if (m_dbFactor >= 1.0)
-			{
-				m_PointList.clear();
-				this->RedrawWindow();
-			}
-
 			/*
 			if (m_TImage.IsReady())
 			{
@@ -328,15 +267,6 @@ void CRgnDlg::DUI_OnLButtonUp(WPARAM wParam, LPARAM lParam)
 {
 	if (wParam == 100)
 	{
-		CRect WndRect = this->GetClientRect();
-		CAKTrajectory::EllipseMidPoint(CPoint(WndRect.Width() / 2, 0), WndRect.Width() / 2, WndRect.Width() / 5, EGT_TOP, m_PointList);
-
-//////////////////////////////////////////////////////////////////////////
-
-
-//////////////////////////////////////////////////////////////////////////
-
-
 		m_dbFactor = 0.0;
 		m_nTimerId = this->SetTimer(10);
 	}
