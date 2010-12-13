@@ -34,10 +34,7 @@ protected:
 	double m_dbFactor;
 	int m_nTimerId;
 
-	POINT_VET m_PointList;
-
 	CResImage m_TImage;
-
 	CDxD3DRender m_DxD3d;
 
 private:
