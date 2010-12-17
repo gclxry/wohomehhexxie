@@ -44,14 +44,6 @@ LRESULT CGroundGlassDlg::OnGetMinMaxInfo(WPARAM wParam, LPARAM lParam)
 	return __base_super::OnGetMinMaxInfo(wParam, lParam);
 }
 
-LRESULT CGroundGlassDlg::OnTimer(WPARAM wParam, LPARAM lParam)
-{
-	if (m_nTimer == (int)wParam)
-		this->RedrawWindow();
-
-	return __base_super::OnTimer(wParam, lParam);
-}
-
 void CGroundGlassDlg::OnCreate()
 {
 	__base_super::OnCreate();
@@ -60,7 +52,7 @@ void CGroundGlassDlg::OnCreate()
 	m_Blend.BlendOp = AC_SRC_OVER;
 	m_Blend.BlendFlags = 0;
 	m_Blend.AlphaFormat = AC_SRC_OVER;
-	m_Blend.SourceConstantAlpha = 254;
+	m_Blend.SourceConstantAlpha = 255;
 
 	// 设置默认大小
 	this->CenterWindow(260, 480);
@@ -421,6 +413,11 @@ LRESULT CGroundGlassDlg::OnMoving(WPARAM wParam, LPARAM lParam)
 {
 	LRESULT lRet = __base_super::OnMoving(wParam, lParam);
 	this->RedrawWindow();
+
+//	HDC hDc = ::GetDC(this->GetSafeHandle());
+//	OnPaint(hDc);
+//	::ReleaseDC(this->GetSafeHandle(), hDc);
+
 	return lRet;
 }
 
@@ -428,7 +425,20 @@ LRESULT CGroundGlassDlg::OnSizing(WPARAM wParam, LPARAM lParam)
 {
 	LRESULT lRet = __base_super::OnSizing(wParam, lParam);
 	this->RedrawWindow();
+
+//	HDC hDc = ::GetDC(this->GetSafeHandle());
+//	OnPaint(hDc);
+//	::ReleaseDC(this->GetSafeHandle(), hDc);
+
 	return lRet;
+}
+
+LRESULT CGroundGlassDlg::OnTimer(WPARAM wParam, LPARAM lParam)
+{
+	if (m_nTimer == (int)wParam)
+		this->RedrawWindow();
+
+	return __base_super::OnTimer(wParam, lParam);
 }
 
 void CGroundGlassDlg::OnPaint(HDC hPaintDc)
