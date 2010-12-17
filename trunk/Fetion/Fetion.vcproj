@@ -409,6 +409,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="SSE"
+				>
+				<File
+					RelativePath=".\SseDlg.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SseDlg.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
