@@ -475,3 +475,53 @@ void CHighEfficiencyDlg::MaxOrResWnd()
 		}
 	}
 }
+
+void CHighEfficiencyDlg::DrawFetionBkgndLine(HDC hMemoryDC, CRect WndRect)
+{
+	Graphics DoGrap(hMemoryDC);
+
+	// »­±ß¿òÏß
+	Pen OutPen(Color(255, 163, 163, 163));
+	Pen InPen(Color(255, 255, 255, 255));
+
+	Point aPointList[9];
+	int nCut = 2;
+
+	for (int i = 1; i >= 0; i--)
+	{
+		int nRD = 1;
+		CRect UserDcRect = WndRect;
+
+		aPointList[0].X = UserDcRect.left + i;
+		aPointList[0].Y = UserDcRect.top + nCut;
+
+		aPointList[1].X = UserDcRect.left + nCut;
+		aPointList[1].Y = UserDcRect.top + i;
+
+		aPointList[2].X = UserDcRect.right - nCut;
+		aPointList[2].Y = UserDcRect.top + i;
+
+		aPointList[3].X = UserDcRect.right - nRD - i;
+		aPointList[3].Y = UserDcRect.top + nCut;
+
+		aPointList[4].X = UserDcRect.right - nRD - i;
+		aPointList[4].Y = UserDcRect.bottom - nCut - 1;
+
+		aPointList[5].X = UserDcRect.right - nCut - 1;
+		aPointList[5].Y = UserDcRect.bottom - nRD - i;
+
+		aPointList[6].X = UserDcRect.left + nCut;
+		aPointList[6].Y = UserDcRect.bottom - nRD - i;
+
+		aPointList[7].X = UserDcRect.left + i;
+		aPointList[7].Y = UserDcRect.bottom - nCut - 1;
+
+		aPointList[8].X = UserDcRect.left + i;
+		aPointList[8].Y = UserDcRect.top + nCut;
+
+		if (i == 0)
+			DoGrap.DrawLines(&OutPen, aPointList, 9);
+		else
+			DoGrap.DrawLines(&InPen, aPointList, 9);
+	}
+}

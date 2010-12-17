@@ -456,7 +456,11 @@ void CGroundGlassDlg::OnPaint(HDC hPaintDc)
 		// ¿ªÊ¼»­Í¼
 		m_pUiManager->OnPaint(hMemoryDC, WndRect);
 
+		WndRect = this->GetClientRect();
+		DrawFetionBkgndLine(hMemoryDC, WndRect);
+
 		{
+			WndRect = this->GetWindowRect();
 			POINT ptWinPos = {WndRect.left, WndRect.top};
 			POINT ptSrc = {0, 0};
 			SIZE sizeWindow = {WndRect.Width(), WndRect.Height()};

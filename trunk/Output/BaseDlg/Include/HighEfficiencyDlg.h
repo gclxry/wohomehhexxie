@@ -56,6 +56,7 @@ protected:
 	virtual void SizeMistBegin() {};
 	virtual void SizeMistEnd() {};
 
+	void DrawFetionBkgndLine(HDC hMemoryDC, CRect WndRect);
 private:
 	void SetWndRgn(int cx, int cy);
 	static bool m_bIsNeedLButtonUpMsg;
