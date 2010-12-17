@@ -22,7 +22,7 @@ public:
 
 	CSize GetDcSize() { return m_DcSize; };
 	void Delete();
-	void Create(int nWidth, int nHeight, bool bIsAlign = false);
+	void Create(int nWidth, int nHeight, bool bIsAlign = true);
 
 	HDC GetSafeHdc(void) { return m_hDC; };
 	HBITMAP GetBmpHandle(void) { return m_hBmp; };
