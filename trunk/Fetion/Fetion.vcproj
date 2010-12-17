@@ -393,6 +393,14 @@
 				Name="Ã«²£Á§´°¿Ú"
 				>
 				<File
+					RelativePath=".\Gauss.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Gauss.h"
+					>
+				</File>
+				<File
 					RelativePath=".\GroundGlassDlg.cpp"
 					>
 				</File>
