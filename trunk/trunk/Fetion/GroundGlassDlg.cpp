@@ -1,6 +1,7 @@
 
 #include "StdAfx.h"
 #include "GroundGlassDlg.h"
+#include "Gauss.h"
 
 
 #define __base_super					CHighEfficiencyDlg
@@ -444,8 +445,9 @@ LRESULT CGroundGlassDlg::OnTimer(WPARAM wParam, LPARAM lParam)
 void CGroundGlassDlg::OnPaint(HDC hPaintDc)
 {
 	CSysUnit::SetWindowToTransparence(m_hWnd, true);
+
 	CRect WndRect = this->GetClientRect();
-	m_BmpDc.Create(WndRect.Width(), WndRect.Height());
+	m_BmpDc.Create(WndRect.Width(), WndRect.Height(), false);
 
 	HDC hMemoryDC = m_BmpDc.GetSafeHdc();
 	HBITMAP hMemoryBitmap = m_BmpDc.GetBmpHandle();
@@ -460,6 +462,12 @@ void CGroundGlassDlg::OnPaint(HDC hPaintDc)
 
 		WndRect = this->GetWindowRect();
 		CUiMethod::GetScreenBitmap(hMemoryDC, WndRect);
+
+//		CGaussBlur::GaussIIRBlurImage((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy,
+//			32, 6, 6);
+
+
+
 
 //////////////////////////////////////////////////////////////////////////
 
