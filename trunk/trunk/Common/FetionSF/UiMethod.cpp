@@ -72,7 +72,7 @@ void CUiMethod::SafeColor(int &nColor)
 		nColor = 0;
 }
 
-HBITMAP WINAPI CUiMethod::GetScreenBitmap(CRect &GetRect) 
+HBITMAP CUiMethod::GetScreenBitmap(CRect &GetRect) 
 { 
 	HDC hDC = NULL, hMemDC = NULL;
 	HBITMAP hNewBitmap = NULL;
@@ -94,6 +94,22 @@ HBITMAP WINAPI CUiMethod::GetScreenBitmap(CRect &GetRect)
 		::ReleaseDC(NULL, hDC);
 	}
 	return hNewBitmap;
+}
+
+bool CUiMethod::GetScreenBitmap(HDC hMemDC, CRect &GetRect) 
+{
+	bool bRet = false;
+	HDC hDC = NULL;
+	if (hMemDC != NULL && (hDC = ::GetDC(NULL)) != NULL)
+	{
+		::BitBlt(hMemDC, 0, 0, GetRect.Width(), GetRect.Height(),
+			hDC, GetRect.left, GetRect.top, SRCCOPY);
+
+		::ReleaseDC(NULL, hDC);
+		bRet = true;
+	}
+
+	return bRet;
 }
 
 void CUiMethod::ClientToScreen(HWND hWnd, CRect &ClientRect)

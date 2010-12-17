@@ -4,6 +4,7 @@
 #include "LogonDlgBusiness.h"
 #include "RgnDlg.h"
 #include "MistDlg.h"
+#include "GroundGlassDlg.h"
 
 
 int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
@@ -24,8 +25,11 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 //	CRgnDlg *pRgnDlg = new CRgnDlg(hInstance, NULL, IDI_FETION);
 //	pRgnDlg->ShowWindow();
 
-	CMistDlg *pMistDlg = new CMistDlg(hInstance, NULL, IDI_FETION);;
-	pMistDlg->ShowWindow();
+//	CMistDlg *pMistDlg = new CMistDlg(hInstance, NULL, IDI_FETION);;
+//	pMistDlg->ShowWindow();
+
+	CGroundGlassDlg *pGroundGlassDlg = new CGroundGlassDlg(hInstance, NULL, IDI_FETION);;
+	pGroundGlassDlg->ShowWindow();
 
 
 	// 主消息循环:
@@ -41,7 +45,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 		}
 	}
 //	delete pRgnDlg;
-	delete pMistDlg;
+//	delete pMistDlg;
+	delete pGroundGlassDlg;
 
 	// 释放资源
 	CUiMethod::UnInitGdiPlus();

@@ -350,26 +350,10 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="MistDlg"
+				Name="Áé»ê³öÇÏ´°¿Ú"
 				>
-				<File
-					RelativePath=".\MistDlg.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\MistDlg.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SizeMistDlg.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SizeMistDlg.h"
-					>
-				</File>
 				<Filter
-					Name="Áé»ê³öÇÏ"
+					Name="ÒÆ¶¯Âí¼×´°¿Ú"
 					>
 					<File
 						RelativePath=".\MoveMistDlg.cpp"
@@ -380,6 +364,42 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="À­ÉìÂí¼×´°¿Ú"
+					>
+					<File
+						RelativePath=".\SizeMistDlg.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SizeMistDlg.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Áé»ê´°¿Ú"
+					>
+					<File
+						RelativePath=".\MistDlg.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\MistDlg.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="Ã«²£Á§´°¿Ú"
+				>
+				<File
+					RelativePath=".\GroundGlassDlg.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\GroundGlassDlg.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>

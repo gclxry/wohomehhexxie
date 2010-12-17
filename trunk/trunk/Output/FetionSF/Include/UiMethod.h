@@ -30,7 +30,8 @@ public:
 	static GraphicsPath* MakeRoundRect(Point topLeft, Point bottomRight, INT percentageRounded);
 
 	// 屏幕指定区域截图
-	static HBITMAP WINAPI GetScreenBitmap(CRect &GetRect);
+	static HBITMAP GetScreenBitmap(CRect &GetRect);
+	static bool GetScreenBitmap(HDC hMemDC, CRect &GetRect);
 
 	// 取得图片类型
 	static IMAGE_TYPE GetImageTypeFromLocal(CString strPath);
