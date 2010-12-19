@@ -410,7 +410,7 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 	{
 		Graphics DoGrap(hMemoryDC);
 
-		CSseRender::SolidBrush32ARGB(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), WndRect, 255, 255, 255, 255);
+		CSseRender::SolidBrush32ARGB(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), WndRect, ARGB_MARK(255, 255, 255, 255));
 
 		// ¿ªÊ¼»­Í¼
 		m_pUiManager->OnPaint(hMemoryDC, WndRect);
