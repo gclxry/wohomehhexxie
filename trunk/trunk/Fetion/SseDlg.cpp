@@ -1,6 +1,7 @@
 
 #include "StdAfx.h"
 #include "SseDlg.h"
+#include "SseRender.h"
 
 
 #define __base_super					CHighEfficiencyDlg
@@ -225,7 +226,7 @@ LRESULT CSseDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 
 	if (m_pStatic != NULL)
 	{
-		m_pStatic->MoveWindow(CRect(0, 0, cx, cy), hWinPoslnfo);
+		//m_pStatic->MoveWindow(CRect(0, 0, cx, cy), hWinPoslnfo);
 	}
 
 	if (m_pUserLogo != NULL)
@@ -408,6 +409,8 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 	if (hMemoryDC != NULL && hMemoryBitmap != NULL)
 	{
 		Graphics DoGrap(hMemoryDC);
+
+		CSseRender::SolidBrush32ARGB(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), WndRect, 255, 255, 255, 255);
 
 		// ¿ªÊ¼»­Í¼
 		m_pUiManager->OnPaint(hMemoryDC, WndRect);

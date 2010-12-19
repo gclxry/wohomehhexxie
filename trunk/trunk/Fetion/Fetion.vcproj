@@ -420,6 +420,14 @@
 					RelativePath=".\SseDlg.h"
 					>
 				</File>
+				<File
+					RelativePath=".\SseRender.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SseRender.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>
