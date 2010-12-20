@@ -55,5 +55,6 @@ private:
 
 	CBaseCtrlManager m_UiManager;
 
+	BLENDFUNCTION m_Blend;
 	CBitmapDC m_BmpDc;
 };
