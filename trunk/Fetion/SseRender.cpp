@@ -10,31 +10,61 @@ CSseRender::~CSseRender(void)
 {
 }
 
+// 使用32位带透明值颜色值填充一段位图数据
+void CSseRender::RGBA32_FillBitmapBuffer(DWORD *pBmpData, CSize BmpSize, DWORD dwColor)
+{
+	if (pBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0)
+		return;
+
+	// 64位色块数据
+	DWORD dwColorList[2] = {dwColor, dwColor};
+
+	// 一次运算2个像素
+	int nLoopsCtns = (BmpSize.cx * BmpSize.cy) / 2;
+
+	__asm
+	{
+		emms							// MMX状态清零
+		mov		edi, pBmpData			// 目标寄存器
+		mov		ecx, nLoopsCtns			// 循环次数
+
+LOOP_S:
+		movq	mm0, [dwColorList]		// 将需要复制的64位数据拷贝MMX寄存器中
+		movq	[edi], mm0				// 将64位数据拷贝从MMX寄存器中拷贝到目标内存中
+		add		edi, 8					// 操作8字节之后的数据
+
+		dec		ecx						// 计数器减1
+		jnz		LOOP_S
+		emms							// 恢复FP为正常状态
+	}
+}
+
 void CSseRender::SolidBrush32ARGB(DWORD *pImgData, CSize ImgSize, CRect DrawRect, DWORD dwColor)
 {
 	if (pImgData == NULL || ImgSize.cx == 0 || ImgSize.cy == 0 || DrawRect.IsRectEmpty())
 		return;
 
-	__int64 nPixel = 0;
-
-	DWORD *pdwColor = &dwColor;
+	// 64位色块数据
+	DWORD dwColorList[2] = {dwColor, dwColor};
 
 	// 一次运算2个像素
 	int nLoopsCtns = (ImgSize.cx * ImgSize.cy) / 2;
 
 	__asm
 	{
-		emms
+		emms							// MMX状态清零
 
-		mov		esi, pdwColor			// 目标寄存器
-		mov		edi, pImgData			// 源寄存器
+		mov		edi, pImgData			// 目标寄存器
 		mov		ecx, nLoopsCtns			// 循环次数
 
 LOOP_S:
+		movq	mm0, [dwColorList]		// 将需要复制的64位数据拷贝MMX寄存器中
+		movq	[edi], mm0				// 将64位数据拷贝从MMX寄存器中拷贝到目标内存中
+		add		edi, 8					// 操作8字节之后的数据
 
 		dec		ecx						// 计数器减1
 		jnz		LOOP_S
-		emms							// TBD 恢复FPU为正常状态
+		emms							// 恢复FP为正常状态
 	}
 }
 
