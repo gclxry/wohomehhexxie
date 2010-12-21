@@ -2,7 +2,7 @@
 #include "StdAfx.h"
 #include "GroundGlassDlg.h"
 #include "Gauss.h"
-
+#include "Header1.h"
 
 #define __base_super					CHighEfficiencyDlg
 
@@ -465,6 +465,21 @@ void CGroundGlassDlg::OnPaint(HDC hPaintDc)
 
 //		CGaussBlur::GaussIIRBlurImage((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy,
 //			32, 6, 6);
+
+		//CUiMethod::SaveToBitmap(hMemoryBitmap, _T("D:\\1.bmp"));
+
+//		Bitmap *ptBmp = Bitmap::FromHBITMAP(hMemoryBitmap, NULL);
+
+		ImageGaussiabBlur((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy, 2, 2);
+
+//		BitmapData lockedBitmapData;
+//		ptBmp->LockBits(Rect(0, 0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy), ImageLockModeRead | ImageLockModeWrite, PixelFormat32bppARGB, &lockedBitmapData);
+//		ImageGaussiabBlur((BYTE *)lockedBitmapData.Scan0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy, 2, 2);
+//		ptBmp->UnlockBits(&lockedBitmapData);
+//		DoGrap.DrawImage(ptBmp, PointF(0, 0));
+//		delete ptBmp;
+
+		//CUiMethod::SaveToBitmap(hMemoryBitmap, _T("D:\\2.bmp"));
 
 
 

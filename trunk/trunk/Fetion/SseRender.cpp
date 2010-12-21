@@ -10,13 +10,76 @@ CSseRender::~CSseRender(void)
 {
 }
 
+// 计算一个颜色值的alpha混合
+#define PIXEL_ONE_COLOR_ALPHA_SET(byRGB_One,byA,MovOffset)	\
+__asm	movzx       eax, byRGB_One \
+__asm	movzx       edx, byA \
+__asm	imul        eax, edx \
+__asm	cdq \
+__asm	mov         ecx, 255 \
+__asm	idiv        ecx \
+__asm	mov         [esi+MovOffset], al
+
+// 根据一个像素的RGBA值，进行本像素的alpha混合
+#define PIXEL_ALPHA_SET(byA,byR,byG,byB,dwReturn)	\
+BYTE *pA = &byA; \
+DWORD *pdwColor = &dwReturn; \
+__asm \
+{ \
+	__asm	mov			ebx, pdwColor \
+	__asm	mov			esi, ebx \
+	PIXEL_ONE_COLOR_ALPHA_SET(byR,byA,2) \
+	PIXEL_ONE_COLOR_ALPHA_SET(byG,byA,1) \
+	PIXEL_ONE_COLOR_ALPHA_SET(byB,byA,0) \
+	__asm	movzx		ebx, byA \
+	__asm	mov         [esi+3], bl \
+}
+
+
+
 // 使用32位带透明值颜色值填充一段位图数据
-void CSseRender::RGBA32_FillBitmapBuffer(DWORD *pBmpData, CSize BmpSize, DWORD dwColor)
+void CSseRender::RGBA32_FillBitmapBuffer1(DWORD *pBmpData, CSize BmpSize, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
 {
 	if (pBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0)
 		return;
 
+	DWORD dwColor;
+	// 根据一个像素的RGBA值，进行本像素的alpha混合
+	PIXEL_ALPHA_SET(byA,byR,byG,byB,dwColor);
+
 	// 64位色块数据
+	DWORD dwColorList[2] = {dwColor, dwColor};
+
+	// 一次运算2个像素
+	int nLoopsCtns = (BmpSize.cx * BmpSize.cy) / 2;
+
+	__asm
+	{
+		emms						// MMX状态清零
+		mov		edi, pBmpData		// 目标寄存器
+		mov		ecx, nLoopsCtns		// 循环次数
+LOOP_S:
+		movq	mm0, [dwColorList]
+		movq	[edi], mm0
+		add		edi, 8
+		dec		ecx
+		jnz		LOOP_S
+		emms
+	}
+}
+
+// 使用32位带透明值颜色值填充一段位图数据
+void CSseRender::RGBA32_FillBitmapBuffer(DWORD *pBmpData, CSize BmpSize, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
+{
+	if (pBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0)
+		return;
+
+	byR = (BYTE)((float)byR * ((float)byA / 255.0));
+	byG = (BYTE)((float)byG * ((float)byA / 255.0));
+	byB = (BYTE)((float)byB * ((float)byA / 255.0));
+
+	// 64位色块数据
+	DWORD dwColor = BGRA_MARK(byB, byG, byR, byA);
 	DWORD dwColorList[2] = {dwColor, dwColor};
 
 	// 一次运算2个像素
@@ -36,6 +99,7 @@ LOOP_S:
 		dec		ecx						// 计数器减1
 		jnz		LOOP_S
 		emms							// 恢复FP为正常状态
+
 	}
 }
 
