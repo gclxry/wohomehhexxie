@@ -26,7 +26,12 @@ CBitmapDC::~CBitmapDC()
    Delete();
 }
 
-void CBitmapDC::Create(int nWidth, int nHeight, bool bIsAlign)
+void CBitmapDC::ClearMem()
+{
+
+}
+
+void CBitmapDC::Create(int nWidth, int nHeight)
 {
 	if (nWidth <= 0 || nHeight<= 0)
 		return;
@@ -42,14 +47,11 @@ void CBitmapDC::Create(int nWidth, int nHeight, bool bIsAlign)
 		memset(&bih, 0, sizeof(BITMAPINFOHEADER));
 		bih.biSize = sizeof(BITMAPINFOHEADER);
 		bih.biHeight = nHeight;
+		bih.biWidth = nWidth;
+		//bih.biWidth = ((((int)nWidth * 8) + 31) & ~31) >> 3;
 		bih.biPlanes = 1;
 		bih.biBitCount = 32;
 		bih.biCompression = BI_RGB;
-
-		if (bIsAlign)
-			bih.biWidth = ((((int)nWidth * 8) + 31) & ~31) >> 3;
-		else
-			bih.biWidth = nWidth;
 
 		m_hDC = CreateCompatibleDC(NULL);
 		if (m_hDC != NULL)
@@ -70,6 +72,9 @@ void CBitmapDC::Create(int nWidth, int nHeight, bool bIsAlign)
 			}
 		}
 	}
+
+	if (m_pBits != NULL)
+		memset(m_pBits, 0, m_DcSize.cx * m_DcSize.cy);
 }
 
 void CBitmapDC::Delete()

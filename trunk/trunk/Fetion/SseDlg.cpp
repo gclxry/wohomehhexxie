@@ -1,7 +1,7 @@
 
 #include "StdAfx.h"
 #include "SseDlg.h"
-#include "SseRender.h"
+#include "MmxRender.h"
 
 
 #define __base_super					CHighEfficiencyDlg
@@ -415,45 +415,30 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 	HBITMAP hMemoryBitmap = m_BmpDc.GetBmpHandle();
 	if (hMemoryDC != NULL && hMemoryBitmap != NULL)
 	{
-//		CSseRender::RGBA32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 0, 0, 0, 0);
-
 		Graphics DoGrap(hMemoryDC);
 		DWORD *pBits = m_BmpDc.GetBits();
 
-/*		DWORD dwC = BGRA_MARK(123, 234, 222, 18);
-		RGBQUAD cStu;
-		cStu.rgbBlue = 16;
-		cStu.rgbGreen = 198;
-		cStu.rgbRed = 120;
-		cStu.rgbReserved = 101;
-
-		DWORD dwC1;
-		memcpy(&dwC1, &cStu, sizeof(DWORD));
-
-		SolidBrush FillBrush(Color(101, 120, 198, 16));
+		SolidBrush FillBrush(Color(0, 120, 198, 16));
 		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
-		*/
 
-		CSseRender::RGBA32_FillBitmapBuffer1(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 101, 120, 198, 16);
-
+		CMmxRender MmxR;
+		MmxR.RGBA32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 101, 120, 198, 16);
 
 		// ¿ªÊ¼»­Í¼
-//		m_pUiManager->OnPaint(hMemoryDC, WndRect);
-//
-//		WndRect = this->GetClientRect();
-//		DrawFetionBkgndLine(hMemoryDC, WndRect);
+		m_pUiManager->OnPaint(hMemoryDC, WndRect);
 
-		{
-			CSysUnit::SetWindowToTransparence(m_hWnd, true);
-			WndRect = this->GetWindowRect();
-			POINT ptWinPos = {WndRect.left, WndRect.top};
-			POINT ptSrc = {0, 0};
-			SIZE sizeWindow = {WndRect.Width(), WndRect.Height()};
-			::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, hMemoryDC, &ptSrc, 0, &m_Blend, ULW_ALPHA);
-		}
+		// »­±ß¿ò
+		WndRect = this->GetClientRect();
+		DrawFetionBkgndLine(hMemoryDC, WndRect);
+
+		CSysUnit::SetWindowToTransparence(m_hWnd, true);
+		WndRect = this->GetWindowRect();
+		POINT ptWinPos = {WndRect.left, WndRect.top};
+		POINT ptSrc = {0, 0};
+		SIZE sizeWindow = {WndRect.Width(), WndRect.Height()};
+		::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, hMemoryDC, &ptSrc, 0, &m_Blend, ULW_ALPHA);
 
 //		CSysUnit::SetWindowToTransparence(m_hWnd, false);
-//		::BitBlt(hPaintDc, 0, 0, WndRect.Width(), WndRect.Height(),
-//			hMemoryDC, 0, 0, SRCCOPY);
+//		::BitBlt(hPaintDc, 0, 0, WndRect.Width(), WndRect.Height(), hMemoryDC, 0, 0, SRCCOPY);
 	}
 }

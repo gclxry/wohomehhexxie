@@ -447,7 +447,7 @@ void CGroundGlassDlg::OnPaint(HDC hPaintDc)
 	CSysUnit::SetWindowToTransparence(m_hWnd, true);
 
 	CRect WndRect = this->GetClientRect();
-	m_BmpDc.Create(WndRect.Width(), WndRect.Height(), false);
+	m_BmpDc.Create(WndRect.Width(), WndRect.Height());
 
 	HDC hMemoryDC = m_BmpDc.GetSafeHdc();
 	HBITMAP hMemoryBitmap = m_BmpDc.GetBmpHandle();
