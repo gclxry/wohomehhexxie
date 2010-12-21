@@ -418,11 +418,24 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		Graphics DoGrap(hMemoryDC);
 		DWORD *pBits = m_BmpDc.GetBits();
 
-		SolidBrush FillBrush(Color(0, 120, 198, 16));
-		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
+		SolidBrush FillBrush(Color(101, 120, 198, 16));
+
+		DWORD dwTm1 = ::GetTickCount();
+//		for (int i = 0; i < 5000; i++)
+//		{
+//			DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
+//		}
+		DWORD dwTm2 = ::GetTickCount();
 
 		CMmxRender MmxR;
-		MmxR.RGBA32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 101, 120, 198, 16);
+//		for (int i = 0; i < 5000; i++)
+		{
+			MmxR.RGBA32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 101, 120, 198, 16);
+		}
+		DWORD dwTm3 = ::GetTickCount();
+
+		DWORD dwT1 = dwTm2 - dwTm1;
+		DWORD dwT2 = dwTm3 - dwTm2;
 
 		// ¿ªÊ¼»­Í¼
 		m_pUiManager->OnPaint(hMemoryDC, WndRect);
