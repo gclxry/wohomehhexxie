@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\BaseDlg\Include;..\Output\FetionSF\Include;..\Output\RichEdit\Include;..\Common\GDIPlus\Includes;..\Output\Flash\Include;..\Common\DirectXSDK\Include"
+				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\BaseDlg\Include;..\Output\FetionSF\Include;..\Output\RichEdit\Include;..\Common\GDIPlus\Includes;..\Output\Flash\Include;..\Common\DirectXSDK\Include;..\Output\MmxRender\Include;..\TS_MmxRender"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -120,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\BaseDlg\Include;..\Output\FetionSF\Include;..\Output\RichEdit\Include;..\Common\GDIPlus\Includes;..\Output\Flash\Include;..\Common\DirectXSDK\Include"
+				AdditionalIncludeDirectories=".\;..\Output\BaseCtrl\Include;..\Output\BaseDlg\Include;..\Output\FetionSF\Include;..\Output\RichEdit\Include;..\Common\GDIPlus\Includes;..\Output\Flash\Include;..\Common\DirectXSDK\Include;..\Output\MmxRender\Include;..\TS_MmxRender"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -424,15 +424,27 @@
 					RelativePath=".\SseDlg.h"
 					>
 				</File>
-				<File
-					RelativePath=".\SseRender.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SseRender.h"
-					>
-				</File>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="Mmx"
+			>
+			<File
+				RelativePath="..\TS_MmxRender\MmxBase.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\MmxRender\Include\MmxBase.h"
+				>
+			</File>
+			<File
+				RelativePath="..\TS_MmxRender\MmxRender.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\MmxRender\Include\MmxRender.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
