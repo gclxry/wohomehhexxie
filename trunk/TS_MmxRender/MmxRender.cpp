@@ -29,7 +29,7 @@ void CMmxRender::ARGB32_FillBitmapBuffer(DWORD *pBmpData, CSize BmpSize, BYTE by
 	int nLoops = (BmpSize.cx * BmpSize.cy) / 2;
 	__asm
 	{
-		emms
+		emms							// MMX状态清零
 		mov		edi, pBmpData			// 目标寄存器
 		mov		ecx, nLoops				// 循环次数
 		dec		ecx
@@ -91,3 +91,29 @@ LOOP_S:
 		}
 	}
 }
+/*
+// 32位带透明值色块画刷
+void CMmxRender::ARGB32_SolidBrush(BYTE *pBmpData, CSize BmpSize, CRect BrushRect, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
+{
+	if (pBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0 || BrushRect.IsRectEmpty() || byA == 0)
+		return;
+
+	for (int i = 0; i < BmpSize.cx * BmpSize.cy; i++)
+	{
+		DWORD dwC = pBmpData[i];
+		BYTE byDA = (BYTE)(dwC>>24);
+		BYTE byDR = (BYTE)(dwC>>16);
+		BYTE byDG = (BYTE)(dwC>>8);
+		BYTE byDB = (BYTE)dwC;
+
+		float fAlpha = (float)byA / (float)255.0;
+		byDR = (BYTE)((float)byR * fAlpha + (1.0 - fAlpha) * (float)byDR);
+		byDG = (BYTE)((float)byG * fAlpha + (1.0 - fAlpha) * (float)byDG);
+		byDB = (BYTE)((float)byB * fAlpha + (1.0 - fAlpha) * (float)byDB);
+
+		float fAlphaD = (float)byDA / (float)255.0;
+		byDA = (BYTE)((1.0 - (1.0 - fAlpha) * (1.0 - fAlphaD)) * 255.0);
+		pBmpData[i] = BGRA_MARK(byDB,byDG,byDR,byDA);
+	}
+}
+*/
