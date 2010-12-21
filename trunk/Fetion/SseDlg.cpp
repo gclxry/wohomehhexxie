@@ -415,12 +415,12 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 	HBITMAP hMemoryBitmap = m_BmpDc.GetBmpHandle();
 	if (hMemoryDC != NULL && hMemoryBitmap != NULL)
 	{
-		CSseRender::RGBA32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 0);
+//		CSseRender::RGBA32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 0, 0, 0, 0);
 
 		Graphics DoGrap(hMemoryDC);
 		DWORD *pBits = m_BmpDc.GetBits();
 
-		DWORD dwC = BGRA_MARK(123, 234, 222, 18);
+/*		DWORD dwC = BGRA_MARK(123, 234, 222, 18);
 		RGBQUAD cStu;
 		cStu.rgbBlue = 16;
 		cStu.rgbGreen = 198;
@@ -432,8 +432,10 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 
 		SolidBrush FillBrush(Color(101, 120, 198, 16));
 		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
+		*/
 
-		CSseRender::RGBA32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), dwC1);
+		CSseRender::RGBA32_FillBitmapBuffer1(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 101, 120, 198, 16);
+
 
 		// ¿ªÊ¼»­Í¼
 //		m_pUiManager->OnPaint(hMemoryDC, WndRect);
@@ -455,10 +457,3 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 //			hMemoryDC, 0, 0, SRCCOPY);
 	}
 }
-
-/*
-Src.Red = Src.Red * SourceConstantAlpha / 255.0;  
-Src.Green = Src.Green * SourceConstantAlpha / 255.0;  
-Src.Blue = Src.Blue * SourceConstantAlpha / 255.0;  
-Src.Alpha = Src.Alpha * SourceConstantAlpha / 255.0;  
-*/
