@@ -16,12 +16,8 @@ void CMmxRender::RGBA32_FillBitmapBuffer(DWORD *pBmpData, CSize BmpSize, BYTE by
 	if (pBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0)
 		return;
 
-	DWORD dwColor;
-	if (byA == 0)
-	{
-		dwColor = 0;
-	}
-	else
+	DWORD dwColor = 0;
+	if (byA > 0)
 	{
 		// 根据一个像素的RGBA值，进行本像素的alpha混合
 		PIXEL_ALPHA_SET(byA,byR,byG,byB,dwColor);
