@@ -441,7 +441,7 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 
 		CMmxRender MmxR;
 		MmxR.ARGB32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 101, 150, 198, 16);
-		MmxR.ARGB32_SolidBrush(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(0, 0, WndRect.Width(), WndRect.Height()), 201, 49, 40, 50);
+		MmxR.ARGB32_SolidBrush((BYTE*)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(0, 0, WndRect.Width(), WndRect.Height()), 201, 49, 40, 50);
 
 
 
