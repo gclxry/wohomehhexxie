@@ -418,12 +418,6 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		Graphics DoGrap(hMemoryDC);
 		DWORD *pBits = m_BmpDc.GetBits();
 
-		DWORD dwTm1 = ::GetTickCount();
-		DWORD dwTm2 = ::GetTickCount();
-		DWORD dwTm3 = ::GetTickCount();
-		DWORD dwT1 = dwTm2 - dwTm1;
-		DWORD dwT2 = dwTm3 - dwTm2;
-
 		/*		// ½¥±ä»­Ë¢
 		col1 = Color(0, 102, 102, 102);
 		col2 = Color(70, 102, 102, 102);
@@ -433,16 +427,31 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		DoGrap.FillRectangle(&lgBrush4, p1.X, p1.Y, nXhW, nXhW);
 		*/
 
-//		SolidBrush FillBrush(Color(101, 150, 198, 16));
-//		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
+		SolidBrush FillBrush(Color(101, 150, 198, 16));
+		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
 
-//		SolidBrush FillBrush1(Color(201, 49, 40, 50));
-//		DoGrap.FillRectangle(&FillBrush1, 0, 0, WndRect.Width(), WndRect.Height());
+		SolidBrush FillBrush1(Color(201, 49, 40, 50));
+
+		DWORD dwTm1 = ::GetTickCount();
+		for (int i = 0; i < 2000; i++)
+		{
+			DoGrap.FillRectangle(&FillBrush1, 0, 0, WndRect.Width(), WndRect.Height());
+		}
+		DWORD dwTm2 = ::GetTickCount();
 
 		CMmxRender MmxR;
 		MmxR.ARGB32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 101, 150, 198, 16);
-		MmxR.ARGB32_SolidBrush((BYTE*)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(0, 0, WndRect.Width(), WndRect.Height()), 201, 49, 40, 50);
 
+		DWORD dwTm3 = ::GetTickCount();
+		for (int i = 0; i < 2000; i++)
+		{
+			MmxR.ARGB32_SolidBrush((BYTE*)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(0, 0, WndRect.Width(), WndRect.Height()), 201, 49, 40, 50);
+		}
+		DWORD dwTm4 = ::GetTickCount();
+
+
+		DWORD dwT1 = dwTm2 - dwTm1;
+		DWORD dwT2 = dwTm4 - dwTm3;
 
 
 		// ¿ªÊ¼»­Í¼
