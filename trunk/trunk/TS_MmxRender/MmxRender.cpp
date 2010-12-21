@@ -29,7 +29,7 @@ void CMmxRender::ARGB32_FillBitmapBuffer(DWORD *pBmpData, CSize BmpSize, BYTE by
 	int nLoops = (BmpSize.cx * BmpSize.cy) / 2;
 	__asm
 	{
-		emms							// MMX状态清零
+		emms
 		mov		edi, pBmpData			// 目标寄存器
 		mov		ecx, nLoops				// 循环次数
 		dec		ecx
@@ -52,52 +52,22 @@ void CMmxRender::ARGB32_SolidBrush(BYTE *pBmpData, CSize BmpSize, CRect BrushRec
 	if (pBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0 || BrushRect.IsRectEmpty() || byA == 0)
 		return;
 
-//	for (int i = 0; i < BmpSize.cx * BmpSize.cy; i++)
-//	{
-		DWORD dwC = pBmpData[0];
-		BYTE byDA = (BYTE)(dwC>>24);
-		BYTE byDR = (BYTE)(dwC>>16);
-		BYTE byDG = (BYTE)(dwC>>8);
-		BYTE byDB = (BYTE)dwC;
-
-		float fAlpha = (float)byA / (float)255.0;
-		byDR = (BYTE)((float)byR * fAlpha + (1.0 - fAlpha) * (float)byDR);
-		byDG = (BYTE)((float)byG * fAlpha + (1.0 - fAlpha) * (float)byDG);
-		byDB = (BYTE)((float)byB * fAlpha + (1.0 - fAlpha) * (float)byDB);
-
-		float fAlphaD = (float)byDA / (float)255.0;
-		byDA = (BYTE)((1.0 - (1.0 - fAlpha) * (1.0 - fAlphaD)) * 255.0);
-//		pBmpData[i] = BGRA_MARK(byDB,byDG,byDR,byDA);
-//	}
-
-
 	if (byA == 255)
 	{
 	}
 	else
 	{
-		float fAlphaS = 0.0;
-		float *pfAlphaS = &fAlphaS;
-
-		float fAlphaD = 0.0;
-		float *pfAlphaD = &fAlphaD;
-
-//		BYTE *pbySa = &byA;
-//		BYTE *pbySr = &byR;
-//		BYTE *pbySg = &byG;
-//		BYTE *pbySb = &byB;
-
 		int nLoops = BmpSize.cx * BmpSize.cy;
 		__asm
 		{
-			emms							// MMX状态清零
-			mov		esi, pBmpData			// 目标寄存器
+			emms
+			mov		esi, pBmpData
 
 			movzx	edx, byA
 			mov		ebx, 00FFH
 			sub		ebx, edx
 
-			mov		ecx, nLoops				// 循环次数
+			mov		ecx, nLoops
 			dec		ecx
 LOOP_S:
 			__asm							// 逐个像素计算alpha融合
@@ -115,7 +85,7 @@ LOOP_S:
 				sub		eax, edx
 				mov		[esi+3], al
 			}
-			add		esi, 4					// 操作4字节之后的数据
+			add		esi, 4					// 操作下一个像素
 			loop	LOOP_S
 			emms
 		}
