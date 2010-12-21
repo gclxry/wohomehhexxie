@@ -418,24 +418,32 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		Graphics DoGrap(hMemoryDC);
 		DWORD *pBits = m_BmpDc.GetBits();
 
-		SolidBrush FillBrush(Color(101, 120, 198, 16));
-
 		DWORD dwTm1 = ::GetTickCount();
-//		for (int i = 0; i < 5000; i++)
-//		{
-//			DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
-//		}
 		DWORD dwTm2 = ::GetTickCount();
-
-		CMmxRender MmxR;
-//		for (int i = 0; i < 5000; i++)
-		{
-			MmxR.RGBA32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 101, 120, 198, 16);
-		}
 		DWORD dwTm3 = ::GetTickCount();
-
 		DWORD dwT1 = dwTm2 - dwTm1;
 		DWORD dwT2 = dwTm3 - dwTm2;
+
+		/*		// ½¥±ä»­Ë¢
+		col1 = Color(0, 102, 102, 102);
+		col2 = Color(70, 102, 102, 102);
+		p1 = Point(0, 0);
+		p2 = Point(nXhW, nXhW);
+		LinearGradientBrush lgBrush4(p1, p2, col1, col2);
+		DoGrap.FillRectangle(&lgBrush4, p1.X, p1.Y, nXhW, nXhW);
+		*/
+
+//		SolidBrush FillBrush(Color(101, 150, 198, 16));
+//		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
+
+//		SolidBrush FillBrush1(Color(201, 49, 40, 50));
+//		DoGrap.FillRectangle(&FillBrush1, 0, 0, WndRect.Width(), WndRect.Height());
+
+		CMmxRender MmxR;
+		MmxR.ARGB32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 101, 150, 198, 16);
+		MmxR.ARGB32_SolidBrush(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(0, 0, WndRect.Width(), WndRect.Height()), 201, 49, 40, 50);
+
+
 
 		// ¿ªÊ¼»­Í¼
 		m_pUiManager->OnPaint(hMemoryDC, WndRect);

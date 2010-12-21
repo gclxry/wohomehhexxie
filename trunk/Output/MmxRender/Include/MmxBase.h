@@ -41,5 +41,12 @@ public:
 	~CMmxBase(void);
 
 	// 使用32位带透明值颜色值填充一段位图数据
-	virtual void RGBA32_FillBitmapBuffer(DWORD *pBmpData, CSize BmpSize, BYTE byA, BYTE byR, BYTE byG, BYTE byB) {};
+	virtual void ARGB32_FillBitmapBuffer(DWORD *pBmpData, CSize BmpSize, BYTE byA, BYTE byR, BYTE byG, BYTE byB) {};
 };
+
+
+// 两个像素覆盖的ALPHA融合算法
+// Dst.Red = Src.Red * Src.alpha + (1-Src.alpha) * Dst.Red ;
+// Dst.Green = Src.Green * Src.alpha + (1-Src.alpha) * Dst.Green;
+// Dst.Blue = Src.Blue * Src.alpha + (1-Src.alpha) * Dst.Blue ;
+// Dst.Alpha = 1 - (1 - Src.Alpha1) * ( 1 - Dst.Alpha)
