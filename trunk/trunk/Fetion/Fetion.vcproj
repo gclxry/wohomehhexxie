@@ -437,14 +437,30 @@
 				RelativePath="..\Output\MmxRender\Include\MmxBase.h"
 				>
 			</File>
-			<File
-				RelativePath="..\TS_MmxRender\MmxRender.cpp"
+			<Filter
+				Name="Mmx"
 				>
-			</File>
-			<File
-				RelativePath="..\Output\MmxRender\Include\MmxRender.h"
+				<File
+					RelativePath="..\TS_MmxRender\MmxRender.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\MmxRender\Include\MmxRender.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Sse2"
 				>
-			</File>
+				<File
+					RelativePath="..\TS_MmxRender\Sse2Render.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\MmxRender\Include\Sse2Render.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

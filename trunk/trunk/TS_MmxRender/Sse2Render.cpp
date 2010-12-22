@@ -1,17 +1,17 @@
 
 #include "StdAfx.h"
-#include "MmxRender.h"
+#include "Sse2Render.h"
 
-CMmxRender::CMmxRender(void)
+CSse2Render::CSse2Render(void)
 {
 }
 
-CMmxRender::~CMmxRender(void)
+CSse2Render::~CSse2Render(void)
 {
 }
 
 // 使用32位带透明值颜色值填充一段位图数据
-void CMmxRender::ARGB32_FillBitmapBuffer(DWORD *pBmpData, CSize BmpSize, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
+void CSse2Render::ARGB32_FillBitmapBuffer(DWORD *pBmpData, CSize BmpSize, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
 {
 	if (pBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0)
 		return;
@@ -45,8 +45,8 @@ LOOP_S:
 		pBmpData[BmpSize.cx * BmpSize.cy - 1] = dwColor;
 }
 
-// mmx 32位带透明值色块画刷
-void CMmxRender::ARGB32_SolidBrush(DWORD *pDstBmpData, CSize BmpSize, CRect BrushRect, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
+// sse2 32位带透明值色块画刷
+void CSse2Render::ARGB32_SolidBrush(DWORD *pDstBmpData, CSize BmpSize, CRect BrushRect, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
 {
 	if (pDstBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0 || BrushRect.IsRectEmpty() || byA == 0)
 		return;
@@ -99,75 +99,3 @@ LOOP_S:
 		}
 	}
 }
-
-/*
-// 汇编 32位带透明值色块画刷
-void CMmxRender::ARGB32_SolidBrush(BYTE *pBmpData, CSize BmpSize, CRect BrushRect, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
-{
-	if (pBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0 || BrushRect.IsRectEmpty() || byA == 0)
-		return;
-
-	if (byA == 255)
-	{
-	}
-	else
-	{
-		int nLoops = BmpSize.cx * BmpSize.cy;
-		__asm
-		{
-			mov		esi, pBmpData
-
-			movzx	edx, byA
-			mov		ebx, 00FFH
-			sub		ebx, edx
-
-			mov		ecx, nLoops
-			dec		ecx
-LOOP_S:
-			__asm							// 逐个像素计算alpha融合
-			{
-				TW0_PIXEL_ALPHA_SET(byB,byA,0)
-				TW0_PIXEL_ALPHA_SET(byG,byA,1)
-				TW0_PIXEL_ALPHA_SET(byR,byA,2)
-
-				movzx	eax, [esi+3]
-				mov		edx, 00FFH
-				sub		edx, eax
-				imul	edx, ebx
-				shr		edx, 8
-				mov		eax, 00FFH
-				sub		eax, edx
-				mov		[esi+3], al
-			}
-			add		esi, 4					// 操作下一个像素
-			loop	LOOP_S
-			emms
-		}
-	}
-}
-
-// C 32位带透明值色块画刷
-void CMmxRender::ARGB32_SolidBrush(BYTE *pBmpData, CSize BmpSize, CRect BrushRect, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
-{
-	if (pBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0 || BrushRect.IsRectEmpty() || byA == 0)
-		return;
-
-	for (int i = 0; i < BmpSize.cx * BmpSize.cy; i++)
-	{
-		DWORD dwC = pBmpData[i];
-		BYTE byDA = (BYTE)(dwC>>24);
-		BYTE byDR = (BYTE)(dwC>>16);
-		BYTE byDG = (BYTE)(dwC>>8);
-		BYTE byDB = (BYTE)dwC;
-
-		float fAlpha = (float)byA / (float)255.0;
-		byDR = (BYTE)((float)byR * fAlpha + (1.0 - fAlpha) * (float)byDR);
-		byDG = (BYTE)((float)byG * fAlpha + (1.0 - fAlpha) * (float)byDG);
-		byDB = (BYTE)((float)byB * fAlpha + (1.0 - fAlpha) * (float)byDB);
-
-		float fAlphaD = (float)byDA / (float)255.0;
-		byDA = (BYTE)((1.0 - (1.0 - fAlpha) * (1.0 - fAlphaD)) * 255.0);
-		pBmpData[i] = BGRA_MARK(byDB,byDG,byDR,byDA);
-	}
-}
-*/
