@@ -56,46 +56,66 @@ void CSse2Render::ARGB32_SolidBrush(DWORD *pDstBmpData, CSize BmpSize, CRect Bru
 	}
 	else
 	{
-		DWORD dwOvrColor = BGRA_MARK(byB,byG,byR,byA);
+		DWORD dwOvrColor[2] = { BGRA_MARK(byB,byG,byR,byA), BGRA_MARK(byB,byG,byR,byA) };
+		DWORD *pDwOvrColor = dwOvrColor;
 
-		int nLoops = BmpSize.cx * BmpSize.cy;
+		int nLoops = (BmpSize.cx * BmpSize.cy) / 2;
 		__asm
 		{
-			// 算法流程
-			pxor		mm2, mm2	// 把MM2清0
+			pxor		xmm2, xmm2	// 把MM2清0
 			mov			edx, pDstBmpData	// 取32bit像素地址到edx
-			mov			eax, dwOvrColor
+			mov			eax, pDwOvrColor
 			mov			ecx, nLoops
 			dec			ecx
 
-			// dst = (ovr * ovr.alpha) / 256 + dst - (dst * ovr.alpha) / 256
 			// dst = ((ovr - dst) * ovr.alpha) / 256 + dst
 LOOP_S:
-			movd		mm0, [edx]	// 把Source像素值取到mm0低32bit
-			movd		mm1, eax	// 把Overlay像素值取到mm1低32bit
-			punpcklbw	mm0, mm2	// Source:8 bit到16 bit以容纳结果,32bit expand to 64 bit
-			punpcklbw	mm1, mm2	// Overlay:8 bit到16 bit以容纳结果.32bit expand to 64 bit
-			movq		mm3, mm1	// 因为要用Overlay的Alpha值
-			punpckhwd	mm3, mm3	// 高字移动到双字
-			punpckhdq	mm3, mm3	// 双字移动到四字，可以分别计算每个颜色值的alpha的混合啦
-			movq		mm4, mm0
-			movq		mm5, mm1
-			psubusw		mm4, mm1	// Source-Overlay,饱和减
-			psubusw		mm5, mm0	// Overlay-Source,饱和减
-			pmullw		mm4, mm3	// Alpha * (Source-Overlay)
-			pmullw		mm5, mm3	// Alpha * (Overlay-Source)
-			psrlw		mm4, 8		// 除以256,now mm4 get the result,(Source-Overlay)<0 部分
-			psrlw		mm5, 8		// 除以256,now mm5 get the result,(Overlay-Source)>0 部分
-			paddusw		mm0, mm5	// 饱和加到原图象D=Alpha*(O-S)+S,(Source-Overlay)<0 部分
-			psubusw		mm0, mm4	// 饱和加到原图象D=S-Alpha*(S-O),(Overlay-Source)>0 部分
-			packuswb	mm0, mm0	// 紧缩到低32bit
+			movq		mm0, qword ptr [edx]	// 取2个像素值放入mm0，目标像素点
+			movq		mm1, qword ptr [eax]	// 取2个像素值放入mm1，覆盖像素点
 
-			movd		[edx], mm0	// 保存结果
-			add			edx, 4		// 操作下一个像素
+			movq2dq		xmm0, mm0	// 把2个像素值放入xmm0低64bit
+			movq2dq		xmm1, mm1
+
+			punpcklbw	xmm0, xmm2	// 扩展64位数据到128位，以32位一个像素为单位，以容纳计算结果
+			punpcklbw	xmm1, xmm2
+
+//			movdq2q		mm4, xmm0	// TTT 测试显示值
+//			movdq2q		mm5, xmm1	// TTT 测试显示值
+
+			movdqu		xmm3, xmm1	// 为了取得覆盖像素点的alpha值
+			punpckhwd	xmm3, xmm3	// 高字移动到双字
+			punpckhwd	xmm3, xmm3	// 高字移动到四字
+			punpckhwd	xmm3, xmm3	// 双字移动到八字，可以分别计算每个颜色值的alpha的混合啦
+
+//			movdq2q		mm4, xmm3	// TTT 测试显示值
+
+			movdqu		xmm4, xmm0
+			movdqu		xmm5, xmm1
+
+			psubusw		xmm4, xmm1	// Source-Overlay,饱和减
+			psubusw		xmm5, xmm0	// Overlay-Source,饱和减
+
+			pmullw		xmm4, xmm3	// Alpha * (Source-Overlay)
+			pmullw		xmm5, xmm3	// Alpha * (Overlay-Source)
+
+			psrlw		xmm4, 8		// 除以256,now mm4 get the result,(Source-Overlay)<0 部分
+			psrlw		xmm5, 8		// 除以256,now mm5 get the result,(Overlay-Source)>0 部分
+
+
+			paddusw		xmm0, xmm5	// 饱和加到原图象D=Alpha*(O-S)+S,(Source-Overlay)<0 部分
+			psubusw		xmm0, xmm4	// 饱和加到原图象D=S-Alpha*(S-O),(Overlay-Source)>0 部分
+			packuswb	xmm0, xmm0	// 紧缩到低32bit
+
+			movdq2q		mm0, xmm0	// 保存结果
+			movq		[edx], mm0
+			add			edx, 8
 
 			loop		LOOP_S
-
 			emms
+		}
+
+		if ((BmpSize.cx * BmpSize.cy) % 2 > 1)
+		{
 		}
 	}
 }

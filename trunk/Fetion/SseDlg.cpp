@@ -434,7 +434,7 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		SolidBrush FillBrush1(Color(201, 49, 40, 50));
 
 		DWORD dwTm1 = ::GetTickCount();
-//		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 2000; i++)
 		{
 			DoGrap.FillRectangle(&FillBrush1, 0, 0, WndRect.Width(), WndRect.Height());
 		}
@@ -445,7 +445,7 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 
 		CSse2Render Sse2R;
 		DWORD dwTm3 = ::GetTickCount();
-//		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 2000; i++)
 		{
 			Sse2R.ARGB32_SolidBrush(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(0, 0, WndRect.Width(), WndRect.Height()), 201, 49, 40, 50);
 		}
