@@ -58,6 +58,7 @@ public:
 // Dst.Green = Src.Green * Src.alpha + (1-Src.alpha) * Dst.Green;
 // Dst.Blue = Src.Blue * Src.alpha + (1-Src.alpha) * Dst.Blue ;
 // Dst.Alpha = 1 - (1 - Src.Alpha1) * ( 1 - Dst.Alpha)
+// dst = ((ovr - dst) * ovr.alpha) / 256 + dst
 
 
 // 计算一个颜色值的alpha混合
