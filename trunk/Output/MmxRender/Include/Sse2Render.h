@@ -4,11 +4,11 @@
 #include "MmxBase.h"
 
 
-class CMmxRender : public CMmxBase
+class CSse2Render : public CMmxBase
 {
 public:
-	CMmxRender(void);
-	~CMmxRender(void);
+	CSse2Render(void);
+	~CSse2Render(void);
 
 	// 使用32位带透明值颜色值填充一段位图数据
 	virtual void ARGB32_FillBitmapBuffer(DWORD *pBmpData, CSize BmpSize, BYTE byA, BYTE byR, BYTE byG, BYTE byB);

@@ -2,6 +2,7 @@
 #include "StdAfx.h"
 #include "SseDlg.h"
 #include "MmxRender.h"
+#include "Sse2Render.h"
 
 
 #define __base_super					CHighEfficiencyDlg
@@ -433,7 +434,7 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		SolidBrush FillBrush1(Color(201, 49, 40, 50));
 
 		DWORD dwTm1 = ::GetTickCount();
-		for (int i = 0; i < 2000; i++)
+//		for (int i = 0; i < 10; i++)
 		{
 			DoGrap.FillRectangle(&FillBrush1, 0, 0, WndRect.Width(), WndRect.Height());
 		}
@@ -442,10 +443,11 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		CMmxRender MmxR;
 		MmxR.ARGB32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 101, 150, 198, 16);
 
+		CSse2Render Sse2R;
 		DWORD dwTm3 = ::GetTickCount();
-		for (int i = 0; i < 2000; i++)
+//		for (int i = 0; i < 10; i++)
 		{
-			MmxR.ARGB32_SolidBrush((BYTE*)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(0, 0, WndRect.Width(), WndRect.Height()), 201, 49, 40, 50);
+			Sse2R.ARGB32_SolidBrush(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(0, 0, WndRect.Width(), WndRect.Height()), 201, 49, 40, 50);
 		}
 		DWORD dwTm4 = ::GetTickCount();
 
