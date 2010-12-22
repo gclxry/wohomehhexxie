@@ -68,7 +68,6 @@ void CSse2Render::ARGB32_SolidBrush(DWORD *pDstBmpData, CSize BmpSize, CRect Bru
 			mov			ecx, nLoops
 			dec			ecx
 
-			// dst = ((ovr - dst) * ovr.alpha) / 256 + dst
 LOOP_S:
 			movq		mm0, qword ptr [edx]	// 取2个像素值放入mm0，目标像素点
 			movq		mm1, qword ptr [eax]	// 取2个像素值放入mm1，覆盖像素点
@@ -100,7 +99,6 @@ LOOP_S:
 
 			psrlw		xmm4, 8		// 除以256,now mm4 get the result,(Source-Overlay)<0 部分
 			psrlw		xmm5, 8		// 除以256,now mm5 get the result,(Overlay-Source)>0 部分
-
 
 			paddusw		xmm0, xmm5	// 饱和加到原图象D=Alpha*(O-S)+S,(Source-Overlay)<0 部分
 			psubusw		xmm0, xmm4	// 饱和加到原图象D=S-Alpha*(S-O),(Overlay-Source)>0 部分
