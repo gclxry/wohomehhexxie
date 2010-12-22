@@ -10,6 +10,20 @@ CMmxRender::~CMmxRender(void)
 {
 }
 
+// 设置Alpha为指定值
+void CMmxRender::ARGB32_CoverAlpha(DWORD *pBmpData, CSize BmpSize, BYTE byA)
+{
+	if (pBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0)
+		return;
+
+	for (int i = 0; i < (BmpSize.cx * BmpSize.cy); i++)
+	{
+		BYTE *pRgba = (BYTE*)&(pBmpData[i]);
+		pRgba += 3;
+		*pRgba = byA;
+	}
+}
+
 // 使用32位带透明值颜色值填充一段位图数据
 void CMmxRender::ARGB32_FillBitmapBuffer(DWORD *pBmpData, CSize BmpSize, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
 {
