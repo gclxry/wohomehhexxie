@@ -61,7 +61,6 @@ void CMmxRender::ARGB32_SolidBrush(DWORD *pDstBmpData, CSize BmpSize, CRect Brus
 		int nLoops = BmpSize.cx * BmpSize.cy;
 		__asm
 		{
-			// 算法流程
 			pxor		mm2, mm2	// 把MM2清0
 			mov			edx, pDstBmpData	// 取32bit像素地址到edx
 			mov			eax, dwOvrColor
