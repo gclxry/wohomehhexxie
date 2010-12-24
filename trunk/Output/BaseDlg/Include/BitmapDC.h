@@ -28,9 +28,6 @@ public:
 	HBITMAP GetBmpHandle(void) { return m_hBmp; };
 	DWORD* GetBits(void) { return (DWORD *)m_pBits; };
 
-private:
-	void ClearMem();
-
 protected:
 
 	HBITMAP m_hBmp;

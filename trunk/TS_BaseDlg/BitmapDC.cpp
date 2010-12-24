@@ -26,11 +26,6 @@ CBitmapDC::~CBitmapDC()
    Delete();
 }
 
-void CBitmapDC::ClearMem()
-{
-
-}
-
 void CBitmapDC::Create(int nWidth, int nHeight)
 {
 	if (nWidth <= 0 || nHeight<= 0)
@@ -60,21 +55,20 @@ void CBitmapDC::Create(int nWidth, int nHeight)
 				DIB_RGB_COLORS, (void**)(&m_pBits), NULL, 0);
 
 			if (m_hBmp != NULL && m_pBits != NULL)
-			{
 				SelectObject(m_hDC, m_hBmp);
-			}
 			else
-			{
-				DeleteDC(m_hDC);
-				m_pBits = NULL;
-				m_hBmp = NULL;
-				m_hDC = NULL;
-			}
+				Delete();
+		}
+		else
+		{
+			Delete();
 		}
 	}
-
-	if (m_pBits != NULL)
-		memset(m_pBits, 0, m_DcSize.cx * m_DcSize.cy);
+	else
+	{
+		if (m_pBits != NULL)
+			memset(m_pBits, 0, m_DcSize.cx * m_DcSize.cy * 4);
+	}
 }
 
 void CBitmapDC::Delete()
@@ -92,4 +86,5 @@ void CBitmapDC::Delete()
 	}
 
 	m_pBits = NULL;
+	m_DcSize.cx = m_DcSize.cy = 0;
 }

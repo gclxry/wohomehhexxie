@@ -109,7 +109,7 @@ bool CBfComboSelBtnBar::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pU
 			m_pIdStatic = pBaseCMgr->CreateBfStatic(pMsgCtrl, CRect(0, 0, 0, 0));
 			bRet = (m_pIdStatic != NULL);
 			if (bRet)
-				m_pIdStatic->SetWindowTextColor(Color(255, 255, 255));
+				m_pIdStatic->SetWindowTextColor(Color(254, 255, 255, 255));
 		}
 
 		if (bRet)

@@ -3,7 +3,8 @@
 #include "SseDlg.h"
 #include "MmxRender.h"
 #include "Sse2Render.h"
-
+#include "GdiPlusImaging.h"
+using namespace Gdiplus;
 
 #define __base_super					CHighEfficiencyDlg
 
@@ -61,7 +62,10 @@ void CSseDlg::OnCreate()
 
 	CString strSkinDir = CSysUnit::GetAppPath();
 
-	CString strPicPath = strSkinDir + _T("SkinImage\\bj1.png");
+	CString strPicPath = strSkinDir + _T("SkinImage\\Post.png");
+	m_TestImg.LoadImageFromFile(strPicPath, IT_BMP);
+
+	strPicPath = strSkinDir + _T("SkinImage\\bj1.png");
 	m_pStatic = m_UiManager.CreateBfStatic(this, CRect(0, 0, 0, 0), 0, strPicPath, IT_PNG);
 	if (m_pStatic == NULL)
 	{
@@ -429,36 +433,43 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		*/
 
 		SolidBrush FillBrush(Color(101, 150, 198, 16));
-//		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
+		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
 
 		SolidBrush FillBrush1(Color(201, 49, 40, 50));
+		DoGrap.FillRectangle(&FillBrush1, 0, 0, WndRect.Width(), WndRect.Height());
+
+		DoGrap.DrawImage(m_TestImg.GetImage(), PointF(10, 10));
 
 		DWORD dwTm1 = ::GetTickCount();
-//		for (int i = 0; i < 2000; i++)
-		{
-			DoGrap.FillRectangle(&FillBrush1, 0, 0, WndRect.Width(), WndRect.Height());
-		}
 		DWORD dwTm2 = ::GetTickCount();
-
-		CMmxRender MmxR;
-		MmxR.ARGB32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 101, 150, 198, 16);
-
-		CSse2Render Sse2R;
 		DWORD dwTm3 = ::GetTickCount();
-//		for (int i = 0; i < 2000; i++)
-		{
-			Sse2R.ARGB32_SolidBrush(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(0, 0, WndRect.Width(), WndRect.Height()), 201, 49, 40, 50);
-		}
 		DWORD dwTm4 = ::GetTickCount();
-
-
 		DWORD dwT1 = dwTm2 - dwTm1;
 		DWORD dwT2 = dwTm4 - dwTm3;
 
-		MmxR.ARGB32_CoverAlpha(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 255);
+		CMmxRender MmxR;
+		CSse2Render Sse2R;
+//		MmxR.ARGB32_CoverAlpha(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 255);
+//		MmxR.ARGB32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 101, 150, 198, 16);
+//		Sse2R.ARGB32_SolidBrush(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(0, 0, WndRect.Width(), WndRect.Height()), 201, 49, 40, 50);
+
+		Bitmap *pBmp = (Bitmap *)m_TestImg.GetImage();
+		BitmapData LockedBmpData;
+		pBmp->LockBits(Rect(0, 0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy), ImageLockModeRead | ImageLockModeWrite, PixelFormat32bppARGB, &LockedBmpData);
+
+		Sse2R.ARGB32_AlphaBlend((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(),
+			(BYTE *)LockedBmpData.Scan0, CSize(pBmp->GetWidth(), pBmp->GetHeight()), CPoint(10, 200));
+
+		pBmp->UnlockBits(&LockedBmpData);
+
+
+
+
+
+
 
 		// ¿ªÊ¼»­Í¼
-		m_pUiManager->OnPaint(hMemoryDC, WndRect);
+//		m_pUiManager->OnPaint(hMemoryDC, WndRect);
 
 		// »­±ß¿ò
 		WndRect = this->GetClientRect();
