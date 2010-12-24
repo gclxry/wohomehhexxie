@@ -38,7 +38,7 @@ protected:
 	// Êó±êÀë¿ª´°¿Ú
 	virtual void DUI_OnMouseLeave(WPARAM wParam, LPARAM lParam);
 
-	BOOL DrawHBITMAP(HDC hDstDc, CRect DstRect, HBITMAP hSrcBmp);
+	void DrawGlassLine(HDC hMemoryDC, CRect DrawRect);
 private:
 	CBfMouseMoveStatic *m_pUserLogo;
 	CBfLinkStatic *m_pLink1;
@@ -65,4 +65,5 @@ private:
 	BLENDFUNCTION m_Blend;
 
 	int m_nTimer;
+	CRect m_GlassRect;
 };

@@ -2,7 +2,6 @@
 #include "StdAfx.h"
 #include "GroundGlassDlg.h"
 #include "Gauss.h"
-#include "Header1.h"
 
 #define __base_super					CHighEfficiencyDlg
 
@@ -25,6 +24,7 @@ CGroundGlassDlg::CGroundGlassDlg(HINSTANCE hInstance, HWND hParentWnd, int nIcon
 	m_pLogonBtn = NULL;
 
 	m_pUiManager = &m_UiManager;
+	m_GlassRect.SetRectEmpty();
 }
 
 CGroundGlassDlg::~CGroundGlassDlg(void)
@@ -234,9 +234,18 @@ LRESULT CGroundGlassDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 	int cx = LOWORD(lParam); 
 	int cy = HIWORD(lParam);
 
+	int nCut = 6;
+	int nTopCut = 28;
+	m_GlassRect = CRect(nCut, nTopCut, cx - nCut, cy - nCut);
+
 	if (m_pStatic != NULL)
 	{
-		//m_pStatic->MoveWindow(CRect(0, 0, cx, cy), hWinPoslnfo);
+		CRect TRect(m_GlassRect);
+		TRect.left += 2;
+		TRect.top += 2;
+		TRect.right -= 2;
+		TRect.bottom -= 2;
+		m_pStatic->MoveWindow(TRect, hWinPoslnfo);
 	}
 
 	if (m_pUserLogo != NULL)
@@ -463,26 +472,18 @@ void CGroundGlassDlg::OnPaint(HDC hPaintDc)
 		WndRect = this->GetWindowRect();
 		CUiMethod::GetScreenBitmap(hMemoryDC, WndRect);
 
-//		CGaussBlur::GaussIIRBlurImage((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy,
-//			32, 6, 6);
+		// GDI 数据
+//		ImageGaussiabBlur((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy, 1, 1);
 
-		//CUiMethod::SaveToBitmap(hMemoryBitmap, _T("D:\\1.bmp"));
-
-//		Bitmap *ptBmp = Bitmap::FromHBITMAP(hMemoryBitmap, NULL);
-
-		ImageGaussiabBlur((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy, 2, 2);
-
-//		BitmapData LockedBmpData;
-//		ptBmp->LockBits(Rect(0, 0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy), ImageLockModeRead | ImageLockModeWrite, PixelFormat32bppARGB, &LockedBmpData);
-//		ImageGaussiabBlur((BYTE *)LockedBmpData.Scan0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy, 2, 2);
-//		ptBmp->UnlockBits(&LockedBmpData);
-//		DoGrap.DrawImage(ptBmp, PointF(0, 0));
-//		delete ptBmp;
-
-		//CUiMethod::SaveToBitmap(hMemoryBitmap, _T("D:\\2.bmp"));
-
-
-
+		// GDI+ 数据
+		Bitmap *ptBmp = Bitmap::FromHBITMAP(hMemoryBitmap, NULL);
+		BitmapData LockedBmpData;
+		ptBmp->LockBits(Rect(0, 0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy), ImageLockModeRead | ImageLockModeWrite, PixelFormat32bppARGB, &LockedBmpData);
+		CGaussBlur GaussB;
+		GaussB.ImageGaussiabBlur((BYTE *)LockedBmpData.Scan0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy, 2, 2);
+		ptBmp->UnlockBits(&LockedBmpData);
+		DoGrap.DrawImage(ptBmp, PointF(0, 0));
+		delete ptBmp;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -491,6 +492,7 @@ void CGroundGlassDlg::OnPaint(HDC hPaintDc)
 
 		WndRect = this->GetClientRect();
 		DrawFetionBkgndLine(hMemoryDC, WndRect);
+		DrawGlassLine(hMemoryDC, m_GlassRect);
 
 		{
 			WndRect = this->GetWindowRect();
@@ -508,23 +510,52 @@ void CGroundGlassDlg::OnPaint(HDC hPaintDc)
 	}
 }
 
-BOOL CGroundGlassDlg::DrawHBITMAP(HDC hDstDc, CRect DstRect, HBITMAP hSrcBmp)
+void CGroundGlassDlg::DrawGlassLine(HDC hMemoryDC, CRect DrawRect)
 {
-	BOOL bRet = FALSE;
+	Graphics DoGrap(hMemoryDC);
 
-	if (hSrcBmp != NULL && hDstDc != NULL)
+	// 画边框线
+	Pen OutPen(Color(255, 163, 163, 163));
+	Pen InPen(Color(255, 255, 255, 255));
+
+	Point aPointList[9];
+	int nCut = 2;
+
+	for (int i = 1; i >= 0; i--)
 	{
-		HDC hMemoryDC = ::CreateCompatibleDC(hDstDc);
-		if (hMemoryDC != NULL)
-		{
-			::SelectObject(hMemoryDC, hSrcBmp);
+		int nRD = 1;
+		CRect UserDcRect = DrawRect;
 
-			::BitBlt(hDstDc, DstRect.left, DstRect.top, DstRect.Width(), DstRect.Height(), hMemoryDC, 0, 0, SRCCOPY);
+		aPointList[0].X = UserDcRect.left + i;
+		aPointList[0].Y = UserDcRect.top + nCut;
 
-			bRet = TRUE;
-			::DeleteDC(hMemoryDC);
-		}
+		aPointList[1].X = UserDcRect.left + nCut;
+		aPointList[1].Y = UserDcRect.top + i;
+
+		aPointList[2].X = UserDcRect.right - nCut;
+		aPointList[2].Y = UserDcRect.top + i;
+
+		aPointList[3].X = UserDcRect.right - nRD - i;
+		aPointList[3].Y = UserDcRect.top + nCut;
+
+		aPointList[4].X = UserDcRect.right - nRD - i;
+		aPointList[4].Y = UserDcRect.bottom - nCut - 1;
+
+		aPointList[5].X = UserDcRect.right - nCut - 1;
+		aPointList[5].Y = UserDcRect.bottom - nRD - i;
+
+		aPointList[6].X = UserDcRect.left + nCut;
+		aPointList[6].Y = UserDcRect.bottom - nRD - i;
+
+		aPointList[7].X = UserDcRect.left + i;
+		aPointList[7].Y = UserDcRect.bottom - nCut - 1;
+
+		aPointList[8].X = UserDcRect.left + i;
+		aPointList[8].Y = UserDcRect.top + nCut;
+
+		if (i == 0)
+			DoGrap.DrawLines(&OutPen, aPointList, 9);
+		else
+			DoGrap.DrawLines(&InPen, aPointList, 9);
 	}
-
-	return bRet;
 }
