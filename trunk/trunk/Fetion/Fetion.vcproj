@@ -408,10 +408,6 @@
 					RelativePath=".\GroundGlassDlg.h"
 					>
 				</File>
-				<File
-					RelativePath=".\Header1.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="SSE"
