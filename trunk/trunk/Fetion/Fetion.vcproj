@@ -421,6 +421,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="IE¿Ø¼þ²âÊÔ"
+				>
+				<File
+					RelativePath=".\IeDlg.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\IeDlg.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Mmx"
