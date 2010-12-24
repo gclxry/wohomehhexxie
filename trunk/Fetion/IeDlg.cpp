@@ -18,6 +18,7 @@ CIeDlg::CIeDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 	m_pLink4 = NULL;
 	m_pStatic = NULL;
 	m_pRightPic = NULL;
+	m_pIe = NULL;
 	m_pL1 = NULL;
 	m_pL2 = NULL;
 	m_pYdLogo = NULL;
@@ -66,6 +67,14 @@ void CIeDlg::OnCreate()
 		return;
 	}
 	m_pStatic->SetFullDrawImage(true);
+
+	m_pIe = m_UiManager.CreateBfIe(this, CRect(0, 0, 0, 0));
+	if (m_pIe == NULL)
+	{
+		::MessageBox(m_hParent, _T("初始化 m_pIe 失败，程序无法启动！"), MSG_TITLE, MB_OK | MB_ICONSTOP);
+		::PostMessage(m_hParent, WM_CLOSE, NULL, NULL);
+		return;
+	}
 
 	strPicPath = strSkinDir + _T("SkinImage\\Spice.png");
 	m_pRightPic = m_UiManager.CreateBfStatic(this, CRect(0, 0, 0, 0), 0, strPicPath, IT_PNG);
@@ -236,6 +245,9 @@ LRESULT CIeDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 	int cx = LOWORD(lParam); 
 	int cy = HIWORD(lParam);
 
+	int nCut = 3;
+	int nCutH = 100;
+
 	if (m_pStatic != NULL)
 	{
 		m_pStatic->MoveWindow(CRect(0, 0, cx, cy), hWinPoslnfo);
@@ -243,9 +255,13 @@ LRESULT CIeDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 
 	if (m_pRightPic != NULL)
 	{
-		int nCut = 3;
-		int nCutH = 100;
 		m_pRightPic->MoveWindow(CRect(cx - nCut - 120, nCutH, cx - nCut, nCutH + 120), hWinPoslnfo);
+	}
+
+	CRect IeRect(cx - nCut - 120, nCut, cx - nCut, nCut + 120);
+	if (m_pIe != NULL)
+	{
+		m_pIe->MoveWindow(IeRect, hWinPoslnfo);
 	}
 
 	if (m_pUserLogo != NULL)

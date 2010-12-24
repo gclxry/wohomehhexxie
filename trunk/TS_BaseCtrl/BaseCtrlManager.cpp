@@ -9,6 +9,29 @@ CBaseCtrlManager::~CBaseCtrlManager(void)
 {
 }
 
+CBfIe* CBaseCtrlManager::CreateBfIe(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId)
+{
+	CBfIe *pWnd = NULL;
+	if (IsReady())
+	{
+		pWnd = new CBfIe(CWindowBase::ms_hInstance);
+		if (pWnd != NULL)
+		{
+			if (!pWnd->CreateWnd(m_pParentDlg, this, pMsgCtrl, WndRect, nWndId, DWT_BAR_COMBO_SELECT_BUTTON))
+			{
+				SAVE_DELETE(pWnd);
+			}
+			else
+			{
+				m_nTrueWndCtns++;
+				m_WndList.NewWndObj(pWnd);
+			}
+		}
+	}
+
+	return pWnd;
+}
+
 CBfComboSelBtnBar* CBaseCtrlManager::CreateBfComboSelBtnBar(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId)
 {
 	CBfComboSelBtnBar *pWnd = NULL;
@@ -30,7 +53,6 @@ CBfComboSelBtnBar* CBaseCtrlManager::CreateBfComboSelBtnBar(CDirectUiWindowMsgCt
 
 	return pWnd;
 }
-
 
 CBfFlash* CBaseCtrlManager::CreateBfFlash(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, CString strFlashPath)
 {

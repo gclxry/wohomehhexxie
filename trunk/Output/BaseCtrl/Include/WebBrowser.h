@@ -3,11 +3,11 @@
 #pragma once
 #include "Windows.h"
 
-class CBfWebBrowser
+class CWebBrowser
 {
 public:
-	CBfWebBrowser();
-	virtual ~CBfWebBrowser();
+	CWebBrowser();
+	virtual ~CWebBrowser();
 
 	bool LaunchIE(LPTSTR szResourceURL);
 };

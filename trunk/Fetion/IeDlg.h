@@ -42,6 +42,7 @@ private:
 	CBfLinkStatic *m_pLink4;
 	CBfStatic *m_pStatic;
 	CBfStatic *m_pRightPic;
+	CBfIe *m_pIe;
 
 	CBfStatic *m_pL1;
 	CBfStatic *m_pL2;

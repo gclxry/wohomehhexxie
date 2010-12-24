@@ -15,6 +15,7 @@
 #include "BfFlash.h"
 #include "BfNormalGraduatedButton.h"
 #include "BfComboSelBtnBar.h"
+#include "BfIe.h"
 
 
 class CBaseCtrlManager : public CDirectUiManager
@@ -23,6 +24,7 @@ public:
 	CBaseCtrlManager(void);
 	~CBaseCtrlManager(void);
 
+	CBfIe* CreateBfIe(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId = 0);
 	CBfComboSelBtnBar* CreateBfComboSelBtnBar(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId);
 
 	CBfFlash* CreateBfFlash(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, CString strFlashPath = _T(""));
