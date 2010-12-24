@@ -3,7 +3,17 @@
 #include "exdisp.h"
 #include "mshtmlc.h"
 
-bool CBfWebBrowser::LaunchIE(LPTSTR szResourceURL)
+CWebBrowser::CWebBrowser()
+{
+
+}
+
+CWebBrowser::~CWebBrowser()
+{
+
+}
+
+bool CWebBrowser::LaunchIE(LPTSTR szResourceURL)
 {
 	::CoInitialize(NULL);
 
@@ -14,23 +24,8 @@ bool CBfWebBrowser::LaunchIE(LPTSTR szResourceURL)
 	{
 		int dx, dy;
 		DWORD dwFlags;
-		//
-		//  this marks this window as a third party window, 
-		//  so that the window is not reused.
-		//
-		pwb->put_RegisterAsBrowser(VARIANT_TRUE);
 
-		// turn off scrolling & resizing
-		//ITargetFrame2* ptgf;
-		//if (SUCCEEDED(pwb->QueryInterface(IID_ITargetFrame2, (void **) &ptgf))) 
-		//{
-		//    if (SUCCEEDED(ptgf->GetFrameOptions(&dwFlags))) {
-		//        dwFlags &= ~(FRAMEOPTIONS_SCROLL_YES | FRAMEOPTIONS_SCROLL_NO | FRAMEOPTIONS_SCROLL_AUTO);
-		//        dwFlags |= FRAMEOPTIONS_SCROLL_NO;
-		//        ptgf->SetFrameOptions(dwFlags);
-		//    }
-		//    ptgf->Release();
-		//}
+		pwb->put_RegisterAsBrowser(VARIANT_TRUE);
 
 		IServiceProvider *psp;
 		if (SUCCEEDED(pwb->QueryInterface(IID_IServiceProvider, (void**) &psp))) 
@@ -54,11 +49,6 @@ bool CBfWebBrowser::LaunchIE(LPTSTR szResourceURL)
 		pwb->put_AddressBar(FALSE);
 		pwb->put_Resizable(FALSE);
 
-
-		// set client area size
-		//int iWidth = 466L;
-		//int iHeight = 286L;
-
 		int iWidth = 800;
 		int iHeight = 600;
 
@@ -77,13 +67,14 @@ bool CBfWebBrowser::LaunchIE(LPTSTR szResourceURL)
 			pwb->put_Top(dy);    
 
 		pwb->put_Visible(TRUE);
+		pwb->Navigate("www.baidu.com", NULL, NULL, NULL, NULL);
 
-		//        CreateParmsFile();
-
+/*
 		BSTR bstr = BSTRFROMANSI(szResourceURL);
 		HRESULT hr = pwb->Navigate(bstr, PVAREMPTY, PVAREMPTY, PVAREMPTY, PVAREMPTY);
 
 		SysFreeString(bstr);
+*/		
 		pwb->Release();
 
 		return true;

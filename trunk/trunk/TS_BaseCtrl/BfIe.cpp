@@ -2,10 +2,8 @@
 #include "BfIe.h"
 
 
-CBfIe::CBfIe(HINSTANCE hInstance):
-CBfWindowsWnd(hInstance)
+CBfIe::CBfIe(HINSTANCE hInstance) : CBfWindowsWnd(hInstance)
 {
-	m_bIsDrawFrame = true;
 }
 
 CBfIe::~CBfIe(void)
@@ -94,4 +92,16 @@ LRESULT CBfIe::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		OnLoseFocus();
 
 	return ::CallWindowProc(m_OldWndProc, m_hWindowsWnd, uMsg, wParam, lParam);
+}
+
+bool CBfIe::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManager, CDirectUiWindowMsgCtrl *pMsgCtrl,
+								CRect WndRect, int nWndId, WND_TYPE WndType, int nImageId, CString strImagePath, IMAGE_TYPE nImageType)
+{
+	bool bRet = CDirectUiWindow::CreateWnd(pParentDlg, pUiManager, pMsgCtrl, WndRect, nWndId, WndType, nImageId, strImagePath, nImageType);
+	if (bRet)
+	{
+		m_WebId.LaunchIE(_T("www.baidu.com"));
+	}
+
+	return bRet;
 }
