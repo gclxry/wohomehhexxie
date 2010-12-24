@@ -382,6 +382,26 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="008 IE¿Ø¼þ"
+			>
+			<File
+				RelativePath=".\BfIe.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseCtrl\Include\BfIe.h"
+				>
+			</File>
+			<File
+				RelativePath=".\WebBrowser.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseCtrl\Include\WebBrowser.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\Output\BaseCtrl\Include\BaseCtrl.h"
 			>
