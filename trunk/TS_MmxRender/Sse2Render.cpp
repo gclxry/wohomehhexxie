@@ -446,60 +446,69 @@ void CSse2Render::ARGB32_AlphaBlend(__inout BYTE *pbyDst, __in CSize DstSize, __
 	BlendRect.top = BlendPoint.y;
 	BlendRect.bottom = min((BlendRect.top + OvrSize.cy), DstSize.cy);
 
-	int nLoops = (BlendRect.Width() * BlendRect.Height()) / 2;
-	__asm
+	for (int nLine = BlendRect.top; nLine < BlendRect.bottom; nLine++)
 	{
-		pxor		xmm2, xmm2	// 把MM2清0
-		mov			edx, dword ptr [pbyDst]	// 取32bit像素地址到edx
-		mov			eax, dword ptr [pbyOvr]
-		mov			ecx, nLoops
-		dec			ecx
+		int nLineNum = nLine - BlendRect.top;
+		BYTE *pbyLineDst = pbyDst + (DstSize.cx * nLine * 4) + (BlendRect.left * 4);
+		BYTE *pbyLineOvr = pbyOvr + (OvrSize.cx * nLineNum * 4);
 
-LOOP_S:
-		movq		mm0, qword ptr [edx]	// 取2个像素值放入mm0，目标像素点
-		movq		mm1, qword ptr [eax]	// 取2个像素值放入mm1，覆盖像素点
+		int nLoops = BlendRect.Width() / 2;
+		__asm
+		{
+			pxor		xmm2, xmm2	// 把MM2清0
+			mov			edx, dword ptr [pbyLineDst]	// 取32bit像素地址到edx
+			mov			eax, dword ptr [pbyLineOvr]
+			mov			ecx, nLoops
+			dec			ecx
 
-		movq2dq		xmm0, mm0	// 把2个像素值放入xmm0低64bit
-		movq2dq		xmm1, mm1
+		LOOP_S:
+			movq		mm0, qword ptr [edx]	// 取2个像素值放入mm0，目标像素点
+			movq		mm1, qword ptr [eax]	// 取2个像素值放入mm1，覆盖像素点
 
-		punpcklbw	xmm0, xmm2	// 扩展64位数据到128位，以64位为一个像素，以容纳计算结果
-		punpcklbw	xmm1, xmm2
+			movq2dq		xmm0, mm0	// 把2个像素值放入xmm0低64bit
+			movq2dq		xmm1, mm1
 
-		//			movdq2q		mm4, xmm0	// TTT 测试显示值
-		//			movdq2q		mm5, xmm1	// TTT 测试显示值
+			punpcklbw	xmm0, xmm2	// 扩展64位数据到128位，以64位为一个像素，以容纳计算结果
+			punpcklbw	xmm1, xmm2
 
-		movdqu		xmm3, xmm1	// 为了取得覆盖像素点的alpha值
-		punpckhwd	xmm3, xmm3	// 高字移动到双字
-		punpckhwd	xmm3, xmm3	// 高字移动到四字
-		punpckhwd	xmm3, xmm3	// 双字移动到八字，可以分别计算每个颜色值的alpha的混合啦
+			//			movdq2q		mm4, xmm0	// TTT 测试显示值
+			//			movdq2q		mm5, xmm1	// TTT 测试显示值
 
-		//			movdq2q		mm4, xmm3	// TTT 测试显示值
+			movdqu		xmm3, xmm1	// 为了取得覆盖像素点的alpha值
+			punpckhwd	xmm3, xmm3	// 高字移动到双字
+			punpckhwd	xmm3, xmm3	// 高字移动到四字
+			punpckhwd	xmm3, xmm3	// 双字移动到八字，可以分别计算每个颜色值的alpha的混合啦
 
-		movdqu		xmm4, xmm0
-		movdqu		xmm5, xmm1
+			//			movdq2q		mm4, xmm3	// TTT 测试显示值
 
-		psubusw		xmm4, xmm1	// Source-Overlay,饱和减
-		psubusw		xmm5, xmm0	// Overlay-Source,饱和减
+			movdqu		xmm4, xmm0
+			movdqu		xmm5, xmm1
 
-		pmullw		xmm4, xmm3	// Alpha * (Source-Overlay)
-		pmullw		xmm5, xmm3	// Alpha * (Overlay-Source)
+			psubusw		xmm4, xmm1	// Source-Overlay,饱和减
+			psubusw		xmm5, xmm0	// Overlay-Source,饱和减
 
-		psrlw		xmm4, 8		// 除以256,now mm4 get the result,(Source-Overlay)<0 部分
-		psrlw		xmm5, 8		// 除以256,now mm5 get the result,(Overlay-Source)>0 部分
+			pmullw		xmm4, xmm3	// Alpha * (Source-Overlay)
+			pmullw		xmm5, xmm3	// Alpha * (Overlay-Source)
 
-		paddusw		xmm0, xmm5	// 饱和加到原图象D=Alpha*(O-S)+S,(Source-Overlay)<0 部分
-		psubusw		xmm0, xmm4	// 饱和加到原图象D=S-Alpha*(S-O),(Overlay-Source)>0 部分
-		packuswb	xmm0, xmm0	// 紧缩到低32bit
+			psrlw		xmm4, 8		// 除以256,now mm4 get the result,(Source-Overlay)<0 部分
+			psrlw		xmm5, 8		// 除以256,now mm5 get the result,(Overlay-Source)>0 部分
 
-		movdq2q		mm0, xmm0	// 保存结果
-		movq		[edx], mm0
-		add			edx, 8
+			paddusw		xmm0, xmm5	// 饱和加到原图象D=Alpha*(O-S)+S,(Source-Overlay)<0 部分
+			psubusw		xmm0, xmm4	// 饱和加到原图象D=S-Alpha*(S-O),(Overlay-Source)>0 部分
+			packuswb	xmm0, xmm0	// 紧缩到低32bit
 
-		loop		LOOP_S
-		emms
-	}
+			movdq2q		mm0, xmm0	// 保存结果
+			movq		[edx], mm0
+			add			edx, 8
+			add			eax, 8
 
-	if ((BlendRect.Width() * BlendRect.Height()) % 2 > 1)
-	{
+			loop		LOOP_S
+			emms
+		}
+
+		if (BlendRect.Width() % 2 > 1)
+		{
+		}
+
 	}
 }

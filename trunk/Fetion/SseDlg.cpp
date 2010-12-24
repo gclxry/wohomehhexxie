@@ -438,14 +438,13 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		SolidBrush FillBrush1(Color(201, 49, 40, 50));
 		DoGrap.FillRectangle(&FillBrush1, 0, 0, WndRect.Width(), WndRect.Height());
 
-		DoGrap.DrawImage(m_TestImg.GetImage(), PointF(10, 10));
-
 		DWORD dwTm1 = ::GetTickCount();
+		for (int i = 0; i < 2000; i++)
+		{
+			DoGrap.DrawImage(m_TestImg.GetImage(), PointF(10, 10));
+		}
 		DWORD dwTm2 = ::GetTickCount();
-		DWORD dwTm3 = ::GetTickCount();
-		DWORD dwTm4 = ::GetTickCount();
-		DWORD dwT1 = dwTm2 - dwTm1;
-		DWORD dwT2 = dwTm4 - dwTm3;
+
 
 		CMmxRender MmxR;
 		CSse2Render Sse2R;
@@ -455,14 +454,21 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 
 		Bitmap *pBmp = (Bitmap *)m_TestImg.GetImage();
 		BitmapData LockedBmpData;
-		pBmp->LockBits(Rect(0, 0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy), ImageLockModeRead | ImageLockModeWrite, PixelFormat32bppARGB, &LockedBmpData);
+		pBmp->LockBits(Rect(0, 0, pBmp->GetWidth(), pBmp->GetHeight()), ImageLockModeRead, PixelFormat32bppARGB, &LockedBmpData);
 
-		Sse2R.ARGB32_AlphaBlend((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(),
-			(BYTE *)LockedBmpData.Scan0, CSize(pBmp->GetWidth(), pBmp->GetHeight()), CPoint(10, 200));
+		DWORD dwTm3 = ::GetTickCount();
+		for (int i = 0; i < 2000; i++)
+		{
+			Sse2R.ARGB32_AlphaBlend((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(),
+				(BYTE *)LockedBmpData.Scan0, CSize(pBmp->GetWidth(), pBmp->GetHeight()), CPoint(10, 200));
+		}
+		DWORD dwTm4 = ::GetTickCount();
 
 		pBmp->UnlockBits(&LockedBmpData);
 
 
+		DWORD dwT1 = dwTm2 - dwTm1;
+		DWORD dwT2 = dwTm4 - dwTm3;
 
 
 
