@@ -114,6 +114,52 @@ LOOP_S:
 }
 
 /*
+// 老外写的mmx
+// The assembler code which does the blending is actually really simple. From my additive blender, there's two parts. The first part initializes three of the MMX registers:
+
+__asm {
+movd    mm5, one
+movd    mm6, alpha
+pxor    mm7, mm7
+punpcklbw  mm5, mm7
+punpcklbw  mm6, mm7
+paddw    mm6, mm5
+}
+// The second part loops through each pixel to be drawn and blends them appropriately:
+
+hile (ty <= ty2) 
+
+line = (unsigned long*)source->line[sy]; 
+line = (unsigned long*)target->line[ty]; 
+x = sx1; tx = tx1; 
+hile (tx <= tx2) 
+
+l = sline[sx]; 
+f (!masked || sl != skip_colour) 
+{ 
+tl = tline[tx]; 
+__asm { 
+movd mm0, sl 
+movd mm1, tl 
+punpcklbw mm0, mm7 
+punpcklbw mm1, mm7 
+
+pmullw mm0, mm6 
+psrlw mm0, 8 
+paddusw mm1, mm0 
+
+packuswb mm1, mm7 
+movd tl, mm1 
+} 
+tline[tx] = tl; 
+} 
+sx++; tx++; 
+} 
+sy++; ty++; 
+} 
+
+*/
+/*
 // 汇编 32位带透明值色块画刷
 void CMmxRender::ARGB32_SolidBrush(BYTE *pBmpData, CSize BmpSize, CRect BrushRect, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
 {

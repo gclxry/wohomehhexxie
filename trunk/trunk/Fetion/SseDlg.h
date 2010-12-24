@@ -57,4 +57,6 @@ private:
 
 	BLENDFUNCTION m_Blend;
 	CBitmapDC m_BmpDc;
+
+	CResImage m_TestImg;
 };

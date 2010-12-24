@@ -16,7 +16,8 @@
 #include <map>
 using namespace std;
 
-#include "gdiplus.h"
+#include <GdiPlus.h>
+#include <GdiPlusImaging.h>
 using namespace Gdiplus;
 
 

@@ -114,9 +114,9 @@ void CBfDrawButton::DrawFocus()
 void CBfDrawButton::DrawBtnText()
 {
 	if (IsEnable())
-		m_WndTextInfo.TextColor = Color(0, 0, 0);
+		m_WndTextInfo.TextColor = Color(254, 0, 0, 0);
 	else
-		m_WndTextInfo.TextColor = Color(128, 128, 128);
+		m_WndTextInfo.TextColor = Color(254, 128, 128, 128);
 
 	m_WndTextInfo.TextRectF = CUiMethod::CRect2RectF(m_WndRect);
 	m_WndTextInfo.TextRectF.Y += 1;

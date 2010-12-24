@@ -33,7 +33,7 @@ void CBfLinkStatic::OnPaint()
 		CopyFontInfo(m_WndTextInfo, NormalInfo);
 		CopyFontInfo(m_WndTextInfo, MouseMoveInfo);
 		MouseMoveInfo.FStyle = (FontStyle)(FontStyleUnderline | MouseMoveInfo.FStyle);
-		MouseMoveInfo.TextColor = Color(255, 0, 0);
+		MouseMoveInfo.TextColor = Color(254, 255, 0, 0);
 		CopyFontInfo(MouseMoveInfo, m_WndTextInfo);
 
 		CBfStatic::OnPaint();
