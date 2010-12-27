@@ -40,13 +40,44 @@ bool CWebBrowser::LaunchIE(HWND hParent, CRect ShowRect, CString strUrl)
 	if (pWebBrowser != NULL)
 	{
 
+		//::SetHostFlags(DOCHOSTUIFLAG_NO3DBORDER | DOCHOSTUIFLAG_SCROLL_NO);
+
+/*
+		IHTMLElement *pbody = NULL;
+		hr = m_pDoc2->get_body(&pbody);
+		if ( FAILED(hr) || !pbody) { return; }
+
+		IHTMLBodyElement *pelem = NULL;
+
+		hr = pbody->QueryInterface(IID_IHTMLBodyElement, (void**)&pelem );
+
+		if (SUCCEEDED(hr) && pelem )
+		{
+			pelem ->put_scroll(L"no");
+			pelem ->Release();
+		}
+		pbody->Release();*/
+
+		m_webADCtrl.Enable3DBorder(FALSE);     // 此代码禁止三维边框
+		m_webADCtrl.EnableScrollBar(FALSE); // 此代码禁止滚动条
+		m_webADCtrl.SetWebBrowser(pWebBrowser);
+
+
+
 
 		VariantInit(&varMyURL);
-		varMyURL.vt = VT_BSTR; 
+		varMyURL.vt = VT_BSTR;
 		varMyURL.bstrVal = ::SysAllocString(_T("http://www.baidu.com"));
 		pWebBrowser->Navigate2(&varMyURL,0,0,0,0);
-		VariantClear(&varMyURL); 
-		pWebBrowser->Release(); 
+
+
+//		IHTMLDocument2* pDoc = NULL;
+//		HRESULT hr = pWebBrowser->get_Document((IDispatch **)&pDoc);
+//		IHTMLElement *pBody = NULL;
+//		pDoc->get_body(&pBody);
+
+		VariantClear(&varMyURL);
+		pWebBrowser->Release();
 	}
 
 	return true;
