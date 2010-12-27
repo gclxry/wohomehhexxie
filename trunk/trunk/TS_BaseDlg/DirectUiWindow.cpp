@@ -6,7 +6,6 @@ bool CDirectUiWindow::ms_bIsWndLButtonDown = false;
 CDirectUiWindow* CDirectUiWindow::ms_pLButtonDownWnd = NULL;
 CDirectUiWindow* CDirectUiWindow::ms_pFocusWnd = NULL;
 int CDirectUiWindow::ms_nDefaultWndId = 4;
-HDC CDirectUiWindow::m_hsPaintDc = NULL;
 
 CDirectUiWindow::CDirectUiWindow(void)
 {
@@ -42,6 +41,20 @@ void CDirectUiWindow::MoveWindow(CRect ToRect, HDWP hWinPoslnfo)
 	{
 		m_WndRect = ToRect;
 		SetTextRect(ToRect);
+	}
+}
+
+// 不绘制本窗口区域，将本窗口从裁剪区中删除
+void CDirectUiWindow::NotDrawWindow()
+{
+	if (m_pUiManager != NULL)
+	{
+		HDC hPDc = m_pUiManager->GetParentPaintDc();
+		if (IS_SAVE_HANDLE(hPDc))
+		{
+			// 从当前裁减区中去除客户区的某矩形部分
+			::ExcludeClipRect(hPDc, m_WndRect.left, m_WndRect.top, m_WndRect.right, m_WndRect.bottom);
+		}
 	}
 }
 

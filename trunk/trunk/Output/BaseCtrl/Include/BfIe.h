@@ -4,7 +4,7 @@
 #include "BfWindowsWnd.h"
 #include "WebBrowser.h"
 
-class CBfIe : public CDirectUiWindow, public CBfWindowsWnd
+class CBfIe : public CDirectUiWindow
 {
 public:
 	CBfIe(HINSTANCE hInstance);
@@ -19,14 +19,6 @@ public:
 
 protected:
 	virtual void OnPaint();
-	virtual void OnMouseHover(CPoint point);
-	virtual void OnLoseFocus();
-	virtual void OnSetFocus();
-
-	virtual LPCTSTR GetSuperClassName() const;
-	virtual LPCTSTR GetWindowClassName() const;
-
-	virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
 	CWebBrowser m_WebId;
