@@ -22,17 +22,19 @@ LPCTSTR CBfIe::GetWindowClassName() const
 
 void CBfIe::OnPaint()
 {
+	HDC hPDc = CDirectUiWindow::GetParentPaintDc();
+	if (IS_SAVE_HANDLE(hPDc))
+	{
+		// 从当前裁减区中去除客户区的某矩形部分
+		::ExcludeClipRect(hPDc, m_WndRect.left, m_WndRect.top, m_WndRect.right, m_WndRect.bottom);
+	}
 }
 
 void CBfIe::MoveWindow(CRect ToRect, HDWP hWinPoslnfo)
 {
 	CDirectUiWindow::MoveWindow(ToRect, hWinPoslnfo);
 
-	int nCut = 1;
-	m_WndTextInfo.TextRectF.X += nCut;
-	m_WndTextInfo.TextRectF.Y += nCut;
-	m_WndTextInfo.TextRectF.Width -= (nCut * 2);
-	m_WndTextInfo.TextRectF.Height -= (nCut * 2);
+	m_WebId.MoveWindow(ToRect);
 }
 
 void CBfIe::OnMouseHover(CPoint point)
@@ -100,7 +102,7 @@ bool CBfIe::CreateWnd(CDirectUiDlg *pParentDlg, CDirectUiManager *pUiManager, CD
 	bool bRet = CDirectUiWindow::CreateWnd(pParentDlg, pUiManager, pMsgCtrl, WndRect, nWndId, WndType, nImageId, strImagePath, nImageType);
 	if (bRet)
 	{
-		m_WebId.LaunchIE(_T("www.baidu.com"));
+		m_WebId.LaunchIE(pParentDlg->GetSafeHandle(), CRect(0, 0, 100, 100), _T("www.baidu.com"));
 	}
 
 	return bRet;

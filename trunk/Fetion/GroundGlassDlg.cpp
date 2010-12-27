@@ -1,7 +1,6 @@
 
 #include "StdAfx.h"
 #include "GroundGlassDlg.h"
-#include "Gauss.h"
 
 #define __base_super					CHighEfficiencyDlg
 
@@ -22,6 +21,7 @@ CGroundGlassDlg::CGroundGlassDlg(HINSTANCE hInstance, HWND hParentWnd, int nIcon
 	m_pCheckBox1 = NULL;
 	m_pCheckBox2 = NULL;
 	m_pLogonBtn = NULL;
+	m_pnWei = NULL;
 
 	m_pUiManager = &m_UiManager;
 	m_GlassRect.SetRectEmpty();
@@ -48,6 +48,8 @@ LRESULT CGroundGlassDlg::OnGetMinMaxInfo(WPARAM wParam, LPARAM lParam)
 void CGroundGlassDlg::OnCreate()
 {
 	__base_super::OnCreate();
+
+	m_GaussB.InitWeights(2, 2);
 
 	//m_Blend是结构体BLENDFUNCTION的对象，用于指定两个DC(画图设备)的融合方式。
 	m_Blend.BlendOp = AC_SRC_OVER;
@@ -479,8 +481,9 @@ void CGroundGlassDlg::OnPaint(HDC hPaintDc)
 		Bitmap *ptBmp = Bitmap::FromHBITMAP(hMemoryBitmap, NULL);
 		BitmapData LockedBmpData;
 		ptBmp->LockBits(Rect(0, 0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy), ImageLockModeRead | ImageLockModeWrite, PixelFormat32bppARGB, &LockedBmpData);
-		CGaussBlur GaussB;
-		GaussB.ImageGaussiabBlur((BYTE *)LockedBmpData.Scan0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy, 2, 2);
+
+		m_GaussB.ImageGaussBlur((BYTE *)LockedBmpData.Scan0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy, 10, 30, 10, 10, 2);
+		//GaussB.ImageGaussiabBlur((BYTE *)LockedBmpData.Scan0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy, 2, 2);
 		ptBmp->UnlockBits(&LockedBmpData);
 		DoGrap.DrawImage(ptBmp, PointF(0, 0));
 		delete ptBmp;

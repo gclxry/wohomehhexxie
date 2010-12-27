@@ -1,6 +1,7 @@
 
 #pragma once
 #include "Fetion.h"
+#include "Gauss.h"
 
 #define WND_ID_LOGON_USER_LOGO					(65535)
 #define WND_ID_LOGON_LINK_1						(65536)
@@ -66,4 +67,6 @@ private:
 
 	int m_nTimer;
 	CRect m_GlassRect;
+	CGaussBlur m_GaussB;
+	int *m_pnWei;
 };

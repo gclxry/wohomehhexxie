@@ -17,7 +17,7 @@ CBfIe* CBaseCtrlManager::CreateBfIe(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndR
 		pWnd = new CBfIe(CWindowBase::ms_hInstance);
 		if (pWnd != NULL)
 		{
-			if (!pWnd->CreateWnd(m_pParentDlg, this, pMsgCtrl, WndRect, nWndId, DWT_BAR_COMBO_SELECT_BUTTON))
+			if (!pWnd->CreateWnd(m_pParentDlg, this, pMsgCtrl, WndRect, nWndId, DWT_IE))
 			{
 				SAVE_DELETE(pWnd);
 			}
