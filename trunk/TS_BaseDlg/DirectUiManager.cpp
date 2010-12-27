@@ -3,6 +3,7 @@
 
 CDirectUiManager::CDirectUiManager(void)
 {
+	m_hPaintDc = NULL;
 	m_pDoGrap = NULL;
 	m_hMemoryDC = NULL;
 	m_hParent = NULL;
@@ -46,8 +47,10 @@ bool CDirectUiManager::IsReady()
 	return IS_SAVE_HANDLE(m_hParent);
 }
 
-void CDirectUiManager::OnPaint(HDC hMemoryDC, CRect &DrawRect)
+void CDirectUiManager::OnPaint(HDC hMemoryDC, CRect &DrawRect, HDC hParentPaintDc)
 {
+	m_hPaintDc = hParentPaintDc;
+
 	Graphics DoGrap(hMemoryDC);
 
 	m_pDoGrap = &DoGrap;

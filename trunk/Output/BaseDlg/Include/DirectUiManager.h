@@ -11,7 +11,7 @@ public:
 	virtual bool InitManager(CDirectUiDlg *pParentDlg);
 
 	virtual void OnPaintRgn(CRect &WndRect, Graphics *pGraphics);
-	virtual void OnPaint(HDC hMemoryDC, CRect &DrawRect);
+	virtual void OnPaint(HDC hMemoryDC, CRect &DrawRect, HDC hParentPaintDc = NULL);
 	virtual bool OnMouseMove(UINT nFlags, CPoint point);
 	virtual void OnTimer(int nTimerId);
 	virtual void OnActivateApp(WPARAM wParam, LPARAM lParam);
@@ -28,10 +28,15 @@ public:
 	// 删除指定窗口
 	void ClearDirectUiWindow(CDirectUiWindow *pWnd);
 
+	// 取得实际窗口的绘图DC
+	HDC GetParentPaintDc() { return m_hPaintDc; };
+
 protected:
 	virtual bool IsReady();
 
 protected:
+	// 实际的窗口的DC
+	HDC m_hPaintDc;
 	// 绘图用的GID+
 	Graphics *m_pDoGrap;
 	// 绘图用的GDI

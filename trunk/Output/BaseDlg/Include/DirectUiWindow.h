@@ -67,11 +67,6 @@ public:
 	// 窗口是否显示
 	bool IsVisable() { return (m_dwWndAttr & DWP_VISABLE) != 0; };
 
-	// 设置实际窗口的绘图DC
-	static void SetParentPaintDc(HDC hDc) { m_hsPaintDc = hDc; };
-	// 取得实际窗口的绘图DC
-	static HDC GetParentPaintDc() { return m_hsPaintDc; };
-
 protected:
 	// 窗口是否为GIF窗口
 	bool IsGifWnd() { return (m_WndType == DWT_GIF_STATIC); };
@@ -152,6 +147,9 @@ protected:
 		CDirectUiWindow::ms_pLButtonDownWnd = NULL;
 	};
 
+	// 不绘制本窗口区域，将本窗口从裁剪区中删除
+	void NotDrawWindow();
+
 private:
 	// 鼠标左键是否按下
 	static bool ms_bIsWndLButtonDown;
@@ -171,8 +169,6 @@ private:
 	};
 
 protected:
-	// 实际的窗口的DC
-	static HDC m_hsPaintDc;
 	// 绘图用的GDI+
 	Graphics *m_pDoGrap;
 	// 绘图用的GDI
