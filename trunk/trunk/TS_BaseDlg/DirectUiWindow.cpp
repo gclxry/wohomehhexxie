@@ -6,6 +6,7 @@ bool CDirectUiWindow::ms_bIsWndLButtonDown = false;
 CDirectUiWindow* CDirectUiWindow::ms_pLButtonDownWnd = NULL;
 CDirectUiWindow* CDirectUiWindow::ms_pFocusWnd = NULL;
 int CDirectUiWindow::ms_nDefaultWndId = 4;
+HDC CDirectUiWindow::m_hsPaintDc = NULL;
 
 CDirectUiWindow::CDirectUiWindow(void)
 {

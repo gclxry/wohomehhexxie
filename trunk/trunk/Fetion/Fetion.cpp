@@ -14,6 +14,11 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
+
+	CoInitialize(NULL);
+	AtlAxWinInit();
+
+
 	// ≥ı ºªØ
 	CUiMethod::InitGdiPlus();
 

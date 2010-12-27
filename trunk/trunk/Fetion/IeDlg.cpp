@@ -447,6 +447,7 @@ void CIeDlg::OnPaint(HDC hPaintDc)
 		Graphics DoGrap(hMemoryDC);
 
 		// ¿ªÊ¼»­Í¼
+		CDirectUiWindow::SetParentPaintDc(hPaintDc);
 		m_pUiManager->OnPaint(hMemoryDC, WndRect);
 
 		// »­±ß¿ò

@@ -12,6 +12,7 @@ class CDirectUiManager;
 class CDirectUiWindow
 {
 	friend class CDirectUiManager;
+
 public:
 	CDirectUiWindow(void);
 	virtual ~CDirectUiWindow(void);
@@ -65,6 +66,12 @@ public:
 
 	// 窗口是否显示
 	bool IsVisable() { return (m_dwWndAttr & DWP_VISABLE) != 0; };
+
+	// 设置实际窗口的绘图DC
+	static void SetParentPaintDc(HDC hDc) { m_hsPaintDc = hDc; };
+	// 取得实际窗口的绘图DC
+	static HDC GetParentPaintDc() { return m_hsPaintDc; };
+
 protected:
 	// 窗口是否为GIF窗口
 	bool IsGifWnd() { return (m_WndType == DWT_GIF_STATIC); };
@@ -164,6 +171,8 @@ private:
 	};
 
 protected:
+	// 实际的窗口的DC
+	static HDC m_hsPaintDc;
 	// 绘图用的GDI+
 	Graphics *m_pDoGrap;
 	// 绘图用的GDI
