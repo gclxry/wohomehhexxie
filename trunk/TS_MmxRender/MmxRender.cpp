@@ -113,6 +113,69 @@ LOOP_S:
 	}
 }
 
+// 设置内存指定区域的Alpha值
+void CMmxRender::ARGB32_SetAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __in CRect SetRect, __in BYTE bySetA)
+{
+	if (pbyDst == NULL || DstSize.cx == 0 || DstSize.cy == 0 || SetRect.IsRectEmpty())
+		return;
+
+	if (SetRect.left < 0)
+		SetRect.left = 0;
+
+	if (SetRect.top < 0)
+		SetRect.top = 0;
+
+	if (SetRect.right > DstSize.cx)
+		SetRect.right = DstSize.cx;
+
+	if (SetRect.bottom > DstSize.cy)
+		SetRect.bottom = DstSize.cy;
+
+	BYTE *pbyA = &bySetA;
+	DWORD dwA = bySetA;
+	DWORD dwSetA[2] = { dwA, dwA };
+	DWORD *pdwA = dwSetA;
+
+	for (int nLine = SetRect.top; nLine < SetRect.bottom; nLine++)
+	{
+		BYTE *pbyLineDst = pbyDst + (DstSize.cx * nLine * 4) + (SetRect.left * 4);
+
+		int nLoops = SetRect.Width() / 2;
+		__asm
+		{
+			mov		edx, dword ptr [pbyLineDst]
+			mov		eax, dword ptr [pdwA]
+			movq	mm1, [eax]
+			pslld	mm1, 24
+			mov		ecx, nLoops
+			dec		ecx
+
+LOOP_S:
+			movq	mm0, [edx]
+			pslld	mm0, 8
+			psrld	mm0, 8
+			paddusb	mm0, mm1
+			movq	[edx], mm0
+			add		edx, 8
+			loop	LOOP_S
+
+			emms
+		}
+
+		if (SetRect.Width() % 2 > 0)
+		{
+			__asm
+			{
+				sub		edx, 4
+				mov		eax, dwA
+				mov		esi, edx
+				mov		[esi+3], 00H
+				mov		[esi+3], al
+			}
+		}
+	}
+}
+
 /*
 // 老外写的mmx
 // The assembler code which does the blending is actually really simple. From my additive blender, there's two parts. The first part initializes three of the MMX registers:

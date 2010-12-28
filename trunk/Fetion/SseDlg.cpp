@@ -435,19 +435,19 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		SolidBrush FillBrush(Color(101, 150, 198, 16));
 		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
 
-		SolidBrush FillBrush1(Color(201, 49, 40, 50));
-		DoGrap.FillRectangle(&FillBrush1, 0, 0, WndRect.Width(), WndRect.Height());
+		CMmxRender MmxR;
+		CSse2Render Sse2R;
 
-		DWORD dwTm1 = ::GetTickCount();
+		MmxR.ARGB32_SetAlpha((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(40, 10, 201, 1000), 50);
+
+
+/*		DWORD dwTm1 = ::GetTickCount();
 		for (int i = 0; i < 2000; i++)
 		{
 			DoGrap.DrawImage(m_TestImg.GetImage(), PointF(10, 10));
 		}
 		DWORD dwTm2 = ::GetTickCount();
 
-
-		CMmxRender MmxR;
-		CSse2Render Sse2R;
 //		MmxR.ARGB32_CoverAlpha(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 255);
 //		MmxR.ARGB32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 101, 150, 198, 16);
 //		Sse2R.ARGB32_SolidBrush(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(0, 0, WndRect.Width(), WndRect.Height()), 201, 49, 40, 50);
@@ -466,16 +466,12 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 
 		pBmp->UnlockBits(&LockedBmpData);
 
-
 		DWORD dwT1 = dwTm2 - dwTm1;
 		DWORD dwT2 = dwTm4 - dwTm3;
-
-
-
-
+*/
 
 		// ¿ªÊ¼»­Í¼
-//		m_pUiManager->OnPaint(hMemoryDC, WndRect);
+		m_pUiManager->OnPaint(hMemoryDC, WndRect);
 
 		// »­±ß¿ò
 		WndRect = this->GetClientRect();

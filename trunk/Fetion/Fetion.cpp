@@ -33,11 +33,11 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 //	CGroundGlassDlg *pGroundGlassDlg = new CGroundGlassDlg(hInstance, NULL, IDI_FETION);;
 //	pGroundGlassDlg->ShowWindow();
 
-//	CSseDlg *pSseDlg = new CSseDlg(hInstance, NULL, IDI_FETION);;
-//	pSseDlg->ShowWindow();
+	CSseDlg *pSseDlg = new CSseDlg(hInstance, NULL, IDI_FETION);;
+	pSseDlg->ShowWindow();
 
-	CIeDlg *pIelg = new CIeDlg(hInstance, NULL, IDI_FETION);;
-	pIelg->ShowWindow();
+//	CIeDlg *pIelg = new CIeDlg(hInstance, NULL, IDI_FETION);;
+//	pIelg->ShowWindow();
 
 	// 主消息循环:
 	MSG msg;
@@ -54,8 +54,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 //	delete pRgnDlg;
 //	delete pMistDlg;
 //	delete pGroundGlassDlg;
-//	delete pSseDlg;
-	delete pIelg;
+	delete pSseDlg;
+//	delete pIelg;
 
 	// 释放资源
 	CUiMethod::UnInitGdiPlus();

@@ -16,4 +16,6 @@ public:
 	virtual void ARGB32_SolidBrush(DWORD *pDstBmpData, CSize BmpSize, CRect BrushRect, BYTE byA, BYTE byR, BYTE byG, BYTE byB);
 	// 设置Alpha为指定值
 	virtual void ARGB32_CoverAlpha(DWORD *pBmpData, CSize BmpSize, BYTE byA);
+	// 设置内存指定区域的Alpha值，注意，内存位图的位置和肉眼观察的位置是相反的。
+	virtual void ARGB32_SetAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __in CRect SetRect, __in BYTE bySetA);
 };
