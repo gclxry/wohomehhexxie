@@ -438,7 +438,7 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		CMmxRender MmxR;
 		CSse2Render Sse2R;
 
-		MmxR.ARGB32_SetAlpha((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(40, 10, 201, 1000), 50);
+		MmxR.ARGB32_SetAlpha((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(40, 10, 201, 300), 50);
 
 
 /*		DWORD dwTm1 = ::GetTickCount();
