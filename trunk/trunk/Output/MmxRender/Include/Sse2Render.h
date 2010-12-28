@@ -24,4 +24,5 @@ public:
 	virtual void ARGB32_AlphaBlend(__inout BYTE *pbyDst, __in CSize DstSize, __in BYTE *pbyOvr, __in CSize OvrSize, __in CPoint BlendPoint);
 
 	void CSse2Render::BlendESS0(unsigned char* src1, unsigned char* src2, unsigned char* dst, unsigned int count);
+
 };
