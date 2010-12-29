@@ -21,13 +21,12 @@ public:
 		}
 	}
 
-	void InitWeights(double Q, int radius);
-	// 
-	void ImageGaussBlur(BYTE *Data,int width, int height,int left,int top,int right,int bottom);
-	void ImageGaussBlur(BYTE *Data,int width, int height);
+	void InitWeights(double dbQ, int nRadius);
+	void ImageGaussBlur(BYTE *pbyData, int nWidth, int nHeight, int nLeft, int nTop, int nRight,int nBottom);
+	void ImageGaussBlur(BYTE *pbyData, int nWidth, int nHeight);
 
 private:
-	void _ImageGaussiabBlur(BYTE *Data,int widthFrom,int widthTo,int heightFrom,int heightTo,int stride,BYTE *ptrTemp);
+	void _ImageGaussiabBlur(BYTE *pbyData, int nWidthFrom, int nWidthTo, int nHeightFrom, int nHeightTo, int nStride, BYTE *ptrTemp);
 
 private:
 	int *m_pnWeightList;

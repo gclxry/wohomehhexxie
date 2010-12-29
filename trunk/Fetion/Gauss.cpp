@@ -4,14 +4,17 @@
 
 // 模糊整个图像
 // 32位bgra格式的数据
-void CGaussBlur::ImageGaussBlur(BYTE *Data,int width, int height)
-{		
-	int radius = m_nRadius;
+void CGaussBlur::ImageGaussBlur(BYTE *pbyData, int nWidth, int nHeight)
+{
+	if (m_pnWeightList == NULL)
+		return;
+
+	int nRadius = m_nRadius;
 	// bgra 
 	int bytes = 4;
-	int stride = width*bytes;
-	int templateLength = 2 * radius + 1;
-	DWORD num = max(width,height)*bytes;
+	int nStride = nWidth*bytes;
+	int templateLength = 2 * nRadius + 1;
+	DWORD num = max(nWidth,nHeight)*bytes;
 	BYTE *ptrTemp = new BYTE[num];
 	memset(ptrTemp,0,num*sizeof(BYTE));	
 
@@ -22,7 +25,7 @@ void CGaussBlur::ImageGaussBlur(BYTE *Data,int width, int height)
 	__asm
 	{
 		// col blur
-		mov     eax, 0				//	for(col = 0; col < width; col++)
+		mov     eax, 0				//	for(col = 0; col < nWidth; col++)
 		mov     col, eax 
 		jmp     cColJudge 
 	cColLoop:
@@ -30,11 +33,11 @@ void CGaussBlur::ImageGaussBlur(BYTE *Data,int width, int height)
 		add     eax,1 
 		mov     col,eax 
 	cColJudge:
-		mov     eax, width
+		mov     eax, nWidth
 		cmp     col, eax 
 		jge     cColLoopEnd 
 
-		mov     eax, 0			//	for(row = 0; row < height; row++)
+		mov     eax, 0			//	for(row = 0; row < nHeight; row++)
 		mov     row, eax 
 		jmp     cPreAlphaJudge 
 	cPreAlphaLoop:
@@ -42,14 +45,14 @@ void CGaussBlur::ImageGaussBlur(BYTE *Data,int width, int height)
 		add     edx,1 
 		mov     row,edx 
 	cPreAlphaJudge:
-		mov     eax, height
+		mov     eax, nHeight
 		cmp     row, eax 
 		jge     cPreAlphaLoopEnd 
 
-		//pTT = (BYTE *)Data+row*stride +col*bytes; // 预乘alpha
+		//pTT = (BYTE *)pbyData+row*nStride +col*bytes; // 预乘alpha
 		mov         eax, row
-		imul        eax, stride
-		add         eax, [Data] 
+		imul        eax, nStride
+		add         eax, [pbyData] 
 		mov         ecx, col
 		imul        ecx, bytes 
 		add         eax, ecx 
@@ -88,7 +91,7 @@ void CGaussBlur::ImageGaussBlur(BYTE *Data,int width, int height)
 		jmp         cPreAlphaLoop
 cPreAlphaLoopEnd:
 
-		mov     eax, 0					//	for(row = ; row < height; row++)
+		mov     eax, 0					//	for(row = ; row < nHeight; row++)
 		mov     row, eax 
 		jmp     cRowJudge 
 	cRowLoop:
@@ -96,7 +99,7 @@ cPreAlphaLoopEnd:
 		add     edx,1 
 		mov     row,edx 
 	cRowJudge:
-		mov     eax, height
+		mov     eax, nHeight
 		cmp     row, eax 
 		jge     cRowEnd 
 		
@@ -107,8 +110,8 @@ cPreAlphaLoopEnd:
 		mov     a,   ebx 		
 		
  		mov     eax, row 
- 		imul    eax, stride 
- 		mov     edx, [Data]
+ 		imul    eax, nStride 
+ 		mov     edx, [pbyData]
  		add     edx, eax 
  		mov     eax, col 
  		imul    eax, bytes 
@@ -119,14 +122,14 @@ cPreAlphaLoopEnd:
 		
 		mov     ecx, templateLength			// 模板长度放入ecx
 		
-		mov     eax, radius					// 计算模板偏移量像素扫描线偏移量
+		mov     eax, nRadius					// 计算模板偏移量像素扫描线偏移量
 		cmp		eax, row
 		jge		cOffset1
-		mov		eax, height
-		sub		eax, radius
+		mov		eax, nHeight
+		sub		eax, nRadius
 		dec		eax
 		cmp		eax, row
-		jl		cOffset2					//(ecx-radius+height-row-1)
+		jl		cOffset2					//(ecx-nRadius+nHeight-row-1)
 		jmp		cOffset3
 	cOffset1:						
 		add		ecx, row                    // 循环次数调整
@@ -134,7 +137,7 @@ cPreAlphaLoopEnd:
 		sub     eax, row					// 模板偏移量
 		imul    eax, 4							
 		add		edi, eax
-		mov		eax, stride					// 数据偏移量
+		mov		eax, nStride					// 数据偏移量
 		imul	eax, row
 		sub		esi, eax	
 		jmp		cblurLoop
@@ -142,8 +145,8 @@ cPreAlphaLoopEnd:
 		add		ecx, eax					// 后边界只调整循环次数和源数据指针
 		sub		ecx, row
 	cOffset3:
-		mov		eax, radius					// 中间部分只调整源数据指针
-		imul	eax, stride
+		mov		eax, nRadius					// 中间部分只调整源数据指针
+		imul	eax, nStride
 		sub		esi, eax
 	cblurLoop:								// 模糊循环
 		movzx   eax, [esi]					// blue
@@ -159,7 +162,7 @@ cPreAlphaLoopEnd:
 		add     r,   eax					// red结果累加
 		add     a,   edx					// alpha结果累加
 		add     edi, 4						// 循环变量增加一，int型数据占4字节
-		add     esi, stride					// 下一行的同一列
+		add     esi, nStride					// 下一行的同一列
 		loop    cblurLoop					// goto cblurLoop
 
 
@@ -185,7 +188,7 @@ cPreAlphaLoopEnd:
 	cRowEnd:
 
 
-		mov         eax, Data
+		mov         eax, pbyData
 		mov         ecx, col
 		imul        ecx, bytes 
 		add         eax, ecx 
@@ -201,7 +204,7 @@ cPreAlphaLoopEnd:
 		add     edx,1 
 		mov     row,edx 
 	cRowCopyJudge:
-		mov     eax, height
+		mov     eax, nHeight
 		cmp     row, eax 
 		jge     cRowCopyLoopEnd 
 		
@@ -218,7 +221,7 @@ cPreAlphaLoopEnd:
 		add         eax, bytes
 		mov         esi, eax 			
 		mov         eax, edi		// ptroffset
-		add         eax, stride 
+		add         eax, nStride 
 		mov         edi, eax 
 
 		jmp         cRowCopyLoop
@@ -229,7 +232,7 @@ cPreAlphaLoopEnd:
 
 	//// row blur
 
-		mov     eax, 0						//		for(row = 0; row < height; row++)
+		mov     eax, 0						//		for(row = 0; row < nHeight; row++)
 		mov     row, eax 
 		jmp     rRowJudge 
 	rRowLoop:
@@ -237,11 +240,11 @@ cPreAlphaLoopEnd:
 		add     eax,1 
 		mov     row,eax 
 	rRowJudge:
-		mov     eax, height
+		mov     eax, nHeight
 		cmp     row, eax 
 		jge     rRowLoopEnd 
 
-		mov     eax, 0					//	for(col = 0; col < height; col++)
+		mov     eax, 0					//	for(col = 0; col < nHeight; col++)
 		mov     col, eax 
 		jmp     rColJudge 
 	rColLoop:
@@ -249,7 +252,7 @@ cPreAlphaLoopEnd:
 		add     eax, 1 
 		mov     col, eax 
 	rColJudge:
-		mov     eax, width 
+		mov     eax, nWidth 
 		cmp     col, eax 
 		jge     rColEnd 
 
@@ -260,8 +263,8 @@ cPreAlphaLoopEnd:
 		mov     a,   ebx 		
 		
 		mov     eax, row 
- 		imul    eax, stride 
- 		mov     edx, [Data]
+ 		imul    eax, nStride 
+ 		mov     edx, [pbyData]
  		add     edx, eax 
  		mov     eax, col 
  		imul    eax, bytes 
@@ -272,14 +275,14 @@ cPreAlphaLoopEnd:
 		
 		mov     ecx, templateLength			// 模板长度放入ecx
 		
-		mov     eax, radius					// 计算模板偏移量像素扫描线偏移量
+		mov     eax, nRadius					// 计算模板偏移量像素扫描线偏移量
 		cmp		eax, col
 		jge		rOffset1
-		mov		eax, width
-		sub		eax, radius
+		mov		eax, nWidth
+		sub		eax, nRadius
 		dec		eax
 		cmp		eax, col
-		jl		rOffset2					//(ecx-radius+width-col-1)
+		jl		rOffset2					//(ecx-nRadius+nWidth-col-1)
 		jmp		rOffset3
 	rOffset1:						
 		add		ecx, col                    // 循环次数调整
@@ -295,7 +298,7 @@ cPreAlphaLoopEnd:
 		add		ecx, eax					// 后边界只调整循环次数和源数据指针
 		sub		ecx, col
 	rOffset3:
-		mov		eax, radius					// 中间部分只调整源数据指针
+		mov		eax, nRadius					// 中间部分只调整源数据指针
 		imul	eax, bytes
 		sub		esi, eax
 	rblurLoop:								// 模糊循环
@@ -336,14 +339,14 @@ cPreAlphaLoopEnd:
 		jmp     rColLoop 
 	rColEnd:
 
-		mov         esi, ptrTemp					//	pTT = ptrTemp+radius*bytes;
+		mov         esi, ptrTemp					//	pTT = ptrTemp+nRadius*bytes;
 		
-		mov         eax, row						//	BYTE *ppp = (BYTE *)Data+row*stride+radius*bytes;
-		imul        eax, stride
-		add         eax, Data
+		mov         eax, row						//	BYTE *ppp = (BYTE *)pbyData+row*nStride+nRadius*bytes;
+		imul        eax, nStride
+		add         eax, pbyData
 		mov         edi, eax 
 	
-		mov     eax, 0								//for(col = 0; col < width; col++)
+		mov     eax, 0								//for(col = 0; col < nWidth; col++)
 		mov     col, eax 
 		jmp     rSepAlphaJudge 
 	rSepAlphaLoop:
@@ -351,7 +354,7 @@ cPreAlphaLoopEnd:
 		add     eax,1 
 		mov     col,eax 
 	rSepAlphaJudge:
-		mov     eax, width
+		mov     eax, nWidth
 		cmp     col, eax 
 		jge     rSepAlphaEnd 
 	
@@ -412,23 +415,29 @@ cPreAlphaLoopEnd:
 	delete []ptrTemp;
 } 
 
-// 根据方差Q与模糊半径radius生成 m_pnWeightList
-void CGaussBlur::InitWeights(double Q, int radius)
+// 根据方差dbQ与模糊半径nRadius生成 m_pnWeightList
+void CGaussBlur::InitWeights(double dbQ, int nRadius)
 {
-	m_nRadius = radius;
-
-	double fx = 0;
-	int templateLength = radius*2 + 1;
-	float *fweights = new float[templateLength];
-	
-	for(int i = 1; i <= radius; i++)
+	if (m_pnWeightList != NULL)
 	{
-		fx = i / Q;   
-		fweights[radius + i] = (float)exp(-fx * fx / 2);   
-		fweights[radius - i] = fweights[radius + i];
+		delete []m_pnWeightList;
+		m_pnWeightList = NULL;
 	}
 
-	fweights[radius] = 1.0;
+	m_nRadius = nRadius;
+
+	double fx = 0;
+	int templateLength = nRadius*2 + 1;
+	float *fweights = new float[templateLength];
+	
+	for(int i = 1; i <= nRadius; i++)
+	{
+		fx = i / dbQ;   
+		fweights[nRadius + i] = (float)exp(-fx * fx / 2);   
+		fweights[nRadius - i] = fweights[nRadius + i];
+	}
+
+	fweights[nRadius] = 1.0;
 
 	fx = 0.0;   
 	for(int i = 0; i < templateLength; i++)
@@ -437,6 +446,11 @@ void CGaussBlur::InitWeights(double Q, int radius)
 	}
 
 	m_pnWeightList = new int[templateLength];
+	if (m_pnWeightList == NULL)
+	{
+		delete fweights;
+		return;
+	}
 
 	// 归一化，整数化
 	for(int i = 0; i < templateLength; i++)
@@ -446,40 +460,44 @@ void CGaussBlur::InitWeights(double Q, int radius)
  
 	delete fweights;
 }
+
 // 32位bgra格式，可以指定上下左右的模糊范围
-void CGaussBlur::ImageGaussBlur(BYTE *Data,int width, int height,int left,int top,int right,int bottom)
+void CGaussBlur::ImageGaussBlur(BYTE *pbyData, int nWidth, int nHeight, int nLeft, int nTop, int nRight, int nBottom)
 {
 	if (m_pnWeightList == NULL)
 		return;
 	
 	int bytes = 4;
-	int stride = width*bytes;
-	DWORD num = max(width,height)*bytes;
+	int nStride = nWidth*bytes;
+	DWORD num = max(nWidth,nHeight)*bytes;
 	BYTE *ptrTemp = new BYTE[num];
 	memset(ptrTemp,0,num*sizeof(BYTE));
 
 
-	_ImageGaussiabBlur(Data,0,width,0,top,stride,ptrTemp);
-	_ImageGaussiabBlur(Data,0,width,height-bottom,height,stride,ptrTemp);
-	_ImageGaussiabBlur(Data,0,left,top,height-bottom,stride,ptrTemp);
-	_ImageGaussiabBlur(Data,width-right,width,top,height-bottom,stride,ptrTemp);
+	_ImageGaussiabBlur(pbyData,0,nWidth,0,nTop,nStride,ptrTemp);
+	_ImageGaussiabBlur(pbyData,0,nWidth,nHeight-nBottom,nHeight,nStride,ptrTemp);
+	_ImageGaussiabBlur(pbyData,0,nLeft,nTop,nHeight-nBottom,nStride,ptrTemp);
+	_ImageGaussiabBlur(pbyData,nWidth-nRight,nWidth,nTop,nHeight-nBottom,nStride,ptrTemp);
 
 	delete []ptrTemp;
 }
 
 // 局部模糊函数核心算法
-void CGaussBlur::_ImageGaussiabBlur(BYTE *Data,int widthFrom,int widthTo,int heightFrom,int heightTo,int stride,BYTE *ptrTemp)
+void CGaussBlur::_ImageGaussiabBlur(BYTE *pbyData, int nWidthFrom, int nWidthTo, int nHeightFrom, int nHeightTo, int nStride, BYTE *ptrTemp)
 {
-	int radius = m_nRadius;
+	if (m_pnWeightList == NULL)
+		return;
+
+	int nRadius = m_nRadius;
 	int r,g,b,a,row,col,bytes = 4;
-	int templateLength = 2 * radius + 1;
+	int templateLength = 2 * nRadius + 1;
 
 	int *pnWeight = m_pnWeightList;
 
 	__asm
 	{
 		// col blur
-		mov     eax, widthFrom				//	for(col = 0; col < width; col++)
+		mov     eax, nWidthFrom				//	for(col = 0; col < nWidth; col++)
 		mov     col, eax 
 		jmp     cColJudge 
 	cColLoop:
@@ -487,11 +505,11 @@ void CGaussBlur::_ImageGaussiabBlur(BYTE *Data,int widthFrom,int widthTo,int hei
 		add     eax,1 
 		mov     col,eax 
 	cColJudge:
-		mov     eax, widthTo
+		mov     eax, nWidthTo
 		cmp     col, eax 
 		jge     cColLoopEnd 
 
-		mov     eax, heightFrom			//	for(row = 0; row < height; row++)
+		mov     eax, nHeightFrom			//	for(row = 0; row < nHeight; row++)
 		mov     row, eax 
 		jmp     cPreAlphaJudge 
 	cPreAlphaLoop:
@@ -499,14 +517,14 @@ void CGaussBlur::_ImageGaussiabBlur(BYTE *Data,int widthFrom,int widthTo,int hei
 		add     edx,1 
 		mov     row,edx 
 	cPreAlphaJudge:
-		mov     eax, heightTo
+		mov     eax, nHeightTo
 		cmp     row, eax 
 		jge     cPreAlphaLoopEnd 
 
-		//pTT = (BYTE *)Data+row*stride +col*bytes; // 预乘alpha
+		//pTT = (BYTE *)pbyData+row*nStride +col*bytes; // 预乘alpha
 		mov         eax, row
-		imul        eax, stride
-		add         eax, [Data] 
+		imul        eax, nStride
+		add         eax, [pbyData] 
 		mov         ecx, col
 		imul        ecx, bytes 
 		add         eax, ecx 
@@ -545,7 +563,7 @@ void CGaussBlur::_ImageGaussiabBlur(BYTE *Data,int widthFrom,int widthTo,int hei
 		jmp         cPreAlphaLoop
 cPreAlphaLoopEnd:
 
-		mov     eax, heightFrom					//	for(row = 0; row < height; row++)
+		mov     eax, nHeightFrom					//	for(row = 0; row < nHeight; row++)
 		mov     row, eax 
 		jmp     cRowJudge 
 	cRowLoop:
@@ -553,7 +571,7 @@ cPreAlphaLoopEnd:
 		add     edx,1 
 		mov     row,edx 
 	cRowJudge:
-		mov     eax, heightTo
+		mov     eax, nHeightTo
 		cmp     row, eax 
 		jge     cRowEnd 
 		
@@ -564,9 +582,9 @@ cPreAlphaLoopEnd:
 		mov     a,   ebx 		
 		
  		mov     eax, row 
- 		imul    eax, stride 
- 		//mov     ecx, Data 
- 		mov     edx, [Data]
+ 		imul    eax, nStride 
+ 		//mov     ecx, pbyData 
+ 		mov     edx, [pbyData]
  		add     edx, eax 
  		mov     eax, col 
  		imul    eax, bytes 
@@ -577,17 +595,17 @@ cPreAlphaLoopEnd:
 		
 		mov     ecx, templateLength			// 模板长度放入ecx
 		
-		mov     eax, radius					// 计算模板偏移量像素扫描线偏移量
+		mov     eax, nRadius					// 计算模板偏移量像素扫描线偏移量
 		mov		ebx, row
-		sub		ebx, heightFrom
+		sub		ebx, nHeightFrom
 		cmp		eax, ebx
 		jge		cOffset1
-		mov		eax, heightTo
-		sub		eax, radius
-		sub		eax, heightFrom
+		mov		eax, nHeightTo
+		sub		eax, nRadius
+		sub		eax, nHeightFrom
 		dec		eax
 		cmp		eax, ebx
-		jl		cOffset2					//(ecx-radius+height-row-1)
+		jl		cOffset2					//(ecx-nRadius+nHeight-row-1)
 		jmp		cOffset3
 	cOffset1:						
 		add		ecx, ebx                    // 循环次数调整
@@ -595,7 +613,7 @@ cPreAlphaLoopEnd:
 		sub     eax, ebx					// 模板偏移量
 		imul    eax, 4							
 		add		edi, eax
-		mov		eax, stride					// 数据偏移量
+		mov		eax, nStride					// 数据偏移量
 		imul	eax, ebx
 		sub		esi, eax	
 		jmp		cblurLoop
@@ -603,8 +621,8 @@ cPreAlphaLoopEnd:
 		add		ecx, eax					// 后边界只调整循环次数和源数据指针
 		sub		ecx, ebx
 	cOffset3:
-		mov		eax, radius					// 中间部分只调整源数据指针
-		imul	eax, stride
+		mov		eax, nRadius					// 中间部分只调整源数据指针
+		imul	eax, nStride
 		sub		esi, eax
 	cblurLoop:								// 模糊循环
 		movzx   eax, [esi]					// blue
@@ -620,7 +638,7 @@ cPreAlphaLoopEnd:
 		add     r,   eax					// red结果累加
 		add     a,   edx					// alpha结果累加
 		add     edi, 4						// 循环变量增加一，int型数据占4字节
-		add     esi, stride					// 下一行的同一列
+		add     esi, nStride					// 下一行的同一列
 		loop    cblurLoop					// goto cblurLoop
 
 
@@ -646,20 +664,20 @@ cPreAlphaLoopEnd:
 	cRowEnd:
 
 
-		mov         eax, heightFrom
-		imul        eax, stride
-		add         eax, [Data] 
+		mov         eax, nHeightFrom
+		imul        eax, nStride
+		add         eax, [pbyData] 
 		mov         ecx, col
 		imul        ecx, bytes 
 		add         eax, ecx 
 		mov			edi, eax       // 图片数据指针放入esi
 
-		mov         eax, heightFrom 
+		mov         eax, nHeightFrom 
 		imul        eax, bytes
 		add         eax, ptrTemp
 		mov         esi, eax		// 临时数据指针
 
-		mov     eax, heightFrom
+		mov     eax, nHeightFrom
 		mov     row, eax 
 		jmp     cRowCopyJudge 
 	cRowCopyLoop:
@@ -667,7 +685,7 @@ cPreAlphaLoopEnd:
 		add     edx,1 
 		mov     row,edx 
 	cRowCopyJudge:
-		mov     eax, heightTo
+		mov     eax, nHeightTo
 		cmp     row, eax 
 		jge     cRowCopyLoopEnd 
 		
@@ -684,7 +702,7 @@ cPreAlphaLoopEnd:
 		add         eax, bytes
 		mov         esi, eax 			
 		mov         eax, edi		// ptroffset
-		add         eax, stride 
+		add         eax, nStride 
 		mov         edi, eax 
 
 		jmp         cRowCopyLoop
@@ -695,7 +713,7 @@ cPreAlphaLoopEnd:
 
 	//// row blur
 
-		mov     eax, heightFrom						//		for(row = 0; row < height; row++)
+		mov     eax, nHeightFrom						//		for(row = 0; row < nHeight; row++)
 		mov     row, eax 
 		jmp     rRowJudge 
 	rRowLoop:
@@ -703,11 +721,11 @@ cPreAlphaLoopEnd:
 		add     eax,1 
 		mov     row,eax 
 	rRowJudge:
-		mov     eax, heightTo
+		mov     eax, nHeightTo
 		cmp     row, eax 
 		jge     rRowLoopEnd 
 
-		mov     eax, widthFrom					//	for(col = 0; col < height; col++)
+		mov     eax, nWidthFrom					//	for(col = 0; col < nHeight; col++)
 		mov     col, eax 
 		jmp     rColJudge 
 	rColLoop:
@@ -715,7 +733,7 @@ cPreAlphaLoopEnd:
 		add     eax, 1 
 		mov     col, eax 
 	rColJudge:
-		mov     eax, widthTo 
+		mov     eax, nWidthTo 
 		cmp     col, eax 
 		jge     rColEnd 
 
@@ -726,8 +744,8 @@ cPreAlphaLoopEnd:
 		mov     a,   ebx 		
 		
 		mov     eax, row 
- 		imul    eax, stride 
- 		mov     edx, [Data]
+ 		imul    eax, nStride 
+ 		mov     edx, [pbyData]
  		add     edx, eax 
  		mov     eax, col 
  		imul    eax, bytes 
@@ -738,17 +756,17 @@ cPreAlphaLoopEnd:
 		
 		mov     ecx, templateLength			// 模板长度放入ecx
 		
-		mov     eax, radius					// 计算模板偏移量像素扫描线偏移量
+		mov     eax, nRadius					// 计算模板偏移量像素扫描线偏移量
 		mov		ebx, col
-		sub		ebx, widthFrom
+		sub		ebx, nWidthFrom
 		cmp		eax, ebx
 		jge		rOffset1
-		mov		eax, widthTo
-		sub		eax, radius
-		sub		eax, widthFrom
+		mov		eax, nWidthTo
+		sub		eax, nRadius
+		sub		eax, nWidthFrom
 		dec		eax
 		cmp		eax, ebx
-		jl		rOffset2					//(ecx-radius+width-col-1)
+		jl		rOffset2					//(ecx-nRadius+nWidth-col-1)
 		jmp		rOffset3
 	rOffset1:						
 		add		ecx, ebx                    // 循环次数调整
@@ -764,7 +782,7 @@ cPreAlphaLoopEnd:
 		add		ecx, eax					// 后边界只调整循环次数和源数据指针
 		sub		ecx, ebx
 	rOffset3:
-		mov		eax, radius					// 中间部分只调整源数据指针
+		mov		eax, nRadius					// 中间部分只调整源数据指针
 		imul	eax, bytes
 		sub		esi, eax
 	rblurLoop:								// 模糊循环
@@ -805,20 +823,20 @@ cPreAlphaLoopEnd:
 		jmp     rColLoop 
 	rColEnd:
 
-		mov         eax, widthFrom						//	pTT = ptrTemp+radius*bytes;
+		mov         eax, nWidthFrom						//	pTT = ptrTemp+nRadius*bytes;
 		imul        eax, bytes
 		add         eax, ptrTemp
 		mov         esi, eax 
 		
-		mov         eax, row						//	BYTE *ppp = (BYTE *)Data+row*stride+radius*bytes;
-		imul        eax, stride
-		add         eax, Data
-		mov         ecx, widthFrom
+		mov         eax, row						//	BYTE *ppp = (BYTE *)pbyData+row*nStride+nRadius*bytes;
+		imul        eax, nStride
+		add         eax, pbyData
+		mov         ecx, nWidthFrom
 		imul        ecx, bytes
 		add         eax, ecx 
 		mov         edi, eax 
 	
-		mov     eax, widthFrom								//for(col = 0; col < width; col++)
+		mov     eax, nWidthFrom								//for(col = 0; col < nWidth; col++)
 		mov     col, eax 
 		jmp     rSepAlphaJudge 
 	rSepAlphaLoop:
@@ -826,7 +844,7 @@ cPreAlphaLoopEnd:
 		add     eax,1 
 		mov     col,eax 
 	rSepAlphaJudge:
-		mov     eax, widthTo
+		mov     eax, nWidthTo
 		cmp     col, eax 
 		jge     rSepAlphaEnd 
 	
