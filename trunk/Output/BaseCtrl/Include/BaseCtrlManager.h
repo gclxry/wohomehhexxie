@@ -16,6 +16,7 @@
 #include "BfNormalGraduatedButton.h"
 #include "BfComboSelBtnBar.h"
 #include "BfIe.h"
+#include "BfRichEdit.h"
 
 
 class CBaseCtrlManager : public CDirectUiManager
@@ -23,6 +24,8 @@ class CBaseCtrlManager : public CDirectUiManager
 public:
 	CBaseCtrlManager(void);
 	~CBaseCtrlManager(void);
+
+	CBfRichEdit* CreateBfRichEdit(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId);
 
 	CBfIe* CreateBfIe(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId = 0);
 	CBfComboSelBtnBar* CreateBfComboSelBtnBar(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId);

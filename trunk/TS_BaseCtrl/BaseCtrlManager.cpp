@@ -9,6 +9,28 @@ CBaseCtrlManager::~CBaseCtrlManager(void)
 {
 }
 
+CBfRichEdit* CBaseCtrlManager::CreateBfRichEdit(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId)
+{
+	CBfRichEdit *pWnd = NULL;
+	if (IsReady())
+	{
+		pWnd = new CBfRichEdit();
+		if (pWnd != NULL)
+		{
+			if (!pWnd->CreateWnd(m_pParentDlg, this, pMsgCtrl, WndRect, nWndId, DWT_RICH_EDIT))
+			{
+				SAVE_DELETE(pWnd);
+			}
+			else
+			{
+				m_WndList.NewWndObj(pWnd);
+			}
+		}
+	}
+
+	return pWnd;
+}
+
 CBfIe* CBaseCtrlManager::CreateBfIe(CDirectUiWindowMsgCtrl *pMsgCtrl, CRect WndRect, int nWndId)
 {
 	CBfIe *pWnd = NULL;

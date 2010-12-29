@@ -402,6 +402,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="009 RichEdit"
+			>
+			<File
+				RelativePath=".\BfRichEdit.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Output\BaseCtrl\Include\BfRichEdit.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\Output\BaseCtrl\Include\BaseCtrl.h"
 			>
