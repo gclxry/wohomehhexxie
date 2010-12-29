@@ -22,6 +22,7 @@ CRichEditDlg::CRichEditDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 	m_pCheckBox2 = NULL;
 	m_pLogonBtn = NULL;
 	m_pnWei = NULL;
+	m_pRichEdit = NULL;
 
 	m_pUiManager = &m_UiManager;
 	m_GlassRect.SetRectEmpty();
@@ -73,6 +74,14 @@ void CRichEditDlg::OnCreate()
 		return;
 	}
 	m_pStatic->SetFullDrawImage(true);
+
+	m_pRichEdit = m_UiManager.CreateBfRichEdit(this, CRect(0, 0, 0, 0), 0);
+	if (m_pRichEdit == NULL)
+	{
+		::MessageBox(m_hParent, _T("初始化 m_pRichEdit 失败，程序无法启动！"), MSG_TITLE, MB_OK | MB_ICONSTOP);
+		::PostMessage(m_hParent, WM_CLOSE, NULL, NULL);
+		return;
+	}
 
 	strPicPath = strSkinDir + _T("SkinImage\\YDLogo.png");
 	m_pYdLogo = m_UiManager.CreateBfStatic(this, CRect(0, 0, 0, 0), 0, strPicPath, IT_PNG);
@@ -240,14 +249,21 @@ LRESULT CRichEditDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 	int nTopCut = 28;
 	m_GlassRect = CRect(nCut, nTopCut, cx - nCut, cy - nCut);
 
+	CRect TRect(m_GlassRect);
 	if (m_pStatic != NULL)
 	{
-		CRect TRect(m_GlassRect);
 		TRect.left += 2;
 		TRect.top += 2;
 		TRect.right -= 2;
 		TRect.bottom -= 2;
 		m_pStatic->MoveWindow(TRect, hWinPoslnfo);
+	}
+
+	if (m_pRichEdit != NULL)
+	{
+		CRect RichRect(TRect);
+		RichRect.bottom = RichRect.top + 100;
+		m_pRichEdit->MoveWindow(RichRect, hWinPoslnfo);
 	}
 
 	if (m_pUserLogo != NULL)
