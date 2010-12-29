@@ -475,15 +475,13 @@ void CGroundGlassDlg::OnPaint(HDC hPaintDc)
 		CUiMethod::GetScreenBitmap(hMemoryDC, WndRect);
 
 		// GDI 数据
-//		ImageGaussiabBlur((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy, 1, 1);
+//		m_GaussB.ImageGaussBlur((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy, 6, 30, 6, 6);
 
 		// GDI+ 数据
 		Bitmap *ptBmp = Bitmap::FromHBITMAP(hMemoryBitmap, NULL);
 		BitmapData LockedBmpData;
 		ptBmp->LockBits(Rect(0, 0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy), ImageLockModeRead | ImageLockModeWrite, PixelFormat32bppARGB, &LockedBmpData);
-
 		m_GaussB.ImageGaussBlur((BYTE *)LockedBmpData.Scan0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy, 6, 30, 6, 6);
-		//GaussB.ImageGaussiabBlur((BYTE *)LockedBmpData.Scan0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy, 2, 2);
 		ptBmp->UnlockBits(&LockedBmpData);
 		DoGrap.DrawImage(ptBmp, PointF(0, 0));
 		delete ptBmp;
