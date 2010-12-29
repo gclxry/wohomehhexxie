@@ -22,7 +22,7 @@ public:
 	}
 
 	void InitWeights(double dbQ, int nRadius);
-	void ImageGaussBlur(BYTE *pbyData, int nWidth, int nHeight, int nLeft, int nTop, int nRight,int nBottom);
+	void ImageGaussBlur(BYTE *pbyData, int nWidth, int nHeight, int nLeft, int nTop, int nRight, int nBottom);
 	void ImageGaussBlur(BYTE *pbyData, int nWidth, int nHeight);
 
 private:
