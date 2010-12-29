@@ -61,6 +61,8 @@ private:
 
 	CBaseCtrlManager m_UiManager;
 
+	CBfRichEdit *m_pRichEdit;
+
 
 	CBitmapDC m_BmpDc;
 	BLENDFUNCTION m_Blend;
