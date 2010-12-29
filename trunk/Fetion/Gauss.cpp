@@ -4,8 +4,9 @@
 
 // 模糊整个图像
 // 32位bgra格式的数据
-void CGaussBlur::ImageGaussBlur(BYTE *Data,int width, int height,int radius)
+void CGaussBlur::ImageGaussBlur(BYTE *Data,int width, int height)
 {		
+	int radius = m_nRadius;
 	// bgra 
 	int bytes = 4;
 	int stride = width*bytes;
@@ -13,6 +14,8 @@ void CGaussBlur::ImageGaussBlur(BYTE *Data,int width, int height,int radius)
 	DWORD num = max(width,height)*bytes;
 	BYTE *ptrTemp = new BYTE[num];
 	memset(ptrTemp,0,num*sizeof(BYTE));	
+
+	int *pnWeight = m_pnWeightList;
 
 	int r,g,b,a,row,col;
 	
@@ -112,7 +115,7 @@ cPreAlphaLoopEnd:
  		add     edx, eax					// 当前要进行模糊计算的像素	
 					
 		mov     esi, edx					// 运算涉及到的首个像素指针	
-		mov		edi, m_pnWeights				// 模板
+		mov		edi, pnWeight				// 模板
 		
 		mov     ecx, templateLength			// 模板长度放入ecx
 		
@@ -265,7 +268,7 @@ cPreAlphaLoopEnd:
  		add     edx, eax					// 当前要进行模糊计算的像素	
 		
 		mov     esi, edx					// 运算涉及到的首个像素指针	//
-		mov		edi, m_pnWeights				// 模板
+		mov		edi, pnWeight				// 模板
 		
 		mov     ecx, templateLength			// 模板长度放入ecx
 		
@@ -332,7 +335,6 @@ cPreAlphaLoopEnd:
 
 		jmp     rColLoop 
 	rColEnd:
-
 
 		mov         esi, ptrTemp					//	pTT = ptrTemp+radius*bytes;
 		
@@ -409,14 +411,17 @@ cPreAlphaLoopEnd:
 
 	delete []ptrTemp;
 } 
-// 根据方差Q与模糊半径radius生成m_pnWeights
-void CGaussBlur::InitWeights(double Q,int radius)
+
+// 根据方差Q与模糊半径radius生成 m_pnWeightList
+void CGaussBlur::InitWeights(double Q, int radius)
 {
+	m_nRadius = radius;
+
 	double fx = 0;
 	int templateLength = radius*2 + 1;
 	float *fweights = new float[templateLength];
 	
-	for(int i = 1; i <=  radius; i++)
+	for(int i = 1; i <= radius; i++)
 	{
 		fx = i / Q;   
 		fweights[radius + i] = (float)exp(-fx * fx / 2);   
@@ -431,22 +436,22 @@ void CGaussBlur::InitWeights(double Q,int radius)
 		fx = fx + fweights[i];  
 	}
 
-	m_pnWeights = new int[templateLength];
+	m_pnWeightList = new int[templateLength];
 
 	// 归一化，整数化
 	for(int i = 0; i < templateLength; i++)
 	{
-		m_pnWeights[i] = int(fweights[i] / fx * 65536.0 + 0.5);  
+		m_pnWeightList[i] = int(fweights[i] / fx * 65536.0 + 0.5);  
 	}
  
 	delete fweights;
 }
 // 32位bgra格式，可以指定上下左右的模糊范围
-void CGaussBlur::ImageGaussBlur(BYTE *Data,int width, int height,int left,int top,int right,int bottom,int radius)
+void CGaussBlur::ImageGaussBlur(BYTE *Data,int width, int height,int left,int top,int right,int bottom)
 {
-	if (m_pnWeights == NULL)
+	if (m_pnWeightList == NULL)
 		return;
-
+	
 	int bytes = 4;
 	int stride = width*bytes;
 	DWORD num = max(width,height)*bytes;
@@ -454,19 +459,22 @@ void CGaussBlur::ImageGaussBlur(BYTE *Data,int width, int height,int left,int to
 	memset(ptrTemp,0,num*sizeof(BYTE));
 
 
-	_ImageGaussiabBlur(Data,0,width,0,top,stride,radius,ptrTemp);
-	_ImageGaussiabBlur(Data,0,width,height-bottom,height,stride,radius,ptrTemp);
-	_ImageGaussiabBlur(Data,0,left,top,height-bottom,stride,radius,ptrTemp);
-	_ImageGaussiabBlur(Data,width-right,width,top,height-bottom,stride,radius,ptrTemp);
-	
-	
+	_ImageGaussiabBlur(Data,0,width,0,top,stride,ptrTemp);
+	_ImageGaussiabBlur(Data,0,width,height-bottom,height,stride,ptrTemp);
+	_ImageGaussiabBlur(Data,0,left,top,height-bottom,stride,ptrTemp);
+	_ImageGaussiabBlur(Data,width-right,width,top,height-bottom,stride,ptrTemp);
+
 	delete []ptrTemp;
 }
+
 // 局部模糊函数核心算法
-void CGaussBlur::_ImageGaussiabBlur(BYTE *Data,int widthFrom,int widthTo,int heightFrom,int heightTo,int stride,int radius,BYTE *ptrTemp)
+void CGaussBlur::_ImageGaussiabBlur(BYTE *Data,int widthFrom,int widthTo,int heightFrom,int heightTo,int stride,BYTE *ptrTemp)
 {
+	int radius = m_nRadius;
 	int r,g,b,a,row,col,bytes = 4;
 	int templateLength = 2 * radius + 1;
+
+	int *pnWeight = m_pnWeightList;
 
 	__asm
 	{
@@ -565,7 +573,7 @@ cPreAlphaLoopEnd:
  		add     edx, eax					// 当前要进行模糊计算的像素	
 					
 		mov     esi, edx					// 运算涉及到的首个像素指针	
-		mov		edi, m_pnWeights				// 模板
+		mov		edi, pnWeight				// 模板
 		
 		mov     ecx, templateLength			// 模板长度放入ecx
 		
@@ -726,7 +734,7 @@ cPreAlphaLoopEnd:
  		add     edx, eax					// 当前要进行模糊计算的像素	
 		
 		mov     esi, edx					// 运算涉及到的首个像素指针	//
-		mov		edi, m_pnWeights				// 模板
+		mov		edi, pnWeight				// 模板
 		
 		mov     ecx, templateLength			// 模板长度放入ecx
 		

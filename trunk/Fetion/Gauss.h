@@ -8,25 +8,28 @@ class CGaussBlur
 public:
 	CGaussBlur ()
 	{
-		m_pnWeights = NULL;
+		m_pnWeightList = NULL;
+		m_nRadius = 1;
 	}
+
 	~CGaussBlur()
 	{
-		if (m_pnWeights != NULL)
+		if (m_pnWeightList != NULL)
 		{
-			delete []m_pnWeights;
-			m_pnWeights = NULL;
+			delete []m_pnWeightList;
+			m_pnWeightList = NULL;
 		}
 	}
 
-	void InitWeights(double Q,int radius);
+	void InitWeights(double Q, int radius);
 	// 
-	void ImageGaussBlur(BYTE *Data,int width, int height,int left,int top,int right,int bottom,int radius);
-	void ImageGaussBlur(BYTE *Data,int width, int height,int radius);
+	void ImageGaussBlur(BYTE *Data,int width, int height,int left,int top,int right,int bottom);
+	void ImageGaussBlur(BYTE *Data,int width, int height);
 
 private:
-	void _ImageGaussiabBlur(BYTE *Data,int widthFrom,int widthTo,int heightFrom,int heightTo,int stride,int radius,BYTE *ptrTemp);
+	void _ImageGaussiabBlur(BYTE *Data,int widthFrom,int widthTo,int heightFrom,int heightTo,int stride,BYTE *ptrTemp);
 
 private:
-	int *m_pnWeights;
+	int *m_pnWeightList;
+	int m_nRadius;
 };
