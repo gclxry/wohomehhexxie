@@ -482,7 +482,7 @@ void CGroundGlassDlg::OnPaint(HDC hPaintDc)
 		BitmapData LockedBmpData;
 		ptBmp->LockBits(Rect(0, 0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy), ImageLockModeRead | ImageLockModeWrite, PixelFormat32bppARGB, &LockedBmpData);
 
-		m_GaussB.ImageGaussBlur((BYTE *)LockedBmpData.Scan0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy, 10, 30, 10, 10, 2);
+		m_GaussB.ImageGaussBlur((BYTE *)LockedBmpData.Scan0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy, 6, 30, 6, 6);
 		//GaussB.ImageGaussiabBlur((BYTE *)LockedBmpData.Scan0, m_BmpDc.GetDcSize().cx, m_BmpDc.GetDcSize().cy, 2, 2);
 		ptBmp->UnlockBits(&LockedBmpData);
 		DoGrap.DrawImage(ptBmp, PointF(0, 0));
