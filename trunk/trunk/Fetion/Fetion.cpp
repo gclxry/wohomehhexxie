@@ -7,6 +7,7 @@
 #include "GroundGlassDlg.h"
 #include "SseDlg.h"
 #include "IeDlg.h"
+#include "RichEditDlg.h"
 
 
 int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
@@ -20,24 +21,27 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	// 业务开始
 
 	// 登录窗口
-//	CLogonDlgBusiness LogonDlg(hInstance, NULL, IDI_FETION);
-//	LogonDlg.ShowWindow();
+//	CLogonDlgBusiness *pTestDlg = new CLogonDlgBusiness(hInstance, NULL, IDI_FETION);
+//	pTestDlg->ShowWindow();
 
 	// RGN测试
-//	CRgnDlg *pRgnDlg = new CRgnDlg(hInstance, NULL, IDI_FETION);
-//	pRgnDlg->ShowWindow();
+//	CRgnDlg *pTestDlg = new CRgnDlg(hInstance, NULL, IDI_FETION);
+//	pTestDlg->ShowWindow();
 
-//	CMistDlg *pMistDlg = new CMistDlg(hInstance, NULL, IDI_FETION);;
-//	pMistDlg->ShowWindow();
+//	CMistDlg *pTestDlg = new CMistDlg(hInstance, NULL, IDI_FETION);;
+//	pTestDlg->ShowWindow();
 
-	CGroundGlassDlg *pGroundGlassDlg = new CGroundGlassDlg(hInstance, NULL, IDI_FETION);;
-	pGroundGlassDlg->ShowWindow();
+//	CGroundGlassDlg *pTestDlg = new CGroundGlassDlg(hInstance, NULL, IDI_FETION);;
+//	pTestDlg->ShowWindow();
 
-//	CSseDlg *pSseDlg = new CSseDlg(hInstance, NULL, IDI_FETION);;
-//	pSseDlg->ShowWindow();
+//	CSseDlg *pTestDlg = new CSseDlg(hInstance, NULL, IDI_FETION);;
+//	pTestDlg->ShowWindow();
 
-//	CIeDlg *pIelg = new CIeDlg(hInstance, NULL, IDI_FETION);;
-//	pIelg->ShowWindow();
+//	CIeDlg *pTestDlg = new CIeDlg(hInstance, NULL, IDI_FETION);;
+//	pTestDlg->ShowWindow();
+
+	CRichEditDlg *pTestDlg = new CRichEditDlg(hInstance, NULL, IDI_FETION);;
+	pTestDlg->ShowWindow();
 
 	// 主消息循环:
 	MSG msg;
@@ -51,11 +55,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 			DispatchMessage(&msg);
 		}
 	}
-//	delete pRgnDlg;
-//	delete pMistDlg;
-	delete pGroundGlassDlg;
-//	delete pSseDlg;
-//	delete pIelg;
+	delete pTestDlg;
 
 	// 释放资源
 	CUiMethod::UnInitGdiPlus();

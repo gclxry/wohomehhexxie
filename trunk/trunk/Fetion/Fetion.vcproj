@@ -433,6 +433,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="¸»ÎÄ±¾¿ò²âÊÔ"
+				>
+				<File
+					RelativePath=".\RichEditDlg.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RichEditDlg.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Mmx"
