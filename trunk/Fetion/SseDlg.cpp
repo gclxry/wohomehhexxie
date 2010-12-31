@@ -432,14 +432,6 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		DoGrap.FillRectangle(&lgBrush4, p1.X, p1.Y, nXhW, nXhW);
 		*/
 
-		SolidBrush FillBrush(Color(101, 150, 198, 16));
-		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
-
-		CMmxRender MmxR;
-		CSse2Render Sse2R;
-
-		MmxR.ARGB32_SetAlpha((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(40, 10, 201, 300), 50);
-
 
 /*		DWORD dwTm1 = ::GetTickCount();
 		for (int i = 0; i < 2000; i++)
@@ -472,6 +464,14 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 
 		// ¿ªÊ¼»­Í¼
 		m_pUiManager->OnPaint(hMemoryDC, WndRect);
+
+		SolidBrush FillBrush(Color(101, 150, 198, 16));
+		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
+
+		CMmxRender MmxR;
+		CSse2Render Sse2R;
+
+		MmxR.ARGB32_SetAlpha((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(40, 10, 201, 300), 50);
 
 		// »­±ß¿ò
 		WndRect = this->GetClientRect();
