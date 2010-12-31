@@ -237,7 +237,7 @@ LRESULT CSseDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 
 	if (m_pStatic != NULL)
 	{
-		//m_pStatic->MoveWindow(CRect(0, 0, cx, cy), hWinPoslnfo);
+		m_pStatic->MoveWindow(CRect(0, 0, cx, cy), hWinPoslnfo);
 	}
 
 	if (m_pUserLogo != NULL)
@@ -465,13 +465,18 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		// ¿ªÊ¼»­Í¼
 		m_pUiManager->OnPaint(hMemoryDC, WndRect);
 
-		SolidBrush FillBrush(Color(101, 150, 198, 16));
-		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
+//		SolidBrush FillBrush(Color(101, 150, 198, 16));
+//		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
 
 		CMmxRender MmxR;
 		CSse2Render Sse2R;
 
-		MmxR.ARGB32_SetAlpha((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(40, 10, 201, 300), 50);
+		CRect ARect(0, 0, 0, 0);
+		if (m_pLink1 != NULL)
+		{
+			ARect = m_pLink1->GetWindowRect();
+		}
+		MmxR.ARGB32_SetAlpha((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), ARect, 200);
 
 		// »­±ß¿ò
 		WndRect = this->GetClientRect();
