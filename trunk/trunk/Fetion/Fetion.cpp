@@ -34,16 +34,16 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 //	CGroundGlassDlg *pTestDlg = new CGroundGlassDlg(hInstance, NULL, IDI_FETION);;
 //	pTestDlg->ShowWindow();
 
-//	CSseDlg *pTestDlg = new CSseDlg(hInstance, NULL, IDI_FETION);;
-//	pTestDlg->ShowWindow();
+	CSseDlg *pTestDlg = new CSseDlg(hInstance, NULL, IDI_FETION);;
+	pTestDlg->ShowWindow();
 
 //	CIeDlg *pTestDlg = new CIeDlg(hInstance, NULL, IDI_FETION);;
 //	pTestDlg->ShowWindow();
 
-	CRichEditDlg *pTestDlg = new CRichEditDlg(hInstance, NULL, IDI_FETION);;
-	pTestDlg->ShowWindow();
+//	CRichEditDlg *pTestDlg = new CRichEditDlg(hInstance, NULL, IDI_FETION);;
+//	pTestDlg->ShowWindow();
 
-	// 主消息循环:
+	// 主消息循环
 	MSG msg;
 	HACCEL hAccelTable;
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_FETION));
