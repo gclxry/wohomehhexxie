@@ -306,7 +306,7 @@ void CDirectUiWindow::RedrawWindow(UINT flags)
 
 void CDirectUiWindow::SetDefaultFont()
 {
-	SetTextFont(_T("ËÎÌו"), 12, FontStyleRegular, Color(0, 0, 0));
+	SetTextFont(_T("ËÎÌו"), 12, FontStyleRegular, Color(255, 0, 0, 0));
 }
 
 void CDirectUiWindow::OnDestroy()
