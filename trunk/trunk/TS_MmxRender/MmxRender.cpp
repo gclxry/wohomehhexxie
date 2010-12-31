@@ -132,10 +132,11 @@ void CMmxRender::ARGB32_SetAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __in 
 		SetRect.bottom = DstSize.cy;
 
 	// ·­×ª¾ØÐÎ
-	CRect TRect(SetRect);
-	TRect.top = DstSize.cy - SetRect.top - SetRect.Height();
-	TRect.bottom = TRect.top + SetRect.Height();
-	SetRect = TRect;
+	int nHeight = SetRect.Height();
+	int nTop = DstSize.cy - SetRect.top - SetRect.Height();
+
+	SetRect.top = nTop;
+	SetRect.bottom = SetRect.top + nHeight;
 
 	BYTE *pbyA = &bySetA;
 	DWORD dwA = bySetA;
