@@ -41,10 +41,6 @@ void CBfStatic::OnPaint()
 		if (m_WndTextInfo.IsEmpty())
 			SetDefaultFont();
 
-		FontFamily DefaultFamily(m_WndTextInfo.strFontName);
-		Font DefaultFont(&DefaultFamily, (REAL)m_WndTextInfo.nFontHeight, m_WndTextInfo.FStyle, UnitPixel);
-		SolidBrush DefaultBrush(m_WndTextInfo.TextColor);
-
 		CGdiPlusDraw::DrawWndText(m_pDoGrap, m_WndTextInfo);
 	}
 }
