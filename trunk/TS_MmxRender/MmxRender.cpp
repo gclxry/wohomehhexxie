@@ -262,6 +262,37 @@ LOOP_S:
 	}
 }
 
+// 设置一副位图为指定颜色
+void CMmxRender::ARGB32_ClearBitmap(__inout BYTE *pBmpData, __in CSize BmpSize, __in DWORD dwColor)
+{
+	if (pBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0)
+		return;
+
+	// 64位色块数据
+	DWORD dwColorList[2] = {dwColor, dwColor};
+
+	// 一次复制2个像素
+	int nLoops = (BmpSize.cx * BmpSize.cy) / 2;
+
+	__asm
+	{
+		mov		edi, pBmpData			// 目标寄存器
+		movq	mm0, [dwColorList]		// 将需要复制的64位数据拷贝MMX寄存器中
+		mov		ecx, nLoops				// 循环次数
+		dec		ecx
+
+LOOP_S:
+		movq	[edi], mm0				// 将64位数据拷贝从MMX寄存器中拷贝到目标内存中
+		add		edi, 8					// 操作2个像素之后的数据
+		loop	LOOP_S
+		emms
+	}
+
+	// 填充最后一个像素
+	if (((BmpSize.cx * BmpSize.cy) % 2) > 0)
+		((DWORD*)pBmpData)[BmpSize.cx * BmpSize.cy - 1] = dwColor;
+}
+
 /*
 // 老外写的mmx
 // The assembler code which does the blending is actually really simple. From my additive blender, there's two parts. The first part initializes three of the MMX registers:

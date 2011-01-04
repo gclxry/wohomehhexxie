@@ -487,6 +487,9 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		WndRect = this->GetClientRect();
 		DrawFetionBkgndLine(hMemoryDC, WndRect);
 
+//		DWORD dwColor = BGRA_MARK(0,0,255,255);
+//		MmxR.ARGB32_ClearBitmap((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), dwColor);
+
 		CSysUnit::SetWindowToTransparence(m_hWnd, true);
 		WndRect = this->GetWindowRect();
 		POINT ptWinPos = {WndRect.left, WndRect.top};
