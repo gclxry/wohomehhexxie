@@ -18,12 +18,19 @@ public:
 	// 设置内存指定区域的Alpha值。
 	// pbyDst：内存位图的BTIMAP数据
 	// DstSize：内存位图的大小，单位像素
-	// SetRect：需要设置的位图的位置【注意，内存位图的位置和肉眼观察的位置是相反的。】
-	// bySetA：需要设置的alpha值
+	// SetRect：需要设置的位图的位置
+	// bySetA：alpha值
 	virtual void ARGB32_ClearAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __in CRect SetRect, __in BYTE bySetA);
+
+	// 替换指定的Alpha值。
+	// pbyDst：内存位图的BTIMAP数据
+	// DstSize：内存位图的大小，单位像素
+	// SetRect：需要设置的位图的位置
+	// byComA：指定需要替换的Alpha值
+	// bySetA：alpha值
 	virtual void ARGB32_CoverAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __in CRect SetRect, __in BYTE byComA, __in BYTE bySetA);
 
 private:
-	// 设置符合bitmap内存数据的矩形
+	// 设置符合BITMAP内存数据的矩形
 	virtual void SetCoverRect(__in CSize DstSize, __inout CRect &SetRect);
 };
