@@ -10,20 +10,6 @@ CMmxRender::~CMmxRender(void)
 {
 }
 
-// 设置Alpha为指定值
-void CMmxRender::ARGB32_CoverAlpha(DWORD *pBmpData, CSize BmpSize, BYTE byA)
-{
-	if (pBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0)
-		return;
-
-	for (int i = 0; i < (BmpSize.cx * BmpSize.cy); i++)
-	{
-		BYTE *pRgba = (BYTE*)&(pBmpData[i]);
-		pRgba += 3;
-		*pRgba = byA;
-	}
-}
-
 // 使用32位带透明值颜色值填充一段位图数据
 void CMmxRender::ARGB32_FillBitmapBuffer(DWORD *pBmpData, CSize BmpSize, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
 {
@@ -113,12 +99,9 @@ LOOP_S:
 	}
 }
 
-// 设置内存指定区域的Alpha值
-void CMmxRender::ARGB32_SetAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __in CRect SetRect, __in BYTE bySetA)
+// 设置符合bitmap内存数据的矩形
+void CMmxRender::SetCoverRect(__in CSize DstSize, __inout CRect &SetRect)
 {
-	if (pbyDst == NULL || DstSize.cx == 0 || DstSize.cy == 0 || SetRect.IsRectEmpty())
-		return;
-
 	if (SetRect.left < 0)
 		SetRect.left = 0;
 
@@ -137,23 +120,117 @@ void CMmxRender::ARGB32_SetAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __in 
 
 	SetRect.top = nTop;
 	SetRect.bottom = SetRect.top + nHeight;
+}
+
+// 设置内存指定区域的Alpha值
+void CMmxRender::ARGB32_CoverAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __in CRect SetRect, __in BYTE byComA, __in BYTE bySetA)
+{
+	if (pbyDst == NULL || DstSize.cx == 0 || DstSize.cy == 0 || SetRect.IsRectEmpty())
+		return;
+
+	SetCoverRect(DstSize, SetRect);
+
+	int nLoops = SetRect.Width();
+	int nLine = SetRect.top;
+	int nLineEnd = SetRect.bottom;
+
+	__asm
+	{
+		jmp         CURRENT_LINE_SET_BEING
+
+		LINE_SET_BEING:
+		mov         ecx, dword ptr [nLine]
+		add         ecx, 1
+		mov         dword ptr [nLine], ecx
+
+		CURRENT_LINE_SET_BEING:
+		mov         ecx, dword ptr [nLine]
+		cmp         ecx, dword ptr [nLineEnd]
+		jge         RECT_SET_END
+
+			// 设置一行像素
+			__asm
+			{
+				// 计算每一行开始的像素地址，存入 eax
+				// C语言计算公式：BYTE *pbyLineDst = pbyDst + (DstSize.cx * nLine * 4) + (SetRect.left * 4);
+				mov		eax, dword ptr [DstSize]
+				imul	eax, dword ptr [nLine]
+				mov		ecx, dword ptr [pbyDst]
+				lea		edx, [ecx+eax*4]
+				mov		eax, dword ptr [SetRect]
+				lea		ecx, [edx+eax*4]
+				mov		eax, ecx
+
+				// eax：当前需要操作的像素的内存地址
+				// ebx：一行像素的操作个数的计数器
+				// edx：保存用于比较的数据
+
+				// 初始化每一行的循环
+				mov		ebx, 0
+				movzx	edx, byte ptr [byComA]
+				jmp		CURRENT_LINE_PIX_BEGIN
+
+				// 下一个像素的开始
+			NEXT_LINE_PIX_BEGIN:
+				add		ebx, 1
+
+					// 当前一行的每一个循环的开始
+				CURRENT_LINE_PIX_BEGIN:
+					cmp		ebx, dword ptr [nLoops]
+					jge		LINE_SET_END
+
+					movzx	ecx, byte ptr [eax+3]
+					cmp		ecx, edx
+					jne		PIX_SET_END
+
+						mov		cl, byte ptr [bySetA]
+						mov		byte ptr [eax+3], cl
+
+					PIX_SET_END:
+						add		eax, 4
+
+				jmp		NEXT_LINE_PIX_BEGIN
+			LINE_SET_END:
+			}
+			jmp		LINE_SET_BEING
+		
+		RECT_SET_END:
+	}
+}
+
+// 设置内存指定区域的Alpha值
+void CMmxRender::ARGB32_ClearAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __in CRect SetRect, __in BYTE bySetA)
+{
+	if (pbyDst == NULL || DstSize.cx == 0 || DstSize.cy == 0 || SetRect.IsRectEmpty())
+		return;
+
+	SetCoverRect(DstSize, SetRect);
+
+	int nLoops = SetRect.Width() / 2;
+	int nRem = SetRect.Width() % 2;
 
 	BYTE *pbyA = &bySetA;
 	DWORD dwA = bySetA;
 	DWORD dwSetA[2] = { dwA, dwA };
 	DWORD *pdwA = dwSetA;
 
+	// 初始化各个寄存器的值
+	__asm
+	{
+		mov		ebx, dword ptr [pdwA]
+		movq	mm1, [ebx]
+		pslld	mm1, 24
+		mov		ebx, dwA
+	}
+
 	for (int nLine = SetRect.top; nLine < SetRect.bottom; nLine++)
 	{
+		// 设置一行像素
 		BYTE *pbyLineDst = pbyDst + (DstSize.cx * nLine * 4) + (SetRect.left * 4);
 
-		int nLoops = SetRect.Width() / 2;
 		__asm
 		{
 			mov		edx, dword ptr [pbyLineDst]
-			mov		eax, dword ptr [pdwA]
-			movq	mm1, [eax]
-			pslld	mm1, 24
 			mov		ecx, nLoops
 			dec		ecx
 
@@ -165,21 +242,25 @@ LOOP_S:
 			movq	[edx], mm0
 			add		edx, 8
 			loop	LOOP_S
-
-			emms
 		}
 
-		if (SetRect.Width() % 2 > 0)
+		if (nRem > 0)
 		{
+			// 一行的像素为奇数个，设置最后一个像素
 			__asm
 			{
 				sub		edx, 4
-				mov		eax, dwA
 				mov		esi, edx
 				mov		[esi+3], 00H
-				mov		[esi+3], al
+				mov		[esi+3], bl
 			}
 		}
+	}
+
+	// 清除MMX的状态
+	__asm
+	{
+		emms
 	}
 }
 
