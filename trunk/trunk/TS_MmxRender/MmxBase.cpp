@@ -4,6 +4,7 @@
 
 CMmxBase::CMmxBase(void)
 {
+	m_bIsSupport = false;
 }
 
 CMmxBase::~CMmxBase(void)

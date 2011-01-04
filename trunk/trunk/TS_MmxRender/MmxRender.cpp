@@ -10,45 +10,10 @@ CMmxRender::~CMmxRender(void)
 {
 }
 
-// 使用32位带透明值颜色值填充一段位图数据
-void CMmxRender::ARGB32_FillBitmapBuffer(DWORD *pBmpData, CSize BmpSize, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
-{
-	if (pBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0)
-		return;
-
-	DWORD dwColor = 0;
-	if (byA > 0)
-	{
-		// 根据一个像素的RGBA值，进行本像素的alpha混合
-		PIXEL_ALPHA_SET(byA,byR,byG,byB,dwColor);
-	}
-	// 64位色块数据
-	DWORD dwColorList[2] = {dwColor, dwColor};
-
-	// 一次复制2个像素
-	int nLoops = (BmpSize.cx * BmpSize.cy) / 2;
-	__asm
-	{
-		mov		edi, pBmpData			// 目标寄存器
-		mov		ecx, nLoops				// 循环次数
-		dec		ecx
-LOOP_S:
-		movq	mm0, [dwColorList]		// 将需要复制的64位数据拷贝MMX寄存器中
-		movq	[edi], mm0				// 将64位数据拷贝从MMX寄存器中拷贝到目标内存中
-		add		edi, 8					// 操作2个像素之后的数据
-		loop	LOOP_S
-		emms
-	}
-
-	// 填充最后一个像素
-	if (((BmpSize.cx * BmpSize.cy) % 2) > 0)
-		pBmpData[BmpSize.cx * BmpSize.cy - 1] = dwColor;
-}
-
 // mmx 32位带透明值色块画刷
 void CMmxRender::ARGB32_SolidBrush(DWORD *pDstBmpData, CSize BmpSize, CRect BrushRect, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
 {
-	if (pDstBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0 || BrushRect.IsRectEmpty() || byA == 0)
+	if (pDstBmpData == NULL || BmpSize.cx <= 0 || BmpSize.cy <= 0 || BrushRect.IsRectEmpty() || byA == 0)
 		return;
 
 	if (byA == 255)
@@ -125,7 +90,7 @@ void CMmxRender::SetCoverRect(__in CSize DstSize, __inout CRect &SetRect)
 // 设置内存指定区域的Alpha值
 void CMmxRender::ARGB32_CoverAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __in CRect SetRect, __in BYTE byComA, __in BYTE bySetA)
 {
-	if (pbyDst == NULL || DstSize.cx == 0 || DstSize.cy == 0 || SetRect.IsRectEmpty())
+	if (pbyDst == NULL || DstSize.cx <= 0 || DstSize.cy <= 0 || SetRect.IsRectEmpty())
 		return;
 
 	SetCoverRect(DstSize, SetRect);
@@ -199,7 +164,7 @@ void CMmxRender::ARGB32_CoverAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __i
 // 设置内存指定区域的Alpha值
 void CMmxRender::ARGB32_ClearAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __in CRect SetRect, __in BYTE bySetA)
 {
-	if (pbyDst == NULL || DstSize.cx == 0 || DstSize.cy == 0 || SetRect.IsRectEmpty())
+	if (pbyDst == NULL || DstSize.cx <= 0 || DstSize.cy <= 0 || SetRect.IsRectEmpty())
 		return;
 
 	SetCoverRect(DstSize, SetRect);
@@ -265,7 +230,7 @@ LOOP_S:
 // 设置一副位图为指定颜色
 void CMmxRender::ARGB32_ClearBitmap(__inout BYTE *pBmpData, __in CSize BmpSize, __in DWORD dwColor)
 {
-	if (pBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0)
+	if (pBmpData == NULL || BmpSize.cx <= 0 || BmpSize.cy <= 0)
 		return;
 
 	// 64位色块数据
@@ -292,121 +257,3 @@ LOOP_S:
 	if (((BmpSize.cx * BmpSize.cy) % 2) > 0)
 		((DWORD*)pBmpData)[BmpSize.cx * BmpSize.cy - 1] = dwColor;
 }
-
-/*
-// 老外写的mmx
-// The assembler code which does the blending is actually really simple. From my additive blender, there's two parts. The first part initializes three of the MMX registers:
-
-__asm {
-movd    mm5, one
-movd    mm6, alpha
-pxor    mm7, mm7
-punpcklbw  mm5, mm7
-punpcklbw  mm6, mm7
-paddw    mm6, mm5
-}
-// The second part loops through each pixel to be drawn and blends them appropriately:
-
-hile (ty <= ty2) 
-
-line = (unsigned long*)source->line[sy]; 
-line = (unsigned long*)target->line[ty]; 
-x = sx1; tx = tx1; 
-hile (tx <= tx2) 
-
-l = sline[sx]; 
-f (!masked || sl != skip_colour) 
-{ 
-tl = tline[tx]; 
-__asm { 
-movd mm0, sl 
-movd mm1, tl 
-punpcklbw mm0, mm7 
-punpcklbw mm1, mm7 
-
-pmullw mm0, mm6 
-psrlw mm0, 8 
-paddusw mm1, mm0 
-
-packuswb mm1, mm7 
-movd tl, mm1 
-} 
-tline[tx] = tl; 
-} 
-sx++; tx++; 
-} 
-sy++; ty++; 
-} 
-
-*/
-/*
-// 汇编 32位带透明值色块画刷
-void CMmxRender::ARGB32_SolidBrush(BYTE *pBmpData, CSize BmpSize, CRect BrushRect, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
-{
-	if (pBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0 || BrushRect.IsRectEmpty() || byA == 0)
-		return;
-
-	if (byA == 255)
-	{
-	}
-	else
-	{
-		int nLoops = BmpSize.cx * BmpSize.cy;
-		__asm
-		{
-			mov		esi, pBmpData
-
-			movzx	edx, byA
-			mov		ebx, 00FFH
-			sub		ebx, edx
-
-			mov		ecx, nLoops
-			dec		ecx
-LOOP_S:
-			__asm							// 逐个像素计算alpha融合
-			{
-				TW0_PIXEL_ALPHA_SET(byB,byA,0)
-				TW0_PIXEL_ALPHA_SET(byG,byA,1)
-				TW0_PIXEL_ALPHA_SET(byR,byA,2)
-
-				movzx	eax, [esi+3]
-				mov		edx, 00FFH
-				sub		edx, eax
-				imul	edx, ebx
-				shr		edx, 8
-				mov		eax, 00FFH
-				sub		eax, edx
-				mov		[esi+3], al
-			}
-			add		esi, 4					// 操作下一个像素
-			loop	LOOP_S
-			emms
-		}
-	}
-}
-
-// C 32位带透明值色块画刷
-void CMmxRender::ARGB32_SolidBrush(BYTE *pBmpData, CSize BmpSize, CRect BrushRect, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
-{
-	if (pBmpData == NULL || BmpSize.cx == 0 || BmpSize.cy == 0 || BrushRect.IsRectEmpty() || byA == 0)
-		return;
-
-	for (int i = 0; i < BmpSize.cx * BmpSize.cy; i++)
-	{
-		DWORD dwC = pBmpData[i];
-		BYTE byDA = (BYTE)(dwC>>24);
-		BYTE byDR = (BYTE)(dwC>>16);
-		BYTE byDG = (BYTE)(dwC>>8);
-		BYTE byDB = (BYTE)dwC;
-
-		float fAlpha = (float)byA / (float)255.0;
-		byDR = (BYTE)((float)byR * fAlpha + (1.0 - fAlpha) * (float)byDR);
-		byDG = (BYTE)((float)byG * fAlpha + (1.0 - fAlpha) * (float)byDG);
-		byDB = (BYTE)((float)byB * fAlpha + (1.0 - fAlpha) * (float)byDB);
-
-		float fAlphaD = (float)byDA / (float)255.0;
-		byDA = (BYTE)((1.0 - (1.0 - fAlpha) * (1.0 - fAlphaD)) * 255.0);
-		pBmpData[i] = BGRA_MARK(byDB,byDG,byDR,byDA);
-	}
-}
-*/
