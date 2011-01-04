@@ -6,55 +6,39 @@
 // 32位ARGB颜色值制作
 #define BGRA_MARK(b,g,r,a)          (((BYTE)(b)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(r))<<16)|(((DWORD)(BYTE)(a))<<24))
 
-// 单个像素 alpha 融合算法
-// byR = (BYTE)((float)byR * ((float)byA / 255.0));
-// byG = (BYTE)((float)byG * ((float)byA / 255.0));
-// byB = (BYTE)((float)byB * ((float)byA / 255.0));
-
-// 计算一个颜色值的alpha混合
-#define PIXEL_ONE_COLOR_ALPHA_SET(byRGB_One,byA,MovOffset)	\
-	__asm \
-	{ \
-		__asm	movzx		eax, byRGB_One \
-		__asm	movzx		edx, byA \
-		__asm	imul		eax, edx \
-		__asm	cdq \
-		__asm	mov			ecx, 00FFH \
-		__asm	idiv		ecx \
-		__asm	mov			[esi+MovOffset], al \
-	}
-
-// 根据RGBA值，计算alpha混合的值
-#define PIXEL_ALPHA_SET(byA,byR,byG,byB,dwReturn)	\
-	DWORD *pdwColor = &dwReturn; \
-	__asm \
-	{ \
-		__asm	mov		ebx, pdwColor \
-		__asm	mov		esi, ebx \
-		PIXEL_ONE_COLOR_ALPHA_SET(byB,byA,0) \
-		PIXEL_ONE_COLOR_ALPHA_SET(byG,byA,1) \
-		PIXEL_ONE_COLOR_ALPHA_SET(byR,byA,2) \
-		__asm	movzx	ebx, byA \
-		__asm	mov		[esi+3], bl \
-	}
-
-
 class CMmxBase
 {
 public:
 	CMmxBase(void);
 	~CMmxBase(void);
 
-	// 使用32位带透明值颜色值填充一段位图数据
-	virtual void ARGB32_FillBitmapBuffer(DWORD *pBmpData, CSize BmpSize, BYTE byA, BYTE byR, BYTE byG, BYTE byB) {};
+	// 初始化MMX渲染，判断当前CPU是否支持相应的指令集
+	virtual bool InitMmx() { return false; };
 
-	// 设置Alpha为指定值
-	virtual void ARGB32_CoverAlpha(DWORD *pBmpData, CSize BmpSize, BYTE byA) {};
+	// 设置一副位图为指定颜色
+	// pBmpData：内存位图的BTIMAP数据
+	// BmpSize：内存位图的大小，单位像素
+	// dwColor：需要设置的颜色值（默认值：不透明纯白）
+	virtual void ARGB32_ClearBitmap(__inout BYTE *pBmpData, __in CSize BmpSize, __in DWORD dwColor) {};
+
+	// 设置内存指定区域的Alpha值。
+	// pbyDst：内存位图的BTIMAP数据
+	// DstSize：内存位图的大小，单位像素
+	// SetRect：需要设置的位图的位置
+	// bySetA：alpha值
+	virtual void ARGB32_ClearAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __in CRect SetRect, __in BYTE bySetA) {};
+
+	// 替换指定的Alpha值。
+	// pbyDst：内存位图的BTIMAP数据
+	// DstSize：内存位图的大小，单位像素
+	// SetRect：需要设置的位图的位置
+	// byComA：指定需要替换的Alpha值
+	// bySetA：alpha值
+	virtual void ARGB32_CoverAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __in CRect SetRect, __in BYTE byComA, __in BYTE bySetA) {};
+
+private:
+	bool m_bIsSupport;
 };
-
-
-
-
 
 // 两个像素覆盖的 alpha 融合算法
 // dst = ((ovr - dst) * ovr.alpha) / 256 + dst
@@ -62,23 +46,3 @@ public:
 // Dst.Green = Src.Green * Src.alpha + (1-Src.alpha) * Dst.Green;
 // Dst.Blue = Src.Blue * Src.alpha + (1-Src.alpha) * Dst.Blue ;
 // Dst.Alpha = 1 - (1 - Src.Alpha1) * ( 1 - Dst.Alpha)
-
-
-// 计算一个颜色值的alpha混合
-#define TW0_PIXEL_ALPHA_SET(byRGB_One,byA,MovOffset)	\
-	__asm \
-	{ \
-		__asm	movzx		eax, byRGB_One \
-		__asm	imul		eax, byA \
-		__asm	shr			eax, 8 \
-		__asm	push		eax \
-		__asm	mov			edx, ebx \
-		__asm	movzx		eax, [esi+MovOffset] \
-		__asm	imul		edx, eax \
-		__asm	shr			edx, 8 \
-		__asm	pop         eax \
-		__asm	add			eax, edx \
-		__asm	mov			[esi+MovOffset], al \
-	}
-
-#define TW0_PIXEL_ONE_COLOR_ALPHA_SET
