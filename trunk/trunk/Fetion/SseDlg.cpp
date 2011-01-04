@@ -475,11 +475,13 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		if (m_pLink1 != NULL)
 		{
 			ARect = m_pLink1->GetWindowRect();
-			ARect.top += 2;
-			ARect.bottom -= 3;
-			ARect.left += 1;
+//			ARect.top += 2;
+//			ARect.bottom -= 3;
+//			ARect.left += 1;
 		}
-		MmxR.ARGB32_SetAlpha((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), ARect, 200);
+		ARect = WndRect;
+		//MmxR.ARGB32_ClearAlpha((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), ARect, 200);
+		MmxR.ARGB32_CoverAlpha((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), ARect, 0, 200);
 
 		// »­±ß¿ò
 		WndRect = this->GetClientRect();
