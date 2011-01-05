@@ -22,6 +22,7 @@ protected:
 	virtual void OnCreate();
 	virtual LRESULT OnGetMinMaxInfo(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnTimer(WPARAM wParam, LPARAM lParam);
 
 	// 鼠标左键按下消息
 	virtual void DUI_OnLButtonDown(WPARAM wParam, LPARAM lParam);
@@ -59,4 +60,5 @@ private:
 	CBitmapDC m_BmpDc;
 
 	CResImage m_TestImg;
+	int m_nDrawTimer;
 };
