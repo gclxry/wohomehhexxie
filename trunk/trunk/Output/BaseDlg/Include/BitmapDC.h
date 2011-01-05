@@ -20,18 +20,17 @@ public:
     CBitmapDC();
     virtual ~CBitmapDC();
 
-	CSize GetDcSize() { return m_DcSize; };
+	CSize GetDcSize();
 	void Delete();
 	void Create(int nWidth, int nHeight);
 
-	HDC GetSafeHdc(void) { return m_hDC; };
-	HBITMAP GetBmpHandle(void) { return m_hBmp; };
-	DWORD* GetBits(void) { return (DWORD *)m_pBits; };
+	HDC GetSafeHdc();
+	HBITMAP GetBmpHandle();
+	DWORD* GetBits();
 
-protected:
-
+private:
 	HBITMAP m_hBmp;
 	HDC m_hDC;
-	unsigned char* m_pBits;
+	BYTE* m_pBits;
 	CSize m_DcSize;
 };
