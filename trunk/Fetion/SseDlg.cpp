@@ -440,8 +440,8 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		}
 		DWORD dwTm2 = ::GetTickCount();
 
-//		MmxR.ARGB32_CoverAlpha(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 255);
-//		MmxR.ARGB32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 101, 150, 198, 16);
+//		Sse2R.ARGB32_CoverAlpha(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 255);
+//		Sse2R.ARGB32_FillBitmapBuffer(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), 101, 150, 198, 16);
 //		Sse2R.ARGB32_SolidBrush(m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), CRect(0, 0, WndRect.Width(), WndRect.Height()), 201, 49, 40, 50);
 
 		Bitmap *pBmp = (Bitmap *)m_TestImg.GetImage();
@@ -468,7 +468,6 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		// ¿ªÊ¼»­Í¼
 		m_pUiManager->OnPaint(hMemoryDC, WndRect);
 
-		CMmxRender MmxR;
 		CSse2Render Sse2R;
 
 		CRect ARect(0, 0, 0, 0);
@@ -480,15 +479,15 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 //			ARect.left += 1;
 		}
 		ARect = WndRect;
-		//MmxR.ARGB32_ClearAlpha((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), ARect, 200);
-		MmxR.ARGB32_CoverAlpha((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), ARect, 0, 200);
+		//Sse2R.ARGB32_ClearAlpha((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), ARect, 200);
+		Sse2R.ARGB32_CoverAlpha((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), ARect, 0, 200);
 
 		// »­±ß¿ò
 		WndRect = this->GetClientRect();
 		DrawFetionBkgndLine(hMemoryDC, WndRect);
 
 //		DWORD dwColor = BGRA_MARK(0,0,255,255);
-//		MmxR.ARGB32_ClearBitmap((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), dwColor);
+//		Sse2R.ARGB32_ClearBitmap((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), dwColor);
 
 		CSysUnit::SetWindowToTransparence(m_hWnd, true);
 		WndRect = this->GetWindowRect();
