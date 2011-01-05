@@ -228,6 +228,8 @@ void CSseDlg::OnCreate()
 		return;
 	}
 	m_pLogonBtn->SetWindowText(_T("µÇÂ¼"));
+
+	m_nDrawTimer = this->SetTimer(50);
 }
 
 LRESULT CSseDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
@@ -502,4 +504,13 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 //		CSysUnit::SetWindowToTransparence(m_hWnd, false);
 //		::BitBlt(hPaintDc, 0, 0, WndRect.Width(), WndRect.Height(), hMemoryDC, 0, 0, SRCCOPY);
 	}
+}
+
+LRESULT CSseDlg::OnTimer(WPARAM wParam, LPARAM lParam)
+{
+	int nTimerId = (int)wParam;
+	if (m_nDrawTimer == nTimerId)
+	{
+	}
+	return __base_super::OnTimer(wParam, lParam);
 }
