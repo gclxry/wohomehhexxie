@@ -26,6 +26,26 @@ CBitmapDC::~CBitmapDC()
    Delete();
 }
 
+CSize CBitmapDC::GetDcSize()
+{
+	return m_DcSize;
+}
+
+HDC CBitmapDC::GetSafeHdc()
+{
+	return m_hDC;
+}
+
+HBITMAP CBitmapDC::GetBmpHandle()
+{
+	return m_hBmp;
+}
+
+DWORD* CBitmapDC::GetBits()
+{
+	return (DWORD*)m_pBits;
+}
+
 void CBitmapDC::Create(int nWidth, int nHeight)
 {
 	if (nWidth <= 0 || nHeight<= 0)
@@ -63,11 +83,6 @@ void CBitmapDC::Create(int nWidth, int nHeight)
 		{
 			Delete();
 		}
-	}
-	else
-	{
-		if (m_pBits != NULL)
-			memset(m_pBits, 0, m_DcSize.cx * m_DcSize.cy * 4);
 	}
 }
 

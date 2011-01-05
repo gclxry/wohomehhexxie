@@ -420,6 +420,8 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 	HBITMAP hMemoryBitmap = m_BmpDc.GetBmpHandle();
 	if (hMemoryDC != NULL && hMemoryBitmap != NULL)
 	{
+		CSse2Render Sse2R;
+
 		Graphics DoGrap(hMemoryDC);
 		DWORD *pBits = m_BmpDc.GetBits();
 
@@ -462,13 +464,14 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 		DWORD dwT2 = dwTm4 - dwTm3;
 */
 
-		SolidBrush FillBrush(Color(101, 150, 198, 16));
-		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
+//		DWORD dwColor = BGRA_MARK(12,34,56,78);
+//		SolidBrush FillBrush(Color(101, 150, 198, 16));
+//		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
+
+		Sse2R.ARGB32_ClearBitmap((BYTE*)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), BGRA_MARK(0,0,255,101));
 
 		// ¿ªÊ¼»­Í¼
 		m_pUiManager->OnPaint(hMemoryDC, WndRect);
-
-		CSse2Render Sse2R;
 
 		CRect ARect(0, 0, 0, 0);
 		if (m_pLink1 != NULL)
