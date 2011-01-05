@@ -18,7 +18,6 @@ CPUID::~CPUID()
 
 void CPUID::Executecpuid(DWORD veax)
 {
-	// 因为嵌入式的汇编代码不能识别 类成员变量 所以定义四个临时变量作为过渡
 	DWORD deax = 0;
 	DWORD debx = 0;
 	DWORD decx = 0;
@@ -27,7 +26,7 @@ void CPUID::Executecpuid(DWORD veax)
 	__asm
 	{
 		mov eax, veax
-		cpuid			// 执行cpuid
+		cpuid
 		mov deax, eax
 		mov debx, ebx
 		mov decx, ecx
@@ -43,7 +42,7 @@ void CPUID::Executecpuid(DWORD veax)
 // 制造商信息
 CString CPUID::GetVID()
 {
-	// 字符串，用来存储制造商信息
+	// 存储制造商信息
 	char cVID[13];
 	memset(cVID, 0, 13);
 

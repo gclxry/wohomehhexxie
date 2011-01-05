@@ -14,7 +14,7 @@ CMmxRender::~CMmxRender(void)
 // mmx 32位带透明值色块画刷
 void CMmxRender::ARGB32_SolidBrush(DWORD *pDstBmpData, CSize BmpSize, CRect BrushRect, BYTE byA, BYTE byR, BYTE byG, BYTE byB)
 {
-	if (pDstBmpData == NULL || BmpSize.cx <= 0 || BmpSize.cy <= 0 || BrushRect.IsRectEmpty() || byA == 0)
+	if (!m_bIsSupportMmx || pDstBmpData == NULL || BmpSize.cx <= 0 || BmpSize.cy <= 0 || BrushRect.IsRectEmpty() || byA == 0)
 		return;
 
 	if (byA == 255)
@@ -68,7 +68,7 @@ LOOP_S:
 // 设置内存指定区域的Alpha值
 void CMmxRender::ARGB32_ClearAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __in CRect SetRect, __in BYTE bySetA)
 {
-	if (pbyDst == NULL || DstSize.cx <= 0 || DstSize.cy <= 0 || SetRect.IsRectEmpty())
+	if (!m_bIsSupportMmx || pbyDst == NULL || DstSize.cx <= 0 || DstSize.cy <= 0 || SetRect.IsRectEmpty())
 		return;
 
 	SetCoverRect(DstSize, SetRect);
@@ -134,7 +134,7 @@ LOOP_S:
 // 设置一副位图为指定颜色
 void CMmxRender::ARGB32_ClearBitmap(__inout BYTE *pBmpData, __in CSize BmpSize, __in DWORD dwColor)
 {
-	if (pBmpData == NULL || BmpSize.cx <= 0 || BmpSize.cy <= 0)
+	if (!m_bIsSupportMmx || pBmpData == NULL || BmpSize.cx <= 0 || BmpSize.cy <= 0)
 		return;
 
 	// 64位色块数据
