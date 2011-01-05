@@ -449,14 +449,6 @@
 		<Filter
 			Name="Mmx"
 			>
-			<File
-				RelativePath="..\TS_MmxRender\MmxBase.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Output\MmxRender\Include\MmxBase.h"
-				>
-			</File>
 			<Filter
 				Name="Mmx"
 				>
@@ -478,6 +470,42 @@
 				</File>
 				<File
 					RelativePath="..\Output\MmxRender\Include\Sse2Render.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="CPU¼ì²â"
+				>
+				<File
+					RelativePath="..\TS_MmxRender\CPUID.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\MmxRender\Include\CPUID.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Sse"
+				>
+				<File
+					RelativePath="..\TS_MmxRender\SseRender.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\MmxRender\Include\SseRender.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Base"
+				>
+				<File
+					RelativePath="..\TS_MmxRender\MmxBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Output\MmxRender\Include\MmxBase.h"
 					>
 				</File>
 			</Filter>

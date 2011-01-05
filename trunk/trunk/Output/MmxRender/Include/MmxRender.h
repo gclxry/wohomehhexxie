@@ -3,7 +3,6 @@
 
 #include "MmxBase.h"
 
-
 class CMmxRender : public CMmxBase
 {
 public:
@@ -26,15 +25,6 @@ public:
 	// bySetA：alpha值
 	virtual void ARGB32_ClearAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __in CRect SetRect, __in BYTE bySetA);
 
-	// 替换指定的Alpha值。
-	// pbyDst：内存位图的BTIMAP数据
-	// DstSize：内存位图的大小，单位像素
-	// SetRect：需要设置的位图的位置
-	// byComA：指定需要替换的Alpha值
-	// bySetA：alpha值
-	virtual void ARGB32_CoverAlpha(__inout BYTE *pbyDst, __in CSize DstSize, __in CRect SetRect, __in BYTE byComA, __in BYTE bySetA);
-
 private:
-	// 设置符合BITMAP内存数据的矩形
-	virtual void SetCoverRect(__in CSize DstSize, __inout CRect &SetRect);
+	bool m_bIsSupportMmx;
 };
