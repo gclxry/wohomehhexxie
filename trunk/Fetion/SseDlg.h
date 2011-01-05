@@ -23,6 +23,8 @@ protected:
 	virtual LRESULT OnGetMinMaxInfo(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnTimer(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnEnterSizeMove(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnExitSizeMove(WPARAM wParam, LPARAM lParam);
 
 	// 鼠标左键按下消息
 	virtual void DUI_OnLButtonDown(WPARAM wParam, LPARAM lParam);
@@ -35,6 +37,7 @@ protected:
 	// 鼠标离开窗口
 	virtual void DUI_OnMouseLeave(WPARAM wParam, LPARAM lParam);
 
+	static UINT WINAPI DrawRgnDialog(LPVOID lpParameter);
 private:
 	CBfMouseMoveStatic *m_pUserLogo;
 	CBfLinkStatic *m_pLink1;

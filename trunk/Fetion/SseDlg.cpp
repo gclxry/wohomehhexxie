@@ -8,6 +8,19 @@ using namespace Gdiplus;
 
 #define __base_super					CHighEfficiencyDlg
 
+UINT WINAPI CSseDlg::DrawRgnDialog(LPVOID lpParameter)
+{
+	CSseDlg* pWnd = (CSseDlg*)lpParameter;
+
+	while (pWnd != NULL)
+	{
+//		pWnd->RedrawWindow();
+		Sleep(50);
+	}
+
+	return 0;
+}
+
 CSseDlg::CSseDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 : __base_super(hInstance, hParentWnd, nIconId)
 {
@@ -25,6 +38,7 @@ CSseDlg::CSseDlg(HINSTANCE hInstance, HWND hParentWnd, int nIconId)
 	m_pCheckBox1 = NULL;
 	m_pCheckBox2 = NULL;
 	m_pLogonBtn = NULL;
+	m_nDrawTimer = -1;
 
 	m_pUiManager = &m_UiManager;
 }
@@ -50,6 +64,9 @@ LRESULT CSseDlg::OnGetMinMaxInfo(WPARAM wParam, LPARAM lParam)
 void CSseDlg::OnCreate()
 {
 	__base_super::OnCreate();
+
+	UINT nThreadID = 0;
+	HANDLE m_hThread = (HANDLE)_beginthreadex(NULL, 0, DrawRgnDialog, this, 0, &nThreadID);
 
 	m_Blend.BlendOp = AC_SRC_OVER;
 	m_Blend.BlendFlags = 0;
@@ -229,7 +246,15 @@ void CSseDlg::OnCreate()
 	}
 	m_pLogonBtn->SetWindowText(_T("µÇÂ¼"));
 
-	m_nDrawTimer = this->SetTimer(50);
+
+
+
+	DWORD dwStyle = GetWindowLong(m_hWnd, GWL_EXSTYLE);
+	::SetWindowLong(m_hWnd, GWL_EXSTYLE, (dwStyle | WS_EX_LEFT | WS_EX_LTRREADING
+		| WS_EX_CONTROLPARENT | WS_EX_RIGHTSCROLLBAR));
+
+	dwStyle = GetWindowLong(m_hWnd, GWL_STYLE);
+	::SetWindowLong(m_hWnd, GWL_STYLE, (dwStyle | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | 0x44));
 }
 
 LRESULT CSseDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
@@ -353,6 +378,11 @@ LRESULT CSseDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 	}
 
 	this->RedrawWindow();
+
+//	HDC hDc = ::GetDC(m_hWnd);
+//	OnPaint(hDc);
+//	::ReleaseDC(m_hWnd, hDc);
+
 	return __base_super::OnSize(hWinPoslnfo, wParam, lParam);;
 }
 
@@ -467,10 +497,10 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 */
 
 //		DWORD dwColor = BGRA_MARK(12,34,56,78);
-//		SolidBrush FillBrush(Color(101, 150, 198, 16));
-//		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
+		SolidBrush FillBrush(Color(101, 150, 198, 16));
+		DoGrap.FillRectangle(&FillBrush, 0, 0, WndRect.Width(), WndRect.Height());
 
-		Sse2R.ARGB32_ClearBitmap((BYTE*)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), BGRA_MARK(0,0,255,101));
+//		Sse2R.ARGB32_ClearBitmap((BYTE*)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), BGRA_MARK(0,0,255,254));
 
 		// ¿ªÊ¼»­Í¼
 		m_pUiManager->OnPaint(hMemoryDC, WndRect);
@@ -511,6 +541,20 @@ LRESULT CSseDlg::OnTimer(WPARAM wParam, LPARAM lParam)
 	int nTimerId = (int)wParam;
 	if (m_nDrawTimer == nTimerId)
 	{
+//		::SendMessage(m_hWnd, WM_AFXLAST, NULL, NULL);
 	}
 	return __base_super::OnTimer(wParam, lParam);
+}
+
+LRESULT CSseDlg::OnEnterSizeMove(WPARAM wParam, LPARAM lParam)
+{
+//	m_nDrawTimer = this->SetTimer(50);
+	return __base_super::OnEnterSizeMove(wParam, lParam);
+}
+
+LRESULT CSseDlg::OnExitSizeMove(WPARAM wParam, LPARAM lParam)
+{
+//	this->KillTimer(m_nDrawTimer);
+//	m_nDrawTimer = -1;
+	return __base_super::OnExitSizeMove(wParam, lParam);
 }

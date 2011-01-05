@@ -84,6 +84,11 @@ void CBitmapDC::Create(int nWidth, int nHeight)
 			Delete();
 		}
 	}
+	else
+	{
+		if (m_pBits != NULL)
+			memset(m_pBits, 0, m_DcSize.cx * m_DcSize.cy * 4);
+	}
 }
 
 void CBitmapDC::Delete()
