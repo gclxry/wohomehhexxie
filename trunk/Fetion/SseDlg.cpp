@@ -65,17 +65,17 @@ void CSseDlg::OnCreate()
 {
 	__base_super::OnCreate();
 
-	UINT nThreadID = 0;
-	HANDLE m_hThread = (HANDLE)_beginthreadex(NULL, 0, DrawRgnDialog, this, 0, &nThreadID);
+//	UINT nThreadID = 0;
+//	HANDLE m_hThread = (HANDLE)_beginthreadex(NULL, 0, DrawRgnDialog, this, 0, &nThreadID);
 
 	m_Blend.BlendOp = AC_SRC_OVER;
 	m_Blend.BlendFlags = 0;
-	m_Blend.AlphaFormat = AC_SRC_ALPHA;
+	m_Blend.AlphaFormat = AC_SRC_OVER;
 	m_Blend.SourceConstantAlpha = 255;
 
 	// 设置默认大小
 	this->CenterWindow(260, 480);
-	CSysUnit::SetWindowToTransparence(m_hWnd, true);
+//	CSysUnit::SetWindowToTransparence(m_hWnd, true);
 
 	CString strSkinDir = CSysUnit::GetAppPath();
 
@@ -248,13 +248,13 @@ void CSseDlg::OnCreate()
 
 
 
-
+/*
 	DWORD dwStyle = GetWindowLong(m_hWnd, GWL_EXSTYLE);
 	::SetWindowLong(m_hWnd, GWL_EXSTYLE, (dwStyle | WS_EX_LEFT | WS_EX_LTRREADING
 		| WS_EX_CONTROLPARENT | WS_EX_RIGHTSCROLLBAR));
 
 	dwStyle = GetWindowLong(m_hWnd, GWL_STYLE);
-	::SetWindowLong(m_hWnd, GWL_STYLE, (dwStyle | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | 0x44));
+	::SetWindowLong(m_hWnd, GWL_STYLE, (dwStyle | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | 0x44));*/
 }
 
 LRESULT CSseDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
@@ -377,7 +377,7 @@ LRESULT CSseDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 		m_pLogonBtn->MoveWindow(LogonRect, hWinPoslnfo);
 	}
 
-	this->RedrawWindow();
+//	this->RedrawWindow();
 
 //	HDC hDc = ::GetDC(m_hWnd);
 //	OnPaint(hDc);
@@ -524,15 +524,21 @@ void CSseDlg::OnPaint(HDC hPaintDc)
 //		DWORD dwColor = BGRA_MARK(0,0,255,255);
 //		Sse2R.ARGB32_ClearBitmap((BYTE *)m_BmpDc.GetBits(), m_BmpDc.GetDcSize(), dwColor);
 
-		CSysUnit::SetWindowToTransparence(m_hWnd, true);
-		WndRect = this->GetWindowRect();
-		POINT ptWinPos = {WndRect.left, WndRect.top};
-		POINT ptSrc = {0, 0};
-		SIZE sizeWindow = {WndRect.Width(), WndRect.Height()};
-		::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, hMemoryDC, &ptSrc, 0, &m_Blend, ULW_ALPHA);
+//		CSysUnit::SetWindowToTransparence(m_hWnd, true);
+//		WndRect = this->GetWindowRect();
+//		POINT ptWinPos = {WndRect.left, WndRect.top};
+//		POINT ptSrc = {0, 0};
+//		SIZE sizeWindow = {WndRect.Width(), WndRect.Height()};
+//		::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, hMemoryDC, &ptSrc, 0, &m_Blend, ULW_ALPHA);
 
-//		CSysUnit::SetWindowToTransparence(m_hWnd, false);
-//		::BitBlt(hPaintDc, 0, 0, WndRect.Width(), WndRect.Height(), hMemoryDC, 0, 0, SRCCOPY);
+		CSysUnit::SetWindowToTransparence(m_hWnd, false);
+		::BitBlt(hPaintDc, 0, 0, WndRect.Width(), WndRect.Height(), hMemoryDC, 0, 0, SRCCOPY);
+
+
+		//Graphics DoGrap1(hPaintDc);
+		//SolidBrush FillBrush1(Color(255, 255, 255, 255));
+		//DoGrap1.FillRectangle(&FillBrush1, 0, 0, WndRect.Width(), WndRect.Height());
+		//::AlphaBlend(hPaintDc, 0, 0, WndRect.Width(), WndRect.Height(), hMemoryDC, 0, 0, WndRect.Width(), WndRect.Height(), m_Blend);
 	}
 }
 

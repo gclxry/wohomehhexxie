@@ -58,6 +58,8 @@ protected:
 	virtual void OnDestroy() {};
 	virtual void OnCreate() {};
 	virtual LRESULT OnNcActive(UINT message, WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnActivateApp(WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnActivate(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnNcCalcSize(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnKillFocus(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnEraseBkgnd(WPARAM wParam, LPARAM lParam);
@@ -75,7 +77,6 @@ protected:
 	virtual LRESULT OnMove(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnMoving(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnTimer(WPARAM wParam, LPARAM lParam);
-	virtual LRESULT OnActivateApp(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnSizing(WPARAM wParam, LPARAM lParam);
 	virtual LRESULT OnSizeProc(WPARAM wParam, LPARAM lParam);
 
