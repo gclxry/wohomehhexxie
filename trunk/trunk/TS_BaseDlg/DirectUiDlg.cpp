@@ -271,6 +271,11 @@ LRESULT CDirectUiDlg::OnActivateApp(WPARAM wParam, LPARAM lParam)
 	return ::DefWindowProc(m_hWnd, WM_ACTIVATEAPP, wParam, lParam);
 }
 
+LRESULT CDirectUiDlg::OnActivate(WPARAM wParam, LPARAM lParam)
+{
+	return ::DefWindowProc(m_hWnd, WM_ACTIVATE, wParam, lParam);
+}
+
 LRESULT CDirectUiDlg::OnKillFocus(WPARAM wParam, LPARAM lParam)
 {
 	return ::DefWindowProc(m_hWnd, WM_KILLFOCUS, wParam, lParam);
@@ -300,6 +305,9 @@ LRESULT CDirectUiDlg::WndProc(UINT message, WPARAM wParam, LPARAM lParam)
 	case 0x00AF:	// WM_NCUAHDRAWFRAME
 	case WM_NCACTIVATE:
 		return OnNcActive(message, wParam, lParam);
+		
+	case WM_ACTIVATE:
+		return OnActivate(wParam, lParam);
 
 	case WM_NCCALCSIZE:
 		return OnNcCalcSize(wParam, lParam);
