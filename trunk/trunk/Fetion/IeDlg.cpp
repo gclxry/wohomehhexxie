@@ -374,7 +374,7 @@ LRESULT CIeDlg::OnSize(HDWP hWinPoslnfo, WPARAM wParam, LPARAM lParam)
 		m_pLogonBtn->MoveWindow(LogonRect, hWinPoslnfo);
 	}
 
-	this->RedrawWindow();
+//	this->RedrawWindow();
 	return __base_super::OnSize(hWinPoslnfo, wParam, lParam);;
 }
 
