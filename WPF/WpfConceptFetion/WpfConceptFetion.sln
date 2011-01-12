@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfConceptFetion", "WpfConceptFetion.csproj", "{C50FAB89-AB3A-4BE8-A46F-5A3E79DDEFD5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C50FAB89-AB3A-4BE8-A46F-5A3E79DDEFD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C50FAB89-AB3A-4BE8-A46F-5A3E79DDEFD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C50FAB89-AB3A-4BE8-A46F-5A3E79DDEFD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C50FAB89-AB3A-4BE8-A46F-5A3E79DDEFD5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
