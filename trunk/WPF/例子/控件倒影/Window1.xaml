@@ -1,8 +1,8 @@
 ﻿<Window x:Class="DropShadow.Window1"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" KeyDown="Window_KeyDown"
-    Title="Window1" Height="355" Width="477" WindowStartupLocation="CenterScreen"
-    WindowState="Normal" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+    Title="飞信概念版" Height="355" Width="477" WindowStartupLocation="CenterScreen"
+    WindowState="Normal" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown" IsHitTestVisible="True" ResizeMode="NoResize">
     
     <!--
     <Window.Background>
@@ -36,8 +36,8 @@
                     <AmbientLight Color="White"/>
                 </ModelVisual3D.Content>
             </ModelVisual3D>
-            <Viewport2DVisual3D x:Name="viewport2DVisual3D0" Geometry="{StaticResource geometry1}"
-                                Material="{StaticResource material}">
+            
+            <Viewport2DVisual3D x:Name="View2dTo3d_1" Material="{StaticResource material}">
                 <Viewport2DVisual3D.Transform>
                     <Transform3DGroup>
                         <Transform3DGroup>
@@ -52,10 +52,11 @@
                 </Viewport2DVisual3D.Transform>
                 <Viewport2DVisual3D.Visual>
                     <Border  Style="{StaticResource border}">
-                        <Image Source="Images\050817goodfeng14.jpg"  Opacity="1"  />
+                        <Image Name="image1"/>
                     </Border>
                 </Viewport2DVisual3D.Visual>
             </Viewport2DVisual3D>
+            
             <Viewport2DVisual3D x:Name="viewport2DVisual3D1" Geometry="{StaticResource geometry1}"
                                 Material="{StaticResource material}">
                 <Viewport2DVisual3D.Transform>
@@ -70,10 +71,11 @@
                 </Viewport2DVisual3D.Transform>
                 <Viewport2DVisual3D.Visual>
                     <Border  Style="{StaticResource border}">
-                        <Image Source="Images\051027nature10.jpg"  Opacity="1"/>
+                        <Image Name="image2" Opacity="1"/>
                     </Border>
                 </Viewport2DVisual3D.Visual>
             </Viewport2DVisual3D>
+            
             <Viewport2DVisual3D x:Name="viewport2DVisual3D2" Geometry="{StaticResource geometry1}"
                                 Material="{StaticResource material}">
                 <Viewport2DVisual3D.Transform>
@@ -88,10 +90,11 @@
                 </Viewport2DVisual3D.Transform>
                 <Viewport2DVisual3D.Visual>
                     <Border  Style="{StaticResource border}" >
-                        <Image Source="Images\051027nature11.jpg" Opacity="1" />
+                        <Image Name="image3" Opacity="1"/>
                     </Border>
                 </Viewport2DVisual3D.Visual>
             </Viewport2DVisual3D>
+            
             <Viewport2DVisual3D x:Name="viewport2DVisual3D3" Geometry="{StaticResource geometry1}"
                                 Material="{StaticResource material}">
                 <Viewport2DVisual3D.Transform>
@@ -106,7 +109,7 @@
                 </Viewport2DVisual3D.Transform>
                 <Viewport2DVisual3D.Visual>
                     <Border  Style="{StaticResource border}" >
-                        <Image Source="Images\051123Webshots16.jpg" Opacity="1">
+                        <Image Name ="image4" Opacity="1">
                             <Image.OpacityMask>
                                 <LinearGradientBrush EndPoint="0.012,0.5" StartPoint="0.994,0.5">
                                     <GradientStop Color="#00000000" Offset="0"/>
@@ -117,6 +120,7 @@
                     </Border>
                 </Viewport2DVisual3D.Visual>
             </Viewport2DVisual3D>
+            
             <Viewport2DVisual3D x:Name="viewport2DVisual3D4" Geometry="{StaticResource geometry1}"
                                 Material="{StaticResource material}">
                 <Viewport2DVisual3D.Transform>
@@ -131,7 +135,7 @@
                 </Viewport2DVisual3D.Transform>
                 <Viewport2DVisual3D.Visual>
                     <Border  Style="{StaticResource border}">
-                        <Image Source="Images\050817goodfeng15.jpg" Opacity="1" >
+                        <Image Name="image5" Opacity="1" >
                             <Image.OpacityMask>
                                 <LinearGradientBrush EndPoint="0.994,0.5" StartPoint="0.012,0.5">
                                     <GradientStop Color="#00000000" Offset="0"/>
@@ -168,7 +172,7 @@
                                 <GeometryModel3D.Material>
                                     <DiffuseMaterial>
                                         <DiffuseMaterial.Brush>
-                                            <VisualBrush Visual="{Binding ElementName=viewport2DVisual3D0, Path=Visual}"/>
+                                            <VisualBrush Visual="{Binding ElementName=View2dTo3d_1, Path=Visual}"/>
                                         </DiffuseMaterial.Brush>
                                     </DiffuseMaterial>
                                 </GeometryModel3D.Material>
