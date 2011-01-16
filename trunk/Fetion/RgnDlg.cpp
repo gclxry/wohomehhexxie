@@ -149,7 +149,7 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 		POINT ptWinPos = {WndRect.left, WndRect.top};
 		POINT ptSrc = {0, 0};
 		SIZE sizeWindow = {WndRect.Width(), WndRect.Height()};
-
+/*
 		if (!m_DxD3d.IsInit())
 		{
 			// 绘图
@@ -159,6 +159,7 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 		}
 		
 		m_DxD3d.D3dRender();
+
 		::UpdateLayeredWindow(m_hWnd, hPaintDc, &ptWinPos, &sizeWindow, m_DxD3d.GetD3dRenderTargetData(), &ptSrc, 0, &m_Blend, ULW_ALPHA);
 
 
@@ -168,7 +169,7 @@ void CRgnDlg::OnPaint(HDC hPaintDc)
 			m_dbFactor = 0.0;
 			this->RedrawWindow();
 		}
-		return;
+*/		return;
 	}
 
 	// 设置窗体的透明特性

@@ -340,14 +340,6 @@
 			<Filter
 				Name="Dx9Render"
 				>
-				<File
-					RelativePath=".\TestDx9.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\TestDx9.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Áé»ê³öÇÏ´°¿Ú"

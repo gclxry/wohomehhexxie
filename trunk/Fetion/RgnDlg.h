@@ -35,7 +35,7 @@ protected:
 	int m_nTimerId;
 
 	CResImage m_TImage;
-	CDxD3DRender m_DxD3d;
+//	CDxD3DRender m_DxD3d;
 
 private:
 	CBfNormalGraduatedButton *m_pZhuanBtn;
