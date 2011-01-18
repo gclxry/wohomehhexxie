@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<MyCar>
+	<car name="紫罗兰" pic="F:\MyData\fangshunbao_svn\wohomehhexxie\WPF\TestEB\TestData\001.jpg"/>
+	<car name="三翼面" pic="F:\MyData\fangshunbao_svn\wohomehhexxie\WPF\TestEB\TestData\002.jpg"/>
+	<car name="拉提门" pic="F:\MyData\fangshunbao_svn\wohomehhexxie\WPF\TestEB\TestData\003.jpg"/>
+	<car name="去沙漠" pic="F:\MyData\fangshunbao_svn\wohomehhexxie\WPF\TestEB\TestData\004.jpg"/>
+	<car name="静静地横躺" pic="F:\MyData\fangshunbao_svn\wohomehhexxie\WPF\TestEB\TestData\005.jpg"/>
+	<car name="上面的奢华" pic="F:\MyData\fangshunbao_svn\wohomehhexxie\WPF\TestEB\TestData\006.jpg"/>
+	<car name="对面的科幻" pic="F:\MyData\fangshunbao_svn\wohomehhexxie\WPF\TestEB\TestData\007.jpg"/>
+	<car name="幽兰" pic="F:\MyData\fangshunbao_svn\wohomehhexxie\WPF\TestEB\TestData\008.jpg"/>
+	<car name="雅黑" pic="F:\MyData\fangshunbao_svn\wohomehhexxie\WPF\TestEB\TestData\009.jpg"/>
+	<car name="微亮" pic="F:\MyData\fangshunbao_svn\wohomehhexxie\WPF\TestEB\TestData\010.jpg"/>
+	<car name="天地" pic="F:\MyData\fangshunbao_svn\wohomehhexxie\WPF\TestEB\TestData\011.jpg"/>
+	<car name="大头" pic="F:\MyData\fangshunbao_svn\wohomehhexxie\WPF\TestEB\TestData\012.jpg"/>
+	<car name="面头" pic="F:\MyData\fangshunbao_svn\wohomehhexxie\WPF\TestEB\TestData\013.jpg"/>
+	<car name="变形金刚" pic="F:\MyData\fangshunbao_svn\wohomehhexxie\WPF\TestEB\TestData\014.jpg"/>
+	<car name="迷幻" pic="F:\MyData\fangshunbao_svn\wohomehhexxie\WPF\TestEB\TestData\015.jpg"/>
+</MyCar>
