@@ -38,10 +38,10 @@ namespace DropShadow
 
         public void MouseHitTest(object sender, MouseButtonEventArgs args)
         {
-            IInputElemen viewport3d;
-            Point mousePos = args.GetPosition(viewport3d);
-            PointHitTestParameters hitParams = new PointHitTestParameters(mousePos);
-            VisualTreeHelper.HitTest(viewport3d, null, ResultCallback, hitParams);
+            //IInputElemen viewport3d;
+            //Point mousePos = args.GetPosition(viewport3d);
+            //PointHitTestParameters hitParams = new PointHitTestParameters(mousePos);
+            //VisualTreeHelper.HitTest(viewport3d, null, ResultCallback, hitParams);
         }
 
         private void SetImage(Image ImgName, string strPath)
