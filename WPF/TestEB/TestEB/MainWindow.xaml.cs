@@ -22,6 +22,7 @@ namespace TestEB
 			this.InitializeComponent();
 
 			// 在此点下面插入创建对象所需的代码。
+			Reflection.Fill = new VisualBrush(ProductGrid);
 		}
 	}
 }

@@ -4,32 +4,118 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
 	x:Class="TestEB.MainWindow"
 	x:Name="Window"
-	Title="MainWindow"
-	Width="640" Height="480">
+	Title="C#WPF测试"
+	Width="640" Height="622" WindowStartupLocation="CenterScreen">
 	<Window.Resources>
 		<XmlDataProvider x:Key="CarXml" Source="F:\MyData\fangshunbao_svn\wohomehhexxie\WPF\TestEB\TestData\CarSource.xml" d:IsDataSource="True"/>
 		<Storyboard x:Key="CarSource"/>
-		<DataTemplate x:Key="DataTemplate1">
-			<Grid/>
+		<DataTemplate x:Key="ListTemplate1">
+			<Grid>
+				<Rectangle Height="Auto" Margin="0" Stroke="Black" VerticalAlignment="Stretch" RadiusY="17.5" RadiusX="17.5">
+					<Rectangle.Fill>
+						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+							<GradientStop Color="Black" Offset="0"/>
+							<GradientStop Color="#FF7FF4F7" Offset="1"/>
+						</LinearGradientBrush>
+					</Rectangle.Fill>
+				</Rectangle>
+				<Rectangle HorizontalAlignment="Stretch" Height="32" RadiusY="17.5" RadiusX="17.5" Stroke="Black" VerticalAlignment="Top" Width="Auto">
+					<Rectangle.Fill>
+						<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+							<GradientStop Color="Black" Offset="1"/>
+							<GradientStop Color="#FFF5CFF5"/>
+							<GradientStop Color="#FF131013" Offset="0.922"/>
+							<GradientStop Color="#FF8B758B" Offset="1"/>
+							<GradientStop Color="#FFA188A1" Offset="0.301"/>
+						</LinearGradientBrush>
+					</Rectangle.Fill>
+				</Rectangle>
+			</Grid>
 		</DataTemplate>
+		<Storyboard x:Key="ATime1">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="PicGrid">
+				<EasingDoubleKeyFrame KeyTime="0" Value="0.386"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:4" Value="0.996"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="PicGrid">
+				<EasingDoubleKeyFrame KeyTime="0" Value="0.344"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:4" Value="0.904"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="PicGrid">
+				<EasingDoubleKeyFrame KeyTime="0" Value="-140"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:4" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="PicGrid">
+				<EasingDoubleKeyFrame KeyTime="0" Value="-45.35"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:4" Value="3"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="PicGrid">
+				<EasingDoubleKeyFrame KeyTime="0" Value="179.925"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:4" Value="360"/>
+			</DoubleAnimationUsingKeyFrames>
+			<Int32AnimationUsingKeyFrames Storyboard.TargetProperty="(Grid.RowSpan)" Storyboard.TargetName="PicGrid">
+				<EasingInt32KeyFrame KeyTime="0" Value="1"/>
+				<EasingInt32KeyFrame KeyTime="0:0:4" Value="1"/>
+			</Int32AnimationUsingKeyFrames>
+		</Storyboard>
 	</Window.Resources>
+	<Window.Background>
+		<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+			<GradientStop Color="Black" Offset="0"/>
+			<GradientStop Color="White" Offset="1"/>
+		</LinearGradientBrush>
+	</Window.Background>
 	<Window.Triggers>
 		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
 			<BeginStoryboard Storyboard="{StaticResource CarSource}"/>
+			<BeginStoryboard Storyboard="{StaticResource ATime1}"/>
 		</EventTrigger>
 	</Window.Triggers>
 
-	<Grid x:Name="LayoutRoot" DataContext="{Binding Source={StaticResource CarSource}}">
-		<Grid x:Name="ProductGrid" RenderTransformOrigin="0.513,0.507" DataContext="{Binding Source={StaticResource CarXml}, XPath=/MyCar/car}">
+	<Grid x:Name="LayoutRoot" DataContext="{Binding Source={StaticResource CarSource}}" Margin="0,0,0,2">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="0.77*"/>
+			<RowDefinition Height="0.23*"/>
+		</Grid.RowDefinitions>
+		<Grid x:Name="ProductGrid" RenderTransformOrigin="0.513,0.507" DataContext="{Binding Source={StaticResource CarXml}, XPath=/MyCar/car}" Margin="0,0,0,6">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="0.256*"/>
 				<ColumnDefinition Width="0.744*"/>
 			</Grid.ColumnDefinitions>
-			<ContentPresenter x:Name="Master" Margin="0"/>
-			<ContentPresenter x:Name="Details" Grid.Column="1" Margin="8,0,0,0"/>
-			<GridSplitter x:Name="Spli" Grid.Column="1" HorizontalAlignment="Left" Margin="0" Width="8.256"/>
-			<ListBox x:Name="ProductList" DataContext="{Binding Source={StaticResource CarSource}, XPath=/MyCar/car/@name}" IsSynchronizedWithCurrentItem="True" SelectedIndex="0" ItemsSource="{Binding Source={StaticResource CarXml}, XPath=/MyCar/car/@name}" Margin="0"/>
-			<Grid Grid.Column="1" Margin="8.256,0,0,0"/>
+			<ContentPresenter x:Name="Master" ContentTemplate="{DynamicResource ListTemplate1}"/>
+			<ContentPresenter x:Name="Details" Grid.Column="1" Margin="8,0,0,0" ContentTemplate="{DynamicResource ListTemplate1}"/>
+			<GridSplitter x:Name="Spli" Grid.Column="1" HorizontalAlignment="Left" Width="8.256"/>
+			<ListBox x:Name="ProductList" DataContext="{Binding Source={StaticResource CarSource}, XPath=/MyCar/car/@name}" IsSynchronizedWithCurrentItem="True" ItemsSource="{Binding Source={StaticResource CarXml}, XPath=/MyCar/car/@name}" Margin="8,32,8,18" Background="{x:Null}" BorderBrush="{x:Null}"/>
+			<Grid x:Name="PicGrid" Grid.Column="1" Margin="8.256,0,0,0" RenderTransformOrigin="0.5,0.5">
+				<Grid.RenderTransform>
+					<TransformGroup>
+						<ScaleTransform/>
+						<SkewTransform/>
+						<RotateTransform/>
+						<TranslateTransform/>
+					</TransformGroup>
+				</Grid.RenderTransform>
+				<TextBox x:Name="NameBox" Height="40" Margin="16,0,0,26" TextWrapping="Wrap" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="48" Text="{Binding XPath=@name}" Background="{x:Null}" BorderBrush="{x:Null}"/>
+				<TextBox x:Name="PathBox" Height="40" Margin="104,0,8,26" TextWrapping="Wrap" VerticalAlignment="Bottom" Text="{Binding XPath=@pic}" Background="{x:Null}" BorderBrush="{x:Null}"/>
+				<Image x:Name="PicBox" Margin="8,32,8,82" Source="{Binding XPath=@pic}"/>
+			</Grid>
 		</Grid>
+		<Rectangle x:Name="Reflection" Grid.Row="1" RenderTransformOrigin="0.5,0.5">
+			<Rectangle.RenderTransform>
+				<TransformGroup>
+					<ScaleTransform ScaleY="-1" ScaleX="1"/>
+					<SkewTransform AngleY="0" AngleX="0"/>
+					<RotateTransform Angle="0"/>
+					<TranslateTransform/>
+				</TransformGroup>
+			</Rectangle.RenderTransform>
+			<Rectangle.OpacityMask>
+				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+					<GradientStop Color="#B2FFFFFF" Offset="0"/>
+					<GradientStop Offset="1"/>
+				</LinearGradientBrush>
+			</Rectangle.OpacityMask>
+		</Rectangle>
+		<GridSplitter HorizontalAlignment="Stretch" Height="6" VerticalAlignment="Bottom"/>
 	</Grid>
 </Window>
