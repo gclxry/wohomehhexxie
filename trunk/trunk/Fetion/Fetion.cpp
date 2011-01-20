@@ -28,11 +28,11 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 //	CRgnDlg *pTestDlg = new CRgnDlg(hInstance, NULL, IDI_FETION);
 //	pTestDlg->ShowWindow();
 
-//	CMistDlg *pTestDlg = new CMistDlg(hInstance, NULL, IDI_FETION);;
-//	pTestDlg->ShowWindow();
-
-	CGroundGlassDlg *pTestDlg = new CGroundGlassDlg(hInstance, NULL, IDI_FETION);;
+	CMistDlg *pTestDlg = new CMistDlg(hInstance, NULL, IDI_FETION);;
 	pTestDlg->ShowWindow();
+
+//	CGroundGlassDlg *pTestDlg = new CGroundGlassDlg(hInstance, NULL, IDI_FETION);;
+//	pTestDlg->ShowWindow();
 
 //	CSseDlg *pTestDlg = new CSseDlg(hInstance, NULL, IDI_FETION);;
 //	pTestDlg->ShowWindow();
