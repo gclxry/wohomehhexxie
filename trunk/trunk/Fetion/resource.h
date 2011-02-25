@@ -6,7 +6,6 @@
 #define IDM_ABOUT                       104
 #define IDI_FETION                      107
 #define IDI_SMALL                       108
-#define IDC_FETION                      109
 #define IDR_MAINFRAME                   128
 #define IDC_STATIC                      -1
 

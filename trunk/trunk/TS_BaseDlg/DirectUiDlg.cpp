@@ -23,12 +23,6 @@ LRESULT CALLBACK PuppetWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lP
 		::SetWindowLongPtr(hWnd, GWLP_USERDATA, NULL);
 		break;
 
-	case WM_DESTROY:
-		pDlg = (CWindowBase *)::GetWindowLongPtr(hWnd, GWL_USERDATA);
-		if (pDlg != NULL)
-			pDlg->WndProc(message, wParam, lParam);
-		break;
-
 	default :
 		pDlg = (CWindowBase *)::GetWindowLongPtr(hWnd, GWL_USERDATA);
 		if (pDlg != NULL)
@@ -140,12 +134,12 @@ ATOM CDirectUiDlg::RegisterBfoClass()
 	wcex.cbClsExtra		= 0;
 	wcex.cbWndExtra		= 0;
 	wcex.hInstance		= ms_hInstance;
-	wcex.hIcon			= LoadIcon(ms_hInstance, MAKEINTRESOURCE(m_nIconId));
+	wcex.hIcon			= NULL;//LoadIcon(ms_hInstance, MAKEINTRESOURCE(m_nIconId));
 	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW + 1);
-	wcex.lpszMenuName	= MAKEINTRESOURCE(m_nIconId);
+	wcex.lpszMenuName	= NULL;//MAKEINTRESOURCE(m_nIconId);
 	wcex.lpszClassName	= m_strWindowClass;
-	wcex.hIconSm		= LoadIcon(wcex.hInstance, MAKEINTRESOURCE(m_nIconId));
+	wcex.hIconSm		= NULL;//LoadIcon(wcex.hInstance, MAKEINTRESOURCE(m_nIconId));
 
 	return RegisterClassEx(&wcex);
 }

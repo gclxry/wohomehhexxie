@@ -46,10 +46,11 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	// 主消息循环
 	MSG msg;
 	HACCEL hAccelTable;
-	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_FETION));
+//	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_FETION));
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
-		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+		//if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+		if (!TranslateAccelerator(msg.hwnd, NULL, &msg))
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
