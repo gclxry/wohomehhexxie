@@ -1,0 +1,22 @@
+<layout area="1">
+	<window>
+		<property>
+			<group name="base">
+				<bool name="01.UiTestDlg.g-base.bool" data="1"/>
+				<int name="" data="5"/>
+				<string name="01.UiTestDlg"/>
+				<combobox name="01.UiTestDlg.g-base.combobox"/>
+				<cursor name="³¬Á´½ÓÊÖÕÆ"/>
+				<font name=""/>
+				<image name=""/>
+				<color name=""/>
+				<group>
+					<string name="01.UiTestDlg"/>
+					<bool name="01.UiTestDlg.bool"/>					
+				</group>
+			</group>
+		</property>
+		<controls>
+		</controls>
+	</window>
+</layout>

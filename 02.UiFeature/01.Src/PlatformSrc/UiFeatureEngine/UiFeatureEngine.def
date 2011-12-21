@@ -1,0 +1,4 @@
+LIBRARY	"UiFeatureEngine"
+
+EXPORTS
+	GetUiEngineInterface			@1
