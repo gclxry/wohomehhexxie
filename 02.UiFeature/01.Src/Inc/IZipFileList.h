@@ -20,41 +20,30 @@ typedef map<string, FILE_ITEM*>		ZIP_FILE_MAP;
 // 不需要压缩的文件后缀名
 typedef vector<string>				NO_COMPRESS_FILE_VEC;
 
-class CZipFileList
+class IZipFileList
 {
 public:
-	CZipFileList();
-	virtual ~CZipFileList();
 
 //// 读取zip文件 //////////////////////////////////////////////////////////////////////
 	// 读取zip文件
-	bool ReadZipFile(const char *pZipFilePath);
+	virtual bool ReadZipFile(const char *pZipFilePath) = 0;
 	// 取得解压缩文件后的文件列表
-	ZIP_FILE_MAP *GetUnZipFileMap();
-	FILE_ITEM *FindUnZipFile(char *pFileName);	
+	virtual ZIP_FILE_MAP *GetUnZipFileMap() = 0;
+	virtual FILE_ITEM *FindUnZipFile(char *pFileName) = 0;
 
 //// 创建zip文件 //////////////////////////////////////////////////////////////////////
 	// 初始化zip文件，pSrcFileDir：需要压缩的源文件目录
-	bool InitWriteZip(char *pSrcFileDir, char *pSaveZipFile);
+	virtual bool InitWriteZip(char *pSrcFileDir, char *pSaveZipFile) = 0;
 	// 写入一个文件，pFilePath：必须是相对于InitWriteZip函数的pSrcFileDir路径的相对路径
-	bool WriteToZip(char *pFilePath);
-	bool EndWriteZip();
+	virtual bool WriteToZip(char *pFilePath) = 0;
+	virtual bool EndWriteZip() = 0;
 
 //////////////////////////////////////////////////////////////////////////
 	// 测试函数
-	void TestWriteUnZipFile(char *pszOutDir);
-
-private:
-	void Clear();
-	// 通过扩展名来判断文件是否需要加密
-	bool CheckFileNeedCompress(char *pFileName);
-
-private:
-	ZIP_FILE_MAP m_ZipFileMap;
-	NO_COMPRESS_FILE_VEC m_NoCompressFileVec;
-
-//////////////////////////////////////////////////////////////////////////
-	// 写入zip用
-	string m_strSrcFileDir;
-	string m_strSaveZipFile;
+	virtual void TestWriteUnZipFile(char *pszOutDir) = 0;
 };
+
+///////////////////////////////////////////////////////////////////////////
+
+IZipFileList *GetZipFileInterface();
+typedef IZipFileList* (*GETZIPFILEINTERFACE)();
