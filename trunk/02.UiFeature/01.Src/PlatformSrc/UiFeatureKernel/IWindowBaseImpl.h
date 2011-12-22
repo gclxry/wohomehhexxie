@@ -60,7 +60,7 @@ protected:
 	virtual void OnRButtonDown(int nVirtKey, POINT pt);
 
 private:
-	// 内部接受到初始化消息，开始初始化窗口，加载皮肤
+	// 001.内部接受到初始化消息，开始初始化窗口，加载皮肤
 	void OnInitWindowBase();
 
 private:

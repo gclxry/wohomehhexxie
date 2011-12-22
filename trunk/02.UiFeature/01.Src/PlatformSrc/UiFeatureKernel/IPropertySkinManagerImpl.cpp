@@ -12,14 +12,12 @@
 #include "..\..\Inc\IPropertyInt.h"
 #include "..\..\Inc\IPropertyString.h"
 
-// 属性资源xml文件
-#define RESOURCE_XML_NAME				("Resource.xml")
-
 IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
 {
 	m_strSkinPath = "";
 	m_WndPropMap.clear();
 	m_AllPropMap.clear();
+	m_AreaType = AT_CN;
 
 	LoadZipDll();
 }
@@ -27,10 +25,10 @@ IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
 IPropertySkinManagerImpl::~IPropertySkinManagerImpl(void)
 {
 	SAFE_FREE_LIBRARY(m_hZipModule);
-	Release();
+	ReleaseResourceXml();
 }
 
-void IPropertySkinManagerImpl::Release()
+void IPropertySkinManagerImpl::ReleaseResourceXml()
 {
 	for (ALL_PROP_MAP::iterator pGroupItem = m_AllPropMap.begin(); pGroupItem != m_AllPropMap.end(); pGroupItem++)
 	{
@@ -40,7 +38,7 @@ void IPropertySkinManagerImpl::Release()
 			for (PROP_MAP::iterator pPropItem = pGroup->begin(); pPropItem != pGroup->end(); pPropItem++)
 			{
 				IPropertyBase* pProp = pPropItem->second;
-				ReleaseProp(pProp);
+				ReleaseResourceXmlProp(pProp);
 			}
 			SAFE_DELETE(pGroup);
 		}
@@ -66,7 +64,7 @@ void IPropertySkinManagerImpl::LoadZipDll()
 	m_pZipFile = GetZip();
 }
 
-void IPropertySkinManagerImpl::ReleaseProp(IPropertyBase *pCtrlProp)
+void IPropertySkinManagerImpl::ReleaseResourceXmlProp(IPropertyBase *pCtrlProp)
 {
 	if (pCtrlProp == NULL)
 		return;
@@ -249,20 +247,97 @@ bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 
 	// 从皮肤文件中初始化皮肤队列 TBD
 	m_strSkinPath = pszSkinPath;
-	bool bOK = m_pZipFile->ReadZipFile(pszSkinPath);
-	if (bOK)
+	if (!m_pZipFile->ReadZipFile(pszSkinPath))
+		return false;
+
+	FILE_ITEM * pResurceXml = m_pZipFile->FindUnZipFile(RESOURCE_XML_NAME);
+	FILE_ITEM * pWindowsXml = m_pZipFile->FindUnZipFile(WINDOWS_XML_NAME);
+	if (pWindowsXml == NULL || pResurceXml == NULL)
+		return false;
+
+	// 解读属性
+	if (!TranslateResourceXml(pResurceXml))
+		return false;
+
+	// 解析所有Windows
+	if (!TranslateWindowsXml(pWindowsXml))
+		return false;
+
+	return true;
+}
+
+// 解析Windows.xml
+bool IPropertySkinManagerImpl::TranslateWindowsXml(FILE_ITEM *pWindowsXml)
+{
+	m_WndPropMap.clear();
+	if (pWindowsXml == NULL || pWindowsXml->pFileData == NULL)
+		return false;
+
+	XmlState xmlState = { 0 };
+	JabberXmlInitState(&xmlState);
+	int bytesParsed = JabberXmlParse(&xmlState, (char *)pWindowsXml->pFileData, pWindowsXml->dwSrcFileLen);
+	XmlNode *pWindowRoot  = JabberXmlGetChild(&xmlState.root, "layout");
+	if (pWindowRoot != NULL)
 	{
-		// 解读属性
-		FILE_ITEM * pResurceXml = m_pZipFile->FindUnZipFile(RESOURCE_XML_NAME);
-		bOK = TranslateResourceXml(pResurceXml);
+		// 取得语言种类
+		char* psz_area = JabberXmlGetAttrValue(pWindowRoot, "area");
+		if (psz_area == NULL)
+			return false;
+		m_AreaType = (AREA_TYPE)atoi(psz_area);
+
+		int nItemCount = pWindowRoot->numChild;
+		for (int i = 0; i < nItemCount; i++)
+		{
+			XmlNode* pPropType = JabberXmlGetNthChildWithoutTag(pWindowRoot, i);
+			if (pPropType != NULL && pPropType->name != NULL)
+			{
+				if (lstrcmpiA(pPropType->name, "window") == 0)
+				{
+					string strWndName = pPropType->name;
+					WND_PROP_MAP::iterator pWndItem = m_WndPropMap.find(strWndName);
+					if (pWndItem != m_WndPropMap.end())
+						return false;
+
+					IPropertyWindowImpl *pWndProp = new IPropertyWindowImpl;
+
+				}
+
+				//{
+				//	// 找到属性组
+				//	pOnePropMap = pTypeItem->second;
+				//}
+				//else
+				//{
+				//	// 创建属性组
+				//	pOnePropMap = new PROP_MAP;
+				//	if (pOnePropMap == NULL)
+				//		return false;
+
+				//	pOnePropMap->clear();
+				//	m_AllPropMap.insert(pair<string, PROP_MAP*>(strTypeName, pOnePropMap));
+				//}
+
+				//if (pOnePropMap == NULL)
+				//	return false;
+
+				//if (!GeneralCreateProp((char*)strTypeName.c_str(), pPropType, pOnePropMap))
+				//	return false;
+			}
+		}
+	}
+	else
+	{
+		return false;
 	}
 
+	JabberXmlDestroyState(&xmlState);
 	return true;
 }
 
 // 解析Resource.xml
 bool IPropertySkinManagerImpl::TranslateResourceXml(FILE_ITEM *pResurceXml)
 {
+	m_AllPropMap.clear();
 	if (pResurceXml == NULL || pResurceXml->pFileData == NULL)
 		return false;
 
