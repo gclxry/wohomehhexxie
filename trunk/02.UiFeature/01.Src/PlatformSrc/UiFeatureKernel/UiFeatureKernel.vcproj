@@ -369,18 +369,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="ZIPÑ¹Ëõ"
-				>
-				<File
-					RelativePath=".\ZipFileList.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ZipFileList.h"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="×ÓÀà»¯"
 				>
 				<File

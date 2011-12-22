@@ -2,7 +2,7 @@
 #pragma once
 #include "..\..\Inc\IPropertySkinManager.h"
 #include "..\..\Inc\IPropertyWindow.h"
-#include "ZipFileList.h"
+#include "..\..\Inc\IZipFileList.h"
 
 // KEY:窗口名称，所有窗口的管理器map
 typedef map<string, IPropertyWindow*>			WND_PROP_MAP;
@@ -44,13 +44,18 @@ private:
 	// 通用的从资源xml中创建属性
 	bool GeneralCreateProp(char *pPropType, XmlNode* pXmlNode, PROP_MAP* pPropMap);
 
+	// 加载zip文件
+	void LoadZipDll();
+
 private:
 	// 所有窗口的属性管理器map
 	WND_PROP_MAP m_WndPropMap;
 	// 皮肤路径
 	string m_strSkinPath;
-	// zip文件
-	CZipFileList m_ZipFile;
 	// 所有种类的属性的队列
 	ALL_PROP_MAP m_AllPropMap;
+
+	// zip文件
+	IZipFileList *m_pZipFile;
+	HMODULE m_hZipModule;
 };

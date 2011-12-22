@@ -1,0 +1,4 @@
+LIBRARY	"UiFeatureEngine"
+
+EXPORTS
+	GetZipFileInterface			@1

@@ -1,6 +1,7 @@
 
 #include "StdAfx.h"
 #include "IPropertySkinManagerImpl.h"
+#include "CommonFun.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IPropertyFont.h"
 #include "..\..\Inc\IPropertyBool.h"
@@ -19,10 +20,13 @@ IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
 	m_strSkinPath = "";
 	m_WndPropMap.clear();
 	m_AllPropMap.clear();
+
+	LoadZipDll();
 }
 
 IPropertySkinManagerImpl::~IPropertySkinManagerImpl(void)
 {
+	SAFE_FREE_LIBRARY(m_hZipModule);
 	Release();
 }
 
@@ -42,6 +46,24 @@ void IPropertySkinManagerImpl::Release()
 		}
 	}
 	m_AllPropMap.clear();
+}
+
+// 加载zip文件
+void IPropertySkinManagerImpl::LoadZipDll()
+{
+	m_pZipFile = NULL;
+	m_hZipModule = NULL;
+
+	string strPath = GetDllPath(NAME_ZIP_DLL);
+	m_hZipModule = ::LoadLibraryA(strPath.c_str());
+	if (m_hZipModule == NULL)
+		return;
+
+	GETZIPFILEINTERFACE GetZip = (GETZIPFILEINTERFACE)::GetProcAddress(m_hZipModule, "GetZipFileInterface");
+	if (GetZip == NULL)
+		return;
+
+	m_pZipFile = GetZip();
 }
 
 void IPropertySkinManagerImpl::ReleaseProp(IPropertyBase *pCtrlProp)
@@ -186,7 +208,7 @@ IPropertyBase* IPropertySkinManagerImpl::FindProperty(char* pszPropType, char* p
 bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 {
 	// TBD，从Builder来和皮肤文件来是不一样的
-	if (pszSkinPath == NULL || strlen(pszSkinPath) <= 0)
+	if (pszSkinPath == NULL || strlen(pszSkinPath) <= 0 || m_pZipFile == NULL)
 		return false;
 
 	// 初始化
@@ -208,30 +230,30 @@ bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 	strUfd += SKIN_DATA_DIR;
 	strUfd += "skintest.ufd";
 
-	m_ZipFile.InitWriteZip((char*)strDir.c_str(), (char*)strUfd.c_str());
-	m_ZipFile.WriteToZip("Layout.xml");
-	m_ZipFile.WriteToZip("Resource.xml");
-	m_ZipFile.WriteToZip("bk.PNG");
-	m_ZipFile.WriteToZip("V5.Dlg.Close.png");
-	m_ZipFile.WriteToZip("V5.Dlg.Mini.png");
-	m_ZipFile.WriteToZip("V5.Logon.ACDC.png");
-	m_ZipFile.WriteToZip("V5.Logon.Set.png");
-	m_ZipFile.WriteToZip("V5.LogonBiz.01.jpg");
-	m_ZipFile.WriteToZip("V5.LogonBiz.02.png");
-	m_ZipFile.WriteToZip("下拉2标注.png");
-	m_ZipFile.WriteToZip("下拉菜单效果图_MarkMan.png");
-	m_ZipFile.WriteToZip("切图副本.png");
-	m_ZipFile.WriteToZip("最新修改.png");
-	m_ZipFile.EndWriteZip();
+	m_pZipFile->InitWriteZip((char*)strDir.c_str(), (char*)strUfd.c_str());
+	m_pZipFile->WriteToZip("Layout.xml");
+	m_pZipFile->WriteToZip("Resource.xml");
+	m_pZipFile->WriteToZip("bk.PNG");
+	m_pZipFile->WriteToZip("V5.Dlg.Close.png");
+	m_pZipFile->WriteToZip("V5.Dlg.Mini.png");
+	m_pZipFile->WriteToZip("V5.Logon.ACDC.png");
+	m_pZipFile->WriteToZip("V5.Logon.Set.png");
+	m_pZipFile->WriteToZip("V5.LogonBiz.01.jpg");
+	m_pZipFile->WriteToZip("V5.LogonBiz.02.png");
+	m_pZipFile->WriteToZip("下拉2标注.png");
+	m_pZipFile->WriteToZip("下拉菜单效果图_MarkMan.png");
+	m_pZipFile->WriteToZip("切图副本.png");
+	m_pZipFile->WriteToZip("最新修改.png");
+	m_pZipFile->EndWriteZip();
 //////////////////////////////////////////////////////////////////////////
 
 	// 从皮肤文件中初始化皮肤队列 TBD
 	m_strSkinPath = pszSkinPath;
-	bool bOK = m_ZipFile.ReadZipFile(pszSkinPath);
+	bool bOK = m_pZipFile->ReadZipFile(pszSkinPath);
 	if (bOK)
 	{
 		// 解读属性
-		FILE_ITEM * pResurceXml = m_ZipFile.FindUnZipFile(RESOURCE_XML_NAME);
+		FILE_ITEM * pResurceXml = m_pZipFile->FindUnZipFile(RESOURCE_XML_NAME);
 		bOK = TranslateResourceXml(pResurceXml);
 	}
 

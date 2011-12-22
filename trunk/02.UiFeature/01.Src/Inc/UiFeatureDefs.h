@@ -19,7 +19,11 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define NAME_KERNEL									_T("UiFeatureKernel.dll")
+
+#define NAME_KERNEL_DLL								("UiFeatureKernel.dll")
+#define NAME_ENGINE_DLL								("UiFeatureEngine.dll")
 #define NAME_CONTROL_DLL							("UiFeatureControl.dll")
+#define NAME_ZIP_DLL								("UiFeatureZip.dll")
 
 // 控件预览图、icon文件的存放路径，这个只有Builder使用，内核并不使用
 #define CONTROL_IMAGE_DIR							_T("ControlsRes\\")

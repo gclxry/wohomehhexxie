@@ -1,14 +1,24 @@
 
 #include "stdafx.h"
-#include "ZipFileList.h"
+#include "IZipFileListImpl.h"
 #include ".\zip\inc\zlib.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 
 #pragma comment(lib, "./zip/lib/zlib.lib")
 #pragma comment(lib, "./zip/lib/Unzip.lib")
 
+IZipFileList *GetZipFileInterface()
+{
+	return IZipFileListImpl::GetInstance();
+}
 
-CZipFileList::CZipFileList()
+IZipFileListImpl* IZipFileListImpl::GetInstance()
+{
+	static IZipFileListImpl _ZipFileListInstance;
+	return &_ZipFileListInstance;
+}
+
+IZipFileListImpl::IZipFileListImpl()
 {
 	m_ZipFileMap.clear();
 	m_NoCompressFileVec.clear();
@@ -18,12 +28,12 @@ CZipFileList::CZipFileList()
 	m_NoCompressFileVec.push_back(".gif");
 }
 
-CZipFileList::~CZipFileList()
+IZipFileListImpl::~IZipFileListImpl()
 {
 	Clear();
 }
 
-void CZipFileList::Clear()
+void IZipFileListImpl::Clear()
 {
 	for (ZIP_FILE_MAP::iterator pZipItem = m_ZipFileMap.begin(); pZipItem != m_ZipFileMap.end(); pZipItem++)
 	{
@@ -38,7 +48,7 @@ void CZipFileList::Clear()
 }
 
 // 初始化zip文件，pSrcFileDir：需要压缩的源文件目录
-bool CZipFileList::InitWriteZip(char *pSrcFileDir, char *pSaveZipFile)
+bool IZipFileListImpl::InitWriteZip(char *pSrcFileDir, char *pSaveZipFile)
 {
 	Clear();
 	if (pSrcFileDir == NULL || pSaveZipFile == NULL || strlen(pSrcFileDir) <= 0 || strlen(pSaveZipFile) <= 0)
@@ -55,7 +65,7 @@ bool CZipFileList::InitWriteZip(char *pSrcFileDir, char *pSaveZipFile)
 }
 
 // 写入一个文件，pFilePath：必须是相对于InitWriteZip函数的pSrcFileDir路径的相对路径
-bool CZipFileList::WriteToZip(char *pFilePath)
+bool IZipFileListImpl::WriteToZip(char *pFilePath)
 {
 	if (pFilePath == NULL || strlen(pFilePath) <= 0 || m_strSrcFileDir.size() <= 0 || m_strSaveZipFile.size() <= 0)
 		return false;
@@ -155,7 +165,7 @@ bool CZipFileList::WriteToZip(char *pFilePath)
 	return true;
 }
 
-bool CZipFileList::EndWriteZip()
+bool IZipFileListImpl::EndWriteZip()
 {
 	if (m_ZipFileMap.size() <= 0)
 		return false;
@@ -243,7 +253,7 @@ bool CZipFileList::EndWriteZip()
 
 //////////////////////////////////////////////////////////////////////////
 // 读取zip文件
-bool CZipFileList::ReadZipFile(const char *pZipFilePath)
+bool IZipFileListImpl::ReadZipFile(const char *pZipFilePath)
 {
 	Clear();
 	if (pZipFilePath == NULL || strlen(pZipFilePath) <= 0)
@@ -374,12 +384,12 @@ bool CZipFileList::ReadZipFile(const char *pZipFilePath)
 }
 
 // 取得解压缩文件后的文件列表
-ZIP_FILE_MAP* CZipFileList::GetUnZipFileMap()
+ZIP_FILE_MAP* IZipFileListImpl::GetUnZipFileMap()
 {
 	return &m_ZipFileMap;
 }
 
-FILE_ITEM* CZipFileList::FindUnZipFile(char *pFileName)
+FILE_ITEM* IZipFileListImpl::FindUnZipFile(char *pFileName)
 {
 	if (pFileName == NULL || strlen(pFileName) <= 0)
 		return NULL;
@@ -392,7 +402,7 @@ FILE_ITEM* CZipFileList::FindUnZipFile(char *pFileName)
 	return (pZipItem->second);
 }
 
-void CZipFileList::TestWriteUnZipFile(char *pszOutDir)
+void IZipFileListImpl::TestWriteUnZipFile(char *pszOutDir)
 {
 	if (pszOutDir == NULL || strlen(pszOutDir) <= 0)
 		return;
@@ -433,7 +443,7 @@ void CZipFileList::TestWriteUnZipFile(char *pszOutDir)
 }
 
 // 通过扩展名来判断文件是否需要加密
-bool CZipFileList::CheckFileNeedCompress(char *pFileName)
+bool IZipFileListImpl::CheckFileNeedCompress(char *pFileName)
 {
 	if (pFileName == NULL)
 		return false;
