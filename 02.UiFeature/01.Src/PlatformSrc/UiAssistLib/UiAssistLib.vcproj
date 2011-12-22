@@ -3,10 +3,9 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="UiAssistLib"
-	ProjectGUID="{DA0C891B-02E7-44F3-8230-3F01E97E5CD6}"
+	ProjectGUID="{1EAFE2F7-FE2A-4271-A2E9-BCC236412A25}"
 	RootNamespace="UiAssistLib"
-	Keyword="MFCDLLProj"
-	TargetFrameworkVersion="196613"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -21,7 +20,7 @@
 			OutputDirectory="..\..\Lib"
 			IntermediateDirectory="..\..\Temp\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
-			UseOfMFC="1"
+			UseOfATL="0"
 			CharacterSet="2"
 			>
 			<Tool
@@ -38,16 +37,15 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="false"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;UiAssistLib_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
 				DebugInformationFormat="4"
@@ -57,9 +55,6 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="1033"
-				AdditionalIncludeDirectories="$(IntDir)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -88,7 +83,7 @@
 			OutputDirectory="..\..\Lib"
 			IntermediateDirectory="..\..\Temp\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
-			UseOfMFC="1"
+			UseOfATL="0"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -106,15 +101,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="false"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL"
-				RuntimeLibrary="0"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;UiAssistLib_EXPORTS"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
@@ -125,9 +119,6 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"
-				AdditionalIncludeDirectories="$(IntDir)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -156,32 +147,20 @@
 	</References>
 	<Files>
 		<Filter
-			Name="03.内存DC"
+			Name="01.LIB接口"
 			>
 			<File
-				RelativePath=".\CMemoryDC.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Inc\CMemoryDC.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="04.Xml解析"
-			>
-			<File
-				RelativePath=".\CUiXmlParser.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Inc\CUiXmlParser.h"
+				RelativePath=".\UiAssistLib.cpp"
 				>
 			</File>
 		</Filter>
 		<Filter
 			Name="其他"
 			>
+			<File
+				RelativePath=".\resource.h"
+				>
+			</File>
 			<File
 				RelativePath=".\stdafx.cpp"
 				>
@@ -210,10 +189,42 @@
 				RelativePath=".\targetver.h"
 				>
 			</File>
+			<File
+				RelativePath=".\UiAssistLib.rc"
+				>
+			</File>
 		</Filter>
 		<Filter
-			Name="02.各种属性"
+			Name="02.各种属性管理"
 			>
+			<Filter
+				Name="03.【Control】管理"
+				>
+				<Filter
+					Name="02.一个Control的属性"
+					>
+					<File
+						RelativePath="..\..\Inc\IPropertyControl.h"
+						>
+					</File>
+					<File
+						RelativePath=".\IPropertyControlImpl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\IPropertyControlImpl.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="03.各种属性"
+			>
+			<File
+				RelativePath=".\CUiXmlParser.cpp"
+				>
+			</File>
 			<File
 				RelativePath="..\..\Inc\IPropertyBase.h"
 				>
@@ -243,7 +254,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="ComboBox"
+				Name="ComboBbox"
 				>
 				<File
 					RelativePath=".\IPropertyComboBox.cpp"
@@ -316,18 +327,26 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="01.控件基本属性"
+			Name="04.各种图元"
+			>
+			<Filter
+				Name="01.字体图元"
+				>
+			</Filter>
+			<Filter
+				Name="02.图片图元"
+				>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="05.内存DC"
 			>
 			<File
-				RelativePath="..\..\Inc\IPropertyControl.h"
+				RelativePath=".\CMemoryDC.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\IPropertyControlImpl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\IPropertyControlImpl.h"
+				RelativePath="..\..\Inc\CMemoryDC.h"
 				>
 			</File>
 		</Filter>

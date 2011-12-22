@@ -99,12 +99,3 @@ bool IPropertyImage::ReadResourceXmlProperty(XmlNode* pXmlNode)
 
 	return true;
 }
-
-bool IPropertyImage::CreateBuilderShowProp(void *pGridCtrl)
-{
-	CMFCPropertyGridCtrl *pWndPropList = (CMFCPropertyGridCtrl*)pGridCtrl;
-	if (pWndPropList == NULL)
-		return false;
-
-	return true;
-}

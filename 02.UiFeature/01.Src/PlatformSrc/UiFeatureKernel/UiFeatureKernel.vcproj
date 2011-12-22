@@ -3,10 +3,9 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="UiFeatureKernel"
-	ProjectGUID="{322EC5E1-B1B9-4DF7-AAD3-4BF30376B3A9}"
+	ProjectGUID="{1EAFE2F7-FE3A-4270-A2C9-BAA23648AA21}"
 	RootNamespace="UiFeatureKernel"
-	Keyword="MFCDLLProj"
-	TargetFrameworkVersion="196613"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -21,7 +20,7 @@
 			OutputDirectory="..\..\Bin"
 			IntermediateDirectory="..\..\Temp\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
-			UseOfMFC="1"
+			UseOfATL="0"
 			CharacterSet="2"
 			>
 			<Tool
@@ -38,16 +37,15 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="false"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;UiFeatureKernel_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
 				DebugInformationFormat="4"
@@ -57,20 +55,20 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="1033"
-				AdditionalIncludeDirectories="$(IntDir)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				OutputFile="$(OutDir)\UiFeatureKernel.dll"
 				LinkIncremental="2"
-				IgnoreDefaultLibraryNames="msvcrt.lib;msvcprtd.lib"
-				ModuleDefinitionFile=".\UiFeatureKernel.def"
+				AdditionalLibraryDirectories=""
+				IgnoreDefaultLibraryNames=""
+				ModuleDefinitionFile="UiFeatureKernel.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
+				ImportLibrary="$(IntDir)\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -100,7 +98,7 @@
 			OutputDirectory="..\..\Bin"
 			IntermediateDirectory="..\..\Temp\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
-			UseOfMFC="1"
+			UseOfATL="0"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -118,15 +116,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="false"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL"
-				RuntimeLibrary="0"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;UiFeatureKernel_EXPORTS"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
@@ -137,22 +134,23 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"
-				AdditionalIncludeDirectories="$(IntDir)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				OutputFile="$(OutDir)\UiFeatureKernel.dll"
 				LinkIncremental="1"
-				IgnoreDefaultLibraryNames="msvcrt.lib;msvcprtd.lib"
-				ModuleDefinitionFile=".\UiFeatureKernel.def"
+				AdditionalLibraryDirectories=""
+				IgnoreDefaultLibraryNames=""
+				ModuleDefinitionFile="UiFeatureKernel.def"
 				GenerateDebugInformation="true"
+				ProgramDatabaseFile="..\..\..\..\..\Pdb\$(TargetName).pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				ImportLibrary="$(IntDir)\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -182,98 +180,58 @@
 	</References>
 	<Files>
 		<Filter
-			Name="01.对外接口"
+			Name="01.DLL接口"
 			>
 			<File
-				RelativePath="..\..\Inc\IPropertyControlManager.h"
+				RelativePath="..\..\Inc\UiFeatureBaseDefs.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IPropertyControlManagerImpl.cpp"
+				RelativePath=".\UiFeatureKernel.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\IPropertyControlManagerImpl.h"
+				RelativePath=".\UiFeatureKernel.def"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Inc\IPropertyWindowManager.h"
+				RelativePath="..\..\Inc\UiFeatureKernel.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="03.对【Control】接口"
+			>
+			<File
+				RelativePath="..\..\Inc\IKernelControl.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IPropertyWindowManagerImpl.cpp"
+				RelativePath=".\IKernelControlImpl.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\IPropertyWindowManagerImpl.h"
+				RelativePath=".\IKernelControlImpl.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="02.对【Window】的接口"
+			>
+			<File
+				RelativePath="..\..\Inc\IKernelWindow.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IKernelWindowImpl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IKernelWindowImpl.h"
 				>
 			</File>
 			<Filter
-				Name="01.对【Builder】接口"
-				>
-				<File
-					RelativePath="..\..\Inc\IKernelBuilder.h"
-					>
-				</File>
-				<File
-					RelativePath=".\IKernelBuilderImpl.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\IKernelBuilderImpl.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="02.对【Window】接口"
-				>
-				<File
-					RelativePath="..\..\Inc\IKernelWindow.h"
-					>
-				</File>
-				<File
-					RelativePath=".\IKernelWindowImpl.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\IKernelWindowImpl.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="03.对【Control】接口"
-				>
-				<File
-					RelativePath="..\..\Inc\IKernelControl.h"
-					>
-				</File>
-				<File
-					RelativePath=".\IKernelControlImpl.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\IKernelControlImpl.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="04.全局皮肤包管理"
-				>
-				<File
-					RelativePath="..\..\Inc\IPropertySkinManager.h"
-					>
-				</File>
-				<File
-					RelativePath=".\IPropertySkinManagerImpl.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\IPropertySkinManagerImpl.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="05.子类化后【Window】消息处理"
+				Name="02.子类化窗口"
 				>
 				<File
 					RelativePath="..\..\Inc\IWindowBase.h"
@@ -287,29 +245,41 @@
 					RelativePath=".\IWindowBaseImpl.h"
 					>
 				</File>
-				<Filter
-					Name="【Window】属性"
-					>
-					<File
-						RelativePath="..\..\Inc\IPropertyWindow.h"
-						>
-					</File>
-					<File
-						RelativePath=".\IPropertyWindowImpl.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\IPropertyWindowImpl.h"
-						>
-					</File>
-				</Filter>
 			</Filter>
+			<Filter
+				Name="01.子类化操作"
+				>
+				<File
+					RelativePath=".\WindowSubclass.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowSubclass.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="04.对【Builder】的接口"
+			>
+			<File
+				RelativePath="..\..\Inc\IKernelBuilder.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IKernelBuilderImpl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IKernelBuilderImpl.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="其他"
 			>
 			<File
-				RelativePath=".\Resource.h"
+				RelativePath=".\resource.h"
 				>
 			</File>
 			<File
@@ -341,23 +311,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UiFeatureKernel.def"
-				>
-			</File>
-			<File
 				RelativePath=".\UiFeatureKernel.rc"
-				>
-			</File>
-			<File
-				RelativePath=".\res\UiFeatureKernel.rc2"
 				>
 			</File>
 		</Filter>
 		<Filter
-			Name="02.功能类"
+			Name="Common"
 			>
+			<File
+				RelativePath="..\..\Inc\UiFeatureDefs.h"
+				>
+			</File>
 			<Filter
-				Name="公有函数"
+				Name="01.通用函数"
 				>
 				<File
 					RelativePath=".\CommonFun.cpp"
@@ -369,19 +335,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="子类化"
-				>
-				<File
-					RelativePath=".\WindowSubclass.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\WindowSubclass.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="所有控件DLL管理"
+				Name="02.管理所有的控件DLL"
 				>
 				<File
 					RelativePath=".\ControlImpl.cpp"
@@ -393,18 +347,78 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\..\Inc\UiFeatureDefs.h"
+		<Filter
+			Name="05.皮肤属性管理"
 			>
-		</File>
-		<File
-			RelativePath=".\UiFeatureKernel.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Inc\UiFeatureKernel.h"
-			>
-		</File>
+			<Filter
+				Name="02.属性"
+				>
+				<Filter
+					Name="01.【Window】属性"
+					>
+					<File
+						RelativePath=".\IPropertyWindowImpl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\IPropertyWindowImpl.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="01.管理器"
+				>
+				<Filter
+					Name="03.【Control】属性管理"
+					>
+					<File
+						RelativePath="..\..\Inc\IPropertyControlManager.h"
+						>
+					</File>
+					<File
+						RelativePath=".\IPropertyControlManagerImpl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\IPropertyControlManagerImpl.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="01.【Skin】属性管理"
+					>
+					<File
+						RelativePath="..\..\Inc\IPropertySkinManager.h"
+						>
+					</File>
+					<File
+						RelativePath=".\IPropertySkinManagerImpl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\IPropertySkinManagerImpl.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="02.【Window】属性管理"
+					>
+					<File
+						RelativePath="..\..\Inc\IPropertyWindowManager.h"
+						>
+					</File>
+					<File
+						RelativePath=".\IPropertyWindowManagerImpl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\IPropertyWindowManagerImpl.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
