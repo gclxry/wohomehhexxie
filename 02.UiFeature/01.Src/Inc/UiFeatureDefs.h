@@ -25,6 +25,11 @@ using namespace std;
 #define NAME_CONTROL_DLL							("UiFeatureControl.dll")
 #define NAME_ZIP_DLL								("UiFeatureZip.dll")
 
+// 属性资源xml文件
+#define RESOURCE_XML_NAME							("Resource.xml")
+// Window配置资源xml文件
+#define WINDOWS_XML_NAME							("Windows.xml")
+
 // 控件预览图、icon文件的存放路径，这个只有Builder使用，内核并不使用
 #define CONTROL_IMAGE_DIR							_T("ControlsRes\\")
 // 所有皮肤文件集中存放的地方

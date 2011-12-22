@@ -1,5 +1,5 @@
 <layout area="1">
-	<window>
+	<window name="LogonWindow">
 		<property>
 			<group name="base">
 				<bool name="01.UiTestDlg.g-base.bool" data="1"/>

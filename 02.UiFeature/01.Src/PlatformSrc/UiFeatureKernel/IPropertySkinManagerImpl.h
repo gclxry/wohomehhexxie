@@ -28,21 +28,23 @@ public:
 	// 设置显示的语言种类
 	virtual void SetArea(AREA_TYPE areaType);
 
-protected:
+private:
 	// 初始化皮肤包
 	bool InitSkinPackage(const char *pszSkinPath);
 	// 解析Resource.xml
 	bool TranslateResourceXml(FILE_ITEM *pResurceXml);
-
-private:
-	// 清空属性队列
-	void Release();
-	void ReleaseProp(IPropertyBase *pCtrlProp);
-
 	// 判断属性是否已经存在
 	bool IsPropExist(XmlNode* pXmlNode, PROP_MAP* pPropMap, string &strPropName);
 	// 通用的从资源xml中创建属性
 	bool GeneralCreateProp(char *pPropType, XmlNode* pXmlNode, PROP_MAP* pPropMap);
+	// 清空属性队列
+	void ReleaseResourceXml();
+	void ReleaseResourceXmlProp(IPropertyBase *pCtrlProp);
+
+	// 解析Windows.xml
+	bool TranslateWindowsXml(FILE_ITEM *pWindowsXml);
+
+
 
 	// 加载zip文件
 	void LoadZipDll();
@@ -58,4 +60,6 @@ private:
 	// zip文件
 	IZipFileList *m_pZipFile;
 	HMODULE m_hZipModule;
+
+	AREA_TYPE m_AreaType;
 };
