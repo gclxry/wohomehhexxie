@@ -12,11 +12,6 @@ IKernelBuilderImpl::IKernelBuilderImpl(void)
 
 IKernelBuilderImpl::~IKernelBuilderImpl(void)
 {
-//	for (CONTROL_REG_MAP::iterator pItem = m_CtrlRegMap.begin(); pItem != m_CtrlRegMap.end(); pItem++)
-//	{
-//		CONTROL_REG* pRegCtrl = pItem->second;
-//		SAFE_DELETE(pRegCtrl);
-//	}
 	m_CtrlRegMap.clear();
 }
 

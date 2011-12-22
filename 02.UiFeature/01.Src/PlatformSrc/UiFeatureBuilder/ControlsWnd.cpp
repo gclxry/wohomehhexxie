@@ -105,35 +105,33 @@ void CControlsWnd::SetControlList(CONTROL_REG_MAP* pRegControlMap)
 
 	for (CONTROL_REG_MAP::iterator pCtrlItem = pRegControlMap->begin(); pCtrlItem != pRegControlMap->end(); pCtrlItem++)
 	{
-		CONTROL_REG *pRegCtrl = pCtrlItem->second;
-		if (pRegCtrl == NULL)
-			continue;
+		CONTROL_REG &RegCtrl = pCtrlItem->second;
 
-		CONTROL_LIST_GROUP_MAP::iterator pGroup = m_ListGroupMap.find(pRegCtrl->strCtrlGroupName);
+		CONTROL_LIST_GROUP_MAP::iterator pGroup = m_ListGroupMap.find(RegCtrl.strCtrlGroupName);
 		if (pGroup == m_ListGroupMap.end())
 		{
 			// ÐÂ×é±ð
 			CONTROL_LIST_GROUP Group;
 			Group.ItemMap.clear();
-			Group.strCtrlGroupName = pRegCtrl->strCtrlGroupName;
-			m_ListGroupMap.insert(pair<string, CONTROL_LIST_GROUP>(pRegCtrl->strCtrlGroupName, Group));
+			Group.strCtrlGroupName = RegCtrl.strCtrlGroupName;
+			m_ListGroupMap.insert(pair<string, CONTROL_LIST_GROUP>(RegCtrl.strCtrlGroupName, Group));
 
-			pGroup = m_ListGroupMap.find(pRegCtrl->strCtrlGroupName);
+			pGroup = m_ListGroupMap.find(RegCtrl.strCtrlGroupName);
 			if (pGroup == m_ListGroupMap.end())
 				continue;
 
-			m_wndObjectCombo.AddString(A2W(pRegCtrl->strCtrlGroupName.c_str()));
+			m_wndObjectCombo.AddString(A2W(RegCtrl.strCtrlGroupName.c_str()));
 		}
 
 		CONTROL_LIST_GROUP &Group = pGroup->second;
-		CONTROL_LIST_ITEM_MAP::iterator pItem = Group.ItemMap.find(pRegCtrl->strCtrlName);
+		CONTROL_LIST_ITEM_MAP::iterator pItem = Group.ItemMap.find(RegCtrl.strCtrlName);
 		if (pItem != Group.ItemMap.end())
 			continue;
 
 		CONTROL_LIST_ITEM Item;
-		Item.strDllName = pRegCtrl->strDllName;
-		Item.strCtrlName = pRegCtrl->strCtrlName;
-		Item.strControlImg = pRegCtrl->strControlImg;
+		Item.strDllName = RegCtrl.strDllName;
+		Item.strCtrlName = RegCtrl.strCtrlName;
+		Item.strControlImg = RegCtrl.strControlImg;
 		Group.ItemMap.insert(pair<string, CONTROL_LIST_ITEM>(Item.strCtrlName, Item));
 	}
 
