@@ -37,7 +37,10 @@ LRESULT CALLBACK WindowSubProc(HWND hWnd, UINT nMsgId, WPARAM wParam, LPARAM lPa
 					{
 						// 消息需要继续往下传了
 						if (SubFun.pOldWndProc != NULL)
-							return SubFun.pOldWndProc(hWnd, nMsgId, wParam, lParam);
+						{
+							return ::CallWindowProc(SubFun.pOldWndProc, hWnd, nMsgId, wParam, lParam);
+							//return SubFun.pOldWndProc(hWnd, nMsgId, wParam, lParam);
+						}
 					}
 					else
 					{
@@ -78,9 +81,13 @@ bool CWindowSubclass::SubWindow(HWND hWnd, IWindowBase* pWndBase)
 
 	SUBCLASS_FUNCTION SubFu;
 	SubFu.pWndBase = pWndBase;
+	// DWLP_DLGPROC GWLP_WNDPROC GWL_WNDPROC
+	WNDPROC pOldWndProc = (WNDPROC)::GetWindowLongPtr(hWnd, GWL_WNDPROC);
 	SubFu.pOldWndProc = (WNDPROC)::SetWindowLongPtr(hWnd, GWL_WNDPROC, (LONG_PTR)WindowSubProc);
 	if (SubFu.pOldWndProc == NULL)
 		return false;
+
+	DWORD dwErr = ::GetLastError();
 
 	m_SubClsWndMap.insert(pair<HWND, SUBCLASS_FUNCTION>(hWnd, SubFu));
 	return true;

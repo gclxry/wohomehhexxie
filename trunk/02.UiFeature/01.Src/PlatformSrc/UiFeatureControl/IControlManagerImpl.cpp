@@ -26,16 +26,14 @@ void IControlManagerImpl::SetRegControl(CONTROL_REG_MAP *pCtrlMap, string strCtr
 	if (pCtrlMap == NULL)
 		return;
 
-	CONTROL_REG *pRegInfo = new CONTROL_REG;
-	if (pRegInfo == NULL)
-		return;
+	CONTROL_REG RegInfo;
 
-	pRegInfo->strControlImg = strControlImg;
-	pRegInfo->strCtrlGroupName = strCtrlGroupName;
-	pRegInfo->strCtrlName = strCtrlName;
-	pRegInfo->strDllName = NAME_CONTROL_DLL;
+	RegInfo.strControlImg = strControlImg;
+	RegInfo.strCtrlGroupName = strCtrlGroupName;
+	RegInfo.strCtrlName = strCtrlName;
+	RegInfo.strDllName = NAME_CONTROL_DLL;
 
-	pCtrlMap->insert(pair<string, CONTROL_REG*>(pRegInfo->strCtrlName, pRegInfo));
+	pCtrlMap->insert(pair<string, CONTROL_REG>(RegInfo.strCtrlName, RegInfo));
 }
 
 //////////////////////////////////////////////////////////////////////////
