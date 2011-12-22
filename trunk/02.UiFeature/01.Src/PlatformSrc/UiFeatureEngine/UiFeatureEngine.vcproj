@@ -3,10 +3,9 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="UiFeatureEngine"
-	ProjectGUID="{137CE0E2-2884-4B52-A2D7-62A41857BFB6}"
+	ProjectGUID="{1EAFE2C7-FE3A-4270-D2E9-BAA23648AA26}"
 	RootNamespace="UiFeatureEngine"
-	Keyword="MFCDLLProj"
-	TargetFrameworkVersion="196613"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -21,8 +20,8 @@
 			OutputDirectory="..\..\Bin"
 			IntermediateDirectory="..\..\Temp\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
-			UseOfMFC="1"
-			CharacterSet="1"
+			UseOfATL="0"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -38,16 +37,15 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="false"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;UiFeatureEngine_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
 				DebugInformationFormat="4"
@@ -57,19 +55,20 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="1033"
-				AdditionalIncludeDirectories="$(IntDir)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				OutputFile="$(OutDir)\UiFeatureEngine.dll"
 				LinkIncremental="2"
-				ModuleDefinitionFile=".\UiFeatureEngine.def"
+				AdditionalLibraryDirectories=""
+				IgnoreDefaultLibraryNames=""
+				ModuleDefinitionFile="UiFeatureEngine.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
+				ImportLibrary="$(IntDir)\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -99,8 +98,8 @@
 			OutputDirectory="..\..\Bin"
 			IntermediateDirectory="..\..\Temp\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
-			UseOfMFC="1"
-			CharacterSet="1"
+			UseOfATL="0"
+			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -117,15 +116,14 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="false"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL"
-				RuntimeLibrary="0"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;UiFeatureEngine_EXPORTS"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
@@ -136,21 +134,23 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1033"
-				AdditionalIncludeDirectories="$(IntDir)"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				OutputFile="$(OutDir)\UiFeatureEngine.dll"
 				LinkIncremental="1"
-				ModuleDefinitionFile=".\UiFeatureEngine.def"
+				AdditionalLibraryDirectories=""
+				IgnoreDefaultLibraryNames=""
+				ModuleDefinitionFile="UiFeatureEngine.def"
 				GenerateDebugInformation="true"
+				ProgramDatabaseFile="..\..\..\..\..\Pdb\$(TargetName).pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				ImportLibrary="$(IntDir)\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -180,8 +180,28 @@
 	</References>
 	<Files>
 		<Filter
-			Name="01.UI引擎"
+			Name="01.DLL接口"
 			>
+			<File
+				RelativePath=".\UiFeatureEngine.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\UiFeatureEngine.def"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Inc\UiFeatureEngine.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="02.UI引擎"
+			>
+			<File
+				RelativePath="..\..\Inc\IUiEngine.h"
+				>
+			</File>
 			<File
 				RelativePath=".\IUiEngineImpl.cpp"
 				>
@@ -195,7 +215,7 @@
 			Name="其他"
 			>
 			<File
-				RelativePath=".\Resource.h"
+				RelativePath=".\resource.h"
 				>
 			</File>
 			<File
@@ -227,24 +247,12 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UiFeatureEngine.def"
-				>
-			</File>
-			<File
 				RelativePath=".\UiFeatureEngine.rc"
-				>
-			</File>
-			<File
-				RelativePath=".\res\UiFeatureEngine.rc2"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\UiFeatureEngine.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Inc\UiFeatureEngine.h"
+			RelativePath="..\..\Inc\UiFeatureDefs.h"
 			>
 		</File>
 	</Files>

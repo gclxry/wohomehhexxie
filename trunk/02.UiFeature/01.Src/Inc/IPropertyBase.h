@@ -2,6 +2,7 @@
 // 属性
 
 #pragma once
+#include "CUiXmlParser.h"
 
 // 属性类型
 enum PROP_TYPE 
