@@ -24,9 +24,12 @@
 		<item id="6" name=""/>
 	</color>
 	<int>
-		<item id="7" name="" data=""/>
+		<item id="7" name="" data="5000"/>
 	</int>
 	<bool>
-		<item id="8" name="" data=""/>
+		<item id="8" name="" data="1"/>
 	</bool>
+	<group>
+		<item id="9" name="明年的给力+带劲"/>
+	</group>
 </resource>

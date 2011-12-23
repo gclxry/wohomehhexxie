@@ -4,6 +4,14 @@
 #pragma once
 #include "IPropertyBase.h"
 
+struct INT_PROP
+{
+	// 属性名称
+	int nPropId;
+	string strName;
+	int nIntData;
+};
+
 class IPropertyInt : public IPropertyBase
 {
 public:
@@ -17,4 +25,6 @@ public:
 	// 从XML节点读取属性值，并放入属性队列
 	virtual bool ReadResourceXmlProperty(XmlNode* pXmlNode);
 
+private:
+	INT_PROP m_IntProp;
 };

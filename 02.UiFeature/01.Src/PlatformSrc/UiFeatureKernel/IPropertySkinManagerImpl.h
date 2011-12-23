@@ -31,22 +31,33 @@ public:
 private:
 	// 初始化皮肤包
 	bool InitSkinPackage(const char *pszSkinPath);
+	// 加载zip文件
+	void LoadZipDll();
+
+//////////////////////////////////////////////////////////////////////////
+	// Resource.xml相关
 	// 解析Resource.xml
 	bool TranslateResourceXml(FILE_ITEM *pResurceXml);
+	void ReleaseResourceXml();
+	void ReleaseResourceXmlProp(IPropertyBase *pCtrlProp);
 	// 判断属性是否已经存在
 	bool IsPropExist(XmlNode* pXmlNode, PROP_MAP* pPropMap, int &nPropId);
 	// 通用的从资源xml中创建属性
 	bool GeneralCreateProp(char *pPropType, XmlNode* pXmlNode, PROP_MAP* pPropMap);
-	// 清空属性队列
-	void ReleaseResourceXml();
-	void ReleaseResourceXmlProp(IPropertyBase *pCtrlProp);
+	// 设置当前最大的PropId
 	void ResetPropId(int nPropId);
 
+//////////////////////////////////////////////////////////////////////////
+	// Controls.xml 相关
+	bool TranslateControlsXml(FILE_ITEM *pWindowsXml);
+
+//////////////////////////////////////////////////////////////////////////
+	// Windows.xml 相关
 	// 解析Windows.xml
 	bool TranslateWindowsXml(FILE_ITEM *pWindowsXml);
 
-	// 加载zip文件
-	void LoadZipDll();
+//////////////////////////////////////////////////////////////////////////
+	// Layout.xml 相关
 
 private:
 	// 所有窗口的属性管理器map

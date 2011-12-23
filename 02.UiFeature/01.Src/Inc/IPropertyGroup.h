@@ -4,19 +4,21 @@
 #pragma once
 #include "IPropertyBase.h"
 
-struct BOOL_PROP
+// Group 中的属性列表
+typedef vector<IPropertyBase*>		GROUP_PROP_VEC;
+
+struct GROUP_PROP
 {
 	// 属性名称
 	int nPropId;
 	string strName;
-	bool bBoolData;
 };
 
-class IPropertyBool : public IPropertyBase
+class IPropertyGroup : public IPropertyBase
 {
 public:
-	IPropertyBool();
-	~IPropertyBool();
+	IPropertyGroup();
+	~IPropertyGroup();
 
 	// 是否为合法数据
 	virtual bool IsRightData();
@@ -25,6 +27,10 @@ public:
 	// 从XML节点读取属性值，并放入属性队列
 	virtual bool ReadResourceXmlProperty(XmlNode* pXmlNode);
 
+	// 取得Group下的属性列表
+	GROUP_PROP_VEC* GetPropVec();
+
 private:
-	BOOL_PROP m_BoolProp;
+	GROUP_PROP m_GroupProp;
+	GROUP_PROP_VEC m_PropVec;
 };

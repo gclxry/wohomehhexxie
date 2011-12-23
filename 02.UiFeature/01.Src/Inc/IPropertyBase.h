@@ -14,7 +14,8 @@ enum PROP_TYPE
 	PT_FONT,
 	PT_IMAGE,
 	PT_INT,
-	PT_STRING
+	PT_STRING,
+	PT_GROUP
 };
 
 #define PROP_TYPE_BOOL_NAME						"bool"
@@ -25,6 +26,7 @@ enum PROP_TYPE
 #define PROP_TYPE_IMAGE_NAME					"image"
 #define PROP_TYPE_INT_NAME						"int"
 #define PROP_TYPE_STRING_NAME					"string"
+#define PROP_TYPE_GROUP_NAME					"group"
 
 // ”Ô—‘÷÷¿‡
 enum AREA_TYPE

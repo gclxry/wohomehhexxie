@@ -5,6 +5,7 @@
 
 IPropertyImage::IPropertyImage()
 {
+	m_ImageProp.nPropId = 0;
 	m_ImageProp.strName = "";
 	m_ImageProp.strZipFile = "";
 	INIT_RECT(m_ImageProp.RectInImage);
