@@ -34,7 +34,7 @@ using namespace std;
 #define CONTROL_IMAGE_DIR							_T("ControlsRes\\")
 // 所有皮肤文件集中存放的地方
 #define SKIN_DATA_DIR								("SkinData\\")
-#define SKIN_PROP_NAME								("name")
+#define SKIN_PROP_ID								("id")
 
 #ifndef SAFE_CLOSE_HANDLE
 #define SAFE_CLOSE_HANDLE(hHandle)					{if(hHandle!=NULL)::CloseHandle(hHandle);hHandle=NULL;};

@@ -17,12 +17,14 @@ enum PROP_TYPE
 	PT_STRING
 };
 
-#define PROP_TYPE_FONT_NAME						"font"
-#define PROP_TYPE_STRING_NAME					"string"
-#define PROP_TYPE_COMBOBOX_NAME					"combobox"
-#define PROP_TYPE_IMAGE_NAME					"image"
-#define PROP_TYPE_CURSOR_NAME					"cursor"
+#define PROP_TYPE_BOOL_NAME						"bool"
 #define PROP_TYPE_COLOR_NAME					"color"
+#define PROP_TYPE_COMBOBOX_NAME					"combobox"
+#define PROP_TYPE_CURSOR_NAME					"cursor"
+#define PROP_TYPE_FONT_NAME						"font"
+#define PROP_TYPE_IMAGE_NAME					"image"
+#define PROP_TYPE_INT_NAME						"int"
+#define PROP_TYPE_STRING_NAME					"string"
 
 // ”Ô—‘÷÷¿‡
 enum AREA_TYPE

@@ -63,8 +63,9 @@ bool IPropertyFont::ReadResourceXmlProperty(XmlNode* pXmlNode)
 	if (pXmlNode == NULL)
 		return false;
 
-	char* psz_name = JabberXmlGetAttrValue(pXmlNode, SKIN_PROP_NAME);
-	if (psz_name == NULL)
+	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_PROP_ID);
+	char* psz_name = JabberXmlGetAttrValue(pXmlNode, "name");
+	if (psz_id == NULL || psz_name == NULL)
 		return false;
 
 	XmlNode* pLogfont = JabberXmlGetChild(pXmlNode, "logfont");
@@ -100,6 +101,7 @@ bool IPropertyFont::ReadResourceXmlProperty(XmlNode* pXmlNode)
 		psz_VAligning == NULL || psz_HAligning == NULL || psz_ShowMode == NULL)
 		return false;
 
+	m_FontProp.nPropId = atoi(psz_id);
 	m_FontProp.strName = psz_name;
 
 	// logfont
