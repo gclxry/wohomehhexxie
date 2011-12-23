@@ -7,6 +7,7 @@
 //  Ù–‘¿‡–Õ
 enum PROP_TYPE 
 {
+	PT_NONE	= 0,
 	PT_BOOL	= 1,
 	PT_COLOR,
 	PT_COMBOBOX,

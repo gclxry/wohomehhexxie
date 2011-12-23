@@ -9,6 +9,7 @@ struct INT_PROP
 	//  Ù–‘√˚≥∆
 	int nPropId;
 	string strName;
+	string strPropInfo;
 	int nIntData;
 };
 

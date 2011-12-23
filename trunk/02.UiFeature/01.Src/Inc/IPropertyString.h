@@ -11,6 +11,7 @@ struct STRING_PROP
 	//  Ù–‘√˚≥∆
 	int nPropId;
 	string strName;
+	string strPropInfo;
 	string strDefaultString;
 	AREA_TYPE nDefaultArea;
 	STRING_MAP StringMap;

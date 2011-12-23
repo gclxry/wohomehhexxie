@@ -7,6 +7,7 @@ IPropertyGroup::IPropertyGroup()
 {
 	m_GroupProp.nPropId = 0;
 	m_GroupProp.strName = "";
+	m_GroupProp.strPropInfo = "";
 	m_PropVec.clear();
 }
 
@@ -45,4 +46,13 @@ bool IPropertyGroup::ReadResourceXmlProperty(XmlNode* pXmlNode)
 	m_GroupProp.strName = psz_name;
 
 	return true;
+}
+
+// 追加一个属性
+void IPropertyGroup::AppendProperty(IPropertyBase* pProperty)
+{
+	if (pProperty == NULL)
+		return;
+
+	m_PropVec.push_back(pProperty);
 }

@@ -7,6 +7,7 @@ IPropertyBool::IPropertyBool()
 {
 	m_BoolProp.nPropId = 0;
 	m_BoolProp.strName = "";
+	m_BoolProp.strPropInfo = "";
 	m_BoolProp.bBoolData = false;
 }
 

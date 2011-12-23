@@ -9,6 +9,7 @@ struct BOOL_PROP
 	//  Ù–‘√˚≥∆
 	int nPropId;
 	string strName;
+	string strPropInfo;
 	bool bBoolData;
 };
 

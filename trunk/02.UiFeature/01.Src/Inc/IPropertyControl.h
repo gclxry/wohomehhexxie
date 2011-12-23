@@ -5,6 +5,7 @@
 
 
 class IControlBase;
+class IPropertySkinManager;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 当前控件相对于父控件的布局类型
@@ -56,6 +57,7 @@ public:
 	// 设置附属控件
 	virtual void SetControlBase(IControlBase *pCtrl) = 0;
 	virtual IControlBase* GetControlBase() = 0;
+	virtual void SetPropertySkinManager(IPropertySkinManager *pMgr) = 0;
 
 	// 控件显示位置和大小，这个位置是相对于附着的窗口的
 	virtual void SetCtrlInWindowRect(RECT CtrlWndRct) = 0;

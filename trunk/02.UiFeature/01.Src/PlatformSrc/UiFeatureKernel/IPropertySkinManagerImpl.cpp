@@ -1,5 +1,6 @@
 
 #include "StdAfx.h"
+#include <assert.h>
 #include "IPropertySkinManagerImpl.h"
 #include "CommonFun.h"
 #include "..\..\Inc\UiFeatureDefs.h"
@@ -193,13 +194,115 @@ IPropertySkinManager* IPropertySkinManagerImpl::GetInstance()
 	return &_PropertySkinManagerInstance;
 }
 
-// 查找指定的属性
-IPropertyBase* IPropertySkinManagerImpl::FindProperty(char* pszPropType, int nPropId)
+PROP_TYPE IPropertySkinManagerImpl::PropStringToType(string strPropType)
 {
-	if (pszPropType == NULL || nPropId <= 0 || m_AllPropMap.size() <= 0)
+	if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_FONT_NAME) == 0)
+	{
+		return PT_FONT;
+	}
+	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_STRING_NAME) == 0)
+	{
+		return PT_STRING;
+	}
+	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_COMBOBOX_NAME) == 0)
+	{
+		return PT_COMBOBOX;
+	}
+	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_IMAGE_NAME) == 0)
+	{
+		return PT_IMAGE;
+	}
+	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_CURSOR_NAME) == 0)
+	{
+		return PT_CURSOR;
+	}
+	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_COLOR_NAME) == 0)
+	{
+		return PT_COLOR;
+	}
+	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_BOOL_NAME) == 0)
+	{
+		return PT_BOOL;
+	}
+	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_INT_NAME) == 0)
+	{
+		return PT_INT;
+	}
+	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_GROUP_NAME) == 0)
+	{
+		return PT_GROUP;
+	}
+
+	return PT_NONE;
+}
+
+string IPropertySkinManagerImpl::PropTypeToString(PROP_TYPE propType)
+{
+	string strType("");
+	switch (propType)
+	{
+	case PT_BOOL:
+		strType = PROP_TYPE_BOOL_NAME;
+		break;
+
+	case PT_COLOR:
+		strType = PROP_TYPE_COLOR_NAME;
+		break;
+
+	case PT_COMBOBOX:
+		strType = PROP_TYPE_COMBOBOX_NAME;
+		break;
+
+	case PT_CURSOR:
+		strType = PROP_TYPE_CURSOR_NAME;
+		break;
+
+	case PT_FONT:
+		strType = PROP_TYPE_FONT_NAME;
+		break;
+
+	case PT_IMAGE:
+		strType = PROP_TYPE_IMAGE_NAME;
+		break;
+
+	case PT_INT:
+		strType = PROP_TYPE_INT_NAME;
+		break;
+
+	case PT_STRING:
+		strType = PROP_TYPE_STRING_NAME;
+		break;
+
+	case PT_GROUP:
+		strType = PROP_TYPE_GROUP_NAME;
+		break;
+
+	default:
+		break;
+	}
+
+	return strType;
+}
+
+// 创建一个属性，并将次属性放入队列
+IPropertyBase* IPropertySkinManagerImpl::CreateProperty(PROP_TYPE propType, int nPropId)
+{
+	if (FindProperty(propType, nPropId) != NULL)
+	{
+		// 发现重复的ID
+		assert(false);
+		return NULL;
+	}
+
+}
+
+// 查找指定的属性
+IPropertyBase* IPropertySkinManagerImpl::FindProperty(PROP_TYPE propType, int nPropId)
+{
+	if (nPropId <= 0 || m_AllPropMap.size() <= 0)
 		return NULL;
 
-	string strType(pszPropType);
+	string strType = PropTypeToString(propType);
 	ALL_PROP_MAP::iterator pPropTypeItem = m_AllPropMap.find(strType);
 	if (pPropTypeItem == m_AllPropMap.end())
 		return NULL;

@@ -7,6 +7,7 @@ IPropertyInt::IPropertyInt()
 {
 	m_IntProp.nPropId = 0;
 	m_IntProp.strName = "";
+	m_IntProp.strPropInfo = "";
 	m_IntProp.nIntData = 0;
 }
 
