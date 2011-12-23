@@ -46,9 +46,10 @@ bool IPropertyImage::ReadResourceXmlProperty(XmlNode* pXmlNode)
 	if (pXmlNode == NULL)
 		return false;
 
-	char* psz_name = JabberXmlGetAttrValue(pXmlNode, SKIN_PROP_NAME);
+	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_PROP_ID);
+	char* psz_name = JabberXmlGetAttrValue(pXmlNode, "name");
 	char* psz_imageinzip = JabberXmlGetAttrValue(pXmlNode, "imageinzip");
-	if (psz_name == NULL || psz_imageinzip == NULL)
+	if (psz_id == NULL || psz_name == NULL || psz_imageinzip == NULL)
 		return false;
 
 	XmlNode* pRectInImage = JabberXmlGetChild(pXmlNode, "rectinimage");
@@ -79,6 +80,7 @@ bool IPropertyImage::ReadResourceXmlProperty(XmlNode* pXmlNode)
 		psz_middlestretch == NULL)
 		return false;
 
+	m_ImageProp.nPropId = atoi(psz_id);
 	m_ImageProp.strName = psz_name;
 	m_ImageProp.strZipFile = psz_imageinzip;
 

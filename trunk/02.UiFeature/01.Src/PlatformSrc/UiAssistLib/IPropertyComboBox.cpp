@@ -35,14 +35,16 @@ bool IPropertyComboBox::ReadResourceXmlProperty(XmlNode* pXmlNode)
 	if (pXmlNode == NULL)
 		return false;
 
-	char* psz_name = JabberXmlGetAttrValue(pXmlNode, SKIN_PROP_NAME);
+	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_PROP_ID);
+	char* psz_name = JabberXmlGetAttrValue(pXmlNode, "name");
 	char* psz_counts = JabberXmlGetAttrValue(pXmlNode, "counts");
 	char* psz_select = JabberXmlGetAttrValue(pXmlNode, "select");
-	if (psz_name == NULL || psz_counts == NULL || psz_select == NULL)
+	if (psz_id == NULL || psz_name == NULL || psz_counts == NULL || psz_select == NULL)
 		return false;
 
 	int nCtns = atoi(psz_counts);
 
+	m_ComboBoxPro.nPropId = atoi(psz_id);
 	m_ComboBoxPro.strName = psz_name;
 	m_ComboBoxPro.nSelect = atoi(psz_select);
 	if (m_ComboBoxPro.nSelect < 0 || m_ComboBoxPro.nSelect >= nCtns)

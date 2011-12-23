@@ -254,7 +254,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="ComboBbox"
+				Name="CombobBox"
 				>
 				<File
 					RelativePath=".\IPropertyComboBox.cpp"
@@ -350,6 +350,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath="..\..\Inc\UiFeatureDefs.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

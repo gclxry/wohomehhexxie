@@ -11,9 +11,11 @@
 #include "..\..\Inc\IPropertyImage.h"
 #include "..\..\Inc\IPropertyInt.h"
 #include "..\..\Inc\IPropertyString.h"
+#include "IPropertyWindowImpl.h"
 
 IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
 {
+	m_bPropId = 1;
 	m_strSkinPath = "";
 	m_WndPropMap.clear();
 	m_AllPropMap.clear();
@@ -180,9 +182,9 @@ IPropertySkinManager* IPropertySkinManagerImpl::GetInstance()
 }
 
 // 查找指定的属性
-IPropertyBase* IPropertySkinManagerImpl::FindProperty(char* pszPropType, char* pszPropName)
+IPropertyBase* IPropertySkinManagerImpl::FindProperty(char* pszPropType, int nPropId)
 {
-	if (pszPropType == NULL || pszPropName == NULL || m_AllPropMap.size() <= 0)
+	if (pszPropType == NULL || nPropId <= 0 || m_AllPropMap.size() <= 0)
 		return NULL;
 
 	string strType(pszPropType);
@@ -194,8 +196,7 @@ IPropertyBase* IPropertySkinManagerImpl::FindProperty(char* pszPropType, char* p
 	if (pPropMap == NULL)
 		return NULL;
 
-	string strPropName(pszPropName);
-	PROP_MAP::iterator pPropItem = pPropMap->find(strPropName);
+	PROP_MAP::iterator pPropItem = pPropMap->find(nPropId);
 	if (pPropItem == pPropMap->end())
 		return NULL;
 
@@ -390,18 +391,18 @@ bool IPropertySkinManagerImpl::TranslateResourceXml(FILE_ITEM *pResurceXml)
 }
 
 // 判断属性是否已经存在
-bool IPropertySkinManagerImpl::IsPropExist(XmlNode* pXmlNode, PROP_MAP* pPropMap, string &strPropName)
+bool IPropertySkinManagerImpl::IsPropExist(XmlNode* pXmlNode, PROP_MAP* pPropMap, int &nPropId)
 {
-	strPropName = "";
+	nPropId = 0;
 	if (pXmlNode == NULL || pPropMap == NULL)
 		return false;
 
-	char* psz_name = JabberXmlGetAttrValue(pXmlNode, SKIN_PROP_NAME);
-	if (psz_name == NULL)
+	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_PROP_ID);
+	if (psz_id == NULL)
 		return false;
 
-	strPropName = psz_name;
-	PROP_MAP::iterator pPropItem = pPropMap->find(strPropName);
+	nPropId = atoi(psz_id);
+	PROP_MAP::iterator pPropItem = pPropMap->find(nPropId);
 	if (pPropItem == pPropMap->end())
 		return false;
 
@@ -426,6 +427,12 @@ IPropertyWindow* IPropertySkinManagerImpl::InitWindowSkin(const char *pszSkinPat
 	return pWndProp;
 }
 
+void IPropertySkinManagerImpl::ResetPropId(int nPropId)
+{
+	if (nPropId > m_bPropId)
+		m_bPropId = nPropId;
+}
+
 bool IPropertySkinManagerImpl::GeneralCreateProp(char *pPropType, XmlNode* pXmlNode, PROP_MAP* pPropMap)
 {
 	if (pPropType == NULL || pXmlNode == NULL || pPropMap == NULL)
@@ -437,9 +444,12 @@ bool IPropertySkinManagerImpl::GeneralCreateProp(char *pPropType, XmlNode* pXmlN
 		XmlNode* pItem = JabberXmlGetNthChildWithoutTag(pXmlNode, i);
 		if (pItem != NULL)
 		{
-			string strPropName = "";
-			if (IsPropExist(pItem, pPropMap, strPropName))
+			int nPropId = 0;
+			if (IsPropExist(pItem, pPropMap, nPropId))
 				return false;
+
+			// 重新设置PropId
+			ResetPropId(nPropId);
 
 			IPropertyBase* pBaseProp = NULL;
 			if (lstrcmpiA(pPropType, PROP_TYPE_FONT_NAME) == 0)
@@ -508,6 +518,28 @@ bool IPropertySkinManagerImpl::GeneralCreateProp(char *pPropType, XmlNode* pXmlN
 					SAFE_DELETE(pProp);
 				}
 			}
+			else if (lstrcmpiA(pPropType, PROP_TYPE_BOOL_NAME) == 0)
+			{
+				IPropertyBool* pProp = new IPropertyBool;
+				if (pProp == NULL)
+					return false;
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+				{
+					SAFE_DELETE(pProp);
+				}
+			}
+			else if (lstrcmpiA(pPropType, PROP_TYPE_INT_NAME) == 0)
+			{
+				IPropertyInt* pProp = new IPropertyInt;
+				if (pProp == NULL)
+					return false;
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+				{
+					SAFE_DELETE(pProp);
+				}
+			}
 			else
 			{
 				return false;
@@ -518,11 +550,11 @@ bool IPropertySkinManagerImpl::GeneralCreateProp(char *pPropType, XmlNode* pXmlN
 
 			if (!pBaseProp->ReadResourceXmlProperty(pItem))
 			{
-				ReleaseProp(pBaseProp);
+				ReleaseResourceXmlProp(pBaseProp);
 				return false;
 			}
 
-			pPropMap->insert(pair<string, IPropertyBase*>(strPropName, pBaseProp));
+			pPropMap->insert(pair<int, IPropertyBase*>(nPropId, pBaseProp));
 		}
 	}
 

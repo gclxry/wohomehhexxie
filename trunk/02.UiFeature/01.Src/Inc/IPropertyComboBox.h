@@ -8,6 +8,7 @@
 struct COMBOBOX_PROP
 {
 	//  Ù–‘√˚≥∆
+	int nPropId;
 	string strName;
 	int nSelect;
 	STRING_VEC DataVec;
