@@ -229,6 +229,10 @@
 				Name="02.¿ÉÉèÖÃÊôÐÔ"
 				>
 				<File
+					RelativePath=".\IPropertyBase.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Inc\IPropertyBase.h"
 					>
 				</File>

@@ -36,12 +36,12 @@ void IPropertySkinManagerImpl::ReleaseResourceXml()
 {
 	for (ALL_PROP_MAP::iterator pGroupItem = m_AllPropMap.begin(); pGroupItem != m_AllPropMap.end(); pGroupItem++)
 	{
-		PROP_MAP* pGroup = pGroupItem->second;
+		PROP_VEC* pGroup = pGroupItem->second;
 		if (pGroup != NULL)
 		{
-			for (PROP_MAP::iterator pPropItem = pGroup->begin(); pPropItem != pGroup->end(); pPropItem++)
+			for (PROP_VEC::iterator pPropItem = pGroup->begin(); pPropItem != pGroup->end(); pPropItem++)
 			{
-				IPropertyBase* pProp = pPropItem->second;
+				IPropertyBase* pProp = *pPropItem;
 				ReleaseProperty(pProp);
 			}
 			SAFE_DELETE(pGroup);
@@ -285,15 +285,8 @@ string IPropertySkinManagerImpl::PropTypeToString(PROP_TYPE propType)
 }
 
 // 创建一个属性，并将次属性放入队列
-IPropertyBase* IPropertySkinManagerImpl::CreateProperty(PROP_TYPE propType, int nPropId)
+IPropertyBase* IPropertySkinManagerImpl::CreateEmptyProperty(PROP_TYPE propType)
 {
-	if (FindProperty(propType, nPropId) != NULL)
-	{
-		// 发现重复的ID
-		assert(false);
-		return NULL;
-	}
-
 	IPropertyBase* pBaseProp = NULL;
 	switch (propType)
 	{
@@ -411,56 +404,68 @@ IPropertyBase* IPropertySkinManagerImpl::CreateProperty(PROP_TYPE propType, int 
 
 	if (pBaseProp != NULL)
 	{
-		PROP_MAP* pOnePropMap = NULL;
+		PROP_VEC* pOnePropVec = NULL;
 		string strTypeName = PropTypeToString(propType);
 		ALL_PROP_MAP::iterator pTypeItem = m_AllPropMap.find(strTypeName);
 		if (pTypeItem != m_AllPropMap.end())
 		{
 			// 找到属性组
-			pOnePropMap = pTypeItem->second;
+			pOnePropVec = pTypeItem->second;
 		}
 		else
 		{
 			// 创建属性组
-			pOnePropMap = new PROP_MAP;
-			if (pOnePropMap == NULL)
+			pOnePropVec = new PROP_VEC;
+			if (pOnePropVec == NULL)
 			{
 				ReleaseProperty(pBaseProp);
 				return NULL;
 			}
 
-			pBaseProp->SetPropId(nPropId);
-
-			pOnePropMap->clear();
-			pOnePropMap->insert(pair<int, IPropertyBase*>(nPropId, pBaseProp));
-
-			m_AllPropMap.insert(pair<string, PROP_MAP*>(strTypeName, pOnePropMap));
+			pOnePropVec->clear();
+			m_AllPropMap.insert(pair<string, PROP_VEC*>(strTypeName, pOnePropVec));
 		}
+
+		if (pOnePropVec != NULL)
+			pOnePropVec->push_back(pBaseProp);
 	}
 
 	return pBaseProp;
 }
 
 // 查找指定的属性
-IPropertyBase* IPropertySkinManagerImpl::FindProperty(PROP_TYPE propType, int nPropId)
+IPropertyBase* IPropertySkinManagerImpl::FindProperty(PROP_TYPE propType, const char* pszPropId)
 {
-	if (nPropId <= 0 || m_AllPropMap.size() <= 0)
+	string strType = PropTypeToString(propType);
+	return FindProperty(strType.c_str(), pszPropId);
+}
+
+IPropertyBase* IPropertySkinManagerImpl::FindProperty(const char* pszPropType, const char* pszPropId)
+{
+	if (pszPropType == NULL || strlen(pszPropType) <= 0 || pszPropId == NULL || strlen(pszPropId) <= 0 || m_AllPropMap.size() <= 0)
 		return NULL;
 
-	string strType = PropTypeToString(propType);
+	string strType = pszPropType;
 	ALL_PROP_MAP::iterator pPropTypeItem = m_AllPropMap.find(strType);
 	if (pPropTypeItem == m_AllPropMap.end())
 		return NULL;
 
-	PROP_MAP* pPropMap = pPropTypeItem->second;
-	if (pPropMap == NULL)
+	PROP_VEC* pPropVec = pPropTypeItem->second;
+	if (pPropVec == NULL)
 		return NULL;
 
-	PROP_MAP::iterator pPropItem = pPropMap->find(nPropId);
-	if (pPropItem == pPropMap->end())
-		return NULL;
+	string strPropId = pszPropId;
+	for (int i = 0; i < (int)pPropVec->size(); i++)
+	{
+		IPropertyBase* pProp = (*pPropVec)[i];
+		if (pProp != NULL)
+		{
+			if (lstrcmpiA(pProp->GetPropId(), pszPropId) == 0)
+				return pProp;
+		}
+	}
 
-	return (pPropItem->second);
+	return NULL;
 }
 
 // 初始化皮肤包
@@ -567,23 +572,23 @@ bool IPropertySkinManagerImpl::TranslateWindowsXml(FILE_ITEM *pWindowsXml)
 
 				//{
 				//	// 找到属性组
-				//	pOnePropMap = pTypeItem->second;
+				//	pOnePropVec = pTypeItem->second;
 				//}
 				//else
 				//{
 				//	// 创建属性组
-				//	pOnePropMap = new PROP_MAP;
-				//	if (pOnePropMap == NULL)
+				//	pOnePropVec = new PROP_VEC;
+				//	if (pOnePropVec == NULL)
 				//		return false;
 
-				//	pOnePropMap->clear();
-				//	m_AllPropMap.insert(pair<string, PROP_MAP*>(strTypeName, pOnePropMap));
+				//	pOnePropVec->clear();
+				//	m_AllPropMap.insert(pair<string, PROP_VEC*>(strTypeName, pOnePropVec));
 				//}
 
-				//if (pOnePropMap == NULL)
+				//if (pOnePropVec == NULL)
 				//	return false;
 
-				//if (!GeneralCreateProp((char*)strTypeName.c_str(), pPropType, pOnePropMap))
+				//if (!GeneralCreateProp((char*)strTypeName.c_str(), pPropType, pOnePropVec))
 				//	return false;
 			}
 		}
@@ -616,29 +621,29 @@ bool IPropertySkinManagerImpl::TranslateResourceXml(FILE_ITEM *pResurceXml)
 			XmlNode* pPropType = JabberXmlGetNthChildWithoutTag(pResurceRoot, i);
 			if (pPropType != NULL && pPropType->name != NULL)
 			{
-				PROP_MAP* pOnePropMap = NULL;
+				PROP_VEC* pOnePropVec = NULL;
 				string strTypeName = pPropType->name;
 				ALL_PROP_MAP::iterator pTypeItem = m_AllPropMap.find(strTypeName);
 				if (pTypeItem != m_AllPropMap.end())
 				{
 					// 找到属性组
-					pOnePropMap = pTypeItem->second;
+					pOnePropVec = pTypeItem->second;
 				}
 				else
 				{
 					// 创建属性组
-					pOnePropMap = new PROP_MAP;
-					if (pOnePropMap == NULL)
+					pOnePropVec = new PROP_VEC;
+					if (pOnePropVec == NULL)
 						return false;
 
-					pOnePropMap->clear();
-					m_AllPropMap.insert(pair<string, PROP_MAP*>(strTypeName, pOnePropMap));
+					pOnePropVec->clear();
+					m_AllPropMap.insert(pair<string, PROP_VEC*>(strTypeName, pOnePropVec));
 				}
 
-				if (pOnePropMap == NULL)
+				if (pOnePropVec == NULL)
 					return false;
 
-				if (!GeneralCreateProp((char*)strTypeName.c_str(), pPropType, pOnePropMap))
+				if (!GeneralCreateProp((char*)strTypeName.c_str(), pPropType, pOnePropVec))
 					return false;
 			}
 		}
@@ -653,22 +658,24 @@ bool IPropertySkinManagerImpl::TranslateResourceXml(FILE_ITEM *pResurceXml)
 }
 
 // 判断属性是否已经存在
-bool IPropertySkinManagerImpl::IsPropExist(XmlNode* pXmlNode, PROP_MAP* pPropMap, int &nPropId)
+bool IPropertySkinManagerImpl::IsPropExist(XmlNode* pXmlNode, PROP_VEC* pPropVec, string &strPropId)
 {
-	nPropId = 0;
-	if (pXmlNode == NULL || pPropMap == NULL)
+	strPropId = "";
+	if (pXmlNode == NULL || pPropVec == NULL)
 		return false;
 
 	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_PROP_ID);
 	if (psz_id == NULL)
 		return false;
 
-	nPropId = atoi(psz_id);
-	PROP_MAP::iterator pPropItem = pPropMap->find(nPropId);
-	if (pPropItem == pPropMap->end())
-		return false;
+	//for (PROP_VEC::iterator pPropItem = pPropVec->begin(); pPropItem != pPropVec->end(); pPropItem++)
+	//{
+	//	IPropertyBase* pProp = *pPropItem;
+	//	if (pProp != NULL && lstrcmpiA(pProp->GetPropId(), ) == 0)
+	//		return true;
+	//}
 
-	return true;
+	return false;
 }
 
 // 初始化皮肤
@@ -695,9 +702,9 @@ void IPropertySkinManagerImpl::ResetPropId(int nPropId)
 		m_bPropId = nPropId;
 }
 
-bool IPropertySkinManagerImpl::GeneralCreateProp(char *pPropType, XmlNode* pXmlNode, PROP_MAP* pPropMap)
+bool IPropertySkinManagerImpl::GeneralCreateProp(char *pPropType, XmlNode* pXmlNode, PROP_VEC* pPropVec)
 {
-	if (pPropType == NULL || pXmlNode == NULL || pPropMap == NULL)
+	if (pPropType == NULL || pXmlNode == NULL || pPropVec == NULL)
 		return false;
 
 	int nItemCount = pXmlNode->numChild;
@@ -706,12 +713,12 @@ bool IPropertySkinManagerImpl::GeneralCreateProp(char *pPropType, XmlNode* pXmlN
 		XmlNode* pItem = JabberXmlGetNthChildWithoutTag(pXmlNode, i);
 		if (pItem != NULL)
 		{
-			int nPropId = 0;
-			if (IsPropExist(pItem, pPropMap, nPropId))
-				return false;
+			//int nPropId = 0;
+			//if (IsPropExist(pItem, pPropMap, nPropId))
+			//	return false;
 
-			// 重新设置PropId
-			ResetPropId(nPropId);
+			//// 重新设置PropId
+			//ResetPropId(nPropId);
 
 			IPropertyBase* pBaseProp = NULL;
 			if (lstrcmpiA(pPropType, PROP_TYPE_FONT_NAME) == 0)
@@ -827,7 +834,7 @@ bool IPropertySkinManagerImpl::GeneralCreateProp(char *pPropType, XmlNode* pXmlN
 				return false;
 			}
 
-			pPropMap->insert(pair<int, IPropertyBase*>(nPropId, pBaseProp));
+			pPropVec->push_back(pBaseProp);
 		}
 	}
 
@@ -841,13 +848,13 @@ void IPropertySkinManagerImpl::SetArea(AREA_TYPE areaType)
 	if (pStringItem == m_AllPropMap.end())
 		return;
 
-	PROP_MAP* pPropMap = pStringItem->second;
+	PROP_VEC* pPropMap = pStringItem->second;
 	if (pPropMap == NULL)
 		return;
 
-	for (PROP_MAP::iterator pPropItem = pPropMap->begin(); pPropItem != pPropMap->end(); pPropItem++)
+	for (PROP_VEC::iterator pPropItem = pPropMap->begin(); pPropItem != pPropMap->end(); pPropItem++)
 	{
-		IPropertyBase* pProp = pPropItem->second;
+		IPropertyBase* pProp = *pPropItem;
 		if (pProp == NULL)
 			continue;
 
@@ -896,23 +903,23 @@ bool IPropertySkinManagerImpl::TranslateControlsXml(FILE_ITEM *pWindowsXml)
 
 				//{
 				//	// 找到属性组
-				//	pOnePropMap = pTypeItem->second;
+				//	pOnePropVec = pTypeItem->second;
 				//}
 				//else
 				//{
 				//	// 创建属性组
-				//	pOnePropMap = new PROP_MAP;
-				//	if (pOnePropMap == NULL)
+				//	pOnePropVec = new PROP_VEC;
+				//	if (pOnePropVec == NULL)
 				//		return false;
 
-				//	pOnePropMap->clear();
-				//	m_AllPropMap.insert(pair<string, PROP_MAP*>(strTypeName, pOnePropMap));
+				//	pOnePropVec->clear();
+				//	m_AllPropMap.insert(pair<string, PROP_VEC*>(strTypeName, pOnePropVec));
 				//}
 
-				//if (pOnePropMap == NULL)
+				//if (pOnePropVec == NULL)
 				//	return false;
 
-				//if (!GeneralCreateProp((char*)strTypeName.c_str(), pPropType, pOnePropMap))
+				//if (!GeneralCreateProp((char*)strTypeName.c_str(), pPropType, pOnePropVec))
 				//	return false;
 			}
 		}

@@ -217,9 +217,14 @@ bool IPropertyControlImpl::GetDragControl()
 // 1. 创建空的属性列表
 bool IPropertyControlImpl::CreateEmptyPropList()
 {
-//	m_ControlPropList
+	m_ControlPropList.clear();
+
+	// 基础属性组
+	IPropertyGroup *pBaseGroupProp = (IPropertyGroup *)CreateProperty(NULL, PT_GROUP, 1, "控件基本属性", NULL);
 
 	// 控件名称
+	IPropertyBase* pNameProp = CreateProperty(pBaseGroupProp, PT_STRING, 1, "Name", "控件名称");
+
 	// Visible
 	// Enable
 	// 是否接受鼠标消息
@@ -230,7 +235,7 @@ bool IPropertyControlImpl::CreateEmptyPropList()
 }
 
 // 2. 从xml文件填充控件属性
-bool IPropertyControlImpl::ReadPropFromControlsXml()
+bool IPropertyControlImpl::ReadPropFromControlsXml(const char* pszControlId)
 {
 	return true;
 }

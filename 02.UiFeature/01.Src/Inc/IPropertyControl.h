@@ -96,7 +96,7 @@ public:
 	// 1. 创建空的属性列表
 	virtual bool CreateEmptyPropList() = 0;
 	// 2. 从xml文件填充控件属性
-	virtual bool ReadPropFromControlsXml() = 0;
+	virtual bool ReadPropFromControlsXml(const char* pszControlId) = 0;
 	// 3. 创建Builder显示用的属性
 	virtual bool CreateBuilderShowPropList() = 0;
 };

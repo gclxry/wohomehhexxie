@@ -21,7 +21,7 @@ class IPropertyString : public IPropertyBase
 {
 public:
 	IPropertyString();
-	~IPropertyString();
+	virtual ~IPropertyString();
 
 	// 是否为合法数据
 	virtual bool IsRightData();
