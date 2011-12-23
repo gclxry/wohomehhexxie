@@ -8,6 +8,10 @@ public:
 	IPropertyControlImpl(void);
 	virtual ~IPropertyControlImpl(void);
 
+	// 设置附属控件
+	virtual void SetControlBase(IControlBase *pCtrl);
+	virtual IControlBase* GetControlBase();
+
 	// 控件显示位置和大小，这个位置是相对于附着的窗口的
 	virtual void SetCtrlInWindowRect(RECT CtrlWndRct);
 	virtual RECT GetCtrlInWindowRect();
@@ -35,9 +39,24 @@ public:
 	// 拖动控件属性
 	virtual void SetDragControl(bool bDrag);
 	virtual bool GetDragControl();
+
+	// 可用属性
+	virtual void SetEnable(bool bEnable);
+	virtual bool IsEnable();
+
+//////////////////////////////////////////////////////////////////////////
+	// 以下3个函数创建、显示属性用，执行顺序由上到下
+	// 1. 创建空的属性列表
+	virtual bool CreateEmptyPropList();
+	// 2. 从xml文件填充控件属性
+	virtual bool ReadPropFromControlsXml();
+	// 3. 创建Builder显示用的属性
+	virtual bool CreateBuilderShowPropList();
+
 private:
 	// 是否可见
 	bool m_bVisible;
+	bool m_bEnable;
 	// 是否接受鼠标消息
 	bool m_bIsReceiveMouseMsg;
 	// 控件位置，这个位置是相对于窗口的位置
@@ -50,4 +69,6 @@ private:
 	string m_strCtrlName;
 	// 拖动控件
 	bool m_bDragCtrl;
+	// 附属控件
+	IControlBase *m_pBaseCtrl;
 };

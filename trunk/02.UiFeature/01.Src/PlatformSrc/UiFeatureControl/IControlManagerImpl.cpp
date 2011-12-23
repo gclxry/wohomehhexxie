@@ -4,6 +4,11 @@
 #include "..\..\Inc\UiFeatureDefs.h"
 
 
+IControlManager *GetControlManager()
+{
+	return IControlManagerImpl::GetInstance();
+}
+
 IControlManagerImpl::IControlManagerImpl(void)
 {
 }

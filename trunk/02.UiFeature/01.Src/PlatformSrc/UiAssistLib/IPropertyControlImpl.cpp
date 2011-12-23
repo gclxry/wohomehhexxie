@@ -5,7 +5,9 @@
 
 IPropertyControlImpl::IPropertyControlImpl(void)
 {
+	m_pBaseCtrl = NULL;
 	m_bVisible = true;
+	m_bEnable = true;
 	m_bIsReceiveMouseMsg = true;
 	INIT_RECT(m_RectInWindow);
 	INIT_RECT(m_RectInParentCtrl);
@@ -15,6 +17,28 @@ IPropertyControlImpl::IPropertyControlImpl(void)
 
 IPropertyControlImpl::~IPropertyControlImpl(void)
 {
+}
+
+// 可用属性
+void IPropertyControlImpl::SetEnable(bool bEnable)
+{
+	m_bEnable = bEnable;
+}
+
+bool IPropertyControlImpl::IsEnable()
+{
+	return m_bEnable;
+}
+
+// 设置附属控件
+void IPropertyControlImpl::SetControlBase(IControlBase *pCtrl)
+{
+	m_pBaseCtrl = pCtrl;
+}
+
+IControlBase* IPropertyControlImpl::GetControlBase()
+{
+	return m_pBaseCtrl;
 }
 
 // 可见属性
@@ -179,4 +203,22 @@ void IPropertyControlImpl::SetDragControl(bool bDrag)
 bool IPropertyControlImpl::GetDragControl()
 {
 	return m_bDragCtrl;
+}
+
+// 1. 创建空的属性列表
+bool IPropertyControlImpl::CreateEmptyPropList()
+{
+	return true;
+}
+
+// 2. 从xml文件填充控件属性
+bool IPropertyControlImpl::ReadPropFromControlsXml()
+{
+	return true;
+}
+
+// 3. 创建Builder显示用的属性
+bool IPropertyControlImpl::CreateBuilderShowPropList()
+{
+	return true;
 }

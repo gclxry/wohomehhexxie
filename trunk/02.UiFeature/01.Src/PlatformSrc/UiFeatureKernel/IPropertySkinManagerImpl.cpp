@@ -11,6 +11,7 @@
 #include "..\..\Inc\IPropertyImage.h"
 #include "..\..\Inc\IPropertyInt.h"
 #include "..\..\Inc\IPropertyString.h"
+#include "..\..\Inc\IPropertyGroup.h"
 #include "IPropertyWindowImpl.h"
 
 IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
@@ -128,6 +129,17 @@ void IPropertySkinManagerImpl::ReleaseResourceXmlProp(IPropertyBase *pCtrlProp)
 		}
 		break;
 
+	case PT_GROUP:
+		{
+			IPropertyGroup* pProp = dynamic_cast<IPropertyGroup*>(pCtrlProp);
+			if (pProp != NULL)
+			{
+				SAFE_DELETE(pProp);
+				return;
+			}
+		}
+		break;
+
 	case PT_IMAGE:
 		{
 			IPropertyImage* pProp = dynamic_cast<IPropertyImage*>(pCtrlProp);
@@ -230,8 +242,10 @@ bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 	strUfd += "skintest.ufd";
 
 	m_pZipFile->InitWriteZip((char*)strDir.c_str(), (char*)strUfd.c_str());
-	m_pZipFile->WriteToZip("Layout.xml");
-	m_pZipFile->WriteToZip("Resource.xml");
+	m_pZipFile->WriteToZip(WINDOWS_XML_NAME);
+	m_pZipFile->WriteToZip(RESOURCE_XML_NAME);
+	m_pZipFile->WriteToZip(LAYOUT_XML_NAME);
+	m_pZipFile->WriteToZip(CONTROLS_XML_NAME);
 	m_pZipFile->WriteToZip("bk.PNG");
 	m_pZipFile->WriteToZip("V5.Dlg.Close.png");
 	m_pZipFile->WriteToZip("V5.Dlg.Mini.png");
@@ -540,6 +554,17 @@ bool IPropertySkinManagerImpl::GeneralCreateProp(char *pPropType, XmlNode* pXmlN
 					SAFE_DELETE(pProp);
 				}
 			}
+			else if (lstrcmpiA(pPropType, PROP_TYPE_GROUP_NAME) == 0)
+			{
+				IPropertyGroup* pProp = new IPropertyGroup;
+				if (pProp == NULL)
+					return false;
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+				{
+					SAFE_DELETE(pProp);
+				}
+			}
 			else
 			{
 				return false;
@@ -584,4 +609,71 @@ void IPropertySkinManagerImpl::SetArea(AREA_TYPE areaType)
 
 		pStringProp->SetArea(areaType);
 	}
+}
+
+bool IPropertySkinManagerImpl::TranslateControlsXml(FILE_ITEM *pWindowsXml)
+{
+	m_WndPropMap.clear();
+	if (pWindowsXml == NULL || pWindowsXml->pFileData == NULL)
+		return false;
+
+	XmlState xmlState = { 0 };
+	JabberXmlInitState(&xmlState);
+	int bytesParsed = JabberXmlParse(&xmlState, (char *)pWindowsXml->pFileData, pWindowsXml->dwSrcFileLen);
+	XmlNode *pWindowRoot  = JabberXmlGetChild(&xmlState.root, "layout");
+	if (pWindowRoot != NULL)
+	{
+		// 取得语言种类
+		char* psz_area = JabberXmlGetAttrValue(pWindowRoot, "area");
+		if (psz_area == NULL)
+			return false;
+		m_AreaType = (AREA_TYPE)atoi(psz_area);
+
+		int nItemCount = pWindowRoot->numChild;
+		for (int i = 0; i < nItemCount; i++)
+		{
+			XmlNode* pPropType = JabberXmlGetNthChildWithoutTag(pWindowRoot, i);
+			if (pPropType != NULL && pPropType->name != NULL)
+			{
+				if (lstrcmpiA(pPropType->name, "window") == 0)
+				{
+					string strWndName = pPropType->name;
+					WND_PROP_MAP::iterator pWndItem = m_WndPropMap.find(strWndName);
+					if (pWndItem != m_WndPropMap.end())
+						return false;
+
+					IPropertyWindowImpl *pWndProp = new IPropertyWindowImpl;
+
+				}
+
+				//{
+				//	// 找到属性组
+				//	pOnePropMap = pTypeItem->second;
+				//}
+				//else
+				//{
+				//	// 创建属性组
+				//	pOnePropMap = new PROP_MAP;
+				//	if (pOnePropMap == NULL)
+				//		return false;
+
+				//	pOnePropMap->clear();
+				//	m_AllPropMap.insert(pair<string, PROP_MAP*>(strTypeName, pOnePropMap));
+				//}
+
+				//if (pOnePropMap == NULL)
+				//	return false;
+
+				//if (!GeneralCreateProp((char*)strTypeName.c_str(), pPropType, pOnePropMap))
+				//	return false;
+			}
+		}
+	}
+	else
+	{
+		return false;
+	}
+
+	JabberXmlDestroyState(&xmlState);
+	return true;
 }

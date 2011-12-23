@@ -15,6 +15,7 @@ IPropertyComboBox::~IPropertyComboBox()
 
 void IPropertyComboBox::Clear()
 {
+	m_ComboBoxPro.nPropId = 0;
 	m_ComboBoxPro.strName = "";
 	m_ComboBoxPro.nSelect = -1;
 	m_ComboBoxPro.DataVec.clear();

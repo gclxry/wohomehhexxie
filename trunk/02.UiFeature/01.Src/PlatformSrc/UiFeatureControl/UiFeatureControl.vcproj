@@ -183,10 +183,6 @@
 			Name="01.DLL½Ó¿Ú"
 			>
 			<File
-				RelativePath=".\UiFeatureControl.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\UiFeatureControl.def"
 				>
 			</File>

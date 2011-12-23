@@ -5,6 +5,7 @@
 
 IPropertyFont::IPropertyFont()
 {
+	m_FontProp.nPropId = 0;
 	m_FontProp.strName = "";
 	m_FontProp.FontColor = 0;
 	memset(&m_FontProp.Font, 0, sizeof(LOGFONTA));

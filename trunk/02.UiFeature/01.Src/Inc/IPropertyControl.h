@@ -3,6 +3,9 @@
 
 #pragma once
 
+
+class IControlBase;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 当前控件相对于父控件的布局类型
 enum CONTROL_LAYOUT
@@ -50,6 +53,9 @@ struct CONTROL_LAYOUT_INFO
 class IPropertyControl
 {
 public:
+	// 设置附属控件
+	virtual void SetControlBase(IControlBase *pCtrl) = 0;
+	virtual IControlBase* GetControlBase() = 0;
 
 	// 控件显示位置和大小，这个位置是相对于附着的窗口的
 	virtual void SetCtrlInWindowRect(RECT CtrlWndRct) = 0;
@@ -75,8 +81,20 @@ public:
 	virtual void SetVisible(bool bVisible) = 0;
 	virtual bool IsVisible() = 0;
 
+	// 可用属性
+	virtual void SetEnable(bool bEnable) = 0;
+	virtual bool IsEnable() = 0;
+
 	// 拖动控件属性
 	virtual void SetDragControl(bool bDrag) = 0;
 	virtual bool GetDragControl() = 0;
 
+//////////////////////////////////////////////////////////////////////////
+	// 以下3个函数创建、显示属性用，执行顺序由上到下
+	// 1. 创建空的属性列表
+	virtual bool CreateEmptyPropList() = 0;
+	// 2. 从xml文件填充控件属性
+	virtual bool ReadPropFromControlsXml() = 0;
+	// 3. 创建Builder显示用的属性
+	virtual bool CreateBuilderShowPropList() = 0;
 };
