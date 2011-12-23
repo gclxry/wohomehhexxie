@@ -2,7 +2,7 @@
 // 一个控件的属性
 
 #pragma once
-
+#include "IFeatureObject.h"
 
 class IControlBase;
 class IPropertySkinManager;
@@ -51,7 +51,7 @@ struct CONTROL_LAYOUT_INFO
 	int nBottomSpace;
 };
 
-class IPropertyControl
+class IPropertyControl : public IFeatureObject
 {
 public:
 	// 设置附属控件
@@ -95,7 +95,9 @@ public:
 	// 以下3个函数创建、显示属性用，执行顺序由上到下
 	// 1. 创建空的属性列表
 	virtual bool CreateEmptyPropList() = 0;
-	// 2. 从xml文件填充控件属性
+	// 2.从Builder中新创建一个控件，需要初始化属性的PropId
+	virtual bool InitPropIdByBuilder(const char* pszBaseId) = 0;
+	// 2. 从xml文件中读取控件属性时，不需要初始化属性的PropId，PropId来源于xml文件
 	virtual bool ReadPropFromControlsXml(const char* pszControlId) = 0;
 	// 3. 创建Builder显示用的属性
 	virtual bool CreateBuilderShowPropList() = 0;

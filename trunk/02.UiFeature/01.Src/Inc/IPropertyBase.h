@@ -3,6 +3,7 @@
 
 #pragma once
 #include "CUiXmlParser.h"
+#include "IFeatureObject.h"
 
 // 属性类型
 enum PROP_TYPE 
@@ -49,15 +50,11 @@ enum AREA_TYPE
 // string 队列
 typedef vector<string>							STRING_VEC;
 
-class IPropertyBase
+class IPropertyBase : public IFeatureObject
 {
 public:
 	IPropertyBase();
 	virtual ~IPropertyBase();
-
-	// 属性 ID 字符串
-	const char* GetPropId();
-	void SetPropId(const char* pszPropId);
 
 	// 是否为合法数据
 	virtual bool IsRightData() = 0;
@@ -65,8 +62,4 @@ public:
 	virtual PROP_TYPE GetPropType() = 0;
 	// 从XML节点读取属性值，并放入属性队列
 	virtual bool ReadResourceXmlProperty(XmlNode* pXmlNode) = 0;
-
-private:
-	// 属性 ID 字符串
-	string m_strPropId;
 };

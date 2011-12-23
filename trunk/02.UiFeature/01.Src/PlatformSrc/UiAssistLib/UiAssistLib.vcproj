@@ -358,6 +358,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="05.»ùÀà"
+			>
+			<File
+				RelativePath=".\IFeatureObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Inc\IFeatureObject.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\Inc\UiFeatureDefs.h"
 			>
