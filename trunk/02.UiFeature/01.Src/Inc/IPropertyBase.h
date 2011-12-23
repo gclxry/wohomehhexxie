@@ -52,6 +52,9 @@ typedef vector<string>							STRING_VEC;
 class IPropertyBase
 {
 public:
+	// 设置属性ID
+	virtual void SetPropId(int nPropId) = 0;
+	virtual int GetPropId() = 0;
 	// 是否为合法数据
 	virtual bool IsRightData() = 0;
 	// 取得属性类型
