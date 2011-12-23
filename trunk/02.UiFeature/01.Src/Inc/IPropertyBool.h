@@ -17,7 +17,7 @@ class IPropertyBool : public IPropertyBase
 {
 public:
 	IPropertyBool();
-	~IPropertyBool();
+	virtual ~IPropertyBool();
 
 	// 是否为合法数据
 	virtual bool IsRightData();

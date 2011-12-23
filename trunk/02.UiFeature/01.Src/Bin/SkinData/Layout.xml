@@ -1,24 +1,14 @@
 <layout area="1">
-	<window name="LogonWindow">
-		<property>
-			<group name="base">
-				<bool id="8"/>
-				<int id="7"/>
-				<string id="2"/>
-				<combobox id="3"/>
-				<cursor id="5"/>
-				<font id="1"/>
-				<image id="4"/>
-				<color id="0"/>
-				<group name="第二组别">
-					<string id="-1"/>
-					<bool id="-1"/>
-				</group>
-			</group>
-		</property>
-		<controls>
-			<item type="" id="">
-			<>
-		</controls>
+	<window type="Window" id="Window1">
+		<ctrl type="UiForm" id="Window1.UiForm9">
+			<ctrl type="Button" id="Window1.Button2"/>
+			<ctrl type="CheckBox" id="Window1.CheckBox3"/>
+			<ctrl type="Button" id="Window1.Button4"/>
+		</ctrl>
+		<ctrl type="UiForm" id="Window1.UiForm5">
+			<ctrl type="Button" id="Window1.Button6"/>
+			<ctrl type="CheckBox" id="Window1.CheckBox7"/>
+			<ctrl type="Button" id="Window1.Button8"/>
+		</ctrl>
 	</window>
 </layout>

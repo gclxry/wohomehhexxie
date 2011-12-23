@@ -8,7 +8,7 @@ class IPropertyColor : public IPropertyBase
 {
 public:
 	IPropertyColor();
-	~IPropertyColor();
+	virtual ~IPropertyColor();
 
 	// 是否为合法数据
 	virtual bool IsRightData();

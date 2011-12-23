@@ -52,9 +52,13 @@ typedef vector<string>							STRING_VEC;
 class IPropertyBase
 {
 public:
-	// 设置属性ID
-	virtual void SetPropId(int nPropId) = 0;
-	virtual int GetPropId() = 0;
+	IPropertyBase();
+	virtual ~IPropertyBase();
+
+	// 属性 ID 字符串
+	const char* GetPropId();
+	void SetPropId(const char* pszPropId);
+
 	// 是否为合法数据
 	virtual bool IsRightData() = 0;
 	// 取得属性类型
@@ -62,4 +66,7 @@ public:
 	// 从XML节点读取属性值，并放入属性队列
 	virtual bool ReadResourceXmlProperty(XmlNode* pXmlNode) = 0;
 
+private:
+	// 属性 ID 字符串
+	string m_strPropId;
 };

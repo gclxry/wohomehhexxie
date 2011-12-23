@@ -37,7 +37,7 @@ class IPropertyImage : public IPropertyBase
 {
 public:
 	IPropertyImage();
-	~IPropertyImage();
+	virtual ~IPropertyImage();
 
 	// 是否为合法数据
 	virtual bool IsRightData();

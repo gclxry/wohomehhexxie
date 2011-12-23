@@ -8,7 +8,7 @@ class IPropertyCursor : public IPropertyBase
 {
 public:
 	IPropertyCursor();
-	~IPropertyCursor();
+	virtual ~IPropertyCursor();
 
 	// 是否为合法数据
 	virtual bool IsRightData();

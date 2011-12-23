@@ -19,7 +19,7 @@ class IPropertyGroup : public IPropertyBase
 {
 public:
 	IPropertyGroup();
-	~IPropertyGroup();
+	virtual ~IPropertyGroup();
 
 	// 是否为合法数据
 	virtual bool IsRightData();

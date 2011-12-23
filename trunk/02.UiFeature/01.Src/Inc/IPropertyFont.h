@@ -49,7 +49,7 @@ class IPropertyFont : public IPropertyBase
 {
 public:
 	IPropertyFont();
-	~IPropertyFont();
+	virtual ~IPropertyFont();
 
 	// 是否为合法数据
 	virtual bool IsRightData();

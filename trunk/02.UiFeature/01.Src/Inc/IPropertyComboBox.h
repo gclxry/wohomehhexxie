@@ -19,7 +19,7 @@ class IPropertyComboBox : public IPropertyBase
 {
 public:
 	IPropertyComboBox();
-	~IPropertyComboBox();
+	virtual ~IPropertyComboBox();
 
 	// 是否为合法数据
 	virtual bool IsRightData();
