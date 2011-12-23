@@ -42,7 +42,7 @@ void IPropertySkinManagerImpl::ReleaseResourceXml()
 			for (PROP_MAP::iterator pPropItem = pGroup->begin(); pPropItem != pGroup->end(); pPropItem++)
 			{
 				IPropertyBase* pProp = pPropItem->second;
-				ReleaseResourceXmlProp(pProp);
+				ReleaseProperty(pProp);
 			}
 			SAFE_DELETE(pGroup);
 		}
@@ -68,7 +68,7 @@ void IPropertySkinManagerImpl::LoadZipDll()
 	m_pZipFile = GetZip();
 }
 
-void IPropertySkinManagerImpl::ReleaseResourceXmlProp(IPropertyBase *pCtrlProp)
+void IPropertySkinManagerImpl::ReleaseProperty(IPropertyBase *pCtrlProp)
 {
 	if (pCtrlProp == NULL)
 		return;
@@ -294,6 +294,151 @@ IPropertyBase* IPropertySkinManagerImpl::CreateProperty(PROP_TYPE propType, int 
 		return NULL;
 	}
 
+	IPropertyBase* pBaseProp = NULL;
+	switch (propType)
+	{
+	case PT_BOOL:
+		{
+			IPropertyBool* pProp = new IPropertyBool;
+			if (pProp != NULL)
+			{
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+					SAFE_DELETE(pProp);
+			}
+		}
+		break;
+
+	case PT_COLOR:
+		{
+			IPropertyColor* pProp = new IPropertyColor;
+			if (pProp != NULL)
+			{
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+					SAFE_DELETE(pProp);
+			}
+		}
+		break;
+
+	case PT_COMBOBOX:
+		{
+			IPropertyComboBox* pProp = new IPropertyComboBox;
+			if (pProp != NULL)
+			{
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+					SAFE_DELETE(pProp);
+			}
+		}
+		break;
+
+	case PT_CURSOR:
+		{
+			IPropertyCursor* pProp = new IPropertyCursor;
+			if (pProp != NULL)
+			{
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+					SAFE_DELETE(pProp);
+			}
+		}
+		break;
+
+	case PT_FONT:
+		{
+			IPropertyFont* pProp = new IPropertyFont;
+			if (pProp != NULL)
+			{
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+					SAFE_DELETE(pProp);
+			}
+		}
+		break;
+
+	case PT_GROUP:
+		{
+			IPropertyGroup* pProp = new IPropertyGroup;
+			if (pProp != NULL)
+			{
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+					SAFE_DELETE(pProp);
+			}
+		}
+		break;
+
+	case PT_IMAGE:
+		{
+			IPropertyImage* pProp = new IPropertyImage;
+			if (pProp != NULL)
+			{
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+					SAFE_DELETE(pProp);
+			}
+		}
+		break;
+
+	case PT_INT:
+		{
+			IPropertyInt* pProp = new IPropertyInt;
+			if (pProp != NULL)
+			{
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+					SAFE_DELETE(pProp);
+			}
+		}
+		break;
+
+	case PT_STRING:
+		{
+			IPropertyString* pProp = new IPropertyString;
+			if (pProp != NULL)
+			{
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+					SAFE_DELETE(pProp);
+			}
+		}
+		break;
+
+	default:
+		break;
+	}
+
+	if (pBaseProp != NULL)
+	{
+		PROP_MAP* pOnePropMap = NULL;
+		string strTypeName = PropTypeToString(propType);
+		ALL_PROP_MAP::iterator pTypeItem = m_AllPropMap.find(strTypeName);
+		if (pTypeItem != m_AllPropMap.end())
+		{
+			// 找到属性组
+			pOnePropMap = pTypeItem->second;
+		}
+		else
+		{
+			// 创建属性组
+			pOnePropMap = new PROP_MAP;
+			if (pOnePropMap == NULL)
+			{
+				ReleaseProperty(pBaseProp);
+				return NULL;
+			}
+
+			pBaseProp->SetPropId(nPropId);
+
+			pOnePropMap->clear();
+			pOnePropMap->insert(pair<int, IPropertyBase*>(nPropId, pBaseProp));
+
+			m_AllPropMap.insert(pair<string, PROP_MAP*>(strTypeName, pOnePropMap));
+		}
+	}
+
+	return pBaseProp;
 }
 
 // 查找指定的属性
@@ -678,7 +823,7 @@ bool IPropertySkinManagerImpl::GeneralCreateProp(char *pPropType, XmlNode* pXmlN
 
 			if (!pBaseProp->ReadResourceXmlProperty(pItem))
 			{
-				ReleaseResourceXmlProp(pBaseProp);
+				ReleaseProperty(pBaseProp);
 				return false;
 			}
 

@@ -43,7 +43,7 @@ private:
 	// 解析Resource.xml
 	bool TranslateResourceXml(FILE_ITEM *pResurceXml);
 	void ReleaseResourceXml();
-	void ReleaseResourceXmlProp(IPropertyBase *pCtrlProp);
+	void ReleaseProperty(IPropertyBase *pCtrlProp);
 	// 判断属性是否已经存在
 	bool IsPropExist(XmlNode* pXmlNode, PROP_MAP* pPropMap, int &nPropId);
 	// 通用的从资源xml中创建属性

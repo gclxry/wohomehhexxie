@@ -219,6 +219,13 @@ bool IPropertyControlImpl::CreateEmptyPropList()
 {
 //	m_ControlPropList
 
+	// 控件名称
+	// Visible
+	// Enable
+	// 是否接受鼠标消息
+	// 布局
+	// 是否支持动画
+
 	return true;
 }
 
