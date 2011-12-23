@@ -1,7 +1,8 @@
 
 #include "StdAfx.h"
-#include "..\..\Inc\UiFeatureDefs.h"
 #include "IPropertyControlImpl.h"
+#include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\IControlBase.h"
 
 IPropertyControlImpl::IPropertyControlImpl(void)
 {
@@ -220,10 +221,13 @@ bool IPropertyControlImpl::CreateEmptyPropList()
 	m_ControlPropList.clear();
 
 	// 基础属性组
-	IPropertyGroup *pBaseGroupProp = (IPropertyGroup *)CreateProperty(NULL, PT_GROUP, 1, "控件基本属性", NULL);
+	IPropertyGroup *pBaseGroupProp = (IPropertyGroup *)CreateProperty(NULL, PT_GROUP, "控件基本属性", NULL);
+
+	// 控件类型(只读)
+	// 控件ID(只读)
 
 	// 控件名称
-	IPropertyBase* pNameProp = CreateProperty(pBaseGroupProp, PT_STRING, 1, "Name", "控件名称");
+	IPropertyBase* pNameProp = CreateProperty(pBaseGroupProp, PT_STRING, "Name", "控件名称");
 
 	// Visible
 	// Enable
@@ -231,6 +235,21 @@ bool IPropertyControlImpl::CreateEmptyPropList()
 	// 布局
 	// 是否支持动画
 
+	return true;
+}
+
+// 2.从Builder中新创建一个控件，需要初始化属性的PropId
+bool IPropertyControlImpl::InitPropIdByBuilder(const char* pszBaseId)
+{
+	if (pszBaseId == NULL || m_pSkinPropMgr == NULL || m_pBaseCtrl == NULL || m_pBaseCtrl->GetObjectType() == NULL)
+		return false;
+
+	char szId[1024];
+	memset(szId, 0, 1024);
+
+	int nId = m_pSkinPropMgr->GetNewId();
+	sprintf_s(szId, 1023, "%s.%s%d", pszBaseId, m_pBaseCtrl->GetObjectType(), nId);
+	SetObjectType(szId);
 	return true;
 }
 
@@ -247,7 +266,7 @@ bool IPropertyControlImpl::CreateBuilderShowPropList()
 }
 
 // 创建一个属性
-IPropertyBase* IPropertyControlImpl::CreateProperty(IPropertyGroup *pPropGroup, PROP_TYPE propType, UINT nPropId, char *pPropName, char *pPropInfo)
+IPropertyBase* IPropertyControlImpl::CreateProperty(IPropertyGroup *pPropGroup, PROP_TYPE propType, char *pPropName, char *pPropInfo)
 {
 	if (m_pSkinPropMgr == NULL)
 		return NULL;

@@ -1,7 +1,8 @@
 
 #pragma once
 #include "IPropertyControl.h"
-#include "..\..\Inc\CMemoryDC.h"
+#include "CMemoryDC.h"
+#include "IFeatureObject.h"
 
 class IWindowBase;
 class IPropertyControl;
@@ -73,7 +74,7 @@ enum CONTROL_MSG
 // 子控件列表
 typedef vector<IControlBase*>			CHILD_CTRLS_VEC;
 
-class IControlBase
+class IControlBase : public IFeatureObject
 {
 public:
 	// 绘制当前控件，参数为父窗口/父控件的内存DC
@@ -95,6 +96,7 @@ public:
 	// 鼠标是否Hover
 	virtual void SetMouseHover(bool bHover) = 0;
 	virtual bool IsMousehover() = 0;
+
 
 //////////////////////////////////////////////////////////////////////////
 // 编码用的控制属性

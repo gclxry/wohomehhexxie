@@ -17,4 +17,6 @@ public:
 	virtual void SetArea(AREA_TYPE areaType) = 0;
 	// 创建一个属性，并将次属性放入队列
 	virtual IPropertyBase* CreateEmptyProperty(PROP_TYPE propType) = 0;
+	// 取得ID号
+	virtual int GetNewId() = 0;
 };

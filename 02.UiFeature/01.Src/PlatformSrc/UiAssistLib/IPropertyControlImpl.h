@@ -4,6 +4,8 @@
 #include "..\..\Inc\IPropertyGroup.h"
 #include "..\..\Inc\IPropertySkinManager.h"
 
+class IControlBase;
+
 class IPropertyControlImpl : public IPropertyControl
 {
 public:
@@ -51,7 +53,9 @@ public:
 	// 以下3个函数创建、显示属性用，执行顺序由上到下
 	// 1. 创建空的属性列表
 	virtual bool CreateEmptyPropList();
-	// 2. 从xml文件填充控件属性
+	// 2.从Builder中新创建一个控件，需要初始化属性的PropId
+	virtual bool InitPropIdByBuilder(const char* pszBaseId);
+	// 2. 从xml文件中读取控件属性时，不需要初始化属性的PropId，PropId来源于xml文件
 	virtual bool ReadPropFromControlsXml(const char* pszControlId);
 	// 3. 创建Builder显示用的属性
 	virtual bool CreateBuilderShowPropList();
@@ -60,7 +64,7 @@ protected:
 //	// 1.1 在派生控件中创建属性
 //	virtual bool CreateDedicationProp() = 0;
 	// 创建一个属性
-	IPropertyBase* CreateProperty(IPropertyGroup *pPropGroup, PROP_TYPE propType, UINT nPropId, char *pPropName, char *pPropInfo);
+	IPropertyBase* CreateProperty(IPropertyGroup *pPropGroup, PROP_TYPE propType, char *pPropName, char *pPropInfo);
 
 private:
 

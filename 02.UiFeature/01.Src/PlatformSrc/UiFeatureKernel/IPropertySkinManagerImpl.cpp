@@ -460,7 +460,7 @@ IPropertyBase* IPropertySkinManagerImpl::FindProperty(const char* pszPropType, c
 		IPropertyBase* pProp = (*pPropVec)[i];
 		if (pProp != NULL)
 		{
-			if (lstrcmpiA(pProp->GetPropId(), pszPropId) == 0)
+			if (lstrcmpiA(pProp->GetObjectId(), pszPropId) == 0)
 				return pProp;
 		}
 	}
@@ -698,8 +698,14 @@ IPropertyWindow* IPropertySkinManagerImpl::InitWindowSkin(const char *pszSkinPat
 
 void IPropertySkinManagerImpl::ResetPropId(int nPropId)
 {
-	if (nPropId > m_bPropId)
-		m_bPropId = nPropId;
+	if (nPropId >= m_bPropId)
+		m_bPropId = nPropId + 1;
+}
+
+// È¡µÃIDºÅ
+int IPropertySkinManagerImpl::GetNewId()
+{
+	return m_bPropId++;
 }
 
 bool IPropertySkinManagerImpl::GeneralCreateProp(char *pPropType, XmlNode* pXmlNode, PROP_VEC* pPropVec)
