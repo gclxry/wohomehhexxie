@@ -32,6 +32,7 @@ struct FONT_PROP
 	int nPropId;
 	// 属性名称
 	string strName;
+	string strPropInfo;
 	// 字体信息
 	LOGFONTA Font;
 	// 字体颜色

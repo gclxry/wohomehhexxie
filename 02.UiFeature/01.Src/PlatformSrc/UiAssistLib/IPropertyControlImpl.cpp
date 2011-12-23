@@ -6,6 +6,10 @@
 IPropertyControlImpl::IPropertyControlImpl(void)
 {
 	m_pBaseCtrl = NULL;
+	m_pSkinPropMgr = NULL;
+	m_ControlPropList.clear();
+
+
 	m_bVisible = true;
 	m_bEnable = true;
 	m_bIsReceiveMouseMsg = true;
@@ -17,6 +21,11 @@ IPropertyControlImpl::IPropertyControlImpl(void)
 
 IPropertyControlImpl::~IPropertyControlImpl(void)
 {
+}
+
+void IPropertyControlImpl::SetPropertySkinManager(IPropertySkinManager *pMgr)
+{
+	m_pSkinPropMgr = pMgr;
 }
 
 // 可用属性
@@ -208,6 +217,8 @@ bool IPropertyControlImpl::GetDragControl()
 // 1. 创建空的属性列表
 bool IPropertyControlImpl::CreateEmptyPropList()
 {
+//	m_ControlPropList
+
 	return true;
 }
 
@@ -221,4 +232,13 @@ bool IPropertyControlImpl::ReadPropFromControlsXml()
 bool IPropertyControlImpl::CreateBuilderShowPropList()
 {
 	return true;
+}
+
+// 创建一个属性
+IPropertyBase* IPropertyControlImpl::CreateProperty(IPropertyGroup *pPropGroup, PROP_TYPE propType, UINT nPropId, char *pPropName, char *pPropInfo)
+{
+	if (m_pSkinPropMgr == NULL)
+		return NULL;
+
+	return NULL;
 }

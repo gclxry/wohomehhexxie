@@ -24,15 +24,19 @@ public:
 	// 初始化Window皮肤
 	virtual IPropertyWindow* InitWindowSkin(const char *pszSkinPath, const char *pszWndName);
 	// 查找指定的属性
-	virtual IPropertyBase* FindProperty(char* pszPropType, int nPropId);
+	virtual IPropertyBase* FindProperty(PROP_TYPE propType, int nPropId);
 	// 设置显示的语言种类
 	virtual void SetArea(AREA_TYPE areaType);
+	// 创建一个属性，并将次属性放入队列
+	virtual IPropertyBase* CreateProperty(PROP_TYPE propType, int nPropId);
 
 private:
 	// 初始化皮肤包
 	bool InitSkinPackage(const char *pszSkinPath);
 	// 加载zip文件
 	void LoadZipDll();
+	string PropTypeToString(PROP_TYPE propType);
+	PROP_TYPE PropStringToType(string strPropType);
 
 //////////////////////////////////////////////////////////////////////////
 	// Resource.xml相关

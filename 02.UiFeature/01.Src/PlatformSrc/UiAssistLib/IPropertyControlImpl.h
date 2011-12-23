@@ -1,6 +1,8 @@
 
 #pragma once
 #include "..\..\Inc\IPropertyControl.h"
+#include "..\..\Inc\IPropertyGroup.h"
+#include "..\..\Inc\IPropertySkinManager.h"
 
 class IPropertyControlImpl : public IPropertyControl
 {
@@ -11,6 +13,7 @@ public:
 	// 设置附属控件
 	virtual void SetControlBase(IControlBase *pCtrl);
 	virtual IControlBase* GetControlBase();
+	virtual void SetPropertySkinManager(IPropertySkinManager *pMgr);
 
 	// 控件显示位置和大小，这个位置是相对于附着的窗口的
 	virtual void SetCtrlInWindowRect(RECT CtrlWndRct);
@@ -53,7 +56,21 @@ public:
 	// 3. 创建Builder显示用的属性
 	virtual bool CreateBuilderShowPropList();
 
+protected:
+//	// 1.1 在派生控件中创建属性
+//	virtual bool CreateDedicationProp() = 0;
+	// 创建一个属性
+	IPropertyBase* CreateProperty(IPropertyGroup *pPropGroup, PROP_TYPE propType, UINT nPropId, char *pPropName, char *pPropInfo);
+
 private:
+
+private:
+	// 存储Builder可见可设置属性列表
+	GROUP_PROP_VEC m_ControlPropList;
+	// 附属控件
+	IControlBase *m_pBaseCtrl;
+	IPropertySkinManager *m_pSkinPropMgr;
+
 	// 是否可见
 	bool m_bVisible;
 	bool m_bEnable;
@@ -69,6 +86,4 @@ private:
 	string m_strCtrlName;
 	// 拖动控件
 	bool m_bDragCtrl;
-	// 附属控件
-	IControlBase *m_pBaseCtrl;
 };

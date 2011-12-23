@@ -16,6 +16,7 @@ IPropertyString::~IPropertyString()
 void IPropertyString::Clear()
 {
 	m_StringProp.strName = "";
+	m_StringProp.strPropInfo = "";
 	m_StringProp.strDefaultString = "";
 	m_StringProp.nDefaultArea = AT_CN;
 	m_StringProp.StringMap.clear();
