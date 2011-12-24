@@ -6,6 +6,7 @@
 
 IPropertyControlImpl::IPropertyControlImpl(void)
 {
+	SetObjectType("PropertyControl");
 	m_pBaseCtrl = NULL;
 	m_pSkinPropMgr = NULL;
 	m_ControlPropList.clear();
