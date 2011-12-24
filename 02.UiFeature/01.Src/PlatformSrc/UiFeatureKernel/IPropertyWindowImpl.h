@@ -2,7 +2,7 @@
 #pragma once
 #include "..\..\Inc\IPropertyWindow.h"
 
-class IPropertyWindowImpl : public IPropertyWindow
+class IPropertyWindowImpl
 {
 public:
 	IPropertyWindowImpl(void);

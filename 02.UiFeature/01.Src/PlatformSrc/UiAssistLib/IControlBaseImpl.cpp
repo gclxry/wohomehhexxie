@@ -11,14 +11,7 @@ IControlBaseImpl::IControlBaseImpl(void)
 	m_ChildCtrlsVec.clear();
 	m_bNeedRedraw = true;
 	m_bMouseHover = false;
-
-	IPropertyControlImpl *pCtrlProp = new IPropertyControlImpl;
-	if (pCtrlProp != NULL)
-	{
-		m_pCtrlProp = dynamic_cast<IPropertyControl*>(pCtrlProp);
-		if (m_pCtrlProp == NULL)
-			SAFE_DELETE(pCtrlProp);
-	}
+	m_pCtrlProp = NULL;
 }
 
 IControlBaseImpl::~IControlBaseImpl(void)

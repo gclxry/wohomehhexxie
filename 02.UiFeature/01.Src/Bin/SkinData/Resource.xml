@@ -1,6 +1,6 @@
 <resource>
 	<font>
-		<item objid="1" id="1" name="Link.Normal">
+		<item objid="1" name="Link.Normal">
 			<logfont lfFaceName="ËÎÌו" lfHeight="3" lfWidth="4" lfEscapement="5" lfOrientation="3" lfWeight="2" lfItalic="1" lfUnderline="0" lfStrikeOut="1" lfCharSet="1" lfOutPrecision="2" lfClipPrecision="0" lfQuality="1" lfPitchAndFamily="1"/>
 			<mode color="1" VAligning="1" HAligning="2" ShowMode="1"/>
 		</item>

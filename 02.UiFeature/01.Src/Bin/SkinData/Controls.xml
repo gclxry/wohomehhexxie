@@ -1,20 +1,50 @@
 <controls>
-	<Button>
-		<item id ="">
-			<group objid="">
-				<bool objid="8"/>
-				<int objid="7"/>
-				<string objid="2"/>
-				<combobox objid="3"/>
-				<cursor objid="5"/>
-				<font objid="1"/>
-				<image objid="4"/>
-				<color objid="0"/>
-				<group objid="第二组别">
-					<string objid="-1"/>
-					<bool objid="-1"/>
-				</group>
+	<Button objio="23423">
+		<group objid="">
+			<bool objid="8"/>
+			<int objid="7"/>
+			<string objid="2"/>
+			<combobox objid="3"/>
+			<cursor objid="5"/>
+			<font objid="1"/>
+			<image objid="4"/>
+			<color objid="0"/>
+			<group objid="第二组别">
+				<string objid="-1"/>
+				<bool objid="-1"/>
 			</group>
-		</item>
+		</group>
 	</Button>
+	<Button objio="234231">
+		<group objid="">
+			<bool objid="8"/>
+			<int objid="7"/>
+			<string objid="2"/>
+			<combobox objid="3"/>
+			<cursor objid="5"/>
+			<font objid="1"/>
+			<image objid="4"/>
+			<color objid="0"/>
+			<group objid="第二组别">
+				<string objid="-1"/>
+				<bool objid="-1"/>
+			</group>
+		</group>
+	</Button>
+	<CheckBox objio="234223">
+		<group objid="">
+			<bool objid="8"/>
+			<int objid="7"/>
+			<string objid="2"/>
+			<combobox objid="3"/>
+			<cursor objid="5"/>
+			<font objid="1"/>
+			<image objid="4"/>
+			<color objid="0"/>
+			<group objid="第二组别">
+				<string objid="-1"/>
+				<bool objid="-1"/>
+			</group>
+		</group>
+	</CheckBox>
 </layout>

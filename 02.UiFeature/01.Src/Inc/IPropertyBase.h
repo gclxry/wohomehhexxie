@@ -5,6 +5,8 @@
 #include "CUiXmlParser.h"
 #include "IFeatureObject.h"
 
+class IPropertyBase;
+
 // 属性类型
 enum PROP_TYPE 
 {
@@ -48,7 +50,17 @@ enum AREA_TYPE
 };
 
 // string 队列
-typedef vector<string>							STRING_VEC;
+typedef vector<string>									STRING_VEC;
+
+// 一种属性的队列，如：font、string、image等，KEY：ObjectId
+// 一种控件的属性队列，如：Button、CheckBox等，KEY：ObjectId
+// 一种窗口的属性队列，KEY：ObjectId
+typedef map<string, IPropertyBase*>						PROP_BASE_ITEM;
+
+// 所有种类的属性的队列，KEY：属性类型名称，如：font
+// 所有控件种类的属性的队列，KEY：控件类型名称，如：Button
+// KEY:ObjectId，所有窗口的管理器map
+typedef map<string, PROP_BASE_ITEM*>					PROP_BASE_MAP;
 
 class IPropertyBase : public IFeatureObject
 {

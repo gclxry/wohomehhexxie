@@ -314,7 +314,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="属性组【Group】"
+				Name="Group"
 				>
 				<File
 					RelativePath=".\IPropertyGroup.cpp"
@@ -322,6 +322,30 @@
 				</File>
 				<File
 					RelativePath="..\..\Inc\IPropertyGroup.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="特殊：Control"
+				>
+				<File
+					RelativePath=".\IPropertyControl.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyControl.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="特殊：Window"
+				>
+				<File
+					RelativePath=".\IPropertyWindow.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyWindow.h"
 					>
 				</File>
 			</Filter>
@@ -368,22 +392,6 @@
 					RelativePath=".\IControlBaseImpl.h"
 					>
 				</File>
-				<Filter
-					Name="01.一个Control的属性"
-					>
-					<File
-						RelativePath="..\..\Inc\IPropertyControl.h"
-						>
-					</File>
-					<File
-						RelativePath=".\IPropertyControlImpl.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\IPropertyControlImpl.h"
-						>
-					</File>
-				</Filter>
 			</Filter>
 		</Filter>
 		<File
