@@ -2,21 +2,22 @@
 // 一个窗口的属性
 
 #pragma once
+#include "IFeatureObject.h"
+#include "IPropertyControl.h"
 
-class IPropertyWindow
+// Window属性队列，KEY：ObjectID
+class IPropertyWindow;
+typedef map<string, IPropertyWindow*>			WINDOW_PROP_MAP;
+
+class IPropertyWindow : public IFeatureObject
 {
 public:
-	// 是否支持全窗口点击移动
-	virtual void SetDragWindow(bool bDrag) = 0;
-	virtual bool GetDragWindow() = 0;
+	IPropertyWindow();
+	virtual ~IPropertyWindow();
 
-	// 是否最大化
-	virtual void SetCanFullScreen(bool bCanFull) = 0;
-	virtual bool IsCanFullScreen() = 0;
-	virtual void SetFullScreen(bool bFull) = 0;
-	virtual bool IsFullScreen() = 0;
+	CHILD_CTRL_PROP_VEC* GetChildControlVec();
 
-	// 窗口名称
-	virtual void SetWindowName(char *pszWndName) = 0;
-	virtual const char * GetWindowName() = 0;
+private:
+	// 子控件属性节点 的列表
+	CHILD_CTRL_PROP_VEC m_ChildCtrlPropVec;
 };

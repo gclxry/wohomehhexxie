@@ -1,6 +1,6 @@
 <windows>
-	<window objid="Window1" id="1">
-		<group name="base">
+	<window objid="Window1">
+		<group objid="base">
 			<string objid="Window1.string1"/>
 			<bool objid="Window1.bool2"/>
 			<int objid="Window1.int3"/>
@@ -10,14 +10,14 @@
 			<font objid="1"/>
 			<image objid="4"/>
 			<color objid="0"/>
-			<group name="第二组别">
+			<group objid="第二组别">
 				<string objid="-1"/>
 				<bool objid="-1"/>
 			</group>
 		</group>
 	</window>
 	<window objid="Window.2">
-		<group name="base">
+		<group objid="base">
 			<bool objid="8"/>
 			<int objid="7"/>
 			<string objid="2"/>
@@ -26,7 +26,7 @@
 			<font objid="1"/>
 			<image objid="4"/>
 			<color objid="0"/>
-			<group name="第二组别">
+			<group objid="第二组别">
 				<string objid="-1"/>
 				<bool objid="-1"/>
 			</group>

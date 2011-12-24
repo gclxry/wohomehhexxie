@@ -26,10 +26,11 @@ IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
 	m_strSkinPath = "";
 	m_AllPropMap.clear();
 	m_AllCtrlPropMap.clear();
+	m_AllWindowPropMap.clear();
+	m_LayoutWindowVec.clear();
+
 	m_nObjectIdInRes = 1;
 	m_nEmptyObjectId = 1;
-
-	m_WndPropMap.clear();
 	m_AreaType = AT_CN;
 
 	LoadZipDll();
@@ -38,36 +39,67 @@ IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
 IPropertySkinManagerImpl::~IPropertySkinManagerImpl(void)
 {
 	SAFE_FREE_LIBRARY(m_hZipModule);
-	ReleaseControlsXml();
-	ReleaseResourceXml();
+
+	ReleaseLayoutMap();
+	ReleasePropMapItem(&m_AllWindowPropMap);
+	ReleasePropMap(m_AllCtrlPropMap);
+	ReleasePropMap(m_AllPropMap);
 }
 
-void IPropertySkinManagerImpl::ReleaseControlsXml()
+void IPropertySkinManagerImpl::ReleaseLayoutMap()
 {
-	for (ALL_CONTROL_PROP_MAP::iterator pGroupItem = m_AllCtrlPropMap.begin(); pGroupItem != m_AllCtrlPropMap.end(); pGroupItem++)
+	for (WINDOW_PROP_MAP::iterator pWndItem = m_LayoutWindowVec.begin(); pWndItem != m_LayoutWindowVec.end(); pWndItem++)
 	{
-		CONTROL_PROP_MAP* pGroup = pGroupItem->second;
-		SAFE_DELETE(pGroup);
+		IPropertyWindow* pWnd = pWndItem->second;
+		if (pWnd != NULL)
+		{
+			ReleaseLayoutMapChildCtrlVec(pWnd->GetChildControlVec());
+			SAFE_DELETE(pWnd);
+		}
 	}
-	m_AllCtrlPropMap.clear();
+	m_LayoutWindowVec.clear();
 }
 
-void IPropertySkinManagerImpl::ReleaseResourceXml()
+void IPropertySkinManagerImpl::ReleaseLayoutMapChildCtrlVec(CHILD_CTRL_PROP_VEC* pCtrlVec)
 {
-	for (ALL_PROP_MAP::iterator pGroupItem = m_AllPropMap.begin(); pGroupItem != m_AllPropMap.end(); pGroupItem++)
+	if (pCtrlVec == NULL)
+		return;
+
+	for (CHILD_CTRL_PROP_VEC::iterator pVecItem = pCtrlVec->begin(); pVecItem != pCtrlVec->end(); pVecItem++)
 	{
-		PROP_MAP* pGroup = pGroupItem->second;
+		IPropertyControl* pCtrl = *pVecItem;
+		if (pCtrl != NULL)
+			ReleaseLayoutMapChildCtrlVec(pCtrl->GetChildControlVec());
+		SAFE_DELETE(pCtrl);
+	}
+	pCtrlVec->clear();
+}
+
+void IPropertySkinManagerImpl::ReleasePropMap(PROP_BASE_MAP &PropMap)
+{
+	for (PROP_BASE_MAP::iterator pGroupItem = PropMap.begin(); pGroupItem != PropMap.end(); pGroupItem++)
+	{
+		PROP_BASE_ITEM* pGroup = pGroupItem->second;
 		if (pGroup != NULL)
 		{
-			for (PROP_MAP::iterator pPropItem = pGroup->begin(); pPropItem != pGroup->end(); pPropItem++)
-			{
-				IPropertyBase* pProp = pPropItem->second;
-				ReleaseBaseProp(pProp);
-			}
+			ReleasePropMapItem(pGroup);
 			SAFE_DELETE(pGroup);
 		}
 	}
 	m_AllPropMap.clear();
+}
+
+void IPropertySkinManagerImpl::ReleasePropMapItem(PROP_BASE_ITEM* pPropMapItem)
+{
+	if (pPropMapItem == NULL)
+		return;
+
+	for (PROP_BASE_ITEM::iterator pPropItem = pPropMapItem->begin(); pPropItem != pPropMapItem->end(); pPropItem++)
+	{
+		IPropertyBase* pProp = pPropItem->second;
+		ReleaseBaseProp(pProp);
+	}
+	pPropMapItem->clear();
 }
 
 void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
@@ -411,9 +443,9 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(PROP_TYPE propType)
 
 	if (pBaseProp != NULL)
 	{
-		PROP_MAP* pOnePropMap = NULL;
+		PROP_BASE_ITEM* pOnePropMap = NULL;
 		string strTypeName = PropTypeToString(propType);
-		ALL_PROP_MAP::iterator pTypeItem = m_AllPropMap.find(strTypeName);
+		PROP_BASE_MAP::iterator pTypeItem = m_AllPropMap.find(strTypeName);
 		if (pTypeItem != m_AllPropMap.end())
 		{
 			// 找到属性组
@@ -422,7 +454,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(PROP_TYPE propType)
 		else
 		{
 			// 创建属性组
-			pOnePropMap = new PROP_MAP;
+			pOnePropMap = new PROP_BASE_ITEM;
 			if (pOnePropMap == NULL)
 			{
 				ReleaseBaseProp(pBaseProp);
@@ -430,7 +462,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(PROP_TYPE propType)
 			}
 
 			pOnePropMap->clear();
-			m_AllPropMap.insert(pair<string, PROP_MAP*>(strTypeName, pOnePropMap));
+			m_AllPropMap.insert(pair<string, PROP_BASE_ITEM*>(strTypeName, pOnePropMap));
 		}
 
 		if (pOnePropMap != NULL)
@@ -460,16 +492,16 @@ IPropertyBase* IPropertySkinManagerImpl::FindBaseProperty(const char* pszPropTyp
 		return NULL;
 
 	string strType = pszPropType;
-	ALL_PROP_MAP::iterator pPropTypeItem = m_AllPropMap.find(strType);
+	PROP_BASE_MAP::iterator pPropTypeItem = m_AllPropMap.find(strType);
 	if (pPropTypeItem == m_AllPropMap.end())
 		return NULL;
 
-	PROP_MAP* pPropMap = pPropTypeItem->second;
+	PROP_BASE_ITEM* pPropMap = pPropTypeItem->second;
 	if (pPropMap == NULL)
 		return NULL;
 
 	string strPropId = pszPropId;
-	PROP_MAP::iterator pPropItem = pPropMap->find(strPropId);
+	PROP_BASE_ITEM::iterator pPropItem = pPropMap->find(strPropId);
 	if (pPropItem == pPropMap->end())
 		return NULL;
 
@@ -484,7 +516,7 @@ bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 		return false;
 
 	// 初始化
-	if (m_WndPropMap.size() > 0)
+	if (m_AllWindowPropMap.size() > 0)
 		return true;
 
 //////////////////////////////////////////////////////////////////////////
@@ -549,6 +581,9 @@ bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 	m_pZipFile->RemoveFile(pWindowsXml);
 
 	// 解析 Layout.xml
+	if (!TranslateLayoutXml(pLayoutXml))
+		return false;
+	m_pZipFile->RemoveFile(pLayoutXml);
 
 	return true;
 }
@@ -563,8 +598,8 @@ IPropertyWindow* IPropertySkinManagerImpl::InitWindowSkin(const char *pszSkinPat
 		return NULL;
 
 	string strWndName = pszWndName;
-	WND_PROP_MAP::iterator pWndPropItem = m_WndPropMap.find(strWndName);
-	if (pWndPropItem == m_WndPropMap.end())
+	PROP_BASE_MAP::iterator pWndPropItem = m_AllWindowPropMap.find(strWndName);
+	if (pWndPropItem == m_AllWindowPropMap.end())
 		return NULL;
 
 	IPropertyWindow* pWndProp = pWndPropItem->second;
@@ -586,15 +621,15 @@ int IPropertySkinManagerImpl::GetNewId()
 // 设置显示的语言种类
 void IPropertySkinManagerImpl::SetArea(AREA_TYPE areaType)
 {
-	ALL_PROP_MAP::iterator pStringItem = m_AllPropMap.find(PROP_TYPE_STRING_NAME);
+	PROP_BASE_MAP::iterator pStringItem = m_AllPropMap.find(PROP_TYPE_STRING_NAME);
 	if (pStringItem == m_AllPropMap.end())
 		return;
 
-	PROP_MAP* pPropMap = pStringItem->second;
+	PROP_BASE_ITEM* pPropMap = pStringItem->second;
 	if (pPropMap == NULL)
 		return;
 
-	for (PROP_MAP::iterator pPropItem = pPropMap->begin(); pPropItem != pPropMap->end(); pPropItem++)
+	for (PROP_BASE_ITEM::iterator pPropItem = pPropMap->begin(); pPropItem != pPropMap->end(); pPropItem++)
 	{
 		IPropertyBase* pProp = pPropItem->second;
 		if (pProp == NULL)
@@ -627,9 +662,9 @@ bool IPropertySkinManagerImpl::TranslateResourceXml(FILE_ITEM *pResurceXml)
 			XmlNode* pPropTypeXml = JabberXmlGetNthChildWithoutTag(pResurceRoot, i);
 			if (pPropTypeXml != NULL && pPropTypeXml->name != NULL)
 			{
-				PROP_MAP* pOnePropMap = NULL;
+				PROP_BASE_ITEM* pOnePropMap = NULL;
 				string strTypeName = pPropTypeXml->name;
-				ALL_PROP_MAP::iterator pTypeItem = m_AllPropMap.find(strTypeName);
+				PROP_BASE_MAP::iterator pTypeItem = m_AllPropMap.find(strTypeName);
 				if (pTypeItem != m_AllPropMap.end())
 				{
 					// 找到属性组
@@ -638,12 +673,12 @@ bool IPropertySkinManagerImpl::TranslateResourceXml(FILE_ITEM *pResurceXml)
 				else
 				{
 					// 创建属性组
-					pOnePropMap = new PROP_MAP;
+					pOnePropMap = new PROP_BASE_ITEM;
 					if (pOnePropMap == NULL)
 						return false;
 
 					pOnePropMap->clear();
-					m_AllPropMap.insert(pair<string, CONTROL_PROP_MAP*>(strTypeName, pOnePropMap));
+					m_AllPropMap.insert(pair<string, PROP_BASE_ITEM*>(strTypeName, pOnePropMap));
 				}
 
 				if (pOnePropMap == NULL)
@@ -663,7 +698,7 @@ bool IPropertySkinManagerImpl::TranslateResourceXml(FILE_ITEM *pResurceXml)
 	return true;
 }
 
-bool IPropertySkinManagerImpl::GeneralCreateBaseProp(char *pPropType, XmlNode* pXmlNode, PROP_MAP* pPropMap)
+bool IPropertySkinManagerImpl::GeneralCreateBaseProp(char *pPropType, XmlNode* pXmlNode, PROP_BASE_ITEM* pPropMap)
 {
 	if (pPropType == NULL || pXmlNode == NULL || pPropMap == NULL)
 		return false;
@@ -679,7 +714,7 @@ bool IPropertySkinManagerImpl::GeneralCreateBaseProp(char *pPropType, XmlNode* p
 				return false;
 
 			string strObjId = psz_id;
-			PROP_MAP::iterator pPropItem = pPropMap->find(strObjId);
+			PROP_BASE_ITEM::iterator pPropItem = pPropMap->find(strObjId);
 			if (pPropItem != pPropMap->end())
 				return false;
 
@@ -822,9 +857,9 @@ bool IPropertySkinManagerImpl::TranslateControlsXml(FILE_ITEM *pControlsXml)
 			XmlNode* pCtrlTypeXml = JabberXmlGetNthChildWithoutTag(pControlsRoot, i);
 			if (pCtrlTypeXml != NULL && pCtrlTypeXml->name != NULL)
 			{
-				CONTROL_PROP_MAP* pOneCtrlMap = NULL;
+				PROP_BASE_ITEM* pOneCtrlMap = NULL;
 				string strTypeName = pCtrlTypeXml->name;
-				ALL_CONTROL_PROP_MAP::iterator pTypeItem = m_AllCtrlPropMap.find(strTypeName);
+				PROP_BASE_MAP::iterator pTypeItem = m_AllCtrlPropMap.find(strTypeName);
 				if (pTypeItem != m_AllCtrlPropMap.end())
 				{
 					// 找到属性组
@@ -833,18 +868,18 @@ bool IPropertySkinManagerImpl::TranslateControlsXml(FILE_ITEM *pControlsXml)
 				else
 				{
 					// 创建属性组
-					pOneCtrlMap = new CONTROL_PROP_MAP;
+					pOneCtrlMap = new PROP_BASE_ITEM;
 					if (pOneCtrlMap == NULL)
 						return false;
 
 					pOneCtrlMap->clear();
-					m_AllCtrlPropMap.insert(pair<string, CONTROL_PROP_MAP*>(strTypeName, pOneCtrlMap));
+					m_AllCtrlPropMap.insert(pair<string, PROP_BASE_ITEM*>(strTypeName, pOneCtrlMap));
 				}
 
 				if (pOneCtrlMap == NULL)
 					return false;
 
-				if (!GeneralCreateCtrlProp((char*)strTypeName.c_str(), pCtrlTypeXml, pOneCtrlMap))
+				if (!GeneralCreateSubProp(pCtrlTypeXml, pOneCtrlMap))
 					return false;
 			}
 		}
@@ -858,40 +893,53 @@ bool IPropertySkinManagerImpl::TranslateControlsXml(FILE_ITEM *pControlsXml)
 	return true;
 }
 
-bool IPropertySkinManagerImpl::GeneralCreateCtrlProp(char *pCtrlType, XmlNode* pXmlNode, CONTROL_PROP_MAP* pCtrlPropMap)
+bool IPropertySkinManagerImpl::GeneralCreateSubProp(XmlNode* pXmlNode, PROP_BASE_ITEM* pCtrlPropMap)
 {
-	if (pCtrlType == NULL || pXmlNode == NULL || pCtrlPropMap == NULL)
+	if (pszObjId == NULL || pXmlNode == NULL || pCtrlPropMap == NULL)
 		return false;
 
-	int nItemCount = pXmlNode->numChild;
-	for (int i = 0; i < nItemCount; i++)
+	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_OBJECT_ID);
+	if (psz_id == NULL)
+		return false;
+
+	string strObjId = psz_id;
+	PROP_BASE_ITEM::iterator pFindGroupItem = pCtrlPropMap->find(strObjId);
+	if (pFindGroupItem != pCtrlPropMap->end())
+		return false;
+
+	IPropertyGroup* pCtrlProp = new IPropertyGroup;
+	if (pCtrlProp == NULL)
+		return false;
+
+	pBaseProp = dynamic_cast<IPropertyBase*>(pCtrlProp);
+	if (pBaseProp == NULL)
 	{
-		XmlNode* pItemNode = JabberXmlGetNthChildWithoutTag(pXmlNode, i);
-		if (pItemNode != NULL)
+		SAFE_DELETE(pCtrlProp);
+		return false;
+	}
+	pCtrlProp->SetObjectId(psz_id);
+	pCtrlPropMap->insert(pair<string, IPropertyBase*>(strObjId, pBaseProp));
+
+	int nPropCount = pXmlNode->numChild;
+	for (int nPropNo = 0; nPropNo < nPropCount; nPropNo++)
+	{
+		XmlNode* pPropNode = JabberXmlGetNthChildWithoutTag(pXmlNode, i);
+		if (pPropNode != NULL && pPropNode->name != NULL)
 		{
-			int nPropCount = pItemNode->numChild;
-			for (int nPropNo = 0; nPropNo < nPropCount; nPropNo++)
+			psz_id = JabberXmlGetAttrValue(pPropNode, SKIN_OBJECT_ID);
+			if (psz_id == NULL)
+				return false;
+
+			IPropertyBase* pFindBaseProp = FindBaseProperty(pPropNode->name, psz_id);
+			if (pFindBaseProp == NULL)
+				continue;
+
+			pCtrlProp->AppendProperty(pFindBaseProp);
+			if (pFindBaseProp->GetPropType() == PT_GROUP)
 			{
-				XmlNode* pPropNode = JabberXmlGetNthChildWithoutTag(pItemNode, i);
-				if (pPropNode != NULL && pPropNode->name != NULL)
-				{
-					char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_OBJECT_ID);
-					if (psz_id == NULL)
-						return false;
-
-					IPropertyBase* pFindBaseProp = FindBaseProperty(pPropNode->name, psz_id);
-					if (pFindBaseProp == NULL)
-						continue;
-
-					string strObjId = psz_id;
-					pCtrlPropMap->insert(pair<string, IPropertyBase*>(strObjId, pFindBaseProp));
-					if (pFindBaseProp->GetPropType() == PT_GROUP)
-					{
-						IPropertyGroup *pGroup = dynamic_cast<IPropertyGroup*>(pFindBaseProp);
-						if (pGroup != NULL)
-							AppendBasePropToGroup(pGroup, pPropNode);
-					}
-				}
+				IPropertyGroup *pGroup = dynamic_cast<IPropertyGroup*>(pFindBaseProp);
+				if (pGroup != NULL)
+					AppendBasePropToGroup(pGroup, pPropNode);
 			}
 		}
 	}
@@ -941,59 +989,79 @@ void IPropertySkinManagerImpl::AppendBasePropToGroup(IPropertyGroup *pGroup, Xml
 // 解析Windows.xml
 bool IPropertySkinManagerImpl::TranslateWindowsXml(FILE_ITEM *pWindowsXml)
 {
-	m_WndPropMap.clear();
+	m_AllWindowPropMap.clear();
 	if (pWindowsXml == NULL || pWindowsXml->pFileData == NULL)
 		return false;
 
 	XmlState xmlState = { 0 };
 	JabberXmlInitState(&xmlState);
 	int bytesParsed = JabberXmlParse(&xmlState, (char *)pWindowsXml->pFileData, pWindowsXml->dwSrcFileLen);
-	XmlNode *pWindowRoot  = JabberXmlGetChild(&xmlState.root, "layout");
-	if (pWindowRoot != NULL)
+	XmlNode *pWindowsRoot  = JabberXmlGetChild(&xmlState.root, "windows");
+	if (pWindowsRoot != NULL)
 	{
-		// 取得语言种类
-		char* psz_area = JabberXmlGetAttrValue(pWindowRoot, "area");
-		if (psz_area == NULL)
-			return false;
-		m_AreaType = (AREA_TYPE)atoi(psz_area);
-
-		int nItemCount = pWindowRoot->numChild;
+		int nItemCount = pWindowsRoot->numChild;
 		for (int i = 0; i < nItemCount; i++)
 		{
-			XmlNode* pPropType = JabberXmlGetNthChildWithoutTag(pWindowRoot, i);
-			if (pPropType != NULL && pPropType->name != NULL)
+			XmlNode* pWindowNode = JabberXmlGetNthChildWithoutTag(pWindowsRoot, i);
+			if (!GeneralCreateSubProp(pWindowNode, &m_AllWindowPropMap))
+				return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+
+	JabberXmlDestroyState(&xmlState);
+	return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 解析Windows.xml
+bool IPropertySkinManagerImpl::TranslateLayoutXml(FILE_ITEM *pLayoutXml)
+{
+	m_LayoutWindowVec.clear();
+	if (pLayoutXml == NULL || pLayoutXml->pFileData == NULL)
+		return false;
+
+	XmlState xmlState = { 0 };
+	JabberXmlInitState(&xmlState);
+	int bytesParsed = JabberXmlParse(&xmlState, (char *)pLayoutXml->pFileData, pLayoutXml->dwSrcFileLen);
+	XmlNode *pWindowsRoot  = JabberXmlGetChild(&xmlState.root, "layout");
+	if (pWindowsRoot != NULL)
+	{
+		char* psz_area = JabberXmlGetAttrValue(pWindowNode, "area");
+		char* psz_lastid = JabberXmlGetAttrValue(pWindowNode, "lastid");
+		if (psz_area == NULL || psz_lastid == NULL)
+			return;
+
+		AREA_TYPE areaType = (AREA_TYPE)atoi(psz_area);
+		SetArea(areaType);
+		m_nObjectIdInRes = atoi(psz_lastid);
+
+		int nItemCount = pWindowsRoot->numChild;
+		for (int i = 0; i < nItemCount; i++)
+		{
+			XmlNode* pWindowNode = JabberXmlGetNthChildWithoutTag(pWindowsRoot, i);
+			if (pWindowNode != NULL)
 			{
-				if (lstrcmpiA(pPropType->name, "window") == 0)
-				{
-					string strWndName = pPropType->name;
-					WND_PROP_MAP::iterator pWndItem = m_WndPropMap.find(strWndName);
-					if (pWndItem != m_WndPropMap.end())
-						return false;
+				char* psz_id = JabberXmlGetAttrValue(pWindowNode, SKIN_OBJECT_ID);
+				if (psz_id == NULL)
+					return;
 
-					IPropertyWindowImpl *pWndProp = new IPropertyWindowImpl;
+				string strObjId = psz_id;
+				WINDOW_PROP_MAP::iterator pWndItem = m_LayoutWindowVec.find(strObjId);
+				if (pWndItem != m_LayoutWindowVec.end())
+					continue;
 
-				}
+				IPropertyWindow* pOneWndLayoutProp = new IPropertyWindow;
+				if (pOneWndLayoutProp == NULL)
+					return false;
+				m_LayoutWindowVec.insert(pair<string, IPropertyWindow*>(strObjId, pOneWndLayoutProp));
 
-				//{
-				//	// 找到属性组
-				//	pOnePropMap = pTypeItem->second;
-				//}
-				//else
-				//{
-				//	// 创建属性组
-				//	pOnePropMap = new PROP_MAP;
-				//	if (pOnePropMap == NULL)
-				//		return false;
-
-				//	pOnePropMap->clear();
-				//	m_AllPropMap.insert(pair<string, PROP_MAP*>(strTypeName, pOnePropMap));
-				//}
-
-				//if (pOnePropMap == NULL)
-				//	return false;
-
-				//if (!GeneralCreateBaseProp((char*)strTypeName.c_str(), pPropType, pOnePropMap))
-				//	return false;
+				pOneWndLayoutProp->SetObjectId(psz_id);
+				if (!GeneralCreateWindowLayoutProp(pWindowNode, pOneWndLayoutProp->GetChildControlVec(), NULL))
+					return false;
 			}
 		}
 	}
@@ -1004,4 +1072,67 @@ bool IPropertySkinManagerImpl::TranslateWindowsXml(FILE_ITEM *pWindowsXml)
 
 	JabberXmlDestroyState(&xmlState);
 	return true;
+}
+
+bool IPropertySkinManagerImpl::GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, CHILD_CTRL_PROP_VEC* pChildCtrlVec, IPropertyControl* pParentProp)
+{
+	if (pXmlNode == NULL || pChildCtrlVec == NULL)
+		return false;
+
+	int nItemCount = pXmlNode->numChild;
+	for (int i = 0; i < nItemCount; i++)
+	{
+		XmlNode* pCtrlNode = JabberXmlGetNthChildWithoutTag(pXmlNode, i);
+		if (pCtrlNode != NULL)
+		{
+			char* psz_id = JabberXmlGetAttrValue(pCtrlNode, SKIN_OBJECT_ID);
+			if (psz_id == NULL)
+				return false;
+
+			IPropertyGroup* pCtrlPropGroup = FindControlPropGroup(psz_id);
+			if (pCtrlPropGroup == NULL)
+				continue;
+
+			IPropertyControl* pCtrlProp = new IPropertyControl;
+			if (pCtrlProp == NULL)
+				return false;
+
+			pCtrlProp->SetObjectId(psz_id);
+			pCtrlProp->SetControlBaseProp(pCtrlPropGroup);
+			pCtrlProp->SetParentProp(pParentProp);
+			pChildCtrlVec->push_back(pCtrlProp);
+
+			if (pCtrlNode->numChild > 0)
+				GeneralCreateWindowLayoutProp(pCtrlNode, pCtrlProp->GetChildControlVec(), pCtrlProp);
+		}
+	}
+
+	return true;
+}
+
+IPropertyGroup* IPropertySkinManagerImpl::FindControlPropGroup(char *pszObjectId)
+{
+	if (pszObjectId == NULL)
+		return NULL;
+
+	for (PROP_BASE_MAP::iterator pGroupItem = m_AllCtrlPropMap.begin(); pGroupItem != m_AllCtrlPropMap.end(); pGroupItem++)
+	{
+		PROP_BASE_ITEM* pGroup = pGroupItem->second;
+		if (pGroup != NULL)
+		{
+			string strObjId = pszObjectId;
+			PROP_BASE_ITEM::iterator pPropItem = pGroup->find(strObjId);
+			if (pPropItem == pGroup->end())
+				return NULL;
+			
+			IPropertyBase* pPropBase = (pGroupItem->second);
+			if (pPropBase == NULL)
+				return NULL;
+
+			IPropertyGroup* pFindGroup = dynamic_cast<IPropertyGroup*>(pPropBase);
+			return pFindGroup;
+		}
+	}
+
+	return NULL;
 }

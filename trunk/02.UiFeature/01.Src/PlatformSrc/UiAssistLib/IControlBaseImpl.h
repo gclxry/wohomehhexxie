@@ -3,7 +3,7 @@
 #include "..\..\Inc\IControlBase.h"
 #include "..\..\Inc\IWindowBase.h"
 #include "..\..\Inc\IUiEngine.h"
-#include "..\UiAssistLib\IPropertyControlImpl.h"
+#include "..\..\Inc\IPropertyControl.h"
 
 class IControlBaseImpl : public IControlBase
 {

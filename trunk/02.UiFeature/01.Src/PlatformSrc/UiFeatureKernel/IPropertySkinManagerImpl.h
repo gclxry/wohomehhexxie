@@ -7,22 +7,7 @@
 
 //////////////////////////////////////////////////////////////////////////
 // 资源属性队列
-// 一种属性的队列，如：font、string、image等，KEY：ObjectId
-typedef map<string, IPropertyBase*>				PROP_MAP;
-// 所有种类的属性的队列，KEY：属性类型名称，如：font
-typedef map<string, PROP_MAP*>					ALL_PROP_MAP;
 
-//////////////////////////////////////////////////////////////////////////
-// 控件属性队列
-// 一种控件的属性队列，如：Button、CheckBox等，KEY：ObjectId
-typedef PROP_MAP								CONTROL_PROP_MAP;
-// 所有控件种类的属性的队列，KEY：控件类型名称，如：Button
-typedef map<string, CONTROL_PROP_MAP*>			ALL_CONTROL_PROP_MAP;
-
-//////////////////////////////////////////////////////////////////////////
-// 窗口属性队列
-// KEY:窗口ID，所有窗口的管理器map
-typedef map<string, IPropertyWindow*>			WND_PROP_MAP;
 
 class IPropertySkinManagerImpl : public IPropertySkinManager
 {
@@ -57,16 +42,16 @@ private:
 	// Resource.xml相关
 	// 解析Resource.xml
 	bool TranslateResourceXml(FILE_ITEM *pResurceXml);
-	void ReleaseResourceXml();
+	void ReleasePropMap(PROP_BASE_MAP &PropMap);
 	void ReleaseBaseProp(IPropertyBase *pCtrlProp);
+	void ReleasePropMapItem(PROP_BASE_ITEM* pPropMapItem);
 	// 通用的从资源xml中创建属性
-	bool GeneralCreateBaseProp(char *pPropType, XmlNode* pXmlNode, PROP_MAP* pPropMap);
+	bool GeneralCreateBaseProp(char *pPropType, XmlNode* pXmlNode, PROP_BASE_ITEM* pPropMap);
 
 //////////////////////////////////////////////////////////////////////////
 	// Controls.xml 相关
 	bool TranslateControlsXml(FILE_ITEM *pControlsXml);
-	void ReleaseControlsXml();
-	bool GeneralCreateCtrlProp(char *pCtrlType, XmlNode* pXmlNode, CONTROL_PROP_MAP* pCtrlPropMap);
+	bool GeneralCreateSubProp(XmlNode* pXmlNode, PROP_BASE_ITEM* pCtrlPropMap);
 	void AppendBasePropToGroup(IPropertyGroup *pGroup, XmlNode* pXmlNode);
 
 //////////////////////////////////////////////////////////////////////////
@@ -76,16 +61,23 @@ private:
 
 //////////////////////////////////////////////////////////////////////////
 	// Layout.xml 相关
+	bool TranslateLayoutXml(FILE_ITEM *pLayoutXml);
+	bool GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, CHILD_CTRL_PROP_VEC* pChildCtrlVec, IPropertyControl* pParentProp);
+	IPropertyGroup* FindControlPropGroup(char *pszObjectId);
+	void ReleaseLayoutMap();
+	void ReleaseLayoutMapChildCtrlVec(CHILD_CTRL_PROP_VEC* pCtrlVec);
 
 private:
 	// 皮肤路径
 	string m_strSkinPath;
 	// 所有种类的属性的队列
-	ALL_PROP_MAP m_AllPropMap;
+	PROP_BASE_MAP m_AllPropMap;
 	// 所有控件种类的属性的队列，KEY：控件类型名称，如：Button
-	ALL_CONTROL_PROP_MAP m_AllCtrlPropMap;
+	PROP_BASE_MAP m_AllCtrlPropMap;
 	// 所有窗口的属性管理器map
-	WND_PROP_MAP m_WndPropMap;
+	PROP_BASE_ITEM m_AllWindowPropMap;
+	// 布局队列
+	WINDOW_PROP_MAP m_LayoutWindowVec;
 
 	// zip文件
 	IZipFileList *m_pZipFile;
