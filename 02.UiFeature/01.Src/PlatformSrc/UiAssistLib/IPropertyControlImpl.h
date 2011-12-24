@@ -54,7 +54,7 @@ public:
 	// 1. 创建空的属性列表
 	virtual bool CreateEmptyPropList();
 	// 2.从Builder中新创建一个控件，需要初始化属性的PropId
-	virtual bool InitPropIdByBuilder(const char* pszBaseId);
+	virtual bool InitObjectIdByBuilder(const char* pszBaseId);
 	// 2. 从xml文件中读取控件属性时，不需要初始化属性的PropId，PropId来源于xml文件
 	virtual bool ReadPropFromControlsXml(const char* pszControlId);
 	// 3. 创建Builder显示用的属性
@@ -67,6 +67,8 @@ protected:
 	IPropertyBase* CreateProperty(IPropertyGroup *pPropGroup, PROP_TYPE propType, char *pPropName, char *pPropInfo);
 
 private:
+	// 2.从Builder中新创建一个控件，需要初始化属性的PropId
+	void InitControlPropObjectId(GROUP_PROP_VEC *pPropList);
 
 private:
 	// 存储Builder可见可设置属性列表

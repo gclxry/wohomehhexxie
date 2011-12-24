@@ -96,7 +96,7 @@ public:
 	// 1. 创建空的属性列表
 	virtual bool CreateEmptyPropList() = 0;
 	// 2.从Builder中新创建一个控件，需要初始化属性的PropId
-	virtual bool InitPropIdByBuilder(const char* pszBaseId) = 0;
+	virtual bool InitObjectIdByBuilder(const char* pszBaseId) = 0;
 	// 2. 从xml文件中读取控件属性时，不需要初始化属性的PropId，PropId来源于xml文件
 	virtual bool ReadPropFromControlsXml(const char* pszControlId) = 0;
 	// 3. 创建Builder显示用的属性
