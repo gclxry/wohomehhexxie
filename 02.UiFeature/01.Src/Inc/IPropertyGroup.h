@@ -10,7 +10,6 @@ typedef vector<IPropertyBase*>		GROUP_PROP_VEC;
 struct GROUP_PROP
 {
 	//  Ù–‘√˚≥∆
-	int nPropId;
 	string strName;
 	string strPropInfo;
 };

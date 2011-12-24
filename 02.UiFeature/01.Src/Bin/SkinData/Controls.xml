@@ -1,18 +1,18 @@
 <controls>
 	<Button>
-		<item id ="" name="">
-			<group id="" name="base">
-				<bool id="8"/>
-				<int id="7"/>
-				<string id="2"/>
-				<combobox id="3"/>
-				<cursor id="5"/>
-				<font id="1"/>
-				<image id="4"/>
-				<color id="0"/>
-				<group name="第二组别">
-					<string id="-1"/>
-					<bool id="-1"/>
+		<item id ="">
+			<group objid="">
+				<bool objid="8"/>
+				<int objid="7"/>
+				<string objid="2"/>
+				<combobox objid="3"/>
+				<cursor objid="5"/>
+				<font objid="1"/>
+				<image objid="4"/>
+				<color objid="0"/>
+				<group objid="第二组别">
+					<string objid="-1"/>
+					<bool objid="-1"/>
 				</group>
 			</group>
 		</item>

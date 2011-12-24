@@ -5,6 +5,7 @@
 
 IPropertyString::IPropertyString()
 {
+	SetObjectType("string");
 	Clear();
 }
 
@@ -47,16 +48,16 @@ bool IPropertyString::ReadResourceXmlProperty(XmlNode* pXmlNode)
 	if (pXmlNode == NULL)
 		return false;
 
-	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_PROP_ID);
+	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_OBJECT_ID);
 	char* psz_name = JabberXmlGetAttrValue(pXmlNode, "name");
 	char* psz_counts = JabberXmlGetAttrValue(pXmlNode, "counts");
-	char* psz_default = JabberXmlGetAttrValue(pXmlNode, "default");
+	char* psz_default = JabberXmlGetAttrValue(pXmlNode, "defaultarea");
 	if (psz_id == NULL || psz_name == NULL || psz_counts == NULL || psz_default == NULL)
 		return false;
 
 	int nCtns = atoi(psz_counts);
 
-	m_StringProp.nPropId = atoi(psz_id);
+	SetObjectId((const char *)psz_id);
 	m_StringProp.strName = psz_name;
 	m_StringProp.nDefaultArea = (AREA_TYPE)atoi(psz_default);
 	if (m_StringProp.nDefaultArea <= AT_NONE || m_StringProp.nDefaultArea >= AT_LAST)

@@ -8,7 +8,6 @@
 struct COMBOBOX_PROP
 {
 	//  Ù–‘√˚≥∆
-	int nPropId;
 	string strName;
 	string strPropInfo;
 	int nSelect;

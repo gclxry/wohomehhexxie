@@ -47,6 +47,27 @@ void IZipFileListImpl::Clear()
 	m_ZipFileMap.clear();
 }
 
+void IZipFileListImpl::RemoveFile(FILE_ITEM *pRemove)
+{
+	if (m_ZipFileMap.size() <= 0 || pRemove == NULL)
+		return;
+
+	for (ZIP_FILE_MAP::iterator pZipItem = m_ZipFileMap.begin(); pZipItem != m_ZipFileMap.end(); pZipItem++)
+	{
+		FILE_ITEM* pZip = pZipItem->second;
+		if (pZip == pRemove)
+		{
+			SAFE_DELETE(pZip->pFileData);
+			SAFE_DELETE(pZip);
+			m_ZipFileMap.erase(pZipItem);
+			break;
+		}
+	}
+
+	if (m_ZipFileMap.size() <= 0)
+		m_ZipFileMap.clear();
+}
+
 // 初始化zip文件，pSrcFileDir：需要压缩的源文件目录
 bool IZipFileListImpl::InitWriteZip(char *pSrcFileDir, char *pSaveZipFile)
 {

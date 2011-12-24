@@ -1,35 +1,35 @@
 <resource>
 	<font>
-		<item id="1" name="Link.Normal">
+		<item objid="1" id="1" name="Link.Normal">
 			<logfont lfFaceName="宋体" lfHeight="3" lfWidth="4" lfEscapement="5" lfOrientation="3" lfWeight="2" lfItalic="1" lfUnderline="0" lfStrikeOut="1" lfCharSet="1" lfOutPrecision="2" lfClipPrecision="0" lfQuality="1" lfPitchAndFamily="1"/>
 			<mode color="1" VAligning="1" HAligning="2" ShowMode="1"/>
 		</item>
 	</font>
 	<string>
-		<item id="2" name="Link.Normal.string" counts="3" defaultarea="2" data0="超链接正常状态专用字体" area0="1" data1="sdfgsdg" area1="3" data2="3523452345" area2="4"/>
+		<item objid="2" name="Link.Normal.string" counts="3" defaultarea="2" data0="超链接正常状态专用字体" area0="1" data1="sdfgsdg" area1="3" data2="3523452345" area2="4"/>
 	</string>
 	<combobox>
-		<combobox id="3" name="01.UiTestDlg.g-base.combobox" counts="5" select="3" data0="ABC" data1="abc" data2="123" data3="YUI" data4="*(--)"/>
+		<combobox objid="3" name="01.UiTestDlg.g-base.combobox" counts="5" select="3" data0="ABC" data1="abc" data2="123" data3="YUI" data4="*(--)"/>
 	</combobox>
 	<image>
-		<item id="4" name="01.bk.normal" imageinzip="V5.Default.Menu.Bk.png">
+		<item objid="4" name="01.bk.normal" imageinzip="V5.Default.Menu.Bk.png">
 			<rectinimage left="0" top="10" right="100" bottom="200"/>
 			<jgg left="3" top="2" right="4" bottom="1" leftstretch="1" topstretch="1" rightstretch="1" bottomstretch="1" middlestretch="1"/>
 		</item>
 	</image>
 	<cursor>
-		<item id="5" name=""/>
+		<item objid="5" name=""/>
 	</cursor>
 	<color>
-		<item id="6" name=""/>
+		<item objid="6" name=""/>
 	</color>
 	<int>
-		<item id="7" name="" data="5000"/>
+		<item objid="7" name="" data="5000"/>
 	</int>
 	<bool>
-		<item id="8" name="" data="1"/>
+		<item objid="8" name="" data="1"/>
 	</bool>
 	<group>
-		<item id="9" name="明年的给力+带劲"/>
+		<item objid="9" name="明年的给力+带劲"/>
 	</group>
 </resource>

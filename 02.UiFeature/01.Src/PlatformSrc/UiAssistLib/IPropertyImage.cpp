@@ -5,7 +5,8 @@
 
 IPropertyImage::IPropertyImage()
 {
-	m_ImageProp.nPropId = 0;
+	SetObjectType("Image");
+
 	m_ImageProp.strName = "";
 	m_ImageProp.strPropInfo = "";
 	m_ImageProp.strZipFile = "";
@@ -48,7 +49,7 @@ bool IPropertyImage::ReadResourceXmlProperty(XmlNode* pXmlNode)
 	if (pXmlNode == NULL)
 		return false;
 
-	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_PROP_ID);
+	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_OBJECT_ID);
 	char* psz_name = JabberXmlGetAttrValue(pXmlNode, "name");
 	char* psz_imageinzip = JabberXmlGetAttrValue(pXmlNode, "imageinzip");
 	if (psz_id == NULL || psz_name == NULL || psz_imageinzip == NULL)
@@ -82,7 +83,7 @@ bool IPropertyImage::ReadResourceXmlProperty(XmlNode* pXmlNode)
 		psz_middlestretch == NULL)
 		return false;
 
-	m_ImageProp.nPropId = atoi(psz_id);
+	SetObjectId((const char *)psz_id);
 	m_ImageProp.strName = psz_name;
 	m_ImageProp.strZipFile = psz_imageinzip;
 

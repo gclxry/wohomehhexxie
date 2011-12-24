@@ -24,7 +24,6 @@ struct JGG_INFO
 // 图片属性
 struct IMAGE_PROP
 {
-	int nPropId;
 	string strName;
 	string strPropInfo;
 	// 在压缩文件中的文件名
