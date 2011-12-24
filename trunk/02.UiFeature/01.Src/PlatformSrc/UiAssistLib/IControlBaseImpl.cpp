@@ -5,11 +5,20 @@
 
 IControlBaseImpl::IControlBaseImpl(void)
 {
+	SetObjectType("ControlBase");
 	m_pUiEngine = NULL;
 	m_pParentWindowBase = NULL;
 	m_ChildCtrlsVec.clear();
 	m_bNeedRedraw = true;
 	m_bMouseHover = false;
+
+	IPropertyControlImpl *pCtrlProp = new IPropertyControlImpl;
+	if (pCtrlProp != NULL)
+	{
+		m_pCtrlProp = dynamic_cast<IPropertyControl*>(pCtrlProp);
+		if (m_pCtrlProp == NULL)
+			SAFE_DELETE(pCtrlProp);
+	}
 }
 
 IControlBaseImpl::~IControlBaseImpl(void)
@@ -19,7 +28,10 @@ IControlBaseImpl::~IControlBaseImpl(void)
 // 设置控件在下次绘制的时候是否需要进行重绘
 void IControlBaseImpl::SetNeedRedraw(bool bNeedRedraw)
 {
-	if (!m_CtrlProp.IsVisible())
+	if (m_pCtrlProp == NULL)
+		return;
+	
+	if (!m_pCtrlProp->IsVisible())
 	{
 		m_bNeedRedraw = false;
 		return;
@@ -68,17 +80,16 @@ CHILD_CTRLS_VEC* IControlBaseImpl::GetChildCtrlsVec()
 // 取得属性
 IPropertyControl* IControlBaseImpl::GetControlBaseProp()
 {
-	IPropertyControl* pProp = dynamic_cast<IPropertyControl*>(&m_CtrlProp);
-	return pProp;
+	return m_pCtrlProp;
 }
 
 // 绘制当前控件，参数为父窗口/父控件的内存DC
 void IControlBaseImpl::OnPaintControl(CMemoryDC &WndMemDc)
 {
-	if (WndMemDc.GetSafeHdc() == NULL && m_pUiEngine != NULL)
+	if (m_pCtrlProp == NULL || WndMemDc.GetSafeHdc() == NULL && m_pUiEngine != NULL)
 		return;
 
-	RECT RectInWnd = m_CtrlProp.GetCtrlInWindowRect();
+	RECT RectInWnd = m_pCtrlProp->GetCtrlInWindowRect();
 	m_CtrlMemDc.Create(RECT_WIDTH(RectInWnd), RECT_HEIGHT(RectInWnd), 0, false, m_bNeedRedraw);
 	if (m_CtrlMemDc.GetBits() == NULL)
 		return;

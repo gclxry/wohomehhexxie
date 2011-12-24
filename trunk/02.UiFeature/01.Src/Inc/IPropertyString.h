@@ -9,7 +9,6 @@ typedef map<AREA_TYPE, string>		STRING_MAP;
 struct STRING_PROP
 {
 	//  Ù–‘√˚≥∆
-	int nPropId;
 	string strName;
 	string strPropInfo;
 	string strDefaultString;

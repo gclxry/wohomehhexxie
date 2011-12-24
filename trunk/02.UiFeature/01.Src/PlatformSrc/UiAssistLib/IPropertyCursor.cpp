@@ -5,6 +5,7 @@
 
 IPropertyCursor::IPropertyCursor()
 {
+	SetObjectType("cursor");
 }
 
 IPropertyCursor::~IPropertyCursor()

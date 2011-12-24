@@ -5,6 +5,7 @@
 
 IPropertyColor::IPropertyColor()
 {
+	SetObjectType("color");
 }
 
 IPropertyColor::~IPropertyColor()

@@ -23,6 +23,7 @@ typedef vector<string>				NO_COMPRESS_FILE_VEC;
 class IZipFileList
 {
 public:
+	virtual void RemoveFile(FILE_ITEM *pRemove) = 0;
 
 //// 读取zip文件 //////////////////////////////////////////////////////////////////////
 	// 读取zip文件

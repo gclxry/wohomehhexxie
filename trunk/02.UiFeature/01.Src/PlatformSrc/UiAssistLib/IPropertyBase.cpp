@@ -5,6 +5,7 @@
 
 IPropertyBase::IPropertyBase()
 {
+	SetObjectType("PropertyBase");
 }
 
 IPropertyBase::~IPropertyBase()

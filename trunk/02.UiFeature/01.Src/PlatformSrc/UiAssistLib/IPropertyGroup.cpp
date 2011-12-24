@@ -5,7 +5,7 @@
 
 IPropertyGroup::IPropertyGroup()
 {
-	m_GroupProp.nPropId = 0;
+	SetObjectType("group");
 	m_GroupProp.strName = "";
 	m_GroupProp.strPropInfo = "";
 	m_PropVec.clear();
@@ -37,12 +37,12 @@ bool IPropertyGroup::ReadResourceXmlProperty(XmlNode* pXmlNode)
 	if (pXmlNode == NULL)
 		return false;
 
-	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_PROP_ID);
+	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_OBJECT_ID);
 	char* psz_name = JabberXmlGetAttrValue(pXmlNode, "name");
 	if (psz_id == NULL || psz_name == NULL)
 		return false;
 
-	m_GroupProp.nPropId = atoi(psz_id);
+	SetObjectId((const char *)psz_id);
 	m_GroupProp.strName = psz_name;
 
 	return true;

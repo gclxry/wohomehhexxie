@@ -1,14 +1,14 @@
-<layout area="1">
-	<window type="Window" id="Window1">
-		<ctrl type="UiForm" id="Window1.UiForm9">
-			<ctrl type="Button" id="Window1.Button2"/>
-			<ctrl type="CheckBox" id="Window1.CheckBox3"/>
-			<ctrl type="Button" id="Window1.Button4"/>
+<layout area="1" lastid="100">
+	<window type="Window" objid="Window1">
+		<ctrl type="UiForm" objid="Window1.UiForm9">
+			<ctrl type="Button" objid="Window1.Button2"/>
+			<ctrl type="CheckBox" objid="Window1.CheckBox3"/>
+			<ctrl type="Button" objid="Window1.Button4"/>
 		</ctrl>
-		<ctrl type="UiForm" id="Window1.UiForm5">
-			<ctrl type="Button" id="Window1.Button6"/>
-			<ctrl type="CheckBox" id="Window1.CheckBox7"/>
-			<ctrl type="Button" id="Window1.Button8"/>
+		<ctrl type="UiForm" objid="Window1.UiForm5">
+			<ctrl type="Button" objid="Window1.Button6"/>
+			<ctrl type="CheckBox" objid="Window1.CheckBox7"/>
+			<ctrl type="Button" objid="Window1.Button8"/>
 		</ctrl>
 	</window>
 </layout>

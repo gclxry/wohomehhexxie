@@ -5,7 +5,8 @@
 
 IPropertyFont::IPropertyFont()
 {
-	m_FontProp.nPropId = 0;
+	SetObjectType("font");
+
 	m_FontProp.strName = "";
 	m_FontProp.strPropInfo = "";
 	m_FontProp.FontColor = 0;
@@ -65,7 +66,7 @@ bool IPropertyFont::ReadResourceXmlProperty(XmlNode* pXmlNode)
 	if (pXmlNode == NULL)
 		return false;
 
-	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_PROP_ID);
+	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_OBJECT_ID);
 	char* psz_name = JabberXmlGetAttrValue(pXmlNode, "name");
 	if (psz_id == NULL || psz_name == NULL)
 		return false;
@@ -103,7 +104,7 @@ bool IPropertyFont::ReadResourceXmlProperty(XmlNode* pXmlNode)
 		psz_VAligning == NULL || psz_HAligning == NULL || psz_ShowMode == NULL)
 		return false;
 
-	m_FontProp.nPropId = atoi(psz_id);
+	SetObjectId((const char *)psz_id);
 	m_FontProp.strName = psz_name;
 
 	// logfont

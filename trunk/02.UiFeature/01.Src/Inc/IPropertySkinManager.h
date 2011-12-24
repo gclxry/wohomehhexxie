@@ -11,12 +11,12 @@ public:
 	// 初始化Window皮肤
 	virtual IPropertyWindow* InitWindowSkin(const char *pszSkinPath, const char *pszWndName) = 0;
 	// 查找指定的属性
-	virtual IPropertyBase* FindProperty(PROP_TYPE propType, const char* pszPropId) = 0;
-	virtual IPropertyBase* FindProperty(const char* pszPropType, const char* pszPropId) = 0;
+	virtual IPropertyBase* FindBaseProperty(PROP_TYPE propType, const char* pszPropId) = 0;
+	virtual IPropertyBase* FindBaseProperty(const char* pszPropType, const char* pszPropId) = 0;
 	// 设置显示的语言种类
 	virtual void SetArea(AREA_TYPE areaType) = 0;
 	// 创建一个属性，并将次属性放入队列
-	virtual IPropertyBase* CreateEmptyProperty(PROP_TYPE propType) = 0;
+	virtual IPropertyBase* CreateEmptyBaseProp(PROP_TYPE propType) = 0;
 	// 取得ID号
 	virtual int GetNewId() = 0;
 };

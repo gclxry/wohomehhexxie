@@ -1,34 +1,34 @@
 <windows>
-	<window id="Window1">
+	<window objid="Window1" id="1">
 		<group name="base">
-			<string id="Window1.string1"/>
-			<bool id="Window1.bool2"/>
-			<int id="Window1.int3"/>
-			<string id="2"/>
-			<combobox id="3"/>
-			<cursor id="5"/>
-			<font id="1"/>
-			<image id="4"/>
-			<color id="0"/>
+			<string objid="Window1.string1"/>
+			<bool objid="Window1.bool2"/>
+			<int objid="Window1.int3"/>
+			<string objid="2"/>
+			<combobox objid="3"/>
+			<cursor objid="5"/>
+			<font objid="1"/>
+			<image objid="4"/>
+			<color objid="0"/>
 			<group name="第二组别">
-				<string id="-1"/>
-				<bool id="-1"/>
+				<string objid="-1"/>
+				<bool objid="-1"/>
 			</group>
 		</group>
 	</window>
-	<window id="Window.2">
+	<window objid="Window.2">
 		<group name="base">
-			<bool id="8"/>
-			<int id="7"/>
-			<string id="2"/>
-			<combobox id="3"/>
-			<cursor id="5"/>
-			<font id="1"/>
-			<image id="4"/>
-			<color id="0"/>
+			<bool objid="8"/>
+			<int objid="7"/>
+			<string objid="2"/>
+			<combobox objid="3"/>
+			<cursor objid="5"/>
+			<font objid="1"/>
+			<image objid="4"/>
+			<color objid="0"/>
 			<group name="第二组别">
-				<string id="-1"/>
-				<bool id="-1"/>
+				<string objid="-1"/>
+				<bool objid="-1"/>
 			</group>
 		</group>
 	</window>

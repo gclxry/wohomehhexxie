@@ -5,6 +5,7 @@
 
 IPropertyComboBox::IPropertyComboBox()
 {
+	SetObjectType("combobox");
 	Clear();
 }
 
@@ -15,7 +16,6 @@ IPropertyComboBox::~IPropertyComboBox()
 
 void IPropertyComboBox::Clear()
 {
-	m_ComboBoxPro.nPropId = 0;
 	m_ComboBoxPro.strName = "";
 	m_ComboBoxPro.strPropInfo = "";
 	m_ComboBoxPro.nSelect = -1;
@@ -37,7 +37,7 @@ bool IPropertyComboBox::ReadResourceXmlProperty(XmlNode* pXmlNode)
 	if (pXmlNode == NULL)
 		return false;
 
-	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_PROP_ID);
+	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_OBJECT_ID);
 	char* psz_name = JabberXmlGetAttrValue(pXmlNode, "name");
 	char* psz_counts = JabberXmlGetAttrValue(pXmlNode, "counts");
 	char* psz_select = JabberXmlGetAttrValue(pXmlNode, "select");
@@ -46,7 +46,7 @@ bool IPropertyComboBox::ReadResourceXmlProperty(XmlNode* pXmlNode)
 
 	int nCtns = atoi(psz_counts);
 
-	m_ComboBoxPro.nPropId = atoi(psz_id);
+	SetObjectId((const char *)psz_id);
 	m_ComboBoxPro.strName = psz_name;
 	m_ComboBoxPro.nSelect = atoi(psz_select);
 	if (m_ComboBoxPro.nSelect < 0 || m_ComboBoxPro.nSelect >= nCtns)

@@ -10,6 +10,8 @@ public:
 
 	static IZipFileListImpl* GetInstance();
 
+	virtual void RemoveFile(FILE_ITEM *pRemove);
+
 //// 读取zip文件 //////////////////////////////////////////////////////////////////////
 	// 读取zip文件
 	virtual bool ReadZipFile(const char *pZipFilePath);

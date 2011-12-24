@@ -48,7 +48,7 @@ private:
 	// 绘图引擎
 	IUiEngine *m_pUiEngine;
 	// 控件属性
-	IPropertyControlImpl m_CtrlProp;
+	IPropertyControl *m_pCtrlProp;
 	// 鼠标Hover状态
 	bool m_bMouseHover;
 };

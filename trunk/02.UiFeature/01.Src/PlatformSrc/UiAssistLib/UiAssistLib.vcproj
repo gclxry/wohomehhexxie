@@ -209,141 +209,121 @@
 		<Filter
 			Name="02.各种属性"
 			>
+			<File
+				RelativePath=".\IPropertyBase.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Inc\IPropertyBase.h"
+				>
+			</File>
 			<Filter
-				Name="01.一个Control的属性"
+				Name="Bool"
 				>
 				<File
-					RelativePath="..\..\Inc\IPropertyControl.h"
+					RelativePath=".\IPropertyBool.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\IPropertyControlImpl.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\IPropertyControlImpl.h"
+					RelativePath="..\..\Inc\IPropertyBool.h"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="02.可设置属性"
+				Name="Color"
 				>
 				<File
-					RelativePath=".\IPropertyBase.cpp"
+					RelativePath=".\IPropertyColor.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\Inc\IPropertyBase.h"
+					RelativePath="..\..\Inc\IPropertyColor.h"
 					>
 				</File>
-				<Filter
-					Name="String"
+			</Filter>
+			<Filter
+				Name="CombobBox"
+				>
+				<File
+					RelativePath=".\IPropertyComboBox.cpp"
 					>
-					<File
-						RelativePath=".\IPropertyString.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Inc\IPropertyString.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="Int"
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyComboBox.h"
 					>
-					<File
-						RelativePath=".\IPropertyInt.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Inc\IPropertyInt.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="Bool"
+				</File>
+			</Filter>
+			<Filter
+				Name="Cursor"
+				>
+				<File
+					RelativePath=".\IPropertyCursor.cpp"
 					>
-					<File
-						RelativePath=".\IPropertyBool.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Inc\IPropertyBool.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="Color"
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyCursor.h"
 					>
-					<File
-						RelativePath=".\IPropertyColor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Inc\IPropertyColor.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="CombobBox"
+				</File>
+			</Filter>
+			<Filter
+				Name="Font"
+				>
+				<File
+					RelativePath=".\IPropertyFont.cpp"
 					>
-					<File
-						RelativePath=".\IPropertyComboBox.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Inc\IPropertyComboBox.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="Cursor"
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyFont.h"
 					>
-					<File
-						RelativePath=".\IPropertyCursor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Inc\IPropertyCursor.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="Font"
+				</File>
+			</Filter>
+			<Filter
+				Name="Image"
+				>
+				<File
+					RelativePath=".\IPropertyImage.cpp"
 					>
-					<File
-						RelativePath=".\IPropertyFont.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Inc\IPropertyFont.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="Image"
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyImage.h"
 					>
-					<File
-						RelativePath=".\IPropertyImage.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Inc\IPropertyImage.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="属性组【Group】"
+				</File>
+			</Filter>
+			<Filter
+				Name="Int"
+				>
+				<File
+					RelativePath=".\IPropertyInt.cpp"
 					>
-					<File
-						RelativePath=".\IPropertyGroup.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Inc\IPropertyGroup.h"
-						>
-					</File>
-				</Filter>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyInt.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="String"
+				>
+				<File
+					RelativePath=".\IPropertyString.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyString.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="属性组【Group】"
+				>
+				<File
+					RelativePath=".\IPropertyGroup.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyGroup.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -388,6 +368,22 @@
 					RelativePath=".\IControlBaseImpl.h"
 					>
 				</File>
+				<Filter
+					Name="01.一个Control的属性"
+					>
+					<File
+						RelativePath="..\..\Inc\IPropertyControl.h"
+						>
+					</File>
+					<File
+						RelativePath=".\IPropertyControlImpl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\IPropertyControlImpl.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<File
