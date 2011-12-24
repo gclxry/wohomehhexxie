@@ -376,6 +376,18 @@
 			<Filter
 				Name="02.¿Ø¼þ»ùÀà"
 				>
+				<File
+					RelativePath="..\..\Inc\IControlBase.h"
+					>
+				</File>
+				<File
+					RelativePath=".\IControlBaseImpl.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\IControlBaseImpl.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<File

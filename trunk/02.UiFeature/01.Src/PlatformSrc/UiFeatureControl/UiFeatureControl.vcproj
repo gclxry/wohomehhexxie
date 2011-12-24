@@ -208,22 +208,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="03.控件基类"
-			>
-			<File
-				RelativePath="..\..\Inc\IControlBase.h"
-				>
-			</File>
-			<File
-				RelativePath=".\IControlBaseImpl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\IControlBaseImpl.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="其他"
 			>
 			<File
