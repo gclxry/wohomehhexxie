@@ -239,18 +239,58 @@ bool IPropertyControlImpl::CreateEmptyPropList()
 }
 
 // 2.从Builder中新创建一个控件，需要初始化属性的PropId
-bool IPropertyControlImpl::InitPropIdByBuilder(const char* pszBaseId)
+bool IPropertyControlImpl::InitObjectIdByBuilder(const char* pszBaseId)
 {
 	if (pszBaseId == NULL || m_pSkinPropMgr == NULL || m_pBaseCtrl == NULL || m_pBaseCtrl->GetObjectType() == NULL)
 		return false;
 
+	string strCtrlType = m_pBaseCtrl->GetObjectType();
+	if (strCtrlType.size() <= 0)
+		return false;
+
+	// 设置控件自身的ObjectId
+	int nId = m_pSkinPropMgr->GetNewId();
 	char szId[1024];
 	memset(szId, 0, 1024);
-
-	int nId = m_pSkinPropMgr->GetNewId();
-	sprintf_s(szId, 1023, "%s.%s%d", pszBaseId, m_pBaseCtrl->GetObjectType(), nId);
+	sprintf_s(szId, 1023, "%s.%s%d", pszBaseId, strCtrlType.c_str(), nId);
 	SetObjectType(szId);
+
+	// 循环设置属性的ID
+	InitControlPropObjectId(&m_ControlPropList);
+
 	return true;
+}
+
+void IPropertyControlImpl::InitControlPropObjectId(GROUP_PROP_VEC *pPropList)
+{
+	if (pPropList == NULL || m_pSkinPropMgr == NULL || m_pBaseCtrl == NULL)
+		return;
+
+	string strCtrlType = m_pBaseCtrl->GetObjectType();
+	if (strCtrlType.size() <= 0)
+		return;
+
+	char szId[1024];
+	for (GROUP_PROP_VEC::iterator pPropItem = pPropList->begin(); pPropItem != pPropList->end(); pPropItem++)
+	{
+		IPropertyBase* pProp = *pPropItem;
+		if (pProp == NULL)
+			continue;
+
+		string strTypeName = pProp->GetObjectType();
+
+		memset(szId, 0, 1024);
+		int nId = m_pSkinPropMgr->GetNewId();
+		sprintf_s(szId, 1023, "%s.%s%d", strCtrlType.c_str(), strTypeName.c_str(), nId);
+		pProp->SetObjectType(szId);
+
+		if (pProp->GetPropType() == PT_GROUP)
+		{
+			IPropertyGroup *pGroup = dynamic_cast<IPropertyGroup*>(pProp);
+			if (pGroup != NULL)
+				InitControlPropObjectId(pGroup->GetPropVec());
+		}
+	}
 }
 
 // 2. 从xml文件填充控件属性
