@@ -1,10 +1,10 @@
 
 #include "StdAfx.h"
-#include "..\..\Inc\IPropertyControlInWindow.h"
+#include "..\..\Inc\IPropertyControlManager.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IControlBase.h"
 
-IPropertyControlInWindow::IPropertyControlInWindow(void)
+IPropertyControlManager::IPropertyControlManager(void)
 {
 	SetObjectType("PropertyControl");
 	m_pBaseCtrl = NULL;
@@ -22,72 +22,72 @@ IPropertyControlInWindow::IPropertyControlInWindow(void)
 	m_bDragCtrl = false;
 }
 
-IPropertyControlInWindow::~IPropertyControlInWindow(void)
+IPropertyControlManager::~IPropertyControlManager(void)
 {
 }
 
-void IPropertyControlInWindow::SetParentPropertyControl(IPropertyControlInWindow *pParent)
+void IPropertyControlManager::SetParentPropertyControl(IPropertyControlManager *pParent)
 {
 	if (pParent != NULL)
 		m_pParentPropertyControl = pParent;
 }
 
-IPropertyControlInWindow* IPropertyControlInWindow::GetParentPropertyControl()
+IPropertyControlManager* IPropertyControlManager::GetParentPropertyControl()
 {
 	return m_pParentPropertyControl;
 }
 
-void IPropertyControlInWindow::SetPropertySkinManager(IPropertySkinManager *pMgr)
+void IPropertyControlManager::SetPropertySkinManager(IPropertySkinManager *pMgr)
 {
 	m_pSkinPropMgr = pMgr;
 }
 
 // 可用属性
-void IPropertyControlInWindow::SetEnable(bool bEnable)
+void IPropertyControlManager::SetEnable(bool bEnable)
 {
 	m_bEnable = bEnable;
 }
 
-bool IPropertyControlInWindow::IsEnable()
+bool IPropertyControlManager::IsEnable()
 {
 	return m_bEnable;
 }
 
 // 设置附属控件
-void IPropertyControlInWindow::SetControlBase(IControlBase *pCtrl)
+void IPropertyControlManager::SetControlBase(IControlBase *pCtrl)
 {
 	m_pBaseCtrl = pCtrl;
 }
 
-IControlBase* IPropertyControlInWindow::GetControlBase()
+IControlBase* IPropertyControlManager::GetControlBase()
 {
 	return m_pBaseCtrl;
 }
 
 // 可见属性
-void IPropertyControlInWindow::SetVisible(bool bVisible)
+void IPropertyControlManager::SetVisible(bool bVisible)
 {
 	m_bVisible = bVisible;
 }
 
-bool IPropertyControlInWindow::IsVisible()
+bool IPropertyControlManager::IsVisible()
 {
 	return m_bVisible;
 }
 
 // 是否接受鼠标消息
-void IPropertyControlInWindow::SetReceiveMouseMessage(bool bIsReceive)
+void IPropertyControlManager::SetReceiveMouseMessage(bool bIsReceive)
 {
 	m_bIsReceiveMouseMsg = bIsReceive;
 }
 
-bool IPropertyControlInWindow::GetReceiveMouseMessage()
+bool IPropertyControlManager::GetReceiveMouseMessage()
 {
 	return m_bIsReceiveMouseMsg;
 }
 
 // 控件显示位置和大小，这个位置是相对于附着的窗口的
-void IPropertyControlInWindow::SetCtrlInWindowRect(RECT CtrlWndRct)
+void IPropertyControlManager::SetCtrlInWindowRect(RECT CtrlWndRct)
 {
 	m_RectInWindow = CtrlWndRct;
 	int nWidth = RECT_WIDTH(m_RectInWindow);
@@ -174,18 +174,18 @@ void IPropertyControlInWindow::SetCtrlInWindowRect(RECT CtrlWndRct)
 	}
 }
 
-RECT IPropertyControlInWindow::GetCtrlInWindowRect()
+RECT IPropertyControlManager::GetCtrlInWindowRect()
 {
 	return m_RectInWindow;
 }
 
-RECT IPropertyControlInWindow::GetCtrlInControlRect()
+RECT IPropertyControlManager::GetCtrlInControlRect()
 {
 	return m_RectInParentCtrl;
 }
 
 // 取得控件的大小
-RECT IPropertyControlInWindow::GetCtrlRect()
+RECT IPropertyControlManager::GetCtrlRect()
 {
 	RECT CtrlRct;
 	INIT_RECT(CtrlRct);
@@ -195,41 +195,41 @@ RECT IPropertyControlInWindow::GetCtrlRect()
 }
 
 // 相对于父控件的布局信息
-void IPropertyControlInWindow::SetLayout(CONTROL_LAYOUT_INFO &cliLayoutInfo)
+void IPropertyControlManager::SetLayout(CONTROL_LAYOUT_INFO &cliLayoutInfo)
 {
 	m_LayoutInfo = cliLayoutInfo;
 }
 
-CONTROL_LAYOUT_INFO IPropertyControlInWindow::GetLayout()
+CONTROL_LAYOUT_INFO IPropertyControlManager::GetLayout()
 {
 	return m_LayoutInfo;
 }
 
 // 控件名称，唯一识别窗口的标志
-void IPropertyControlInWindow::SetName(char *pCtrlName)
+void IPropertyControlManager::SetName(char *pCtrlName)
 {
 	if (pCtrlName != NULL)
 		m_strCtrlName = pCtrlName;
 }
 
-const char* IPropertyControlInWindow::GetName()
+const char* IPropertyControlManager::GetName()
 {
 	return m_strCtrlName.c_str();
 }
 
 // 拖动控件属性
-void IPropertyControlInWindow::SetDragControl(bool bDrag)
+void IPropertyControlManager::SetDragControl(bool bDrag)
 {
 	m_bDragCtrl = bDrag;
 }
 
-bool IPropertyControlInWindow::GetDragControl()
+bool IPropertyControlManager::GetDragControl()
 {
 	return m_bDragCtrl;
 }
 
 // 1. 创建空的属性列表
-bool IPropertyControlInWindow::CreateEmptyPropList()
+bool IPropertyControlManager::CreateEmptyPropList()
 {
 	m_ControlPropList.clear();
 
@@ -252,7 +252,7 @@ bool IPropertyControlInWindow::CreateEmptyPropList()
 }
 
 // 2.从Builder中新创建一个控件，需要初始化属性的PropId
-bool IPropertyControlInWindow::InitObjectIdByBuilder(const char* pszBaseId)
+bool IPropertyControlManager::InitObjectIdByBuilder(const char* pszBaseId)
 {
 	if (pszBaseId == NULL || m_pSkinPropMgr == NULL || m_pBaseCtrl == NULL || m_pBaseCtrl->GetObjectType() == NULL)
 		return false;
@@ -274,7 +274,7 @@ bool IPropertyControlInWindow::InitObjectIdByBuilder(const char* pszBaseId)
 	return true;
 }
 
-void IPropertyControlInWindow::InitControlPropObjectId(GROUP_PROP_VEC *pPropList)
+void IPropertyControlManager::InitControlPropObjectId(GROUP_PROP_VEC *pPropList)
 {
 	if (pPropList == NULL || m_pSkinPropMgr == NULL || m_pBaseCtrl == NULL)
 		return;
@@ -307,19 +307,19 @@ void IPropertyControlInWindow::InitControlPropObjectId(GROUP_PROP_VEC *pPropList
 }
 
 // 2. 从xml文件填充控件属性
-bool IPropertyControlInWindow::ReadPropFromControlsXml(const char* pszControlId)
+bool IPropertyControlManager::ReadPropFromControlsXml(const char* pszControlId)
 {
 	return true;
 }
 
 // 3. 创建Builder显示用的属性
-bool IPropertyControlInWindow::CreateBuilderShowPropList()
+bool IPropertyControlManager::CreateBuilderShowPropList()
 {
 	return true;
 }
 
 // 创建一个属性
-IPropertyBase* IPropertyControlInWindow::CreateProperty(IPropertyGroup *pPropGroup, PROP_TYPE propType, char *pPropName, char *pPropInfo)
+IPropertyBase* IPropertyControlManager::CreateProperty(IPropertyGroup *pPropGroup, PROP_TYPE propType, char *pPropName, char *pPropInfo)
 {
 	if (m_pSkinPropMgr == NULL)
 		return NULL;

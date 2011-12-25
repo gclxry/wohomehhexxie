@@ -4,15 +4,59 @@
 
 IPropertyWindowManagerImpl::IPropertyWindowManagerImpl(void)
 {
+	m_bDragWindow = false;
+	m_bCanFullScreen = false;
+	m_bIsFullScreen = false;
+	m_strWndName = "";
 }
 
 IPropertyWindowManagerImpl::~IPropertyWindowManagerImpl(void)
 {
 }
 
+// 窗口名称
+void IPropertyWindowManagerImpl::SetWindowName(char *pszWndName)
+{
+	if (pszWndName != NULL)
+		m_strWndName = pszWndName;
+}
 
-// 创建属性过程
-// 1. 创建属性的记录参数
-// 2. 设置属性的默认值
-// 3. 创建用于显示的属性值
-// 4. 设置显示用的属性
+const char * IPropertyWindowManagerImpl::GetWindowName()
+{
+	return m_strWndName.c_str();
+}
+
+// 是否支持全窗口点击移动
+void IPropertyWindowManagerImpl::SetDragWindow(bool bDrag)
+{
+	m_bDragWindow = bDrag;
+}
+
+bool IPropertyWindowManagerImpl::GetDragWindow()
+{
+	return m_bDragWindow;
+}
+
+// 是否最大化
+void IPropertyWindowManagerImpl::SetCanFullScreen(bool bCanFull)
+{
+	m_bCanFullScreen = bCanFull;
+}
+
+bool IPropertyWindowManagerImpl::IsCanFullScreen()
+{
+	return m_bCanFullScreen;
+}
+
+void IPropertyWindowManagerImpl::SetFullScreen(bool bFull)
+{
+	if (m_bCanFullScreen)
+		m_bIsFullScreen = bFull;
+	else
+		m_bIsFullScreen = false;
+}
+
+bool IPropertyWindowManagerImpl::IsFullScreen()
+{
+	return m_bIsFullScreen;
+}
