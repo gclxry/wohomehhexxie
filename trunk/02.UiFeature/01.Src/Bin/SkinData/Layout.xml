@@ -2,13 +2,13 @@
 	<window objid="Window1">
 		<ctrl objid="Window1.UiForm9">
 			<ctrl objid="Window1.Button2"/>
-			<ctrl objid="Window1.CheckBox3"/>
-			<ctrl objid="Window1.Button4"/>
+			<ctrl objid="Window1.UiForm9"/>
+			<ctrl objid="Window1.Button2"/>
 		</ctrl>
-		<ctrl objid="Window1.UiForm5">
-			<ctrl objid="Window1.Button6"/>
-			<ctrl objid="Window1.CheckBox7"/>
-			<ctrl objid="Window1.Button8"/>
+		<ctrl objid="Window1.UiForm9">
+			<ctrl objid="Window1.Button2"/>
+			<ctrl objid="Window1.UiForm9"/>
+			<ctrl objid="Window1.Button2"/>
 		</ctrl>
 	</window>
 </layout>

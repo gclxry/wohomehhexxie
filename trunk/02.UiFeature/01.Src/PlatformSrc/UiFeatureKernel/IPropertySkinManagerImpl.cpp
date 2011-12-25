@@ -657,7 +657,7 @@ bool IPropertySkinManagerImpl::TranslateResourceXml(FILE_ITEM *pResurceXml)
 	XmlState xmlState = { 0 };
 	JabberXmlInitState(&xmlState);
 	int bytesParsed = JabberXmlParse(&xmlState, (char *)pResurceXml->pFileData, pResurceXml->dwSrcFileLen);
-	XmlNode *pResurceRoot  = JabberXmlGetChild(&xmlState.root, "resource");
+	XmlNode *pResurceRoot = JabberXmlGetChild(&xmlState.root, "resource");
 	if (pResurceRoot != NULL)
 	{
 		int nItemCount = pResurceRoot->numChild;
@@ -713,7 +713,7 @@ bool IPropertySkinManagerImpl::GeneralCreateBaseProp(char *pPropType, XmlNode* p
 		XmlNode* pItem = JabberXmlGetNthChildWithoutTag(pXmlNode, i);
 		if (pItem != NULL)
 		{
-			char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_OBJECT_ID);
+			char* psz_id = JabberXmlGetAttrValue(pItem, SKIN_OBJECT_ID);
 			if (psz_id == NULL)
 				return false;
 
@@ -911,9 +911,12 @@ bool IPropertySkinManagerImpl::GeneralCreateSubProp(XmlNode* pXmlNode, PROP_BASE
 	if (pFindGroupItem != pCtrlPropMap->end())
 		return false;
 
+	// 创建一个窗口或者一个控件的所有属性节点的根节点：属性组
 	IPropertyGroup* pCtrlProp = new IPropertyGroup;
 	if (pCtrlProp == NULL)
 		return false;
+	pCtrlProp->SetObjectId(psz_id);
+	pCtrlProp->SetObjectType(PROP_ROOT_TYPE_NAME);
 
 	IPropertyBase* pBaseProp = dynamic_cast<IPropertyBase*>(pCtrlProp);
 	if (pBaseProp == NULL)
@@ -921,8 +924,6 @@ bool IPropertySkinManagerImpl::GeneralCreateSubProp(XmlNode* pXmlNode, PROP_BASE
 		SAFE_DELETE(pCtrlProp);
 		return false;
 	}
-	pCtrlProp->SetObjectId(psz_id);
-	pBaseProp->SetObjectType("Window_Or_Control_Property_Head");
 	pCtrlPropMap->insert(pair<string, IPropertyBase*>(strObjId, pBaseProp));
 
 	int nPropCount = pXmlNode->numChild;
@@ -937,14 +938,17 @@ bool IPropertySkinManagerImpl::GeneralCreateSubProp(XmlNode* pXmlNode, PROP_BASE
 
 			IPropertyBase* pFindBaseProp = FindBaseProperty(pPropNode->name, psz_id);
 			if (pFindBaseProp == NULL)
-				continue;
+				return false;
 
 			pCtrlProp->AppendProperty(pFindBaseProp);
 			if (pFindBaseProp->GetPropType() == PT_GROUP)
 			{
-				IPropertyGroup *pGroup = dynamic_cast<IPropertyGroup*>(pFindBaseProp);
-				if (pGroup != NULL)
-					AppendBasePropToGroup(pGroup, pPropNode);
+				IPropertyGroup *pNewGroup = dynamic_cast<IPropertyGroup*>(pFindBaseProp);
+				if (pNewGroup == NULL)
+					return false;
+
+				if (!AppendBasePropToGroup(pNewGroup, pPropNode))
+					return false;
 			}
 		}
 	}
@@ -952,42 +956,39 @@ bool IPropertySkinManagerImpl::GeneralCreateSubProp(XmlNode* pXmlNode, PROP_BASE
 	return true;
 }
 
-void IPropertySkinManagerImpl::AppendBasePropToGroup(IPropertyGroup *pGroup, XmlNode* pXmlNode)
+bool IPropertySkinManagerImpl::AppendBasePropToGroup(IPropertyGroup *pGroup, XmlNode* pXmlNode)
 {
 	if (pGroup == NULL || pXmlNode == NULL)
-		return;
+		return false;
 
 	int nItemCount = pXmlNode->numChild;
 	for (int i = 0; i < nItemCount; i++)
 	{
-		XmlNode* pItemNode = JabberXmlGetNthChildWithoutTag(pXmlNode, i);
-		if (pItemNode != NULL)
+		XmlNode* pPropNode = JabberXmlGetNthChildWithoutTag(pXmlNode, i);
+		if (pPropNode != NULL && pPropNode->name != NULL)
 		{
-			int nPropCount = pItemNode->numChild;
-			for (int nPropNo = 0; nPropNo < nPropCount; nPropNo++)
+			char* psz_id = JabberXmlGetAttrValue(pPropNode, SKIN_OBJECT_ID);
+			if (psz_id == NULL)
+				return false;
+
+			IPropertyBase* pFindBaseProp = FindBaseProperty(pPropNode->name, psz_id);
+			if (pFindBaseProp == NULL)
+				return false;
+
+			pGroup->AppendProperty(pFindBaseProp);
+			if (pFindBaseProp->GetPropType() == PT_GROUP)
 			{
-				XmlNode* pPropNode = JabberXmlGetNthChildWithoutTag(pItemNode, i);
-				if (pPropNode != NULL && pPropNode->name != NULL)
-				{
-					char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_OBJECT_ID);
-					if (psz_id == NULL)
-						return;
+				IPropertyGroup *pNewGroup = dynamic_cast<IPropertyGroup*>(pFindBaseProp);
+				if (pNewGroup == NULL)
+					return false;
 
-					IPropertyBase* pFindBaseProp = FindBaseProperty(pPropNode->name, psz_id);
-					if (pFindBaseProp == NULL)
-						continue;
-
-					pGroup->AppendProperty(pFindBaseProp);
-					if (pFindBaseProp->GetPropType() == PT_GROUP)
-					{
-						IPropertyGroup *pNewGroup = dynamic_cast<IPropertyGroup*>(pFindBaseProp);
-						if (pNewGroup != NULL)
-							AppendBasePropToGroup(pNewGroup, pPropNode);
-					}
-				}
+				if (!AppendBasePropToGroup(pNewGroup, pPropNode))
+					return false;
 			}
 		}
 	}
+
+	return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1001,7 +1002,7 @@ bool IPropertySkinManagerImpl::TranslateWindowsXml(FILE_ITEM *pWindowsXml)
 	XmlState xmlState = { 0 };
 	JabberXmlInitState(&xmlState);
 	int bytesParsed = JabberXmlParse(&xmlState, (char *)pWindowsXml->pFileData, pWindowsXml->dwSrcFileLen);
-	XmlNode *pWindowsRoot  = JabberXmlGetChild(&xmlState.root, "windows");
+	XmlNode *pWindowsRoot = JabberXmlGetChild(&xmlState.root, "windows");
 	if (pWindowsRoot != NULL)
 	{
 		int nItemCount = pWindowsRoot->numChild;
@@ -1032,7 +1033,7 @@ bool IPropertySkinManagerImpl::TranslateLayoutXml(FILE_ITEM *pLayoutXml)
 	XmlState xmlState = { 0 };
 	JabberXmlInitState(&xmlState);
 	int bytesParsed = JabberXmlParse(&xmlState, (char *)pLayoutXml->pFileData, pLayoutXml->dwSrcFileLen);
-	XmlNode *pLayoutRoot  = JabberXmlGetChild(&xmlState.root, "layout");
+	XmlNode *pLayoutRoot = JabberXmlGetChild(&xmlState.root, "layout");
 	if (pLayoutRoot != NULL)
 	{
 		char* psz_area = JabberXmlGetAttrValue(pLayoutRoot, "area");
@@ -1057,7 +1058,7 @@ bool IPropertySkinManagerImpl::TranslateLayoutXml(FILE_ITEM *pLayoutXml)
 				string strObjId = psz_id;
 				WINDOW_PROP_MAP::iterator pWndItem = m_LayoutWindowVec.find(strObjId);
 				if (pWndItem != m_LayoutWindowVec.end())
-					continue;
+					return false;
 
 				IPropertyWindow* pOneWndLayoutProp = new IPropertyWindow;
 				if (pOneWndLayoutProp == NULL)
@@ -1096,7 +1097,7 @@ bool IPropertySkinManagerImpl::GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, 
 
 			IPropertyGroup* pCtrlPropGroup = FindControlPropGroup(psz_id);
 			if (pCtrlPropGroup == NULL)
-				continue;
+				return false;
 
 			IPropertyControl* pCtrlProp = new IPropertyControl;
 			if (pCtrlProp == NULL)
@@ -1108,7 +1109,10 @@ bool IPropertySkinManagerImpl::GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, 
 			pChildCtrlVec->push_back(pCtrlProp);
 
 			if (pCtrlNode->numChild > 0)
-				GeneralCreateWindowLayoutProp(pCtrlNode, pCtrlProp->GetChildControlVec(), pCtrlProp);
+			{
+				if (!GeneralCreateWindowLayoutProp(pCtrlNode, pCtrlProp->GetChildControlVec(), pCtrlProp))
+					return false;
+			}
 		}
 	}
 
@@ -1128,11 +1132,11 @@ IPropertyGroup* IPropertySkinManagerImpl::FindControlPropGroup(char *pszObjectId
 			string strObjId = pszObjectId;
 			PROP_BASE_ITEM::iterator pPropItem = pGroup->find(strObjId);
 			if (pPropItem == pGroup->end())
-				return NULL;
+				continue;
 			
 			IPropertyBase* pPropBase = pPropItem->second;
 			if (pPropBase == NULL)
-				return NULL;
+				continue;
 
 			IPropertyGroup* pFindGroup = dynamic_cast<IPropertyGroup*>(pPropBase);
 			return pFindGroup;
