@@ -109,13 +109,15 @@ void IWindowBaseImpl::OnInitWindowBase()
 	}
 
 	// 初始化对话框皮肤
-	m_WndPropMgr = pPropSkinMgr->InitWindowSkin(m_strSkinPath.c_str(), m_strWindowName.c_str());
-	if (m_WndPropMgr == NULL)
+	IPropertyGroup* pWndPropGroup = pPropSkinMgr->InitWindowSkin(m_strSkinPath.c_str(), m_strWindowName.c_str());
+	if (pWndPropGroup == NULL)
 	{
 		// 向窗口发送通知：初始化皮肤异常
 		::PostMessage(m_hWnd, UM_INIT_WINDOW_ERROR, -2, NULL);
 		return;
 	}
+	// 设置对话框属性
+	m_WndPropMgr.SetXmlPropetry(pWndPropGroup);
 
 //////////////////////////////////////////////////////////////////////////
 	// 当窗口的属性发生变化时需要通知窗口进行刷新
@@ -241,7 +243,7 @@ void IWindowBaseImpl::CenterWindow()
 // 窗口属性
 IPropertyWindowManager* IWindowBaseImpl::GetWindowProp()
 {
-	return m_WndPropMgr;
+	return &m_WndPropMgr;
 }
 
 // 本窗口的消息处理函数，bPassOn参数为true是，消息会继续传递处理；false时，处理完毕，不再下传
@@ -606,11 +608,11 @@ void IWindowBaseImpl::OnLButtonDown(int nVirtKey, POINT pt)
 		SetFocusCtrl(NULL);
 
 		// 是否最大化
-		if (m_WndPropMgr->IsFullScreen())
+		if (m_WndPropMgr.IsFullScreen())
 			return;
 
 		// 是否支持鼠标点击移动窗口
-		if (m_WndPropMgr->GetDragWindow())
+		if (m_WndPropMgr.GetDragWindow())
 			::PostMessage(m_hWnd, WM_NCLBUTTONDOWN, HTCAPTION, MAKELPARAM(pt.x, pt.y));
 
 		return;

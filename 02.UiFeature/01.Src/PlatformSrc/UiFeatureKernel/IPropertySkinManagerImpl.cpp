@@ -589,23 +589,25 @@ bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 }
 
 // ≥ı ºªØ∆§∑Ù
-IPropertyWindowManager* IPropertySkinManagerImpl::InitWindowSkin(const char *pszSkinPath, const char *pszWndName)
+IPropertyGroup* IPropertySkinManagerImpl::InitWindowSkin(const char *pszSkinPath, const char *pszWndName)
 {
-	// TBD
-	return NULL;
-	//if (pszSkinPath == NULL || strlen(pszSkinPath) <= 0 || pszWndName == NULL || strlen(pszWndName) <= 0)
-	//	return NULL;
+	if (pszSkinPath == NULL || strlen(pszSkinPath) <= 0 || pszWndName == NULL || strlen(pszWndName) <= 0)
+		return NULL;
 
-	//if (!InitSkinPackage(pszSkinPath))
-	//	return NULL;
+	if (!InitSkinPackage(pszSkinPath))
+		return NULL;
 
-	//string strWndName = pszWndName;
-	//PROP_BASE_MAP::iterator pWndPropItem = m_AllWindowPropMap.find(strWndName);
-	//if (pWndPropItem == m_AllWindowPropMap.end())
-	//	return NULL;
+	string strWndName = pszWndName;
+	PROP_BASE_ITEM::iterator pWndPropItem = m_AllWindowPropMap.find(strWndName);
+	if (pWndPropItem == m_AllWindowPropMap.end())
+		return NULL;
 
-	//IPropertyWindowManager* pWndProp = pWndPropItem->second;
-	//return pWndProp;
+	IPropertyBase* pBaseProp = pWndPropItem->second;
+	if (pBaseProp == NULL)
+		return NULL;
+
+	IPropertyGroup* pPropGroup = dynamic_cast<IPropertyGroup*>(pBaseProp);
+	return pPropGroup;
 }
 
 void IPropertySkinManagerImpl::ResetBaseObjectId(int nObjectId)
@@ -920,6 +922,7 @@ bool IPropertySkinManagerImpl::GeneralCreateSubProp(XmlNode* pXmlNode, PROP_BASE
 		return false;
 	}
 	pCtrlProp->SetObjectId(psz_id);
+	pBaseProp->SetObjectType("Window_Or_Control_Property_Head");
 	pCtrlPropMap->insert(pair<string, IPropertyBase*>(strObjId, pBaseProp));
 
 	int nPropCount = pXmlNode->numChild;
