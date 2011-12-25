@@ -2,14 +2,14 @@
 // 当前皮肤所有窗口中所有控件的属性管理类
 
 #pragma once
-#include "IPropertyWindow.h"
+#include "IPropertyWindowInWindow.h"
 #include "IPropertyBase.h"
 
 class IPropertySkinManager
 {
 public:
 	// 初始化Window皮肤
-	virtual IPropertyWindow* InitWindowSkin(const char *pszSkinPath, const char *pszWndName) = 0;
+	virtual IPropertyWindowInWindow* InitWindowSkin(const char *pszSkinPath, const char *pszWndName) = 0;
 //	// 查找指定的属性
 //	virtual IPropertyBase* FindBaseProperty(PROP_TYPE propType, const char* pszPropId) = 0;
 //	virtual IPropertyBase* FindBaseProperty(const char* pszPropType, const char* pszPropId) = 0;

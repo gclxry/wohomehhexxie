@@ -393,6 +393,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="03.在窗口中的控件属性"
+				>
+				<File
+					RelativePath=".\IPropertyControlInWindow.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyControlInWindow.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath="..\..\Inc\UiFeatureDefs.h"

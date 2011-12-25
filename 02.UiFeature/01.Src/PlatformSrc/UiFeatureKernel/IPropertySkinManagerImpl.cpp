@@ -589,21 +589,23 @@ bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 }
 
 // ≥ı ºªØ∆§∑Ù
-IPropertyWindow* IPropertySkinManagerImpl::InitWindowSkin(const char *pszSkinPath, const char *pszWndName)
+IPropertyWindowInWindow* IPropertySkinManagerImpl::InitWindowSkin(const char *pszSkinPath, const char *pszWndName)
 {
-	if (pszSkinPath == NULL || strlen(pszSkinPath) <= 0 || pszWndName == NULL || strlen(pszWndName) <= 0)
-		return NULL;
+	// TBD
+	return NULL;
+	//if (pszSkinPath == NULL || strlen(pszSkinPath) <= 0 || pszWndName == NULL || strlen(pszWndName) <= 0)
+	//	return NULL;
 
-	if (!InitSkinPackage(pszSkinPath))
-		return NULL;
+	//if (!InitSkinPackage(pszSkinPath))
+	//	return NULL;
 
-	string strWndName = pszWndName;
-	PROP_BASE_MAP::iterator pWndPropItem = m_AllWindowPropMap.find(strWndName);
-	if (pWndPropItem == m_AllWindowPropMap.end())
-		return NULL;
+	//string strWndName = pszWndName;
+	//PROP_BASE_MAP::iterator pWndPropItem = m_AllWindowPropMap.find(strWndName);
+	//if (pWndPropItem == m_AllWindowPropMap.end())
+	//	return NULL;
 
-	IPropertyWindow* pWndProp = pWndPropItem->second;
-	return pWndProp;
+	//IPropertyWindowInWindow* pWndProp = pWndPropItem->second;
+	//return pWndProp;
 }
 
 void IPropertySkinManagerImpl::ResetBaseObjectId(int nObjectId)
@@ -895,7 +897,7 @@ bool IPropertySkinManagerImpl::TranslateControlsXml(FILE_ITEM *pControlsXml)
 
 bool IPropertySkinManagerImpl::GeneralCreateSubProp(XmlNode* pXmlNode, PROP_BASE_ITEM* pCtrlPropMap)
 {
-	if (pszObjId == NULL || pXmlNode == NULL || pCtrlPropMap == NULL)
+	if (pXmlNode == NULL || pCtrlPropMap == NULL)
 		return false;
 
 	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_OBJECT_ID);
@@ -911,7 +913,7 @@ bool IPropertySkinManagerImpl::GeneralCreateSubProp(XmlNode* pXmlNode, PROP_BASE
 	if (pCtrlProp == NULL)
 		return false;
 
-	pBaseProp = dynamic_cast<IPropertyBase*>(pCtrlProp);
+	IPropertyBase* pBaseProp = dynamic_cast<IPropertyBase*>(pCtrlProp);
 	if (pBaseProp == NULL)
 	{
 		SAFE_DELETE(pCtrlProp);
@@ -923,7 +925,7 @@ bool IPropertySkinManagerImpl::GeneralCreateSubProp(XmlNode* pXmlNode, PROP_BASE
 	int nPropCount = pXmlNode->numChild;
 	for (int nPropNo = 0; nPropNo < nPropCount; nPropNo++)
 	{
-		XmlNode* pPropNode = JabberXmlGetNthChildWithoutTag(pXmlNode, i);
+		XmlNode* pPropNode = JabberXmlGetNthChildWithoutTag(pXmlNode, nPropNo);
 		if (pPropNode != NULL && pPropNode->name != NULL)
 		{
 			psz_id = JabberXmlGetAttrValue(pPropNode, SKIN_OBJECT_ID);
@@ -1027,27 +1029,27 @@ bool IPropertySkinManagerImpl::TranslateLayoutXml(FILE_ITEM *pLayoutXml)
 	XmlState xmlState = { 0 };
 	JabberXmlInitState(&xmlState);
 	int bytesParsed = JabberXmlParse(&xmlState, (char *)pLayoutXml->pFileData, pLayoutXml->dwSrcFileLen);
-	XmlNode *pWindowsRoot  = JabberXmlGetChild(&xmlState.root, "layout");
-	if (pWindowsRoot != NULL)
+	XmlNode *pLayoutRoot  = JabberXmlGetChild(&xmlState.root, "layout");
+	if (pLayoutRoot != NULL)
 	{
-		char* psz_area = JabberXmlGetAttrValue(pWindowNode, "area");
-		char* psz_lastid = JabberXmlGetAttrValue(pWindowNode, "lastid");
+		char* psz_area = JabberXmlGetAttrValue(pLayoutRoot, "area");
+		char* psz_lastid = JabberXmlGetAttrValue(pLayoutRoot, "lastid");
 		if (psz_area == NULL || psz_lastid == NULL)
-			return;
+			return false;
 
 		AREA_TYPE areaType = (AREA_TYPE)atoi(psz_area);
 		SetArea(areaType);
 		m_nObjectIdInRes = atoi(psz_lastid);
 
-		int nItemCount = pWindowsRoot->numChild;
+		int nItemCount = pLayoutRoot->numChild;
 		for (int i = 0; i < nItemCount; i++)
 		{
-			XmlNode* pWindowNode = JabberXmlGetNthChildWithoutTag(pWindowsRoot, i);
+			XmlNode* pWindowNode = JabberXmlGetNthChildWithoutTag(pLayoutRoot, i);
 			if (pWindowNode != NULL)
 			{
 				char* psz_id = JabberXmlGetAttrValue(pWindowNode, SKIN_OBJECT_ID);
 				if (psz_id == NULL)
-					return;
+					return false;
 
 				string strObjId = psz_id;
 				WINDOW_PROP_MAP::iterator pWndItem = m_LayoutWindowVec.find(strObjId);
@@ -1125,7 +1127,7 @@ IPropertyGroup* IPropertySkinManagerImpl::FindControlPropGroup(char *pszObjectId
 			if (pPropItem == pGroup->end())
 				return NULL;
 			
-			IPropertyBase* pPropBase = (pGroupItem->second);
+			IPropertyBase* pPropBase = pPropItem->second;
 			if (pPropBase == NULL)
 				return NULL;
 

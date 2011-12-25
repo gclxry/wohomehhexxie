@@ -357,15 +357,15 @@
 					Name="01.¡¾Window¡¿ÊôÐÔ"
 					>
 					<File
-						RelativePath="..\..\Inc\IPropertyWindow.h"
-						>
-					</File>
-					<File
 						RelativePath=".\IPropertyWindowImpl.cpp"
 						>
 					</File>
 					<File
 						RelativePath=".\IPropertyWindowImpl.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Inc\IPropertyWindowInWindow.h"
 						>
 					</File>
 				</Filter>

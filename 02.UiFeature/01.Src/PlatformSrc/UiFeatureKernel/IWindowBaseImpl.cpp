@@ -2,8 +2,9 @@
 #include "stdafx.h"
 #include "IWindowBaseImpl.h"
 #include "..\..\Inc\UiFeatureDefs.h"
-#include "IPropertySkinManagerImpl.h"
 #include "..\..\Inc\IPropertyControl.h"
+#include "..\..\Inc\IPropertyControlInWindow.h"
+#include "IPropertySkinManagerImpl.h"
 
 // 弹出任务栏菜单消息，XP以下适用
 #define WM_POPUPSYSTEMMENU						(0x0313)
@@ -144,7 +145,7 @@ bool IWindowBaseImpl::GetControlByName(CHILD_CTRLS_VEC *pCtrlVec, char *pszCtrlN
 		IControlBase *pCtrl = m_ChildCtrlsVec[i];
 		if (pCtrl != NULL)
 		{
-			IPropertyControl* pCtrlProp = pCtrl->GetControlBaseProp();
+			IPropertyControlInWindow* pCtrlProp = pCtrl->GetControlBaseProp();
 			if (pCtrlProp == NULL)
 				continue;
 
@@ -239,7 +240,7 @@ void IWindowBaseImpl::CenterWindow()
 }
 
 // 窗口属性
-IPropertyWindow* IWindowBaseImpl::GetWindowProp()
+IPropertyWindowInWindow* IWindowBaseImpl::GetWindowProp()
 {
 	return m_pWndProp;
 }
@@ -436,7 +437,7 @@ bool IWindowBaseImpl::CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt, I
 		IControlBase* pCtrl = (*pCtrlVec)[i];
 		if (pCtrl != NULL)
 		{
-			IPropertyControl* pCtrlProp = pCtrl->GetControlBaseProp();
+			IPropertyControlInWindow* pCtrlProp = pCtrl->GetControlBaseProp();
 			if (pCtrlProp != NULL && pCtrlProp->IsVisible())
 			{
 				if (pCtrlProp->GetReceiveMouseMessage())
@@ -473,7 +474,7 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 		if (m_pLButtonDownCtrl != NULL)
 		{
 			// 如果允许在控件内部进行自由拖动
-			IPropertyControl* pCtrlProp = m_pLButtonDownCtrl->GetControlBaseProp();
+			IPropertyControlInWindow* pCtrlProp = m_pLButtonDownCtrl->GetControlBaseProp();
 			if (pCtrlProp != NULL && pCtrlProp->GetDragControl())
 			{
 				m_pLButtonDownCtrl->OnMouseDrag(pt);
@@ -484,7 +485,7 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 		// 鼠标按下是，需要锁定一个控件进行鼠标移动处理
 		if (m_pMouseHoverCtrl != NULL)
 		{
-			IPropertyControl* pCtrlProp = m_pMouseHoverCtrl->GetControlBaseProp();
+			IPropertyControlInWindow* pCtrlProp = m_pMouseHoverCtrl->GetControlBaseProp();
 			if (pCtrlProp != NULL)
 			{
 				RECT CtrlRct = pCtrlProp->GetCtrlInWindowRect();
@@ -673,7 +674,7 @@ void IWindowBaseImpl::SetControlPostion(CHILD_CTRLS_VEC *pCtrlVec, SIZE NewSize)
 			}
 			else
 			{
-				IPropertyControl* pParentCtrlProp = pParentCtrl->GetControlBaseProp();
+				IPropertyControlInWindow* pParentCtrlProp = pParentCtrl->GetControlBaseProp();
 				if (pParentCtrlProp == NULL)
 					continue;
 				ParentRctInWnd = pParentCtrlProp->GetCtrlInWindowRect();
@@ -694,7 +695,7 @@ void IWindowBaseImpl::SetControlWindowPostion(IControlBase* pCtrl, RECT ParentRc
 	if (pCtrl == NULL)
 		return;
 
-	IPropertyControl* pCtrlProp = pCtrl->GetControlBaseProp();
+	IPropertyControlInWindow* pCtrlProp = pCtrl->GetControlBaseProp();
 	if (pCtrlProp == NULL)
 		return;
 
