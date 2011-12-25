@@ -187,31 +187,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\UiFeatureKernel.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\UiFeatureKernel.def"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Inc\UiFeatureKernel.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="03.对【Control】接口"
-			>
-			<File
-				RelativePath="..\..\Inc\IKernelControl.h"
-				>
-			</File>
-			<File
-				RelativePath=".\IKernelControlImpl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\IKernelControlImpl.h"
 				>
 			</File>
 		</Filter>
@@ -255,6 +235,22 @@
 				</File>
 				<File
 					RelativePath=".\WindowSubclass.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="03.【Window】属性"
+				>
+				<File
+					RelativePath="..\..\Inc\IPropertyWindowManager.h"
+					>
+				</File>
+				<File
+					RelativePath=".\IPropertyWindowManagerImpl.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\IPropertyWindowManagerImpl.h"
 					>
 				</File>
 			</Filter>
@@ -350,46 +346,18 @@
 		<Filter
 			Name="05.皮肤属性管理"
 			>
-			<Filter
-				Name="02.属性"
+			<File
+				RelativePath="..\..\Inc\IPropertySkinManager.h"
 				>
-				<Filter
-					Name="01.【Window】属性"
-					>
-					<File
-						RelativePath="..\..\Inc\IPropertyWindowManager.h"
-						>
-					</File>
-					<File
-						RelativePath=".\IPropertyWindowManagerImpl.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\IPropertyWindowManagerImpl.h"
-						>
-					</File>
-				</Filter>
-			</Filter>
-			<Filter
-				Name="01.管理器"
+			</File>
+			<File
+				RelativePath=".\IPropertySkinManagerImpl.cpp"
 				>
-				<Filter
-					Name="01.【Skin】属性管理"
-					>
-					<File
-						RelativePath="..\..\Inc\IPropertySkinManager.h"
-						>
-					</File>
-					<File
-						RelativePath=".\IPropertySkinManagerImpl.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\IPropertySkinManagerImpl.h"
-						>
-					</File>
-				</Filter>
-			</Filter>
+			</File>
+			<File
+				RelativePath=".\IPropertySkinManagerImpl.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

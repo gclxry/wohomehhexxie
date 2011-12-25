@@ -5,6 +5,12 @@
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "ControlImpl.h"
 
+// 内核对【Builder】的接口
+IKernelBuilder *GetKernelBuilderInterface()
+{
+	return IKernelBuilderImpl::GetInstance();
+}
+
 IKernelBuilderImpl::IKernelBuilderImpl(void)
 {
 	m_CtrlRegMap.clear();

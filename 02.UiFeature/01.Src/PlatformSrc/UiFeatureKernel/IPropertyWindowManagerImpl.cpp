@@ -4,14 +4,31 @@
 
 IPropertyWindowManagerImpl::IPropertyWindowManagerImpl(void)
 {
+	m_bIsInit = false;
 	m_bDragWindow = false;
 	m_bCanFullScreen = false;
 	m_bIsFullScreen = false;
 	m_strWndName = "";
+
+	m_pWndPropInXml = NULL;
 }
 
 IPropertyWindowManagerImpl::~IPropertyWindowManagerImpl(void)
 {
+}
+
+// 将xml中的属性设置到manager中
+void IPropertyWindowManagerImpl::SetXmlPropetry(IPropertyGroup *pWndPropInXml)
+{
+	if (pWndPropInXml == NULL)
+		return;
+
+	m_pWndPropInXml = pWndPropInXml;
+}
+
+bool IPropertyWindowManagerImpl::IsInit()
+{
+	return m_bIsInit;
 }
 
 // 窗口名称

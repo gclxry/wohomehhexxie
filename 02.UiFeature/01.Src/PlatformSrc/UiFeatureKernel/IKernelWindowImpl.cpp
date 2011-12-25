@@ -5,8 +5,19 @@
 #include "IWindowBaseImpl.h"
 #include "WindowSubclass.h"
 
+// 内核对【对话框】的接口
+IKernelWindow *GetKernelWindowInterface()
+{
+	return IKernelWindowImpl::GetInstance();
+}
+
 IKernelWindowImpl::IKernelWindowImpl(void)
 {
+	for (WINDOW_IMPL_MAP::iterator pWndItem = m_WndImplMap.begin(); pWndItem != m_WndImplMap.end(); pWndItem++)
+	{
+		IWindowBaseImpl* pDelWnd = pWndItem->second;
+		SAFE_DELETE(pDelWnd);
+	}
 	m_WndImplMap.clear();
 }
 
