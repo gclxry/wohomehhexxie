@@ -70,3 +70,5 @@ using namespace ATL;
 #include <map>
 #include <vector>
 using namespace std;
+
+#pragma comment(lib, "../../lib/UiAssistLib.lib")
