@@ -2,7 +2,7 @@
 #pragma once
 #include "..\..\Inc\IWindowBase.h"
 #include "..\..\Inc\CMemoryDC.h"
-#include "..\..\Inc\IPropertyWindowManager.h"
+#include "IPropertyWindowManagerImpl.h"
 
 class IWindowBaseImpl : public IWindowBase
 {
@@ -85,7 +85,7 @@ private:
 protected:
 	BLENDFUNCTION m_Blend;
 	// WindowÊôÐÔ
-	IPropertyWindowManager *m_pWndProp;
+	IPropertyWindowManagerImpl m_WndPropMgr;
 	// ¸¸´°¿Ú¾ä±ú
 	HWND m_hParent;
 	// ´°¿Ú¾ä±ú
