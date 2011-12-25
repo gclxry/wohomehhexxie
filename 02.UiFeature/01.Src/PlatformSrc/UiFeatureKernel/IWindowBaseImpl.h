@@ -2,7 +2,7 @@
 #pragma once
 #include "..\..\Inc\IWindowBase.h"
 #include "..\..\Inc\CMemoryDC.h"
-#include "..\..\Inc\IPropertyWindowInWindow.h"
+#include "..\..\Inc\IPropertyWindowManager.h"
 
 class IWindowBaseImpl : public IWindowBase
 {
@@ -23,7 +23,7 @@ public:
 	// 重绘控件
 	virtual void RedrawControl(IControlBase* pCtrl, bool bDrawImmediately = true);
 	// 窗口属性
-	virtual IPropertyWindowInWindow* GetWindowProp();
+	virtual IPropertyWindowManager* GetWindowProp();
 	// 取得窗口控件指针
 	virtual IControlBase* GetControl(char *pszCtrlName);
 
@@ -85,7 +85,7 @@ private:
 protected:
 	BLENDFUNCTION m_Blend;
 	// Window属性
-	IPropertyWindowInWindow *m_pWndProp;
+	IPropertyWindowManager *m_pWndProp;
 	// 父窗口句柄
 	HWND m_hParent;
 	// 窗口句柄

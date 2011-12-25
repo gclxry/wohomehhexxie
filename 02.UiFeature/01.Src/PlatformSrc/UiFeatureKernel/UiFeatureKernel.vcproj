@@ -357,15 +357,15 @@
 					Name="01.【Window】属性"
 					>
 					<File
-						RelativePath=".\IPropertyWindowImpl.cpp"
+						RelativePath="..\..\Inc\IPropertyWindowManager.h"
 						>
 					</File>
 					<File
-						RelativePath=".\IPropertyWindowImpl.h"
+						RelativePath=".\IPropertyWindowManagerImpl.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\Inc\IPropertyWindowInWindow.h"
+						RelativePath=".\IPropertyWindowManagerImpl.h"
 						>
 					</File>
 				</Filter>
@@ -373,22 +373,6 @@
 			<Filter
 				Name="01.管理器"
 				>
-				<Filter
-					Name="03.【Control】属性管理"
-					>
-					<File
-						RelativePath="..\..\Inc\IPropertyControlManager.h"
-						>
-					</File>
-					<File
-						RelativePath=".\IPropertyControlManagerImpl.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\IPropertyControlManagerImpl.h"
-						>
-					</File>
-				</Filter>
 				<Filter
 					Name="01.【Skin】属性管理"
 					>
@@ -402,22 +386,6 @@
 					</File>
 					<File
 						RelativePath=".\IPropertySkinManagerImpl.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="02.【Window】属性管理"
-					>
-					<File
-						RelativePath="..\..\Inc\IPropertyWindowManager.h"
-						>
-					</File>
-					<File
-						RelativePath=".\IPropertyWindowManagerImpl.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\IPropertyWindowManagerImpl.h"
 						>
 					</File>
 				</Filter>

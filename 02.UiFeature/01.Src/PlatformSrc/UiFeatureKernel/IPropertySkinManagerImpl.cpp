@@ -13,7 +13,7 @@
 #include "..\..\Inc\IPropertyInt.h"
 #include "..\..\Inc\IPropertyString.h"
 #include "..\..\Inc\IPropertyGroup.h"
-#include "IPropertyWindowImpl.h"
+#include "IPropertyWindowManagerImpl.h"
 
 IPropertySkinManager* IPropertySkinManagerImpl::GetInstance()
 {
@@ -589,7 +589,7 @@ bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 }
 
 // ³õÊ¼»¯Æ¤·ô
-IPropertyWindowInWindow* IPropertySkinManagerImpl::InitWindowSkin(const char *pszSkinPath, const char *pszWndName)
+IPropertyWindowManager* IPropertySkinManagerImpl::InitWindowSkin(const char *pszSkinPath, const char *pszWndName)
 {
 	// TBD
 	return NULL;
@@ -604,7 +604,7 @@ IPropertyWindowInWindow* IPropertySkinManagerImpl::InitWindowSkin(const char *ps
 	//if (pWndPropItem == m_AllWindowPropMap.end())
 	//	return NULL;
 
-	//IPropertyWindowInWindow* pWndProp = pWndPropItem->second;
+	//IPropertyWindowManager* pWndProp = pWndPropItem->second;
 	//return pWndProp;
 }
 

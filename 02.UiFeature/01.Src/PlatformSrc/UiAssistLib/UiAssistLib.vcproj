@@ -397,11 +397,11 @@
 				Name="03.在窗口中的控件属性"
 				>
 				<File
-					RelativePath=".\IPropertyControlInWindow.cpp"
+					RelativePath="..\..\Inc\IPropertyControlManager.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\Inc\IPropertyControlInWindow.h"
+					RelativePath=".\IPropertyControManager.cpp"
 					>
 				</File>
 			</Filter>

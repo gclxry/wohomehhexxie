@@ -1,7 +1,7 @@
 
 #pragma once
 #include "..\..\Inc\IControlBase.h"
-#include "..\..\Inc\IPropertyWindowInWindow.h"
+#include "..\..\Inc\IPropertyWindowManager.h"
 
 class IWindowBase
 {
@@ -17,7 +17,7 @@ public:
 	// 重绘控件
 	virtual void RedrawControl(IControlBase* pCtrl, bool bDrawImmediately = true) = 0;
 	// 窗口属性
-	virtual IPropertyWindowInWindow* GetWindowProp() = 0;
+	virtual IPropertyWindowManager* GetWindowProp() = 0;
 	// 取得窗口控件指针
 	virtual IControlBase* GetControl(char *pszCtrlName) = 0;
 

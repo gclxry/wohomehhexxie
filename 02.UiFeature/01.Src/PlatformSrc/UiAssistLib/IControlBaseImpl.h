@@ -19,7 +19,7 @@ public:
 	// 取得子控件列表
 	virtual CHILD_CTRLS_VEC* GetChildCtrlsVec();
 	// 取得属性
-	virtual IPropertyControlInWindow* GetControlBaseProp();
+	virtual IPropertyControlManager* GetControlBaseProp();
 
 	// 鼠标是否Hover
 	virtual void SetMouseHover(bool bHover);
@@ -47,7 +47,7 @@ private:
 	// 绘图引擎
 	IUiEngine *m_pUiEngine;
 	// 控件属性
-	IPropertyControlInWindow *m_pCtrlProp;
+	IPropertyControlManager *m_pCtrlProp;
 	// 鼠标Hover状态
 	bool m_bMouseHover;
 };
