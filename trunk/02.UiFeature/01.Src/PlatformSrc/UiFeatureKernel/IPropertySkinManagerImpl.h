@@ -18,7 +18,7 @@ public:
 	static IPropertySkinManager* GetInstance();
 
 	// 初始化Window皮肤
-	virtual IPropertyWindowManager* InitWindowSkin(const char *pszSkinPath, const char *pszWndName);
+	virtual IPropertyGroup* InitWindowSkin(const char *pszSkinPath, const char *pszWndName);
 	// 查找指定的属性
 	virtual IPropertyBase* FindBaseProperty(PROP_TYPE propType, const char* pszPropId);
 	virtual IPropertyBase* FindBaseProperty(const char* pszPropType, const char* pszPropId);

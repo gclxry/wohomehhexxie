@@ -2,6 +2,7 @@
 // 一个窗口的属性
 
 #pragma once
+#include "IPropertyGroup.h"
 
 class IPropertyWindowManager
 {
