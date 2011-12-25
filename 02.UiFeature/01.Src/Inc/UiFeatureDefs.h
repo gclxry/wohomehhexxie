@@ -37,6 +37,8 @@ using namespace std;
 // 所有皮肤文件集中存放的地方
 #define SKIN_DATA_DIR								("SkinData\\")
 #define SKIN_OBJECT_ID								("objid")
+// 一个窗口或者一个控件的所有属性节点的根节点：属性组的object type name
+#define PROP_ROOT_TYPE_NAME							("Window_Or_Control_Property_Head")
 
 #ifndef SAFE_CLOSE_HANDLE
 #define SAFE_CLOSE_HANDLE(hHandle)					{if(hHandle!=NULL)::CloseHandle(hHandle);hHandle=NULL;};

@@ -52,7 +52,7 @@ private:
 	// Controls.xml 相关
 	bool TranslateControlsXml(FILE_ITEM *pControlsXml);
 	bool GeneralCreateSubProp(XmlNode* pXmlNode, PROP_BASE_ITEM* pCtrlPropMap);
-	void AppendBasePropToGroup(IPropertyGroup *pGroup, XmlNode* pXmlNode);
+	bool AppendBasePropToGroup(IPropertyGroup *pGroup, XmlNode* pXmlNode);
 
 //////////////////////////////////////////////////////////////////////////
 	// Windows.xml 相关

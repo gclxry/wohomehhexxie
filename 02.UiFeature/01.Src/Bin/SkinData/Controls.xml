@@ -1,49 +1,21 @@
 <controls>
-	<Button objio="23423">
-		<group objid="">
+	<Button objid="Window1.UiForm9">
+		<group objid="9654613215sdfsWWsdafa">
 			<bool objid="8"/>
 			<int objid="7"/>
-			<string objid="2"/>
-			<combobox objid="3"/>
-			<cursor objid="5"/>
-			<font objid="1"/>
-			<image objid="4"/>
-			<color objid="0"/>
-			<group objid="第二组别">
-				<string objid="-1"/>
-				<bool objid="-1"/>
+			<group objid="base123">
+				<string objid="Window1.string1"/>
+				<bool objid="78"/>
 			</group>
 		</group>
 	</Button>
-	<Button objio="234231">
-		<group objid="">
+	<CheckBox objid="Window1.Button2">
+		<group objid="96546145dfhhafa">
 			<bool objid="8"/>
 			<int objid="7"/>
-			<string objid="2"/>
-			<combobox objid="3"/>
-			<cursor objid="5"/>
-			<font objid="1"/>
-			<image objid="4"/>
-			<color objid="0"/>
-			<group objid="第二组别">
-				<string objid="-1"/>
-				<bool objid="-1"/>
-			</group>
-		</group>
-	</Button>
-	<CheckBox objio="234223">
-		<group objid="">
-			<bool objid="8"/>
-			<int objid="7"/>
-			<string objid="2"/>
-			<combobox objid="3"/>
-			<cursor objid="5"/>
-			<font objid="1"/>
-			<image objid="4"/>
-			<color objid="0"/>
-			<group objid="第二组别">
-				<string objid="-1"/>
-				<bool objid="-1"/>
+			<group objid="werwrwer">
+				<string objid="Window1.string1"/>
+				<bool objid="78"/>
 			</group>
 		</group>
 	</CheckBox>
