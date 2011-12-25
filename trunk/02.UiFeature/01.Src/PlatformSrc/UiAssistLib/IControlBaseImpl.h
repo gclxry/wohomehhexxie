@@ -3,7 +3,6 @@
 #include "..\..\Inc\IControlBase.h"
 #include "..\..\Inc\IWindowBase.h"
 #include "..\..\Inc\IUiEngine.h"
-#include "..\..\Inc\IPropertyControl.h"
 
 class IControlBaseImpl : public IControlBase
 {
@@ -20,7 +19,7 @@ public:
 	// 取得子控件列表
 	virtual CHILD_CTRLS_VEC* GetChildCtrlsVec();
 	// 取得属性
-	virtual IPropertyControl* GetControlBaseProp();
+	virtual IPropertyControlInWindow* GetControlBaseProp();
 
 	// 鼠标是否Hover
 	virtual void SetMouseHover(bool bHover);
@@ -48,7 +47,7 @@ private:
 	// 绘图引擎
 	IUiEngine *m_pUiEngine;
 	// 控件属性
-	IPropertyControl *m_pCtrlProp;
+	IPropertyControlInWindow *m_pCtrlProp;
 	// 鼠标Hover状态
 	bool m_bMouseHover;
 };

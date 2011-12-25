@@ -71,7 +71,7 @@ CHILD_CTRLS_VEC* IControlBaseImpl::GetChildCtrlsVec()
 }
 
 // »°µ√ Ù–‘
-IPropertyControl* IControlBaseImpl::GetControlBaseProp()
+IPropertyControlInWindow* IControlBaseImpl::GetControlBaseProp()
 {
 	return m_pCtrlProp;
 }

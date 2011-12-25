@@ -1,6 +1,6 @@
 
 #pragma once
-#include "IPropertyControl.h"
+#include "IPropertyControlInWindow.h"
 #include "CMemoryDC.h"
 #include "IFeatureObject.h"
 
@@ -91,7 +91,7 @@ public:
 	// 取得子控件列表
 	virtual CHILD_CTRLS_VEC* GetChildCtrlsVec() = 0;
 	// 取得控件的基本属性，不包括各自控件扩展的私有属性
-	virtual IPropertyControl* GetControlBaseProp() = 0;
+	virtual IPropertyControlInWindow* GetControlBaseProp() = 0;
 
 	// 鼠标是否Hover
 	virtual void SetMouseHover(bool bHover) = 0;

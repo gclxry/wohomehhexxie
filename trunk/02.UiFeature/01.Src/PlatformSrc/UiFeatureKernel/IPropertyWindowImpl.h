@@ -1,8 +1,8 @@
 
 #pragma once
-#include "..\..\Inc\IPropertyWindow.h"
+#include "..\..\Inc\IPropertyWindowInWindow.h"
 
-class IPropertyWindowImpl
+class IPropertyWindowImpl : public IPropertyWindowInWindow
 {
 public:
 	IPropertyWindowImpl(void);
