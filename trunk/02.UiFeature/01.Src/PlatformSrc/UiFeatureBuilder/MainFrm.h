@@ -59,6 +59,9 @@ private:
 //////////////////////////////////////////////////////////////////////////
 	bool	m_bInitOk;
 
+	CString m_strSkinName;
+	CString m_strSkinDir;
+
 private:
 	void InitUiFeatureKernel();
 	CString GetDllPath(TCHAR *pszDllName);

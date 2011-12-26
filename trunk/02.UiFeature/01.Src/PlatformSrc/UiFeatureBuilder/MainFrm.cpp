@@ -49,6 +49,8 @@ CMainFrame::CMainFrame()
 	m_hControlDll = NULL;
 	m_pRegControlMap = NULL;
 	m_bInitOk = false;
+	m_strSkinDir = _T("");
+	m_strSkinName = _T("");
 }
 
 CMainFrame::~CMainFrame()
@@ -459,4 +461,6 @@ void CMainFrame::OnFileNew()
 	// TODO: Add your command handler code here
 	CCreateNewSkinProject NewSkinDlg;
 	NewSkinDlg.DoModal();
+
+	NewSkinDlg.GetNewProjectPath(m_strSkinDir, m_strSkinName);
 }
