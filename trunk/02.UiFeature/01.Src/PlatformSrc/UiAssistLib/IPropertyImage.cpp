@@ -5,7 +5,7 @@
 
 IPropertyImage::IPropertyImage()
 {
-	SetObjectType("Image");
+	SetObjectType(PROP_TYPE_IMAGE_NAME);
 
 	m_ImageProp.strName = "";
 	m_ImageProp.strPropInfo = "";
@@ -35,12 +35,6 @@ void IPropertyImage::SetImageProp(IMAGE_PROP* pImgProp)
 		return;
 
 	m_ImageProp = *pImgProp;
-}
-
-// 取得属性类型
-PROP_TYPE IPropertyImage::GetPropType()
-{
-	return PT_IMAGE;
 }
 
 // 从XML节点读取属性值，并放入属性队列

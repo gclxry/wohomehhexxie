@@ -4,7 +4,7 @@
 
 IPropertyWindow::IPropertyWindow(void)
 {
-	SetObjectType("PropertyWindow");
+	SetObjectType(PROP_TYPE_WINDOW_NAME);
 	m_ChildCtrlPropVec.clear();
 }
 

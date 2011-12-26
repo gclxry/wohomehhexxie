@@ -5,7 +5,7 @@
 
 IPropertyCursor::IPropertyCursor()
 {
-	SetObjectType("cursor");
+	SetObjectType(PROP_TYPE_CURSOR_NAME);
 }
 
 IPropertyCursor::~IPropertyCursor()
@@ -16,11 +16,6 @@ IPropertyCursor::~IPropertyCursor()
 bool IPropertyCursor::IsRightData()
 {
 	return false;
-}
-
-PROP_TYPE IPropertyCursor::GetPropType()
-{
-	return PT_CURSOR;
 }
 
 bool IPropertyCursor::ReadResourceXmlProperty(XmlNode* pXmlNode)

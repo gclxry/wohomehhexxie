@@ -5,7 +5,7 @@
 
 IPropertyFont::IPropertyFont()
 {
-	SetObjectType("font");
+	SetObjectType(PROP_TYPE_FONT_NAME);
 
 	m_FontProp.strName = "";
 	m_FontProp.strPropInfo = "";
@@ -53,12 +53,6 @@ void IPropertyFont::SetFontProp(FONT_PROP *pFontProp)
 		return;
 
 	m_FontProp = *pFontProp;
-}
-
-// É¾³ý×ÔÉí
-PROP_TYPE IPropertyFont::GetPropType()
-{
-	return PT_FONT;
 }
 
 bool IPropertyFont::ReadResourceXmlProperty(XmlNode* pXmlNode)

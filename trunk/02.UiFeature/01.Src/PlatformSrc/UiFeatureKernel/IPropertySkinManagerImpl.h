@@ -20,12 +20,12 @@ public:
 	// 初始化Window皮肤
 	virtual IPropertyGroup* InitWindowSkin(const char *pszSkinPath, const char *pszWndName);
 	// 查找指定的属性
-	virtual IPropertyBase* FindBaseProperty(PROP_TYPE propType, const char* pszPropId);
+	virtual IPropertyBase* FindBaseProperty(OBJECT_TYPE_ID propType, const char* pszPropId);
 	virtual IPropertyBase* FindBaseProperty(const char* pszPropType, const char* pszPropId);
 	// 设置显示的语言种类
 	virtual void SetArea(AREA_TYPE areaType);
 	// 创建一个属性，并将次属性放入队列
-	virtual IPropertyBase* CreateEmptyBaseProp(PROP_TYPE propType);
+	virtual IPropertyBase* CreateEmptyBaseProp(OBJECT_TYPE_ID propType);
 	// 取得ID号
 	virtual int GetNewId();
 
@@ -34,8 +34,6 @@ private:
 	bool InitSkinPackage(const char *pszSkinPath);
 	// 加载zip文件
 	void LoadZipDll();
-	string PropTypeToString(PROP_TYPE propType);
-	PROP_TYPE PropStringToType(string strPropType);
 	void ResetBaseObjectId(int nObjectId);
 
 //////////////////////////////////////////////////////////////////////////

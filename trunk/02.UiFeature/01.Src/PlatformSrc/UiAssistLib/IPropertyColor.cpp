@@ -5,7 +5,7 @@
 
 IPropertyColor::IPropertyColor()
 {
-	SetObjectType("color");
+	SetObjectType(PROP_TYPE_COLOR_NAME);
 }
 
 IPropertyColor::~IPropertyColor()
@@ -16,11 +16,6 @@ IPropertyColor::~IPropertyColor()
 bool IPropertyColor::IsRightData()
 {
 	return false;
-}
-
-PROP_TYPE IPropertyColor::GetPropType()
-{
-	return PT_COLOR;
 }
 
 bool IPropertyColor::ReadResourceXmlProperty(XmlNode* pXmlNode)

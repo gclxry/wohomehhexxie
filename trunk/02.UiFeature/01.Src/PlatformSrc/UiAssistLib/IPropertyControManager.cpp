@@ -297,7 +297,7 @@ void IPropertyControlManager::InitControlPropObjectId(GROUP_PROP_VEC *pPropList)
 		sprintf_s(szId, 1023, "%s.%s%d", strCtrlType.c_str(), strTypeName.c_str(), nId);
 		pProp->SetObjectType(szId);
 
-		if (pProp->GetPropType() == PT_GROUP)
+		if (pProp->GetObjectTypeId() == PT_GROUP)
 		{
 			IPropertyGroup *pGroup = dynamic_cast<IPropertyGroup*>(pProp);
 			if (pGroup != NULL)
@@ -319,7 +319,7 @@ bool IPropertyControlManager::CreateBuilderShowPropList()
 }
 
 // 创建一个属性
-IPropertyBase* IPropertyControlManager::CreateProperty(IPropertyGroup *pPropGroup, PROP_TYPE propType, char *pPropName, char *pPropInfo)
+IPropertyBase* IPropertyControlManager::CreateProperty(IPropertyGroup *pPropGroup, OBJECT_TYPE_ID propType, char *pPropName, char *pPropInfo)
 {
 	if (m_pSkinPropMgr == NULL)
 		return NULL;

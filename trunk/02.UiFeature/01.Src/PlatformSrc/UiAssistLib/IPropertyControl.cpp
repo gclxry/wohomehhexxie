@@ -4,7 +4,7 @@
 
 IPropertyControl::IPropertyControl(void)
 {
-	SetObjectType("PropertyControl");
+	SetObjectType(PROP_TYPE_CONTROL_NAME);
 	m_ChildCtrlPropVec.clear();
 	m_pPrentCtrlProp = NULL;
 	m_pCtrlPropGroup = NULL;
