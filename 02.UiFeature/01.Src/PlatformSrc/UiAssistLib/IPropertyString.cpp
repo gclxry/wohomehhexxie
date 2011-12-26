@@ -5,7 +5,7 @@
 
 IPropertyString::IPropertyString()
 {
-	SetObjectType("string");
+	SetObjectType(PROP_TYPE_STRING_NAME);
 	Clear();
 }
 
@@ -26,11 +26,6 @@ void IPropertyString::Clear()
 bool IPropertyString::IsRightData()
 {
 	return (m_StringProp.strDefaultString.size() > 0);
-}
-
-PROP_TYPE IPropertyString::GetPropType()
-{
-	return PT_STRING;
 }
 
 void IPropertyString::SetArea(AREA_TYPE areaType)

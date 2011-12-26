@@ -5,7 +5,7 @@
 
 IPropertyComboBox::IPropertyComboBox()
 {
-	SetObjectType("combobox");
+	SetObjectType(PROP_TYPE_COMBOBOX_NAME);
 	Clear();
 }
 
@@ -25,11 +25,6 @@ void IPropertyComboBox::Clear()
 bool IPropertyComboBox::IsRightData()
 {
 	return (m_ComboBoxPro.strName.size() > 0 && m_ComboBoxPro.DataVec.size() > 0 && m_ComboBoxPro.nSelect >= 0);
-}
-
-PROP_TYPE IPropertyComboBox::GetPropType()
-{
-	return PT_COMBOBOX;
 }
 
 bool IPropertyComboBox::ReadResourceXmlProperty(XmlNode* pXmlNode)

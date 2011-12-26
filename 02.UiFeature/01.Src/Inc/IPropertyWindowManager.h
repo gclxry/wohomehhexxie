@@ -11,7 +11,7 @@ public:
 	virtual bool IsInit() = 0;
 
 	// 将xml中的属性设置到manager中
-	virtual void SetXmlPropetry(IPropertyGroup *pWndPropInXml) = 0;
+	virtual void SetWindowPropetry(IPropertyGroup *pWndPropInXml) = 0;
 
 	// 是否支持全窗口点击移动
 	virtual void SetDragWindow(bool bDrag) = 0;

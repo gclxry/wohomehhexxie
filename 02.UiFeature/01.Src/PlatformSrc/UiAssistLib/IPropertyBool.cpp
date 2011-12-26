@@ -5,7 +5,7 @@
 
 IPropertyBool::IPropertyBool()
 {
-	SetObjectType("bool");
+	SetObjectType(PROP_TYPE_BOOL_NAME);
 	m_BoolProp.strName = "";
 	m_BoolProp.strPropInfo = "";
 	m_BoolProp.bBoolData = false;
@@ -19,11 +19,6 @@ IPropertyBool::~IPropertyBool()
 bool IPropertyBool::IsRightData()
 {
 	return (m_BoolProp.strName.size() > 0);
-}
-
-PROP_TYPE IPropertyBool::GetPropType()
-{
-	return PT_BOOL;
 }
 
 bool IPropertyBool::ReadResourceXmlProperty(XmlNode* pXmlNode)
@@ -42,4 +37,14 @@ bool IPropertyBool::ReadResourceXmlProperty(XmlNode* pXmlNode)
 	m_BoolProp.bBoolData = (atoi(psz_data) != 0);
 
 	return true;
+}
+
+void IPropertyBool::SetValue(bool bBoolData)
+{
+	m_BoolProp.bBoolData = bBoolData;
+}
+
+bool IPropertyBool::GetValue()
+{
+	return m_BoolProp.bBoolData;
 }

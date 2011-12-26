@@ -121,7 +121,7 @@ protected:
 	//	// 1.1 在派生控件中创建属性
 	//	virtual bool CreateDedicationProp() = 0;
 	// 创建一个属性
-	IPropertyBase* CreateProperty(IPropertyGroup *pPropGroup, PROP_TYPE propType, char *pPropName, char *pPropInfo);
+	IPropertyBase* CreateProperty(IPropertyGroup *pPropGroup, OBJECT_TYPE_ID propType, char *pPropName, char *pPropInfo);
 
 private:
 	// 2.从Builder中新创建一个控件，需要初始化属性的PropId

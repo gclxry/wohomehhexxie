@@ -2,7 +2,7 @@
 #include "StdAfx.h"
 #include <assert.h>
 #include "IPropertySkinManagerImpl.h"
-#include "CommonFun.h"
+#include "..\..\Inc\ICommonFun.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IPropertyFont.h"
 #include "..\..\Inc\IPropertyBool.h"
@@ -107,7 +107,7 @@ void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
 	if (pCtrlProp == NULL)
 		return;
 
-	switch (pCtrlProp->GetPropType())
+	switch (pCtrlProp->GetObjectTypeId())
 	{
 	case PT_BOOL:
 		{
@@ -233,98 +233,8 @@ void IPropertySkinManagerImpl::LoadZipDll()
 	m_pZipFile = GetZip();
 }
 
-PROP_TYPE IPropertySkinManagerImpl::PropStringToType(string strPropType)
-{
-	if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_FONT_NAME) == 0)
-	{
-		return PT_FONT;
-	}
-	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_STRING_NAME) == 0)
-	{
-		return PT_STRING;
-	}
-	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_COMBOBOX_NAME) == 0)
-	{
-		return PT_COMBOBOX;
-	}
-	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_IMAGE_NAME) == 0)
-	{
-		return PT_IMAGE;
-	}
-	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_CURSOR_NAME) == 0)
-	{
-		return PT_CURSOR;
-	}
-	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_COLOR_NAME) == 0)
-	{
-		return PT_COLOR;
-	}
-	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_BOOL_NAME) == 0)
-	{
-		return PT_BOOL;
-	}
-	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_INT_NAME) == 0)
-	{
-		return PT_INT;
-	}
-	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_GROUP_NAME) == 0)
-	{
-		return PT_GROUP;
-	}
-
-	return PT_NONE;
-}
-
-string IPropertySkinManagerImpl::PropTypeToString(PROP_TYPE propType)
-{
-	string strType("");
-	switch (propType)
-	{
-	case PT_BOOL:
-		strType = PROP_TYPE_BOOL_NAME;
-		break;
-
-	case PT_COLOR:
-		strType = PROP_TYPE_COLOR_NAME;
-		break;
-
-	case PT_COMBOBOX:
-		strType = PROP_TYPE_COMBOBOX_NAME;
-		break;
-
-	case PT_CURSOR:
-		strType = PROP_TYPE_CURSOR_NAME;
-		break;
-
-	case PT_FONT:
-		strType = PROP_TYPE_FONT_NAME;
-		break;
-
-	case PT_IMAGE:
-		strType = PROP_TYPE_IMAGE_NAME;
-		break;
-
-	case PT_INT:
-		strType = PROP_TYPE_INT_NAME;
-		break;
-
-	case PT_STRING:
-		strType = PROP_TYPE_STRING_NAME;
-		break;
-
-	case PT_GROUP:
-		strType = PROP_TYPE_GROUP_NAME;
-		break;
-
-	default:
-		break;
-	}
-
-	return strType;
-}
-
-// 创建一个属性，并将次属性放入队列
-IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(PROP_TYPE propType)
+// 创建一个属性，并将此属性放入队列
+IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID propType)
 {
 	IPropertyBase* pBaseProp = NULL;
 	switch (propType)
@@ -480,7 +390,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(PROP_TYPE propType)
 }
 
 // 查找指定的属性
-IPropertyBase* IPropertySkinManagerImpl::FindBaseProperty(PROP_TYPE propType, const char* pszPropId)
+IPropertyBase* IPropertySkinManagerImpl::FindBaseProperty(OBJECT_TYPE_ID propType, const char* pszPropId)
 {
 	string strType = PropTypeToString(propType);
 	return FindBaseProperty(strType.c_str(), pszPropId);
@@ -941,7 +851,7 @@ bool IPropertySkinManagerImpl::GeneralCreateSubProp(XmlNode* pXmlNode, PROP_BASE
 				return false;
 
 			pCtrlProp->AppendProperty(pFindBaseProp);
-			if (pFindBaseProp->GetPropType() == PT_GROUP)
+			if (pFindBaseProp->GetObjectTypeId() == PT_GROUP)
 			{
 				IPropertyGroup *pNewGroup = dynamic_cast<IPropertyGroup*>(pFindBaseProp);
 				if (pNewGroup == NULL)
@@ -976,7 +886,7 @@ bool IPropertySkinManagerImpl::AppendBasePropToGroup(IPropertyGroup *pGroup, Xml
 				return false;
 
 			pGroup->AppendProperty(pFindBaseProp);
-			if (pFindBaseProp->GetPropType() == PT_GROUP)
+			if (pFindBaseProp->GetObjectTypeId() == PT_GROUP)
 			{
 				IPropertyGroup *pNewGroup = dynamic_cast<IPropertyGroup*>(pFindBaseProp);
 				if (pNewGroup == NULL)

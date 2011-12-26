@@ -406,6 +406,18 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="06.Í¨ÓÃº¯Êý"
+			>
+			<File
+				RelativePath=".\ICommonFun.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Inc\ICommonFun.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\Inc\UiFeatureDefs.h"
 			>

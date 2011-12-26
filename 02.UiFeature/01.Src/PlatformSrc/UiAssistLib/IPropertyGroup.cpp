@@ -5,7 +5,7 @@
 
 IPropertyGroup::IPropertyGroup()
 {
-	SetObjectType("group");
+	SetObjectType(PROP_TYPE_GROUP_NAME);
 	m_GroupProp.strName = "";
 	m_GroupProp.strPropInfo = "";
 	m_PropVec.clear();
@@ -19,11 +19,6 @@ IPropertyGroup::~IPropertyGroup()
 bool IPropertyGroup::IsRightData()
 {
 	return (m_GroupProp.strName.size() > 0);
-}
-
-PROP_TYPE IPropertyGroup::GetPropType()
-{
-	return PT_GROUP;
 }
 
 // 取得Group下的属性列表

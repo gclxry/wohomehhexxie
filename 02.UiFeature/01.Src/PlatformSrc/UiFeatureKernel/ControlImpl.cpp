@@ -1,7 +1,7 @@
 
 #include "StdAfx.h"
 #include "ControlImpl.h"
-#include "CommonFun.h"
+#include "..\..\Inc\ICommonFun.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 
 CControlImpl::CControlImpl(void)

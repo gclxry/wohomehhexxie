@@ -5,7 +5,7 @@
 
 IPropertyInt::IPropertyInt()
 {
-	SetObjectType("int");
+	SetObjectType(PROP_TYPE_INT_NAME);
 	m_IntProp.strName = "";
 	m_IntProp.strPropInfo = "";
 	m_IntProp.nIntData = 0;
@@ -19,11 +19,6 @@ IPropertyInt::~IPropertyInt()
 bool IPropertyInt::IsRightData()
 {
 	return (m_IntProp.strName.size() > 0);
-}
-
-PROP_TYPE IPropertyInt::GetPropType()
-{
-	return PT_INT;
 }
 
 bool IPropertyInt::ReadResourceXmlProperty(XmlNode* pXmlNode)

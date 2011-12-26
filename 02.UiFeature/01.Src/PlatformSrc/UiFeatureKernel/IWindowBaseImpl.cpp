@@ -117,7 +117,7 @@ void IWindowBaseImpl::OnInitWindowBase()
 		return;
 	}
 	// 设置对话框属性
-	m_WndPropMgr.SetXmlPropetry(pWndPropGroup);
+	m_WndPropMgr.SetWindowPropetry(pWndPropGroup);
 
 //////////////////////////////////////////////////////////////////////////
 	// 当窗口的属性发生变化时需要通知窗口进行刷新
