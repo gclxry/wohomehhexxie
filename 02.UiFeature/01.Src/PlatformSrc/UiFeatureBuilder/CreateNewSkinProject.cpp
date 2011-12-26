@@ -13,7 +13,8 @@ IMPLEMENT_DYNAMIC(CCreateNewSkinProject, CDialog)
 CCreateNewSkinProject::CCreateNewSkinProject(CWnd* pParent /*=NULL*/)
 	: CDialog(CCreateNewSkinProject::IDD, pParent)
 {
-
+	m_strSkinDir = _T("");
+	m_strSkinName = _T("");
 }
 
 CCreateNewSkinProject::~CCreateNewSkinProject()
@@ -48,12 +49,38 @@ BOOL CCreateNewSkinProject::OnInitDialog()
 
 void CCreateNewSkinProject::OnBnClickedCancel()
 {
-	// TODO: Add your control notification handler code here
+	m_strSkinDir = _T("");
+	m_strSkinName = _T("");
+
 	OnCancel();
 }
 
 void CCreateNewSkinProject::OnBnClickedOk()
 {
-	// TODO: Add your control notification handler code here
+	m_strSkinDir = _T("");
+	m_strSkinName = _T("");
+
+	this->GetDlgItemText(IDE_DIR, m_strSkinDir);
+	if (m_strSkinDir.GetLength() <= 0)
+	{
+		AfxMessageBox(_T("请选择工程文件保存路径！"), MB_OK | MB_ICONERROR);
+		this->GetDlgItem(IDE_DIR)->SetFocus();
+		return;
+	}
+
+	this->GetDlgItemText(IDE_NAME, m_strSkinName);
+	if (m_strSkinName.GetLength() <= 0)
+	{
+		AfxMessageBox(_T("请输入皮肤工程名称！"), MB_OK | MB_ICONERROR);
+		this->GetDlgItem(IDE_NAME)->SetFocus();
+		return;
+	}
+
 	OnOK();
+}
+
+void CCreateNewSkinProject::GetNewProjectPath(CString &strDir, CString &strName)
+{
+	strDir = m_strSkinDir;
+	strName = m_strSkinName;
 }

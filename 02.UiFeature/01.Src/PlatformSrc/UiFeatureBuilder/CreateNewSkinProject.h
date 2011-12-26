@@ -15,8 +15,12 @@ public:
 // Dialog Data
 	enum { IDD = IDD_CREATE_NEW_PROJECT };
 
+	void GetNewProjectPath(CString &strDir, CString &strName);
+
 private:
 	CMFCEditBrowseCtrl m_BrowseFolderEdit;
+	CString m_strSkinName;
+	CString m_strSkinDir;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
