@@ -23,6 +23,7 @@ CCreateNewSkinProject::~CCreateNewSkinProject()
 void CCreateNewSkinProject::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDE_DIR, m_BrowseFolderEdit);
 }
 
 
@@ -33,6 +34,17 @@ END_MESSAGE_MAP()
 
 
 // CCreateNewSkinProject message handlers
+
+BOOL CCreateNewSkinProject::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+
+	// TODO:  Add extra initialization here
+
+	m_BrowseFolderEdit.EnableFolderBrowseButton();
+	return TRUE;  // return TRUE unless you set the focus to a control
+	// EXCEPTION: OCX Property Pages should return FALSE
+}
 
 void CCreateNewSkinProject::OnBnClickedCancel()
 {

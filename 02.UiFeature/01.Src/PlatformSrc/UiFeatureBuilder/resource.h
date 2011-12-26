@@ -84,9 +84,12 @@
 #define ID_VIEW_CONTROLSWND_LIST        308
 #define ID_VIEW_CONTROLSWND_COMBO       309
 #define ID_VIEW_RES_VIEW                310
-#define IDD_DIALOG1                     310
 #define IDD_CREATE_NEW_PROJECT          310
 #define ID_VIEW_WINDOW_VIEW             311
+#define IDB_BROWER_BTN                  1000
+#define IDE_DIR                         1001
+#define IDC_EDIT2                       1002
+#define IDE_NAME                        1002
 
 // Next default values for new objects
 // 
@@ -94,7 +97,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        311
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1000
+#define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

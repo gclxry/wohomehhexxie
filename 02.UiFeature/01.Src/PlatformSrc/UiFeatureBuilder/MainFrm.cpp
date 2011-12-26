@@ -6,6 +6,7 @@
 #include "UiFeatureBuilder.h"
 #include "MainFrm.h"
 #include "UiFeatureDefs.h"
+#include "CreateNewSkinProject.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -25,6 +26,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_REGISTERED_MESSAGE(AFX_WM_CREATETOOLBAR, &CMainFrame::OnToolbarCreateNew)
 	ON_COMMAND_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_OFF_2007_AQUA, &CMainFrame::OnApplicationLook)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_OFF_2007_AQUA, &CMainFrame::OnUpdateApplicationLook)
+	ON_COMMAND(ID_FILE_NEW, &CMainFrame::OnFileNew)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -40,6 +42,7 @@ static UINT indicators[] =
 CMainFrame::CMainFrame()
 {
 	theApp.m_nAppLook = theApp.GetInt(_T("ApplicationLook"), ID_VIEW_APPLOOK_OFF_2007_SILVER);
+	theApp.InitShellManager();
 
 	m_hKernelDll = NULL;
 	m_pKernelBuilder = NULL;
@@ -449,4 +452,11 @@ void CMainFrame::InitUiFeatureKernel()
 
 
 	m_bInitOk = true;
+}
+
+void CMainFrame::OnFileNew()
+{
+	// TODO: Add your command handler code here
+	CCreateNewSkinProject NewSkinDlg;
+	NewSkinDlg.DoModal();
 }
