@@ -22,7 +22,7 @@ public:
 	void AdjustLayout();
 	void OnChangeVisualStyle();
 
-	void SetSkinManager(IPropertySkinManager *pSkinMgr);
+	void Init(IKernelWindow* pKernelWindow, IPropertySkinManager *pSkinMgr);
 
 protected:
 	CClassToolBar m_wndToolBar;

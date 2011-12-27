@@ -1,6 +1,7 @@
 
 #pragma once
 #include "..\..\Inc\IPropertySkinManager.h"
+#include "..\..\Inc\IKernelWindow.h"
 /////////////////////////////////////////////////////////////////////////////
 // CViewTree ´°¿Ú
 
@@ -18,10 +19,11 @@ protected:
 public:
 	virtual ~CViewTree();
 
-	void SetSkinManager(IPropertySkinManager *pSkinMgr);
+	void Init(IKernelWindow* pKernelWindow, IPropertySkinManager *pSkinMgr);
 
 private:
 	IPropertySkinManager *m_pSkinMgr;
+	IKernelWindow* m_pKernelWindow;
 
 protected:
 	DECLARE_MESSAGE_MAP()
