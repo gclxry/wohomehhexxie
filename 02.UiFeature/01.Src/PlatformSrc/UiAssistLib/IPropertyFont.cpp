@@ -6,9 +6,8 @@
 IPropertyFont::IPropertyFont()
 {
 	SetObjectType(PROP_TYPE_FONT_NAME);
+	SetObjectName("default_font[ËÎÌו12]");
 
-	m_FontProp.strName = "";
-	m_FontProp.strPropInfo = "";
 	m_FontProp.FontColor = 0;
 	memset(&m_FontProp.Font, 0, sizeof(LOGFONTA));
 
@@ -99,7 +98,7 @@ bool IPropertyFont::ReadResourceXmlProperty(XmlNode* pXmlNode)
 		return false;
 
 	SetObjectId((const char *)psz_id);
-	m_FontProp.strName = psz_name;
+	SetObjectName((const char *)psz_name);
 
 	// logfont
 	strcpy_s(m_FontProp.Font.lfFaceName, 32, psz_lfFaceName);

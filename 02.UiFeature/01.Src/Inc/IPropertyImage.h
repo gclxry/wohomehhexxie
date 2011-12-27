@@ -24,8 +24,6 @@ struct JGG_INFO
 // 图片属性
 struct IMAGE_PROP
 {
-	string strName;
-	string strPropInfo;
 	// 在压缩文件中的文件名
 	string strZipFile;
 	RECT RectInImage;

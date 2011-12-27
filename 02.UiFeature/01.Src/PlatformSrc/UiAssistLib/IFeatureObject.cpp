@@ -8,7 +8,7 @@ IFeatureObject::IFeatureObject()
 {
 	m_strObjId = "NO_OBJECT_ID";
 	m_strObjType = "NO_OBJECT_TYPE_NAME";
-	m_strObjName = "NO_OBJECT_NAME";
+	m_strObjName = "";
 	m_strObjInfo = "NO_OBJECT_INFO";
 }
 

@@ -1,6 +1,7 @@
 
 #include "StdAfx.h"
 #include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\IFeatureObject.h"
 #include "IKernelWindowImpl.h"
 #include "IWindowBaseImpl.h"
 #include "WindowSubclass.h"
@@ -105,6 +106,12 @@ IWindowBase* IKernelWindowImpl::BuilderCreateWindow(IPropertyGroup *pWindowProp)
 		SAFE_DELETE(pWndBaseImpl);
 		return NULL;
 	}
+
+	// 设置objecid
+	char szId[MAX_PATH];
+	memset(szId, 0, MAX_PATH);
+	sprintf_s(szId, MAX_PATH-1, "%s%d", PROP_TYPE_WINDOW_NAME, IPropertySkinManagerImpl::GetInstance()->GetNewId());
+	pWindowProp->SetObjectId(szId);
 
 	// 初始化在builder中的属性
 	pWndBase->BuilderInitWindowBase(pWindowProp);

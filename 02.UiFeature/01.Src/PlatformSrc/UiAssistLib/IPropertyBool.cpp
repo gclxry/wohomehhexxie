@@ -6,19 +6,12 @@
 IPropertyBool::IPropertyBool()
 {
 	SetObjectType(PROP_TYPE_BOOL_NAME);
-	m_BoolProp.strName = "";
-	m_BoolProp.strPropInfo = "";
-	m_BoolProp.bBoolData = false;
+	m_bBoolData = false;
 }
 
 IPropertyBool::~IPropertyBool()
 {
 
-}
-
-bool IPropertyBool::IsRightData()
-{
-	return (m_BoolProp.strName.size() > 0);
 }
 
 bool IPropertyBool::ReadResourceXmlProperty(XmlNode* pXmlNode)
@@ -33,18 +26,18 @@ bool IPropertyBool::ReadResourceXmlProperty(XmlNode* pXmlNode)
 		return false;
 
 	SetObjectId((const char *)psz_id);
-	m_BoolProp.strName = psz_name;
-	m_BoolProp.bBoolData = (atoi(psz_data) != 0);
+	SetObjectName((const char *)psz_name);
+	m_bBoolData = (atoi(psz_data) != 0);
 
 	return true;
 }
 
 void IPropertyBool::SetValue(bool bBoolData)
 {
-	m_BoolProp.bBoolData = bBoolData;
+	m_bBoolData = bBoolData;
 }
 
 bool IPropertyBool::GetValue()
 {
-	return m_BoolProp.bBoolData;
+	return m_bBoolData;
 }

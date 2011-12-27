@@ -29,9 +29,6 @@ enum FONT_ALIGNING
 // 字体属性
 struct FONT_PROP
 {
-	// 属性名称
-	string strName;
-	string strPropInfo;
 	// 字体信息
 	LOGFONTA Font;
 	// 字体颜色

@@ -16,8 +16,6 @@ IPropertyString::~IPropertyString()
 
 void IPropertyString::Clear()
 {
-	m_StringProp.strName = "";
-	m_StringProp.strPropInfo = "";
 	m_StringProp.strDefaultString = "";
 	m_StringProp.nDefaultArea = AT_CN;
 	m_StringProp.StringMap.clear();
@@ -53,7 +51,7 @@ bool IPropertyString::ReadResourceXmlProperty(XmlNode* pXmlNode)
 	int nCtns = atoi(psz_counts);
 
 	SetObjectId((const char *)psz_id);
-	m_StringProp.strName = psz_name;
+	SetObjectName((const char *)psz_name);
 	m_StringProp.nDefaultArea = (AREA_TYPE)atoi(psz_default);
 	if (m_StringProp.nDefaultArea <= AT_NONE || m_StringProp.nDefaultArea >= AT_LAST)
 		m_StringProp.nDefaultArea = AT_CN;

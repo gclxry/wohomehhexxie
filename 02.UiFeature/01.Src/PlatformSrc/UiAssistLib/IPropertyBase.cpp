@@ -12,3 +12,8 @@ IPropertyBase::~IPropertyBase()
 {
 
 }
+
+bool IPropertyBase::IsRightData()
+{
+	return (strlen(this->GetObjectName()) > 0);
+}
