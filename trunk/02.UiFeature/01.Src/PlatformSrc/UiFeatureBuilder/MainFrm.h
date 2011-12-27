@@ -48,8 +48,8 @@ protected:  // 控件条嵌入成员
 private:
 //////////////////////////////////////////////////////////////////////////
 	// Kernel 相关
-	HMODULE				m_hKernelDll;
-	IKernelWindow*		m_pKernelWindow;
+	HMODULE m_hKernelDll;
+	IKernelWindow* m_pKernelWindow;
 	IPropertySkinManager* m_pSkinMgr;
 	CONTROL_REG_MAP* m_pRegControlMap;
 

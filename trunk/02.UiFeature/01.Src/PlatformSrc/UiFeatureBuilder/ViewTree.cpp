@@ -15,6 +15,7 @@ static char THIS_FILE[] = __FILE__;
 CViewTree::CViewTree()
 {
 	m_pSkinMgr = NULL;
+	m_pKernelWindow = NULL;
 }
 
 CViewTree::~CViewTree()
@@ -62,15 +63,18 @@ void CViewTree::OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult)
 	*pResult = 0;
 }
 
-void CViewTree::SetSkinManager(IPropertySkinManager *pSkinMgr)
+void CViewTree::Init(IKernelWindow* pKernelWindow, IPropertySkinManager *pSkinMgr)
 {
-	if (pSkinMgr != NULL)
-		m_pSkinMgr = pSkinMgr;
+	if (pKernelWindow == NULL || pSkinMgr == NULL)
+		return;
+
+	m_pKernelWindow = pKernelWindow;
+	m_pSkinMgr = pSkinMgr;
 }
 
 void CViewTree::OnCreateWindowPanel()
 {
-	if (m_pSkinMgr == NULL)
+	if (m_pSkinMgr == NULL || m_pKernelWindow == NULL)
 	{
 		AfxMessageBox(_T("列表没有被初始化"), MB_OK | MB_ICONERROR);
 		return;
@@ -91,6 +95,13 @@ void CViewTree::OnCreateWindowPanel()
 		AfxMessageBox(_T("新建窗体/面板 属性 错误！"), MB_OK | MB_ICONERROR);
 		return;
 	}
+	
+	IWindowBase *pWndBase = m_pKernelWindow->BuilderCreateWindow(pWndGroup);
+	if (pWndBase == NULL)
+	{
+		AfxMessageBox(_T("新建窗体/面板时，创建绘制窗体错误！"), MB_OK | MB_ICONERROR);
+		return;
+	}
 
-	this->SetItemData(hWindow, (DWORD_PTR)pWndGroup);
+	this->SetItemData(hWindow, (DWORD_PTR)pWndBase);
 }
