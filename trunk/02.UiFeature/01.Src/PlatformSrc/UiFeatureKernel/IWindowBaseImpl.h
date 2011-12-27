@@ -9,7 +9,11 @@ class IWindowBaseImpl : public IWindowBase
 public:
 	IWindowBaseImpl();
 	virtual ~IWindowBaseImpl();
+//////////////////////////////////////////////////////////////////////////
+	// Builder 使用的函数
+	virtual void BuilderInitWindowBase(IPropertyGroup *pWindowProp);
 
+//////////////////////////////////////////////////////////////////////////
 	// 初始化
 	virtual void InitWindowBase(HWND hWnd, char *pszSkinPath, char *pszWndName);
 	// 窗口居中显示

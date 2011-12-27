@@ -869,3 +869,11 @@ void IWindowBaseImpl::RedrawWindow(RECT* pDrawRct)
 {
 	::RedrawWindow(m_hWnd, pDrawRct, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 }
+
+void IWindowBaseImpl::BuilderInitWindowBase(IPropertyGroup *pWindowProp)
+{
+	if (pWindowProp == NULL)
+		return;
+
+	m_WndPropMgr.SetWindowPropetry(pWindowProp);
+}

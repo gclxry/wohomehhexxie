@@ -45,7 +45,7 @@ CMainFrame::CMainFrame()
 	theApp.InitShellManager();
 
 	m_hKernelDll = NULL;
-	m_pKernelBuilder = NULL;
+	m_pKernelWindow = NULL;
 	m_pSkinMgr = NULL;
 	m_hControlDll = NULL;
 	m_pRegControlMap = NULL;
@@ -434,25 +434,25 @@ void CMainFrame::InitUiFeatureKernel()
 		return;
 	}
 
-	GETKERNELBUILDERINTERFACE GetKernel = (GETKERNELBUILDERINTERFACE)::GetProcAddress(m_hKernelDll, "GetKernelBuilderInterface");
+	GETKERNELWINDOWINTERFACE GetKernel = (GETKERNELWINDOWINTERFACE)::GetProcAddress(m_hKernelDll, "GetKernelWindowInterface");
 	if (GetKernel == NULL)
 	{
-		AfxMessageBox(_T("找不到UiFeature内核DLL的【GetKernelBuilderInterface】函数！"), MB_OK | MB_ICONERROR);
+		AfxMessageBox(_T("找不到UiFeature内核DLL的【GetKernelWindowInterface】函数！"), MB_OK | MB_ICONERROR);
 		return;
 	}
 
-	m_pKernelBuilder = GetKernel();
-	if (m_pKernelBuilder == NULL)
+	m_pKernelWindow = GetKernel();
+	if (m_pKernelWindow == NULL)
 	{
-		AfxMessageBox(_T("找不到UiFeature内核DLL的【IKernelBuilder】接口！"), MB_OK | MB_ICONERROR);
+		AfxMessageBox(_T("找不到UiFeature内核DLL的【IKernelWindow】接口！"), MB_OK | MB_ICONERROR);
 		return;
 	}
 
-	m_pSkinMgr = m_pKernelBuilder->GetSkinManager();
+	m_pSkinMgr = m_pKernelWindow->GetSkinManager();
 	m_wndWindowView.SetSkinManager(m_pSkinMgr);
 
 	// 加载控件显示数据
-	m_pRegControlMap = m_pKernelBuilder->GetRegControlMap();
+	m_pRegControlMap = m_pKernelWindow->BuilderRegisterControl();
 	// 显示控件
 	m_wndControls.SetControlList(m_pRegControlMap);
 

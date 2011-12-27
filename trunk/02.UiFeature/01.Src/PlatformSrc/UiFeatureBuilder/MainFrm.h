@@ -49,9 +49,9 @@ private:
 //////////////////////////////////////////////////////////////////////////
 	// Kernel 相关
 	HMODULE				m_hKernelDll;
-	IKernelBuilder*		m_pKernelBuilder;
+	IKernelWindow*		m_pKernelWindow;
 	IPropertySkinManager* m_pSkinMgr;
-	CONTROL_REG_MAP*	m_pRegControlMap;
+	CONTROL_REG_MAP* m_pRegControlMap;
 
 //////////////////////////////////////////////////////////////////////////
 	// 控件相关
