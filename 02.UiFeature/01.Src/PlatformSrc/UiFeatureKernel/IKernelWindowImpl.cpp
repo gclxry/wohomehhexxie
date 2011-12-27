@@ -4,6 +4,8 @@
 #include "IKernelWindowImpl.h"
 #include "IWindowBaseImpl.h"
 #include "WindowSubclass.h"
+#include "ControlImpl.h"
+#include "IPropertySkinManagerImpl.h"
 
 // 内核对【对话框】的接口
 IKernelWindow *GetKernelWindowInterface()
@@ -13,22 +15,37 @@ IKernelWindow *GetKernelWindowInterface()
 
 IKernelWindowImpl::IKernelWindowImpl(void)
 {
+	m_nBuilderHwnd = 1;
+	m_CtrlRegMap.clear();
+}
+
+IKernelWindowImpl::~IKernelWindowImpl(void)
+{
 	for (WINDOW_IMPL_MAP::iterator pWndItem = m_WndImplMap.begin(); pWndItem != m_WndImplMap.end(); pWndItem++)
 	{
 		IWindowBaseImpl* pDelWnd = pWndItem->second;
 		SAFE_DELETE(pDelWnd);
 	}
 	m_WndImplMap.clear();
-}
-
-IKernelWindowImpl::~IKernelWindowImpl(void)
-{
+	m_CtrlRegMap.clear();
 }
 
 IKernelWindow* IKernelWindowImpl::GetInstance()
 {
 	static IKernelWindowImpl _KernelWindowInstance;
 	return &_KernelWindowInstance;
+}
+
+// 取得所有支持的控件
+CONTROL_REG_MAP* IKernelWindowImpl::BuilderRegisterControl()
+{
+	CControlImpl::GetInstance()->SetRegControlMap(&m_CtrlRegMap);
+	return &m_CtrlRegMap;
+}
+
+IPropertySkinManager* IKernelWindowImpl::GetSkinManager()
+{
+	return IPropertySkinManagerImpl::GetInstance();
 }
 
 // 一个对话框释放皮肤资源
@@ -69,5 +86,31 @@ IWindowBase* IKernelWindowImpl::InitFeatureSkin(HWND hWnd, char *pszSkinPath, ch
 
 	// 记录到窗口队列中
 	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>(hWnd, pWndBaseImpl));
+	return pWndBase;
+}
+
+// 创建一个Builder使用的窗口
+IWindowBase* IKernelWindowImpl::BuilderCreateWindow(IPropertyGroup *pWindowProp)
+{
+	if (pWindowProp == NULL)
+		return NULL;
+
+	IWindowBaseImpl *pWndBaseImpl = new IWindowBaseImpl;
+	if (pWndBaseImpl == NULL)
+		return NULL;
+
+	IWindowBase* pWndBase = (dynamic_cast<IWindowBase*>(pWndBaseImpl));
+	if (pWndBase == NULL)
+	{
+		SAFE_DELETE(pWndBaseImpl);
+		return NULL;
+	}
+
+	// 初始化在builder中的属性
+	pWndBase->BuilderInitWindowBase(pWindowProp);
+
+	// 记录到窗口队列中
+	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>((HWND)m_nBuilderHwnd++, pWndBaseImpl));
+
 	return pWndBase;
 }

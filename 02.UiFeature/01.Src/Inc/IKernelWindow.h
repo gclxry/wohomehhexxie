@@ -5,6 +5,15 @@
 class IKernelWindow
 {
 public:
+	virtual IPropertySkinManager* GetSkinManager() = 0;
+//////////////////////////////////////////////////////////////////////////
+// Builder 使用函数
+	// 取得所有支持的控件
+	virtual CONTROL_REG_MAP *BuilderRegisterControl() = 0;
+	// 创建一个Builder使用的窗口
+	virtual IWindowBase* BuilderCreateWindow(IPropertyGroup *pWindowProp) = 0;
+
+//////////////////////////////////////////////////////////////////////////
 	// 一个对话框从一个皮肤包里使用指定的对话框皮肤资源初始化自己
 	// 窗口释放皮肤资源的释放在内部自动完成
 	virtual IWindowBase* InitFeatureSkin(HWND hWnd, char *pszSkinPath, char *pszWndName) = 0;

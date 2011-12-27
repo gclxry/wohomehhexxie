@@ -2,5 +2,3 @@ LIBRARY	"UiFeatureKernel"
 
 EXPORTS
 	GetKernelWindowInterface			@1
-	GetKernelBuilderInterface			@2
-	GetSkinManagerInterface				@3
