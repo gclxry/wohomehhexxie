@@ -15,6 +15,11 @@
 #include "..\..\Inc\IPropertyGroup.h"
 #include "IPropertyWindowManagerImpl.h"
 
+IPropertySkinManager *GetSkinManagerInterface()
+{
+	return IPropertySkinManagerImpl::GetInstance();
+}
+
 IPropertySkinManager* IPropertySkinManagerImpl::GetInstance()
 {
 	static IPropertySkinManagerImpl _PropertySkinManagerInstance;

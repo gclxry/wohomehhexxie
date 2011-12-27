@@ -50,6 +50,7 @@ private:
 	// Kernel ฯเนุ
 	HMODULE				m_hKernelDll;
 	IKernelBuilder*		m_pKernelBuilder;
+	IPropertySkinManager* m_pSkinMgr;
 	CONTROL_REG_MAP*	m_pRegControlMap;
 
 //////////////////////////////////////////////////////////////////////////

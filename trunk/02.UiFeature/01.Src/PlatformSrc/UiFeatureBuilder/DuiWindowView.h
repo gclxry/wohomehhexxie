@@ -22,6 +22,8 @@ public:
 	void AdjustLayout();
 	void OnChangeVisualStyle();
 
+	void SetSkinManager(IPropertySkinManager *pSkinMgr);
+
 protected:
 	CClassToolBar m_wndToolBar;
 	CViewTree m_wndWindowTree;
@@ -29,6 +31,9 @@ protected:
 	UINT m_nCurrSort;
 
 	void FillClassView();
+
+private:
+	HTREEITEM m_hRoot;
 
 // ÖØÐ´
 public:

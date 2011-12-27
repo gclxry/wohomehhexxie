@@ -12,3 +12,8 @@ typedef IKernelWindow* (*GETKERNELWINDOWINTERFACE)();
 // 内核对【Builder】的接口
 IKernelBuilder *GetKernelBuilderInterface();
 typedef IKernelBuilder* (*GETKERNELBUILDERINTERFACE)();
+
+//////////////////////////////////////////////////////////////////////////
+// 内核对【SkinManager】的接口
+IPropertySkinManager *GetSkinManagerInterface();
+typedef IPropertySkinManager* (*GETSKINMANAGERINTERFACE)();
