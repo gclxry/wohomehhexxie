@@ -3,7 +3,7 @@
 #include "IFeatureObject.h"
 #include "IPropertySkinManager.h"
 
-string GetDllPath(char *pszDllName);
+string PathHelper(char *pszDllName);
 
 OBJECT_TYPE_ID PropStringToType(string strPropType);
 string PropTypeToString(OBJECT_TYPE_ID propType);

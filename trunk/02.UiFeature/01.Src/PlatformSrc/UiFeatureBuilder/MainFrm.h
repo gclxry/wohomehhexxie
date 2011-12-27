@@ -64,7 +64,7 @@ private:
 
 private:
 	void InitUiFeatureKernel();
-	CString GetDllPath(TCHAR *pszDllName);
+	CString PathHelper(TCHAR *pszDllName);
 
 
 // 生成的消息映射函数

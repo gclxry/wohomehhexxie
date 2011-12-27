@@ -2,7 +2,7 @@
 #include "StdAfx.h"
 #include "..\..\Inc\ICommonFun.h"
 
-string GetDllPath(char *pszDllName)
+string PathHelper(char *pszDllName)
 {
 	string strPath = "";
 	if (pszDllName != NULL)

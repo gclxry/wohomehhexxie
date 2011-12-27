@@ -4,6 +4,8 @@
 #include "stdafx.h"
 #include "UiFeatureBuilder.h"
 #include "CreateNewSkinProject.h"
+#include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\ICommonFun.h"
 
 
 // CCreateNewSkinProject dialog
@@ -57,6 +59,7 @@ void CCreateNewSkinProject::OnBnClickedCancel()
 
 void CCreateNewSkinProject::OnBnClickedOk()
 {
+	USES_CONVERSION;
 	m_strSkinDir = _T("");
 	m_strSkinName = _T("");
 
@@ -73,6 +76,22 @@ void CCreateNewSkinProject::OnBnClickedOk()
 	{
 		AfxMessageBox(_T("请输入皮肤工程名称！"), MB_OK | MB_ICONERROR);
 		this->GetDlgItem(IDE_NAME)->SetFocus();
+		return;
+	}
+
+	CString strToFile("");
+	strToFile.Format(_T("%s%s%s%s"), m_strSkinDir, _T("\\"), m_strSkinName, _T(NAME_SKIN_PROJ_EX_NAME));
+
+//	char szPath[MAX_PATH+1];
+//	PathHelper(NAME_UFP_TEMPLATE, szPath, MAX_PATH+1);
+
+	string strPath = PathHelper(NAME_UFP_TEMPLATE);
+
+	if (!::CopyFileA(strPath.c_str(), W2A(strToFile), TRUE))
+	{
+		CString strInfo(_T(""));
+		strInfo.Format(_T("创建皮肤工程失败！原因有可能是：\n1.安装目录下不存在【%s】文件\n2.目标文件已经存在\n3.目标文件夹不可写"), NAME_UFP_TEMPLATE);
+		AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
 		return;
 	}
 

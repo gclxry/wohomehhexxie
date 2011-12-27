@@ -405,7 +405,7 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CString CMainFrame::GetDllPath(TCHAR *pszDllName)
+CString CMainFrame::PathHelper(TCHAR *pszDllName)
 {
 	CString strPath = _T("");
 	if (pszDllName != NULL)
@@ -425,7 +425,7 @@ CString CMainFrame::GetDllPath(TCHAR *pszDllName)
 
 void CMainFrame::InitUiFeatureKernel()
 {
-	CString strKernelPath = GetDllPath(NAME_KERNEL);
+	CString strKernelPath = PathHelper(NAME_KERNEL);
 	m_hKernelDll = ::LoadLibrary(strKernelPath);
 	if (m_hKernelDll == NULL)
 	{
