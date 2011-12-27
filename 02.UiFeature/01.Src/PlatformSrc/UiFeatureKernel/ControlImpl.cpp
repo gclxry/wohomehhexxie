@@ -25,7 +25,7 @@ bool CControlImpl::LoadDll()
 	if (m_hControlDll != NULL)
 		return true;
 
-	string strPath = GetDllPath(NAME_CONTROL_DLL);
+	string strPath = PathHelper(NAME_CONTROL_DLL);
 	if (strPath.size() <= 0)
 		return false;
 

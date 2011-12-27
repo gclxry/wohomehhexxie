@@ -221,7 +221,7 @@ void IPropertySkinManagerImpl::LoadZipDll()
 	m_pZipFile = NULL;
 	m_hZipModule = NULL;
 
-	string strPath = GetDllPath(NAME_ZIP_DLL);
+	string strPath = PathHelper(NAME_ZIP_DLL);
 	m_hZipModule = ::LoadLibraryA(strPath.c_str());
 	if (m_hZipModule == NULL)
 		return;
