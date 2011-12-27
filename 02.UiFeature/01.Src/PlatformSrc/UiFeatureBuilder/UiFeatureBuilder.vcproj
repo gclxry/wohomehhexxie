@@ -221,10 +221,6 @@
 				RelativePath=".\UiFeatureBuilderView.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\ViewTree.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -253,10 +249,6 @@
 			</File>
 			<File
 				RelativePath=".\UiFeatureBuilderView.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ViewTree.h"
 				>
 			</File>
 		</Filter>
@@ -426,7 +418,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="04.各个窗口视图"
+				Name="04.【窗体-面板】视图"
 				>
 				<File
 					RelativePath=".\DuiWindowView.cpp"
@@ -434,6 +426,14 @@
 				</File>
 				<File
 					RelativePath=".\DuiWindowView.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ViewTree.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ViewTree.h"
 					>
 				</File>
 			</Filter>

@@ -46,6 +46,7 @@ CMainFrame::CMainFrame()
 
 	m_hKernelDll = NULL;
 	m_pKernelBuilder = NULL;
+	m_pSkinMgr = NULL;
 	m_hControlDll = NULL;
 	m_pRegControlMap = NULL;
 	m_bInitOk = false;
@@ -447,11 +448,13 @@ void CMainFrame::InitUiFeatureKernel()
 		return;
 	}
 
+	m_pSkinMgr = m_pKernelBuilder->GetSkinManager();
+	m_wndWindowView.SetSkinManager(m_pSkinMgr);
+
 	// 加载控件显示数据
 	m_pRegControlMap = m_pKernelBuilder->GetRegControlMap();
 	// 显示控件
 	m_wndControls.SetControlList(m_pRegControlMap);
-
 
 	m_bInitOk = true;
 }

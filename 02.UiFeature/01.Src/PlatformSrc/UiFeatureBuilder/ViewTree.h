@@ -1,6 +1,6 @@
 
 #pragma once
-
+#include "..\..\Inc\IPropertySkinManager.h"
 /////////////////////////////////////////////////////////////////////////////
 // CViewTree ´°¿Ú
 
@@ -18,6 +18,14 @@ protected:
 public:
 	virtual ~CViewTree();
 
+	void SetSkinManager(IPropertySkinManager *pSkinMgr);
+
+private:
+	IPropertySkinManager *m_pSkinMgr;
+
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnCreateWindowPanel();
 };

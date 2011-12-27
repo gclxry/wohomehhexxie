@@ -60,7 +60,7 @@ void CCreateNewSkinProject::OnBnClickedCancel()
 void CCreateNewSkinProject::OnBnClickedOk()
 {
 	USES_CONVERSION;
-	m_strSkinDir = _T("");
+	m_strSkinDir = _T("");	
 	m_strSkinName = _T("");
 
 	this->GetDlgItemText(IDE_DIR, m_strSkinDir);
@@ -81,9 +81,6 @@ void CCreateNewSkinProject::OnBnClickedOk()
 
 	CString strToFile("");
 	strToFile.Format(_T("%s%s%s%s"), m_strSkinDir, _T("\\"), m_strSkinName, _T(NAME_SKIN_PROJ_EX_NAME));
-
-//	char szPath[MAX_PATH+1];
-//	PathHelper(NAME_UFP_TEMPLATE, szPath, MAX_PATH+1);
 
 	string strPath = PathHelper(NAME_UFP_TEMPLATE);
 

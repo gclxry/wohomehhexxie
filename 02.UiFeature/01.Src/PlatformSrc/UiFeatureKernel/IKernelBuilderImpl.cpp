@@ -4,6 +4,7 @@
 #include "..\..\Inc\IPropertySkinManager.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "ControlImpl.h"
+#include "IPropertySkinManagerImpl.h"
 
 // 内核对【Builder】的接口
 IKernelBuilder *GetKernelBuilderInterface()
@@ -25,6 +26,11 @@ IKernelBuilder* IKernelBuilderImpl::GetInstance()
 {
 	static IKernelBuilderImpl _KernelBuilderInstance;
 	return &_KernelBuilderInstance;
+}
+
+IPropertySkinManager* IKernelBuilderImpl::GetSkinManager()
+{
+	return IPropertySkinManagerImpl::GetInstance();
 }
 
 // 取得所有支持的控件

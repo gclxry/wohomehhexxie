@@ -39,6 +39,7 @@ IMPLEMENT_SERIAL(CClassViewMenuButton, CMFCToolBarMenuButton, 1)
 CDuiWindowView::CDuiWindowView()
 {
 	m_nCurrSort = ID_SORTING_GROUPBYTYPE;
+	m_hRoot = NULL;
 }
 
 CDuiWindowView::~CDuiWindowView()
@@ -121,40 +122,45 @@ void CDuiWindowView::OnSize(UINT nType, int cx, int cy)
 
 void CDuiWindowView::FillClassView()
 {
-	HTREEITEM hRoot = m_wndWindowTree.InsertItem(_T("FakeApp ¿‡"), 0, 0);
-	m_wndWindowTree.SetItemState(hRoot, TVIS_BOLD, TVIS_BOLD);
+	m_hRoot = m_wndWindowTree.InsertItem(_T("°æ¥∞ÃÂ-√Ê∞Â°ø"), 0, 0);
+	m_wndWindowTree.SetItemState(m_hRoot, TVIS_BOLD, TVIS_BOLD);
 
-	HTREEITEM hClass = m_wndWindowTree.InsertItem(_T("CFakeAboutDlg"), 1, 1, hRoot);
+/*	HTREEITEM hClass = m_wndWindowTree.InsertItem(_T("CFakeAboutDlg"), 1, 1, m_hRoot);
 	m_wndWindowTree.InsertItem(_T("CFakeAboutDlg()"), 3, 3, hClass);
 
-	m_wndWindowTree.Expand(hRoot, TVE_EXPAND);
+	m_wndWindowTree.Expand(m_hRoot, TVE_EXPAND);
 
-	hClass = m_wndWindowTree.InsertItem(_T("CFakeApp"), 1, 1, hRoot);
+	hClass = m_wndWindowTree.InsertItem(_T("CFakeApp"), 1, 1, m_hRoot);
 	m_wndWindowTree.InsertItem(_T("CFakeApp()"), 3, 3, hClass);
 	m_wndWindowTree.InsertItem(_T("InitInstance()"), 3, 3, hClass);
 	m_wndWindowTree.InsertItem(_T("OnAppAbout()"), 3, 3, hClass);
 
-	hClass = m_wndWindowTree.InsertItem(_T("CFakeAppDoc"), 1, 1, hRoot);
+	hClass = m_wndWindowTree.InsertItem(_T("CFakeAppDoc"), 1, 1, m_hRoot);
 	m_wndWindowTree.InsertItem(_T("CFakeAppDoc()"), 4, 4, hClass);
 	m_wndWindowTree.InsertItem(_T("~CFakeAppDoc()"), 3, 3, hClass);
 	m_wndWindowTree.InsertItem(_T("OnNewDocument()"), 3, 3, hClass);
 
-	hClass = m_wndWindowTree.InsertItem(_T("CFakeAppView"), 1, 1, hRoot);
+	hClass = m_wndWindowTree.InsertItem(_T("CFakeAppView"), 1, 1, m_hRoot);
 	m_wndWindowTree.InsertItem(_T("CFakeAppView()"), 4, 4, hClass);
 	m_wndWindowTree.InsertItem(_T("~CFakeAppView()"), 3, 3, hClass);
 	m_wndWindowTree.InsertItem(_T("GetDocument()"), 3, 3, hClass);
 	m_wndWindowTree.Expand(hClass, TVE_EXPAND);
 
-	hClass = m_wndWindowTree.InsertItem(_T("CFakeAppFrame"), 1, 1, hRoot);
+	hClass = m_wndWindowTree.InsertItem(_T("CFakeAppFrame"), 1, 1, m_hRoot);
 	m_wndWindowTree.InsertItem(_T("CFakeAppFrame()"), 3, 3, hClass);
 	m_wndWindowTree.InsertItem(_T("~CFakeAppFrame()"), 3, 3, hClass);
 	m_wndWindowTree.InsertItem(_T("m_wndMenuBar"), 6, 6, hClass);
 	m_wndWindowTree.InsertItem(_T("m_wndToolBar"), 6, 6, hClass);
 	m_wndWindowTree.InsertItem(_T("m_wndStatusBar"), 6, 6, hClass);
 
-	hClass = m_wndWindowTree.InsertItem(_T("Globals"), 2, 2, hRoot);
+	hClass = m_wndWindowTree.InsertItem(_T("Globals"), 2, 2, m_hRoot);
 	m_wndWindowTree.InsertItem(_T("theFakeApp"), 5, 5, hClass);
-	m_wndWindowTree.Expand(hClass, TVE_EXPAND);
+	m_wndWindowTree.Expand(hClass, TVE_EXPAND);*/
+}
+
+void CDuiWindowView::SetSkinManager(IPropertySkinManager *pSkinMgr)
+{
+	m_wndWindowTree.SetSkinManager(pSkinMgr);
 }
 
 void CDuiWindowView::OnContextMenu(CWnd* pWnd, CPoint point)

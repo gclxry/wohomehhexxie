@@ -14,6 +14,8 @@ public:
 	// 取得所有支持的控件
 	virtual CONTROL_REG_MAP *GetRegControlMap();
 
+	virtual IPropertySkinManager* GetSkinManager();
+
 private:
 	// 所有支持的控件
 	CONTROL_REG_MAP		m_CtrlRegMap;
