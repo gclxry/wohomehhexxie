@@ -7,21 +7,12 @@
 // Group 中的属性列表
 typedef vector<IPropertyBase*>		GROUP_PROP_VEC;
 
-struct GROUP_PROP
-{
-	// 属性名称
-	string strName;
-	string strPropInfo;
-};
-
 class IPropertyGroup : public IPropertyBase
 {
 public:
 	IPropertyGroup();
 	virtual ~IPropertyGroup();
 
-	// 是否为合法数据
-	virtual bool IsRightData();
 	// 从XML节点读取属性值，并放入属性队列
 	virtual bool ReadResourceXmlProperty(XmlNode* pXmlNode);
 
@@ -33,6 +24,5 @@ public:
 	void AppendProperty(IPropertyBase* pProperty);
 
 private:
-	GROUP_PROP m_GroupProp;
 	GROUP_PROP_VEC m_PropVec;
 };

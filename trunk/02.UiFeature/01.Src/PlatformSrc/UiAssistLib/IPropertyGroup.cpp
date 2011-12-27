@@ -6,19 +6,12 @@
 IPropertyGroup::IPropertyGroup()
 {
 	SetObjectType(PROP_TYPE_GROUP_NAME);
-	m_GroupProp.strName = "";
-	m_GroupProp.strPropInfo = "";
 	m_PropVec.clear();
 }
 
 IPropertyGroup::~IPropertyGroup()
 {
 
-}
-
-bool IPropertyGroup::IsRightData()
-{
-	return (m_GroupProp.strName.size() > 0);
 }
 
 // 取得Group下的属性列表
@@ -38,7 +31,7 @@ bool IPropertyGroup::ReadResourceXmlProperty(XmlNode* pXmlNode)
 		return false;
 
 	SetObjectId((const char *)psz_id);
-	m_GroupProp.strName = psz_name;
+	SetObjectName((const char *)psz_name);
 
 	return true;
 }

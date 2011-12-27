@@ -128,15 +128,21 @@ string PropTypeToString(OBJECT_TYPE_ID propType)
 
 void ResetObjectId(IFeatureObject *pSetObj, IPropertySkinManager* pSkinPropMgr, char *pszBase)
 {
-	if (pSetObj == NULL || pSkinPropMgr == NULL || pszBase == NULL)
+	if (pSetObj == NULL || pSkinPropMgr == NULL)
 		return;
 
 	char szId[1024];
 	memset(szId, 0, 1024);
-	sprintf_s(szId, 1023, "%s.%s%d", pszBase, pSetObj->GetObjectType(), pSkinPropMgr->GetNewId());
+
+	if (pszBase != NULL)
+		sprintf_s(szId, 1023, "%s.%s%d", pszBase, pSetObj->GetObjectType(), pSkinPropMgr->GetNewId());
+	else
+		sprintf_s(szId, 1023, "%s%d", pSetObj->GetObjectType(), pSkinPropMgr->GetNewId());
+
 	pSetObj->SetObjectId(szId);
 }
 
+// 创建一个属性，如果这个属性在 group 中已经有了，就返回这个属性，如果没有
 IPropertyBase* CreateResourcePropetry(IPropertySkinManager* pSkinPropMgr, IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo)
 {
 	if (pSkinPropMgr == NULL || pGroup == NULL || pszPropName == NULL || propType <= PT_NONE || propType >= PT_LAST || strlen(pszPropName) <= 0)
@@ -178,5 +184,7 @@ IPropertyBase* CreateResourcePropetry(IPropertySkinManager* pSkinPropMgr, IPrope
 	pPropBase->SetObjectInfo(pszPropInfo);
 	// 设置ObjectID
 	ResetObjectId((IFeatureObject*)pPropBase, pSkinPropMgr, (char*)pGroup->GetObjectId());
+
+	pGroup->AppendProperty(pPropBase);
 	return pPropBase;
 }

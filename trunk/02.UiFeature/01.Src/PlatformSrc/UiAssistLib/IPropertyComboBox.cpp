@@ -16,15 +16,13 @@ IPropertyComboBox::~IPropertyComboBox()
 
 void IPropertyComboBox::Clear()
 {
-	m_ComboBoxPro.strName = "";
-	m_ComboBoxPro.strPropInfo = "";
 	m_ComboBoxPro.nSelect = -1;
 	m_ComboBoxPro.DataVec.clear();
 }
 
 bool IPropertyComboBox::IsRightData()
 {
-	return (m_ComboBoxPro.strName.size() > 0 && m_ComboBoxPro.DataVec.size() > 0 && m_ComboBoxPro.nSelect >= 0);
+	return (m_ComboBoxPro.DataVec.size() > 0 && m_ComboBoxPro.nSelect >= 0);
 }
 
 bool IPropertyComboBox::ReadResourceXmlProperty(XmlNode* pXmlNode)
@@ -42,7 +40,7 @@ bool IPropertyComboBox::ReadResourceXmlProperty(XmlNode* pXmlNode)
 	int nCtns = atoi(psz_counts);
 
 	SetObjectId((const char *)psz_id);
-	m_ComboBoxPro.strName = psz_name;
+	SetObjectName((const char *)psz_name);
 	m_ComboBoxPro.nSelect = atoi(psz_select);
 	if (m_ComboBoxPro.nSelect < 0 || m_ComboBoxPro.nSelect >= nCtns)
 		m_ComboBoxPro.nSelect = 0;

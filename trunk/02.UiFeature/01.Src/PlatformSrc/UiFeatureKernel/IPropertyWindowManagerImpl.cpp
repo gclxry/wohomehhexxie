@@ -189,16 +189,19 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 	m_pPropBase_Visible = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, PT_BOOL, "Visible", "是否可见");
 	if (m_pPropBase_Visible == NULL)
 		return;
+	m_pPropBase_Visible->SetValue(true);
 
 	// base-支持分层窗口
 	m_pPropBase_Layered = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, PT_BOOL, "LayeredWindow", "是否支持分层窗口");
 	if (m_pPropBase_Layered == NULL)
 		return;
+	m_pPropBase_Layered->SetValue(false);
 
 	// base-topmost
 	m_pPropBase_TopMost = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, PT_BOOL, "TopMost", "窗口是否在最上层");
 	if (m_pPropBase_TopMost == NULL)
 		return;
+	m_pPropBase_TopMost->SetValue(false);
 
 	// base-sysbase
 	m_pPropGroupSysBase = (IPropertyGroup*)CreatePropetry(m_pPropGroupBase, PT_GROUP, "SysBase", NULL);

@@ -7,8 +7,6 @@ IPropertyImage::IPropertyImage()
 {
 	SetObjectType(PROP_TYPE_IMAGE_NAME);
 
-	m_ImageProp.strName = "";
-	m_ImageProp.strPropInfo = "";
 	m_ImageProp.strZipFile = "";
 	INIT_RECT(m_ImageProp.RectInImage);
 	memset(&m_ImageProp.jggInfo, 0, sizeof(JGG_INFO));
@@ -78,7 +76,7 @@ bool IPropertyImage::ReadResourceXmlProperty(XmlNode* pXmlNode)
 		return false;
 
 	SetObjectId((const char *)psz_id);
-	m_ImageProp.strName = psz_name;
+	SetObjectName((const char *)psz_name);
 	m_ImageProp.strZipFile = psz_imageinzip;
 
 	m_ImageProp.RectInImage.left = atoi(psz_left);
