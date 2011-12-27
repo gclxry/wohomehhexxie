@@ -24,6 +24,8 @@ using namespace std;
 #define NAME_ENGINE_DLL								("UiFeatureEngine.dll")
 #define NAME_CONTROL_DLL							("UiFeatureControl.dll")
 #define NAME_ZIP_DLL								("UiFeatureZip.dll")
+#define NAME_UFP_TEMPLATE							("ufp.template")
+#define NAME_SKIN_PROJ_EX_NAME						".ufp"
 
 // 属性资源xml文件
 #define RESOURCE_XML_NAME							("Resource.xml")
