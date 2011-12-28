@@ -33,7 +33,6 @@ public:
 
 protected:
 	CFont m_fntPropList;
-	CPropertiesToolBar m_wndToolBar;
 	CPropertyViewCtrl m_wndPropList;
 
 // й╣ож

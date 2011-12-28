@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "PropertyViewCtrl.h"
 #include "..\..\Inc\UiFeatureDefs.h"
+#include "PropetryDialogGridProperty.h"
 
 CPropertyViewCtrl::CPropertyViewCtrl(void)
 {
@@ -141,7 +142,6 @@ void CPropertyViewCtrl::AppendColorProp(CMFCPropertyGridProperty* pParentPropGro
 
 void CPropertyViewCtrl::ClearAll()
 {
-	return;
 	m_pPropGroup = NULL;
 	this->RemoveAll();
 }
@@ -191,9 +191,25 @@ void CPropertyViewCtrl::AppendFontProp(CMFCPropertyGridProperty* pParentPropGrou
 
 void CPropertyViewCtrl::AppendImageProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyImage *pImageProp)
 {
+	USES_CONVERSION;
 	if (pParentPropGroup == NULL || pImageProp == NULL)
 		return;
 
+	IPropertyBase *pPropBase = dynamic_cast<IPropertyBase*>(pImageProp);
+	if (pPropBase == NULL)
+		return;
+
+	CString strName = A2W(pPropBase->GetObjectName());
+	CString strInfo = A2W(pPropBase->GetObjectInfo());
+	CString strData = A2W(pImageProp->GetImageBaseName());
+
+	CPropetryDialogGridProperty *pNewProp = new CPropetryDialogGridProperty(strName, (_variant_t)strData, strInfo);
+	if (pNewProp == NULL)
+		return;
+	pNewProp->AllowEdit(FALSE);
+
+	pNewProp->SetData((DWORD_PTR)pPropBase);
+	pParentPropGroup->AddSubItem(pNewProp);
 }
 
 void CPropertyViewCtrl::AppendIntProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyInt *pIntProp)
@@ -223,7 +239,10 @@ void CPropertyViewCtrl::AppendStringProp(CMFCPropertyGridProperty* pParentPropGr
 
 	if ((lstrcmpA(pPropBase->GetObjectName(), NAME_SKIN_PROP_NAME_OBJ_ID) == 0)
 	|| (lstrcmpA(pPropBase->GetObjectName(), NAME_SKIN_PROP_NAME_TYPE) == 0))
+	{
+		pNewProp->Enable(FALSE);
 		pNewProp->AllowEdit(FALSE);
+	}
 
 	pNewProp->SetData((DWORD_PTR)pPropBase);
 	pParentPropGroup->AddSubItem(pNewProp);

@@ -15,6 +15,11 @@ IPropertyImage::~IPropertyImage()
 
 }
 
+const char * IPropertyImage::GetImageBaseName()
+{
+	return (m_strImageBaseName.c_str());
+}
+
 bool IPropertyImage::IsRightData()
 {
 	return (m_strImageBaseName.size() > 0);

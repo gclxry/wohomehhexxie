@@ -424,6 +424,18 @@
 					RelativePath=".\PropertyViewCtrl.h"
 					>
 				</File>
+				<Filter
+					Name="属性子窗口"
+					>
+					<File
+						RelativePath=".\PropetryDialogGridProperty.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\PropetryDialogGridProperty.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="04.【窗体-面板】视图"
