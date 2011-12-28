@@ -3,6 +3,10 @@
 #include "IUiEngineImpl.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 
+IUiEngine *GetUiEngineInterface()
+{
+	return IUiEngineImpl::GetInstance();
+}
 
 IUiEngineImpl::IUiEngineImpl(void)
 {
