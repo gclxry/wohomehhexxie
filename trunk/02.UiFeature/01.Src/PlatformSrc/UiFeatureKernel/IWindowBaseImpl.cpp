@@ -877,5 +877,7 @@ void IWindowBaseImpl::BuilderInitWindowBase(IPropertyGroup *pWindowProp)
 	if (pWindowProp == NULL)
 		return;
 
+	this->SetObjectId(pWindowProp->GetObjectId());
+	this->SetObjectName("【新建窗体名称】");
 	m_WndPropMgr.SetWindowPropetry(pWindowProp);
 }

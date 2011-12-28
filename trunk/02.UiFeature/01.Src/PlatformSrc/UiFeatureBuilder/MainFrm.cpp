@@ -454,6 +454,7 @@ void CMainFrame::InitUiFeatureKernel()
 	m_pSkinMgr = m_pKernelWindow->GetSkinManager();
 
 	m_wndWindowView.Init(m_pKernelWindow, m_wndProperties.GetPropetryCtrl());
+	m_wndProperties.Init(m_pKernelWindow, m_wndWindowView.GetViewTreeCtrl());
 
 	// 加载控件显示数据
 	m_pRegControlMap = m_pKernelWindow->BuilderRegisterControl();

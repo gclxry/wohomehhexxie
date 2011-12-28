@@ -234,13 +234,13 @@ bool IPropertyControlManager::CreateEmptyPropList()
 	m_ControlPropList.clear();
 
 	// 基础属性组
-	IPropertyGroup *pBaseGroupProp = (IPropertyGroup *)CreateProperty(NULL, PT_GROUP, "控件基本属性", NULL);
+	IPropertyGroup *pBaseGroupProp = (IPropertyGroup *)CreateProperty(NULL, OTID_GROUP, "控件基本属性", NULL);
 
 	// 控件类型(只读)
 	// 控件ID(只读)
 
 	// 控件名称
-	IPropertyBase* pNameProp = CreateProperty(pBaseGroupProp, PT_STRING, "Name", "控件名称");
+	IPropertyBase* pNameProp = CreateProperty(pBaseGroupProp, OTID_STRING, "Name", "控件名称");
 
 	// Visible
 	// Enable
@@ -297,7 +297,7 @@ void IPropertyControlManager::InitControlPropObjectId(GROUP_PROP_VEC *pPropList)
 		sprintf_s(szId, 1023, "%s.%s%d", strCtrlType.c_str(), strTypeName.c_str(), nId);
 		pProp->SetObjectType(szId);
 
-		if (pProp->GetObjectTypeId() == PT_GROUP)
+		if (pProp->GetObjectTypeId() == OTID_GROUP)
 		{
 			IPropertyGroup *pGroup = dynamic_cast<IPropertyGroup*>(pProp);
 			if (pGroup != NULL)

@@ -23,6 +23,8 @@ public:
 
 	CPropertyViewCtrl* GetPropetryCtrl();
 
+	void Init(IKernelWindow* pKernelWindow, CWindowsViewTree *pViewTree);
+
 //  Ù–‘
 public:
 	void SetVSDotNetLook(BOOL bSet)

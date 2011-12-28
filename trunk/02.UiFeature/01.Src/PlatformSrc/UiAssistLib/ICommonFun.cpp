@@ -24,66 +24,66 @@ OBJECT_TYPE_ID PropStringToType(string strPropType)
 {
 	if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_FONT_NAME) == 0)
 	{
-		return PT_FONT;
+		return OTID_FONT;
 	}
 	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_STRING_NAME) == 0)
 	{
-		return PT_STRING;
+		return OTID_STRING;
 	}
 	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_COMBOBOX_NAME) == 0)
 	{
-		return PT_COMBOBOX;
+		return OTID_COMBOBOX;
 	}
 	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_IMAGE_NAME) == 0)
 	{
-		return PT_IMAGE;
+		return OTID_IMAGE;
 	}
 	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_CURSOR_NAME) == 0)
 	{
-		return PT_CURSOR;
+		return OTID_CURSOR;
 	}
 	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_COLOR_NAME) == 0)
 	{
-		return PT_COLOR;
+		return OTID_COLOR;
 	}
 	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_BOOL_NAME) == 0)
 	{
-		return PT_BOOL;
+		return OTID_BOOL;
 	}
 	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_INT_NAME) == 0)
 	{
-		return PT_INT;
+		return OTID_INT;
 	}
 	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_GROUP_NAME) == 0)
 	{
-		return PT_GROUP;
+		return OTID_GROUP;
 	}
 	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_CONTROL_NAME) == 0)
 	{
-		return PT_CONTROL;
+		return OTID_CONTROL;
 	}
 	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_WINDOW_NAME) == 0)
 	{
-		return PT_WINDOW;
+		return OTID_WINDOW;
 	}
 	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_COLOR_BASE_NAME) == 0)
 	{
-		return PT_COLOR_BASE;
+		return OTID_COLOR_BASE;
 	}
 	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_CURSOR_BASE_NAME) == 0)
 	{
-		return PT_CURSOR_BASE;
+		return OTID_CURSOR_BASE;
 	}
 	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_FONT_BASE_NAME) == 0)
 	{
-		return PT_FONT_BASE;
+		return OTID_FONT_BASE;
 	}
 	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_IMAGE_BASE_NAME) == 0)
 	{
-		return PT_IMAGE_BASE;
+		return OTID_IMAGE_BASE;
 	}
 
-	return PT_NONE;
+	return OTID_NONE;
 }
 
 string PropTypeToString(OBJECT_TYPE_ID propType)
@@ -91,63 +91,63 @@ string PropTypeToString(OBJECT_TYPE_ID propType)
 	string strType("");
 	switch (propType)
 	{
-	case PT_BOOL:
+	case OTID_BOOL:
 		strType = PROP_TYPE_BOOL_NAME;
 		break;
 
-	case PT_COLOR:
+	case OTID_COLOR:
 		strType = PROP_TYPE_COLOR_NAME;
 		break;
 
-	case PT_COMBOBOX:
+	case OTID_COMBOBOX:
 		strType = PROP_TYPE_COMBOBOX_NAME;
 		break;
 
-	case PT_CURSOR:
+	case OTID_CURSOR:
 		strType = PROP_TYPE_CURSOR_NAME;
 		break;
 
-	case PT_FONT:
+	case OTID_FONT:
 		strType = PROP_TYPE_FONT_NAME;
 		break;
 
-	case PT_IMAGE:
+	case OTID_IMAGE:
 		strType = PROP_TYPE_IMAGE_NAME;
 		break;
 
-	case PT_INT:
+	case OTID_INT:
 		strType = PROP_TYPE_INT_NAME;
 		break;
 
-	case PT_STRING:
+	case OTID_STRING:
 		strType = PROP_TYPE_STRING_NAME;
 		break;
 
-	case PT_GROUP:
+	case OTID_GROUP:
 		strType = PROP_TYPE_GROUP_NAME;
 		break;
 
-	case PT_CONTROL:
+	case OTID_CONTROL:
 		strType = PROP_TYPE_CONTROL_NAME;
 		break;
 
-	case PT_WINDOW:
+	case OTID_WINDOW:
 		strType = PROP_TYPE_WINDOW_NAME;
 		break;
 
-	case PT_COLOR_BASE:
+	case OTID_COLOR_BASE:
 		strType = PROP_TYPE_COLOR_BASE_NAME;
 		break;
 
-	case PT_CURSOR_BASE:
+	case OTID_CURSOR_BASE:
 		strType = PROP_TYPE_CURSOR_BASE_NAME;
 		break;
 
-	case PT_FONT_BASE:
+	case OTID_FONT_BASE:
 		strType = PROP_TYPE_FONT_BASE_NAME;
 		break;
 
-	case PT_IMAGE_BASE:
+	case OTID_IMAGE_BASE:
 		strType = PROP_TYPE_IMAGE_BASE_NAME;
 		break;
 
@@ -177,7 +177,7 @@ void ResetObjectId(IFeatureObject *pSetObj, IPropertySkinManager* pSkinPropMgr, 
 // 创建一个属性，如果这个属性在 group 中已经有了，就返回这个属性，如果没有
 IPropertyBase* CreateResourcePropetry(IPropertySkinManager* pSkinPropMgr, IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo)
 {
-	if (pSkinPropMgr == NULL || pGroup == NULL || pszPropName == NULL || propType <= PT_NONE || propType >= PT_LAST || strlen(pszPropName) <= 0)
+	if (pSkinPropMgr == NULL || pGroup == NULL || pszPropName == NULL || propType <= OTID_NONE || propType >= OTID_LAST || strlen(pszPropName) <= 0)
 		return NULL;
 
 	GROUP_PROP_VEC *pChildGroup = pGroup->GetPropVec();

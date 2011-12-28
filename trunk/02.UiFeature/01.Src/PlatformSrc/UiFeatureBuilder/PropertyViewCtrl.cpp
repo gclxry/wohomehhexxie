@@ -2,14 +2,26 @@
 #include "PropertyViewCtrl.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "PropetryDialogGridProperty.h"
+#include "WindowsViewTree.h"
 
 CPropertyViewCtrl::CPropertyViewCtrl(void)
 {
-	m_pPropGroup = NULL;
+	m_pCurrentPropGroup = NULL;
+	m_pKernelWindow = NULL;
+	m_pViewTree = NULL;
 }
 
 CPropertyViewCtrl::~CPropertyViewCtrl(void)
 {
+}
+
+void CPropertyViewCtrl::Init(IKernelWindow* pKernelWindow, CWindowsViewTree *pViewTree)
+{
+	if (pKernelWindow == NULL || pViewTree == NULL)
+		return;
+
+	m_pKernelWindow = pKernelWindow;
+	m_pViewTree = pViewTree;
 }
 
 void CPropertyViewCtrl::SetShowPropGroup(IPropertyGroup *pPropGroup)
@@ -18,8 +30,8 @@ void CPropertyViewCtrl::SetShowPropGroup(IPropertyGroup *pPropGroup)
 	if (pPropGroup == NULL)
 		return;
 
-	m_pPropGroup = pPropGroup;
-	AppendPropGroup(NULL, m_pPropGroup);
+	m_pCurrentPropGroup = pPropGroup;
+	AppendPropGroup(NULL, m_pCurrentPropGroup);
 	this->RedrawWindow();
 }
 
@@ -40,7 +52,7 @@ void CPropertyViewCtrl::AppendPropGroup(CMFCPropertyGridProperty* pParentPropGro
 			continue;
 
 		OBJECT_TYPE_ID ObjTypeId = pProp->GetObjectTypeId();
-		if (ObjTypeId == PT_GROUP)
+		if (ObjTypeId == OTID_GROUP)
 		{
 			// 创建一个属性组
 			CString strName = A2W(pProp->GetObjectName());
@@ -61,35 +73,35 @@ void CPropertyViewCtrl::AppendPropGroup(CMFCPropertyGridProperty* pParentPropGro
 		// 普通属性
 		switch (ObjTypeId)
 		{
-		case PT_BOOL:
+		case OTID_BOOL:
 			AppendBoolProp(pParentPropGroup, (IPropertyBool*)pProp);
 			break;
 
-		case PT_COLOR:
+		case OTID_COLOR:
 			AppendColorProp(pParentPropGroup, (IPropertyColor*)pProp);
 			break;
 
-		case PT_COMBOBOX:
-			AppendComboboxProp(pParentPropGroup, (IPropertyComboBox*)pProp);
+		case OTID_COMBOBOX:
+			AppendComboBoxProp(pParentPropGroup, (IPropertyComboBox*)pProp);
 			break;
 
-		case PT_CURSOR:
+		case OTID_CURSOR:
 			AppendCursorProp(pParentPropGroup, (IPropertyCursor*)pProp);
 			break;
 
-		case PT_FONT:
+		case OTID_FONT:
 			AppendFontProp(pParentPropGroup, (IPropertyFont*)pProp);
 			break;
 
-		case PT_IMAGE:
+		case OTID_IMAGE:
 			AppendImageProp(pParentPropGroup, (IPropertyImage*)pProp);
 			break;
 
-		case PT_INT:
+		case OTID_INT:
 			AppendIntProp(pParentPropGroup, (IPropertyInt*)pProp);
 			break;
 
-		case PT_STRING:
+		case OTID_STRING:
 			AppendStringProp(pParentPropGroup, (IPropertyString*)pProp);
 			break;
 
@@ -143,12 +155,12 @@ void CPropertyViewCtrl::AppendColorProp(CMFCPropertyGridProperty* pParentPropGro
 
 void CPropertyViewCtrl::ClearAll()
 {
-	m_pPropGroup = NULL;
+	m_pCurrentPropGroup = NULL;
 	this->RemoveAll();
 	this->RedrawWindow();
 }
 
-void CPropertyViewCtrl::AppendComboboxProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyComboBox *pComboboxProp)
+void CPropertyViewCtrl::AppendComboBoxProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyComboBox *pComboboxProp)
 {
 	USES_CONVERSION;
 	if (pParentPropGroup == NULL || pComboboxProp == NULL)
@@ -270,8 +282,125 @@ void CPropertyViewCtrl::OnPropertyChanged(CMFCPropertyGridProperty* pProperty)
 	if (pProperty == NULL)
 		return;
 
-//	CString s = pProperty->GetName();  //被改变的参数名
-//	COleVariant t = pProperty->GetValue(); //改变之后的值
-//	t = pProperty->GetOriginalValue();  //改变之前的值
+	IPropertyBase *pPropBase = (IPropertyBase*)pProperty->GetData();
+	if (pPropBase == NULL)
+		return;
 
+	OBJECT_TYPE_ID ObjectTypeId = pPropBase->GetObjectTypeId();
+	switch (ObjectTypeId)
+	{
+	case OTID_BOOL:
+		RefreshBoolProp(pProperty, (IPropertyBool*)pPropBase);
+		break;
+
+	case OTID_COLOR:
+		RefreshColorProp(pProperty, (IPropertyColor*)pPropBase);
+		break;
+
+	case OTID_COMBOBOX:
+		RefreshComboBoxProp(pProperty, (IPropertyComboBox*)pPropBase);
+		break;
+
+	case OTID_CURSOR:
+		RefreshCursorProp(pProperty, (IPropertyCursor*)pPropBase);
+		break;
+
+	case OTID_FONT:
+		RefreshFontProp(pProperty, (IPropertyFont*)pPropBase);
+		break;
+
+	case OTID_IMAGE:
+		RefreshImageProp(pProperty, (IPropertyImage*)pPropBase);
+		break;
+
+	case OTID_INT:
+		RefreshIntProp(pProperty, (IPropertyInt*)pPropBase);
+		break;
+
+	case OTID_STRING:
+		RefreshStringProp(pProperty, (IPropertyString*)pPropBase);
+		break;
+
+	default:
+		return;
+	}
+
+	// 刷新树形列表
+	if (m_pViewTree != NULL)
+		m_pViewTree->Refresh(m_pCurrentPropGroup);
+
+	// 刷新界面 TBD
+
+}
+
+void CPropertyViewCtrl::RefreshBoolProp(CMFCPropertyGridProperty* pProperty, IPropertyBool *pBoolProp)
+{
+	if (pProperty == NULL || pBoolProp == NULL)
+		return;
+
+	COleVariant NewVariant = pProperty->GetValue();
+	pBoolProp->SetValue(NewVariant.boolVal != VARIANT_FALSE);
+}
+
+void CPropertyViewCtrl::RefreshColorProp(CMFCPropertyGridProperty* pProperty, IPropertyColor *pColorProp)
+{
+
+}
+
+void CPropertyViewCtrl::RefreshComboBoxProp(CMFCPropertyGridProperty* pProperty, IPropertyComboBox *pComboboxProp)
+{
+
+}
+
+void CPropertyViewCtrl::RefreshCursorProp(CMFCPropertyGridProperty* pProperty, IPropertyCursor *pCursorProp)
+{
+
+}
+
+void CPropertyViewCtrl::RefreshFontProp(CMFCPropertyGridProperty* pProperty, IPropertyFont *pFontProp)
+{
+
+}
+
+void CPropertyViewCtrl::RefreshImageProp(CMFCPropertyGridProperty* pProperty, IPropertyImage *pImageProp)
+{
+
+}
+
+void CPropertyViewCtrl::RefreshIntProp(CMFCPropertyGridProperty* pProperty, IPropertyInt *pIntProp)
+{
+
+}
+
+void CPropertyViewCtrl::RefreshStringProp(CMFCPropertyGridProperty* pProperty, IPropertyString *pStringProp)
+{
+	USES_CONVERSION;
+	if (pProperty == NULL || pStringProp == NULL)
+		return;
+
+	CString strName = pProperty->GetName();
+	COleVariant NewVariant = pProperty->GetValue();
+	if (NewVariant.bstrVal == NULL)
+		return;
+
+	CString strValue(NewVariant.bstrVal);
+	::SysFreeString(NewVariant.bstrVal);
+
+	if (strName.CompareNoCase(_T(NAME_SKIN_PROP_NAME)) == 0)
+	{
+		if (strValue.GetLength() <= 0)
+		{
+			string strOld = pStringProp->GetString();
+			COleVariant OldVariant(A2W(strOld.c_str()));
+			pProperty->SetValue(OldVariant);
+
+			AfxMessageBox(_T("【Name】字段不允许为空！"), MB_OK | MB_ICONERROR);
+			return;
+		}
+
+		if (m_pCurrentPropGroup != NULL)
+			m_pCurrentPropGroup->SetObjectName(W2A(strValue));
+	}
+
+	pStringProp->SetString(W2A(strValue));
 }

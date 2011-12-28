@@ -167,3 +167,88 @@ void CWindowsViewTree::OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase)
 
 	m_pPropCtrl->SetShowPropGroup(pPropGroup);
 }
+
+void CWindowsViewTree::Refresh(IPropertyGroup *pRefreshGroup)
+{
+	if (pRefreshGroup == NULL)
+		return;
+
+	IPropertyBase *pPropBase = dynamic_cast<IPropertyBase*>(pRefreshGroup);
+	if (pPropBase == NULL)
+		return;
+
+	HTREEITEM hRootItem = this->GetRootItem();
+	HTREEITEM hRefreshItem = FindRefreshTreeItem(hRootItem, pPropBase);
+	if (hRefreshItem == NULL)
+		return;
+	
+	RefreshTreeItem(hRefreshItem);
+}
+
+HTREEITEM CWindowsViewTree::FindRefreshTreeItem(HTREEITEM hItem, IPropertyBase *pPropBase)
+{
+	if (hItem == NULL || pPropBase == NULL)
+		return NULL;
+
+	IFeatureObject *pComPropBase = (IFeatureObject*)this->GetItemData(hItem);
+	if (pComPropBase != NULL && pComPropBase->GetObjectId() != NULL && pPropBase->GetObjectId() != NULL
+		&& lstrcmpA(pComPropBase->GetObjectId(), pPropBase->GetObjectId()) == 0)
+		return hItem;
+
+	if (!this->ItemHasChildren(hItem))
+		return NULL;
+
+	HTREEITEM hChild = this->GetChildItem(hItem);
+	while(hChild != NULL)
+	{
+		HTREEITEM hFind = FindRefreshTreeItem(hChild, pPropBase);
+		if (hFind != NULL)
+			return hFind;
+
+		hChild = this->GetNextItem(hChild, TVGN_NEXT);
+	}
+
+	return NULL;
+}
+
+void CWindowsViewTree::RefreshTreeItem(HTREEITEM hItem)
+{
+	USES_CONVERSION;
+	if (hItem == NULL)
+		return;
+
+	IFeatureObject *pPropBase = (IFeatureObject*)this->GetItemData(hItem);
+	if (pPropBase != NULL)
+	{
+		// 刷新操作，目前只有刷新名字
+		if (pPropBase->GetObjectTypeId() == OTID_WINDOW)
+		{
+			// 窗口
+			IWindowBase* pWnd = dynamic_cast<IWindowBase*>(pPropBase);
+			if (pWnd != NULL)
+			{
+				IPropertyGroup *pWnpPropGroup = pWnd->GetWindowProp()->GetWindowPropetryBaseGroup();
+				if (pWnpPropGroup != NULL)
+				{
+					pWnd->SetObjectName(pWnpPropGroup->GetObjectName());
+					this->SetItemText(hItem, A2W(pWnd->GetObjectName()));
+				}
+			}
+		}
+		else if (pPropBase->GetObjectTypeId() == OTID_CONTROL)
+		{
+			// 控件
+			this->SetItemText(hItem, A2W(pPropBase->GetObjectName()));
+		}
+	}
+
+	if (!this->ItemHasChildren(hItem))
+		return;
+
+	HTREEITEM hChild = this->GetChildItem(hItem);
+	while(hChild != NULL)
+	{
+		RefreshTreeItem(hChild);
+		hChild = this->GetNextItem(hChild, TVGN_NEXT);
+	}
+}

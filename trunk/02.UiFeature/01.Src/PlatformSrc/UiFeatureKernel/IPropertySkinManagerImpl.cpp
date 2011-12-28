@@ -123,7 +123,7 @@ void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
 
 	switch (pCtrlProp->GetObjectTypeId())
 	{
-	case PT_BOOL:
+	case OTID_BOOL:
 		{
 			IPropertyBool* pProp = dynamic_cast<IPropertyBool*>(pCtrlProp);
 			if (pProp != NULL)
@@ -134,7 +134,7 @@ void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
 		}
 		break;
 
-	case PT_COLOR:
+	case OTID_COLOR:
 		{
 			IPropertyColor* pProp = dynamic_cast<IPropertyColor*>(pCtrlProp);
 			if (pProp != NULL)
@@ -145,7 +145,7 @@ void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
 		}
 		break;
 
-	case PT_COMBOBOX:
+	case OTID_COMBOBOX:
 		{
 			IPropertyComboBox* pProp = dynamic_cast<IPropertyComboBox*>(pCtrlProp);
 			if (pProp != NULL)
@@ -156,7 +156,7 @@ void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
 		}
 		break;
 
-	case PT_CURSOR:
+	case OTID_CURSOR:
 		{
 			IPropertyCursor* pProp = dynamic_cast<IPropertyCursor*>(pCtrlProp);
 			if (pProp != NULL)
@@ -167,7 +167,7 @@ void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
 		}
 		break;
 
-	case PT_FONT:
+	case OTID_FONT:
 		{
 			IPropertyFont* pProp = dynamic_cast<IPropertyFont*>(pCtrlProp);
 			if (pProp != NULL)
@@ -178,7 +178,7 @@ void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
 		}
 		break;
 
-	case PT_GROUP:
+	case OTID_GROUP:
 		{
 			IPropertyGroup* pProp = dynamic_cast<IPropertyGroup*>(pCtrlProp);
 			if (pProp != NULL)
@@ -189,7 +189,7 @@ void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
 		}
 		break;
 
-	case PT_IMAGE:
+	case OTID_IMAGE:
 		{
 			IPropertyImage* pProp = dynamic_cast<IPropertyImage*>(pCtrlProp);
 			if (pProp != NULL)
@@ -200,7 +200,7 @@ void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
 		}
 		break;
 
-	case PT_IMAGE_BASE:
+	case OTID_IMAGE_BASE:
 		{
 			IPropertyImageBase* pProp = dynamic_cast<IPropertyImageBase*>(pCtrlProp);
 			if (pProp != NULL)
@@ -211,7 +211,7 @@ void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
 		}
 		break;
 
-	case PT_INT:
+	case OTID_INT:
 		{
 			IPropertyInt* pProp = dynamic_cast<IPropertyInt*>(pCtrlProp);
 			if (pProp != NULL)
@@ -222,7 +222,7 @@ void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
 		}
 		break;
 
-	case PT_STRING:
+	case OTID_STRING:
 		{
 			IPropertyString* pProp = dynamic_cast<IPropertyString*>(pCtrlProp);
 			if (pProp != NULL)
@@ -264,7 +264,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 	IPropertyBase* pBaseProp = NULL;
 	switch (propType)
 	{
-	case PT_BOOL:
+	case OTID_BOOL:
 		{
 			IPropertyBool* pProp = new IPropertyBool;
 			if (pProp != NULL)
@@ -276,7 +276,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 		}
 		break;
 
-	case PT_COLOR:
+	case OTID_COLOR:
 		{
 			IPropertyColor* pProp = new IPropertyColor;
 			if (pProp != NULL)
@@ -288,7 +288,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 		}
 		break;
 
-	case PT_COMBOBOX:
+	case OTID_COMBOBOX:
 		{
 			IPropertyComboBox* pProp = new IPropertyComboBox;
 			if (pProp != NULL)
@@ -300,7 +300,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 		}
 		break;
 
-	case PT_CURSOR:
+	case OTID_CURSOR:
 		{
 			IPropertyCursor* pProp = new IPropertyCursor;
 			if (pProp != NULL)
@@ -312,7 +312,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 		}
 		break;
 
-	case PT_FONT:
+	case OTID_FONT:
 		{
 			IPropertyFont* pProp = new IPropertyFont;
 			if (pProp != NULL)
@@ -324,7 +324,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 		}
 		break;
 
-	case PT_GROUP:
+	case OTID_GROUP:
 		{
 			IPropertyGroup* pProp = new IPropertyGroup;
 			if (pProp != NULL)
@@ -336,7 +336,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 		}
 		break;
 
-	case PT_IMAGE:
+	case OTID_IMAGE:
 		{
 			IPropertyImage* pProp = new IPropertyImage;
 			if (pProp != NULL)
@@ -348,7 +348,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 		}
 		break;
 
-	case PT_IMAGE_BASE:
+	case OTID_IMAGE_BASE:
 		{
 			IPropertyImageBase* pProp = new IPropertyImageBase;
 			if (pProp != NULL)
@@ -360,7 +360,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 		}
 		break;
 
-	case PT_INT:
+	case OTID_INT:
 		{
 			IPropertyInt* pProp = new IPropertyInt;
 			if (pProp != NULL)
@@ -372,7 +372,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 		}
 		break;
 
-	case PT_STRING:
+	case OTID_STRING:
 		{
 			IPropertyString* pProp = new IPropertyString;
 			if (pProp != NULL)
@@ -888,7 +888,7 @@ bool IPropertySkinManagerImpl::GeneralCreateSubProp(XmlNode* pXmlNode, PROP_BASE
 				return false;
 
 			pCtrlProp->AppendProperty(pFindBaseProp);
-			if (pFindBaseProp->GetObjectTypeId() == PT_GROUP)
+			if (pFindBaseProp->GetObjectTypeId() == OTID_GROUP)
 			{
 				IPropertyGroup *pNewGroup = dynamic_cast<IPropertyGroup*>(pFindBaseProp);
 				if (pNewGroup == NULL)
@@ -923,7 +923,7 @@ bool IPropertySkinManagerImpl::AppendBasePropToGroup(IPropertyGroup *pGroup, Xml
 				return false;
 
 			pGroup->AppendProperty(pFindBaseProp);
-			if (pFindBaseProp->GetObjectTypeId() == PT_GROUP)
+			if (pFindBaseProp->GetObjectTypeId() == OTID_GROUP)
 			{
 				IPropertyGroup *pNewGroup = dynamic_cast<IPropertyGroup*>(pFindBaseProp);
 				if (pNewGroup == NULL)
