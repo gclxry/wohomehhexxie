@@ -183,10 +183,6 @@
 			Name="01.DLL½Ó¿Ú"
 			>
 			<File
-				RelativePath=".\UiFeatureEngine.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\UiFeatureEngine.def"
 				>
 			</File>
