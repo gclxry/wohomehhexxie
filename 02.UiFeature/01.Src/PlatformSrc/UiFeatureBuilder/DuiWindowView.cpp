@@ -1,13 +1,13 @@
 
 #include "stdafx.h"
 #include "MainFrm.h"
-#include "DuiWindowView.h"
+#include "WindowView.h"
 #include "Resource.h"
 #include "UiFeatureBuilder.h"
 
 class CClassViewMenuButton : public CMFCToolBarMenuButton
 {
-	friend class CDuiWindowView;
+	friend class CWindowView;
 
 	DECLARE_SERIAL(CClassViewMenuButton)
 
@@ -36,17 +36,17 @@ IMPLEMENT_SERIAL(CClassViewMenuButton, CMFCToolBarMenuButton, 1)
 // 构造/析构
 //////////////////////////////////////////////////////////////////////
 
-CDuiWindowView::CDuiWindowView()
+CWindowView::CWindowView()
 {
 	m_nCurrSort = ID_SORTING_GROUPBYTYPE;
 	m_hRoot = NULL;
 }
 
-CDuiWindowView::~CDuiWindowView()
+CWindowView::~CWindowView()
 {
 }
 
-BEGIN_MESSAGE_MAP(CDuiWindowView, CDockablePane)
+BEGIN_MESSAGE_MAP(CWindowView, CDockablePane)
 	ON_WM_CREATE()
 	ON_WM_SIZE()
 	ON_WM_CONTEXTMENU()
@@ -61,9 +61,9 @@ BEGIN_MESSAGE_MAP(CDuiWindowView, CDockablePane)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
-// CDuiWindowView 消息处理程序
+// CWindowView 消息处理程序
 
-int CDuiWindowView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+int CWindowView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CDockablePane::OnCreate(lpCreateStruct) == -1)
 		return -1;
@@ -114,13 +114,13 @@ int CDuiWindowView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
-void CDuiWindowView::OnSize(UINT nType, int cx, int cy)
+void CWindowView::OnSize(UINT nType, int cx, int cy)
 {
 	CDockablePane::OnSize(nType, cx, cy);
 	AdjustLayout();
 }
 
-void CDuiWindowView::FillClassView()
+void CWindowView::FillClassView()
 {
 	m_hRoot = m_wndWindowTree.InsertItem(_T("【窗体-面板】"), 0, 0);
 	m_wndWindowTree.SetItemState(m_hRoot, TVIS_BOLD, TVIS_BOLD);
@@ -158,17 +158,17 @@ void CDuiWindowView::FillClassView()
 	m_wndWindowTree.Expand(hClass, TVE_EXPAND);*/
 }
 
-void CDuiWindowView::Init(IKernelWindow* pKernelWindow, CPropertyCtrl *pPropCtrl)
+void CWindowView::Init(IKernelWindow* pKernelWindow, CPropertyCtrl *pPropCtrl)
 {
 	m_wndWindowTree.Init(pKernelWindow, pPropCtrl);
 }
 
-CWindowsViewTree* CDuiWindowView::GetViewTreeCtrl()
+CWindowsViewTree* CWindowView::GetViewTreeCtrl()
 {
 	return &m_wndWindowTree;
 }
 
-void CDuiWindowView::OnContextMenu(CWnd* pWnd, CPoint point)
+void CWindowView::OnContextMenu(CWnd* pWnd, CPoint point)
 {
 	CTreeCtrl* pWndTree = (CTreeCtrl*)&m_wndWindowTree;
 	ASSERT_VALID(pWndTree);
@@ -211,7 +211,7 @@ void CDuiWindowView::OnContextMenu(CWnd* pWnd, CPoint point)
 	}
 }
 
-void CDuiWindowView::AdjustLayout()
+void CWindowView::AdjustLayout()
 {
 	if (GetSafeHwnd() == NULL)
 	{
@@ -227,12 +227,12 @@ void CDuiWindowView::AdjustLayout()
 	m_wndWindowTree.SetWindowPos(NULL, rectClient.left + 1, rectClient.top + cyTlb + 1, rectClient.Width() - 2, rectClient.Height() - cyTlb - 2, SWP_NOACTIVATE | SWP_NOZORDER);
 }
 
-BOOL CDuiWindowView::PreTranslateMessage(MSG* pMsg)
+BOOL CWindowView::PreTranslateMessage(MSG* pMsg)
 {
 	return CDockablePane::PreTranslateMessage(pMsg);
 }
 
-void CDuiWindowView::OnSort(UINT id)
+void CWindowView::OnSort(UINT id)
 {
 	if (m_nCurrSort == id)
 	{
@@ -251,32 +251,32 @@ void CDuiWindowView::OnSort(UINT id)
 	}
 }
 
-void CDuiWindowView::OnUpdateSort(CCmdUI* pCmdUI)
+void CWindowView::OnUpdateSort(CCmdUI* pCmdUI)
 {
 	pCmdUI->SetCheck(pCmdUI->m_nID == m_nCurrSort);
 }
 
-void CDuiWindowView::OnClassAddMemberFunction()
+void CWindowView::OnClassAddMemberFunction()
 {
 	AfxMessageBox(_T("添加成员函数..."));
 }
 
-void CDuiWindowView::OnClassAddMemberVariable()
+void CWindowView::OnClassAddMemberVariable()
 {
 	// TODO: 在此处添加命令处理程序代码
 }
 
-void CDuiWindowView::OnClassDefinition()
+void CWindowView::OnClassDefinition()
 {
 	// TODO: 在此处添加命令处理程序代码
 }
 
-void CDuiWindowView::OnClassProperties()
+void CWindowView::OnClassProperties()
 {
 	// TODO: 在此处添加命令处理程序代码
 }
 
-void CDuiWindowView::OnPaint()
+void CWindowView::OnPaint()
 {
 	CPaintDC dc(this); // 用于绘制的设备上下文
 
@@ -288,14 +288,14 @@ void CDuiWindowView::OnPaint()
 	dc.Draw3dRect(rectTree, ::GetSysColor(COLOR_3DSHADOW), ::GetSysColor(COLOR_3DSHADOW));
 }
 
-void CDuiWindowView::OnSetFocus(CWnd* pOldWnd)
+void CWindowView::OnSetFocus(CWnd* pOldWnd)
 {
 	CDockablePane::OnSetFocus(pOldWnd);
 
 	m_wndWindowTree.SetFocus();
 }
 
-void CDuiWindowView::OnChangeVisualStyle()
+void CWindowView::OnChangeVisualStyle()
 {
 	m_ClassViewImages.DeleteImageList();
 
