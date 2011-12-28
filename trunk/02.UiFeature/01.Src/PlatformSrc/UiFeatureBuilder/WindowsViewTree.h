@@ -11,16 +11,16 @@ class CWindowsViewTree : public CTreeCtrl
 // 构造
 public:
 	CWindowsViewTree();
+	virtual ~CWindowsViewTree();
+	void Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPropCtrl);
 
 // 重写
 protected:
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 
-// 实现
-public:
-	virtual ~CWindowsViewTree();
-
-	void Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPropCtrl);
+private:
+	void OnTvnSelchanged_SelectRoot();
+	void OnTvnSelchanged_SelectWindow();
 
 private:
 	IPropertySkinManager *m_pSkinMgr;
@@ -32,4 +32,5 @@ protected:
 public:
 	afx_msg void OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnCreateWindowPanel();
+	afx_msg void OnTvnSelchanged(NMHDR *pNMHDR, LRESULT *pResult);
 };

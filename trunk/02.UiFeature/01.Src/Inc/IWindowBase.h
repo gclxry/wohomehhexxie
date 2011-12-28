@@ -1,9 +1,10 @@
 
 #pragma once
-#include "..\..\Inc\IControlBase.h"
-#include "..\..\Inc\IPropertyWindowManager.h"
+#include "IControlBase.h"
+#include "IPropertyWindowManager.h"
+#include "IFeatureObject.h"
 
-class IWindowBase
+class IWindowBase : public IFeatureObject
 {
 public:
 //////////////////////////////////////////////////////////////////////////
