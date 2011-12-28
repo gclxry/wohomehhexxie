@@ -13,11 +13,11 @@ class CClassToolBar : public CMFCToolBar
 	virtual BOOL AllowShowOnList() const { return FALSE; }
 };
 
-class CDuiWindowView : public CDockablePane
+class CWindowView : public CDockablePane
 {
 public:
-	CDuiWindowView();
-	virtual ~CDuiWindowView();
+	CWindowView();
+	virtual ~CWindowView();
 
 	void AdjustLayout();
 	void OnChangeVisualStyle();
