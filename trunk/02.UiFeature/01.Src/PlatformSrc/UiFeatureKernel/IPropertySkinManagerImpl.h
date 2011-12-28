@@ -30,6 +30,7 @@ public:
 	virtual int GetNewId();
 
 private:
+	void ReleaseSkinManager();
 	// 初始化皮肤包
 	bool InitSkinPackage(const char *pszSkinPath);
 	// 加载zip文件

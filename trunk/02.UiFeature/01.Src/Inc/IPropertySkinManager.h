@@ -8,6 +8,7 @@
 class IPropertySkinManager
 {
 public:
+
 	// 初始化Window皮肤
 	virtual IPropertyGroup* InitWindowSkin(const char *pszSkinPath, const char *pszWndName) = 0;
 //	// 查找指定的属性

@@ -1,6 +1,7 @@
 
 #pragma once
 #include "..\..\Inc\IKernelWindow.h"
+#include "IPropertySkinManagerImpl.h"
 
 class IWindowBaseImpl;
 typedef map<HWND, IWindowBaseImpl*>		WINDOW_IMPL_MAP;
@@ -20,7 +21,7 @@ public:
 	// 取得所有支持的控件
 	virtual CONTROL_REG_MAP *BuilderRegisterControl();
 	// 创建一个Builder使用的窗口
-	virtual IWindowBase* BuilderCreateWindow(IPropertyGroup *pWindowProp);
+	virtual IWindowBase* BuilderCreateWindow();
 
 //////////////////////////////////////////////////////////////////////////
 	// 一个对话框从一个皮肤包里使用指定的对话框皮肤资源初始化自己
@@ -29,9 +30,13 @@ public:
 	virtual void ReleaseFeatureSkin(HWND hWnd);
 
 private:
+	void ReleaseKernelWindow();
+
+private:
 	WINDOW_IMPL_MAP m_WndImplMap;
 	// 所有支持的控件
 	CONTROL_REG_MAP m_CtrlRegMap;
 	// Builder中使用的hwnd的索引值
 	int m_nBuilderHwnd;
+	IPropertySkinManagerImpl *m_pSkinMgr;
 };
