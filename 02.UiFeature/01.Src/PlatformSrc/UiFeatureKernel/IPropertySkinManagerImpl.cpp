@@ -34,6 +34,10 @@ IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
 	m_AllCtrlPropMap.clear();
 	m_AllWindowPropMap.clear();
 	m_LayoutWindowVec.clear();
+	m_pImageBasePropMap = NULL;
+	m_pFontBasePropMap = NULL;
+	m_pCursorBasePropMap = NULL;
+	m_pColorBasePropMap = NULL;
 
 	m_nObjectIdInRes = 1;
 	m_nEmptyObjectId = 1;

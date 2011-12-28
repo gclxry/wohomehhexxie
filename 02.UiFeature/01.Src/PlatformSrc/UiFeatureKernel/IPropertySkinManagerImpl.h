@@ -78,6 +78,15 @@ private:
 	// 布局队列
 	WINDOW_PROP_MAP m_LayoutWindowVec;
 
+	// ImageBase 属性队列
+	PROP_BASE_ITEM* m_pImageBasePropMap;
+	// FontBase 属性队列
+	PROP_BASE_ITEM* m_pFontBasePropMap;
+	// CursorBase 属性队列
+	PROP_BASE_ITEM* m_pCursorBasePropMap;
+	// ColorBase 属性队列
+	PROP_BASE_ITEM* m_pColorBasePropMap;
+
 	// zip文件
 	IZipFileList *m_pZipFile;
 	HMODULE m_hZipModule;
