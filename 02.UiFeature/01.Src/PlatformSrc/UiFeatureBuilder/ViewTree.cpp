@@ -1,6 +1,6 @@
 
 #include "stdafx.h"
-#include "ViewTree.h"
+#include "WindowsViewTree.h"
 #include "resource.h"
 
 #ifdef _DEBUG
@@ -10,28 +10,28 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
-// CViewTree
+// CWindowsViewTree
 
-CViewTree::CViewTree()
+CWindowsViewTree::CWindowsViewTree()
 {
 	m_pSkinMgr = NULL;
 	m_pKernelWindow = NULL;
 	m_pPropCtrl = NULL;
 }
 
-CViewTree::~CViewTree()
+CWindowsViewTree::~CWindowsViewTree()
 {
 }
 
-BEGIN_MESSAGE_MAP(CViewTree, CTreeCtrl)
-	ON_NOTIFY_REFLECT(NM_RCLICK, &CViewTree::OnNMRClick)
-	ON_COMMAND(ID_CREATE_WINDOW_PANEL, &CViewTree::OnCreateWindowPanel)
+BEGIN_MESSAGE_MAP(CWindowsViewTree, CTreeCtrl)
+	ON_NOTIFY_REFLECT(NM_RCLICK, &CWindowsViewTree::OnNMRClick)
+	ON_COMMAND(ID_CREATE_WINDOW_PANEL, &CWindowsViewTree::OnCreateWindowPanel)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
-// CViewTree 消息处理程序
+// CWindowsViewTree 消息处理程序
 
-BOOL CViewTree::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
+BOOL CWindowsViewTree::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 {
 	BOOL bRes = CTreeCtrl::OnNotify(wParam, lParam, pResult);
 
@@ -46,7 +46,7 @@ BOOL CViewTree::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 	return bRes;
 }
 
-void CViewTree::OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult)
+void CWindowsViewTree::OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	HTREEITEM hRootItem = this->GetRootItem();
 	HTREEITEM hItem = this->GetSelectedItem();
@@ -64,7 +64,7 @@ void CViewTree::OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult)
 	*pResult = 0;
 }
 
-void CViewTree::Init(IKernelWindow* pKernelWindow, CPropertyCtrl *pPropCtrl)
+void CWindowsViewTree::Init(IKernelWindow* pKernelWindow, CPropertyCtrl *pPropCtrl)
 {
 	if (pKernelWindow == NULL || pPropCtrl == NULL)
 		return;
@@ -74,9 +74,9 @@ void CViewTree::Init(IKernelWindow* pKernelWindow, CPropertyCtrl *pPropCtrl)
 	m_pPropCtrl = pPropCtrl;
 }
 
-void CViewTree::OnCreateWindowPanel()
+void CWindowsViewTree::OnCreateWindowPanel()
 {
-	if (m_pSkinMgr == NULL || m_pKernelWindow == NULL)
+	if (m_pSkinMgr == NULL || m_pKernelWindow == NULL || m_pPropCtrl == NULL)
 	{
 		AfxMessageBox(_T("列表没有被初始化"), MB_OK | MB_ICONERROR);
 		return;
@@ -99,4 +99,5 @@ void CViewTree::OnCreateWindowPanel()
 	}
 
 	this->SetItemData(hWindow, (DWORD_PTR)pWndBase);
+	this->SelectItem(hWindow);
 }

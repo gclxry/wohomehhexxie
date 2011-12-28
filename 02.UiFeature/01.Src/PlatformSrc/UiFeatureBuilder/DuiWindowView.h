@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "ViewTree.h"
+#include "WindowsViewTree.h"
 
 class CClassToolBar : public CMFCToolBar
 {
@@ -22,12 +22,12 @@ public:
 	void AdjustLayout();
 	void OnChangeVisualStyle();
 
-	CViewTree *GetViewTreeCtrl();
+	CWindowsViewTree *GetViewTreeCtrl();
 	void Init(IKernelWindow* pKernelWindow, CPropertyCtrl *pPropCtrl);
 
 protected:
 	CClassToolBar m_wndToolBar;
-	CViewTree m_wndWindowTree;
+	CWindowsViewTree m_wndWindowTree;
 	CImageList m_ClassViewImages;
 	UINT m_nCurrSort;
 
