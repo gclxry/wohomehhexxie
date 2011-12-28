@@ -122,10 +122,10 @@ void CWindowsView::OnSize(UINT nType, int cx, int cy)
 
 void CWindowsView::FillClassView()
 {
-	m_hRoot = m_wndWindowTree.InsertItem(_T("【窗体-面板】"), 0, 0);
+/*	m_hRoot = m_wndWindowTree.InsertItem(_T("【窗体-面板】"), 0, 0);
 	m_wndWindowTree.SetItemState(m_hRoot, TVIS_BOLD, TVIS_BOLD);
 
-/*	HTREEITEM hClass = m_wndWindowTree.InsertItem(_T("CFakeAboutDlg"), 1, 1, m_hRoot);
+	HTREEITEM hClass = m_wndWindowTree.InsertItem(_T("CFakeAboutDlg"), 1, 1, m_hRoot);
 	m_wndWindowTree.InsertItem(_T("CFakeAboutDlg()"), 3, 3, hClass);
 
 	m_wndWindowTree.Expand(m_hRoot, TVE_EXPAND);

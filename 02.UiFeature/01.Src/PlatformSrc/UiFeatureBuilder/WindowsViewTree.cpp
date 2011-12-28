@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "WindowsViewTree.h"
 #include "resource.h"
+#include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\IFeatureObject.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -26,6 +28,7 @@ CWindowsViewTree::~CWindowsViewTree()
 BEGIN_MESSAGE_MAP(CWindowsViewTree, CTreeCtrl)
 	ON_NOTIFY_REFLECT(NM_RCLICK, &CWindowsViewTree::OnNMRClick)
 	ON_COMMAND(ID_CREATE_WINDOW_PANEL, &CWindowsViewTree::OnCreateWindowPanel)
+	ON_NOTIFY_REFLECT(TVN_SELCHANGED, &CWindowsViewTree::OnTvnSelchanged)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -48,9 +51,11 @@ BOOL CWindowsViewTree::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 
 void CWindowsViewTree::OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult)
 {
-	HTREEITEM hRootItem = this->GetRootItem();
 	HTREEITEM hItem = this->GetSelectedItem();
+	if (!IS_SAFE_HANDLE(hItem))
+		return;
 
+	HTREEITEM hRootItem = this->GetRootItem();
 	if (hRootItem == hItem)
 	{
 		POINT pt;
@@ -72,6 +77,11 @@ void CWindowsViewTree::Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPr
 	m_pKernelWindow = pKernelWindow;
 	m_pSkinMgr = m_pKernelWindow->GetSkinManager();
 	m_pPropCtrl = pPropCtrl;
+
+	this->DeleteAllItems();
+	HTREEITEM hRootItem = this->InsertItem(_T("【窗体-面板】"), 0, 0);
+	this->SetItemState(hRootItem, TVIS_BOLD, TVIS_BOLD);
+	this->SelectItem(hRootItem);
 }
 
 void CWindowsViewTree::OnCreateWindowPanel()
@@ -100,4 +110,49 @@ void CWindowsViewTree::OnCreateWindowPanel()
 
 	this->SetItemData(hWindow, (DWORD_PTR)pWndBase);
 	this->SelectItem(hWindow);
+}
+
+void CWindowsViewTree::OnTvnSelchanged(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
+
+	HTREEITEM hItem = this->GetSelectedItem();
+	if (!IS_SAFE_HANDLE(hItem))
+		return;
+
+	HTREEITEM hRootItem = this->GetRootItem();
+	if (hRootItem == hItem)
+	{
+		// 选择了根
+		OnTvnSelchanged_SelectRoot();
+		return;
+	}
+
+	IFeatureObject *pObj = (IFeatureObject*)this->GetItemData(hItem);
+	if (pObj == NULL)
+		return;
+
+	if (lstrcmpA(pObj->GetObjectType(), PROP_TYPE_WINDOW_NAME) == 0)
+	{
+		OnTvnSelchanged_SelectWindow();
+		return;
+	}
+
+
+
+
+	*pResult = 0;
+}
+
+void CWindowsViewTree::OnTvnSelchanged_SelectRoot()
+{
+	if (m_pPropCtrl == NULL)
+		return;
+
+	m_pPropCtrl->RemoveAll();
+}
+
+void CWindowsViewTree::OnTvnSelchanged_SelectWindow()
+{
+
 }
