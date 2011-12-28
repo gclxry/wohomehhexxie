@@ -59,9 +59,7 @@ int CPropertiesWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 
 	InitPropList();
-
 	AdjustLayout();
-
 	return 0;
 }
 
@@ -92,6 +90,7 @@ void CPropertiesWnd::InitPropList()
 	m_wndPropList.SetVSDotNetLook();
 	m_wndPropList.MarkModifiedProperties();
 
+	/*
 	CMFCPropertyGridProperty* pGroup1 = new CMFCPropertyGridProperty(_T("外观"));
 
 	pGroup1->AddSubItem(new CMFCPropertyGridProperty(_T("三维外观"), (_variant_t) false, _T("指定窗口的字体不使用粗体，并且控件将使用三维边框")));
@@ -164,6 +163,7 @@ void CPropertiesWnd::InitPropList()
 
 	pGroup4->Expand(FALSE);
 	m_wndPropList.AddProperty(pGroup4);
+	*/
 }
 
 void CPropertiesWnd::SetPropListFont()
@@ -185,4 +185,9 @@ void CPropertiesWnd::SetPropListFont()
 	m_fntPropList.CreateFontIndirect(&lf);
 
 	m_wndPropList.SetFont(&m_fntPropList);
+}
+
+void CPropertiesWnd::Init(IKernelWindow* pKernelWindow, CWindowsViewTree *pViewTree)
+{
+	m_wndPropList.Init(pKernelWindow, pViewTree);
 }

@@ -425,7 +425,7 @@
 					>
 				</File>
 				<Filter
-					Name="属性子窗口"
+					Name="属性中包含窗口"
 					>
 					<File
 						RelativePath=".\PropetryDialogGridProperty.cpp"

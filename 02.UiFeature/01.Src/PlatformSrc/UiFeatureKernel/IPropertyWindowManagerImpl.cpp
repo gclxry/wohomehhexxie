@@ -149,7 +149,7 @@ bool IPropertyWindowManagerImpl::IsFullScreen()
 
 IPropertyBase* IPropertyWindowManagerImpl::CreatePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo)
 {
-	if (m_pSkinPropMgr == NULL || m_pWndPropInXml == NULL || pszPropName == NULL || strlen(pszPropName) <= 0 || propType <= PT_NONE || propType >= PT_LAST)
+	if (m_pSkinPropMgr == NULL || m_pWndPropInXml == NULL || pszPropName == NULL || strlen(pszPropName) <= 0 || propType <= OTID_NONE || propType >= OTID_LAST)
 		return NULL;
 
 	if (pGroup == NULL)
@@ -165,56 +165,56 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 		return;
 
 	// Group:base
-	m_pPropGroupBase = (IPropertyGroup*)CreatePropetry(NULL, PT_GROUP, "WindowBase", NULL);
+	m_pPropGroupBase = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "WindowBase", NULL);
 	if (m_pPropGroupBase == NULL)
 		return;
 
 	// base-类型名称
-	m_pPropBase_TypeName = (IPropertyString*)CreatePropetry(m_pPropGroupBase, PT_STRING, NAME_SKIN_PROP_NAME_TYPE, "当前 Object 类型");
+	m_pPropBase_TypeName = (IPropertyString*)CreatePropetry(m_pPropGroupBase, OTID_STRING, NAME_SKIN_PROP_NAME_TYPE, "当前 Object 类型");
 	if (m_pPropBase_TypeName == NULL)
 		return;
 	m_pPropBase_TypeName->SetString(PROP_TYPE_WINDOW_NAME);
 
 	// base-objectid
-	m_pPropBase_ObjectId = (IPropertyString*)CreatePropetry(m_pPropGroupBase, PT_STRING, NAME_SKIN_PROP_NAME_OBJ_ID, "当前 Object Id");
+	m_pPropBase_ObjectId = (IPropertyString*)CreatePropetry(m_pPropGroupBase, OTID_STRING, NAME_SKIN_PROP_NAME_OBJ_ID, "当前 Object Id");
 	if (m_pPropBase_ObjectId == NULL)
 		return;
 	m_pPropBase_ObjectId->SetString((char*)m_pWndPropInXml->GetObjectId());
 
 	// base-name
-	m_pPropBase_Name = (IPropertyString*)CreatePropetry(m_pPropGroupBase, PT_STRING, NAME_SKIN_PROP_NAME, "当前 Object 名称");
+	m_pPropBase_Name = (IPropertyString*)CreatePropetry(m_pPropGroupBase, OTID_STRING, NAME_SKIN_PROP_NAME, "当前 Object 名称");
 	if (m_pPropBase_Name == NULL)
 		return;
 	if (m_pPropBase_Name->GetString() != NULL && strlen(m_pPropBase_Name->GetString()) <= 0)
 		m_pPropBase_Name->SetString("新建窗体/面板");
 
 	// base-visible
-	m_pPropBase_Visible = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, PT_BOOL, "Visible", "是否可见");
+	m_pPropBase_Visible = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, OTID_BOOL, "Visible", "是否可见");
 	if (m_pPropBase_Visible == NULL)
 		return;
 
 	// base-支持分层窗口
-	m_pPropBase_Layered = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, PT_BOOL, "LayeredWindow", "是否支持分层窗口");
+	m_pPropBase_Layered = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, OTID_BOOL, "LayeredWindow", "是否支持分层窗口");
 	if (m_pPropBase_Layered == NULL)
 		return;
 
 	// base-topmost
-	m_pPropBase_TopMost = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, PT_BOOL, "TopMost", "窗口是否在最上层");
+	m_pPropBase_TopMost = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, OTID_BOOL, "TopMost", "窗口是否在最上层");
 	if (m_pPropBase_TopMost == NULL)
 		return;
 
 	// base-sysbase
-	m_pPropGroupSysBase = (IPropertyGroup*)CreatePropetry(m_pPropGroupBase, PT_GROUP, "SysBase", NULL);
+	m_pPropGroupSysBase = (IPropertyGroup*)CreatePropetry(m_pPropGroupBase, OTID_GROUP, "SysBase", NULL);
 	if (m_pPropGroupSysBase == NULL)
 		return;
 
 	// base-sysbase-最大化
-	m_pPropSysBase_CanFullScreen = (IPropertyBool*)CreatePropetry(m_pPropGroupSysBase, PT_BOOL, "CanFullScreen", "是否可以最大化");
+	m_pPropSysBase_CanFullScreen = (IPropertyBool*)CreatePropetry(m_pPropGroupSysBase, OTID_BOOL, "CanFullScreen", "是否可以最大化");
 	if (m_pPropSysBase_CanFullScreen == NULL)
 		return;
 
 	// base-sysbase-最小化
-	m_pPropSysBase_CanMiniSize = (IPropertyBool*)CreatePropetry(m_pPropGroupSysBase, PT_BOOL, "CanMiniSize", "是否可以最小化");
+	m_pPropSysBase_CanMiniSize = (IPropertyBool*)CreatePropetry(m_pPropGroupSysBase, OTID_BOOL, "CanMiniSize", "是否可以最小化");
 	if (m_pPropSysBase_CanMiniSize == NULL)
 		return;
 
@@ -222,62 +222,62 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 	// base-sysbase-最大尺寸
 
 	// Group-size
-	m_pPropGroupSize = (IPropertyGroup*)CreatePropetry(NULL, PT_GROUP, "Size", NULL);
+	m_pPropGroupSize = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "Size", NULL);
 	if (m_pPropGroupSize == NULL)
 		return;
 
 	// size-width
-	m_pPropSize_Width = (IPropertyInt*)CreatePropetry(m_pPropGroupSize, PT_INT, "Width", "窗口宽度");
+	m_pPropSize_Width = (IPropertyInt*)CreatePropetry(m_pPropGroupSize, OTID_INT, "Width", "窗口宽度");
 	if (m_pPropSize_Width == NULL)
 		return;
 
 	// size-height
-	m_pPropSize_Height = (IPropertyInt*)CreatePropetry(m_pPropGroupSize, PT_INT, "Height", "窗口高度");
+	m_pPropSize_Height = (IPropertyInt*)CreatePropetry(m_pPropGroupSize, OTID_INT, "Height", "窗口高度");
 	if (m_pPropSize_Height == NULL)
 		return;
 
 	// Group-drag(拖拽窗口)
-	m_pPropGroupDrag = (IPropertyGroup*)CreatePropetry(NULL, PT_GROUP, "Drag", NULL);
+	m_pPropGroupDrag = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "Drag", NULL);
 	if (m_pPropGroupDrag == NULL)
 		return;
 
 	// drag-enable
-	m_pPropDrag_Enable = (IPropertyBool*)CreatePropetry(m_pPropGroupDrag, PT_BOOL, "Enable", "是否可以拖动窗口，随处移动");
+	m_pPropDrag_Enable = (IPropertyBool*)CreatePropetry(m_pPropGroupDrag, OTID_BOOL, "Enable", "是否可以拖动窗口，随处移动");
 	if (m_pPropDrag_Enable == NULL)
 		return;
 
 	// Group-stretching(拉伸窗口)
-	m_pPropGroupStretching = (IPropertyGroup*)CreatePropetry(NULL, PT_GROUP, "Stretching", NULL);
+	m_pPropGroupStretching = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "Stretching", NULL);
 	if (m_pPropGroupStretching == NULL)
 		return;
 
 	// stretching-enable
-	m_pPropStretching_Enable = (IPropertyBool*)CreatePropetry(m_pPropGroupStretching, PT_BOOL, "Enable", "是否可以拉伸窗口，使窗口可以变大变小");
+	m_pPropStretching_Enable = (IPropertyBool*)CreatePropetry(m_pPropGroupStretching, OTID_BOOL, "Enable", "是否可以拉伸窗口，使窗口可以变大变小");
 	if (m_pPropStretching_Enable == NULL)
 		return;
 
 	// stretching-leftspace
-	m_pPropStretching_LeftSpace = (IPropertyInt*)CreatePropetry(m_pPropGroupStretching, PT_INT, "LeftSpace", "拉伸窗口，窗口左侧鼠标探测范围");
+	m_pPropStretching_LeftSpace = (IPropertyInt*)CreatePropetry(m_pPropGroupStretching, OTID_INT, "LeftSpace", "拉伸窗口，窗口左侧鼠标探测范围");
 	if (m_pPropStretching_LeftSpace == NULL)
 		return;
 
 	// stretching-rightspace
-	m_pPropStretching_RightSpace = (IPropertyInt*)CreatePropetry(m_pPropGroupStretching, PT_INT, "RightSpace", "拉伸窗口，窗口右侧鼠标探测范围");
+	m_pPropStretching_RightSpace = (IPropertyInt*)CreatePropetry(m_pPropGroupStretching, OTID_INT, "RightSpace", "拉伸窗口，窗口右侧鼠标探测范围");
 	if (m_pPropStretching_RightSpace == NULL)
 		return;
 
 	// stretching-topspace
-	m_pPropStretching_TopSpace = (IPropertyInt*)CreatePropetry(m_pPropGroupStretching, PT_INT, "TopSpace", "拉伸窗口，窗口上方鼠标探测范围");
+	m_pPropStretching_TopSpace = (IPropertyInt*)CreatePropetry(m_pPropGroupStretching, OTID_INT, "TopSpace", "拉伸窗口，窗口上方鼠标探测范围");
 	if (m_pPropStretching_TopSpace == NULL)
 		return;
 
 	// stretching-bottomspace
-	m_pPropStretching_BottomSpace = (IPropertyInt*)CreatePropetry(m_pPropGroupStretching, PT_INT, "BottomSpace", "拉伸窗口，窗口下方鼠标探测范围");
+	m_pPropStretching_BottomSpace = (IPropertyInt*)CreatePropetry(m_pPropGroupStretching, OTID_INT, "BottomSpace", "拉伸窗口，窗口下方鼠标探测范围");
 	if (m_pPropStretching_BottomSpace == NULL)
 		return;
 
 	// Group-WindowRgn
-	m_pPropGroupWindowRgn = (IPropertyGroup*)CreatePropetry(NULL, PT_GROUP, "WindowRgn", NULL);
+	m_pPropGroupWindowRgn = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "WindowRgn", NULL);
 	if (m_pPropGroupWindowRgn == NULL)
 		return;
 }

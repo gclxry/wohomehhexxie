@@ -12,7 +12,9 @@ class CWindowsViewTree : public CTreeCtrl
 public:
 	CWindowsViewTree();
 	virtual ~CWindowsViewTree();
+
 	void Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPropCtrl);
+	void Refresh(IPropertyGroup *pRefreshGroup);
 
 // ÖØÐ´
 protected:
@@ -21,6 +23,9 @@ protected:
 private:
 	void OnTvnSelchanged_SelectRoot();
 	void OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase);
+
+	HTREEITEM FindRefreshTreeItem(HTREEITEM hItem, IPropertyBase *pPropBase);
+	void RefreshTreeItem(HTREEITEM hItem);
 
 private:
 	IPropertySkinManager *m_pSkinMgr;
