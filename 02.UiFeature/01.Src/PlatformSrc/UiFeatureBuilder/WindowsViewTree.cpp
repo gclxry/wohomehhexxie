@@ -134,12 +134,10 @@ void CWindowsViewTree::OnTvnSelchanged(NMHDR *pNMHDR, LRESULT *pResult)
 
 	if (lstrcmpA(pObj->GetObjectType(), PROP_TYPE_WINDOW_NAME) == 0)
 	{
-		OnTvnSelchanged_SelectWindow();
+		IWindowBase *pWndBase = dynamic_cast<IWindowBase*>(pObj);
+		OnTvnSelchanged_SelectWindow(pWndBase);
 		return;
 	}
-
-
-
 
 	*pResult = 0;
 }
@@ -149,10 +147,23 @@ void CWindowsViewTree::OnTvnSelchanged_SelectRoot()
 	if (m_pPropCtrl == NULL)
 		return;
 
-	m_pPropCtrl->RemoveAll();
+	m_pPropCtrl->ClearAll();
 }
 
-void CWindowsViewTree::OnTvnSelchanged_SelectWindow()
+void CWindowsViewTree::OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase)
 {
+	OnTvnSelchanged_SelectRoot();
 
+	if (m_pPropCtrl == NULL || pWndBase == NULL)
+		return;
+
+	IPropertyWindowManager* pPropWndMgr = pWndBase->GetWindowProp();
+	if (pPropWndMgr == NULL)
+		return;
+
+	IPropertyGroup* pPropGroup = pPropWndMgr->GetWindowPropetryBaseGroup();
+	if (pPropGroup == NULL)
+		return;
+
+	m_pPropCtrl->SetShowPropGroup(pPropGroup);
 }

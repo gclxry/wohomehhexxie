@@ -281,3 +281,8 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 	if (m_pPropGroupWindowRgn == NULL)
 		return;
 }
+
+IPropertyGroup* IPropertyWindowManagerImpl::GetWindowPropetryBaseGroup()
+{
+	return m_pWndPropInXml;
+}
