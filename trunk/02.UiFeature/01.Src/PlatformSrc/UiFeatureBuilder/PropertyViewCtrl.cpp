@@ -20,6 +20,7 @@ void CPropertyViewCtrl::SetShowPropGroup(IPropertyGroup *pPropGroup)
 
 	m_pPropGroup = pPropGroup;
 	AppendPropGroup(NULL, m_pPropGroup);
+	this->RedrawWindow();
 }
 
 void CPropertyViewCtrl::AppendPropGroup(CMFCPropertyGridProperty* pParentPropGroup, IPropertyGroup *pPropGroup)
@@ -144,6 +145,7 @@ void CPropertyViewCtrl::ClearAll()
 {
 	m_pPropGroup = NULL;
 	this->RemoveAll();
+	this->RedrawWindow();
 }
 
 void CPropertyViewCtrl::AppendComboboxProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyComboBox *pComboboxProp)
