@@ -6,6 +6,7 @@
 #include "IPropertyWindowManagerImpl.h"
 #include "IPropertySkinManagerImpl.h"
 #include "..\..\Inc\ICommonFun.h"
+#include "..\..\Inc\UiFeatureDefs.h"
 
 IPropertyWindowManagerImpl::IPropertyWindowManagerImpl(void)
 {
@@ -169,13 +170,13 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 		return;
 
 	// base-类型名称
-	m_pPropBase_TypeName = (IPropertyString*)CreatePropetry(m_pPropGroupBase, PT_STRING, "Type", "当前 Object 类型");
+	m_pPropBase_TypeName = (IPropertyString*)CreatePropetry(m_pPropGroupBase, PT_STRING, NAME_SKIN_PROP_NAME_TYPE, "当前 Object 类型");
 	if (m_pPropBase_TypeName == NULL)
 		return;
 	m_pPropBase_TypeName->SetString(PROP_TYPE_WINDOW_NAME);
 
 	// base-objectid
-	m_pPropBase_ObjectId = (IPropertyString*)CreatePropetry(m_pPropGroupBase, PT_STRING, "ObjectId", "当前 Object Id");
+	m_pPropBase_ObjectId = (IPropertyString*)CreatePropetry(m_pPropGroupBase, PT_STRING, NAME_SKIN_PROP_NAME_OBJ_ID, "当前 Object Id");
 	if (m_pPropBase_ObjectId == NULL)
 		return;
 	m_pPropBase_ObjectId->SetString((char*)m_pWndPropInXml->GetObjectId());
