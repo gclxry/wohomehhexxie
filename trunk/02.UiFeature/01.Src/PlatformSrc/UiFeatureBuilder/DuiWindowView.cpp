@@ -163,7 +163,7 @@ void CDuiWindowView::Init(IKernelWindow* pKernelWindow, CPropertyCtrl *pPropCtrl
 	m_wndWindowTree.Init(pKernelWindow, pPropCtrl);
 }
 
-CViewTree* CDuiWindowView::GetViewTreeCtrl()
+CWindowsViewTree* CDuiWindowView::GetViewTreeCtrl()
 {
 	return &m_wndWindowTree;
 }

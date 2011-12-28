@@ -4,13 +4,13 @@
 #include "..\..\Inc\IKernelWindow.h"
 #include "PropertyCtrl.h"
 /////////////////////////////////////////////////////////////////////////////
-// CViewTree 窗口
+// CWindowsViewTree 窗口
 
-class CViewTree : public CTreeCtrl
+class CWindowsViewTree : public CTreeCtrl
 {
 // 构造
 public:
-	CViewTree();
+	CWindowsViewTree();
 
 // 重写
 protected:
@@ -18,7 +18,7 @@ protected:
 
 // 实现
 public:
-	virtual ~CViewTree();
+	virtual ~CWindowsViewTree();
 
 	void Init(IKernelWindow* pKernelWindow, CPropertyCtrl *pPropCtrl);
 
