@@ -25,6 +25,11 @@ bool IPropertyComboBox::IsRightData()
 	return (m_ComboBoxPro.DataVec.size() > 0 && m_ComboBoxPro.nSelect >= 0);
 }
 
+COMBOBOX_PROP* IPropertyComboBox::GetComboBoxData()
+{
+	return &m_ComboBoxPro;
+}
+
 bool IPropertyComboBox::ReadResourceXmlProperty(XmlNode* pXmlNode)
 {
 	if (pXmlNode == NULL)

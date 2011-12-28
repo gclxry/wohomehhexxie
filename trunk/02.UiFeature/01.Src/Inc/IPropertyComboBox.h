@@ -7,7 +7,6 @@
 // ComboBox属性
 struct COMBOBOX_PROP
 {
-	// 属性名称
 	int nSelect;
 	STRING_VEC DataVec;
 };
@@ -22,6 +21,8 @@ public:
 	virtual bool IsRightData();
 	// 从XML节点读取属性值，并放入属性队列
 	virtual bool ReadResourceXmlProperty(XmlNode* pXmlNode);
+
+	COMBOBOX_PROP* GetComboBoxData();
 
 private:
 	void Clear();
