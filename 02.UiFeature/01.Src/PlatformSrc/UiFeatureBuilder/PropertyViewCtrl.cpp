@@ -393,7 +393,6 @@ void CPropertyViewCtrl::RefreshStringProp(CMFCPropertyGridProperty* pProperty, I
 			string strOld = pStringProp->GetString();
 			COleVariant OldVariant(A2W(strOld.c_str()));
 			pProperty->SetValue(OldVariant);
-
 			AfxMessageBox(_T("¡¾Name¡¿×Ö¶Î²»ÔÊÐíÎª¿Õ£¡"), MB_OK | MB_ICONERROR);
 			return;
 		}
