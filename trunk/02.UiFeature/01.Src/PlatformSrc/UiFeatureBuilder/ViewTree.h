@@ -2,6 +2,7 @@
 #pragma once
 #include "..\..\Inc\IPropertySkinManager.h"
 #include "..\..\Inc\IKernelWindow.h"
+#include "PropertyCtrl.h"
 /////////////////////////////////////////////////////////////////////////////
 // CViewTree ´°¿Ú
 
@@ -19,11 +20,12 @@ protected:
 public:
 	virtual ~CViewTree();
 
-	void Init(IKernelWindow* pKernelWindow, IPropertySkinManager *pSkinMgr);
+	void Init(IKernelWindow* pKernelWindow, CPropertyCtrl *pPropCtrl);
 
 private:
 	IPropertySkinManager *m_pSkinMgr;
 	IKernelWindow* m_pKernelWindow;
+	CPropertyCtrl *m_pPropCtrl;
 
 protected:
 	DECLARE_MESSAGE_MAP()

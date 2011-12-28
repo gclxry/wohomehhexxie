@@ -22,7 +22,8 @@ public:
 	void AdjustLayout();
 	void OnChangeVisualStyle();
 
-	void Init(IKernelWindow* pKernelWindow, IPropertySkinManager *pSkinMgr);
+	CViewTree *GetViewTreeCtrl();
+	void Init(IKernelWindow* pKernelWindow, CPropertyCtrl *pPropCtrl);
 
 protected:
 	CClassToolBar m_wndToolBar;

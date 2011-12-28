@@ -158,9 +158,14 @@ void CDuiWindowView::FillClassView()
 	m_wndWindowTree.Expand(hClass, TVE_EXPAND);*/
 }
 
-void CDuiWindowView::Init(IKernelWindow* pKernelWindow, IPropertySkinManager *pSkinMgr)
+void CDuiWindowView::Init(IKernelWindow* pKernelWindow, CPropertyCtrl *pPropCtrl)
 {
-	m_wndWindowTree.Init(pKernelWindow, pSkinMgr);
+	m_wndWindowTree.Init(pKernelWindow, pPropCtrl);
+}
+
+CViewTree* CDuiWindowView::GetViewTreeCtrl()
+{
+	return &m_wndWindowTree;
 }
 
 void CDuiWindowView::OnContextMenu(CWnd* pWnd, CPoint point)

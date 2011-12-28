@@ -416,6 +416,14 @@
 					RelativePath=".\PropertiesWnd.h"
 					>
 				</File>
+				<File
+					RelativePath=".\PropertyCtrl.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\PropertyCtrl.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="04.¡¾´°Ìå-Ãæ°å¡¿ÊÓÍ¼"
