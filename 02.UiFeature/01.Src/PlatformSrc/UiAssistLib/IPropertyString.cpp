@@ -94,10 +94,15 @@ void IPropertyString::SetString(char* pszString)
 
 	STRING_MAP::iterator pStringItem = m_StringProp.StringMap.find(m_StringProp.nDefaultArea);
 	if (pStringItem == m_StringProp.StringMap.end())
-		return;
-
-	string &strString = pStringItem->second;
-	strString = pszString;
+	{
+		string strString = pszString;
+		m_StringProp.StringMap.insert(pair<AREA_TYPE, string>(m_StringProp.nDefaultArea, strString));
+	}
+	else
+	{
+		string &strString = pStringItem->second;
+		strString = pszString;
+	}
 	m_StringProp.strDefaultString = pszString;
 }
 
