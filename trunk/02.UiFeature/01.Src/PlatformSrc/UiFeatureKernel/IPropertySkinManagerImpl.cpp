@@ -10,6 +10,7 @@
 #include "..\..\Inc\IPropertyComboBox.h"
 #include "..\..\Inc\IPropertyCursor.h"
 #include "..\..\Inc\IPropertyImage.h"
+#include "..\..\Inc\IPropertyImageBase.h"
 #include "..\..\Inc\IPropertyInt.h"
 #include "..\..\Inc\IPropertyString.h"
 #include "..\..\Inc\IPropertyGroup.h"
@@ -195,6 +196,17 @@ void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
 		}
 		break;
 
+	case PT_IMAGE_BASE:
+		{
+			IPropertyImageBase* pProp = dynamic_cast<IPropertyImageBase*>(pCtrlProp);
+			if (pProp != NULL)
+			{
+				SAFE_DELETE(pProp);
+				return;
+			}
+		}
+		break;
+
 	case PT_INT:
 		{
 			IPropertyInt* pProp = dynamic_cast<IPropertyInt*>(pCtrlProp);
@@ -323,6 +335,18 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 	case PT_IMAGE:
 		{
 			IPropertyImage* pProp = new IPropertyImage;
+			if (pProp != NULL)
+			{
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+					SAFE_DELETE(pProp);
+			}
+		}
+		break;
+
+	case PT_IMAGE_BASE:
+		{
+			IPropertyImageBase* pProp = new IPropertyImageBase;
 			if (pProp != NULL)
 			{
 				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);

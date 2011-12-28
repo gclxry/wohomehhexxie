@@ -7,10 +7,14 @@ enum OBJECT_TYPE_ID
 	PT_NONE	= 0,
 	PT_BOOL	= 1,
 	PT_COLOR,
+	PT_COLOR_BASE,
 	PT_COMBOBOX,
 	PT_CURSOR,
+	PT_CURSOR_BASE,
 	PT_FONT,
+	PT_FONT_BASE,
 	PT_IMAGE,
+	PT_IMAGE_BASE,
 	PT_INT,
 	PT_STRING,
 	PT_GROUP,
@@ -21,10 +25,14 @@ enum OBJECT_TYPE_ID
 
 #define PROP_TYPE_BOOL_NAME						"bool"
 #define PROP_TYPE_COLOR_NAME					"color"
+#define PROP_TYPE_COLOR_BASE_NAME				"colorbase"
 #define PROP_TYPE_COMBOBOX_NAME					"combobox"
 #define PROP_TYPE_CURSOR_NAME					"cursor"
+#define PROP_TYPE_CURSOR_BASE_NAME				"cursorbase"
 #define PROP_TYPE_FONT_NAME						"font"
+#define PROP_TYPE_FONT_BASE_NAME				"fontbase"
 #define PROP_TYPE_IMAGE_NAME					"image"
+#define PROP_TYPE_IMAGE_BASE_NAME				"imagebase"
 #define PROP_TYPE_INT_NAME						"int"
 #define PROP_TYPE_STRING_NAME					"string"
 #define PROP_TYPE_GROUP_NAME					"group"
