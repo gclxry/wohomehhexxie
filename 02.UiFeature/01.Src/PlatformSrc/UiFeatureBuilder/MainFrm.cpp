@@ -57,6 +57,10 @@ CMainFrame::CMainFrame()
 CMainFrame::~CMainFrame()
 {
 	SAFE_FREE_LIBRARY(m_hControlDll);
+	
+//	if (m_pKernelWindow != NULL)
+//		m_pKernelWindow->BuilderRelease();
+
 	SAFE_FREE_LIBRARY(m_hKernelDll);
 }
 

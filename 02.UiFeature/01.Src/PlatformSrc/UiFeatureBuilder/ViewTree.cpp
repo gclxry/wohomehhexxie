@@ -88,15 +88,8 @@ void CViewTree::OnCreateWindowPanel()
 		AfxMessageBox(_T("新建窗体/面板错误！"), MB_OK | MB_ICONERROR);
 		return;
 	}
-
-	IPropertyGroup *pWndGroup = (IPropertyGroup*)m_pSkinMgr->CreateEmptyBaseProp(PT_GROUP);
-	if (pWndGroup == NULL)
-	{
-		AfxMessageBox(_T("新建窗体/面板 属性 错误！"), MB_OK | MB_ICONERROR);
-		return;
-	}
 	
-	IWindowBase *pWndBase = m_pKernelWindow->BuilderCreateWindow(pWndGroup);
+	IWindowBase *pWndBase = m_pKernelWindow->BuilderCreateWindow();
 	if (pWndBase == NULL)
 	{
 		AfxMessageBox(_T("新建窗体/面板时，创建绘制窗体错误！"), MB_OK | MB_ICONERROR);

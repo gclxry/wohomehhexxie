@@ -43,8 +43,12 @@ IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
 
 IPropertySkinManagerImpl::~IPropertySkinManagerImpl(void)
 {
-	SAFE_FREE_LIBRARY(m_hZipModule);
+	ReleaseSkinManager();
+}
 
+void IPropertySkinManagerImpl::ReleaseSkinManager()
+{
+	SAFE_FREE_LIBRARY(m_hZipModule);
 	ReleaseLayoutMap();
 	ReleasePropMapItem(&m_AllWindowPropMap);
 	ReleasePropMap(m_AllCtrlPropMap);
@@ -91,7 +95,7 @@ void IPropertySkinManagerImpl::ReleasePropMap(PROP_BASE_MAP &PropMap)
 			SAFE_DELETE(pGroup);
 		}
 	}
-	m_AllPropMap.clear();
+	PropMap.clear();
 }
 
 void IPropertySkinManagerImpl::ReleasePropMapItem(PROP_BASE_ITEM* pPropMapItem)
