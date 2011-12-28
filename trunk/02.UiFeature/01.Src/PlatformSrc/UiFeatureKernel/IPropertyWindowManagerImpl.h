@@ -32,6 +32,8 @@ public:
 	virtual void SetWindowName(char *pszWndName);
 	virtual const char * GetWindowName();
 
+	virtual IPropertyGroup *GetWindowPropetryBaseGroup();
+
 private:
 	// 创建空的属性队列
 	void CreateWindowPropetry();

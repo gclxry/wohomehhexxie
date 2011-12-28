@@ -20,7 +20,7 @@ protected:
 
 private:
 	void OnTvnSelchanged_SelectRoot();
-	void OnTvnSelchanged_SelectWindow();
+	void OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase);
 
 private:
 	IPropertySkinManager *m_pSkinMgr;

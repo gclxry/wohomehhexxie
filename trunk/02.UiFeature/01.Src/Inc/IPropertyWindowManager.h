@@ -27,5 +27,6 @@ public:
 	virtual void SetWindowName(char *pszWndName) = 0;
 	virtual const char * GetWindowName() = 0;
 
+	virtual IPropertyGroup *GetWindowPropetryBaseGroup() = 0;
 
 };
