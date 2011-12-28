@@ -4,7 +4,7 @@
 
 #pragma once
 #include "FileView.h"
-#include "DuiWindowView.h"
+#include "WindowsView.h"
 #include "PropertiesWnd.h"
 #include "ControlsWnd.h"
 #include "UiFeatureKernel.h"
@@ -41,7 +41,7 @@ protected:  // 控件条嵌入成员
 	CMFCStatusBar     m_wndStatusBar;
 	CMFCToolBarImages m_UserImages;
 	CFileView         m_wndFileView;
-	CDuiWindowView    m_wndWindowView;
+	CWindowsView    m_wndWindowView;
 	CPropertiesWnd    m_wndProperties;
 	CControlsWnd      m_wndControls;
 

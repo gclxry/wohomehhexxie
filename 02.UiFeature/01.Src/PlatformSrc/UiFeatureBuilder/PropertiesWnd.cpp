@@ -91,7 +91,7 @@ int CPropertiesWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
-CPropertyCtrl* CPropertiesWnd::GetPropetryCtrl()
+CPropertyViewCtrl* CPropertiesWnd::GetPropetryCtrl()
 {
 	return &m_wndPropList;
 }

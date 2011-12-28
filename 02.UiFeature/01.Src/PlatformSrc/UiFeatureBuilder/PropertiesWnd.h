@@ -1,6 +1,6 @@
 
 #pragma once
-#include "PropertyCtrl.h"
+#include "PropertyViewCtrl.h"
 
 class CPropertiesToolBar : public CMFCToolBar
 {
@@ -21,7 +21,7 @@ public:
 
 	void AdjustLayout();
 
-	CPropertyCtrl* GetPropetryCtrl();
+	CPropertyViewCtrl* GetPropetryCtrl();
 
 //  Ù–‘
 public:
@@ -34,7 +34,7 @@ public:
 protected:
 	CFont m_fntPropList;
 	CPropertiesToolBar m_wndToolBar;
-	CPropertyCtrl m_wndPropList;
+	CPropertyViewCtrl m_wndPropList;
 
 //  µœ÷
 public:

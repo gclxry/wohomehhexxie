@@ -64,7 +64,7 @@ void CWindowsViewTree::OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult)
 	*pResult = 0;
 }
 
-void CWindowsViewTree::Init(IKernelWindow* pKernelWindow, CPropertyCtrl *pPropCtrl)
+void CWindowsViewTree::Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPropCtrl)
 {
 	if (pKernelWindow == NULL || pPropCtrl == NULL)
 		return;

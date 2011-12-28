@@ -13,17 +13,17 @@ class CClassToolBar : public CMFCToolBar
 	virtual BOOL AllowShowOnList() const { return FALSE; }
 };
 
-class CWindowView : public CDockablePane
+class CWindowsView : public CDockablePane
 {
 public:
-	CWindowView();
-	virtual ~CWindowView();
+	CWindowsView();
+	virtual ~CWindowsView();
 
 	void AdjustLayout();
 	void OnChangeVisualStyle();
 
 	CWindowsViewTree *GetViewTreeCtrl();
-	void Init(IKernelWindow* pKernelWindow, CPropertyCtrl *pPropCtrl);
+	void Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPropCtrl);
 
 protected:
 	CClassToolBar m_wndToolBar;

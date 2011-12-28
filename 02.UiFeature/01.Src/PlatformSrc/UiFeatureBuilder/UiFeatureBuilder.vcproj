@@ -417,11 +417,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\PropertyCtrl.cpp"
+					RelativePath=".\PropertyViewCtrl.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\PropertyCtrl.h"
+					RelativePath=".\PropertyViewCtrl.h"
 					>
 				</File>
 			</Filter>
@@ -429,19 +429,19 @@
 				Name="04.¡¾´°Ìå-Ãæ°å¡¿ÊÓÍ¼"
 				>
 				<File
-					RelativePath=".\DuiWindowView.cpp"
+					RelativePath=".\WindowsView.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\DuiWindowView.h"
+					RelativePath=".\WindowsView.h"
 					>
 				</File>
 				<File
-					RelativePath=".\ViewTree.cpp"
+					RelativePath=".\WindowsViewTree.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\ViewTree.h"
+					RelativePath=".\WindowsViewTree.h"
 					>
 				</File>
 			</Filter>
