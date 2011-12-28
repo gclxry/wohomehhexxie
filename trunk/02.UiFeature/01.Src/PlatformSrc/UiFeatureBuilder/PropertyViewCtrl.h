@@ -18,6 +18,7 @@ public:
 
 	void ClearAll();
 	void SetShowPropGroup(IPropertyGroup *pPropGroup);
+	void OnPropertyChanged(CMFCPropertyGridProperty* pProperty);
 
 private:
 	void AppendPropGroup(CMFCPropertyGridProperty* pParentPropGroup, IPropertyGroup *pPropGroup);

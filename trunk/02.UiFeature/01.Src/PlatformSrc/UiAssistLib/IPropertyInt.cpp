@@ -31,3 +31,13 @@ bool IPropertyInt::ReadResourceXmlProperty(XmlNode* pXmlNode)
 
 	return true;
 }
+
+void IPropertyInt::SetValue(int nValue)
+{
+	m_nIntData = nValue;
+}
+
+int IPropertyInt::GetValue()
+{
+	return m_nIntData;
+}

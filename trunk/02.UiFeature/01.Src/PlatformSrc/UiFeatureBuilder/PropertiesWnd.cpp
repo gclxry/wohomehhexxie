@@ -26,16 +26,7 @@ CPropertiesWnd::~CPropertiesWnd()
 BEGIN_MESSAGE_MAP(CPropertiesWnd, CDockablePane)
 	ON_WM_CREATE()
 	ON_WM_SIZE()
-	ON_COMMAND(ID_EXPAND_ALL, OnExpandAllProperties)
-	ON_UPDATE_COMMAND_UI(ID_EXPAND_ALL, OnUpdateExpandAllProperties)
-	ON_COMMAND(ID_SORTPROPERTIES, OnSortProperties)
-	ON_UPDATE_COMMAND_UI(ID_SORTPROPERTIES, OnUpdateSortProperties)
-	ON_COMMAND(ID_PROPERTIES1, OnProperties1)
-	ON_UPDATE_COMMAND_UI(ID_PROPERTIES1, OnUpdateProperties1)
-	ON_COMMAND(ID_PROPERTIES2, OnProperties2)
-	ON_UPDATE_COMMAND_UI(ID_PROPERTIES2, OnUpdateProperties2)
-	ON_WM_SETFOCUS()
-	ON_WM_SETTINGCHANGE()
+	ON_REGISTERED_MESSAGE(AFX_WM_PROPERTY_CHANGED, OnPropertyChanged)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -85,43 +76,11 @@ void CPropertiesWnd::OnSize(UINT nType, int cx, int cy)
 	AdjustLayout();
 }
 
-void CPropertiesWnd::OnExpandAllProperties()
+LRESULT CPropertiesWnd::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 {
-	m_wndPropList.ExpandAll();
-}
-
-void CPropertiesWnd::OnUpdateExpandAllProperties(CCmdUI* pCmdUI)
-{
-}
-
-void CPropertiesWnd::OnSortProperties()
-{
-	m_wndPropList.SetAlphabeticMode(!m_wndPropList.IsAlphabeticMode());
-}
-
-void CPropertiesWnd::OnUpdateSortProperties(CCmdUI* pCmdUI)
-{
-	pCmdUI->SetCheck(m_wndPropList.IsAlphabeticMode());
-}
-
-void CPropertiesWnd::OnProperties1()
-{
-	// TODO: 在此处添加命令处理程序代码
-}
-
-void CPropertiesWnd::OnUpdateProperties1(CCmdUI* /*pCmdUI*/)
-{
-	// TODO: 在此处添加命令更新 UI 处理程序代码
-}
-
-void CPropertiesWnd::OnProperties2()
-{
-	// TODO: 在此处添加命令处理程序代码
-}
-
-void CPropertiesWnd::OnUpdateProperties2(CCmdUI* /*pCmdUI*/)
-{
-	// TODO: 在此处添加命令更新 UI 处理程序代码
+	CMFCPropertyGridProperty* pProp = (CMFCPropertyGridProperty*)lParam;
+	m_wndPropList.OnPropertyChanged(pProp);
+	return 0;
 }
 
 void CPropertiesWnd::InitPropList()
@@ -205,18 +164,6 @@ void CPropertiesWnd::InitPropList()
 
 	pGroup4->Expand(FALSE);
 	m_wndPropList.AddProperty(pGroup4);
-}
-
-void CPropertiesWnd::OnSetFocus(CWnd* pOldWnd)
-{
-	CDockablePane::OnSetFocus(pOldWnd);
-	m_wndPropList.SetFocus();
-}
-
-void CPropertiesWnd::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
-{
-	CDockablePane::OnSettingChange(uFlags, lpszSection);
-	SetPropListFont();
 }
 
 void CPropertiesWnd::SetPropListFont()

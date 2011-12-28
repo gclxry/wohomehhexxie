@@ -182,27 +182,26 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 	m_pPropBase_ObjectId->SetString((char*)m_pWndPropInXml->GetObjectId());
 
 	// base-name
-	m_pPropBase_Name = (IPropertyString*)CreatePropetry(m_pPropGroupBase, PT_STRING, "Name", "当前 Object 名称");
+	m_pPropBase_Name = (IPropertyString*)CreatePropetry(m_pPropGroupBase, PT_STRING, NAME_SKIN_PROP_NAME, "当前 Object 名称");
 	if (m_pPropBase_Name == NULL)
 		return;
+	if (m_pPropBase_Name->GetString() != NULL && strlen(m_pPropBase_Name->GetString()) <= 0)
+		m_pPropBase_Name->SetString("新建窗体/面板");
 
 	// base-visible
 	m_pPropBase_Visible = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, PT_BOOL, "Visible", "是否可见");
 	if (m_pPropBase_Visible == NULL)
 		return;
-	m_pPropBase_Visible->SetValue(true);
 
 	// base-支持分层窗口
 	m_pPropBase_Layered = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, PT_BOOL, "LayeredWindow", "是否支持分层窗口");
 	if (m_pPropBase_Layered == NULL)
 		return;
-	m_pPropBase_Layered->SetValue(false);
 
 	// base-topmost
 	m_pPropBase_TopMost = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, PT_BOOL, "TopMost", "窗口是否在最上层");
 	if (m_pPropBase_TopMost == NULL)
 		return;
-	m_pPropBase_TopMost->SetValue(false);
 
 	// base-sysbase
 	m_pPropGroupSysBase = (IPropertyGroup*)CreatePropetry(m_pPropGroupBase, PT_GROUP, "SysBase", NULL);

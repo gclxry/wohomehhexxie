@@ -216,9 +216,24 @@ void CPropertyViewCtrl::AppendImageProp(CMFCPropertyGridProperty* pParentPropGro
 
 void CPropertyViewCtrl::AppendIntProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyInt *pIntProp)
 {
+	USES_CONVERSION;
 	if (pParentPropGroup == NULL || pIntProp == NULL)
 		return;
 
+	IPropertyBase *pPropBase = dynamic_cast<IPropertyBase*>(pIntProp);
+	if (pPropBase == NULL)
+		return;
+
+	CString strName = A2W(pPropBase->GetObjectName());
+	CString strInfo = A2W(pPropBase->GetObjectInfo());
+
+	CMFCPropertyGridProperty *pNewProp = new CMFCPropertyGridProperty(strName, (_variant_t)pIntProp->GetValue(), strInfo);
+	if (pNewProp == NULL)
+		return;
+
+	pNewProp->EnableSpinControl(TRUE, -(0x7FFFFFFF), 0x7FFFFFFF);
+	pNewProp->SetData((DWORD_PTR)pPropBase);
+	pParentPropGroup->AddSubItem(pNewProp);
 }
 
 void CPropertyViewCtrl::AppendStringProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyString *pStringProp)
@@ -248,4 +263,15 @@ void CPropertyViewCtrl::AppendStringProp(CMFCPropertyGridProperty* pParentPropGr
 
 	pNewProp->SetData((DWORD_PTR)pPropBase);
 	pParentPropGroup->AddSubItem(pNewProp);
+}
+
+void CPropertyViewCtrl::OnPropertyChanged(CMFCPropertyGridProperty* pProperty)
+{
+	if (pProperty == NULL)
+		return;
+
+//	CString s = pProperty->GetName();  //被改变的参数名
+//	COleVariant t = pProperty->GetValue(); //改变之后的值
+//	t = pProperty->GetOriginalValue();  //改变之前的值
+
 }
