@@ -288,6 +288,14 @@
 					RelativePath="..\..\Inc\IPropertyImage.h"
 					>
 				</File>
+				<File
+					RelativePath=".\IPropertyImageBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyImageBase.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Int"

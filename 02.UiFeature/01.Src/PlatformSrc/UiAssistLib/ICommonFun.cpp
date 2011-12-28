@@ -66,6 +66,22 @@ OBJECT_TYPE_ID PropStringToType(string strPropType)
 	{
 		return PT_WINDOW;
 	}
+	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_COLOR_BASE_NAME) == 0)
+	{
+		return PT_COLOR_BASE;
+	}
+	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_CURSOR_BASE_NAME) == 0)
+	{
+		return PT_CURSOR_BASE;
+	}
+	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_FONT_BASE_NAME) == 0)
+	{
+		return PT_FONT_BASE;
+	}
+	else if (lstrcmpiA(strPropType.c_str(), PROP_TYPE_IMAGE_BASE_NAME) == 0)
+	{
+		return PT_IMAGE_BASE;
+	}
 
 	return PT_NONE;
 }
@@ -117,6 +133,22 @@ string PropTypeToString(OBJECT_TYPE_ID propType)
 
 	case PT_WINDOW:
 		strType = PROP_TYPE_WINDOW_NAME;
+		break;
+
+	case PT_COLOR_BASE:
+		strType = PROP_TYPE_COLOR_BASE_NAME;
+		break;
+
+	case PT_CURSOR_BASE:
+		strType = PROP_TYPE_CURSOR_BASE_NAME;
+		break;
+
+	case PT_FONT_BASE:
+		strType = PROP_TYPE_FONT_BASE_NAME;
+		break;
+
+	case PT_IMAGE_BASE:
+		strType = PROP_TYPE_IMAGE_BASE_NAME;
 		break;
 
 	default:

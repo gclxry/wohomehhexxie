@@ -141,6 +141,7 @@ void CPropertyViewCtrl::AppendColorProp(CMFCPropertyGridProperty* pParentPropGro
 
 void CPropertyViewCtrl::ClearAll()
 {
+	return;
 	m_pPropGroup = NULL;
 	this->RemoveAll();
 }
