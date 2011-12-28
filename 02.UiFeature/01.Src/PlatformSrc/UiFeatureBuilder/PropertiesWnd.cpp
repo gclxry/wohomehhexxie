@@ -91,6 +91,11 @@ int CPropertiesWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
+CPropertyCtrl* CPropertiesWnd::GetPropetryCtrl()
+{
+	return &m_wndPropList;
+}
+
 void CPropertiesWnd::OnSize(UINT nType, int cx, int cy)
 {
 	CDockablePane::OnSize(nType, cx, cy);

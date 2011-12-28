@@ -16,6 +16,7 @@ CViewTree::CViewTree()
 {
 	m_pSkinMgr = NULL;
 	m_pKernelWindow = NULL;
+	m_pPropCtrl = NULL;
 }
 
 CViewTree::~CViewTree()
@@ -63,13 +64,14 @@ void CViewTree::OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult)
 	*pResult = 0;
 }
 
-void CViewTree::Init(IKernelWindow* pKernelWindow, IPropertySkinManager *pSkinMgr)
+void CViewTree::Init(IKernelWindow* pKernelWindow, CPropertyCtrl *pPropCtrl)
 {
-	if (pKernelWindow == NULL || pSkinMgr == NULL)
+	if (pKernelWindow == NULL || pPropCtrl == NULL)
 		return;
 
 	m_pKernelWindow = pKernelWindow;
-	m_pSkinMgr = pSkinMgr;
+	m_pSkinMgr = m_pKernelWindow->GetSkinManager();
+	m_pPropCtrl = pPropCtrl;
 }
 
 void CViewTree::OnCreateWindowPanel()

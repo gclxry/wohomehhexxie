@@ -451,9 +451,9 @@ void CMainFrame::InitUiFeatureKernel()
 		AfxMessageBox(_T("找不到UiFeature内核DLL的【IKernelWindow】接口！"), MB_OK | MB_ICONERROR);
 		return;
 	}
-
 	m_pSkinMgr = m_pKernelWindow->GetSkinManager();
-	m_wndWindowView.Init(m_pKernelWindow, m_pSkinMgr);
+
+	m_wndWindowView.Init(m_pKernelWindow, m_wndProperties.GetPropetryCtrl());
 
 	// 加载控件显示数据
 	m_pRegControlMap = m_pKernelWindow->BuilderRegisterControl();

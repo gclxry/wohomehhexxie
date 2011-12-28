@@ -1,5 +1,6 @@
 
 #pragma once
+#include "PropertyCtrl.h"
 
 class CPropertiesToolBar : public CMFCToolBar
 {
@@ -20,6 +21,8 @@ public:
 
 	void AdjustLayout();
 
+	CPropertyCtrl* GetPropetryCtrl();
+
 //  Ù–‘
 public:
 	void SetVSDotNetLook(BOOL bSet)
@@ -31,7 +34,7 @@ public:
 protected:
 	CFont m_fntPropList;
 	CPropertiesToolBar m_wndToolBar;
-	CMFCPropertyGridCtrl m_wndPropList;
+	CPropertyCtrl m_wndPropList;
 
 //  µœ÷
 public:
