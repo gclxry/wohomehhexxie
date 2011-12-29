@@ -1,6 +1,7 @@
 
 #include "StdAfx.h"
 #include "..\..\Inc\ICommonFun.h"
+#include "..\..\Inc\IPropertyGroup.h"
 
 string PathHelper(char *pszFileName)
 {
@@ -231,4 +232,17 @@ bool FileExists(const char *pszFilePath)
 		return false;
 
 	return true;
+}
+
+void ResetWindowBaseInfo(IWindowBase *pWndBase)
+{
+	if (pWndBase == NULL)
+		return;
+
+	IPropertyGroup *pWnpPropGroup = pWndBase->GetWindowProp()->GetWindowPropetryBaseGroup();
+	if (pWnpPropGroup != NULL)
+	{
+		pWndBase->SetObjectName(pWnpPropGroup->GetObjectName());
+		pWndBase->SetObjectId(pWnpPropGroup->GetObjectId());
+	}
 }
