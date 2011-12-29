@@ -35,7 +35,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 	// 初始化Window皮肤
-	virtual IPropertyGroup* InitWindowSkin(const char *pszSkinPath, const char *pszWndName);
+	virtual IPropertyWindow* InitWindowSkin(const char *pszSkinPath, const char *pszWndName);
 	// 查找指定的属性
 	virtual IPropertyBase* FindBaseProperty(OBJECT_TYPE_ID propType, const char* pszPropId);
 	virtual IPropertyBase* FindBaseProperty(const char* pszPropType, const char* pszPropId);

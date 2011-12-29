@@ -3,13 +3,14 @@
 #include "IControlBase.h"
 #include "IPropertyWindowManager.h"
 #include "IFeatureObject.h"
+#include "IPropertyWindow.h"
 
 class IWindowBase : public IFeatureObject
 {
 public:
 //////////////////////////////////////////////////////////////////////////
 // Builder 使用的函数
-	virtual void BuilderInitWindowBase(IPropertyGroup *pWindowProp) = 0;
+	virtual void BuilderInitWindowBase(IPropertyWindow *pWindowProp) = 0;
 
 //////////////////////////////////////////////////////////////////////////
 	// 窗口居中显示
@@ -26,7 +27,8 @@ public:
 	virtual IPropertyWindowManager* GetWindowProp() = 0;
 	// 取得窗口控件指针
 	virtual IControlBase* GetControl(char *pszCtrlName) = 0;
-
+	// 设置窗口属性
+	virtual void SetWindowPropetry(IPropertyWindow *pPropWindow) = 0;
 
 public:
 ////// 以下函数非外部窗口调用 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

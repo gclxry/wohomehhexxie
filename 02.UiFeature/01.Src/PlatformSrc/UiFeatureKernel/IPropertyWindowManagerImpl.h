@@ -16,7 +16,7 @@ public:
 	virtual bool IsInit();
 
 	// 将xml中的属性设置到manager中
-	virtual void SetWindowPropetry(IPropertyGroup *pWndPropInXml);
+	virtual void SetWindowPropetry(IPropertyWindow *pWndPropInXml);
 
 	// 是否支持全窗口点击移动
 	virtual void SetDragWindow(bool bDrag);
@@ -44,9 +44,8 @@ private:
 	bool m_bIsInit;
 	bool m_bIsFullScreen;
 
-	IPropertyWindow *m_pXmlPropWindow;
 	// 从xml中读入并需要写入xml中的属性窗口属性列表
-	IPropertyGroup *m_pWndPropInXml;
+	IPropertyWindow *m_pXmlPropWindow;
 
 	// Group:base
 	IPropertyGroup* m_pPropGroupBase;
