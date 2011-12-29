@@ -283,6 +283,8 @@ void CWindowsViewTree::InitShowNewProject()
 		if (hWindowItem == NULL)
 			continue;
 
+		this->SetItemData(hWindowItem, (DWORD_PTR)pWndBase);
+
 
 	}
 
