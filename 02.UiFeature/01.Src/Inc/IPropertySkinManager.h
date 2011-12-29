@@ -8,6 +8,14 @@
 class IPropertySkinManager
 {
 public:
+	// 解析Resource.xml
+	virtual bool BuilderTranslateResourceXml(char *pszXmlPath) = 0;
+	// 解析Controls.xml
+	virtual bool BuilderTranslateControlsXml(char *pszXmlPath) = 0;
+	// 解析Windows.xml
+	virtual bool BuilderTranslateWindowsXml(char *pszXmlPath) = 0;
+	// 解析Layout.xml
+	virtual bool BuilderTranslateLayoutXml(char *pszXmlPath) = 0;
 
 	// 初始化Window皮肤
 	virtual IPropertyGroup* InitWindowSkin(const char *pszSkinPath, const char *pszWndName) = 0;

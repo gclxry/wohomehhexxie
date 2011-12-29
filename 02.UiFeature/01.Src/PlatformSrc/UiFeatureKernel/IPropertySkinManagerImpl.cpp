@@ -1092,3 +1092,120 @@ IPropertyGroup* IPropertySkinManagerImpl::FindControlPropGroup(char *pszObjectId
 
 	return NULL;
 }
+
+// 解析Resource.xml
+bool IPropertySkinManagerImpl::BuilderTranslateResourceXml(char *pszXmlPath)
+{
+	FILE_ITEM FileItem;
+	if (!BuilderCreateFileItem(pszXmlPath, FileItem))
+		return false;
+
+	bool bRet = TranslateResourceXml(&FileItem);
+
+	BuilderFreeFileItem(FileItem);
+	return bRet;
+}
+
+// 解析Controls.xml
+bool IPropertySkinManagerImpl::BuilderTranslateControlsXml(char *pszXmlPath)
+{
+	FILE_ITEM FileItem;
+	if (!BuilderCreateFileItem(pszXmlPath, FileItem))
+		return false;
+
+	bool bRet = TranslateControlsXml(&FileItem);
+
+	BuilderFreeFileItem(FileItem);
+	return bRet;
+}
+
+// 解析Windows.xml
+bool IPropertySkinManagerImpl::BuilderTranslateWindowsXml(char *pszXmlPath)
+{
+	FILE_ITEM FileItem;
+	if (!BuilderCreateFileItem(pszXmlPath, FileItem))
+		return false;
+
+	bool bRet = TranslateWindowsXml(&FileItem);
+
+	BuilderFreeFileItem(FileItem);
+	return bRet;
+}
+
+// 解析Layout.xml
+bool IPropertySkinManagerImpl::BuilderTranslateLayoutXml(char *pszXmlPath)
+{
+	FILE_ITEM FileItem;
+	if (!BuilderCreateFileItem(pszXmlPath, FileItem))
+		return false;
+
+	bool bRet = TranslateLayoutXml(&FileItem);
+
+	BuilderFreeFileItem(FileItem);
+	return bRet;
+}
+
+bool IPropertySkinManagerImpl::BuilderCreateFileItem(char *pFilePath, FILE_ITEM &FileItem)
+{
+	FileItem.strFileName = "";
+	FileItem.dwSrcFileLen = 0;
+	FileItem.dwZipDatalen = 0;
+	FileItem.pFileData = NULL;
+
+	if (pFilePath == NULL)
+		return false;
+
+	WIN32_FILE_ATTRIBUTE_DATA FileAttr;
+	if (!::GetFileAttributesExA(pFilePath, GetFileExInfoStandard, &FileAttr))
+		return false;
+
+	FILE *pFile = NULL;
+	fopen_s(&pFile, pFilePath, "rb");
+	if (pFile == NULL)
+		return false;
+
+	FileItem.pFileData = new BYTE[FileAttr.nFileSizeLow];
+	if (FileItem.pFileData == NULL)
+	{
+		fclose(pFile);
+		return false;
+	}
+
+	int nReadCtns = 0;
+	while(nReadCtns < (int)FileAttr.nFileSizeLow)
+	{
+		BYTE *pRead = FileItem.pFileData + nReadCtns;
+		int nNeedRead = FileAttr.nFileSizeLow - nReadCtns;
+
+		int nRead = fread_s(pRead, nNeedRead, 1, nNeedRead, pFile);
+		nReadCtns += nRead;
+
+		if (errno != 0)
+		{
+			SAFE_DELETE_LIST(FileItem.pFileData);
+			fclose(pFile);
+			return false;
+		}
+	}
+
+	if (nReadCtns != (int)FileAttr.nFileSizeLow)
+	{
+		SAFE_DELETE_LIST(FileItem.pFileData);
+		fclose(pFile);
+		return false;
+	}
+
+	FileItem.dwSrcFileLen = FileAttr.nFileSizeLow;
+	return true;
+}
+
+void IPropertySkinManagerImpl::BuilderFreeFileItem(FILE_ITEM &FileItem)
+{
+	if (FileItem.pFileData != NULL)
+		SAFE_DELETE_LIST(FileItem.pFileData);
+
+	FileItem.strFileName = "";
+	FileItem.dwSrcFileLen = 0;
+	FileItem.dwZipDatalen = 0;
+	FileItem.pFileData = NULL;
+}

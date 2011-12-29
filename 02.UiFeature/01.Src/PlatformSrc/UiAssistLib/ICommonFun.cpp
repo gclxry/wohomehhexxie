@@ -2,10 +2,10 @@
 #include "StdAfx.h"
 #include "..\..\Inc\ICommonFun.h"
 
-string PathHelper(char *pszDllName)
+string PathHelper(char *pszFileName)
 {
 	string strPath = "";
-	if (pszDllName != NULL)
+	if (pszFileName != NULL)
 	{
 		char szPath[MAX_PATH + 1];
 		memset(szPath, 0, MAX_PATH + 1);
@@ -14,7 +14,7 @@ string PathHelper(char *pszDllName)
 			szPath[strlen(szPath) - 1] = '\0';
 
 		strPath = szPath;
-		strPath += pszDllName;
+		strPath += pszFileName;
 	}
 
 	return strPath;
@@ -219,4 +219,16 @@ IPropertyBase* CreateResourcePropetry(IPropertySkinManager* pSkinPropMgr, IPrope
 
 	pGroup->AppendProperty(pPropBase);
 	return pPropBase;
+}
+
+bool FileExists(const char *pszFilePath)
+{
+	if (pszFilePath == NULL)
+		return false;
+
+	DWORD dwGet = ::GetFileAttributesA(pszFilePath);
+	if (dwGet == 0xFFFFFFFF)
+		return false;
+
+	return true;
 }

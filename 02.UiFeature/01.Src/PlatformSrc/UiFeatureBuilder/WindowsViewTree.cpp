@@ -79,7 +79,7 @@ void CWindowsViewTree::Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPr
 	m_pPropCtrl = pPropCtrl;
 
 	this->DeleteAllItems();
-	HTREEITEM hRootItem = this->InsertItem(_T("【窗体-面板】"), 0, 0);
+	HTREEITEM hRootItem = this->InsertItem(_T("【窗口/面板】"), 1, 1);
 	this->SetItemState(hRootItem, TVIS_BOLD, TVIS_BOLD);
 	this->SelectItem(hRootItem);
 }
@@ -93,18 +93,18 @@ void CWindowsViewTree::OnCreateWindowPanel()
 	}
 
 	HTREEITEM hRootItem = this->GetRootItem();
-	HTREEITEM hWindow = this->InsertItem(_T("新建窗体/面板"), 1, 1, hRootItem);
+	HTREEITEM hWindow = this->InsertItem(_T("新建窗口/面板"), 0, 0, hRootItem);
 	this->Expand(hRootItem, TVE_EXPAND);
 	if (hWindow == NULL)
 	{
-		AfxMessageBox(_T("新建窗体/面板错误！"), MB_OK | MB_ICONERROR);
+		AfxMessageBox(_T("新建窗口/面板错误！"), MB_OK | MB_ICONERROR);
 		return;
 	}
 	
 	IWindowBase *pWndBase = m_pKernelWindow->BuilderCreateWindow();
 	if (pWndBase == NULL)
 	{
-		AfxMessageBox(_T("新建窗体/面板时，创建绘制窗体错误！"), MB_OK | MB_ICONERROR);
+		AfxMessageBox(_T("新建窗口/面板时，创建绘制窗体错误！"), MB_OK | MB_ICONERROR);
 		return;
 	}
 
