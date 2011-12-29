@@ -326,3 +326,8 @@ void CWindowsView::OnChangeVisualStyle()
 	m_wndToolBar.CleanUpLockedImages();
 	m_wndToolBar.LoadBitmap(theApp.m_bHiColorIcons ? IDB_SORT_24 : IDR_SORT, 0, 0, TRUE /* Ëø¶¨*/);
 }
+
+void CWindowsView::InitShowNewProject()
+{
+	m_wndWindowTree.InitShowNewProject();
+}

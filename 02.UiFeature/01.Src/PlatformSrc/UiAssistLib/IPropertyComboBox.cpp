@@ -30,7 +30,7 @@ COMBOBOX_PROP* IPropertyComboBox::GetComboBoxData()
 	return &m_ComboBoxPro;
 }
 
-bool IPropertyComboBox::ReadResourceXmlProperty(XmlNode* pXmlNode)
+bool IPropertyComboBox::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 {
 	if (pXmlNode == NULL)
 		return false;

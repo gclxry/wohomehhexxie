@@ -20,7 +20,7 @@ GROUP_PROP_VEC* IPropertyGroup::GetPropVec()
 	return &m_PropVec;
 }
 
-bool IPropertyGroup::ReadResourceXmlProperty(XmlNode* pXmlNode)
+bool IPropertyGroup::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 {
 	if (pXmlNode == NULL)
 		return false;

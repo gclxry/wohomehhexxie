@@ -2,7 +2,6 @@
 // 一个控件在xml中的读取的属性
 
 #pragma once
-#include "IFeatureObject.h"
 #include "IPropertyBase.h"
 #include "IPropertyGroup.h"
 
@@ -10,7 +9,7 @@
 class IPropertyControl;
 typedef vector<IPropertyControl*>			CHILD_CTRL_PROP_VEC;
 
-class IPropertyControl : public IFeatureObject
+class IPropertyControl : public IPropertyBase
 {
 public:
 	IPropertyControl(void);

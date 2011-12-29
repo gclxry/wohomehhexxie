@@ -14,7 +14,7 @@ IPropertyBool::~IPropertyBool()
 
 }
 
-bool IPropertyBool::ReadResourceXmlProperty(XmlNode* pXmlNode)
+bool IPropertyBool::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 {
 	if (pXmlNode == NULL)
 		return false;

@@ -15,6 +15,7 @@ public:
 
 	void Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPropCtrl);
 	void Refresh(IPropertyGroup *pRefreshGroup);
+	void InitShowNewProject();
 
 // ÖØÐ´
 protected:

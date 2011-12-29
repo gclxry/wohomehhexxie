@@ -35,7 +35,7 @@ void IPropertyString::SetArea(AREA_TYPE areaType)
 	}
 }
 
-bool IPropertyString::ReadResourceXmlProperty(XmlNode* pXmlNode)
+bool IPropertyString::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 {
 	Clear();
 	if (pXmlNode == NULL)

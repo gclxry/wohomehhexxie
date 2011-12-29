@@ -18,7 +18,7 @@ bool IPropertyCursor::IsRightData()
 	return false;
 }
 
-bool IPropertyCursor::ReadResourceXmlProperty(XmlNode* pXmlNode)
+bool IPropertyCursor::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 {
 	if (pXmlNode == NULL)
 		return false;

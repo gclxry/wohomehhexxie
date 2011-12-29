@@ -17,3 +17,9 @@ bool IPropertyBase::IsRightData()
 {
 	return (strlen(this->GetObjectName()) > 0);
 }
+
+// 从XML节点读取属性值，并放入属性队列
+bool IPropertyBase::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
+{
+	return false;
+}

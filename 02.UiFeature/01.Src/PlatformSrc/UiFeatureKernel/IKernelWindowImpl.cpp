@@ -97,7 +97,7 @@ IWindowBase* IKernelWindowImpl::InitFeatureSkin(HWND hWnd, char *pszSkinPath, ch
 }
 
 // 创建一个Builder使用的窗口
-IWindowBase* IKernelWindowImpl::BuilderCreateWindow()
+IWindowBase* IKernelWindowImpl::BuilderCreateEmptyWindow()
 {
 	IPropertyGroup *pWindowProp = (IPropertyGroup*)m_pSkinMgr->CreateEmptyBaseProp(OTID_GROUP);
 	if (pWindowProp == NULL)
