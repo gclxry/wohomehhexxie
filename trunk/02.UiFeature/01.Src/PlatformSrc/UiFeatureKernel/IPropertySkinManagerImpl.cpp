@@ -590,7 +590,7 @@ bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 }
 
 // ≥ı ºªØ∆§∑Ù
-IPropertyGroup* IPropertySkinManagerImpl::InitWindowSkin(const char *pszSkinPath, const char *pszWndName)
+IPropertyWindow* IPropertySkinManagerImpl::InitWindowSkin(const char *pszSkinPath, const char *pszWndName)
 {
 	if (pszSkinPath == NULL || strlen(pszSkinPath) <= 0 || pszWndName == NULL || strlen(pszWndName) <= 0)
 		return NULL;
@@ -603,12 +603,8 @@ IPropertyGroup* IPropertySkinManagerImpl::InitWindowSkin(const char *pszSkinPath
 	if (pWndPropItem == m_AllWindowPropMap.end())
 		return NULL;
 
-	IPropertyBase* pBaseProp = pWndPropItem->second;
-	if (pBaseProp == NULL)
-		return NULL;
-
-	IPropertyGroup* pPropGroup = dynamic_cast<IPropertyGroup*>(pBaseProp);
-	return pPropGroup;
+	IPropertyWindow* pWndProp = dynamic_cast<IPropertyWindow*>(pWndPropItem->second);
+	return pWndProp;
 }
 
 void IPropertySkinManagerImpl::ResetBaseObjectId(int nObjectId)

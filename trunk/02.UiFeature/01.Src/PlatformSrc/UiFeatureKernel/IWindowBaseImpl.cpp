@@ -38,6 +38,12 @@ IWindowBaseImpl::~IWindowBaseImpl()
 {
 }
 
+// 设置窗口属性
+void IWindowBaseImpl::SetWindowPropetry(IPropertyWindow *pPropWindow)
+{
+	m_WndPropMgr.SetWindowPropetry(pPropWindow);
+}
+
 // 重绘控件
 void IWindowBaseImpl::RedrawControl(IControlBase* pCtrl, bool bDrawImmediately)
 {
@@ -111,15 +117,15 @@ void IWindowBaseImpl::OnInitWindowBase()
 	}
 
 	// 初始化对话框皮肤
-	IPropertyGroup* pWndPropGroup = pPropSkinMgr->InitWindowSkin(m_strSkinPath.c_str(), m_strWindowName.c_str());
-	if (pWndPropGroup == NULL)
+	IPropertyWindow* pWndProp = pPropSkinMgr->InitWindowSkin(m_strSkinPath.c_str(), m_strWindowName.c_str());
+	if (pWndProp == NULL)
 	{
 		// 向窗口发送通知：初始化皮肤异常
 		::PostMessage(m_hWnd, UM_INIT_WINDOW_ERROR, -2, NULL);
 		return;
 	}
 	// 设置对话框属性
-	m_WndPropMgr.SetWindowPropetry(pWndPropGroup);
+	m_WndPropMgr.SetWindowPropetry(pWndProp);
 
 //////////////////////////////////////////////////////////////////////////
 	// 当窗口的属性发生变化时需要通知窗口进行刷新
@@ -872,12 +878,12 @@ void IWindowBaseImpl::RedrawWindow(RECT* pDrawRct)
 	::RedrawWindow(m_hWnd, pDrawRct, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 }
 
-void IWindowBaseImpl::BuilderInitWindowBase(IPropertyGroup *pWindowProp)
+void IWindowBaseImpl::BuilderInitWindowBase(IPropertyWindow *pWindowProp)
 {
 	if (pWindowProp == NULL)
 		return;
 
+	this->SetWindowPropetry(pWindowProp);
 	this->SetObjectId(pWindowProp->GetObjectId());
 	this->SetObjectName("【新建窗体名称】");
-	m_WndPropMgr.SetWindowPropetry(pWindowProp);
 }

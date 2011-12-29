@@ -16,7 +16,6 @@ IPropertyWindowManagerImpl::IPropertyWindowManagerImpl(void)
 	m_bIsFullScreen = false;
 
 	m_pXmlPropWindow = NULL;
-	m_pWndPropInXml = NULL;
 	// Group:base
 	m_pPropGroupBase = NULL;
 	// base-类型名称
@@ -68,12 +67,12 @@ IPropertyWindowManagerImpl::~IPropertyWindowManagerImpl(void)
 }
 
 // 将xml中的属性设置到manager中
-void IPropertyWindowManagerImpl::SetWindowPropetry(IPropertyGroup *pWndPropInXml)
+void IPropertyWindowManagerImpl::SetWindowPropetry(IPropertyWindow *pWndPropInXml)
 {
 	if (pWndPropInXml == NULL)
 		return;
 
-	m_pWndPropInXml = pWndPropInXml;
+	m_pXmlPropWindow = pWndPropInXml;
 	CreateWindowPropetry();
 }
 
@@ -150,11 +149,11 @@ bool IPropertyWindowManagerImpl::IsFullScreen()
 
 IPropertyBase* IPropertyWindowManagerImpl::CreatePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo)
 {
-	if (m_pSkinPropMgr == NULL || m_pWndPropInXml == NULL || pszPropName == NULL || strlen(pszPropName) <= 0 || propType <= OTID_NONE || propType >= OTID_LAST)
+	if (m_pSkinPropMgr == NULL || m_pXmlPropWindow == NULL || pszPropName == NULL || strlen(pszPropName) <= 0 || propType <= OTID_NONE || propType >= OTID_LAST)
 		return NULL;
 
 	if (pGroup == NULL)
-		pGroup = m_pWndPropInXml;
+		pGroup = m_pXmlPropWindow->GSetWindowPropGroup();
 
 	return CreateResourcePropetry(m_pSkinPropMgr, pGroup, propType, pszPropName, pszPropInfo);
 }
@@ -162,7 +161,7 @@ IPropertyBase* IPropertyWindowManagerImpl::CreatePropetry(IPropertyGroup* pGroup
 // 创建空的属性队列
 void IPropertyWindowManagerImpl::CreateWindowPropetry()
 {
-	if (m_pWndPropInXml == NULL)
+	if (m_pXmlPropWindow == NULL)
 		return;
 
 	// Group:base
@@ -180,7 +179,7 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 	m_pPropBase_ObjectId = (IPropertyString*)CreatePropetry(m_pPropGroupBase, OTID_STRING, NAME_SKIN_PROP_NAME_OBJ_ID, "当前 Object Id");
 	if (m_pPropBase_ObjectId == NULL)
 		return;
-	m_pPropBase_ObjectId->SetString((char*)m_pWndPropInXml->GetObjectId());
+	m_pPropBase_ObjectId->SetString((char*)m_pXmlPropWindow->GetObjectId());
 
 	// base-name
 	m_pPropBase_Name = (IPropertyString*)CreatePropetry(m_pPropGroupBase, OTID_STRING, NAME_SKIN_PROP_NAME, "当前 Object 名称");
@@ -285,5 +284,8 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 
 IPropertyGroup* IPropertyWindowManagerImpl::GetWindowPropetryBaseGroup()
 {
-	return m_pWndPropInXml;
+	if (m_pXmlPropWindow == NULL)
+		return NULL;
+
+	return m_pXmlPropWindow->GSetWindowPropGroup();
 }

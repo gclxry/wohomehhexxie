@@ -99,15 +99,22 @@ IWindowBase* IKernelWindowImpl::InitFeatureSkin(HWND hWnd, char *pszSkinPath, ch
 // 创建一个Builder使用的窗口
 IWindowBase* IKernelWindowImpl::BuilderCreateEmptyWindow()
 {
-	IPropertyGroup *pWindowProp = (IPropertyGroup*)m_pSkinMgr->CreateEmptyBaseProp(OTID_GROUP);
-	if (pWindowProp == NULL)
+	IPropertyGroup *pWindowPropGroup = dynamic_cast<IPropertyGroup*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_GROUP));
+	if (pWindowPropGroup == NULL)
 		return NULL;
+
+	IPropertyWindow *pPropWindow = dynamic_cast<IPropertyWindow*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_WINDOW));
+	if (pPropWindow == NULL)
+		return NULL;
+
+	pPropWindow->SetWindowPropGroup(pWindowPropGroup);
 
 	// 设置objecid
 	char szId[MAX_PATH];
 	memset(szId, 0, MAX_PATH);
 	sprintf_s(szId, MAX_PATH-1, "%s%d", PROP_TYPE_WINDOW_NAME, m_pSkinMgr->GetNewId());
-	pWindowProp->SetObjectId(szId);
+	pWindowPropGroup->SetObjectId(szId);
+	pPropWindow->SetObjectId(szId);
 
 	IWindowBaseImpl *pWndBaseImpl = new IWindowBaseImpl;
 	if (pWndBaseImpl == NULL)
@@ -119,9 +126,9 @@ IWindowBase* IKernelWindowImpl::BuilderCreateEmptyWindow()
 		SAFE_DELETE(pWndBaseImpl);
 		return NULL;
 	}
-
+	pWndBase->SetObjectId(szId);
 	// 初始化在builder中的属性
-	pWndBase->BuilderInitWindowBase(pWindowProp);
+	pWndBase->BuilderInitWindowBase(pPropWindow);
 
 	// 记录到窗口队列中
 	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>((HWND)m_nBuilderHwnd++, pWndBaseImpl));

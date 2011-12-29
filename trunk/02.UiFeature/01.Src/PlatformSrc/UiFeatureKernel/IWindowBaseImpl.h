@@ -11,7 +11,7 @@ public:
 	virtual ~IWindowBaseImpl();
 //////////////////////////////////////////////////////////////////////////
 	// Builder 使用的函数
-	virtual void BuilderInitWindowBase(IPropertyGroup *pWindowProp);
+	virtual void BuilderInitWindowBase(IPropertyWindow *pWindowProp);
 
 //////////////////////////////////////////////////////////////////////////
 	// 初始化
@@ -30,6 +30,8 @@ public:
 	virtual IPropertyWindowManager* GetWindowProp();
 	// 取得窗口控件指针
 	virtual IControlBase* GetControl(char *pszCtrlName);
+	// 设置窗口属性
+	virtual void SetWindowPropetry(IPropertyWindow *pPropWindow);
 
 protected:
 	// 设置窗体的透明特性、设置窗口是否支持分层
