@@ -6,6 +6,11 @@
 IPropertyBase::IPropertyBase()
 {
 	SetObjectType("PropertyBase");
+
+	// 关联属性名称
+	m_strRelevancyPropName = "";
+	// 关联属性
+	m_pRelevancyProp = NULL;
 }
 
 IPropertyBase::~IPropertyBase()
@@ -22,4 +27,30 @@ bool IPropertyBase::IsRightData()
 bool IPropertyBase::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 {
 	return false;
+}
+
+const char* IPropertyBase::GetRelevancyPropName()
+{
+	return m_strRelevancyPropName.c_str();
+}
+
+void IPropertyBase::SetRelevancyPropName(char *pszPropName)
+{
+	if (pszPropName == NULL)
+		return;
+
+	m_strRelevancyPropName = pszPropName;
+}
+
+IPropertyBase* IPropertyBase::GetRelevancyProp()
+{
+	return m_pRelevancyProp;
+}
+
+void IPropertyBase::SetRelevancyProp(IPropertyBase *pszProp)
+{
+	if (pszProp == NULL)
+		return;
+
+	m_pRelevancyProp = pszProp;
 }

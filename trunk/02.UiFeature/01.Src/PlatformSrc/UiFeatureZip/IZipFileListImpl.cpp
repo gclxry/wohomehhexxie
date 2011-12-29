@@ -37,7 +37,7 @@ void IZipFileListImpl::Clear()
 {
 	for (ZIP_FILE_MAP::iterator pZipItem = m_ZipFileMap.begin(); pZipItem != m_ZipFileMap.end(); pZipItem++)
 	{
-		FILE_ITEM* pZip = pZipItem->second;
+		ZIP_FILE* pZip = pZipItem->second;
 		if (pZip != NULL)
 		{
 			SAFE_DELETE(pZip->pFileData);
@@ -47,14 +47,14 @@ void IZipFileListImpl::Clear()
 	m_ZipFileMap.clear();
 }
 
-void IZipFileListImpl::RemoveFile(FILE_ITEM *pRemove)
+void IZipFileListImpl::RemoveFile(ZIP_FILE *pRemove)
 {
 	if (m_ZipFileMap.size() <= 0 || pRemove == NULL)
 		return;
 
 	for (ZIP_FILE_MAP::iterator pZipItem = m_ZipFileMap.begin(); pZipItem != m_ZipFileMap.end(); pZipItem++)
 	{
-		FILE_ITEM* pZip = pZipItem->second;
+		ZIP_FILE* pZip = pZipItem->second;
 		if (pZip == pRemove)
 		{
 			SAFE_DELETE(pZip->pFileData);
@@ -132,7 +132,7 @@ bool IZipFileListImpl::WriteToZip(char *pFilePath)
 		return false;
 	}
 
-	FILE_ITEM *pFileItem = new FILE_ITEM;
+	ZIP_FILE *pFileItem = new ZIP_FILE;
 	if (pFileItem == NULL)
 	{
 		fclose(pFile);
@@ -180,7 +180,7 @@ bool IZipFileListImpl::WriteToZip(char *pFilePath)
 		pFileItem->pFileData = pReadBuf;
 	}
 
-	m_ZipFileMap.insert(pair<string, FILE_ITEM*>(pFileItem->strFileName, pFileItem));
+	m_ZipFileMap.insert(pair<string, ZIP_FILE*>(pFileItem->strFileName, pFileItem));
 
 	fclose(pFile);
 	return true;
@@ -208,7 +208,7 @@ bool IZipFileListImpl::EndWriteZip()
 	// 写入单个文件
 	for (ZIP_FILE_MAP::iterator pZipItem = m_ZipFileMap.begin(); pZipItem != m_ZipFileMap.end(); pZipItem++)
 	{
-		FILE_ITEM* pZip = pZipItem->second;
+		ZIP_FILE* pZip = pZipItem->second;
 		if (pZip == NULL || pZip->pFileData == NULL || pZip->dwSrcFileLen <= 0 || pZip->dwZipDatalen <= 0 || pZip->strFileName.size() <= 0)
 			continue;
 
@@ -359,7 +359,7 @@ bool IZipFileListImpl::ReadZipFile(const char *pZipFilePath)
 		}
 
 		// 解压缩
-		FILE_ITEM* pZipItem = new FILE_ITEM;
+		ZIP_FILE* pZipItem = new ZIP_FILE;
 		if (pZipItem == NULL)
 		{
 			SAFE_DELETE(pZipData);
@@ -397,7 +397,7 @@ bool IZipFileListImpl::ReadZipFile(const char *pZipFilePath)
 			pZipItem->pFileData = pZipData;
 		}
 
-		m_ZipFileMap.insert(pair<string, FILE_ITEM*>(pZipItem->strFileName, pZipItem));
+		m_ZipFileMap.insert(pair<string, ZIP_FILE*>(pZipItem->strFileName, pZipItem));
 	}
 
 	fclose(pFile);
@@ -410,7 +410,7 @@ ZIP_FILE_MAP* IZipFileListImpl::GetUnZipFileMap()
 	return &m_ZipFileMap;
 }
 
-FILE_ITEM* IZipFileListImpl::FindUnZipFile(char *pFileName)
+ZIP_FILE* IZipFileListImpl::FindUnZipFile(char *pFileName)
 {
 	if (pFileName == NULL || strlen(pFileName) <= 0)
 		return NULL;
@@ -435,7 +435,7 @@ void IZipFileListImpl::TestWriteUnZipFile(char *pszOutDir)
 
 	for (ZIP_FILE_MAP::iterator pZipItem = m_ZipFileMap.begin(); pZipItem != m_ZipFileMap.end(); pZipItem++)
 	{
-		FILE_ITEM* pZip = pZipItem->second;
+		ZIP_FILE* pZip = pZipItem->second;
 		if (pZip == NULL || pZip->pFileData == NULL || pZip->dwSrcFileLen <= 0 || pZip->dwZipDatalen <= 0 || pZip->strFileName.size() <= 0)
 			continue;
 

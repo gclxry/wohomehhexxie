@@ -6,8 +6,6 @@
 IPropertyImage::IPropertyImage()
 {
 	SetObjectType(PROP_TYPE_IMAGE_NAME);
-	m_pImageBaseProp = NULL;
-	m_strImageBaseName = "";
 }
 
 IPropertyImage::~IPropertyImage()
@@ -17,17 +15,23 @@ IPropertyImage::~IPropertyImage()
 
 const char * IPropertyImage::GetImageBaseName()
 {
-	return (m_strImageBaseName.c_str());
+	return GetRelevancyPropName();
 }
 
 bool IPropertyImage::IsRightData()
 {
-	return (m_strImageBaseName.size() > 0);
+	return (GetRelevancyPropName() != NULL && strlen(GetRelevancyPropName()) > 0);
 }
 
 IPropertyImageBase* IPropertyImage::GetImageBaseProp()
 {
-	return m_pImageBaseProp;
+	return dynamic_cast<IPropertyImageBase*>(GetRelevancyProp());
+}
+
+void IPropertyImage::SetImageBaseProp(IPropertyImageBase* pNewImgBase)
+{
+	IPropertyBase* pPropBase = dynamic_cast<IPropertyBase*>(pNewImgBase);
+	SetRelevancyProp(pPropBase);
 }
 
 // 从XML节点读取属性值，并放入属性队列
@@ -44,7 +48,7 @@ bool IPropertyImage::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 
 	SetObjectId((const char *)psz_id);
 	SetObjectName((const char *)psz_name);
-	m_strImageBaseName = psz_imagebasename;
+	SetRelevancyPropName(psz_imagebasename);
 
 	return true;
 }

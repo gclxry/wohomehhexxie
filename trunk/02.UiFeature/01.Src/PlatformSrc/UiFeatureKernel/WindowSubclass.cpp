@@ -49,7 +49,8 @@ LRESULT CALLBACK WindowSubProc(HWND hWnd, UINT nMsgId, WPARAM wParam, LPARAM lPa
 		}
 	}
 
-	return ::DefWindowProc(hWnd, nMsgId, wParam, lParam);
+//	return ::DefWindowProc(hWnd, nMsgId, wParam, lParam);
+	return 0;
 }
 
 CWindowSubclass::CWindowSubclass()
