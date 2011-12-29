@@ -15,6 +15,7 @@ IPropertyWindowManagerImpl::IPropertyWindowManagerImpl(void)
 	m_bIsInit = false;
 	m_bIsFullScreen = false;
 
+	m_pXmlPropWindow = NULL;
 	m_pWndPropInXml = NULL;
 	// Group:base
 	m_pPropGroupBase = NULL;

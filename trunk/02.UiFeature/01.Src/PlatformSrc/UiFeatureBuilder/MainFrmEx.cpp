@@ -108,6 +108,11 @@ void CMainFrame::OnFileClose()
 
 bool CMainFrame::InitProject()
 {
+	if (m_pSkinMgr == NULL)
+		return false;
+
+	m_pSkinMgr->ReleaseSkinManagerPropetry();
+
 	CString strLayoutXml(_T(""));
 	CString strWindowsXml(_T(""));
 	CString strControlsXml(_T(""));
@@ -151,6 +156,7 @@ bool CMainFrame::InitProject()
 		return false;
 	}
 
+	m_wndWindowView.InitShowNewProject();
 	return true;
 }
 

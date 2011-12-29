@@ -48,12 +48,14 @@ IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
 
 IPropertySkinManagerImpl::~IPropertySkinManagerImpl(void)
 {
-	ReleaseSkinManager();
+	ReleaseSkinManagerPropetry();
 }
 
-void IPropertySkinManagerImpl::ReleaseSkinManager()
+// 清空属性队列
+void IPropertySkinManagerImpl::ReleaseSkinManagerPropetry()
 {
 	SAFE_FREE_LIBRARY(m_hZipModule);
+
 	ReleaseLayoutMap();
 	ReleasePropMapItem(&m_AllWindowPropMap);
 	ReleasePropMap(m_AllCtrlPropMap);
@@ -62,9 +64,9 @@ void IPropertySkinManagerImpl::ReleaseSkinManager()
 
 void IPropertySkinManagerImpl::ReleaseLayoutMap()
 {
-	for (WINDOW_PROP_MAP::iterator pWndItem = m_LayoutWindowVec.begin(); pWndItem != m_LayoutWindowVec.end(); pWndItem++)
+	for (PROP_BASE_ITEM::iterator pWndItem = m_LayoutWindowVec.begin(); pWndItem != m_LayoutWindowVec.end(); pWndItem++)
 	{
-		IPropertyWindow* pWnd = pWndItem->second;
+		IPropertyWindow* pWnd = dynamic_cast<IPropertyWindow*>(pWndItem->second);
 		if (pWnd != NULL)
 		{
 			ReleaseLayoutMapChildCtrlVec(pWnd->GetChildControlVec());
@@ -233,6 +235,28 @@ void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
 		}
 		break;
 
+	case OTID_WINDOW:
+		{
+			IPropertyWindow* pProp = dynamic_cast<IPropertyWindow*>(pCtrlProp);
+			if (pProp != NULL)
+			{
+				SAFE_DELETE(pProp);
+				return;
+			}
+		}
+		break;
+
+	case OTID_CONTROL:
+		{
+			IPropertyControl* pProp = dynamic_cast<IPropertyControl*>(pCtrlProp);
+			if (pProp != NULL)
+			{
+				SAFE_DELETE(pProp);
+				return;
+			}
+		}
+		break;
+
 	default:
 		break;
 	}
@@ -259,7 +283,7 @@ void IPropertySkinManagerImpl::LoadZipDll()
 }
 
 // 创建一个属性，并将此属性放入队列
-IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID propType)
+IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID propType, char *pszObjectId)
 {
 	IPropertyBase* pBaseProp = NULL;
 	switch (propType)
@@ -384,42 +408,72 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 		}
 		break;
 
+	case OTID_WINDOW:
+		{
+			IPropertyWindow* pProp = new IPropertyWindow;
+			if (pProp != NULL)
+			{
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+					SAFE_DELETE(pProp);
+			}
+		}
+		break;
+
 	default:
 		break;
 	}
 
 	if (pBaseProp != NULL)
 	{
-		PROP_BASE_ITEM* pOnePropMap = NULL;
-		string strTypeName = PropTypeToString(propType);
-		PROP_BASE_MAP::iterator pTypeItem = m_AllPropMap.find(strTypeName);
-		if (pTypeItem != m_AllPropMap.end())
+		char szObjId[MAX_PATH + 1];
+		memset(szObjId, 0, MAX_PATH + 1);
+		if (pszObjectId == NULL)
+			sprintf_s(szObjId, MAX_PATH, "NO_OBJ_ID_%d", m_nEmptyObjectId++);
+		else
+			strcpy_s(szObjId, MAX_PATH, pszObjectId);
+		pBaseProp->SetObjectId((const char*)szObjId);
+
+		if (propType == OTID_WINDOW)
 		{
-			// 找到属性组
-			pOnePropMap = pTypeItem->second;
+			// 创建窗口属性
+			IPropertyWindow* pWndProp = dynamic_cast<IPropertyWindow*>(pBaseProp);
+			if (pWndProp == NULL)
+				ReleaseBaseProp(pBaseProp);
+
+			m_LayoutWindowVec.insert(pair<string, IPropertyWindow*>(szObjId, pWndProp));
+		}
+		else if (propType == OTID_CONTROL)
+		{
+			// 创建控件属性
 		}
 		else
 		{
-			// 创建属性组
-			pOnePropMap = new PROP_BASE_ITEM;
-			if (pOnePropMap == NULL)
+			// 创建普通属性
+			PROP_BASE_ITEM* pOnePropMap = NULL;
+			string strTypeName = PropTypeToString(propType);
+			PROP_BASE_MAP::iterator pTypeItem = m_AllPropMap.find(strTypeName);
+			if (pTypeItem != m_AllPropMap.end())
 			{
-				ReleaseBaseProp(pBaseProp);
-				return NULL;
+				// 找到属性组
+				pOnePropMap = pTypeItem->second;
+			}
+			else
+			{
+				// 创建属性组
+				pOnePropMap = new PROP_BASE_ITEM;
+				if (pOnePropMap == NULL)
+				{
+					ReleaseBaseProp(pBaseProp);
+					return NULL;
+				}
+
+				pOnePropMap->clear();
+				m_AllPropMap.insert(pair<string, PROP_BASE_ITEM*>(strTypeName, pOnePropMap));
 			}
 
-			pOnePropMap->clear();
-			m_AllPropMap.insert(pair<string, PROP_BASE_ITEM*>(strTypeName, pOnePropMap));
-		}
-
-		if (pOnePropMap != NULL)
-		{
-			char szObjId[MAX_PATH + 1];
-			memset(szObjId, 0, MAX_PATH + 1);
-			sprintf_s(szObjId, MAX_PATH, "NO_OBJ_ID_%d", m_nEmptyObjectId++);
-			pBaseProp->SetObjectId((const char*)szObjId);
-
-			pOnePropMap->insert(pair<string, IPropertyBase*>(szObjId, pBaseProp));
+			if (pOnePropMap != NULL)
+				pOnePropMap->insert(pair<string, IPropertyBase*>(szObjId, pBaseProp));
 		}
 	}
 
@@ -597,7 +651,7 @@ void IPropertySkinManagerImpl::SetArea(AREA_TYPE areaType)
 // 解析Resource.xml
 bool IPropertySkinManagerImpl::TranslateResourceXml(FILE_ITEM *pResurceXml)
 {
-	m_AllPropMap.clear();
+	ReleasePropMap(m_AllPropMap);
 	if (pResurceXml == NULL || pResurceXml->pFileData == NULL)
 		return false;
 
@@ -777,7 +831,7 @@ bool IPropertySkinManagerImpl::GeneralCreateBaseProp(char *pPropType, XmlNode* p
 			if (pBaseProp == NULL)
 				return false;
 
-			if (!pBaseProp->ReadResourceXmlProperty(pItem))
+			if (!pBaseProp->ReadPropertyFromXmlNode(pItem))
 			{
 				ReleaseBaseProp(pBaseProp);
 				return false;
@@ -792,7 +846,7 @@ bool IPropertySkinManagerImpl::GeneralCreateBaseProp(char *pPropType, XmlNode* p
 
 bool IPropertySkinManagerImpl::TranslateControlsXml(FILE_ITEM *pControlsXml)
 {
-	m_AllCtrlPropMap.clear();
+	ReleasePropMap(m_AllCtrlPropMap);
 	if (pControlsXml == NULL || pControlsXml->pFileData == NULL)
 		return false;
 
@@ -942,7 +996,7 @@ bool IPropertySkinManagerImpl::AppendBasePropToGroup(IPropertyGroup *pGroup, Xml
 // 解析Windows.xml
 bool IPropertySkinManagerImpl::TranslateWindowsXml(FILE_ITEM *pWindowsXml)
 {
-	m_AllWindowPropMap.clear();
+	ReleasePropMapItem(&m_AllWindowPropMap);
 	if (pWindowsXml == NULL || pWindowsXml->pFileData == NULL)
 		return false;
 
@@ -973,7 +1027,7 @@ bool IPropertySkinManagerImpl::TranslateWindowsXml(FILE_ITEM *pWindowsXml)
 // 解析Windows.xml
 bool IPropertySkinManagerImpl::TranslateLayoutXml(FILE_ITEM *pLayoutXml)
 {
-	m_LayoutWindowVec.clear();
+	ReleaseLayoutMap();
 	if (pLayoutXml == NULL || pLayoutXml->pFileData == NULL)
 		return false;
 
@@ -1003,16 +1057,23 @@ bool IPropertySkinManagerImpl::TranslateLayoutXml(FILE_ITEM *pLayoutXml)
 					return false;
 
 				string strObjId = psz_id;
-				WINDOW_PROP_MAP::iterator pWndItem = m_LayoutWindowVec.find(strObjId);
+				PROP_BASE_ITEM::iterator pWndPropGroupItem = m_AllWindowPropMap.find(strObjId);
+				if (pWndPropGroupItem == m_AllWindowPropMap.end())
+					return false;
+
+				IPropertyGroup *pWndPropGroup = dynamic_cast<IPropertyGroup*>(pWndPropGroupItem->second);
+				if (pWndPropGroup == NULL)
+					return false;
+
+				PROP_BASE_ITEM::iterator pWndItem = m_LayoutWindowVec.find(strObjId);
 				if (pWndItem != m_LayoutWindowVec.end())
 					return false;
 
-				IPropertyWindow* pOneWndLayoutProp = new IPropertyWindow;
+				IPropertyWindow* pOneWndLayoutProp = dynamic_cast<IPropertyWindow*>(CreateEmptyBaseProp(OTID_WINDOW, psz_id));
 				if (pOneWndLayoutProp == NULL)
 					return false;
-				m_LayoutWindowVec.insert(pair<string, IPropertyWindow*>(strObjId, pOneWndLayoutProp));
 
-				pOneWndLayoutProp->SetObjectId(psz_id);
+				pOneWndLayoutProp->SetWindowPropGroup(pWndPropGroup);
 				if (!GeneralCreateWindowLayoutProp(pWindowNode, pOneWndLayoutProp->GetChildControlVec(), NULL))
 					return false;
 			}
@@ -1046,11 +1107,10 @@ bool IPropertySkinManagerImpl::GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, 
 			if (pCtrlPropGroup == NULL)
 				return false;
 
-			IPropertyControl* pCtrlProp = new IPropertyControl;
+			IPropertyControl* pCtrlProp = dynamic_cast<IPropertyControl*>(CreateEmptyBaseProp(OTID_CONTROL, psz_id));
 			if (pCtrlProp == NULL)
 				return false;
 
-			pCtrlProp->SetObjectId(psz_id);
 			pCtrlProp->SetControlBaseProp(pCtrlPropGroup);
 			pCtrlProp->SetParentProp(pParentProp);
 			pChildCtrlVec->push_back(pCtrlProp);
@@ -1208,4 +1268,9 @@ void IPropertySkinManagerImpl::BuilderFreeFileItem(FILE_ITEM &FileItem)
 	FileItem.dwSrcFileLen = 0;
 	FileItem.dwZipDatalen = 0;
 	FileItem.pFileData = NULL;
+}
+
+PROP_BASE_ITEM* IPropertySkinManagerImpl::BuilderGetWindowPropMap()
+{
+	return &m_LayoutWindowVec;
 }

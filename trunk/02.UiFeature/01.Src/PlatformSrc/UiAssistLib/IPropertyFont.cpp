@@ -54,7 +54,7 @@ void IPropertyFont::SetFontProp(FONT_PROP *pFontProp)
 	m_FontProp = *pFontProp;
 }
 
-bool IPropertyFont::ReadResourceXmlProperty(XmlNode* pXmlNode)
+bool IPropertyFont::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 {
 	if (pXmlNode == NULL)
 		return false;

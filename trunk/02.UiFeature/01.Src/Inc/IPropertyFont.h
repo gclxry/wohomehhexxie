@@ -50,7 +50,7 @@ public:
 	// 是否为合法数据
 	virtual bool IsRightData();
 	// 从XML节点读取属性值，并放入属性队列
-	virtual bool ReadResourceXmlProperty(XmlNode* pXmlNode);
+	virtual bool ReadPropertyFromXmlNode(XmlNode* pXmlNode);
 
 	// 设置字体信息
 	void SetFontProp(FONT_PROP *pFontProp);

@@ -44,6 +44,7 @@ private:
 	bool m_bIsInit;
 	bool m_bIsFullScreen;
 
+	IPropertyWindow *m_pXmlPropWindow;
 	// 从xml中读入并需要写入xml中的属性窗口属性列表
 	IPropertyGroup *m_pWndPropInXml;
 

@@ -28,6 +28,11 @@ public:
 	// 解析Layout.xml
 	virtual bool BuilderTranslateLayoutXml(char *pszXmlPath);
 
+	virtual PROP_BASE_ITEM* BuilderGetWindowPropMap();
+
+	// 清空属性队列
+	virtual void ReleaseSkinManagerPropetry();
+
 //////////////////////////////////////////////////////////////////////////
 	// 初始化Window皮肤
 	virtual IPropertyGroup* InitWindowSkin(const char *pszSkinPath, const char *pszWndName);
@@ -37,7 +42,7 @@ public:
 	// 设置显示的语言种类
 	virtual void SetArea(AREA_TYPE areaType);
 	// 创建一个属性，并将次属性放入队列
-	virtual IPropertyBase* CreateEmptyBaseProp(OBJECT_TYPE_ID propType);
+	virtual IPropertyBase* CreateEmptyBaseProp(OBJECT_TYPE_ID propType, char *pszObjectId = NULL);
 	// 取得ID号
 	virtual int GetNewId();
 
@@ -48,7 +53,6 @@ private:
 	void BuilderFreeFileItem(FILE_ITEM &FileItem);
 
 //////////////////////////////////////////////////////////////////////////
-	void ReleaseSkinManager();
 	// 初始化皮肤包
 	bool InitSkinPackage(const char *pszSkinPath);
 	// 加载zip文件
@@ -93,8 +97,8 @@ private:
 	PROP_BASE_MAP m_AllCtrlPropMap;
 	// 所有窗口的属性管理器map
 	PROP_BASE_ITEM m_AllWindowPropMap;
-	// 布局队列
-	WINDOW_PROP_MAP m_LayoutWindowVec;
+	// 布局队列，KEY：ObjectID
+	PROP_BASE_ITEM m_LayoutWindowVec;
 
 	// ImageBase 属性队列
 	PROP_BASE_ITEM* m_pImageBasePropMap;

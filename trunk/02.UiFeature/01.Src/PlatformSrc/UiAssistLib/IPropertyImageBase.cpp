@@ -36,7 +36,7 @@ void IPropertyImageBase::SetImageProp(IMAGE_BASE_PROP* pImgProp)
 }
 
 // 从XML节点读取属性值，并放入属性队列
-bool IPropertyImageBase::ReadResourceXmlProperty(XmlNode* pXmlNode)
+bool IPropertyImageBase::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 {
 	if (pXmlNode == NULL)
 		return false;

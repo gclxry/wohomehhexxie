@@ -4,6 +4,7 @@
 #include "resource.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IFeatureObject.h"
+#include "..\..\Inc\IPropertyWindow.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -101,7 +102,7 @@ void CWindowsViewTree::OnCreateWindowPanel()
 		return;
 	}
 	
-	IWindowBase *pWndBase = m_pKernelWindow->BuilderCreateWindow();
+	IWindowBase *pWndBase = m_pKernelWindow->BuilderCreateEmptyWindow();
 	if (pWndBase == NULL)
 	{
 		AfxMessageBox(_T("新建窗口/面板时，创建绘制窗体错误！"), MB_OK | MB_ICONERROR);
@@ -250,5 +251,27 @@ void CWindowsViewTree::RefreshTreeItem(HTREEITEM hItem)
 	{
 		RefreshTreeItem(hChild);
 		hChild = this->GetNextItem(hChild, TVGN_NEXT);
+	}
+}
+
+void CWindowsViewTree::InitShowNewProject()
+{
+	this->DeleteAllItems();
+	HTREEITEM hRootItem = this->InsertItem(_T("【窗口/面板】"), 1, 1);
+	this->SetItemState(hRootItem, TVIS_BOLD, TVIS_BOLD);
+
+	if (m_pSkinMgr == NULL)
+		return;
+
+	PROP_BASE_ITEM* pWndPropMap = m_pSkinMgr->BuilderGetWindowPropMap();
+	if (pWndPropMap == NULL)
+		return;
+
+	for (PROP_BASE_ITEM::iterator pWndItem = pWndPropMap->begin(); pWndItem != pWndPropMap->end(); pWndItem++)
+	{
+		IPropertyWindow* pPropWnd = dynamic_cast<IPropertyWindow*>(pWndItem->second);
+		if (pPropWnd == NULL)
+			continue;
+
 	}
 }

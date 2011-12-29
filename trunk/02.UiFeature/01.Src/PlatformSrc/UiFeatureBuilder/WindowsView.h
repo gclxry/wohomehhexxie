@@ -24,6 +24,7 @@ public:
 
 	CWindowsViewTree *GetViewTreeCtrl();
 	void Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPropCtrl);
+	void InitShowNewProject();
 
 protected:
 	CClassToolBar m_wndToolBar;

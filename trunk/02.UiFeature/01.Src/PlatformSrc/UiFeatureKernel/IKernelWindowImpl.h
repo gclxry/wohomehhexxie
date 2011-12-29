@@ -21,7 +21,7 @@ public:
 	// 取得所有支持的控件
 	virtual CONTROL_REG_MAP *BuilderRegisterControl();
 	// 创建一个Builder使用的窗口
-	virtual IWindowBase* BuilderCreateWindow();
+	virtual IWindowBase* BuilderCreateEmptyWindow();
 
 //////////////////////////////////////////////////////////////////////////
 	// 一个对话框从一个皮肤包里使用指定的对话框皮肤资源初始化自己

@@ -18,7 +18,7 @@ bool IPropertyColor::IsRightData()
 	return false;
 }
 
-bool IPropertyColor::ReadResourceXmlProperty(XmlNode* pXmlNode)
+bool IPropertyColor::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 {
 	if (pXmlNode == NULL)
 		return false;
