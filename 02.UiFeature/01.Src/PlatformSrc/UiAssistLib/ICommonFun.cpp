@@ -215,7 +215,7 @@ IPropertyBase* CreateResourcePropetry(IPropertySkinManager* pSkinPropMgr, IPrope
 	pPropBase->SetObjectName(pszPropName);
 	pPropBase->SetObjectInfo(pszPropInfo);
 	// ÉèÖÃObjectID
-	ResetObjectId((IFeatureObject*)pPropBase, pSkinPropMgr, (char*)pGroup->GetObjectId());
+	ResetObjectId(dynamic_cast<IFeatureObject*>(pPropBase), pSkinPropMgr, (char*)pGroup->GetObjectId());
 
 	pGroup->AppendProperty(pPropBase);
 	return pPropBase;
