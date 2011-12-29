@@ -28,7 +28,7 @@ using namespace std;
 
 #define NAME_SKIN_PROP_NAME_OBJ_ID					"ObjectId"
 #define NAME_SKIN_PROP_NAME_TYPE					"Type"
-#define NAME_SKIN_PROP_NAME							"Name"
+#define NAME_SKIN_PROP_NAME							"@Object_Name"
 
 // 属性资源xml文件
 // Window配置资源xml文件
