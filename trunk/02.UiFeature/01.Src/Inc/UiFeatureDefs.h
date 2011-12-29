@@ -18,33 +18,32 @@ using namespace std;
 #define UM_INIT_WINDOW_BASE							(UM_UI_BASE_DEF_MSG + 3)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define NAME_KERNEL									_T("UiFeatureKernel.dll")
-
-#define NAME_KERNEL_DLL								("UiFeatureKernel.dll")
-#define NAME_ENGINE_DLL								("UiFeatureEngine.dll")
-#define NAME_CONTROL_DLL							("UiFeatureControl.dll")
-#define NAME_ZIP_DLL								("UiFeatureZip.dll")
-#define NAME_UFP_TEMPLATE							("ufp.template")
+#define NAME_KERNEL_DLL								"UiFeatureKernel.dll"
+#define NAME_ENGINE_DLL								"UiFeatureEngine.dll"
+#define NAME_CONTROL_DLL							"UiFeatureControl.dll"
+#define NAME_ZIP_DLL								"UiFeatureZip.dll"
+#define NAME_UFP_TEMPLATE							"ufp.template"
 #define NAME_SKIN_PROJ_EX_NAME						".ufp"
+#define NAME_SKIN_FILE_EX_NAME						".ufd"
 
-#define NAME_SKIN_PROP_NAME_OBJ_ID					("ObjectId")
-#define NAME_SKIN_PROP_NAME_TYPE					("Type")
+#define NAME_SKIN_PROP_NAME_OBJ_ID					"ObjectId"
+#define NAME_SKIN_PROP_NAME_TYPE					"Type"
 #define NAME_SKIN_PROP_NAME							"Name"
 
 // 属性资源xml文件
-#define RESOURCE_XML_NAME							("Resource.xml")
 // Window配置资源xml文件
-#define WINDOWS_XML_NAME							("Windows.xml")
-#define CONTROLS_XML_NAME							("Controls.xml")
-#define LAYOUT_XML_NAME								("Layout.xml")
+#define LAYOUT_XML_NAME								"Layout.xml"
+#define WINDOWS_XML_NAME							"Windows.xml"
+#define CONTROLS_XML_NAME							"Controls.xml"
+#define RESOURCE_XML_NAME							"Resource.xml"
 
 // 控件预览图、icon文件的存放路径，这个只有Builder使用，内核并不使用
 #define CONTROL_IMAGE_DIR							_T("ControlsRes\\")
 // 所有皮肤文件集中存放的地方
-#define SKIN_DATA_DIR								("SkinData\\")
-#define SKIN_OBJECT_ID								("objid")
+#define SKIN_DATA_DIR								"SkinData\\"
+#define SKIN_OBJECT_ID								"objid"
 // 一个窗口或者一个控件的所有属性节点的根节点：属性组的object type name
-#define PROP_ROOT_TYPE_NAME							("Window_Or_Control_Property_Head")
+#define PROP_ROOT_TYPE_NAME							"Window_Or_Control_Property_Head"
 
 #ifndef SAFE_CLOSE_HANDLE
 #define SAFE_CLOSE_HANDLE(hHandle)					{if(hHandle!=NULL)::CloseHandle(hHandle);hHandle=NULL;};

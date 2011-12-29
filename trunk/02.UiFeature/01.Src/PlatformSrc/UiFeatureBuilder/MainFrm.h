@@ -62,10 +62,18 @@ private:
 
 	CString m_strSkinName;
 	CString m_strSkinDir;
+	// 当前项目工程文件
+	CString m_strCurUfpPath;
+	CString m_strOpenUfpPath;
 
 private:
 	void InitUiFeatureKernel();
-	CString PathHelper(TCHAR *pszDllName);
+	bool InitProject();
+
+	bool InitResourceXml(CString strXmlFile);
+	bool InitControlsXml(CString strXmlFile);
+	bool InitWindowsXml(CString strXmlFile);
+	bool InitLayoutXml(CString strXmlFile);
 
 
 // 生成的消息映射函数
@@ -81,6 +89,10 @@ protected:
 	void SetDockingWindowIcons(BOOL bHiColorIcons);
 public:
 	afx_msg void OnFileNew();
+	afx_msg void OnFileOpen();
+	afx_msg void OnFileSave();
+	afx_msg void OnAppExit();
+	afx_msg void OnFileClose();
 };
 
 

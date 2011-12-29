@@ -17,6 +17,18 @@ public:
 
 	static IPropertySkinManager* GetInstance();
 
+//////////////////////////////////////////////////////////////////////////
+	// 打开一个皮肤包时，需要读取皮肤包的文件
+	// 解析Resource.xml
+	virtual bool BuilderTranslateResourceXml(char *pszXmlPath);
+	// 解析Controls.xml
+	virtual bool BuilderTranslateControlsXml(char *pszXmlPath);
+	// 解析Windows.xml
+	virtual bool BuilderTranslateWindowsXml(char *pszXmlPath);
+	// 解析Layout.xml
+	virtual bool BuilderTranslateLayoutXml(char *pszXmlPath);
+
+//////////////////////////////////////////////////////////////////////////
 	// 初始化Window皮肤
 	virtual IPropertyGroup* InitWindowSkin(const char *pszSkinPath, const char *pszWndName);
 	// 查找指定的属性
@@ -30,6 +42,12 @@ public:
 	virtual int GetNewId();
 
 private:
+//////////////////////////////////////////////////////////////////////////
+	// Builder使用函数
+	bool BuilderCreateFileItem(char *pFilePath, FILE_ITEM &FileItem);
+	void BuilderFreeFileItem(FILE_ITEM &FileItem);
+
+//////////////////////////////////////////////////////////////////////////
 	void ReleaseSkinManager();
 	// 初始化皮肤包
 	bool InitSkinPackage(const char *pszSkinPath);

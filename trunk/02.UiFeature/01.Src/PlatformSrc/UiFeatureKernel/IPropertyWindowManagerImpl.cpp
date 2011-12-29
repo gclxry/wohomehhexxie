@@ -165,7 +165,7 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 		return;
 
 	// Group:base
-	m_pPropGroupBase = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "WindowBase", NULL);
+	m_pPropGroupBase = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "WindowBase", "窗口/面板基本属性");
 	if (m_pPropGroupBase == NULL)
 		return;
 
@@ -186,7 +186,7 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 	if (m_pPropBase_Name == NULL)
 		return;
 	if (m_pPropBase_Name->GetString() != NULL && strlen(m_pPropBase_Name->GetString()) <= 0)
-		m_pPropBase_Name->SetString("新建窗体/面板");
+		m_pPropBase_Name->SetString("新建窗口/面板");
 
 	// base-visible
 	m_pPropBase_Visible = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, OTID_BOOL, "Visible", "是否可见");
@@ -204,7 +204,7 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 		return;
 
 	// base-sysbase
-	m_pPropGroupSysBase = (IPropertyGroup*)CreatePropetry(m_pPropGroupBase, OTID_GROUP, "SysBase", NULL);
+	m_pPropGroupSysBase = (IPropertyGroup*)CreatePropetry(m_pPropGroupBase, OTID_GROUP, "SysBase", "窗口系统属性，只限于窗口，其他类型不适用");
 	if (m_pPropGroupSysBase == NULL)
 		return;
 
@@ -222,7 +222,7 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 	// base-sysbase-最大尺寸
 
 	// Group-size
-	m_pPropGroupSize = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "Size", NULL);
+	m_pPropGroupSize = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "Size", "窗口/面板大小");
 	if (m_pPropGroupSize == NULL)
 		return;
 
@@ -237,7 +237,7 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 		return;
 
 	// Group-drag(拖拽窗口)
-	m_pPropGroupDrag = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "Drag", NULL);
+	m_pPropGroupDrag = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "Drag", "拖拽窗口");
 	if (m_pPropGroupDrag == NULL)
 		return;
 
@@ -247,7 +247,7 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 		return;
 
 	// Group-stretching(拉伸窗口)
-	m_pPropGroupStretching = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "Stretching", NULL);
+	m_pPropGroupStretching = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "Stretching", "拉伸窗口");
 	if (m_pPropGroupStretching == NULL)
 		return;
 
@@ -276,10 +276,10 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 	if (m_pPropStretching_BottomSpace == NULL)
 		return;
 
-	// Group-WindowRgn
-	m_pPropGroupWindowRgn = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "WindowRgn", NULL);
-	if (m_pPropGroupWindowRgn == NULL)
-		return;
+//	// Group-WindowRgn
+//	m_pPropGroupWindowRgn = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "WindowRgn", "窗口裁剪");
+//	if (m_pPropGroupWindowRgn == NULL)
+//		return;
 }
 
 IPropertyGroup* IPropertyWindowManagerImpl::GetWindowPropetryBaseGroup()

@@ -27,6 +27,10 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_COMMAND_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_OFF_2007_AQUA, &CMainFrame::OnApplicationLook)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_OFF_2007_AQUA, &CMainFrame::OnUpdateApplicationLook)
 	ON_COMMAND(ID_FILE_NEW, &CMainFrame::OnFileNew)
+	ON_COMMAND(ID_FILE_OPEN, &CMainFrame::OnFileOpen)
+	ON_COMMAND(ID_FILE_SAVE, &CMainFrame::OnFileSave)
+	ON_COMMAND(ID_APP_EXIT, &CMainFrame::OnAppExit)
+	ON_COMMAND(ID_FILE_CLOSE, &CMainFrame::OnFileClose)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -52,6 +56,8 @@ CMainFrame::CMainFrame()
 	m_bInitOk = false;
 	m_strSkinDir = _T("");
 	m_strSkinName = _T("");
+	m_strCurUfpPath = _T("");
+	m_strOpenUfpPath = _T("");
 }
 
 CMainFrame::~CMainFrame()
@@ -405,70 +411,4 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 	}
 
 	return TRUE;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-CString CMainFrame::PathHelper(TCHAR *pszDllName)
-{
-	CString strPath = _T("");
-	if (pszDllName != NULL)
-	{
-		TCHAR szPath[MAX_PATH + 1];
-		memset(szPath, 0, (MAX_PATH + 1) * sizeof(TCHAR));
-		::GetModuleFileName(NULL, szPath, MAX_PATH);
-		while (_tcslen(szPath) > 0 && szPath[_tcslen(szPath) - 1] != '\\')
-			szPath[_tcslen(szPath) - 1] = '\0';
-
-		strPath = szPath;
-		strPath += pszDllName;
-	}
-
-	return strPath;
-}
-
-void CMainFrame::InitUiFeatureKernel()
-{
-	CString strKernelPath = PathHelper(NAME_KERNEL);
-	m_hKernelDll = ::LoadLibrary(strKernelPath);
-	if (m_hKernelDll == NULL)
-	{
-		AfxMessageBox(_T("找不到UiFeature内核DLL！"), MB_OK | MB_ICONERROR);
-		return;
-	}
-
-	GETKERNELWINDOWINTERFACE GetKernel = (GETKERNELWINDOWINTERFACE)::GetProcAddress(m_hKernelDll, "GetKernelWindowInterface");
-	if (GetKernel == NULL)
-	{
-		AfxMessageBox(_T("找不到UiFeature内核DLL的【GetKernelWindowInterface】函数！"), MB_OK | MB_ICONERROR);
-		return;
-	}
-
-	m_pKernelWindow = GetKernel();
-	if (m_pKernelWindow == NULL)
-	{
-		AfxMessageBox(_T("找不到UiFeature内核DLL的【IKernelWindow】接口！"), MB_OK | MB_ICONERROR);
-		return;
-	}
-	m_pSkinMgr = m_pKernelWindow->GetSkinManager();
-
-	m_wndWindowView.Init(m_pKernelWindow, m_wndProperties.GetPropetryCtrl());
-	m_wndProperties.Init(m_pKernelWindow, m_wndWindowView.GetViewTreeCtrl());
-
-	// 加载控件显示数据
-	m_pRegControlMap = m_pKernelWindow->BuilderRegisterControl();
-	// 显示控件
-	m_wndControls.SetControlList(m_pRegControlMap);
-
-	m_bInitOk = true;
-}
-
-void CMainFrame::OnFileNew()
-{
-	// TODO: Add your command handler code here
-	CCreateNewSkinProject NewSkinDlg;
-	NewSkinDlg.DoModal();
-
-	NewSkinDlg.GetNewProjectPath(m_strSkinDir, m_strSkinName);
 }
