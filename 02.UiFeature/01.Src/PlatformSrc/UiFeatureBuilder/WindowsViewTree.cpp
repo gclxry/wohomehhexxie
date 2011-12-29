@@ -263,11 +263,11 @@ void CWindowsViewTree::InitShowNewProject()
 	if (m_pSkinMgr == NULL)
 		return;
 
-	PROP_BASE_ITEM* pWndPropMap = m_pSkinMgr->BuilderGetWindowPropMap();
+	ONE_RESOURCE_PROP_MAP* pWndPropMap = m_pSkinMgr->BuilderGetWindowPropMap();
 	if (pWndPropMap == NULL)
 		return;
 
-	for (PROP_BASE_ITEM::iterator pWndItem = pWndPropMap->begin(); pWndItem != pWndPropMap->end(); pWndItem++)
+	for (ONE_RESOURCE_PROP_MAP::iterator pWndItem = pWndPropMap->begin(); pWndItem != pWndPropMap->end(); pWndItem++)
 	{
 		IPropertyWindow* pPropWnd = dynamic_cast<IPropertyWindow*>(pWndItem->second);
 		if (pPropWnd == NULL)

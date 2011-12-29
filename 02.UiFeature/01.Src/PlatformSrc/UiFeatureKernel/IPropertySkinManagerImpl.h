@@ -28,7 +28,7 @@ public:
 	// 解析Layout.xml
 	virtual bool BuilderTranslateLayoutXml(char *pszXmlPath);
 
-	virtual PROP_BASE_ITEM* BuilderGetWindowPropMap();
+	virtual ONE_RESOURCE_PROP_MAP* BuilderGetWindowPropMap();
 
 	// 清空属性队列
 	virtual void ReleaseSkinManagerPropetry();
@@ -49,8 +49,8 @@ public:
 private:
 //////////////////////////////////////////////////////////////////////////
 	// Builder使用函数
-	bool BuilderCreateFileItem(char *pFilePath, FILE_ITEM &FileItem);
-	void BuilderFreeFileItem(FILE_ITEM &FileItem);
+	bool BuilderCreateFileItem(char *pFilePath, ZIP_FILE &FileItem);
+	void BuilderFreeFileItem(ZIP_FILE &FileItem);
 
 //////////////////////////////////////////////////////////////////////////
 	// 初始化皮肤包
@@ -62,27 +62,30 @@ private:
 //////////////////////////////////////////////////////////////////////////
 	// Resource.xml相关
 	// 解析Resource.xml
-	bool TranslateResourceXml(FILE_ITEM *pResurceXml);
-	void ReleasePropMap(PROP_BASE_MAP &PropMap);
+	bool TranslateResourceXml(ZIP_FILE *pResurceXml);
+	void ReleasePropMap(RESOURCE_PROP_MAP &PropMap);
 	void ReleaseBaseProp(IPropertyBase *pCtrlProp);
-	void ReleasePropMapItem(PROP_BASE_ITEM* pPropMapItem);
+	void ReleasePropMapItem(ONE_RESOURCE_PROP_MAP* pPropMapItem);
 	// 通用的从资源xml中创建属性
-	bool GeneralCreateBaseProp(char *pPropType, XmlNode* pXmlNode, PROP_BASE_ITEM* pPropMap);
+	bool GeneralCreateBaseProp(char *pPropType, XmlNode* pXmlNode, ONE_RESOURCE_PROP_MAP* pPropMap);
+	// 设置属性与base属性的关联
+	void SetPropetryBaseRelevancy();
+	void SetPropRelevancy(ONE_RESOURCE_PROP_MAP* pFromMap, ONE_RESOURCE_PROP_MAP* pToMap);
 
 //////////////////////////////////////////////////////////////////////////
 	// Controls.xml 相关
-	bool TranslateControlsXml(FILE_ITEM *pControlsXml);
-	bool GeneralCreateSubProp(XmlNode* pXmlNode, PROP_BASE_ITEM* pCtrlPropMap);
+	bool TranslateControlsXml(ZIP_FILE *pControlsXml);
+	bool GeneralCreateSubProp(XmlNode* pXmlNode, ONE_RESOURCE_PROP_MAP* pCtrlPropMap);
 	bool AppendBasePropToGroup(IPropertyGroup *pGroup, XmlNode* pXmlNode);
 
 //////////////////////////////////////////////////////////////////////////
 	// Windows.xml 相关
 	// 解析Windows.xml
-	bool TranslateWindowsXml(FILE_ITEM *pWindowsXml);
+	bool TranslateWindowsXml(ZIP_FILE *pWindowsXml);
 
 //////////////////////////////////////////////////////////////////////////
 	// Layout.xml 相关
-	bool TranslateLayoutXml(FILE_ITEM *pLayoutXml);
+	bool TranslateLayoutXml(ZIP_FILE *pLayoutXml);
 	bool GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, CHILD_CTRL_PROP_VEC* pChildCtrlVec, IPropertyControl* pParentProp);
 	IPropertyGroup* FindControlPropGroup(char *pszObjectId);
 	void ReleaseLayoutMap();
@@ -92,22 +95,26 @@ private:
 	// 皮肤路径
 	string m_strSkinPath;
 	// 所有种类的属性的队列
-	PROP_BASE_MAP m_AllPropMap;
+	RESOURCE_PROP_MAP m_AllPropMap;
 	// 所有控件种类的属性的队列，KEY：控件类型名称，如：Button
-	PROP_BASE_MAP m_AllCtrlPropMap;
+	RESOURCE_PROP_MAP m_AllCtrlPropMap;
 	// 所有窗口的属性管理器map
-	PROP_BASE_ITEM m_AllWindowPropMap;
+	ONE_RESOURCE_PROP_MAP m_AllWindowPropMap;
 	// 布局队列，KEY：ObjectID
-	PROP_BASE_ITEM m_LayoutWindowVec;
+	ONE_RESOURCE_PROP_MAP m_LayoutWindowVec;
 
 	// ImageBase 属性队列
-	PROP_BASE_ITEM* m_pImageBasePropMap;
+	ONE_RESOURCE_PROP_MAP* m_pImageBasePropMap;
+	ONE_RESOURCE_PROP_MAP* m_pImagePropMap;
 	// FontBase 属性队列
-	PROP_BASE_ITEM* m_pFontBasePropMap;
+	ONE_RESOURCE_PROP_MAP* m_pFontBasePropMap;
+	ONE_RESOURCE_PROP_MAP* m_pFontPropMap;
 	// CursorBase 属性队列
-	PROP_BASE_ITEM* m_pCursorBasePropMap;
+	ONE_RESOURCE_PROP_MAP* m_pCursorBasePropMap;
+	ONE_RESOURCE_PROP_MAP* m_pCursorPropMap;
 	// ColorBase 属性队列
-	PROP_BASE_ITEM* m_pColorBasePropMap;
+	ONE_RESOURCE_PROP_MAP* m_pColorBasePropMap;
+	ONE_RESOURCE_PROP_MAP* m_pColorPropMap;
 
 	// zip文件
 	IZipFileList *m_pZipFile;

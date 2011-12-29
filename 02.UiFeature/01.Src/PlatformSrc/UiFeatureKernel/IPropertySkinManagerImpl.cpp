@@ -34,10 +34,15 @@ IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
 	m_AllCtrlPropMap.clear();
 	m_AllWindowPropMap.clear();
 	m_LayoutWindowVec.clear();
+
 	m_pImageBasePropMap = NULL;
 	m_pFontBasePropMap = NULL;
 	m_pCursorBasePropMap = NULL;
 	m_pColorBasePropMap = NULL;
+	m_pImagePropMap = NULL;
+	m_pFontPropMap = NULL;
+	m_pCursorPropMap = NULL;
+	m_pColorPropMap = NULL;
 
 	m_nObjectIdInRes = 1;
 	m_nEmptyObjectId = 1;
@@ -64,7 +69,7 @@ void IPropertySkinManagerImpl::ReleaseSkinManagerPropetry()
 
 void IPropertySkinManagerImpl::ReleaseLayoutMap()
 {
-	for (PROP_BASE_ITEM::iterator pWndItem = m_LayoutWindowVec.begin(); pWndItem != m_LayoutWindowVec.end(); pWndItem++)
+	for (ONE_RESOURCE_PROP_MAP::iterator pWndItem = m_LayoutWindowVec.begin(); pWndItem != m_LayoutWindowVec.end(); pWndItem++)
 	{
 		IPropertyWindow* pWnd = dynamic_cast<IPropertyWindow*>(pWndItem->second);
 		if (pWnd != NULL)
@@ -91,11 +96,11 @@ void IPropertySkinManagerImpl::ReleaseLayoutMapChildCtrlVec(CHILD_CTRL_PROP_VEC*
 	pCtrlVec->clear();
 }
 
-void IPropertySkinManagerImpl::ReleasePropMap(PROP_BASE_MAP &PropMap)
+void IPropertySkinManagerImpl::ReleasePropMap(RESOURCE_PROP_MAP &PropMap)
 {
-	for (PROP_BASE_MAP::iterator pGroupItem = PropMap.begin(); pGroupItem != PropMap.end(); pGroupItem++)
+	for (RESOURCE_PROP_MAP::iterator pGroupItem = PropMap.begin(); pGroupItem != PropMap.end(); pGroupItem++)
 	{
-		PROP_BASE_ITEM* pGroup = pGroupItem->second;
+		ONE_RESOURCE_PROP_MAP* pGroup = pGroupItem->second;
 		if (pGroup != NULL)
 		{
 			ReleasePropMapItem(pGroup);
@@ -105,12 +110,12 @@ void IPropertySkinManagerImpl::ReleasePropMap(PROP_BASE_MAP &PropMap)
 	PropMap.clear();
 }
 
-void IPropertySkinManagerImpl::ReleasePropMapItem(PROP_BASE_ITEM* pPropMapItem)
+void IPropertySkinManagerImpl::ReleasePropMapItem(ONE_RESOURCE_PROP_MAP* pPropMapItem)
 {
 	if (pPropMapItem == NULL)
 		return;
 
-	for (PROP_BASE_ITEM::iterator pPropItem = pPropMapItem->begin(); pPropItem != pPropMapItem->end(); pPropItem++)
+	for (ONE_RESOURCE_PROP_MAP::iterator pPropItem = pPropMapItem->begin(); pPropItem != pPropMapItem->end(); pPropItem++)
 	{
 		IPropertyBase* pProp = pPropItem->second;
 		ReleaseBaseProp(pProp);
@@ -450,9 +455,9 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 		else
 		{
 			// 创建普通属性
-			PROP_BASE_ITEM* pOnePropMap = NULL;
+			ONE_RESOURCE_PROP_MAP* pOnePropMap = NULL;
 			string strTypeName = PropTypeToString(propType);
-			PROP_BASE_MAP::iterator pTypeItem = m_AllPropMap.find(strTypeName);
+			RESOURCE_PROP_MAP::iterator pTypeItem = m_AllPropMap.find(strTypeName);
 			if (pTypeItem != m_AllPropMap.end())
 			{
 				// 找到属性组
@@ -461,7 +466,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 			else
 			{
 				// 创建属性组
-				pOnePropMap = new PROP_BASE_ITEM;
+				pOnePropMap = new ONE_RESOURCE_PROP_MAP;
 				if (pOnePropMap == NULL)
 				{
 					ReleaseBaseProp(pBaseProp);
@@ -469,7 +474,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 				}
 
 				pOnePropMap->clear();
-				m_AllPropMap.insert(pair<string, PROP_BASE_ITEM*>(strTypeName, pOnePropMap));
+				m_AllPropMap.insert(pair<string, ONE_RESOURCE_PROP_MAP*>(strTypeName, pOnePropMap));
 			}
 
 			if (pOnePropMap != NULL)
@@ -493,16 +498,16 @@ IPropertyBase* IPropertySkinManagerImpl::FindBaseProperty(const char* pszPropTyp
 		return NULL;
 
 	string strType = pszPropType;
-	PROP_BASE_MAP::iterator pPropTypeItem = m_AllPropMap.find(strType);
+	RESOURCE_PROP_MAP::iterator pPropTypeItem = m_AllPropMap.find(strType);
 	if (pPropTypeItem == m_AllPropMap.end())
 		return NULL;
 
-	PROP_BASE_ITEM* pPropMap = pPropTypeItem->second;
+	ONE_RESOURCE_PROP_MAP* pPropMap = pPropTypeItem->second;
 	if (pPropMap == NULL)
 		return NULL;
 
 	string strPropId = pszPropId;
-	PROP_BASE_ITEM::iterator pPropItem = pPropMap->find(strPropId);
+	ONE_RESOURCE_PROP_MAP::iterator pPropItem = pPropMap->find(strPropId);
 	if (pPropItem == pPropMap->end())
 		return NULL;
 
@@ -559,10 +564,10 @@ bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 	if (!m_pZipFile->ReadZipFile(pszSkinPath))
 		return false;
 
-	FILE_ITEM * pResurceXml = m_pZipFile->FindUnZipFile(RESOURCE_XML_NAME);
-	FILE_ITEM * pControlsXml = m_pZipFile->FindUnZipFile(CONTROLS_XML_NAME);
-	FILE_ITEM * pWindowsXml = m_pZipFile->FindUnZipFile(WINDOWS_XML_NAME);
-	FILE_ITEM * pLayoutXml = m_pZipFile->FindUnZipFile(LAYOUT_XML_NAME);
+	ZIP_FILE * pResurceXml = m_pZipFile->FindUnZipFile(RESOURCE_XML_NAME);
+	ZIP_FILE * pControlsXml = m_pZipFile->FindUnZipFile(CONTROLS_XML_NAME);
+	ZIP_FILE * pWindowsXml = m_pZipFile->FindUnZipFile(WINDOWS_XML_NAME);
+	ZIP_FILE * pLayoutXml = m_pZipFile->FindUnZipFile(LAYOUT_XML_NAME);
 	if (pWindowsXml == NULL || pResurceXml == NULL)
 		return false;
 
@@ -599,7 +604,7 @@ IPropertyWindow* IPropertySkinManagerImpl::InitWindowSkin(const char *pszSkinPat
 		return NULL;
 
 	string strWndName = pszWndName;
-	PROP_BASE_ITEM::iterator pWndPropItem = m_AllWindowPropMap.find(strWndName);
+	ONE_RESOURCE_PROP_MAP::iterator pWndPropItem = m_AllWindowPropMap.find(strWndName);
 	if (pWndPropItem == m_AllWindowPropMap.end())
 		return NULL;
 
@@ -622,15 +627,15 @@ int IPropertySkinManagerImpl::GetNewId()
 // 设置显示的语言种类
 void IPropertySkinManagerImpl::SetArea(AREA_TYPE areaType)
 {
-	PROP_BASE_MAP::iterator pStringItem = m_AllPropMap.find(PROP_TYPE_STRING_NAME);
+	RESOURCE_PROP_MAP::iterator pStringItem = m_AllPropMap.find(PROP_TYPE_STRING_NAME);
 	if (pStringItem == m_AllPropMap.end())
 		return;
 
-	PROP_BASE_ITEM* pPropMap = pStringItem->second;
+	ONE_RESOURCE_PROP_MAP* pPropMap = pStringItem->second;
 	if (pPropMap == NULL)
 		return;
 
-	for (PROP_BASE_ITEM::iterator pPropItem = pPropMap->begin(); pPropItem != pPropMap->end(); pPropItem++)
+	for (ONE_RESOURCE_PROP_MAP::iterator pPropItem = pPropMap->begin(); pPropItem != pPropMap->end(); pPropItem++)
 	{
 		IPropertyBase* pProp = pPropItem->second;
 		if (pProp == NULL)
@@ -645,7 +650,7 @@ void IPropertySkinManagerImpl::SetArea(AREA_TYPE areaType)
 }
 
 // 解析Resource.xml
-bool IPropertySkinManagerImpl::TranslateResourceXml(FILE_ITEM *pResurceXml)
+bool IPropertySkinManagerImpl::TranslateResourceXml(ZIP_FILE *pResurceXml)
 {
 	ReleasePropMap(m_AllPropMap);
 	if (pResurceXml == NULL || pResurceXml->pFileData == NULL)
@@ -663,9 +668,9 @@ bool IPropertySkinManagerImpl::TranslateResourceXml(FILE_ITEM *pResurceXml)
 			XmlNode* pPropTypeXml = JabberXmlGetNthChildWithoutTag(pResurceRoot, i);
 			if (pPropTypeXml != NULL && pPropTypeXml->name != NULL)
 			{
-				PROP_BASE_ITEM* pOnePropMap = NULL;
+				ONE_RESOURCE_PROP_MAP* pOnePropMap = NULL;
 				string strTypeName = pPropTypeXml->name;
-				PROP_BASE_MAP::iterator pTypeItem = m_AllPropMap.find(strTypeName);
+				RESOURCE_PROP_MAP::iterator pTypeItem = m_AllPropMap.find(strTypeName);
 				if (pTypeItem != m_AllPropMap.end())
 				{
 					// 找到属性组
@@ -674,12 +679,45 @@ bool IPropertySkinManagerImpl::TranslateResourceXml(FILE_ITEM *pResurceXml)
 				else
 				{
 					// 创建属性组
-					pOnePropMap = new PROP_BASE_ITEM;
+					pOnePropMap = new ONE_RESOURCE_PROP_MAP;
 					if (pOnePropMap == NULL)
 						return false;
 
 					pOnePropMap->clear();
-					m_AllPropMap.insert(pair<string, PROP_BASE_ITEM*>(strTypeName, pOnePropMap));
+					m_AllPropMap.insert(pair<string, ONE_RESOURCE_PROP_MAP*>(strTypeName, pOnePropMap));
+
+					if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_IMAGE_BASE_NAME))
+					{
+						m_pImageBasePropMap = pOnePropMap;
+					}
+					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_COLOR_BASE_NAME))
+					{
+						m_pColorBasePropMap = pOnePropMap;
+					}
+					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_CURSOR_BASE_NAME))
+					{
+						m_pCursorBasePropMap = pOnePropMap;
+					}
+					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_FONT_BASE_NAME))
+					{
+						m_pFontBasePropMap = pOnePropMap;
+					}
+					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_COLOR_NAME))
+					{
+						m_pColorPropMap = pOnePropMap;
+					}
+					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_CURSOR_NAME))
+					{
+						m_pCursorPropMap = pOnePropMap;
+					}
+					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_FONT_NAME))
+					{
+						m_pFontPropMap = pOnePropMap;
+					}
+					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_IMAGE_NAME))
+					{
+						m_pImagePropMap = pOnePropMap;
+					}
 				}
 
 				if (pOnePropMap == NULL)
@@ -696,10 +734,52 @@ bool IPropertySkinManagerImpl::TranslateResourceXml(FILE_ITEM *pResurceXml)
 	}
 
 	JabberXmlDestroyState(&xmlState);
+	SetPropetryBaseRelevancy();
 	return true;
 }
 
-bool IPropertySkinManagerImpl::GeneralCreateBaseProp(char *pPropType, XmlNode* pXmlNode, PROP_BASE_ITEM* pPropMap)
+// 设置属性与base属性的关联
+void IPropertySkinManagerImpl::SetPropetryBaseRelevancy()
+{
+	SetPropRelevancy(m_pImageBasePropMap, m_pImagePropMap);
+	SetPropRelevancy(m_pFontBasePropMap, m_pFontPropMap);
+	SetPropRelevancy(m_pCursorBasePropMap, m_pCursorPropMap);
+	SetPropRelevancy(m_pColorBasePropMap, m_pColorPropMap);
+}
+
+void IPropertySkinManagerImpl::SetPropRelevancy(ONE_RESOURCE_PROP_MAP* pFromMap, ONE_RESOURCE_PROP_MAP* pToMap)
+{
+	if (pFromMap == NULL || pToMap == NULL)
+		return;
+
+	for (ONE_RESOURCE_PROP_MAP::iterator pToItem = pToMap->begin(); pToItem != pToMap->end(); pToItem++)
+	{
+		IPropertyBase* pToProp = pToItem->second;
+		if (pToProp == NULL)
+			continue;
+
+		if (pToProp->GetRelevancyPropName() == NULL || strlen(pToProp->GetRelevancyPropName()) <= 0)
+			continue;
+
+		for (ONE_RESOURCE_PROP_MAP::iterator pFromItem = pFromMap->begin(); pFromItem != pFromMap->end(); pFromItem++)
+		{
+			IPropertyBase* pFromProp = pFromItem->second;
+			if (pFromProp == NULL)
+				continue;
+
+			if (pFromProp->GetObjectName() == NULL || strlen(pFromProp->GetObjectName()) <= 0)
+				continue;
+
+			if (lstrcmpiA(pToProp->GetRelevancyPropName(), pFromProp->GetObjectName()) == 0)
+			{
+				pToProp->SetRelevancyProp(pFromProp);
+				break;
+			}
+		}
+	}
+}
+
+bool IPropertySkinManagerImpl::GeneralCreateBaseProp(char *pPropType, XmlNode* pXmlNode, ONE_RESOURCE_PROP_MAP* pPropMap)
 {
 	if (pPropType == NULL || pXmlNode == NULL || pPropMap == NULL)
 		return false;
@@ -715,7 +795,7 @@ bool IPropertySkinManagerImpl::GeneralCreateBaseProp(char *pPropType, XmlNode* p
 				return false;
 
 			string strObjId = psz_id;
-			PROP_BASE_ITEM::iterator pPropItem = pPropMap->find(strObjId);
+			ONE_RESOURCE_PROP_MAP::iterator pPropItem = pPropMap->find(strObjId);
 			if (pPropItem != pPropMap->end())
 				return false;
 
@@ -840,7 +920,7 @@ bool IPropertySkinManagerImpl::GeneralCreateBaseProp(char *pPropType, XmlNode* p
 	return true;
 }
 
-bool IPropertySkinManagerImpl::TranslateControlsXml(FILE_ITEM *pControlsXml)
+bool IPropertySkinManagerImpl::TranslateControlsXml(ZIP_FILE *pControlsXml)
 {
 	ReleasePropMap(m_AllCtrlPropMap);
 	if (pControlsXml == NULL || pControlsXml->pFileData == NULL)
@@ -858,9 +938,9 @@ bool IPropertySkinManagerImpl::TranslateControlsXml(FILE_ITEM *pControlsXml)
 			XmlNode* pCtrlTypeXml = JabberXmlGetNthChildWithoutTag(pControlsRoot, i);
 			if (pCtrlTypeXml != NULL && pCtrlTypeXml->name != NULL)
 			{
-				PROP_BASE_ITEM* pOneCtrlMap = NULL;
+				ONE_RESOURCE_PROP_MAP* pOneCtrlMap = NULL;
 				string strTypeName = pCtrlTypeXml->name;
-				PROP_BASE_MAP::iterator pTypeItem = m_AllCtrlPropMap.find(strTypeName);
+				RESOURCE_PROP_MAP::iterator pTypeItem = m_AllCtrlPropMap.find(strTypeName);
 				if (pTypeItem != m_AllCtrlPropMap.end())
 				{
 					// 找到属性组
@@ -869,12 +949,12 @@ bool IPropertySkinManagerImpl::TranslateControlsXml(FILE_ITEM *pControlsXml)
 				else
 				{
 					// 创建属性组
-					pOneCtrlMap = new PROP_BASE_ITEM;
+					pOneCtrlMap = new ONE_RESOURCE_PROP_MAP;
 					if (pOneCtrlMap == NULL)
 						return false;
 
 					pOneCtrlMap->clear();
-					m_AllCtrlPropMap.insert(pair<string, PROP_BASE_ITEM*>(strTypeName, pOneCtrlMap));
+					m_AllCtrlPropMap.insert(pair<string, ONE_RESOURCE_PROP_MAP*>(strTypeName, pOneCtrlMap));
 				}
 
 				if (pOneCtrlMap == NULL)
@@ -894,7 +974,7 @@ bool IPropertySkinManagerImpl::TranslateControlsXml(FILE_ITEM *pControlsXml)
 	return true;
 }
 
-bool IPropertySkinManagerImpl::GeneralCreateSubProp(XmlNode* pXmlNode, PROP_BASE_ITEM* pCtrlPropMap)
+bool IPropertySkinManagerImpl::GeneralCreateSubProp(XmlNode* pXmlNode, ONE_RESOURCE_PROP_MAP* pCtrlPropMap)
 {
 	if (pXmlNode == NULL || pCtrlPropMap == NULL)
 		return false;
@@ -904,7 +984,7 @@ bool IPropertySkinManagerImpl::GeneralCreateSubProp(XmlNode* pXmlNode, PROP_BASE
 		return false;
 
 	string strObjId = psz_id;
-	PROP_BASE_ITEM::iterator pFindGroupItem = pCtrlPropMap->find(strObjId);
+	ONE_RESOURCE_PROP_MAP::iterator pFindGroupItem = pCtrlPropMap->find(strObjId);
 	if (pFindGroupItem != pCtrlPropMap->end())
 		return false;
 
@@ -990,7 +1070,7 @@ bool IPropertySkinManagerImpl::AppendBasePropToGroup(IPropertyGroup *pGroup, Xml
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 解析Windows.xml
-bool IPropertySkinManagerImpl::TranslateWindowsXml(FILE_ITEM *pWindowsXml)
+bool IPropertySkinManagerImpl::TranslateWindowsXml(ZIP_FILE *pWindowsXml)
 {
 	ReleasePropMapItem(&m_AllWindowPropMap);
 	if (pWindowsXml == NULL || pWindowsXml->pFileData == NULL)
@@ -1021,7 +1101,7 @@ bool IPropertySkinManagerImpl::TranslateWindowsXml(FILE_ITEM *pWindowsXml)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 解析Windows.xml
-bool IPropertySkinManagerImpl::TranslateLayoutXml(FILE_ITEM *pLayoutXml)
+bool IPropertySkinManagerImpl::TranslateLayoutXml(ZIP_FILE *pLayoutXml)
 {
 	ReleaseLayoutMap();
 	if (pLayoutXml == NULL || pLayoutXml->pFileData == NULL)
@@ -1053,7 +1133,7 @@ bool IPropertySkinManagerImpl::TranslateLayoutXml(FILE_ITEM *pLayoutXml)
 					return false;
 
 				string strObjId = psz_id;
-				PROP_BASE_ITEM::iterator pWndPropGroupItem = m_AllWindowPropMap.find(strObjId);
+				ONE_RESOURCE_PROP_MAP::iterator pWndPropGroupItem = m_AllWindowPropMap.find(strObjId);
 				if (pWndPropGroupItem == m_AllWindowPropMap.end())
 					return false;
 
@@ -1061,7 +1141,7 @@ bool IPropertySkinManagerImpl::TranslateLayoutXml(FILE_ITEM *pLayoutXml)
 				if (pWndPropGroup == NULL)
 					return false;
 
-				PROP_BASE_ITEM::iterator pWndItem = m_LayoutWindowVec.find(strObjId);
+				ONE_RESOURCE_PROP_MAP::iterator pWndItem = m_LayoutWindowVec.find(strObjId);
 				if (pWndItem != m_LayoutWindowVec.end())
 					return false;
 
@@ -1127,13 +1207,13 @@ IPropertyGroup* IPropertySkinManagerImpl::FindControlPropGroup(char *pszObjectId
 	if (pszObjectId == NULL)
 		return NULL;
 
-	for (PROP_BASE_MAP::iterator pGroupItem = m_AllCtrlPropMap.begin(); pGroupItem != m_AllCtrlPropMap.end(); pGroupItem++)
+	for (RESOURCE_PROP_MAP::iterator pGroupItem = m_AllCtrlPropMap.begin(); pGroupItem != m_AllCtrlPropMap.end(); pGroupItem++)
 	{
-		PROP_BASE_ITEM* pGroup = pGroupItem->second;
+		ONE_RESOURCE_PROP_MAP* pGroup = pGroupItem->second;
 		if (pGroup != NULL)
 		{
 			string strObjId = pszObjectId;
-			PROP_BASE_ITEM::iterator pPropItem = pGroup->find(strObjId);
+			ONE_RESOURCE_PROP_MAP::iterator pPropItem = pGroup->find(strObjId);
 			if (pPropItem == pGroup->end())
 				continue;
 			
@@ -1152,7 +1232,7 @@ IPropertyGroup* IPropertySkinManagerImpl::FindControlPropGroup(char *pszObjectId
 // 解析Resource.xml
 bool IPropertySkinManagerImpl::BuilderTranslateResourceXml(char *pszXmlPath)
 {
-	FILE_ITEM FileItem;
+	ZIP_FILE FileItem;
 	if (!BuilderCreateFileItem(pszXmlPath, FileItem))
 		return false;
 
@@ -1165,7 +1245,7 @@ bool IPropertySkinManagerImpl::BuilderTranslateResourceXml(char *pszXmlPath)
 // 解析Controls.xml
 bool IPropertySkinManagerImpl::BuilderTranslateControlsXml(char *pszXmlPath)
 {
-	FILE_ITEM FileItem;
+	ZIP_FILE FileItem;
 	if (!BuilderCreateFileItem(pszXmlPath, FileItem))
 		return false;
 
@@ -1178,7 +1258,7 @@ bool IPropertySkinManagerImpl::BuilderTranslateControlsXml(char *pszXmlPath)
 // 解析Windows.xml
 bool IPropertySkinManagerImpl::BuilderTranslateWindowsXml(char *pszXmlPath)
 {
-	FILE_ITEM FileItem;
+	ZIP_FILE FileItem;
 	if (!BuilderCreateFileItem(pszXmlPath, FileItem))
 		return false;
 
@@ -1191,7 +1271,7 @@ bool IPropertySkinManagerImpl::BuilderTranslateWindowsXml(char *pszXmlPath)
 // 解析Layout.xml
 bool IPropertySkinManagerImpl::BuilderTranslateLayoutXml(char *pszXmlPath)
 {
-	FILE_ITEM FileItem;
+	ZIP_FILE FileItem;
 	if (!BuilderCreateFileItem(pszXmlPath, FileItem))
 		return false;
 
@@ -1201,7 +1281,7 @@ bool IPropertySkinManagerImpl::BuilderTranslateLayoutXml(char *pszXmlPath)
 	return bRet;
 }
 
-bool IPropertySkinManagerImpl::BuilderCreateFileItem(char *pFilePath, FILE_ITEM &FileItem)
+bool IPropertySkinManagerImpl::BuilderCreateFileItem(char *pFilePath, ZIP_FILE &FileItem)
 {
 	FileItem.strFileName = "";
 	FileItem.dwSrcFileLen = 0;
@@ -1255,7 +1335,7 @@ bool IPropertySkinManagerImpl::BuilderCreateFileItem(char *pFilePath, FILE_ITEM 
 	return true;
 }
 
-void IPropertySkinManagerImpl::BuilderFreeFileItem(FILE_ITEM &FileItem)
+void IPropertySkinManagerImpl::BuilderFreeFileItem(ZIP_FILE &FileItem)
 {
 	if (FileItem.pFileData != NULL)
 		SAFE_DELETE_LIST(FileItem.pFileData);
@@ -1266,7 +1346,7 @@ void IPropertySkinManagerImpl::BuilderFreeFileItem(FILE_ITEM &FileItem)
 	FileItem.pFileData = NULL;
 }
 
-PROP_BASE_ITEM* IPropertySkinManagerImpl::BuilderGetWindowPropMap()
+ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::BuilderGetWindowPropMap()
 {
 	return &m_LayoutWindowVec;
 }

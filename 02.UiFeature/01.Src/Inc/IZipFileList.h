@@ -7,7 +7,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 // 压缩文件列表
-struct FILE_ITEM 
+struct ZIP_FILE 
 {
 	string strFileName;
 	DWORD dwSrcFileLen;
@@ -15,7 +15,7 @@ struct FILE_ITEM
 	BYTE *pFileData;
 };
 // KEY:strFileName
-typedef map<string, FILE_ITEM*>		ZIP_FILE_MAP;
+typedef map<string, ZIP_FILE*>		ZIP_FILE_MAP;
 
 // 不需要压缩的文件后缀名
 typedef vector<string>				NO_COMPRESS_FILE_VEC;
@@ -23,14 +23,14 @@ typedef vector<string>				NO_COMPRESS_FILE_VEC;
 class IZipFileList
 {
 public:
-	virtual void RemoveFile(FILE_ITEM *pRemove) = 0;
+	virtual void RemoveFile(ZIP_FILE *pRemove) = 0;
 
 //// 读取zip文件 //////////////////////////////////////////////////////////////////////
 	// 读取zip文件
 	virtual bool ReadZipFile(const char *pZipFilePath) = 0;
 	// 取得解压缩文件后的文件列表
 	virtual ZIP_FILE_MAP *GetUnZipFileMap() = 0;
-	virtual FILE_ITEM *FindUnZipFile(char *pFileName) = 0;
+	virtual ZIP_FILE *FindUnZipFile(char *pFileName) = 0;
 
 //// 创建zip文件 //////////////////////////////////////////////////////////////////////
 	// 初始化zip文件，pSrcFileDir：需要压缩的源文件目录

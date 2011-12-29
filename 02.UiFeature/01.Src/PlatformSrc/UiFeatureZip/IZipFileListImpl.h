@@ -10,14 +10,14 @@ public:
 
 	static IZipFileListImpl* GetInstance();
 
-	virtual void RemoveFile(FILE_ITEM *pRemove);
+	virtual void RemoveFile(ZIP_FILE *pRemove);
 
 //// 读取zip文件 //////////////////////////////////////////////////////////////////////
 	// 读取zip文件
 	virtual bool ReadZipFile(const char *pZipFilePath);
 	// 取得解压缩文件后的文件列表
 	virtual ZIP_FILE_MAP *GetUnZipFileMap();
-	virtual FILE_ITEM *FindUnZipFile(char *pFileName);	
+	virtual ZIP_FILE *FindUnZipFile(char *pFileName);	
 
 //// 创建zip文件 //////////////////////////////////////////////////////////////////////
 	// 初始化zip文件，pSrcFileDir：需要压缩的源文件目录

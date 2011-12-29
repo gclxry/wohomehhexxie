@@ -23,10 +23,9 @@ public:
 //////////////////////////////////////////////////////////////////////////
 	// 运行时态使用函数
 	IPropertyImageBase* GetImageBaseProp();
-	const char * GetImageBaseName();
-	bool DrawImage(CMemoryDC &DstDc, RECT DstRct);
+	void SetImageBaseProp(IPropertyImageBase* pNewImgBase);
 
-private:
-	string m_strImageBaseName;
-	IPropertyImageBase *m_pImageBaseProp;
+	const char * GetImageBaseName();
+
+	bool DrawImage(CMemoryDC &DstDc, RECT DstRct);
 };

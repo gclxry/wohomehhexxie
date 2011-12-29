@@ -18,7 +18,7 @@ public:
 	// 解析Layout.xml
 	virtual bool BuilderTranslateLayoutXml(char *pszXmlPath) = 0;
 
-	virtual PROP_BASE_ITEM* BuilderGetWindowPropMap() = 0;
+	virtual ONE_RESOURCE_PROP_MAP* BuilderGetWindowPropMap() = 0;
 
 	// 清空属性队列
 	virtual void ReleaseSkinManagerPropetry() = 0;
