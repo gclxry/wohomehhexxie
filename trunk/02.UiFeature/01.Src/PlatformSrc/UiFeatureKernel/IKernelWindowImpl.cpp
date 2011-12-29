@@ -2,6 +2,7 @@
 #include "StdAfx.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IFeatureObject.h"
+#include "..\..\Inc\ICommonFun.h"
 #include "IKernelWindowImpl.h"
 #include "IWindowBaseImpl.h"
 #include "WindowSubclass.h"
@@ -96,7 +97,7 @@ IWindowBase* IKernelWindowImpl::InitFeatureSkin(HWND hWnd, char *pszSkinPath, ch
 	return pWndBase;
 }
 
-// 创建一个Builder使用的窗口
+// 创建一个Builder使用的空的窗口
 IWindowBase* IKernelWindowImpl::BuilderCreateEmptyWindow()
 {
 	IPropertyGroup *pWindowPropGroup = dynamic_cast<IPropertyGroup*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_GROUP));
@@ -126,9 +127,34 @@ IWindowBase* IKernelWindowImpl::BuilderCreateEmptyWindow()
 		SAFE_DELETE(pWndBaseImpl);
 		return NULL;
 	}
-	pWndBase->SetObjectId(szId);
 	// 初始化在builder中的属性
 	pWndBase->BuilderInitWindowBase(pPropWindow);
+	ResetWindowBaseInfo(pWndBase);
+
+	// 记录到窗口队列中
+	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>((HWND)m_nBuilderHwnd++, pWndBaseImpl));
+	return pWndBase;
+}
+
+// 创建一个Builder使用的空的窗口
+IWindowBase* IKernelWindowImpl::BuilderCreatePropetryWindow(IPropertyWindow *pPropWnd)
+{
+	if (pPropWnd == NULL)
+		return NULL;
+
+	IWindowBaseImpl *pWndBaseImpl = new IWindowBaseImpl;
+	if (pWndBaseImpl == NULL)
+		return NULL;
+
+	IWindowBase* pWndBase = (dynamic_cast<IWindowBase*>(pWndBaseImpl));
+	if (pWndBase == NULL)
+	{
+		SAFE_DELETE(pWndBaseImpl);
+		return NULL;
+	}
+	// 初始化在builder中的属性
+	pWndBase->BuilderInitWindowBase(pPropWnd);
+	ResetWindowBaseInfo(pWndBase);
 
 	// 记录到窗口队列中
 	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>((HWND)m_nBuilderHwnd++, pWndBaseImpl));

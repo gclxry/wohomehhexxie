@@ -20,8 +20,10 @@ public:
 	// Builder 使用函数
 	// 取得所有支持的控件
 	virtual CONTROL_REG_MAP *BuilderRegisterControl();
-	// 创建一个Builder使用的窗口
+	// 创建一个Builder使用的空的窗口
 	virtual IWindowBase* BuilderCreateEmptyWindow();
+	// 创建一个Builder使用的窗口，并配置上属性
+	virtual IWindowBase* BuilderCreatePropetryWindow(IPropertyWindow *pPropWnd);
 
 //////////////////////////////////////////////////////////////////////////
 	// 一个对话框从一个皮肤包里使用指定的对话框皮肤资源初始化自己

@@ -5,6 +5,7 @@
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IFeatureObject.h"
 #include "..\..\Inc\IPropertyWindow.h"
+#include "..\..\Inc\ICommonFun.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -256,11 +257,12 @@ void CWindowsViewTree::RefreshTreeItem(HTREEITEM hItem)
 
 void CWindowsViewTree::InitShowNewProject()
 {
+	USES_CONVERSION;
 	this->DeleteAllItems();
 	HTREEITEM hRootItem = this->InsertItem(_T("【窗口/面板】"), 1, 1);
 	this->SetItemState(hRootItem, TVIS_BOLD, TVIS_BOLD);
 
-	if (m_pSkinMgr == NULL)
+	if (m_pSkinMgr == NULL || m_pKernelWindow == NULL)
 		return;
 
 	ONE_RESOURCE_PROP_MAP* pWndPropMap = m_pSkinMgr->BuilderGetWindowPropMap();
@@ -273,5 +275,18 @@ void CWindowsViewTree::InitShowNewProject()
 		if (pPropWnd == NULL)
 			continue;
 
+		IWindowBase* pWndBase = m_pKernelWindow->BuilderCreatePropetryWindow(pPropWnd);
+		if (pWndBase == NULL)
+			continue;
+
+		HTREEITEM hWindowItem = this->InsertItem(A2W(pWndBase->GetObjectName()), 0, 0, hRootItem);
+		if (hWindowItem == NULL)
+			continue;
+
+
 	}
+
+	// 选中并打开根节点
+	this->SelectItem(hRootItem);
+	this->Expand(hRootItem, TVE_EXPAND);
 }
