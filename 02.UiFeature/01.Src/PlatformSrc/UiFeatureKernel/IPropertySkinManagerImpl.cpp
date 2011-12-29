@@ -799,111 +799,9 @@ bool IPropertySkinManagerImpl::GeneralCreateBaseProp(char *pPropType, XmlNode* p
 			if (pPropItem != pPropMap->end())
 				return false;
 
-			IPropertyBase* pBaseProp = NULL;
-			if (lstrcmpiA(pPropType, PROP_TYPE_FONT_NAME) == 0)
-			{
-				IPropertyFont* pProp = new IPropertyFont;
-				if (pProp == NULL)
-					return false;
-				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
-				if (pBaseProp == NULL)
-				{
-					SAFE_DELETE(pProp);
-				}
-			}
-			else if (lstrcmpiA(pPropType, PROP_TYPE_STRING_NAME) == 0)
-			{
-				IPropertyString* pProp = new IPropertyString;
-				if (pProp == NULL)
-					return false;
-				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
-				if (pBaseProp == NULL)
-				{
-					SAFE_DELETE(pProp);
-				}
-			}
-			else if (lstrcmpiA(pPropType, PROP_TYPE_COMBOBOX_NAME) == 0)
-			{
-				IPropertyComboBox* pProp = new IPropertyComboBox;
-				if (pProp == NULL)
-					return false;
-				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
-				if (pBaseProp == NULL)
-				{
-					SAFE_DELETE(pProp);
-				}
-			}
-			else if (lstrcmpiA(pPropType, PROP_TYPE_IMAGE_NAME) == 0)
-			{
-				IPropertyImage* pProp = new IPropertyImage;
-				if (pProp == NULL)
-					return false;
-				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
-				if (pBaseProp == NULL)
-				{
-					SAFE_DELETE(pProp);
-				}
-			}
-			else if (lstrcmpiA(pPropType, PROP_TYPE_CURSOR_NAME) == 0)
-			{
-				IPropertyCursor* pProp = new IPropertyCursor;
-				if (pProp == NULL)
-					return false;
-				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
-				if (pBaseProp == NULL)
-				{
-					SAFE_DELETE(pProp);
-				}
-			}
-			else if (lstrcmpiA(pPropType, PROP_TYPE_COLOR_NAME) == 0)
-			{
-				IPropertyColor* pProp = new IPropertyColor;
-				if (pProp == NULL)
-					return false;
-				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
-				if (pBaseProp == NULL)
-				{
-					SAFE_DELETE(pProp);
-				}
-			}
-			else if (lstrcmpiA(pPropType, PROP_TYPE_BOOL_NAME) == 0)
-			{
-				IPropertyBool* pProp = new IPropertyBool;
-				if (pProp == NULL)
-					return false;
-				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
-				if (pBaseProp == NULL)
-				{
-					SAFE_DELETE(pProp);
-				}
-			}
-			else if (lstrcmpiA(pPropType, PROP_TYPE_INT_NAME) == 0)
-			{
-				IPropertyInt* pProp = new IPropertyInt;
-				if (pProp == NULL)
-					return false;
-				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
-				if (pBaseProp == NULL)
-				{
-					SAFE_DELETE(pProp);
-				}
-			}
-			else if (lstrcmpiA(pPropType, PROP_TYPE_GROUP_NAME) == 0)
-			{
-				IPropertyGroup* pProp = new IPropertyGroup;
-				if (pProp == NULL)
-					return false;
-				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
-				if (pBaseProp == NULL)
-				{
-					SAFE_DELETE(pProp);
-				}
-			}
-			else
-			{
-				return false;
-			}
-
+			string strProp = pPropType;
+			OBJECT_TYPE_ID ObjTypeId = PropStringToType(strProp);
+			IPropertyBase* pBaseProp = CreateEmptyBaseProp(ObjTypeId, psz_id);
 			if (pBaseProp == NULL)
 				return false;
 
@@ -912,8 +810,6 @@ bool IPropertySkinManagerImpl::GeneralCreateBaseProp(char *pPropType, XmlNode* p
 				ReleaseBaseProp(pBaseProp);
 				return false;
 			}
-
-			pPropMap->insert(pair<string, IPropertyBase*>(strObjId, pBaseProp));
 		}
 	}
 
@@ -989,7 +885,7 @@ bool IPropertySkinManagerImpl::GeneralCreateSubProp(XmlNode* pXmlNode, ONE_RESOU
 		return false;
 
 	// 创建一个窗口或者一个控件的所有属性节点的根节点：属性组
-	IPropertyGroup* pCtrlProp = new IPropertyGroup;
+	IPropertyGroup* pCtrlProp = dynamic_cast<IPropertyGroup*>(CreateEmptyBaseProp(OTID_GROUP));
 	if (pCtrlProp == NULL)
 		return false;
 	pCtrlProp->SetObjectId(psz_id);
