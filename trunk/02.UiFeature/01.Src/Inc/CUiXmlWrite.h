@@ -76,7 +76,7 @@ public:
 		if (m_vctChild.size() == 0)
 		{
 			if (m_sText.length() == 0)
-				sRet += " />";
+				sRet += "/>\n";
 			else
 			{
 				sRet += ">";
@@ -95,7 +95,7 @@ public:
 				sRet += m_sText;
 			sRet += "</";
 			sRet += m_sName;
-			sRet += ">";
+			sRet += ">\n";
 		}
 		return sRet;
 	}

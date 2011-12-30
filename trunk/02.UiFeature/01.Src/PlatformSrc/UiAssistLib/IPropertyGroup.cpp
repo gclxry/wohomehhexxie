@@ -44,3 +44,18 @@ void IPropertyGroup::AppendProperty(IPropertyBase* pProperty)
 
 	m_PropVec.push_back(pProperty);
 }
+
+// Ð´Èëxml
+bool IPropertyGroup::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode)
+{
+	if (pParentXmlNode == NULL)
+		return false;
+
+	CUiXmlWriteNode* pPropNode = XmlStrObj.CreateNode(pParentXmlNode, "item");
+	if (pPropNode == NULL)
+		return false;
+
+	pPropNode->AddAttribute(SKIN_OBJECT_ID, GetObjectId());
+	pPropNode->AddAttribute("name", GetObjectName());
+	return true;
+}

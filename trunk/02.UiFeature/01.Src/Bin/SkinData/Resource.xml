@@ -9,8 +9,8 @@
 		</item>
 	</fontbase>
 	<string>
-		<item objid="Window1.string1" name="23423234234235345" counts="3" defaultarea="2" data0="超链接正常状态专用字体" area0="1" data1="sdfgsdg" area1="3" data2="3523452345" area2="4"/>
-		<item objid="Window1.string2" name="Window1.string1" counts="3" defaultarea="2" data0="超链接正常状态专用字体" area0="1" data1="sdfgsdg" area1="3" data2="3523452345" area2="4"/>
+		<item objid="Window1.string1" name="23423234234235345" counts="3" defaultarea="2" data1="超链接正常状态专用字体" area1="1" data2="sdfgsdg" area2="3" data3="3523452345" area3="4"/>
+		<item objid="Window1.string2" name="Window1.string1" counts="3" defaultarea="2" data1="超链接正常状态专用字体" area1="1" data2="sdfgsdg" area2="3" data3="3523452345" area3="4"/>
 	</string>
 	<combobox>
 		<combobox objid="3" name="01.UiTestDlg.g-base.combobox" counts="5" select="3" data0="ABC" data1="abc" data2="123" data3="YUI" data4="*(--)"/>

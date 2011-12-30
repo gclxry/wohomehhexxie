@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "..\..\Inc\IPropertyString.h"
 #include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\ICommonFun.h"
 
 IPropertyString::IPropertyString()
 {
@@ -114,4 +115,41 @@ void IPropertyString::ResetDefaultString()
 
 	string &strString = pStringItem->second;
 	m_StringProp.strDefaultString = strString;
+}
+
+// Ð´Èëxml
+bool IPropertyString::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode)
+{
+	if (pParentXmlNode == NULL)
+		return false;
+
+	CUiXmlWriteNode* pPropNode = XmlStrObj.CreateNode(pParentXmlNode, "item");
+	if (pPropNode == NULL)
+		return false;
+
+	pPropNode->AddAttribute(SKIN_OBJECT_ID, GetObjectId());
+	pPropNode->AddAttribute("name", GetObjectName());
+	AddIntAttrToNode(pPropNode, "counts", m_StringProp.StringMap.size());
+	AddIntAttrToNode(pPropNode, "defaultarea", m_StringProp.nDefaultArea);
+
+	int nNo = 0;
+	for (STRING_MAP::iterator pStringItem = m_StringProp.StringMap.begin(); pStringItem != m_StringProp.StringMap.end(); pStringItem++)
+	{
+		AREA_TYPE areaType = pStringItem->first;
+		string strString = pStringItem->second;
+		if (strString.size() <= 0)
+			continue;
+
+		char pszDataName[MAX_PATH + 1], pszAreaName[MAX_PATH + 1];
+		memset(pszDataName, 0, MAX_PATH + 1);
+		memset(pszAreaName, 0, MAX_PATH + 1);
+		sprintf_s(pszDataName, MAX_PATH, "data%d", nNo);
+		sprintf_s(pszAreaName, MAX_PATH, "area%d", nNo);
+
+		AddIntAttrToNode(pPropNode, pszAreaName, areaType);
+		pPropNode->AddAttribute(pszDataName, strString.c_str());
+		nNo++;
+	}
+
+	return true;
 }

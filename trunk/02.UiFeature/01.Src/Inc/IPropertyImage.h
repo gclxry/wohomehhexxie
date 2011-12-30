@@ -16,6 +16,8 @@ public:
 	virtual bool IsRightData();
 	// 从XML节点读取属性值，并放入属性队列
 	virtual bool ReadPropertyFromXmlNode(XmlNode* pXmlNode);
+	// 写入xml
+	virtual bool AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode);
 
 //////////////////////////////////////////////////////////////////////////
 	// Builder使用函数，即：编辑状态下使用函数
