@@ -17,4 +17,4 @@ bool FileExists(const char *pszFilePath);
 // …Ë÷√IWindowBaseµƒ objectname £¨objectId
 void ResetWindowBaseInfo(IWindowBase *pWndBase);
 
-void AddIntAttrToNode(CNode* pNode, const char* pszAttrName, int nInt);
+void AddIntAttrToNode(CUiXmlWriteNode* pNode, const char* pszAttrName, int nInt);

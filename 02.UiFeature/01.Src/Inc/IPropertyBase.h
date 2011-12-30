@@ -49,7 +49,7 @@ public:
 	// 从XML节点读取属性值，并放入属性队列
 	virtual bool ReadPropertyFromXmlNode(XmlNode* pXmlNode);
 	// 写入xml
-	virtual bool AppendToXmlNode(CXmlStreamWrite &XmlStrObj, CNode* pParentXmlNode);
+	virtual bool AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode);
 
 	// 关联属性名称
 	virtual const char* GetRelevancyPropName();

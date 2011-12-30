@@ -44,12 +44,12 @@ int IPropertyInt::GetValue()
 }
 
 // –¥»Îxml
-bool IPropertyInt::AppendToXmlNode(CXmlStreamWrite &XmlStrObj, CNode* pParentXmlNode)
+bool IPropertyInt::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode)
 {
 	if (pParentXmlNode == NULL)
 		return false;
 
-	CNode* pPropNode = XmlStrObj.CreateNode("item");
+	CUiXmlWriteNode* pPropNode = XmlStrObj.CreateNode("item");
 	if (pPropNode == NULL)
 		return false;
 

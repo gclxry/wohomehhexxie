@@ -1302,9 +1302,9 @@ bool IPropertySkinManagerImpl::BuilderSaveSkin(char *pszSkinDir, char *pszSkinNa
 
 bool IPropertySkinManagerImpl::SaveLayoutXml(const char *pszSavePath, string &strXmlData)
 {
-	CXmlStreamWrite XmlStrObj;
+	CUiXmlWrite XmlStrObj;
 
-	CNode* pRootNode = XmlStrObj.CreateNode("layout");
+	CUiXmlWriteNode* pRootNode = XmlStrObj.CreateNode("layout");
 	if (pRootNode == NULL)
 		return false;
 
@@ -1317,7 +1317,7 @@ bool IPropertySkinManagerImpl::SaveLayoutXml(const char *pszSavePath, string &st
 		if (pPropWnd == NULL)
 			continue;
 
-		CNode* pWndNode = XmlStrObj.CreateNode(pRootNode, "window");
+		CUiXmlWriteNode* pWndNode = XmlStrObj.CreateNode(pRootNode, "window");
 		if (pWndNode == NULL)
 			return false;
 
@@ -1333,7 +1333,7 @@ bool IPropertySkinManagerImpl::SaveLayoutXml(const char *pszSavePath, string &st
 	return true;
 }
 
-bool IPropertySkinManagerImpl::SaveLayoutXml_ChildCtrl(CXmlStreamWrite &XmlStrObj, CNode* pNode, CHILD_CTRL_PROP_VEC* pWndChildVec)
+bool IPropertySkinManagerImpl::SaveLayoutXml_ChildCtrl(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pNode, CHILD_CTRL_PROP_VEC* pWndChildVec)
 {
 	if (pWndChildVec == NULL)
 		return false;
@@ -1344,7 +1344,7 @@ bool IPropertySkinManagerImpl::SaveLayoutXml_ChildCtrl(CXmlStreamWrite &XmlStrOb
 		if (pPropCtrl == NULL)
 			continue;
 
-		CNode* pCtrlNode = XmlStrObj.CreateNode(pNode, "ctrl");
+		CUiXmlWriteNode* pCtrlNode = XmlStrObj.CreateNode(pNode, "ctrl");
 		if (pCtrlNode == NULL)
 			return false;
 
@@ -1373,9 +1373,9 @@ void IPropertySkinManagerImpl::SaveToFile(char *pszFilePath, BYTE *pData, int nD
 
 bool IPropertySkinManagerImpl::SaveResourceXml(const char *pszSavePath, string &strXmlData)
 {
-	CXmlStreamWrite XmlStrObj;
+	CUiXmlWrite XmlStrObj;
 
-	CNode* pRootNode = XmlStrObj.CreateNode("resource");
+	CUiXmlWriteNode* pRootNode = XmlStrObj.CreateNode("resource");
 	if (pRootNode == NULL)
 		return false;
 
@@ -1386,7 +1386,7 @@ bool IPropertySkinManagerImpl::SaveResourceXml(const char *pszSavePath, string &
 			continue;
 
 		string strPropType = pPropTypeItem->first;
-		CNode* pPropTypeNode = XmlStrObj.CreateNode(pRootNode, strPropType.c_str());
+		CUiXmlWriteNode* pPropTypeNode = XmlStrObj.CreateNode(pRootNode, strPropType.c_str());
 		if (pPropTypeNode == NULL)
 			return false;
 
