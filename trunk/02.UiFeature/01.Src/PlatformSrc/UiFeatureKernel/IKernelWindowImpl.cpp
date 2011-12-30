@@ -100,6 +100,9 @@ IWindowBase* IKernelWindowImpl::InitFeatureSkin(HWND hWnd, char *pszSkinPath, ch
 // 创建一个Builder使用的空的窗口
 IWindowBase* IKernelWindowImpl::BuilderCreateEmptyWindow()
 {
+	if (m_pSkinMgr == NULL)
+		return NULL;
+
 	IPropertyGroup *pWindowPropGroup = dynamic_cast<IPropertyGroup*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_GROUP));
 	if (pWindowPropGroup == NULL)
 		return NULL;
@@ -133,6 +136,7 @@ IWindowBase* IKernelWindowImpl::BuilderCreateEmptyWindow()
 
 	// 记录到窗口队列中
 	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>((HWND)m_nBuilderHwnd++, pWndBaseImpl));
+	m_pSkinMgr->GetAllWindowPropMap()->insert(pair<string, IPropertyBase*>(pWndBase->GetObjectId(), pWindowPropGroup));
 	return pWndBase;
 }
 
@@ -158,6 +162,7 @@ IWindowBase* IKernelWindowImpl::BuilderCreatePropetryWindow(IPropertyWindow *pPr
 
 	// 记录到窗口队列中
 	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>((HWND)m_nBuilderHwnd++, pWndBaseImpl));
+	m_pSkinMgr->GetAllWindowPropMap()->insert(pair<string, IPropertyBase*>(pWndBase->GetObjectId(), pWndBase->GetWindowProp()->GetWindowPropetryBaseGroup()));
 	return pWndBase;
 }
 

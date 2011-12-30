@@ -60,8 +60,9 @@ IPropertySkinManagerImpl::~IPropertySkinManagerImpl(void)
 void IPropertySkinManagerImpl::ReleaseSkinManagerPropetry()
 {
 	ReleaseLayoutMap();
-	ReleasePropMapItem(&m_AllWindowPropMap);
-	ReleasePropMap(m_AllCtrlPropMap);
+	// 以下两个队列不需要释放，两个队列中所有内容均在 m_AllPropMap 被自动释放
+//	ReleasePropMapItem(&m_AllWindowPropMap);
+//	ReleasePropMap(m_AllCtrlPropMap);
 	ReleasePropMap(m_AllPropMap);
 }
 
@@ -1460,4 +1461,9 @@ bool IPropertySkinManagerImpl::SaveWindowsXml_GroupProp(CUiXmlWrite &XmlStrObj, 
 	}
 
 	return true;
+}
+
+ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::GetAllWindowPropMap()
+{
+	return &m_AllWindowPropMap;
 }
