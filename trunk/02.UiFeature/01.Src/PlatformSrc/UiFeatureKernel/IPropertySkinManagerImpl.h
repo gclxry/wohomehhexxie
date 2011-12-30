@@ -2,7 +2,7 @@
 #pragma once
 #include "..\..\Inc\IPropertySkinManager.h"
 #include "..\..\Inc\IPropertyWindow.h"
-#include "..\..\Inc\IZipFileList.h"
+#include "ZipFileList.h"
 #include "..\..\Inc\IPropertyGroup.h"
 #include "..\..\Inc\CUiXmlWrite.h"
 
@@ -59,8 +59,6 @@ private:
 //////////////////////////////////////////////////////////////////////////
 	// 初始化皮肤包
 	bool InitSkinPackage(const char *pszSkinPath);
-	// 加载zip文件
-	void LoadZipDll();
 	void ResetBaseObjectId(int nObjectId);
 
 //////////////////////////////////////////////////////////////////////////
@@ -127,8 +125,7 @@ private:
 	ONE_RESOURCE_PROP_MAP* m_pColorPropMap;
 
 	// zip文件
-	IZipFileList *m_pZipFile;
-	HMODULE m_hZipModule;
+	CZipFileList *m_pZipFile;
 
 	AREA_TYPE m_AreaType;
 

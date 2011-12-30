@@ -48,7 +48,7 @@ IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
 	m_nEmptyObjectId = 1;
 	m_AreaType = AT_CN;
 
-	LoadZipDll();
+	m_pZipFile = CZipFileList::GetInstance();
 }
 
 IPropertySkinManagerImpl::~IPropertySkinManagerImpl(void)
@@ -59,8 +59,6 @@ IPropertySkinManagerImpl::~IPropertySkinManagerImpl(void)
 // 清空属性队列
 void IPropertySkinManagerImpl::ReleaseSkinManagerPropetry()
 {
-	SAFE_FREE_LIBRARY(m_hZipModule);
-
 	ReleaseLayoutMap();
 	ReleasePropMapItem(&m_AllWindowPropMap);
 	ReleasePropMap(m_AllCtrlPropMap);
@@ -267,24 +265,6 @@ void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
 	}
 
 	SAFE_DELETE(pCtrlProp);
-}
-
-// 加载zip文件
-void IPropertySkinManagerImpl::LoadZipDll()
-{
-	m_pZipFile = NULL;
-	m_hZipModule = NULL;
-
-	string strPath = PathHelper(NAME_ZIP_DLL);
-	m_hZipModule = ::LoadLibraryA(strPath.c_str());
-	if (m_hZipModule == NULL)
-		return;
-
-	GETZIPFILEINTERFACE GetZip = (GETZIPFILEINTERFACE)::GetProcAddress(m_hZipModule, "GetZipFileInterface");
-	if (GetZip == NULL)
-		return;
-
-	m_pZipFile = GetZip();
 }
 
 // 创建一个属性，并将此属性放入队列

@@ -310,6 +310,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="01.Zip"
+				>
+				<File
+					RelativePath=".\ZipFileList.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ZipFileList.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="03.整个皮肤文件的属性管理"
