@@ -1,1 +1,71 @@
-<resource><bool><item objid="window1.group2.group9.bool10" name="CanFullScreen" data="0" /><item objid="window1.group2.group9.bool11" name="CanMiniSize" data="0" /><item objid="window1.group15.bool16" name="Enable" data="0" /><item objid="window1.group17.bool18" name="Enable" data="0" /><item objid="window23.group24.bool28" name="Visible" data="0" /><item objid="window23.group24.bool29" name="LayeredWindow" data="0" /><item objid="window23.group24.bool30" name="TopMost" data="0" /><item objid="window23.group24.group31.bool32" name="CanFullScreen" data="0" /><item objid="window23.group24.group31.bool33" name="CanMiniSize" data="0" /><item objid="window23.group37.bool38" name="Enable" data="0" /><item objid="window23.group39.bool40" name="Enable" data="0" /><item objid="window1.group2.bool6" name="Visible" data="0" /><item objid="window1.group2.bool7" name="LayeredWindow" data="0" /><item objid="window1.group2.bool8" name="TopMost" data="0" /></bool><group /><int><item objid="window1.group12.int13" name="Width" data="0" /><item objid="window1.group12.int14" name="Height" data="0" /><item objid="window1.group17.int19" name="LeftSpace" data="0" /><item objid="window1.group17.int20" name="RightSpace" data="0" /><item objid="window1.group17.int21" name="TopSpace" data="0" /><item objid="window1.group17.int22" name="BottomSpace" data="0" /><item objid="window23.group34.int35" name="Width" data="0" /><item objid="window23.group34.int36" name="Height" data="0" /><item objid="window23.group39.int41" name="LeftSpace" data="0" /><item objid="window23.group39.int42" name="RightSpace" data="0" /><item objid="window23.group39.int43" name="TopSpace" data="0" /><item objid="window23.group39.int44" name="BottomSpace" data="0" /></int><string /></resource>
+<resource><bool><item objid="window1.group2.group9.bool10" name="CanFullScreen" data="0"/>
+<item objid="window1.group2.group9.bool11" name="CanMiniSize" data="0"/>
+<item objid="window1.group15.bool16" name="Enable" data="0"/>
+<item objid="window1.group17.bool18" name="Enable" data="0"/>
+<item objid="window23.group24.bool28" name="Visible" data="0"/>
+<item objid="window23.group24.bool29" name="LayeredWindow" data="0"/>
+<item objid="window23.group24.bool30" name="TopMost" data="0"/>
+<item objid="window23.group24.group31.bool32" name="CanFullScreen" data="0"/>
+<item objid="window23.group24.group31.bool33" name="CanMiniSize" data="0"/>
+<item objid="window23.group37.bool38" name="Enable" data="0"/>
+<item objid="window23.group39.bool40" name="Enable" data="0"/>
+<item objid="window45.group46.bool50" name="Visible" data="0"/>
+<item objid="window45.group46.bool51" name="LayeredWindow" data="0"/>
+<item objid="window45.group46.bool52" name="TopMost" data="0"/>
+<item objid="window45.group46.group53.bool54" name="CanFullScreen" data="0"/>
+<item objid="window45.group46.group53.bool55" name="CanMiniSize" data="0"/>
+<item objid="window45.group59.bool60" name="Enable" data="0"/>
+<item objid="window45.group61.bool62" name="Enable" data="0"/>
+<item objid="window1.group2.bool6" name="Visible" data="0"/>
+<item objid="window1.group2.bool7" name="LayeredWindow" data="0"/>
+<item objid="window1.group2.bool8" name="TopMost" data="0"/>
+</bool>
+<group><item objid="window1" name="新建窗口"/>
+<item objid="window1.group2.group9" name="SysBase"/>
+<item objid="window1.group12" name="Size"/>
+<item objid="window1.group15" name="Drag"/>
+<item objid="window1.group17" name="Stretching"/>
+<item objid="window23" name=""/>
+<item objid="window23.group24" name="WindowBase"/>
+<item objid="window1.group2" name="WindowBase"/>
+<item objid="window23.group24.group31" name="SysBase"/>
+<item objid="window23.group34" name="Size"/>
+<item objid="window23.group37" name="Drag"/>
+<item objid="window23.group39" name="Stretching"/>
+<item objid="window45" name=""/>
+<item objid="window45.group46" name="WindowBase"/>
+<item objid="window45.group46.group53" name="SysBase"/>
+<item objid="window45.group56" name="Size"/>
+<item objid="window45.group59" name="Drag"/>
+<item objid="window45.group61" name="Stretching"/>
+</group>
+<int><item objid="window1.group12.int13" name="Width" data="0"/>
+<item objid="window1.group12.int14" name="Height" data="0"/>
+<item objid="window1.group17.int19" name="LeftSpace" data="0"/>
+<item objid="window1.group17.int20" name="RightSpace" data="0"/>
+<item objid="window1.group17.int21" name="TopSpace" data="0"/>
+<item objid="window1.group17.int22" name="BottomSpace" data="0"/>
+<item objid="window23.group34.int35" name="Width" data="0"/>
+<item objid="window23.group34.int36" name="Height" data="0"/>
+<item objid="window23.group39.int41" name="LeftSpace" data="0"/>
+<item objid="window23.group39.int42" name="RightSpace" data="0"/>
+<item objid="window23.group39.int43" name="TopSpace" data="0"/>
+<item objid="window23.group39.int44" name="BottomSpace" data="0"/>
+<item objid="window45.group56.int57" name="Width" data="0"/>
+<item objid="window45.group56.int58" name="Height" data="0"/>
+<item objid="window45.group61.int63" name="LeftSpace" data="0"/>
+<item objid="window45.group61.int64" name="RightSpace" data="0"/>
+<item objid="window45.group61.int65" name="TopSpace" data="0"/>
+<item objid="window45.group61.int66" name="BottomSpace" data="0"/>
+</int>
+<string><item objid="window23.group24.string25" name="Type" counts="1" defaultarea="1" area0="1" data0="window"/>
+<item objid="window23.group24.string26" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window23"/>
+<item objid="window23.group24.string27" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建窗口/面板"/>
+<item objid="window1.group2.string3" name="Type" counts="1" defaultarea="1" area0="1" data0="window"/>
+<item objid="window1.group2.string4" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window1"/>
+<item objid="window45.group46.string47" name="Type" counts="1" defaultarea="1" area0="1" data0="window"/>
+<item objid="window45.group46.string48" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window45"/>
+<item objid="window45.group46.string49" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建窗口/面板"/>
+<item objid="window1.group2.string5" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建窗口"/>
+</string>
+</resource>

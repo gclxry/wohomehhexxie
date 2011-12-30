@@ -52,3 +52,19 @@ bool IPropertyImage::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 
 	return true;
 }
+
+// Ð´Èëxml
+bool IPropertyImage::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode)
+{
+	if (pParentXmlNode == NULL)
+		return false;
+
+	CUiXmlWriteNode* pPropNode = XmlStrObj.CreateNode(pParentXmlNode, "item");
+	if (pPropNode == NULL)
+		return false;
+
+	pPropNode->AddAttribute(SKIN_OBJECT_ID, GetObjectId());
+	pPropNode->AddAttribute("name", GetObjectName());
+	pPropNode->AddAttribute("imagebasename", GetRelevancyPropName());
+	return true;
+}

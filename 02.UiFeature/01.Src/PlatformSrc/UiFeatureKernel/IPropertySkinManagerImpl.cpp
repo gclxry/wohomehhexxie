@@ -1248,11 +1248,15 @@ bool IPropertySkinManagerImpl::BuilderSaveSkin(char *pszSkinDir, char *pszSkinNa
 	string strControlsXmlPath = strDir;
 	strControlsXmlPath += CONTROLS_XML_NAME;
 	string strControlsXmlData("");
+	if (!SaveControlsXml(strControlsXmlPath.c_str(), strControlsXmlData))
+		return false;
 
 	// 保存 Windows.xml
 	string strWindowsXmlPath = strDir;
 	strWindowsXmlPath += WINDOWS_XML_NAME;
 	string strWindowsXmlData("");
+	if (!SaveWindowsXml(strWindowsXmlPath.c_str(), strWindowsXmlData))
+		return false;
 
 	// 保存 Layout.xml
 	string strLayoutXmlPath = strDir;
@@ -1265,6 +1269,7 @@ bool IPropertySkinManagerImpl::BuilderSaveSkin(char *pszSkinDir, char *pszSkinNa
 	strZipFile += pszSkinName;
 	strZipFile += NAME_SKIN_FILE_EX_NAME;
 	
+	// 写入zip文件
 	if (!m_pZipFile->WriteZipInit(pszSkinDir, (char*)strZipFile.c_str()))
 		return false;
 
@@ -1383,5 +1388,76 @@ bool IPropertySkinManagerImpl::SaveResourceXml(const char *pszSavePath, string &
 	strXmlData = XmlStrObj.ToXmlString();
 
 	SaveToFile((char*)pszSavePath, (BYTE*)strXmlData.c_str(), strXmlData.size());
+	return true;
+}
+
+bool IPropertySkinManagerImpl::SaveControlsXml(const char *pszSavePath, string &strXmlData)
+{
+	return true;
+}
+
+bool IPropertySkinManagerImpl::SaveWindowsXml(const char *pszSavePath, string &strXmlData)
+{
+	CUiXmlWrite XmlStrObj;
+
+	CUiXmlWriteNode* pRootNode = XmlStrObj.CreateNode("windows");
+	if (pRootNode == NULL)
+		return false;
+
+	for (ONE_RESOURCE_PROP_MAP::iterator pWndItem = m_AllWindowPropMap.begin(); pWndItem != m_AllWindowPropMap.end(); pWndItem++)
+	{
+		string strObjId = pWndItem->first;
+		IWindowBase* pPropBase = dynamic_cast<IWindowBase*>(pWndItem->second);
+		if (pPropBase == NULL)
+			continue;
+
+		IPropertyGroup *pWndPropGroup = pPropBase->GetWindowProp()->GetWindowPropetryBaseGroup();
+		if (pWndPropGroup == NULL)
+			return false;
+
+		CUiXmlWriteNode* pWindowNode = XmlStrObj.CreateNode(pRootNode, pPropBase->GetObjectType());
+		if (pWindowNode == NULL)
+			return false;
+		pWindowNode->AddAttribute(SKIN_OBJECT_ID, pWndPropGroup->GetObjectId());
+
+		SaveWindowsXml_GroupProp(XmlStrObj, pWindowNode, pWndPropGroup);
+	}
+	strXmlData = XmlStrObj.ToXmlString();
+
+	SaveToFile((char*)pszSavePath, (BYTE*)strXmlData.c_str(), strXmlData.size());
+	return true;
+}
+
+bool IPropertySkinManagerImpl::SaveWindowsXml_GroupProp(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentNode, IPropertyGroup *pPropGroup)
+{
+	if (pParentNode == NULL || pPropGroup == NULL)
+		return false;
+
+	GROUP_PROP_VEC* pPropVec = pPropGroup->GetPropVec();
+	if (pPropVec == NULL)
+		return false;
+
+	for (GROUP_PROP_VEC::iterator pPropItem = pPropVec->begin(); pPropItem != pPropVec->end(); pPropItem++)
+	{
+		IPropertyBase* pProp = *pPropItem;
+		if (pProp == NULL)
+			continue;
+
+		CUiXmlWriteNode* pPropNode = XmlStrObj.CreateNode(pParentNode, pProp->GetObjectType());
+		if (pPropNode == NULL)
+			return false;
+		pPropNode->AddAttribute(SKIN_OBJECT_ID, pProp->GetObjectId());
+
+		if (pProp->GetObjectTypeId() == OTID_GROUP)
+		{
+			IPropertyGroup *pNextPropGroup = dynamic_cast<IPropertyGroup*>(pProp);
+			if (pNextPropGroup == NULL)
+				continue;
+
+			if (!SaveWindowsXml_GroupProp(XmlStrObj, pPropNode, pNextPropGroup))
+				return false;
+		}
+	}
+
 	return true;
 }

@@ -74,16 +74,23 @@ private:
 	void SetPropetryBaseRelevancy();
 	void SetPropRelevancy(ONE_RESOURCE_PROP_MAP* pFromMap, ONE_RESOURCE_PROP_MAP* pToMap);
 
+	bool SaveResourceXml(const char *pszSavePath, string &strXmlData);
+
 //////////////////////////////////////////////////////////////////////////
 	// Controls.xml 相关
 	bool TranslateControlsXml(ZIP_FILE *pControlsXml);
 	bool GeneralCreateSubProp(XmlNode* pXmlNode, ONE_RESOURCE_PROP_MAP* pCtrlPropMap);
 	bool AppendBasePropToGroup(IPropertyGroup *pGroup, XmlNode* pXmlNode);
 
+	bool SaveControlsXml(const char *pszSavePath, string &strXmlData);
+
 //////////////////////////////////////////////////////////////////////////
 	// Windows.xml 相关
 	// 解析Windows.xml
 	bool TranslateWindowsXml(ZIP_FILE *pWindowsXml);
+
+	bool SaveWindowsXml(const char *pszSavePath, string &strXmlData);
+	bool SaveWindowsXml_GroupProp(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentNode, IPropertyGroup *pPropGroup);
 
 //////////////////////////////////////////////////////////////////////////
 	// Layout.xml 相关
@@ -95,8 +102,6 @@ private:
 
 	bool SaveLayoutXml(const char *pszSavePath, string &strXmlData);
 	bool SaveLayoutXml_ChildCtrl(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pNode, CHILD_CTRL_PROP_VEC* pWndChildVec);
-
-	bool SaveResourceXml(const char *pszSavePath, string &strXmlData);
 
 	void SaveToFile(char *pszFilePath, BYTE *pData, int nDataLen);
 private:
