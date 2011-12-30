@@ -3,6 +3,7 @@
 #include "IFeatureObject.h"
 #include "IPropertySkinManager.h"
 #include "IWindowBase.h"
+#include "CUiXmlWrite.h"
 
 string PathHelper(char *pszFileName);
 
@@ -15,3 +16,5 @@ bool FileExists(const char *pszFilePath);
 
 // …Ë÷√IWindowBaseµƒ objectname £¨objectId
 void ResetWindowBaseInfo(IWindowBase *pWndBase);
+
+void AddIntAttrToNode(CNode* pNode, const char* pszAttrName, int nInt);

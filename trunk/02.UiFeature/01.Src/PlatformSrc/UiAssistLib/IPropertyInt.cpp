@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "..\..\Inc\IPropertyInt.h"
 #include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\ICommonFun.h"
 
 IPropertyInt::IPropertyInt()
 {
@@ -40,4 +41,21 @@ void IPropertyInt::SetValue(int nValue)
 int IPropertyInt::GetValue()
 {
 	return m_nIntData;
+}
+
+// Ð´Èëxml
+bool IPropertyInt::AppendToXmlNode(CXmlStreamWrite &XmlStrObj, CNode* pParentXmlNode)
+{
+	if (pParentXmlNode == NULL)
+		return false;
+
+	CNode* pPropNode = XmlStrObj.CreateNode("item");
+	if (pPropNode == NULL)
+		return false;
+
+	pPropNode->AddAttribute(SKIN_OBJECT_ID, GetObjectId());
+	pPropNode->AddAttribute("name", GetObjectName());
+	AddIntAttrToNode(pPropNode, "data", m_nIntData);
+
+	return true;
 }
