@@ -1,24 +1,24 @@
 
 #include "stdafx.h"
-#include "IZipFileListImpl.h"
+#include "ZipFileList.h"
 #include ".\zip\inc\zlib.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 
 #pragma comment(lib, "./zip/lib/zlib.lib")
 #pragma comment(lib, "./zip/lib/Unzip.lib")
 
-IZipFileList *GetZipFileInterface()
+CZipFileList *GetZipFileInterface()
 {
-	return IZipFileListImpl::GetInstance();
+	return CZipFileList::GetInstance();
 }
 
-IZipFileListImpl* IZipFileListImpl::GetInstance()
+CZipFileList* CZipFileList::GetInstance()
 {
-	static IZipFileListImpl _ZipFileListInstance;
+	static CZipFileList _ZipFileListInstance;
 	return &_ZipFileListInstance;
 }
 
-IZipFileListImpl::IZipFileListImpl()
+CZipFileList::CZipFileList()
 {
 	m_ZipFileMap.clear();
 	m_NoCompressFileVec.clear();
@@ -28,12 +28,12 @@ IZipFileListImpl::IZipFileListImpl()
 	m_NoCompressFileVec.push_back(".gif");
 }
 
-IZipFileListImpl::~IZipFileListImpl()
+CZipFileList::~CZipFileList()
 {
 	Clear();
 }
 
-void IZipFileListImpl::Clear()
+void CZipFileList::Clear()
 {
 	for (ZIP_FILE_MAP::iterator pZipItem = m_ZipFileMap.begin(); pZipItem != m_ZipFileMap.end(); pZipItem++)
 	{
@@ -47,7 +47,7 @@ void IZipFileListImpl::Clear()
 	m_ZipFileMap.clear();
 }
 
-void IZipFileListImpl::RemoveFile(ZIP_FILE *pRemove)
+void CZipFileList::RemoveFile(ZIP_FILE *pRemove)
 {
 	if (m_ZipFileMap.size() <= 0 || pRemove == NULL)
 		return;
@@ -69,7 +69,7 @@ void IZipFileListImpl::RemoveFile(ZIP_FILE *pRemove)
 }
 
 // 初始化zip文件，pSrcFileDir：需要压缩的源文件目录
-bool IZipFileListImpl::WriteZipInit(char *pSrcFileDir, char *pSaveZipFile)
+bool CZipFileList::WriteZipInit(char *pSrcFileDir, char *pSaveZipFile)
 {
 	Clear();
 	if (pSrcFileDir == NULL || pSaveZipFile == NULL || strlen(pSrcFileDir) <= 0 || strlen(pSaveZipFile) <= 0)
@@ -86,7 +86,7 @@ bool IZipFileListImpl::WriteZipInit(char *pSrcFileDir, char *pSaveZipFile)
 }
 
 // 写入一段buffer
-bool IZipFileListImpl::WriteZipAppendBuffer(char *pFilePath, BYTE *pBuffer, int nBufferLen)
+bool CZipFileList::WriteZipAppendBuffer(char *pFilePath, BYTE *pBuffer, int nBufferLen)
 {
 	if (pFilePath == NULL || strlen(pFilePath) <= 0 || pBuffer == NULL)
 		return false;
@@ -145,7 +145,7 @@ bool IZipFileListImpl::WriteZipAppendBuffer(char *pFilePath, BYTE *pBuffer, int 
 }
 
 // 写入一个文件，pFilePath：必须是相对于WriteZipInit函数的pSrcFileDir路径的相对路径
-bool IZipFileListImpl::WriteZipAppendFile(char *pFilePath)
+bool CZipFileList::WriteZipAppendFile(char *pFilePath)
 {
 	if (pFilePath == NULL || strlen(pFilePath) <= 0 || m_strSrcFileDir.size() <= 0 || m_strSaveZipFile.size() <= 0)
 		return false;
@@ -246,7 +246,7 @@ bool IZipFileListImpl::WriteZipAppendFile(char *pFilePath)
 	return true;
 }
 
-bool IZipFileListImpl::WriteZipEnd()
+bool CZipFileList::WriteZipEnd()
 {
 	if (m_ZipFileMap.size() <= 0)
 		return false;
@@ -334,7 +334,7 @@ bool IZipFileListImpl::WriteZipEnd()
 
 //////////////////////////////////////////////////////////////////////////
 // 读取zip文件
-bool IZipFileListImpl::ReadZipFile(const char *pZipFilePath)
+bool CZipFileList::ReadZipFile(const char *pZipFilePath)
 {
 	Clear();
 	if (pZipFilePath == NULL || strlen(pZipFilePath) <= 0)
@@ -465,12 +465,12 @@ bool IZipFileListImpl::ReadZipFile(const char *pZipFilePath)
 }
 
 // 取得解压缩文件后的文件列表
-ZIP_FILE_MAP* IZipFileListImpl::GetUnZipFileMap()
+ZIP_FILE_MAP* CZipFileList::GetUnZipFileMap()
 {
 	return &m_ZipFileMap;
 }
 
-ZIP_FILE* IZipFileListImpl::FindUnZipFile(char *pFileName)
+ZIP_FILE* CZipFileList::FindUnZipFile(char *pFileName)
 {
 	if (pFileName == NULL || strlen(pFileName) <= 0)
 		return NULL;
@@ -483,7 +483,7 @@ ZIP_FILE* IZipFileListImpl::FindUnZipFile(char *pFileName)
 	return (pZipItem->second);
 }
 
-void IZipFileListImpl::TestWriteUnZipFile(char *pszOutDir)
+void CZipFileList::TestWriteUnZipFile(char *pszOutDir)
 {
 	if (pszOutDir == NULL || strlen(pszOutDir) <= 0)
 		return;
@@ -524,7 +524,7 @@ void IZipFileListImpl::TestWriteUnZipFile(char *pszOutDir)
 }
 
 // 通过扩展名来判断文件是否需要加密
-bool IZipFileListImpl::CheckFileNeedCompress(char *pFileName)
+bool CZipFileList::CheckFileNeedCompress(char *pFileName)
 {
 	if (pFileName == NULL)
 		return false;
