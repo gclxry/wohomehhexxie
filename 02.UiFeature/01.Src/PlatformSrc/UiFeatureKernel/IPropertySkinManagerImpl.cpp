@@ -540,23 +540,23 @@ bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 	strUfd += SKIN_DATA_DIR;
 	strUfd += "skintest.ufd";
 
-	m_pZipFile->InitWriteZip((char*)strDir.c_str(), (char*)strUfd.c_str());
-	m_pZipFile->WriteToZip(WINDOWS_XML_NAME);
-	m_pZipFile->WriteToZip(RESOURCE_XML_NAME);
-	m_pZipFile->WriteToZip(LAYOUT_XML_NAME);
-	m_pZipFile->WriteToZip(CONTROLS_XML_NAME);
-	m_pZipFile->WriteToZip("bk.PNG");
-	m_pZipFile->WriteToZip("V5.Dlg.Close.png");
-	m_pZipFile->WriteToZip("V5.Dlg.Mini.png");
-	m_pZipFile->WriteToZip("V5.Logon.ACDC.png");
-	m_pZipFile->WriteToZip("V5.Logon.Set.png");
-	m_pZipFile->WriteToZip("V5.LogonBiz.01.jpg");
-	m_pZipFile->WriteToZip("V5.LogonBiz.02.png");
-	m_pZipFile->WriteToZip("下拉2标注.png");
-	m_pZipFile->WriteToZip("下拉菜单效果图_MarkMan.png");
-	m_pZipFile->WriteToZip("切图副本.png");
-	m_pZipFile->WriteToZip("最新修改.png");
-	m_pZipFile->EndWriteZip();
+	m_pZipFile->WriteZipInit((char*)strDir.c_str(), (char*)strUfd.c_str());
+	m_pZipFile->WriteZipAppendFile(WINDOWS_XML_NAME);
+	m_pZipFile->WriteZipAppendFile(RESOURCE_XML_NAME);
+	m_pZipFile->WriteZipAppendFile(LAYOUT_XML_NAME);
+	m_pZipFile->WriteZipAppendFile(CONTROLS_XML_NAME);
+	m_pZipFile->WriteZipAppendFile("bk.PNG");
+	m_pZipFile->WriteZipAppendFile("V5.Dlg.Close.png");
+	m_pZipFile->WriteZipAppendFile("V5.Dlg.Mini.png");
+	m_pZipFile->WriteZipAppendFile("V5.Logon.ACDC.png");
+	m_pZipFile->WriteZipAppendFile("V5.Logon.Set.png");
+	m_pZipFile->WriteZipAppendFile("V5.LogonBiz.01.jpg");
+	m_pZipFile->WriteZipAppendFile("V5.LogonBiz.02.png");
+	m_pZipFile->WriteZipAppendFile("下拉2标注.png");
+	m_pZipFile->WriteZipAppendFile("下拉菜单效果图_MarkMan.png");
+	m_pZipFile->WriteZipAppendFile("切图副本.png");
+	m_pZipFile->WriteZipAppendFile("最新修改.png");
+	m_pZipFile->WriteZipEnd();
 //////////////////////////////////////////////////////////////////////////
 
 	// 从皮肤文件中初始化皮肤队列 TBD
@@ -1250,7 +1250,7 @@ ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::BuilderGetWindowPropMap()
 // 保存皮肤包
 bool IPropertySkinManagerImpl::BuilderSaveSkin(char *pszSkinDir, char *pszSkinName)
 {
-	if (pszSkinDir == NULL || pszSkinName == NULL)
+	if (pszSkinDir == NULL || pszSkinName == NULL || m_pZipFile == NULL)
 		return false;
 
 	string strDir = pszSkinDir;
@@ -1260,32 +1260,51 @@ bool IPropertySkinManagerImpl::BuilderSaveSkin(char *pszSkinDir, char *pszSkinNa
 	// 保存 Resource.xml
 	string strResourceXmlPath = strDir;
 	strResourceXmlPath += RESOURCE_XML_NAME;
+	string strResourceXmlData("");
+	if (!SaveResourceXml(strResourceXmlPath.c_str(), strResourceXmlData))
+		return false;
 
 	// 保存 Controls.xml
 	string strControlsXmlPath = strDir;
 	strControlsXmlPath += CONTROLS_XML_NAME;
+	string strControlsXmlData("");
 
 	// 保存 Windows.xml
 	string strWindowsXmlPath = strDir;
 	strWindowsXmlPath += WINDOWS_XML_NAME;
+	string strWindowsXmlData("");
 
 	// 保存 Layout.xml
 	string strLayoutXmlPath = strDir;
 	strLayoutXmlPath += LAYOUT_XML_NAME;
 	string strLayoutXmlData("");
 	if (!SaveLayoutXml(strLayoutXmlPath.c_str(), strLayoutXmlData))
-	{
 		return false;
-	}
 
-	return true;
+	string strZipFile(strDir);
+	strZipFile += pszSkinName;
+	strZipFile += NAME_SKIN_FILE_EX_NAME;
+	
+	if (!m_pZipFile->WriteZipInit(pszSkinDir, (char*)strZipFile.c_str()))
+		return false;
+
+	if (!m_pZipFile->WriteZipAppendBuffer(RESOURCE_XML_NAME, (BYTE*)strResourceXmlData.c_str(), strResourceXmlData.size()))
+		return false;
+	if (!m_pZipFile->WriteZipAppendBuffer(CONTROLS_XML_NAME, (BYTE*)strControlsXmlData.c_str(), strControlsXmlData.size()))
+		return false;
+	if (!m_pZipFile->WriteZipAppendBuffer(WINDOWS_XML_NAME, (BYTE*)strWindowsXmlData.c_str(), strWindowsXmlData.size()))
+		return false;
+	if (!m_pZipFile->WriteZipAppendBuffer(LAYOUT_XML_NAME, (BYTE*)strLayoutXmlData.c_str(), strLayoutXmlData.size()))
+		return false;
+
+	return m_pZipFile->WriteZipEnd();
 }
 
 bool IPropertySkinManagerImpl::SaveLayoutXml(const char *pszSavePath, string &strXmlData)
 {
-	CXmlStreamWrite LayoutXmlStr;
+	CXmlStreamWrite XmlStrObj;
 
-	CNode* pRootNode = LayoutXmlStr.CreateNode("layout");
+	CNode* pRootNode = XmlStrObj.CreateNode("layout");
 	if (pRootNode == NULL)
 		return false;
 
@@ -1298,27 +1317,19 @@ bool IPropertySkinManagerImpl::SaveLayoutXml(const char *pszSavePath, string &st
 		if (pPropWnd == NULL)
 			continue;
 
-		CNode* pWndNode = LayoutXmlStr.CreateNode(pRootNode, "window");
+		CNode* pWndNode = XmlStrObj.CreateNode(pRootNode, "window");
 		if (pWndNode == NULL)
 			return false;
 
 		pWndNode->AddAttribute(SKIN_OBJECT_ID, pPropWnd->GetObjectId());
 
 		CHILD_CTRL_PROP_VEC* pWndChildVec = pPropWnd->GetChildControlVec();
-		if (!SaveLayoutXml_ChildCtrl(LayoutXmlStr, pWndNode, pWndChildVec))
+		if (!SaveLayoutXml_ChildCtrl(XmlStrObj, pWndNode, pWndChildVec))
 			return false;
 	}
-	strXmlData = LayoutXmlStr.ToXmlString();
+	strXmlData = XmlStrObj.ToXmlString();
 
-
-	FILE* fp = NULL;
-	fopen_s(&fp, "C:\\a.xml", "w");
-	if (fp)
-	{
-		fwrite(strXmlData.c_str(), strXmlData.size(), 1, fp);
-		fclose(fp);
-	}
-
+	SaveToFile((char*)pszSavePath, (BYTE*)strXmlData.c_str(), strXmlData.size());
 	return true;
 }
 
@@ -1355,4 +1366,53 @@ void IPropertySkinManagerImpl::AddIntAttrToNode(CNode* pNode, const char* pszAtt
 	memset(szInt, 0, MAX_PATH);
 	sprintf_s(szInt, MAX_PATH-1, "%d", nInt);	
 	pNode->AddAttribute(pszAttrName, szInt);
+}
+
+void IPropertySkinManagerImpl::SaveToFile(char *pszFilePath, BYTE *pData, int nDataLen)
+{
+	if (pszFilePath == NULL || pData == NULL || nDataLen <= 0)
+		return;
+
+	FILE* fp = NULL;
+	fopen_s(&fp, pszFilePath, "wb");
+	if (fp)
+	{
+		fwrite(pData, nDataLen, 1, fp);
+		fclose(fp);
+	}
+}
+
+bool IPropertySkinManagerImpl::SaveResourceXml(const char *pszSavePath, string &strXmlData)
+{
+	CXmlStreamWrite XmlStrObj;
+
+	CNode* pRootNode = XmlStrObj.CreateNode("resource");
+	if (pRootNode == NULL)
+		return false;
+
+	for (RESOURCE_PROP_MAP::iterator pPropTypeItem = m_AllPropMap.begin(); pPropTypeItem != m_AllPropMap.end(); pPropTypeItem++)
+	{
+		ONE_RESOURCE_PROP_MAP *pPropType = pPropTypeItem->second;
+		if (pPropType == NULL)
+			continue;
+
+		string strPropType = pPropTypeItem->first;
+		CNode* pPropTypeNode = XmlStrObj.CreateNode(pRootNode, strPropType.c_str());
+		if (pPropTypeNode == NULL)
+			return false;
+
+		for (ONE_RESOURCE_PROP_MAP::iterator pPropItem = pPropType->begin(); pPropItem != pPropType->end(); pPropItem++)
+		{
+			IPropertyBase* pPropBase = dynamic_cast<IPropertyBase*>(pPropItem->second);
+			if (pPropBase == NULL)
+				continue;
+
+			if (!pPropBase->AppendToXmlNode(XmlStrObj, pPropTypeNode))
+				return false;
+		}
+	}
+	strXmlData = XmlStrObj.ToXmlString();
+
+	SaveToFile((char*)pszSavePath, (BYTE*)strXmlData.c_str(), strXmlData.size());
+	return true;
 }

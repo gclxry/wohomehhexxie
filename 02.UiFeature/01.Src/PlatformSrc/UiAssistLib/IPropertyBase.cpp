@@ -26,7 +26,7 @@ bool IPropertyBase::IsRightData()
 // 从XML节点读取属性值，并放入属性队列
 bool IPropertyBase::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 {
-	return false;
+	return true;
 }
 
 const char* IPropertyBase::GetRelevancyPropName()
@@ -53,4 +53,9 @@ void IPropertyBase::SetRelevancyProp(IPropertyBase *pszProp)
 		return;
 
 	m_pRelevancyProp = pszProp;
+}
+
+bool IPropertyBase::AppendToXmlNode(CXmlStreamWrite &XmlStrObj, CNode* pParentXmlNode)
+{
+	return true;
 }
