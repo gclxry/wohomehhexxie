@@ -100,8 +100,6 @@ private:
 
 	bool SaveResourceXml(const char *pszSavePath, string &strXmlData);
 
-	void AddIntAttrToNode(CNode* pNode, const char* pszAttrName, int nInt);
-
 	void SaveToFile(char *pszFilePath, BYTE *pData, int nDataLen);
 private:
 	// Æ¤·ôÂ·¾¶

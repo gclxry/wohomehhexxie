@@ -246,3 +246,14 @@ void ResetWindowBaseInfo(IWindowBase *pWndBase)
 		pWndBase->SetObjectId(pWnpPropGroup->GetObjectId());
 	}
 }
+
+void AddIntAttrToNode(CNode* pNode, const char* pszAttrName, int nInt)
+{
+	if (pNode == NULL || pszAttrName == NULL || strlen(pszAttrName) == NULL)
+		return;
+
+	char szInt[MAX_PATH];
+	memset(szInt, 0, MAX_PATH);
+	sprintf_s(szInt, MAX_PATH-1, "%d", nInt);	
+	pNode->AddAttribute(pszAttrName, szInt);
+}

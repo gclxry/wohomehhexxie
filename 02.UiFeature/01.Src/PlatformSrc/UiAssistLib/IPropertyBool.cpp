@@ -41,3 +41,20 @@ bool IPropertyBool::GetValue()
 {
 	return m_bBoolData;
 }
+
+// Ð´Èëxml
+bool IPropertyBool::AppendToXmlNode(CXmlStreamWrite &XmlStrObj, CNode* pParentXmlNode)
+{
+	if (pParentXmlNode == NULL)
+		return false;
+
+	CNode* pPropNode = XmlStrObj.CreateNode("item");
+	if (pPropNode == NULL)
+		return false;
+
+	pPropNode->AddAttribute(SKIN_OBJECT_ID, GetObjectId());
+	pPropNode->AddAttribute("name", GetObjectName());
+	pPropNode->AddAttribute("data", (m_bBoolData ? "1" : "0"));
+
+	return true;
+}

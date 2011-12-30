@@ -1,14 +1,1 @@
-<layout area="1" lastid="100">
-	<window objid="Window1">
-		<ctrl objid="Window1.UiForm9">
-			<ctrl objid="Window1.Button2"/>
-			<ctrl objid="Window1.UiForm9"/>
-			<ctrl objid="Window1.Button2"/>
-		</ctrl>
-		<ctrl objid="Window1.UiForm9">
-			<ctrl objid="Window1.Button2"/>
-			<ctrl objid="Window1.UiForm9"/>
-			<ctrl objid="Window1.Button2"/>
-		</ctrl>
-	</window>
-</layout>
+<layout area="1" lastid="24"><window objid="window1" /></layout>
