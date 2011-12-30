@@ -9,10 +9,16 @@ CPropertyViewCtrl::CPropertyViewCtrl(void)
 	m_pCurrentPropGroup = NULL;
 	m_pKernelWindow = NULL;
 	m_pViewTree = NULL;
+	m_bProjectInitOk = false;
 }
 
 CPropertyViewCtrl::~CPropertyViewCtrl(void)
 {
+}
+
+void CPropertyViewCtrl::SetProjectInitState(bool bInitOk)
+{
+	m_bProjectInitOk = bInitOk;
 }
 
 void CPropertyViewCtrl::Init(IKernelWindow* pKernelWindow, CWindowsViewTree *pViewTree)

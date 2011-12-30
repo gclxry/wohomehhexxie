@@ -24,6 +24,7 @@ public:
 	CPropertyViewCtrl* GetPropetryCtrl();
 
 	void Init(IKernelWindow* pKernelWindow, CWindowsViewTree *pViewTree);
+	void SetProjectInitState(bool bInitOk);
 
 //  Ù–‘
 public:

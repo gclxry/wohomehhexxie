@@ -16,6 +16,7 @@ public:
 	void Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPropCtrl);
 	void Refresh(IPropertyGroup *pRefreshGroup);
 	void InitShowNewProject();
+	void SetProjectInitState(bool bInitOk);
 
 // ÖØÐ´
 protected:
@@ -29,6 +30,7 @@ private:
 	void RefreshTreeItem(HTREEITEM hItem);
 
 private:
+	bool m_bProjectInitOk;
 	IPropertySkinManager *m_pSkinMgr;
 	IKernelWindow* m_pKernelWindow;
 	CPropertyViewCtrl *m_pPropCtrl;

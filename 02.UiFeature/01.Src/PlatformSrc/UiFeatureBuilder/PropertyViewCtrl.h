@@ -25,6 +25,7 @@ public:
 	// 属性发生改变的时候
 	void OnPropertyChanged(CMFCPropertyGridProperty* pProperty);
 	void Init(IKernelWindow* pKernelWindow, CWindowsViewTree *pViewTree);
+	void SetProjectInitState(bool bInitOk);
 
 private:
 	void AppendPropGroup(CMFCPropertyGridProperty* pParentPropGroup, IPropertyGroup *pPropGroup);
@@ -47,6 +48,7 @@ private:
 	void RefreshStringProp(CMFCPropertyGridProperty* pProperty, IPropertyString *pStringProp);
 
 private:
+	bool m_bProjectInitOk;
 	IPropertyGroup* m_pCurrentPropGroup;
 	IKernelWindow* m_pKernelWindow;
 	CWindowsViewTree* m_pViewTree;

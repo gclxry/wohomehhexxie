@@ -81,6 +81,11 @@ LRESULT CPropertiesWnd::OnPropertyChanged(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
+void CPropertiesWnd::SetProjectInitState(bool bInitOk)
+{
+	m_wndPropList.SetProjectInitState(bInitOk);
+}
+
 void CPropertiesWnd::InitPropList()
 {
 	SetPropListFont();

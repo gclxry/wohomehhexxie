@@ -21,6 +21,7 @@ CWindowsViewTree::CWindowsViewTree()
 	m_pSkinMgr = NULL;
 	m_pKernelWindow = NULL;
 	m_pPropCtrl = NULL;
+	m_bProjectInitOk = false;
 }
 
 CWindowsViewTree::~CWindowsViewTree()
@@ -53,6 +54,9 @@ BOOL CWindowsViewTree::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 
 void CWindowsViewTree::OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult)
 {
+	if (!m_bProjectInitOk)
+		return;
+
 	HTREEITEM hItem = this->GetSelectedItem();
 	if (!IS_SAFE_HANDLE(hItem))
 		return;
@@ -69,6 +73,11 @@ void CWindowsViewTree::OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult)
 	}
 
 	*pResult = 0;
+}
+
+void CWindowsViewTree::SetProjectInitState(bool bInitOk)
+{
+	m_bProjectInitOk = bInitOk;
 }
 
 void CWindowsViewTree::Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPropCtrl)
@@ -88,7 +97,7 @@ void CWindowsViewTree::Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPr
 
 void CWindowsViewTree::OnCreateWindowPanel()
 {
-	if (m_pSkinMgr == NULL || m_pKernelWindow == NULL || m_pPropCtrl == NULL)
+	if (!m_bProjectInitOk || m_pSkinMgr == NULL || m_pKernelWindow == NULL || m_pPropCtrl == NULL)
 	{
 		AfxMessageBox(_T("列表没有被初始化"), MB_OK | MB_ICONERROR);
 		return;
@@ -116,6 +125,9 @@ void CWindowsViewTree::OnCreateWindowPanel()
 
 void CWindowsViewTree::OnTvnSelchanged(NMHDR *pNMHDR, LRESULT *pResult)
 {
+	if (!m_bProjectInitOk)
+		return;
+
 	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
 
 	HTREEITEM hItem = this->GetSelectedItem();
