@@ -122,6 +122,11 @@ void CWindowsView::OnSize(UINT nType, int cx, int cy)
 	AdjustLayout();
 }
 
+void CWindowsView::SetProjectInitState(bool bInitOk)
+{
+	m_wndWindowTree.SetProjectInitState(bInitOk);
+}
+
 void CWindowsView::FillClassView()
 {
 /*	m_hRoot = m_wndWindowTree.InsertItem(_T("¡¾´°Ìå-Ãæ°å¡¿"), 0, 0);

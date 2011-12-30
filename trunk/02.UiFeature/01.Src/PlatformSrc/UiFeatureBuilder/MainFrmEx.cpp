@@ -46,6 +46,7 @@ void CMainFrame::InitUiFeatureKernel()
 	m_wndControls.SetControlList(m_pRegControlMap);
 
 	m_bInitOk = true;
+	SetProjectInitState(false);
 }
 
 void CMainFrame::OnFileNew()
@@ -58,8 +59,8 @@ void CMainFrame::OnFileNew()
 	// 关闭现有工程
 	OnFileClose();
 
-	NewSkinDlg.GetNewProjectPath(m_strSkinDir, m_strSkinName);
-	m_strOpenUfpPath.Format(_T("%s\\%s%s"), m_strSkinDir, m_strSkinName, _T(NAME_SKIN_PROJ_EX_NAME));
+	NewSkinDlg.GetNewProjectPath(m_strCurSkinDir, m_strCurSkinName);
+	m_strNewUfpPath.Format(_T("%s\\%s%s"), m_strCurSkinDir, m_strCurSkinName, _T(NAME_SKIN_PROJ_EX_NAME));
 
 	OnFileOpen();
 }
@@ -67,16 +68,28 @@ void CMainFrame::OnFileNew()
 void CMainFrame::OnFileOpen()
 {
 	USES_CONVERSION;
-	OnFileClose();
 
-	if (m_strOpenUfpPath.GetLength() <= 0)
+	// 打开工程文件
+	if (!OpenUfpFile())
 		return;
 
-	// 初始化一个工程
-	InitProject();
+	OnFileClose();
 
-	m_strCurUfpPath = m_strOpenUfpPath;
-	m_strOpenUfpPath = _T("");
+	// 初始化一个工程
+	OpenNewProject();
+
+	m_strCurUfpPath = m_strNewUfpPath;
+	m_strCurSkinName = m_strNewSkinName;
+	m_strCurSkinDir = m_strNewSkinDir;
+	m_strNewUfpPath = _T("");
+	m_strNewSkinName = _T("");
+	m_strNewSkinDir = _T("");
+}
+
+void CMainFrame::SetProjectInitState(bool bInitOk)
+{
+	m_wndWindowView.SetProjectInitState(bInitOk);
+	m_wndProperties.SetProjectInitState(bInitOk);
 }
 
 void CMainFrame::OnFileSave()
@@ -104,10 +117,30 @@ void CMainFrame::OnFileClose()
 
 
 	m_strCurUfpPath = _T("");
+	m_strCurSkinName = _T("");
+	m_strCurSkinDir = _T("");
+	SetProjectInitState(false);
 }
 
-bool CMainFrame::InitProject()
+bool CMainFrame::OpenUfpFile()
 {
+	m_strNewUfpPath = _T("");
+
+	CFileDialog UfpFileSelDlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING,
+		_T("ufp Files (*.ufp)|*.ufp;)||"), NULL);
+	UfpFileSelDlg.DoModal();
+	
+	m_strNewUfpPath = UfpFileSelDlg.GetPathName();
+	m_strNewSkinName = UfpFileSelDlg.GetFileTitle();
+	m_strNewSkinDir = m_strNewUfpPath.Left(m_strNewUfpPath.ReverseFind('\\') + 1);
+
+	return (m_strNewUfpPath.GetLength() > 0 && m_strNewSkinName.GetLength() > 0 && m_strNewSkinDir.GetLength() > 0);
+}
+
+bool CMainFrame::OpenNewProject()
+{
+	SetProjectInitState(true);
+
 	if (m_pSkinMgr == NULL)
 		return false;
 
@@ -119,10 +152,10 @@ bool CMainFrame::InitProject()
 	CString strResourceXml(_T(""));
 
 	// 初始化：Layout.xml
-	strLayoutXml.Format(_T("%s\\%s"), m_strSkinDir, m_strSkinName, _T(LAYOUT_XML_NAME));
-	strWindowsXml.Format(_T("%s\\%s"), m_strSkinDir, m_strSkinName, _T(WINDOWS_XML_NAME));
-	strControlsXml.Format(_T("%s\\%s"), m_strSkinDir, m_strSkinName, _T(CONTROLS_XML_NAME));
-	strResourceXml.Format(_T("%s\\%s"), m_strSkinDir, m_strSkinName, _T(RESOURCE_XML_NAME));
+	strLayoutXml.Format(_T("%s\\%s"), m_strNewSkinDir, m_strNewSkinName, _T(LAYOUT_XML_NAME));
+	strWindowsXml.Format(_T("%s\\%s"), m_strNewSkinDir, m_strNewSkinName, _T(WINDOWS_XML_NAME));
+	strControlsXml.Format(_T("%s\\%s"), m_strNewSkinDir, m_strNewSkinName, _T(CONTROLS_XML_NAME));
+	strResourceXml.Format(_T("%s\\%s"), m_strNewSkinDir, m_strNewSkinName, _T(RESOURCE_XML_NAME));
 
 	if (!InitResourceXml(strResourceXml))
 	{

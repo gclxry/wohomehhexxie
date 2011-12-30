@@ -54,10 +54,13 @@ CMainFrame::CMainFrame()
 	m_hControlDll = NULL;
 	m_pRegControlMap = NULL;
 	m_bInitOk = false;
-	m_strSkinDir = _T("");
-	m_strSkinName = _T("");
+	m_strCurSkinDir = _T("");
+	m_strCurSkinName = _T("");
 	m_strCurUfpPath = _T("");
-	m_strOpenUfpPath = _T("");
+
+	m_strNewUfpPath = _T("");
+	m_strNewSkinDir = _T("");
+	m_strNewSkinName = _T("");
 }
 
 CMainFrame::~CMainFrame()

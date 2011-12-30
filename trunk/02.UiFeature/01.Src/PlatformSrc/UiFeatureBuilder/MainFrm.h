@@ -60,15 +60,22 @@ private:
 //////////////////////////////////////////////////////////////////////////
 	bool	m_bInitOk;
 
-	CString m_strSkinName;
-	CString m_strSkinDir;
 	// 当前项目工程文件
 	CString m_strCurUfpPath;
-	CString m_strOpenUfpPath;
+	CString m_strCurSkinName;
+	CString m_strCurSkinDir;
+
+	CString m_strNewUfpPath;
+	CString m_strNewSkinName;
+	CString m_strNewSkinDir;
 
 private:
 	void InitUiFeatureKernel();
-	bool InitProject();
+
+	bool OpenUfpFile();
+	bool OpenNewProject();
+	// 设置所有显示的控件的初始化状态
+	void SetProjectInitState(bool bInitOk);
 
 	bool InitResourceXml(CString strXmlFile);
 	bool InitControlsXml(CString strXmlFile);
