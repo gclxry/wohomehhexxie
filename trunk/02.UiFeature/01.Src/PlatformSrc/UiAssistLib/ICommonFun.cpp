@@ -247,7 +247,7 @@ void ResetWindowBaseInfo(IWindowBase *pWndBase)
 	}
 }
 
-void AddIntAttrToNode(CNode* pNode, const char* pszAttrName, int nInt)
+void AddIntAttrToNode(CUiXmlWriteNode* pNode, const char* pszAttrName, int nInt)
 {
 	if (pNode == NULL || pszAttrName == NULL || strlen(pszAttrName) == NULL)
 		return;

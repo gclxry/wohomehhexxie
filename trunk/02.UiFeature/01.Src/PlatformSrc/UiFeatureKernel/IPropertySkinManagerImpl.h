@@ -96,7 +96,7 @@ private:
 	void ReleaseLayoutMapChildCtrlVec(CHILD_CTRL_PROP_VEC* pCtrlVec);
 
 	bool SaveLayoutXml(const char *pszSavePath, string &strXmlData);
-	bool SaveLayoutXml_ChildCtrl(CXmlStreamWrite &XmlStrObj, CNode* pNode, CHILD_CTRL_PROP_VEC* pWndChildVec);
+	bool SaveLayoutXml_ChildCtrl(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pNode, CHILD_CTRL_PROP_VEC* pWndChildVec);
 
 	bool SaveResourceXml(const char *pszSavePath, string &strXmlData);
 

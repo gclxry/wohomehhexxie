@@ -1,22 +1,15 @@
-// XmlStreamWrite.h: interface for the CXmlStreamWrite class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#if !defined(AFX_XMLSTREAMWRITE_H__B4821692_AE63_40DA_9BFA_16BA533FD5A0__INCLUDED_)
-#define AFX_XMLSTREAMWRITE_H__B4821692_AE63_40DA_9BFA_16BA533FD5A0__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
-#pragma warning(disable:4786)
 
 /*
-	本类只实现了简单的xml流的生成，单根节点模式，节点名称不能超过60个字节
-	新创建的节点自动成为当前节点的子节点，新建节点变为当前节点
-	可以使用\root\parent\child绝对路径方式创建节点
-	只能一层一层的创建节点，不支持一次创建多层节点
+本类只实现了简单的xml流的生成，单根节点模式，节点名称不能超过60个字节
+新创建的节点自动成为当前节点的子节点，新建节点变为当前节点
+可以使用\root\parent\child绝对路径方式创建节点
+只能一层一层的创建节点，不支持一次创建多层节点
 */
+
+#ifndef __CUIXMLWRITE_H__
+#define __CUIXMLWRITE_H__
+
+#pragma warning(disable:4786)
 
 #include <string>
 #include <list>
@@ -24,10 +17,11 @@
 using namespace std;
 typedef pair<string,string> STRPAIR;
 static const char SCH = '"';
-class CNode
+
+class CUiXmlWriteNode
 {
 public:
-	CNode(const char* pszName)
+	CUiXmlWriteNode(const char* pszName)
 	{
 		const char* p = 0, *pN = pszName;
 		do
@@ -39,15 +33,15 @@ public:
 		} while(p);
 		m_sName = pN;
 	}
-	virtual ~CNode()
+	virtual ~CUiXmlWriteNode()
 	{
-		for (vector<CNode*>::iterator it = m_vctChild.begin(); it != m_vctChild.end(); it++)
+		for (vector<CUiXmlWriteNode*>::iterator it = m_vctChild.begin(); it != m_vctChild.end(); it++)
 			delete (*it);
 	}
 	void SetText(const char* pszText){m_sText=pszText;}
-	void AddChild(CNode* pNode){m_vctChild.push_back(pNode);}
+	void AddChild(CUiXmlWriteNode* pNode){m_vctChild.push_back(pNode);}
 	void AddAttribute(const char* pszName, const char* pszVal){m_lstAttribute.push_back(STRPAIR(pszName, pszVal));}
-	CNode* SearchPath(CNode* pParent, const char* pszPathName)
+	CUiXmlWriteNode* SearchPath(CUiXmlWriteNode* pParent, const char* pszPathName)
 	{
 		if (pszPathName[0] == 0) 
 			return pParent;
@@ -56,7 +50,7 @@ public:
 			return pParent;
 		char szPath[64] = { 0 };
 		strncpy_s(szPath, 64, pszPathName, p-pszPathName);
-		for (vector<CNode*>::iterator it = m_vctChild.begin(); it != m_vctChild.end(); it++)
+		for (vector<CUiXmlWriteNode*>::iterator it = m_vctChild.begin(); it != m_vctChild.end(); it++)
 		{
 			if (_stricmp((*it)->m_sName.c_str(), szPath) == 0)
 				return (*it)->SearchPath((*it), p+1);
@@ -95,7 +89,7 @@ public:
 		else 
 		{
 			sRet += ">";
-			for (vector<CNode*>::iterator it = m_vctChild.begin(); it != m_vctChild.end(); it++)
+			for (vector<CUiXmlWriteNode*>::iterator it = m_vctChild.begin(); it != m_vctChild.end(); it++)
 				sRet += (*it)->ToXmlString();
 			if (m_sText.length() > 0)
 				sRet += m_sText;
@@ -108,22 +102,22 @@ public:
 private:
 	string m_sName;
 	string m_sText;
-	vector<CNode*> m_vctChild;
+	vector<CUiXmlWriteNode*> m_vctChild;
 	list<STRPAIR> m_lstAttribute;
 };
 
-class CXmlStreamWrite  
+class CUiXmlWrite  
 {
 public:
-	CXmlStreamWrite() : m_pRoot(0), m_pActive(0){}
-	virtual ~CXmlStreamWrite(){if (m_pRoot) delete m_pRoot;}
-	CNode* CreateNode(const char* pszName)
+	CUiXmlWrite() : m_pRoot(0), m_pActive(0){}
+	virtual ~CUiXmlWrite(){if (m_pRoot) delete m_pRoot;}
+	CUiXmlWriteNode* CreateNode(const char* pszName)
 	{
-		CNode* pNode = new CNode(pszName);
+		CUiXmlWriteNode* pNode = new CUiXmlWriteNode(pszName);
 		if (pNode == NULL)
 			return NULL;
 
-		CNode* pActive = SearchPath(pszName);
+		CUiXmlWriteNode* pActive = SearchPath(pszName);
 		if (pActive)
 			pActive->AddChild(pNode);
 		else if (m_pRoot == 0)
@@ -133,9 +127,9 @@ public:
 		return m_pActive;
 	}
 
-	CNode* CreateNode(CNode *pParentNode, const char* pszName)
+	CUiXmlWriteNode* CreateNode(CUiXmlWriteNode *pParentNode, const char* pszName)
 	{
-		CNode* pNode = new CNode(pszName);
+		CUiXmlWriteNode* pNode = new CUiXmlWriteNode(pszName);
 		if (pNode == NULL)
 			return NULL;
 
@@ -148,7 +142,7 @@ public:
 		return m_pActive;
 	}
 
-	CNode* SearchPath(const char* pszPathName)
+	CUiXmlWriteNode* SearchPath(const char* pszPathName)
 	{
 		if (m_pRoot == 0)
 			return 0;
@@ -171,8 +165,8 @@ public:
 		return "";
 	}
 private:
-	CNode* m_pRoot;
-	CNode* m_pActive;
+	CUiXmlWriteNode* m_pRoot;
+	CUiXmlWriteNode* m_pActive;
 };
 
-#endif // !defined(AFX_XMLSTREAMWRITE_H__B4821692_AE63_40DA_9BFA_16BA533FD5A0__INCLUDED_)
+#endif // __CUIXMLWRITE_H__

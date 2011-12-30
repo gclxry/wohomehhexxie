@@ -55,7 +55,7 @@ void IPropertyBase::SetRelevancyProp(IPropertyBase *pszProp)
 	m_pRelevancyProp = pszProp;
 }
 
-bool IPropertyBase::AppendToXmlNode(CXmlStreamWrite &XmlStrObj, CNode* pParentXmlNode)
+bool IPropertyBase::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode)
 {
 	return true;
 }
