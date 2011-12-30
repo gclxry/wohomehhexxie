@@ -160,10 +160,10 @@ bool CMainFrame::OpenNewProject()
 	CString strResourceXml(_T(""));
 
 	// ≥ı ºªØ£∫Layout.xml
-	strLayoutXml.Format(_T("%s\\%s"), m_strNewSkinDir, m_strNewSkinName, _T(LAYOUT_XML_NAME));
-	strWindowsXml.Format(_T("%s\\%s"), m_strNewSkinDir, m_strNewSkinName, _T(WINDOWS_XML_NAME));
-	strControlsXml.Format(_T("%s\\%s"), m_strNewSkinDir, m_strNewSkinName, _T(CONTROLS_XML_NAME));
-	strResourceXml.Format(_T("%s\\%s"), m_strNewSkinDir, m_strNewSkinName, _T(RESOURCE_XML_NAME));
+	strLayoutXml.Format(_T("%s%s"), m_strNewSkinDir, _T(LAYOUT_XML_NAME));
+	strWindowsXml.Format(_T("%s%s"), m_strNewSkinDir, _T(WINDOWS_XML_NAME));
+	strControlsXml.Format(_T("%s%s"), m_strNewSkinDir, _T(CONTROLS_XML_NAME));
+	strResourceXml.Format(_T("%s%s"), m_strNewSkinDir, _T(RESOURCE_XML_NAME));
 
 	if (!InitResourceXml(strResourceXml))
 	{
