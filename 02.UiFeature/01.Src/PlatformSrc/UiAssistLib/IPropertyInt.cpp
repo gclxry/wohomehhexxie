@@ -49,7 +49,7 @@ bool IPropertyInt::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pPar
 	if (pParentXmlNode == NULL)
 		return false;
 
-	CUiXmlWriteNode* pPropNode = XmlStrObj.CreateNode("item");
+	CUiXmlWriteNode* pPropNode = XmlStrObj.CreateNode(pParentXmlNode, "item");
 	if (pPropNode == NULL)
 		return false;
 
