@@ -160,3 +160,12 @@ IWindowBase* IKernelWindowImpl::BuilderCreatePropetryWindow(IPropertyWindow *pPr
 	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>((HWND)m_nBuilderHwnd++, pWndBaseImpl));
 	return pWndBase;
 }
+
+// ±£´æÆ¤·ô°ü
+bool IKernelWindowImpl::BuilderSaveSkin(char *pszSkinDir, char *pszSkinName)
+{
+	if (m_pSkinMgr == NULL)
+		return false;
+	
+	return m_pSkinMgr->BuilderSaveSkin(pszSkinDir, pszSkinName);
+}

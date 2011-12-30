@@ -4,6 +4,7 @@
 #include "..\..\Inc\IPropertyWindow.h"
 #include "..\..\Inc\IZipFileList.h"
 #include "..\..\Inc\IPropertyGroup.h"
+#include "XmlStreamWrite.h"
 
 //////////////////////////////////////////////////////////////////////////
 // 资源属性队列
@@ -29,6 +30,9 @@ public:
 	virtual bool BuilderTranslateLayoutXml(char *pszXmlPath);
 
 	virtual ONE_RESOURCE_PROP_MAP* BuilderGetWindowPropMap();
+
+	// 保存皮肤包
+	virtual bool BuilderSaveSkin(char *pszSkinDir, char *pszSkinName);
 
 	// 清空属性队列
 	virtual void ReleaseSkinManagerPropetry();
@@ -91,6 +95,10 @@ private:
 	void ReleaseLayoutMap();
 	void ReleaseLayoutMapChildCtrlVec(CHILD_CTRL_PROP_VEC* pCtrlVec);
 
+	bool SaveLayoutXml(const char *pszSavePath, string &strXmlData);
+	bool SaveLayoutXml_ChildCtrl(CXmlStreamWrite &XmlStrObj, CNode* pNode, CHILD_CTRL_PROP_VEC* pWndChildVec);
+
+	void AddIntAttrToNode(CNode* pNode, const char* pszAttrName, int nInt);
 private:
 	// 皮肤路径
 	string m_strSkinPath;
@@ -101,7 +109,7 @@ private:
 	// 所有窗口的属性管理器map
 	ONE_RESOURCE_PROP_MAP m_AllWindowPropMap;
 	// 布局队列，KEY：ObjectID
-	ONE_RESOURCE_PROP_MAP m_LayoutWindowVec;
+	ONE_RESOURCE_PROP_MAP m_LayoutWindowMap;
 
 	// ImageBase 属性队列
 	ONE_RESOURCE_PROP_MAP* m_pImageBasePropMap;

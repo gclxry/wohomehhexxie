@@ -56,11 +56,8 @@ void CMainFrame::OnFileNew()
 	if (NewSkinDlg.DoModal() != IDOK)
 		return;
 
-	// 关闭现有工程
-	OnFileClose();
-
-	NewSkinDlg.GetNewProjectPath(m_strCurSkinDir, m_strCurSkinName);
-	m_strNewUfpPath.Format(_T("%s\\%s%s"), m_strCurSkinDir, m_strCurSkinName, _T(NAME_SKIN_PROJ_EX_NAME));
+	NewSkinDlg.GetNewProjectPath(m_strNewSkinDir, m_strNewSkinName);
+	m_strNewUfpPath.Format(_T("%s\\%s%s"), m_strNewSkinDir, m_strNewSkinName, _T(NAME_SKIN_PROJ_EX_NAME));
 
 	OnFileOpen();
 }
@@ -69,9 +66,12 @@ void CMainFrame::OnFileOpen()
 {
 	USES_CONVERSION;
 
-	// 打开工程文件
-	if (!OpenUfpFile())
-		return;
+	if (m_strNewUfpPath.GetLength() <= 0)
+	{
+		// 打开工程文件
+		if (!OpenUfpFile())
+			return;
+	}
 
 	OnFileClose();
 
@@ -90,14 +90,6 @@ void CMainFrame::SetProjectInitState(bool bInitOk)
 {
 	m_wndWindowView.SetProjectInitState(bInitOk);
 	m_wndProperties.SetProjectInitState(bInitOk);
-}
-
-void CMainFrame::OnFileSave()
-{
-	if (m_strCurUfpPath.GetLength() <= 0)
-		return;
-
-
 }
 
 void CMainFrame::OnAppExit()
@@ -120,6 +112,22 @@ void CMainFrame::OnFileClose()
 	m_strCurSkinName = _T("");
 	m_strCurSkinDir = _T("");
 	SetProjectInitState(false);
+}
+
+void CMainFrame::OnFileSave()
+{
+	USES_CONVERSION;
+	if (m_strCurUfpPath.GetLength() <= 0 || m_pKernelWindow == NULL)
+		return;
+
+	if (m_pKernelWindow->BuilderSaveSkin(W2A(m_strCurSkinDir), W2A(m_strCurSkinName)))
+	{
+		AfxMessageBox(_T("保存皮肤工程成功！"), MB_OK | MB_ICONINFORMATION);
+	}
+	else
+	{
+		AfxMessageBox(_T("保存皮肤工程失败！"), MB_OK | MB_ICONERROR);
+	}
 }
 
 bool CMainFrame::OpenUfpFile()

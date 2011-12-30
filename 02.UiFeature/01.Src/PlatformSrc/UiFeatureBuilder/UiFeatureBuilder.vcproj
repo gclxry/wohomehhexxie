@@ -213,14 +213,6 @@
 				RelativePath=".\UiFeatureBuilder.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\UiFeatureBuilderDoc.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\UiFeatureBuilderView.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -241,14 +233,6 @@
 			</File>
 			<File
 				RelativePath=".\UiFeatureBuilder.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UiFeatureBuilderDoc.h"
-				>
-			</File>
-			<File
-				RelativePath=".\UiFeatureBuilderView.h"
 				>
 			</File>
 		</Filter>
@@ -386,6 +370,22 @@
 				</File>
 				<File
 					RelativePath=".\MainFrmEx.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UiFeatureBuilderDoc.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UiFeatureBuilderDoc.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UiFeatureBuilderView.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UiFeatureBuilderView.h"
 					>
 				</File>
 			</Filter>

@@ -24,6 +24,8 @@ public:
 	virtual IWindowBase* BuilderCreateEmptyWindow();
 	// 创建一个Builder使用的窗口，并配置上属性
 	virtual IWindowBase* BuilderCreatePropetryWindow(IPropertyWindow *pPropWnd);
+	// 保存皮肤包
+	virtual bool BuilderSaveSkin(char *pszSkinDir, char *pszSkinName);
 
 //////////////////////////////////////////////////////////////////////////
 	// 一个对话框从一个皮肤包里使用指定的对话框皮肤资源初始化自己
