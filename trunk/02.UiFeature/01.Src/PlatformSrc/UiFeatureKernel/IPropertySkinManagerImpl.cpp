@@ -33,7 +33,7 @@ IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
 	m_AllPropMap.clear();
 	m_AllCtrlPropMap.clear();
 	m_AllWindowPropMap.clear();
-	m_LayoutWindowVec.clear();
+	m_LayoutWindowMap.clear();
 
 	m_pImageBasePropMap = NULL;
 	m_pFontBasePropMap = NULL;
@@ -69,7 +69,7 @@ void IPropertySkinManagerImpl::ReleaseSkinManagerPropetry()
 
 void IPropertySkinManagerImpl::ReleaseLayoutMap()
 {
-	for (ONE_RESOURCE_PROP_MAP::iterator pWndItem = m_LayoutWindowVec.begin(); pWndItem != m_LayoutWindowVec.end(); pWndItem++)
+	for (ONE_RESOURCE_PROP_MAP::iterator pWndItem = m_LayoutWindowMap.begin(); pWndItem != m_LayoutWindowMap.end(); pWndItem++)
 	{
 		IPropertyWindow* pWnd = dynamic_cast<IPropertyWindow*>(pWndItem->second);
 		if (pWnd != NULL)
@@ -78,7 +78,7 @@ void IPropertySkinManagerImpl::ReleaseLayoutMap()
 			SAFE_DELETE(pWnd);
 		}
 	}
-	m_LayoutWindowVec.clear();
+	m_LayoutWindowMap.clear();
 }
 
 void IPropertySkinManagerImpl::ReleaseLayoutMapChildCtrlVec(CHILD_CTRL_PROP_VEC* pCtrlVec)
@@ -446,7 +446,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 			if (pWndProp == NULL)
 				ReleaseBaseProp(pBaseProp);
 
-			m_LayoutWindowVec.insert(pair<string, IPropertyWindow*>(szObjId, pWndProp));
+			m_LayoutWindowMap.insert(pair<string, IPropertyWindow*>(szObjId, pWndProp));
 		}
 		else if (propType == OTID_CONTROL)
 		{
@@ -1037,8 +1037,8 @@ bool IPropertySkinManagerImpl::TranslateLayoutXml(ZIP_FILE *pLayoutXml)
 				if (pWndPropGroup == NULL)
 					return false;
 
-				ONE_RESOURCE_PROP_MAP::iterator pWndItem = m_LayoutWindowVec.find(strObjId);
-				if (pWndItem != m_LayoutWindowVec.end())
+				ONE_RESOURCE_PROP_MAP::iterator pWndItem = m_LayoutWindowMap.find(strObjId);
+				if (pWndItem != m_LayoutWindowMap.end())
 					return false;
 
 				IPropertyWindow* pOneWndLayoutProp = dynamic_cast<IPropertyWindow*>(CreateEmptyBaseProp(OTID_WINDOW, psz_id));
@@ -1244,5 +1244,115 @@ void IPropertySkinManagerImpl::BuilderFreeFileItem(ZIP_FILE &FileItem)
 
 ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::BuilderGetWindowPropMap()
 {
-	return &m_LayoutWindowVec;
+	return &m_LayoutWindowMap;
+}
+
+// 保存皮肤包
+bool IPropertySkinManagerImpl::BuilderSaveSkin(char *pszSkinDir, char *pszSkinName)
+{
+	if (pszSkinDir == NULL || pszSkinName == NULL)
+		return false;
+
+	string strDir = pszSkinDir;
+	if (pszSkinDir[strlen(pszSkinDir) - 1] != '\\')
+		strDir += "\\";
+
+	// 保存 Resource.xml
+	string strResourceXmlPath = strDir;
+	strResourceXmlPath += RESOURCE_XML_NAME;
+
+	// 保存 Controls.xml
+	string strControlsXmlPath = strDir;
+	strControlsXmlPath += CONTROLS_XML_NAME;
+
+	// 保存 Windows.xml
+	string strWindowsXmlPath = strDir;
+	strWindowsXmlPath += WINDOWS_XML_NAME;
+
+	// 保存 Layout.xml
+	string strLayoutXmlPath = strDir;
+	strLayoutXmlPath += LAYOUT_XML_NAME;
+	string strLayoutXmlData("");
+	if (!SaveLayoutXml(strLayoutXmlPath.c_str(), strLayoutXmlData))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool IPropertySkinManagerImpl::SaveLayoutXml(const char *pszSavePath, string &strXmlData)
+{
+	CXmlStreamWrite LayoutXmlStr;
+
+	CNode* pRootNode = LayoutXmlStr.CreateNode("layout");
+	if (pRootNode == NULL)
+		return false;
+
+	AddIntAttrToNode(pRootNode, "area", m_AreaType);
+	AddIntAttrToNode(pRootNode, "lastid", m_nObjectIdInRes+1);
+
+	for (ONE_RESOURCE_PROP_MAP::iterator pWndPropItem = m_LayoutWindowMap.begin(); pWndPropItem != m_LayoutWindowMap.end(); pWndPropItem++)
+	{
+		IPropertyWindow *pPropWnd = dynamic_cast<IPropertyWindow*>(pWndPropItem->second);
+		if (pPropWnd == NULL)
+			continue;
+
+		CNode* pWndNode = LayoutXmlStr.CreateNode(pRootNode, "window");
+		if (pWndNode == NULL)
+			return false;
+
+		pWndNode->AddAttribute(SKIN_OBJECT_ID, pPropWnd->GetObjectId());
+
+		CHILD_CTRL_PROP_VEC* pWndChildVec = pPropWnd->GetChildControlVec();
+		if (!SaveLayoutXml_ChildCtrl(LayoutXmlStr, pWndNode, pWndChildVec))
+			return false;
+	}
+	strXmlData = LayoutXmlStr.ToXmlString();
+
+
+	FILE* fp = NULL;
+	fopen_s(&fp, "C:\\a.xml", "w");
+	if (fp)
+	{
+		fwrite(strXmlData.c_str(), strXmlData.size(), 1, fp);
+		fclose(fp);
+	}
+
+	return true;
+}
+
+bool IPropertySkinManagerImpl::SaveLayoutXml_ChildCtrl(CXmlStreamWrite &XmlStrObj, CNode* pNode, CHILD_CTRL_PROP_VEC* pWndChildVec)
+{
+	if (pWndChildVec == NULL)
+		return false;
+
+	for (int i = 0; i < (int)pWndChildVec->size(); i++)
+	{
+		IPropertyControl* pPropCtrl = (*pWndChildVec)[i];
+		if (pPropCtrl == NULL)
+			continue;
+
+		CNode* pCtrlNode = XmlStrObj.CreateNode(pNode, "ctrl");
+		if (pCtrlNode == NULL)
+			return false;
+
+		pCtrlNode->AddAttribute(SKIN_OBJECT_ID, pPropCtrl->GetObjectId());
+
+		CHILD_CTRL_PROP_VEC* pCtrlChildVec = pPropCtrl->GetChildControlVec();
+		if (!SaveLayoutXml_ChildCtrl(XmlStrObj, pCtrlNode, pCtrlChildVec))
+			return false;
+	}
+	return true;
+}
+
+void IPropertySkinManagerImpl::AddIntAttrToNode(CNode* pNode, const char* pszAttrName, int nInt)
+{
+	if (pNode == NULL || pszAttrName == NULL || strlen(pszAttrName) == NULL)
+		return;
+
+	char szInt[MAX_PATH];
+	memset(szInt, 0, MAX_PATH);
+	sprintf_s(szInt, MAX_PATH-1, "%d", nInt);	
+	pNode->AddAttribute(pszAttrName, szInt);
 }

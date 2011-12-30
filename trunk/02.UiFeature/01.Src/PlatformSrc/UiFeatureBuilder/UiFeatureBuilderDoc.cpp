@@ -4,8 +4,8 @@
 
 #include "stdafx.h"
 #include "UiFeatureBuilder.h"
-
 #include "UiFeatureBuilderDoc.h"
+#include "MainFrm.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -17,6 +17,7 @@
 IMPLEMENT_DYNCREATE(CUiFeatureBuilderDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CUiFeatureBuilderDoc, CDocument)
+	ON_COMMAND(ID_FILE_SAVE, &CUiFeatureBuilderDoc::OnFileSave)
 END_MESSAGE_MAP()
 
 
@@ -77,3 +78,10 @@ void CUiFeatureBuilderDoc::Dump(CDumpContext& dc) const
 
 
 // CUiFeatureBuilderDoc ÃüÁî
+
+void CUiFeatureBuilderDoc::OnFileSave()
+{
+	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
+	if (pMain != NULL)
+		pMain->OnFileSave();
+}

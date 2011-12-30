@@ -297,7 +297,7 @@ void CWindowsViewTree::InitShowNewProject()
 
 		this->SetItemData(hWindowItem, (DWORD_PTR)pWndBase);
 
-
+		// TBD 子控件显示
 	}
 
 	// 选中并打开根节点
