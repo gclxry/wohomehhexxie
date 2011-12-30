@@ -21,10 +21,12 @@ public:
 
 //// 创建zip文件 //////////////////////////////////////////////////////////////////////
 	// 初始化zip文件，pSrcFileDir：需要压缩的源文件目录
-	virtual bool InitWriteZip(char *pSrcFileDir, char *pSaveZipFile);
-	// 写入一个文件，pFilePath：必须是相对于InitWriteZip函数的pSrcFileDir路径的相对路径
-	virtual bool WriteToZip(char *pFilePath);
-	virtual bool EndWriteZip();
+	virtual bool WriteZipInit(char *pSrcFileDir, char *pSaveZipFile);
+	// 写入一个文件，pFilePath：必须是相对于WriteZipInit函数的pSrcFileDir路径的相对路径
+	virtual bool WriteZipAppendFile(char *pFilePath);
+	// 写入一段buffer，pFilePath：必须是相对于WriteZipInit函数的pSrcFileDir路径的相对路径
+	virtual bool WriteZipAppendBuffer(char *pFilePath, BYTE *pBuffer, int nBufferLen);
+	virtual bool WriteZipEnd();
 
 //////////////////////////////////////////////////////////////////////////
 	// 测试函数

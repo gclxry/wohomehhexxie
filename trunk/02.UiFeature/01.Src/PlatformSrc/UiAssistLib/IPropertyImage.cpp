@@ -20,7 +20,7 @@ const char * IPropertyImage::GetImageBaseName()
 
 bool IPropertyImage::IsRightData()
 {
-	return (GetRelevancyPropName() != NULL && strlen(GetRelevancyPropName()) > 0);
+	return (GetRelevancyProp() != NULL);
 }
 
 IPropertyImageBase* IPropertyImage::GetImageBaseProp()

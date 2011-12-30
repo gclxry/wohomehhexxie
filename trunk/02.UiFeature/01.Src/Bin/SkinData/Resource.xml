@@ -1,10 +1,13 @@
 <resource>
 	<font>
-		<item objid="1" name="Link.Normal">
+		<item objid="1" name="Link.Normal" fontbasename="Link.Normal.base"/>
+	</font>
+	<fontbase>
+		<item objid="1--" name="Link.Normal.base">
 			<logfont lfFaceName="宋体" lfHeight="3" lfWidth="4" lfEscapement="5" lfOrientation="3" lfWeight="2" lfItalic="1" lfUnderline="0" lfStrikeOut="1" lfCharSet="1" lfOutPrecision="2" lfClipPrecision="0" lfQuality="1" lfPitchAndFamily="1"/>
 			<mode color="1" VAligning="1" HAligning="2" ShowMode="1"/>
 		</item>
-	</font>
+	</fontbase>
 	<string>
 		<item objid="Window1.string1" name="23423234234235345" counts="3" defaultarea="2" data0="超链接正常状态专用字体" area0="1" data1="sdfgsdg" area1="3" data2="3523452345" area2="4"/>
 		<item objid="Window1.string2" name="Window1.string1" counts="3" defaultarea="2" data0="超链接正常状态专用字体" area0="1" data1="sdfgsdg" area1="3" data2="3523452345" area2="4"/>

@@ -4,6 +4,7 @@
 #pragma once
 #include "CUiXmlParser.h"
 #include "IFeatureObject.h"
+#include "CUiXmlWrite.h"
 
 class IPropertyBase;
 
@@ -47,6 +48,8 @@ public:
 	virtual bool IsRightData();
 	// 从XML节点读取属性值，并放入属性队列
 	virtual bool ReadPropertyFromXmlNode(XmlNode* pXmlNode);
+	// 写入xml
+	virtual bool AppendToXmlNode(CXmlStreamWrite &XmlStrObj, CNode* pParentXmlNode);
 
 	// 关联属性名称
 	virtual const char* GetRelevancyPropName();

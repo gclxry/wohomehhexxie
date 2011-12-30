@@ -4,7 +4,7 @@
 #include "..\..\Inc\IPropertyWindow.h"
 #include "..\..\Inc\IZipFileList.h"
 #include "..\..\Inc\IPropertyGroup.h"
-#include "XmlStreamWrite.h"
+#include "..\..\Inc\CUiXmlWrite.h"
 
 //////////////////////////////////////////////////////////////////////////
 // 资源属性队列
@@ -98,7 +98,11 @@ private:
 	bool SaveLayoutXml(const char *pszSavePath, string &strXmlData);
 	bool SaveLayoutXml_ChildCtrl(CXmlStreamWrite &XmlStrObj, CNode* pNode, CHILD_CTRL_PROP_VEC* pWndChildVec);
 
+	bool SaveResourceXml(const char *pszSavePath, string &strXmlData);
+
 	void AddIntAttrToNode(CNode* pNode, const char* pszAttrName, int nInt);
+
+	void SaveToFile(char *pszFilePath, BYTE *pData, int nDataLen);
 private:
 	// 皮肤路径
 	string m_strSkinPath;

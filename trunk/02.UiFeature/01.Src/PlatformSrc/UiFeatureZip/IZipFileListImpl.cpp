@@ -69,7 +69,7 @@ void IZipFileListImpl::RemoveFile(ZIP_FILE *pRemove)
 }
 
 // 初始化zip文件，pSrcFileDir：需要压缩的源文件目录
-bool IZipFileListImpl::InitWriteZip(char *pSrcFileDir, char *pSaveZipFile)
+bool IZipFileListImpl::WriteZipInit(char *pSrcFileDir, char *pSaveZipFile)
 {
 	Clear();
 	if (pSrcFileDir == NULL || pSaveZipFile == NULL || strlen(pSrcFileDir) <= 0 || strlen(pSaveZipFile) <= 0)
@@ -85,8 +85,67 @@ bool IZipFileListImpl::InitWriteZip(char *pSrcFileDir, char *pSaveZipFile)
 	return true;
 }
 
-// 写入一个文件，pFilePath：必须是相对于InitWriteZip函数的pSrcFileDir路径的相对路径
-bool IZipFileListImpl::WriteToZip(char *pFilePath)
+// 写入一段buffer
+bool IZipFileListImpl::WriteZipAppendBuffer(char *pFilePath, BYTE *pBuffer, int nBufferLen)
+{
+	if (pFilePath == NULL || strlen(pFilePath) <= 0 || pBuffer == NULL)
+		return false;
+
+	if (nBufferLen <= 0)
+		return true;
+
+	ZIP_FILE *pFileItem = new ZIP_FILE;
+	if (pFileItem == NULL)
+		return false;
+
+	pFileItem->strFileName = pFilePath;
+	pFileItem->dwSrcFileLen = nBufferLen;
+	pFileItem->dwZipDatalen = 0;
+	pFileItem->pFileData = NULL;
+
+	if (CheckFileNeedCompress(pFilePath))
+	{
+		uLong ulComLen = compressBound(nBufferLen);
+		if (ulComLen <= 0)
+		{
+			SAFE_DELETE(pFileItem);
+			return false;
+		}
+
+		pFileItem->dwZipDatalen = ulComLen;
+		pFileItem->pFileData = new BYTE[ulComLen];
+		if (pFileItem->pFileData == NULL)
+		{
+			SAFE_DELETE(pFileItem);
+			return false;
+		}
+
+		if (compress(pFileItem->pFileData, &(pFileItem->dwZipDatalen), pBuffer, nBufferLen) != Z_OK)
+		{
+			SAFE_DELETE(pFileItem->pFileData);
+			SAFE_DELETE(pFileItem);
+			return false;
+		}
+	}
+	else
+	{
+		pFileItem->dwZipDatalen = nBufferLen;
+		pFileItem->pFileData = new BYTE[nBufferLen];
+		if (pFileItem->pFileData == NULL)
+		{
+			SAFE_DELETE(pFileItem);
+			return false;
+		}
+
+		memcpy(pFileItem->pFileData, pBuffer, nBufferLen);
+	}
+
+	m_ZipFileMap.insert(pair<string, ZIP_FILE*>(pFileItem->strFileName, pFileItem));
+	return true;
+}
+
+// 写入一个文件，pFilePath：必须是相对于WriteZipInit函数的pSrcFileDir路径的相对路径
+bool IZipFileListImpl::WriteZipAppendFile(char *pFilePath)
 {
 	if (pFilePath == NULL || strlen(pFilePath) <= 0 || m_strSrcFileDir.size() <= 0 || m_strSaveZipFile.size() <= 0)
 		return false;
@@ -151,6 +210,7 @@ bool IZipFileListImpl::WriteToZip(char *pFilePath)
 		{
 			fclose(pFile);
 			SAFE_DELETE(pReadBuf);
+			SAFE_DELETE(pFileItem);
 			return false;
 		}
 
@@ -186,7 +246,7 @@ bool IZipFileListImpl::WriteToZip(char *pFilePath)
 	return true;
 }
 
-bool IZipFileListImpl::EndWriteZip()
+bool IZipFileListImpl::WriteZipEnd()
 {
 	if (m_ZipFileMap.size() <= 0)
 		return false;

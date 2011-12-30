@@ -195,7 +195,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="04.Xml½âÎö"
+			Name="04.Xml"
 			>
 			<File
 				RelativePath=".\CUiXmlParser.cpp"
@@ -203,6 +203,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Inc\CUiXmlParser.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Inc\CUiXmlWrite.h"
 				>
 			</File>
 		</Filter>
@@ -274,6 +278,14 @@
 				</File>
 				<File
 					RelativePath="..\..\Inc\IPropertyFont.h"
+					>
+				</File>
+				<File
+					RelativePath=".\IPropertyFontBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyFontBase.h"
 					>
 				</File>
 			</Filter>
