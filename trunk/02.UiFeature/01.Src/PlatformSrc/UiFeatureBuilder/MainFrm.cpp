@@ -30,6 +30,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_COMMAND(ID_FILE_OPEN, &CMainFrame::OnFileOpen)
 	ON_COMMAND(ID_FILE_SAVE, &CMainFrame::OnFileSave)
 	ON_COMMAND(ID_FILE_CLOSE, &CMainFrame::OnFileClose)
+	ON_COMMAND(ID_APP_EXIT, &CMainFrame::OnAppExit)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
