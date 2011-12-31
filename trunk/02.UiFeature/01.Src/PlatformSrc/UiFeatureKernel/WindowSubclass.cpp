@@ -21,7 +21,7 @@ LRESULT CALLBACK WindowSubProc(HWND hWnd, UINT nMsgId, WPARAM wParam, LPARAM lPa
 					::SetWindowLongPtr(hWnd, GWL_WNDPROC, (LONG_PTR)SubFun.pOldWndProc);
 
 				// 释放当前皮肤资源和子类化资源
-				IKernelWindowImpl::GetInstance()->ReleaseFeatureSkin(hWnd);
+				IKernelWindowImpl::GetInstance()->PG_ReleaseFeatureSkin(hWnd);
 
 				// 消息需要继续往下传了
 				if (SubFun.pOldWndProc != NULL)

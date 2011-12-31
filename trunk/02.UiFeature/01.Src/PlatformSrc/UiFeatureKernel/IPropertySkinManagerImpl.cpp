@@ -60,8 +60,6 @@ IPropertySkinManagerImpl::~IPropertySkinManagerImpl(void)
 void IPropertySkinManagerImpl::ReleaseSkinManagerPropetry()
 {
 	ReleaseLayoutMap();
-	// 以下两个队列不需要释放，两个队列中所有内容均在 m_AllPropMap 被自动释放
-//	ReleasePropMapItem(&m_AllWindowPropMap);
 	ReleasePropMap(m_AllCtrlPropMap);
 	ReleasePropMap(m_AllPropMap);
 	m_AllWindowPropMap.clear();
@@ -1230,7 +1228,7 @@ ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::BD_GetWindowPropMap()
 }
 
 // 保存皮肤包
-bool IPropertySkinManagerImpl::BD_SaveSkin(char *pszSkinDir, char *pszSkinName)
+bool IPropertySkinManagerImpl::BD_SaveProject(char *pszSkinDir, char *pszSkinName)
 {
 	if (pszSkinDir == NULL || pszSkinName == NULL || m_pZipFile == NULL)
 		return false;

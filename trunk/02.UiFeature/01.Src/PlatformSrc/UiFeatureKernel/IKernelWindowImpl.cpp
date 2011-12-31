@@ -45,7 +45,7 @@ IKernelWindow* IKernelWindowImpl::GetInstance()
 }
 
 // 取得所有支持的控件
-CONTROL_REG_MAP* IKernelWindowImpl::BuilderRegisterControl()
+CONTROL_REG_MAP* IKernelWindowImpl::BD_GetRegisterControl()
 {
 	CControlImpl::GetInstance()->SetRegControlMap(&m_CtrlRegMap);
 	return &m_CtrlRegMap;
@@ -57,7 +57,7 @@ IPropertySkinManager* IKernelWindowImpl::GetSkinManager()
 }
 
 // 一个对话框释放皮肤资源
-void IKernelWindowImpl::ReleaseFeatureSkin(HWND hWnd)
+void IKernelWindowImpl::PG_ReleaseFeatureSkin(HWND hWnd)
 {
 	WINDOW_IMPL_MAP::iterator pWndImplItem = m_WndImplMap.find(hWnd);
 	if (pWndImplItem != m_WndImplMap.end())
@@ -68,8 +68,18 @@ void IKernelWindowImpl::ReleaseFeatureSkin(HWND hWnd)
 	}
 }
 
+// 关闭一个工程
+bool IKernelWindowImpl::BD_CloseProject()
+{
+	ReleaseKernelWindow();
+	if (m_pSkinMgr != NULL)
+		m_pSkinMgr->ReleaseSkinManagerPropetry();
+
+	return true;
+}
+
 // 一个对话框从一个皮肤包里使用指定的对话框皮肤资源初始化自己
-IWindowBase* IKernelWindowImpl::InitFeatureSkin(HWND hWnd, char *pszSkinPath, char *pszWndName)
+IWindowBase* IKernelWindowImpl::PG_InitFeatureSkin(HWND hWnd, char *pszSkinPath, char *pszWndName)
 {
 	if (!::IsWindow(hWnd) || pszSkinPath == NULL || pszWndName == NULL || strlen(pszSkinPath) <= 0 || strlen(pszWndName) <= 0)
 		return NULL;
@@ -98,7 +108,7 @@ IWindowBase* IKernelWindowImpl::InitFeatureSkin(HWND hWnd, char *pszSkinPath, ch
 }
 
 // 创建一个Builder使用的空的窗口
-IWindowBase* IKernelWindowImpl::BuilderCreateEmptyWindow()
+IWindowBase* IKernelWindowImpl::BD_CreateWindowEmptyPropetry()
 {
 	if (m_pSkinMgr == NULL)
 		return NULL;
@@ -141,7 +151,7 @@ IWindowBase* IKernelWindowImpl::BuilderCreateEmptyWindow()
 }
 
 // 创建一个Builder使用的空的窗口
-IWindowBase* IKernelWindowImpl::BuilderCreatePropetryWindow(IPropertyWindow *pPropWnd)
+IWindowBase* IKernelWindowImpl::BD_CreateWindowByPropetry(IPropertyWindow *pPropWnd)
 {
 	if (pPropWnd == NULL)
 		return NULL;
@@ -167,16 +177,16 @@ IWindowBase* IKernelWindowImpl::BuilderCreatePropetryWindow(IPropertyWindow *pPr
 }
 
 // 保存皮肤包
-bool IKernelWindowImpl::BD_SaveSkin(char *pszSkinDir, char *pszSkinName)
+bool IKernelWindowImpl::BD_SaveProject(char *pszSkinDir, char *pszSkinName)
 {
 	if (m_pSkinMgr == NULL)
 		return false;
 	
-	return m_pSkinMgr->BD_SaveSkin(pszSkinDir, pszSkinName);
+	return m_pSkinMgr->BD_SaveProject(pszSkinDir, pszSkinName);
 }
 
 // 创建/打开一个新的皮肤工程
-bool IKernelWindowImpl::BuilderCreateOrOpenProject(char *pszSkinDir, char *pszSkinName)
+bool IKernelWindowImpl::BD_OpenProject(char *pszSkinDir, char *pszSkinName)
 {
 	if (pszSkinDir == NULL || pszSkinName == NULL || m_pSkinMgr == NULL)
 		return false;

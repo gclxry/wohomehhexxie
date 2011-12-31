@@ -19,6 +19,10 @@ CPropertyViewCtrl::~CPropertyViewCtrl(void)
 void CPropertyViewCtrl::SetProjectInitState(bool bInitOk)
 {
 	m_bProjectInitOk = bInitOk;
+	if (!m_bProjectInitOk)
+	{
+		this->ClearAll();
+	}
 }
 
 void CPropertyViewCtrl::Init(IKernelWindow* pKernelWindow, CWindowsViewTree *pViewTree)

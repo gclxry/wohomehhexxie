@@ -41,7 +41,7 @@ void CMainFrame::InitUiFeatureKernel()
 	m_wndProperties.Init(m_pKernelWindow, m_wndWindowView.GetViewTreeCtrl());
 
 	// 加载控件显示数据
-	m_pRegControlMap = m_pKernelWindow->BuilderRegisterControl();
+	m_pRegControlMap = m_pKernelWindow->BD_GetRegisterControl();
 	// 显示控件
 	m_wndControls.SetControlList(m_pRegControlMap);
 
@@ -56,34 +56,49 @@ void CMainFrame::OnFileNew()
 	if (NewSkinDlg.DoModal() != IDOK)
 		return;
 
+	// 取得新工程路径信息
 	NewSkinDlg.GetNewProjectPath(m_strNewSkinDir, m_strNewSkinName);
+	if (m_strNewSkinDir.GetLength() <= 0 || m_strNewSkinName.GetLength() <= 0)
+		return;
+
 	m_strNewUfpPath.Format(_T("%s\\%s%s"), m_strNewSkinDir, m_strNewSkinName, _T(NAME_SKIN_PROJ_EX_NAME));
 
-	OnFileOpen();
+	// 保存老工程
+	if (!SaveSkinProject(m_strCurSkinDir, m_strCurSkinName, true))
+		return;
+
+	// 关闭老工程
+	if (!CloseSkinProject(m_strCurSkinDir, m_strCurSkinName))
+		return;
+
+	OpenSkinProject(true, m_strNewSkinDir, m_strNewSkinName);
 }
 
 void CMainFrame::OnFileOpen()
 {
 	USES_CONVERSION;
+	// 打开工程文件
+	CFileDialog UfpFileSelDlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING,
+		_T("ufp Files (*.ufp)|*.ufp;)||"), NULL);
+	UfpFileSelDlg.DoModal();
 
-	if (m_strNewUfpPath.GetLength() <= 0)
-	{
-		// 打开工程文件
-		if (!OpenUfpFile())
-			return;
-	}
+	m_strNewUfpPath = UfpFileSelDlg.GetPathName();
+	m_strNewSkinName = UfpFileSelDlg.GetFileTitle();
+	m_strNewSkinDir = m_strNewUfpPath.Left(m_strNewUfpPath.ReverseFind('\\') + 1);
 
-	OnFileClose();
+	if (m_strNewUfpPath.GetLength() <= 0 || m_strNewSkinName.GetLength() <= 0 || m_strNewSkinDir.GetLength() <= 0)
+		return;
 
-	// 初始化一个工程
-	OpenNewProject();
+	// 保存老工程
+	if (!SaveSkinProject(m_strCurSkinDir, m_strCurSkinName, true))
+		return;
 
-	m_strCurUfpPath = m_strNewUfpPath;
-	m_strCurSkinName = m_strNewSkinName;
-	m_strCurSkinDir = m_strNewSkinDir;
-	m_strNewUfpPath = _T("");
-	m_strNewSkinName = _T("");
-	m_strNewSkinDir = _T("");
+	// 关闭老工程
+	if (!CloseSkinProject(m_strCurSkinDir, m_strCurSkinName))
+		return;
+
+	// 打开工程
+	OpenSkinProject(false, m_strNewSkinDir, m_strNewSkinName);
 }
 
 void CMainFrame::SetProjectInitState(bool bInitOk)
@@ -92,106 +107,109 @@ void CMainFrame::SetProjectInitState(bool bInitOk)
 	m_wndProperties.SetProjectInitState(bInitOk);
 }
 
-void CMainFrame::OnAppExit()
-{
-	OnFileClose();
-}
-
 void CMainFrame::OnFileClose()
 {
-	// 保存现有工程
-	OnFileSave();
-
-	if (m_strCurUfpPath.GetLength() <= 0)
+	// 保存老工程
+	if (!SaveSkinProject(m_strCurSkinDir, m_strCurSkinName, true))
 		return;
 
-
-
-
-	m_strCurUfpPath = _T("");
-	m_strCurSkinName = _T("");
-	m_strCurSkinDir = _T("");
-	SetProjectInitState(false);
+	// 关闭老工程
+	if (!CloseSkinProject(m_strCurSkinDir, m_strCurSkinName))
+		return;
 }
 
 void CMainFrame::OnFileSave()
 {
-	USES_CONVERSION;
-	if (m_strCurUfpPath.GetLength() <= 0 || m_pKernelWindow == NULL)
+	// 保存老工程
+	if (!SaveSkinProject(m_strCurSkinDir, m_strCurSkinName, true))
 		return;
-
-	if (m_pKernelWindow->BD_SaveSkin(W2A(m_strCurSkinDir), W2A(m_strCurSkinName)))
-	{
-		AfxMessageBox(_T("保存皮肤工程成功！"), MB_OK | MB_ICONINFORMATION);
-	}
-	else
-	{
-		AfxMessageBox(_T("保存皮肤工程失败！"), MB_OK | MB_ICONERROR);
-	}
 }
 
-bool CMainFrame::OpenUfpFile()
-{
-	m_strNewUfpPath = _T("");
-
-	CFileDialog UfpFileSelDlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING,
-		_T("ufp Files (*.ufp)|*.ufp;)||"), NULL);
-	UfpFileSelDlg.DoModal();
-	
-	m_strNewUfpPath = UfpFileSelDlg.GetPathName();
-	m_strNewSkinName = UfpFileSelDlg.GetFileTitle();
-	m_strNewSkinDir = m_strNewUfpPath.Left(m_strNewUfpPath.ReverseFind('\\') + 1);
-
-	return (m_strNewUfpPath.GetLength() > 0 && m_strNewSkinName.GetLength() > 0 && m_strNewSkinDir.GetLength() > 0);
-}
-
-bool CMainFrame::OpenNewProject()
+// 打开一个工程
+bool CMainFrame::OpenSkinProject(bool bIsNew, CString strSkinDir, CString strSkinName)
 {
 	USES_CONVERSION;
 	SetProjectInitState(true);
 	if (m_pKernelWindow == NULL || m_pSkinMgr == NULL)
 		return false;
 
-	if (!m_pKernelWindow->BuilderCreateOrOpenProject(W2A(m_strNewSkinDir), W2A(m_strNewSkinName)))
+	if (!bIsNew)
 	{
-		CString strInfo(_T(""));
-		strInfo.Format(_T("没有发现匹配的皮肤文件【%s%s】！"), m_strNewSkinName, _T(NAME_SKIN_FILE_EX_NAME));
-		AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
-		return false;
+		if (!m_pKernelWindow->BD_OpenProject(W2A(m_strNewSkinDir), W2A(m_strNewSkinName)))
+		{
+			CString strInfo(_T(""));
+			strInfo.Format(_T("没有发现匹配的皮肤文件【%s%s】！"), m_strNewSkinName, _T(NAME_SKIN_FILE_EX_NAME));
+			AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
+			return false;
+		}
+
+		if (!m_pSkinMgr->BD_TranslateResourceXml(RESOURCE_XML_NAME))
+		{
+			CString strInfo(_T(""));
+			strInfo.Format(_T("导入配置文件【%s】错误！"), _T(RESOURCE_XML_NAME));
+			AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
+			return false;
+		}
+
+		if (!m_pSkinMgr->BD_TranslateControlsXml(CONTROLS_XML_NAME))
+		{
+			CString strInfo(_T(""));
+			strInfo.Format(_T("导入配置文件【%s】错误！"), _T(CONTROLS_XML_NAME));
+			AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
+			return false;
+		}
+
+		if (!m_pSkinMgr->BD_TranslateWindowsXml(WINDOWS_XML_NAME))
+		{
+			CString strInfo(_T(""));
+			strInfo.Format(_T("导入配置文件【%s】错误！"), _T(WINDOWS_XML_NAME));
+			AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
+			return false;
+		}
+
+		if (!m_pSkinMgr->BD_TranslateLayoutXml(LAYOUT_XML_NAME))
+		{
+			CString strInfo(_T(""));
+			strInfo.Format(_T("导入配置文件【%s】错误！"), _T(LAYOUT_XML_NAME));
+			AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
+			return false;
+		}
+
+		m_wndWindowView.InitShowNewProject();
 	}
 
-	if (!m_pSkinMgr->BD_TranslateResourceXml(RESOURCE_XML_NAME))
-	{
-		CString strInfo(_T(""));
-		strInfo.Format(_T("导入配置文件【%s】错误！"), _T(RESOURCE_XML_NAME));
-		AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
-		return false;
-	}
+	return true;
+}
 
-	if (!m_pSkinMgr->BD_TranslateControlsXml(CONTROLS_XML_NAME))
-	{
-		CString strInfo(_T(""));
-		strInfo.Format(_T("导入配置文件【%s】错误！"), _T(CONTROLS_XML_NAME));
-		AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
+// 保存
+bool CMainFrame::SaveSkinProject(CString strSkinDir, CString strSkinName, bool bNeedErroInfo)
+{
+	USES_CONVERSION;
+	if (m_pKernelWindow == NULL)
 		return false;
-	}
 
-	if (!m_pSkinMgr->BD_TranslateWindowsXml(WINDOWS_XML_NAME))
+	bool bOk = m_pKernelWindow->BD_SaveProject(W2A(strSkinDir), W2A(strSkinName));
+	if (bNeedErroInfo)
 	{
-		CString strInfo(_T(""));
-		strInfo.Format(_T("导入配置文件【%s】错误！"), _T(WINDOWS_XML_NAME));
-		AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
-		return false;
+		if (bOk)
+		{
+			AfxMessageBox(_T("保存皮肤工程成功！"), MB_OK | MB_ICONINFORMATION);
+		}
+		else
+		{
+			AfxMessageBox(_T("保存皮肤工程失败！"), MB_OK | MB_ICONERROR);
+		}
 	}
+	return true;
+}
 
-	if (!m_pSkinMgr->BD_TranslateLayoutXml(LAYOUT_XML_NAME))
-	{
-		CString strInfo(_T(""));
-		strInfo.Format(_T("导入配置文件【%s】错误！"), _T(LAYOUT_XML_NAME));
-		AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
-		return false;
-	}
+// 保存
+bool CMainFrame::CloseSkinProject(CString strSkinDir, CString strSkinName)
+{
+	SetProjectInitState(false);
 
-	m_wndWindowView.InitShowNewProject();
+	m_strCurUfpPath = _T("");
+	m_strCurSkinName = _T("");
+	m_strCurSkinDir = _T("");
 	return true;
 }

@@ -32,7 +32,7 @@ public:
 	virtual ONE_RESOURCE_PROP_MAP* BD_GetWindowPropMap();
 
 	// 保存皮肤包
-	virtual bool BD_SaveSkin(char *pszSkinDir, char *pszSkinName);
+	virtual bool BD_SaveProject(char *pszSkinDir, char *pszSkinName);
 
 	// 清空属性队列
 	virtual void ReleaseSkinManagerPropetry();

@@ -135,7 +135,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 		   IKernelWindow *pKernelWnd = GetKernel();
 		   if (pKernelWnd != NULL)
 		   {
-			   pKernelWnd->InitFeatureSkin(hWnd, "G:\\04.VcKBase\\UiFeature\\Bin\\SkinData\\skintest.ufd", "²âÊÔ´°¿Ú");
+			   pKernelWnd->PG_InitFeatureSkin(hWnd, "G:\\04.VcKBase\\UiFeature\\Bin\\SkinData\\skintest.ufd", "²âÊÔ´°¿Ú");
 		   }
 	   }
    }

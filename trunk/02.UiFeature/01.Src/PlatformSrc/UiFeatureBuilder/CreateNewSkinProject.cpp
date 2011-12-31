@@ -86,6 +86,8 @@ void CCreateNewSkinProject::OnBnClickedOk()
 
 	if (!::CopyFileA(strPath.c_str(), W2A(strToFile), TRUE))
 	{
+		m_strSkinDir = _T("");
+		m_strSkinName = _T("");
 		CString strInfo(_T(""));
 		strInfo.Format(_T("创建皮肤工程失败！原因有可能是：\n1.安装目录下不存在【%s】文件\n2.目标文件已经存在\n3.目标文件夹不可写"), NAME_UFP_TEMPLATE);
 		AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
