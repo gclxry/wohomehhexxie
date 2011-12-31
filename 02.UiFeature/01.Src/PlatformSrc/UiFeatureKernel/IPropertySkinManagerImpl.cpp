@@ -424,7 +424,10 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 			// 创建窗口属性
 			IPropertyWindow* pWndProp = dynamic_cast<IPropertyWindow*>(pBaseProp);
 			if (pWndProp == NULL)
+			{
 				ReleaseBaseProp(pBaseProp);
+				return NULL;
+			}
 
 			m_LayoutWindowMap.insert(pair<string, IPropertyWindow*>(szObjId, pWndProp));
 		}
@@ -583,9 +586,10 @@ IPropertyWindow* IPropertySkinManagerImpl::PG_InitWindowSkin(const char *pszSkin
 	if (!InitSkinPackage(pszSkinPath))
 		return NULL;
 
+	// TBD
 	string strWndName = pszWndName;
-	ONE_RESOURCE_PROP_MAP::iterator pWndPropItem = m_AllWindowPropMap.find(strWndName);
-	if (pWndPropItem == m_AllWindowPropMap.end())
+	ONE_RESOURCE_PROP_MAP::iterator pWndPropItem = m_LayoutWindowMap.find(strWndName);
+	if (pWndPropItem == m_LayoutWindowMap.end())
 		return NULL;
 
 	IPropertyWindow* pWndProp = dynamic_cast<IPropertyWindow*>(pWndPropItem->second);
@@ -1393,6 +1397,72 @@ bool IPropertySkinManagerImpl::SaveResourceXml(const char *pszSavePath, string &
 
 bool IPropertySkinManagerImpl::SaveControlsXml(const char *pszSavePath, string &strXmlData)
 {
+	CUiXmlWrite XmlStrObj;
+
+	CUiXmlWriteNode* pRootNode = XmlStrObj.CreateNode("controls");
+	if (pRootNode == NULL)
+		return false;
+
+	for (RESOURCE_PROP_MAP::iterator pCtrlTypeItem = m_AllCtrlPropMap.begin(); pCtrlTypeItem != m_AllCtrlPropMap.end(); pCtrlTypeItem++)
+	{
+		ONE_RESOURCE_PROP_MAP *pCtrlType = pCtrlTypeItem->second;
+		if (pCtrlType == NULL)
+			continue;
+
+		for (ONE_RESOURCE_PROP_MAP::iterator pCtrlItem = pCtrlType->begin(); pCtrlItem != pCtrlType->end(); pCtrlItem++)
+		{
+			IPropertyGroup* pCtrlPropGroup = dynamic_cast<IPropertyGroup*>(pCtrlItem->second);
+			if (pCtrlPropGroup == NULL)
+				continue;
+
+			string strCtrlType = pCtrlTypeItem->first;
+			CUiXmlWriteNode* pCtrlTypeNode = XmlStrObj.CreateNode(pRootNode, strCtrlType.c_str());
+			if (pCtrlTypeNode == NULL)
+				return false;
+			pCtrlTypeNode->AddAttribute(SKIN_OBJECT_ID, pCtrlPropGroup->GetObjectId());
+
+			// 写入group中的数据
+			if (!SaveXml_GroupProp(XmlStrObj, pCtrlTypeNode, pCtrlPropGroup))
+				return false;
+		}
+	}
+	strXmlData = XmlStrObj.ToXmlString();
+
+	SaveToFile((char*)pszSavePath, (BYTE*)strXmlData.c_str(), strXmlData.size());
+	return true;
+}
+
+bool IPropertySkinManagerImpl::SaveXml_GroupProp(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentNode, IPropertyGroup *pPropGroup)
+{
+	if (pParentNode == NULL || pPropGroup == NULL)
+		return false;
+
+	GROUP_PROP_VEC* pPropVec = pPropGroup->GetPropVec();
+	if (pPropVec == NULL)
+		return false;
+
+	for (GROUP_PROP_VEC::iterator pPropItem = pPropVec->begin(); pPropItem != pPropVec->end(); pPropItem++)
+	{
+		IPropertyBase* pProp = *pPropItem;
+		if (pProp == NULL)
+			continue;
+
+		CUiXmlWriteNode* pPropNode = XmlStrObj.CreateNode(pParentNode, pProp->GetObjectType());
+		if (pPropNode == NULL)
+			return false;
+		pPropNode->AddAttribute(SKIN_OBJECT_ID, pProp->GetObjectId());
+
+		if (pProp->GetObjectTypeId() == OTID_GROUP)
+		{
+			IPropertyGroup *pNextPropGroup = dynamic_cast<IPropertyGroup*>(pProp);
+			if (pNextPropGroup == NULL)
+				continue;
+
+			if (!SaveXml_GroupProp(XmlStrObj, pPropNode, pNextPropGroup))
+				return false;
+		}
+	}
+
 	return true;
 }
 
@@ -1420,45 +1490,11 @@ bool IPropertySkinManagerImpl::SaveWindowsXml(const char *pszSavePath, string &s
 			return false;
 		pWindowNode->AddAttribute(SKIN_OBJECT_ID, pWndPropGroup->GetObjectId());
 
-		SaveWindowsXml_GroupProp(XmlStrObj, pWindowNode, pWndPropGroup);
+		SaveXml_GroupProp(XmlStrObj, pWindowNode, pWndPropGroup);
 	}
 	strXmlData = XmlStrObj.ToXmlString();
 
 	SaveToFile((char*)pszSavePath, (BYTE*)strXmlData.c_str(), strXmlData.size());
-	return true;
-}
-
-bool IPropertySkinManagerImpl::SaveWindowsXml_GroupProp(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentNode, IPropertyGroup *pPropGroup)
-{
-	if (pParentNode == NULL || pPropGroup == NULL)
-		return false;
-
-	GROUP_PROP_VEC* pPropVec = pPropGroup->GetPropVec();
-	if (pPropVec == NULL)
-		return false;
-
-	for (GROUP_PROP_VEC::iterator pPropItem = pPropVec->begin(); pPropItem != pPropVec->end(); pPropItem++)
-	{
-		IPropertyBase* pProp = *pPropItem;
-		if (pProp == NULL)
-			continue;
-
-		CUiXmlWriteNode* pPropNode = XmlStrObj.CreateNode(pParentNode, pProp->GetObjectType());
-		if (pPropNode == NULL)
-			return false;
-		pPropNode->AddAttribute(SKIN_OBJECT_ID, pProp->GetObjectId());
-
-		if (pProp->GetObjectTypeId() == OTID_GROUP)
-		{
-			IPropertyGroup *pNextPropGroup = dynamic_cast<IPropertyGroup*>(pProp);
-			if (pNextPropGroup == NULL)
-				continue;
-
-			if (!SaveWindowsXml_GroupProp(XmlStrObj, pPropNode, pNextPropGroup))
-				return false;
-		}
-	}
-
 	return true;
 }
 
