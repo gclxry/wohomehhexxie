@@ -38,7 +38,6 @@ IMPLEMENT_SERIAL(CClassViewMenuButton, CMFCToolBarMenuButton, 1)
 
 CWindowsView::CWindowsView()
 {
-	m_nCurrSort = ID_SORTING_GROUPBYTYPE;
 	m_hRoot = NULL;
 }
 
@@ -56,8 +55,6 @@ BEGIN_MESSAGE_MAP(CWindowsView, CDockablePane)
 	ON_COMMAND(ID_CLASS_PROPERTIES, OnClassProperties)
 	ON_WM_PAINT()
 	ON_WM_SETFOCUS()
-	ON_COMMAND_RANGE(ID_SORTING_GROUPBYTYPE, ID_SORTING_SORTBYACCESS, OnSort)
-	ON_UPDATE_COMMAND_UI_RANGE(ID_SORTING_GROUPBYTYPE, ID_SORTING_SORTBYACCESS, OnUpdateSort)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -79,39 +76,9 @@ int CWindowsView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;      // 未能创建
 	}
 
-	// 加载图像:
-	m_wndToolBar.Create(this, AFX_DEFAULT_TOOLBAR_STYLE, IDR_SORT);
-	m_wndToolBar.LoadToolBar(IDR_SORT, 0, 0, TRUE /* 已锁定*/);
-
 	OnChangeVisualStyle();
 
-	m_wndToolBar.SetPaneStyle(m_wndToolBar.GetPaneStyle() | CBRS_TOOLTIPS | CBRS_FLYBY);
-	m_wndToolBar.SetPaneStyle(m_wndToolBar.GetPaneStyle() & ~(CBRS_GRIPPER | CBRS_SIZE_DYNAMIC | CBRS_BORDER_TOP | CBRS_BORDER_BOTTOM | CBRS_BORDER_LEFT | CBRS_BORDER_RIGHT));
-
-	m_wndToolBar.SetOwner(this);
-
-	// 所有命令将通过此控件路由，而不是通过主框架路由:
-	m_wndToolBar.SetRouteCommandsViaFrame(FALSE);
-
-	CMenu menuSort;
-	menuSort.LoadMenu(IDR_POPUP_SORT);
-
-	m_wndToolBar.ReplaceButton(ID_SORT_MENU, CClassViewMenuButton(menuSort.GetSubMenu(0)->GetSafeHmenu()));
-
-	CClassViewMenuButton* pButton =  DYNAMIC_DOWNCAST(CClassViewMenuButton, m_wndToolBar.GetButton(0));
-
-	if (pButton != NULL)
-	{
-		pButton->m_bText = FALSE;
-		pButton->m_bImage = TRUE;
-		pButton->SetImage(GetCmdMgr()->GetCmdImage(m_nCurrSort));
-		pButton->SetMessageWnd(this);
-	}
-
 	m_wndWindowTree.ModifyStyle(0, TVS_SHOWSELALWAYS);
-
-	// 填入一些静态树视图数据(此处只需填入虚拟代码，而不是复杂的数据)
-	FillClassView();
 
 	return 0;
 }
@@ -125,44 +92,6 @@ void CWindowsView::OnSize(UINT nType, int cx, int cy)
 void CWindowsView::SetProjectInitState(bool bInitOk)
 {
 	m_wndWindowTree.SetProjectInitState(bInitOk);
-}
-
-void CWindowsView::FillClassView()
-{
-/*	m_hRoot = m_wndWindowTree.InsertItem(_T("【窗体-面板】"), 0, 0);
-	m_wndWindowTree.SetItemState(m_hRoot, TVIS_BOLD, TVIS_BOLD);
-
-	HTREEITEM hClass = m_wndWindowTree.InsertItem(_T("CFakeAboutDlg"), 1, 1, m_hRoot);
-	m_wndWindowTree.InsertItem(_T("CFakeAboutDlg()"), 3, 3, hClass);
-
-	m_wndWindowTree.Expand(m_hRoot, TVE_EXPAND);
-
-	hClass = m_wndWindowTree.InsertItem(_T("CFakeApp"), 1, 1, m_hRoot);
-	m_wndWindowTree.InsertItem(_T("CFakeApp()"), 3, 3, hClass);
-	m_wndWindowTree.InsertItem(_T("InitInstance()"), 3, 3, hClass);
-	m_wndWindowTree.InsertItem(_T("OnAppAbout()"), 3, 3, hClass);
-
-	hClass = m_wndWindowTree.InsertItem(_T("CFakeAppDoc"), 1, 1, m_hRoot);
-	m_wndWindowTree.InsertItem(_T("CFakeAppDoc()"), 4, 4, hClass);
-	m_wndWindowTree.InsertItem(_T("~CFakeAppDoc()"), 3, 3, hClass);
-	m_wndWindowTree.InsertItem(_T("OnNewDocument()"), 3, 3, hClass);
-
-	hClass = m_wndWindowTree.InsertItem(_T("CFakeAppView"), 1, 1, m_hRoot);
-	m_wndWindowTree.InsertItem(_T("CFakeAppView()"), 4, 4, hClass);
-	m_wndWindowTree.InsertItem(_T("~CFakeAppView()"), 3, 3, hClass);
-	m_wndWindowTree.InsertItem(_T("GetDocument()"), 3, 3, hClass);
-	m_wndWindowTree.Expand(hClass, TVE_EXPAND);
-
-	hClass = m_wndWindowTree.InsertItem(_T("CFakeAppFrame"), 1, 1, m_hRoot);
-	m_wndWindowTree.InsertItem(_T("CFakeAppFrame()"), 3, 3, hClass);
-	m_wndWindowTree.InsertItem(_T("~CFakeAppFrame()"), 3, 3, hClass);
-	m_wndWindowTree.InsertItem(_T("m_wndMenuBar"), 6, 6, hClass);
-	m_wndWindowTree.InsertItem(_T("m_wndToolBar"), 6, 6, hClass);
-	m_wndWindowTree.InsertItem(_T("m_wndStatusBar"), 6, 6, hClass);
-
-	hClass = m_wndWindowTree.InsertItem(_T("Globals"), 2, 2, m_hRoot);
-	m_wndWindowTree.InsertItem(_T("theFakeApp"), 5, 5, hClass);
-	m_wndWindowTree.Expand(hClass, TVE_EXPAND);*/
 }
 
 void CWindowsView::Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPropCtrl)
@@ -221,46 +150,17 @@ void CWindowsView::OnContextMenu(CWnd* pWnd, CPoint point)
 void CWindowsView::AdjustLayout()
 {
 	if (GetSafeHwnd() == NULL)
-	{
 		return;
-	}
 
 	CRect rectClient;
 	GetClientRect(rectClient);
 
-	int cyTlb = m_wndToolBar.CalcFixedLayout(FALSE, TRUE).cy;
-
-	m_wndToolBar.SetWindowPos(NULL, rectClient.left, rectClient.top, rectClient.Width(), cyTlb, SWP_NOACTIVATE | SWP_NOZORDER);
-	m_wndWindowTree.SetWindowPos(NULL, rectClient.left + 1, rectClient.top + cyTlb + 1, rectClient.Width() - 2, rectClient.Height() - cyTlb - 2, SWP_NOACTIVATE | SWP_NOZORDER);
+	m_wndWindowTree.SetWindowPos(NULL, rectClient.left, rectClient.top , rectClient.Width(), rectClient.Height(), SWP_NOACTIVATE | SWP_NOZORDER);
 }
 
 BOOL CWindowsView::PreTranslateMessage(MSG* pMsg)
 {
 	return CDockablePane::PreTranslateMessage(pMsg);
-}
-
-void CWindowsView::OnSort(UINT id)
-{
-	if (m_nCurrSort == id)
-	{
-		return;
-	}
-
-	m_nCurrSort = id;
-
-	CClassViewMenuButton* pButton =  DYNAMIC_DOWNCAST(CClassViewMenuButton, m_wndToolBar.GetButton(0));
-
-	if (pButton != NULL)
-	{
-		pButton->SetImage(GetCmdMgr()->GetCmdImage(id));
-		m_wndToolBar.Invalidate();
-		m_wndToolBar.UpdateWindow();
-	}
-}
-
-void CWindowsView::OnUpdateSort(CCmdUI* pCmdUI)
-{
-	pCmdUI->SetCheck(pCmdUI->m_nID == m_nCurrSort);
 }
 
 void CWindowsView::OnClassAddMemberFunction()
@@ -304,7 +204,7 @@ void CWindowsView::OnSetFocus(CWnd* pOldWnd)
 
 void CWindowsView::OnChangeVisualStyle()
 {
-	m_ClassViewImages.DeleteImageList();
+	m_WindowViewImages.DeleteImageList();
 
 	UINT uiBmpId = theApp.m_bHiColorIcons ? IDB_CLASS_VIEW_24 : IDB_CLASS_VIEW;
 
@@ -323,13 +223,10 @@ void CWindowsView::OnChangeVisualStyle()
 
 	nFlags |= (theApp.m_bHiColorIcons) ? ILC_COLOR24 : ILC_COLOR4;
 
-	m_ClassViewImages.Create(16, bmpObj.bmHeight, nFlags, 0, 0);
-	m_ClassViewImages.Add(&bmp, RGB(255, 0, 0));
+	m_WindowViewImages.Create(16, bmpObj.bmHeight, nFlags, 0, 0);
+	m_WindowViewImages.Add(&bmp, RGB(255, 0, 0));
 
-	m_wndWindowTree.SetImageList(&m_ClassViewImages, TVSIL_NORMAL);
-
-	m_wndToolBar.CleanUpLockedImages();
-	m_wndToolBar.LoadBitmap(theApp.m_bHiColorIcons ? IDB_SORT_24 : IDR_SORT, 0, 0, TRUE /* 锁定*/);
+	m_wndWindowTree.SetImageList(&m_WindowViewImages, TVSIL_NORMAL);
 }
 
 void CWindowsView::InitShowNewProject()

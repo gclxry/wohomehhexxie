@@ -94,9 +94,6 @@ void CWindowsViewTree::Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPr
 	m_pPropCtrl = pPropCtrl;
 
 	this->DeleteAllItems();
-	HTREEITEM hRootItem = this->InsertItem(_T("¡¾´°¿Ú/Ãæ°å¡¿"), 1, 1);
-	this->SetItemState(hRootItem, TVIS_BOLD, TVIS_BOLD);
-	this->SelectItem(hRootItem);
 }
 
 void CWindowsViewTree::OnCreateWindowPanel()

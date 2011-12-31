@@ -28,12 +28,8 @@ public:
 	void SetProjectInitState(bool bInitOk);
 
 protected:
-	CClassToolBar m_wndToolBar;
 	CWindowsViewTree m_wndWindowTree;
-	CImageList m_ClassViewImages;
-	UINT m_nCurrSort;
-
-	void FillClassView();
+	CImageList m_WindowViewImages;
 
 private:
 	HTREEITEM m_hRoot;
@@ -53,8 +49,6 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
 	afx_msg LRESULT OnChangeActiveTab(WPARAM, LPARAM);
-	afx_msg void OnSort(UINT id);
-	afx_msg void OnUpdateSort(CCmdUI* pCmdUI);
 
 	DECLARE_MESSAGE_MAP()
 };
