@@ -46,6 +46,7 @@ private:
 	void RefreshImageProp(CMFCPropertyGridProperty* pProperty, IPropertyImage *pImageProp);
 	void RefreshIntProp(CMFCPropertyGridProperty* pProperty, IPropertyInt *pIntProp);
 	void RefreshStringProp(CMFCPropertyGridProperty* pProperty, IPropertyString *pStringProp);
+	void RefreshHaveBasePropPropetry(CMFCPropertyGridProperty* pProperty, IPropertyBase *pBaseProp);
 
 private:
 	bool m_bProjectInitOk;

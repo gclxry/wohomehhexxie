@@ -26,6 +26,8 @@ void IFeatureObject::SetObjectId(const char* pszObjId)
 {
 	if (pszObjId != NULL)
 		m_strObjId = pszObjId;
+	else
+		m_strObjId = "";
 }
 
 const char* IFeatureObject::GetObjectType()
@@ -37,6 +39,8 @@ void IFeatureObject::SetObjectType(const char* pszObjType)
 {
 	if (pszObjType != NULL)
 		m_strObjType = pszObjType;
+	else
+		m_strObjType = "";
 }
 
 const char* IFeatureObject::GetObjectName()
@@ -48,6 +52,8 @@ void IFeatureObject::SetObjectName(const char* pszObjName)
 {
 	if (pszObjName != NULL)
 		m_strObjName = pszObjName;
+	else
+		m_strObjName = "";
 }
 
 const char* IFeatureObject::GetObjectInfo()
@@ -59,6 +65,8 @@ void IFeatureObject::SetObjectInfo(const char* pszObjInfo)
 {
 	if (pszObjInfo != NULL)
 		m_strObjInfo = pszObjInfo;
+	else
+		m_strObjInfo = "";
 }
 
 OBJECT_TYPE_ID IFeatureObject::GetObjectTypeId()

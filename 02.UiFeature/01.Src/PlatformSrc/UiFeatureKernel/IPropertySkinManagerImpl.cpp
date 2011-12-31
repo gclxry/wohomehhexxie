@@ -1481,7 +1481,7 @@ bool IPropertySkinManagerImpl::SaveWindowsXml(const char *pszSavePath, string &s
 		if (pWndPropGroup == NULL)
 			continue;
 
-		CUiXmlWriteNode* pWindowNode = XmlStrObj.CreateNode(pRootNode, pWndPropGroup->GetObjectType());
+		CUiXmlWriteNode* pWindowNode = XmlStrObj.CreateNode(pRootNode, PROP_TYPE_WINDOW_NAME);
 		if (pWindowNode == NULL)
 			return false;
 		pWindowNode->AddAttribute(SKIN_OBJECT_ID, pWndPropGroup->GetObjectId());

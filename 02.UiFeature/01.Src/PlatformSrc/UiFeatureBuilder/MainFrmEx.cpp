@@ -64,8 +64,8 @@ void CMainFrame::OnFileNew()
 	if (m_strNewSkinDir.GetAt(m_strNewSkinDir.GetLength() - 1) != '\\')
 		m_strNewSkinDir += "\\";
 
-	CString strInfo(_T(""));
-	strInfo.Format(_T("创建皮肤工程文件【%s%s】成功！"), m_strNewSkinName, _T(NAME_SKIN_FILE_EX_NAME));
+//	CString strInfo(_T(""));
+//	strInfo.Format(_T("创建皮肤工程文件【%s%s】成功！"), m_strNewSkinName, _T(NAME_SKIN_FILE_EX_NAME));
 
 	m_strNewUfpPath.Format(_T("%s%s%s"), m_strNewSkinDir, m_strNewSkinName, _T(NAME_SKIN_PROJ_EX_NAME));
 
@@ -80,7 +80,7 @@ void CMainFrame::OnFileNew()
 	if (!OpenSkinProject(true, m_strNewSkinDir, m_strNewSkinName))
 		return;
 
-	AfxMessageBox(strInfo, MB_OK | MB_ICONINFORMATION);
+//	AfxMessageBox(strInfo, MB_OK | MB_ICONINFORMATION);
 }
 
 void CMainFrame::OnFileOpen()
@@ -116,9 +116,9 @@ void CMainFrame::OnFileOpen()
 	if (!OpenSkinProject(false, m_strNewSkinDir, m_strNewSkinName))
 		return;
 
-	CString strInfo(_T(""));
-	strInfo.Format(_T("打开皮肤工程文件【%s%s】成功！"), m_strCurSkinName, _T(NAME_SKIN_FILE_EX_NAME));
-	AfxMessageBox(strInfo, MB_OK | MB_ICONINFORMATION);
+//	CString strInfo(_T(""));
+//	strInfo.Format(_T("打开皮肤工程文件【%s%s】成功！"), m_strCurSkinName, _T(NAME_SKIN_FILE_EX_NAME));
+//	AfxMessageBox(strInfo, MB_OK | MB_ICONINFORMATION);
 }
 
 void CMainFrame::SetProjectInitState(bool bInitOk)
@@ -239,13 +239,8 @@ bool CMainFrame::SaveSkinProject(CString strSkinDir, CString strSkinName, bool b
 		return false;
 
 	bool bOk = m_pKernelWindow->BD_SaveProject(W2A(strSkinDir), W2A(strSkinName));
-	if (bNeedErroInfo)
-	{
-		if (bOk)
-			AfxMessageBox(_T("保存皮肤工程成功！"), MB_OK | MB_ICONINFORMATION);
-		else
-			AfxMessageBox(_T("保存皮肤工程失败！"), MB_OK | MB_ICONERROR);
-	}
+	if (bNeedErroInfo && !bOk)
+		AfxMessageBox(_T("保存皮肤工程失败！"), MB_OK | MB_ICONERROR);
 	return bOk;
 }
 

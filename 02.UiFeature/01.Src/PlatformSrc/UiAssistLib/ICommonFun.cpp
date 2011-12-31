@@ -242,7 +242,6 @@ void ResetWindowBaseInfo(IWindowBase *pWndBase)
 	IPropertyGroup *pWnpPropGroup = pWndBase->PP_GetWindowPropetryGroup();
 	if (pWnpPropGroup != NULL)
 	{
-		pWndBase->SetObjectName(pWnpPropGroup->GetObjectName());
 		pWndBase->SetObjectId(pWnpPropGroup->GetObjectId());
 	}
 }

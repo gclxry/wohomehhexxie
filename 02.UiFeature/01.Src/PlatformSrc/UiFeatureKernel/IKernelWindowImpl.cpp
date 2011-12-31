@@ -142,7 +142,6 @@ IWindowBase* IKernelWindowImpl::BD_CreateWindowEmptyPropetry()
 	}
 	// 初始化在builder中的属性
 	pWndBase->BD_InitWindowBase(pPropWindow);
-	ResetWindowBaseInfo(pWndBase);
 
 	// 记录到窗口队列中
 	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>((HWND)m_nBuilderHwnd++, pWndBaseImpl));
@@ -168,7 +167,6 @@ IWindowBase* IKernelWindowImpl::BD_CreateWindowByPropetry(IPropertyWindow *pProp
 	}
 	// 初始化在builder中的属性
 	pWndBase->BD_InitWindowBase(pPropWnd);
-	ResetWindowBaseInfo(pWndBase);
 
 	// 记录到窗口队列中
 	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>((HWND)m_nBuilderHwnd++, pWndBaseImpl));
