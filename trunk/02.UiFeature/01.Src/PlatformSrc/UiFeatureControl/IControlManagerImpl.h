@@ -15,5 +15,5 @@ public:
 
 private:
 	// 设置一个支持的控件的节点
-	void SetRegControl(CONTROL_REG_MAP *pCtrlMap, string strCtrlGroupName, string strCtrlName, string strControlImg);
+	void SetRegControl(CONTROL_REG_MAP *pCtrlMap, string strCtrlGroupName, string strCtrlName, string strControlImg, string strControlInfo);
 };

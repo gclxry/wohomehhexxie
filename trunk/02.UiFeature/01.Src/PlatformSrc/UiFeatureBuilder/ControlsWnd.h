@@ -2,25 +2,13 @@
 #pragma once
 #include "FeatureControlList.h"
 #include "UiFeatureControl.h"
-
-
-struct CONTROL_LIST_ITEM 
-{
-	// 所处的DLL名称
-	string	strDllName;
-	// 控件名称
-	string	strCtrlName;
-	// 控件在Builder显示的图片或者icon文件，这些文件存放在ControlsRes目录下，为空则使用Builder中的默认的图标
-	string	strControlImg;
-};
-// KEY: strCtrlName
-typedef map<string, CONTROL_LIST_ITEM>	CONTROL_LIST_ITEM_MAP;
+#include "..\..\Inc\IControlBase.h"
 
 struct CONTROL_LIST_GROUP
 {
 	// 控件所在的控件组名称
 	string strCtrlGroupName;
-	CONTROL_LIST_ITEM_MAP ItemMap;
+	CONTROL_REG_MAP ItemMap;
 };
 // KEY:strCtrlGroupName
 typedef map<string, CONTROL_LIST_GROUP>	CONTROL_LIST_GROUP_MAP;

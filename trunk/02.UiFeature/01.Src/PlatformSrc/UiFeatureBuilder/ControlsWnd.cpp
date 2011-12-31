@@ -84,7 +84,8 @@ int CControlsWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndCtrlList.ModifyStyle(0, LVS_SINGLESEL | LVS_SHOWSELALWAYS);
 
 	m_wndCtrlList.InsertColumn(0, _T("#"), LVCFMT_LEFT, 30);
-	m_wndCtrlList.InsertColumn(CONTROL_NAME_COLUMN, _T("控件名称"), LVCFMT_LEFT, 150);
+	m_wndCtrlList.InsertColumn(CONTROL_NAME_COLUMN, _T("控件名称"), LVCFMT_LEFT, 80);
+	m_wndCtrlList.InsertColumn(CONTROL_NAME_COLUMN + 1, _T("控件说明"), LVCFMT_LEFT, 160);
 
 	AdjustLayout();
 	return 0;
@@ -105,7 +106,7 @@ void CControlsWnd::SetControlList(CONTROL_REG_MAP* pRegControlMap)
 
 	for (CONTROL_REG_MAP::iterator pCtrlItem = pRegControlMap->begin(); pCtrlItem != pRegControlMap->end(); pCtrlItem++)
 	{
-		CONTROL_REG &RegCtrl = pCtrlItem->second;
+		CONTROL_REG RegCtrl = pCtrlItem->second;
 
 		CONTROL_LIST_GROUP_MAP::iterator pGroup = m_ListGroupMap.find(RegCtrl.strCtrlGroupName);
 		if (pGroup == m_ListGroupMap.end())
@@ -124,15 +125,11 @@ void CControlsWnd::SetControlList(CONTROL_REG_MAP* pRegControlMap)
 		}
 
 		CONTROL_LIST_GROUP &Group = pGroup->second;
-		CONTROL_LIST_ITEM_MAP::iterator pItem = Group.ItemMap.find(RegCtrl.strCtrlName);
+		CONTROL_REG_MAP::iterator pItem = Group.ItemMap.find(RegCtrl.strCtrlName);
 		if (pItem != Group.ItemMap.end())
 			continue;
 
-		CONTROL_LIST_ITEM Item;
-		Item.strDllName = RegCtrl.strDllName;
-		Item.strCtrlName = RegCtrl.strCtrlName;
-		Item.strControlImg = RegCtrl.strControlImg;
-		Group.ItemMap.insert(pair<string, CONTROL_LIST_ITEM>(Item.strCtrlName, Item));
+		Group.ItemMap.insert(pair<string, CONTROL_REG>(RegCtrl.strCtrlName, RegCtrl));
 	}
 
 	CONTROL_LIST_GROUP_MAP::iterator pGroup = m_ListGroupMap.begin();
@@ -158,14 +155,15 @@ void CControlsWnd::SetCurrentSelectList(string strGroupName)
 
 	int nCtns = 0;
 	CONTROL_LIST_GROUP &Group = pGroup->second;
-	for (CONTROL_LIST_ITEM_MAP::iterator pCtrlItem = Group.ItemMap.begin(); pCtrlItem != Group.ItemMap.end(); pCtrlItem++)
+	for (CONTROL_REG_MAP::iterator pCtrlItem = Group.ItemMap.begin(); pCtrlItem != Group.ItemMap.end(); pCtrlItem++)
 	{
-		CONTROL_LIST_ITEM& Item = pCtrlItem->second;
+		CONTROL_REG& Item = pCtrlItem->second;
 
 		CString strNo;
 		strNo.Format(_T("%d"), nCtns + 1);
 		m_wndCtrlList.InsertItem(nCtns, strNo);
 		m_wndCtrlList.SetItemText(nCtns, CONTROL_NAME_COLUMN, A2W(Item.strCtrlName.c_str()));
+		m_wndCtrlList.SetItemText(nCtns, CONTROL_NAME_COLUMN + 1, A2W(Item.strControlInfo.c_str()));
 		nCtns++;
 	}
 }
