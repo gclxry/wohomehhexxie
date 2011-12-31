@@ -335,10 +335,6 @@ void CPropertyViewCtrl::OnPropertyChanged(CMFCPropertyGridProperty* pProperty)
 		return;
 	}
 
-	// 刷新树形列表
-	if (m_pViewTree != NULL)
-		m_pViewTree->Refresh(m_pCurrentPropGroup);
-
 	// 刷新界面 TBD
 
 }
@@ -373,11 +369,11 @@ void CPropertyViewCtrl::RefreshHaveBasePropPropetry(CMFCPropertyGridProperty* pP
 	if (pProperty == NULL || pBaseProp == NULL)
 		return;
 
+	pBaseProp->SetRelevancyProp(NULL);
 	COleVariant NewVariant = pProperty->GetValue();
 	if (NewVariant.bstrVal == NULL)
 	{
 		pBaseProp->SetRelevancyPropName(NULL);
-		pBaseProp->SetRelevancyProp(NULL);
 		return;
 	}
 
@@ -385,7 +381,6 @@ void CPropertyViewCtrl::RefreshHaveBasePropPropetry(CMFCPropertyGridProperty* pP
 	::SysFreeString(NewVariant.bstrVal);
 
 	pBaseProp->SetRelevancyPropName(W2A(strValue));
-	pBaseProp->SetRelevancyProp(NULL);
 }
 
 void CPropertyViewCtrl::RefreshImageProp(CMFCPropertyGridProperty* pProperty, IPropertyImage *pImageProp)
@@ -423,12 +418,16 @@ void CPropertyViewCtrl::RefreshStringProp(CMFCPropertyGridProperty* pProperty, I
 			string strOld = pStringProp->GetString();
 			COleVariant OldVariant(A2W(strOld.c_str()));
 			pProperty->SetValue(OldVariant);
-			AfxMessageBox(_T("【Name】字段不允许为空！"), MB_OK | MB_ICONERROR);
+			AfxMessageBox(_T("【@Object_Name】字段不允许为空！"), MB_OK | MB_ICONERROR);
 			return;
 		}
 	}
 
 	pStringProp->SetString(W2A(strValue));
+
+	// 刷新树形列表
+	if (strName.CompareNoCase(_T(NAME_SKIN_PROP_NAME)) == 0 && m_pViewTree != NULL)
+		m_pViewTree->RefreshObjectName();
 }
 
 void CPropertyViewCtrl::RefreshComboBoxProp(CMFCPropertyGridProperty* pProperty, IPropertyComboBox *pComboboxProp)

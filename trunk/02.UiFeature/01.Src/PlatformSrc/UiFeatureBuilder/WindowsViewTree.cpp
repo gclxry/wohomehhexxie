@@ -183,83 +183,45 @@ void CWindowsViewTree::OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase)
 	m_pPropCtrl->SetShowPropGroup(pPropGroup);
 }
 
-void CWindowsViewTree::Refresh(IPropertyGroup *pRefreshGroup)
+void CWindowsViewTree::RefreshObjectName()
 {
-	if (pRefreshGroup == NULL)
-		return;
-
-	IPropertyBase *pPropBase = dynamic_cast<IPropertyBase*>(pRefreshGroup);
-	if (pPropBase == NULL)
-		return;
-
 	HTREEITEM hRootItem = this->GetRootItem();
-	HTREEITEM hRefreshItem = FindRefreshTreeItem(hRootItem, pPropBase);
-	if (hRefreshItem == NULL)
-		return;
-	
-	RefreshTreeItem(hRefreshItem);
+	RefreshItemObjectName(hRootItem);
 }
 
-HTREEITEM CWindowsViewTree::FindRefreshTreeItem(HTREEITEM hItem, IPropertyBase *pPropBase)
-{
-	if (hItem == NULL || pPropBase == NULL)
-		return NULL;
-
-	IFeatureObject *pComPropBase = (IFeatureObject*)this->GetItemData(hItem);
-	if (pComPropBase != NULL && pComPropBase->GetObjectId() != NULL && pPropBase->GetObjectId() != NULL
-		&& lstrcmpA(pComPropBase->GetObjectId(), pPropBase->GetObjectId()) == 0)
-		return hItem;
-
-	if (!this->ItemHasChildren(hItem))
-		return NULL;
-
-	HTREEITEM hChild = this->GetChildItem(hItem);
-	while(hChild != NULL)
-	{
-		HTREEITEM hFind = FindRefreshTreeItem(hChild, pPropBase);
-		if (hFind != NULL)
-			return hFind;
-
-		hChild = this->GetNextItem(hChild, TVGN_NEXT);
-	}
-
-	return NULL;
-}
-
-void CWindowsViewTree::RefreshTreeItem(HTREEITEM hItem)
+void CWindowsViewTree::RefreshItemObjectName(HTREEITEM hParentItem)
 {
 	USES_CONVERSION;
-	if (hItem == NULL)
+	if (hParentItem == NULL)
 		return;
 
-	IFeatureObject *pPropBase = (IFeatureObject*)this->GetItemData(hItem);
-	if (pPropBase != NULL)
-	{
-		// 刷新操作，目前只有刷新名字
-		if (pPropBase->GetObjectTypeId() == OTID_WINDOW)
-		{
-			// 窗口
-			IWindowBase* pWnd = dynamic_cast<IWindowBase*>(pPropBase);
-			if (pWnd != NULL && pWnd->PP_GetWindowObjectName() != NULL)
-			{
-				this->SetItemText(hItem, A2W(pWnd->PP_GetWindowObjectName()));
-				pWnd->SetObjectName(pWnd->PP_GetWindowObjectName());
-			}
-		}
-		else if (pPropBase->GetObjectTypeId() == OTID_CONTROL)
-		{
-			// 控件
-			this->SetItemText(hItem, A2W(pPropBase->GetObjectName()));
-		}
-	}
-
-	if (!this->ItemHasChildren(hItem))
-		return;
-
-	HTREEITEM hChild = this->GetChildItem(hItem);
+	HTREEITEM hChild = this->GetChildItem(hParentItem);
 	while(hChild != NULL)
 	{
-		RefreshTreeItem(hChild);
+		IFeatureObject *pPropBase = (IFeatureObject*)this->GetItemData(hChild);
+		if (pPropBase != NULL)
+		{
+			// 刷新操作，目前只有刷新名字
+			if (pPropBase->GetObjectTypeId() == OTID_WINDOW)
+			{
+				// 窗口
+				IWindowBase* pWnd = dynamic_cast<IWindowBase*>(pPropBase);
+				if (pWnd != NULL && pWnd->PP_GetWindowObjectName() != NULL)
+				{
+					this->SetItemText(hChild, A2W(pWnd->PP_GetWindowObjectName()));
+					pWnd->SetObjectName(pWnd->PP_GetWindowObjectName());
+				}
+			}
+			else if (pPropBase->GetObjectTypeId() == OTID_CONTROL)
+			{
+				// 控件
+				//this->SetItemText(hChild, A2W(pPropBase->GetObjectName()));
+			}
+		}
+
+		// 更新子控件的名称
+		RefreshItemObjectName(hChild);
+
 		hChild = this->GetNextItem(hChild, TVGN_NEXT);
 	}
 }

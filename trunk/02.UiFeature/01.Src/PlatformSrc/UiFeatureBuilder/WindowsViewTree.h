@@ -14,7 +14,7 @@ public:
 	virtual ~CWindowsViewTree();
 
 	void Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPropCtrl);
-	void Refresh(IPropertyGroup *pRefreshGroup);
+	void RefreshObjectName();
 	void InitShowNewProject();
 	void SetProjectInitState(bool bInitOk);
 
@@ -26,8 +26,7 @@ private:
 	void OnTvnSelchanged_SelectRoot();
 	void OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase);
 
-	HTREEITEM FindRefreshTreeItem(HTREEITEM hItem, IPropertyBase *pPropBase);
-	void RefreshTreeItem(HTREEITEM hItem);
+	void RefreshItemObjectName(HTREEITEM hParentItem);
 
 private:
 	bool m_bProjectInitOk;
