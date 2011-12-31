@@ -3,7 +3,6 @@
 #include "IWindowBaseImpl.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IPropertyControl.h"
-#include "..\..\Inc\IPropertyControlManager.h"
 #include "IPropertySkinManagerImpl.h"
 
 // 弹出任务栏菜单消息，XP以下适用
@@ -118,11 +117,7 @@ bool IWindowBaseImpl::GetControlByName(CHILD_CTRLS_VEC *pCtrlVec, char *pszCtrlN
 		IControlBase *pCtrl = m_ChildCtrlsVec[i];
 		if (pCtrl != NULL)
 		{
-			IPropertyControlManager* pCtrlProp = pCtrl->GetControlBaseProp();
-			if (pCtrlProp == NULL)
-				continue;
-
-			string strCtrlName = pCtrlProp->GetName();
+			string strCtrlName = pCtrl->PP_GetObjectName();
 			if (strCtrlName.compare(pszCtrlName) == 0)
 			{
 				*ppCtrl = pCtrl;
@@ -402,28 +397,24 @@ bool IWindowBaseImpl::CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt, I
 	for (int i = nCtns - 1; i >= 0; i--)
 	{
 		IControlBase* pCtrl = (*pCtrlVec)[i];
-		if (pCtrl != NULL)
+		if (pCtrl != NULL && pCtrl->IsVisible())
 		{
-			IPropertyControlManager* pCtrlProp = pCtrl->GetControlBaseProp();
-			if (pCtrlProp != NULL && pCtrlProp->IsVisible())
+			if (pCtrl->GetReceiveMouseMessage())
 			{
-				if (pCtrlProp->GetReceiveMouseMessage())
+				RECT CtrlRct = pCtrl->GetCtrlInWindowRect();
+				if (::PtInRect(&CtrlRct, pt))
 				{
-					RECT CtrlRct = pCtrlProp->GetCtrlInWindowRect();
-					if (::PtInRect(&CtrlRct, pt))
-					{
-						*ppControl = pCtrl;
-						CHILD_CTRLS_VEC *pCtrlsVec = pCtrl->GetChildCtrlsVec();
-						CheckMouseInControl(pCtrlsVec, pt, ppControl);
-						return true;
-					}
-				}
-				else
-				{
+					*ppControl = pCtrl;
 					CHILD_CTRLS_VEC *pCtrlsVec = pCtrl->GetChildCtrlsVec();
-					if (CheckMouseInControl(pCtrlsVec, pt, ppControl))
-						return true;
+					CheckMouseInControl(pCtrlsVec, pt, ppControl);
+					return true;
 				}
+			}
+			else
+			{
+				CHILD_CTRLS_VEC *pCtrlsVec = pCtrl->GetChildCtrlsVec();
+				if (CheckMouseInControl(pCtrlsVec, pt, ppControl))
+					return true;
 			}
 		}
 	}
@@ -441,8 +432,7 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 		if (m_pLButtonDownCtrl != NULL)
 		{
 			// 如果允许在控件内部进行自由拖动
-			IPropertyControlManager* pCtrlProp = m_pLButtonDownCtrl->GetControlBaseProp();
-			if (pCtrlProp != NULL && pCtrlProp->GetDragControl())
+			if (m_pLButtonDownCtrl->GetDragControl())
 			{
 				m_pLButtonDownCtrl->OnMouseDrag(pt);
 				return;
@@ -452,29 +442,25 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 		// 鼠标按下是，需要锁定一个控件进行鼠标移动处理
 		if (m_pMouseHoverCtrl != NULL)
 		{
-			IPropertyControlManager* pCtrlProp = m_pMouseHoverCtrl->GetControlBaseProp();
-			if (pCtrlProp != NULL)
+			RECT CtrlRct = m_pMouseHoverCtrl->GetCtrlInWindowRect();
+			if (::PtInRect(&CtrlRct, pt))
 			{
-				RECT CtrlRct = pCtrlProp->GetCtrlInWindowRect();
-				if (::PtInRect(&CtrlRct, pt))
+				if (m_pMouseHoverCtrl->IsMousehover())
 				{
-					if (m_pMouseHoverCtrl->IsMousehover())
-					{
-						m_pMouseHoverCtrl->OnMouseMove(pt);
-					}
-					else
-					{
-						m_pMouseHoverCtrl->SetMouseHover(true);
-						m_pMouseHoverCtrl->OnMouseEnter(pt);
-					}
+					m_pMouseHoverCtrl->OnMouseMove(pt);
 				}
 				else
 				{
-					if (m_pMouseHoverCtrl->IsMousehover())
-					{
-						m_pMouseHoverCtrl->SetMouseHover(false);
-						m_pMouseHoverCtrl->OnMouseLeave();
-					}
+					m_pMouseHoverCtrl->SetMouseHover(true);
+					m_pMouseHoverCtrl->OnMouseEnter(pt);
+				}
+			}
+			else
+			{
+				if (m_pMouseHoverCtrl->IsMousehover())
+				{
+					m_pMouseHoverCtrl->SetMouseHover(false);
+					m_pMouseHoverCtrl->OnMouseLeave();
 				}
 			}
 		}
@@ -641,10 +627,7 @@ void IWindowBaseImpl::SetControlPostion(CHILD_CTRLS_VEC *pCtrlVec, SIZE NewSize)
 			}
 			else
 			{
-				IPropertyControlManager* pParentCtrlProp = pParentCtrl->GetControlBaseProp();
-				if (pParentCtrlProp == NULL)
-					continue;
-				ParentRctInWnd = pParentCtrlProp->GetCtrlInWindowRect();
+				ParentRctInWnd = pParentCtrl->GetCtrlInWindowRect();
 			}
 
 			// 计算当前控件的位置
@@ -662,13 +645,9 @@ void IWindowBaseImpl::SetControlWindowPostion(IControlBase* pCtrl, RECT ParentRc
 	if (pCtrl == NULL)
 		return;
 
-	IPropertyControlManager* pCtrlProp = pCtrl->GetControlBaseProp();
-	if (pCtrlProp == NULL)
-		return;
-
 	RECT RctInWnd;
 	INIT_RECT(RctInWnd);
-	CONTROL_LAYOUT_INFO CtrlLayout = pCtrlProp->GetLayout();
+	CONTROL_LAYOUT_INFO CtrlLayout = pCtrl->GetLayout();
 	if (CtrlLayout.clType == CL_G_LEFT_TOP)
 	{
 		// 固定大小：左上角定位
@@ -747,7 +726,7 @@ void IWindowBaseImpl::SetControlWindowPostion(IControlBase* pCtrl, RECT ParentRc
 		RctInWnd.bottom = ParentRctInWnd.bottom - CtrlLayout.nBottomSpace;
 	}
 
-	pCtrlProp->SetCtrlInWindowRect(RctInWnd);
+	pCtrl->SetCtrlInWindowRect(RctInWnd);
 }
 
 // 销毁子类化窗口、释放资源

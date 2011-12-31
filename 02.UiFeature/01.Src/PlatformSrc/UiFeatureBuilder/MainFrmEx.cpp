@@ -61,6 +61,9 @@ void CMainFrame::OnFileNew()
 	if (m_strNewSkinDir.GetLength() <= 0 || m_strNewSkinName.GetLength() <= 0)
 		return;
 
+	CString strInfo(_T(""));
+	strInfo.Format(_T("创建皮肤工程文件【%s%s】成功！"), m_strNewSkinName, _T(NAME_SKIN_FILE_EX_NAME));
+
 	m_strNewUfpPath.Format(_T("%s\\%s%s"), m_strNewSkinDir, m_strNewSkinName, _T(NAME_SKIN_PROJ_EX_NAME));
 
 	// 保存老工程
@@ -68,10 +71,13 @@ void CMainFrame::OnFileNew()
 		return;
 
 	// 关闭老工程
-	if (!CloseSkinProject(m_strCurSkinDir, m_strCurSkinName))
+	if (!CloseSkinProject())
 		return;
 
-	OpenSkinProject(true, m_strNewSkinDir, m_strNewSkinName);
+	if (!OpenSkinProject(true, m_strNewSkinDir, m_strNewSkinName))
+		return;
+
+	AfxMessageBox(strInfo, MB_OK | MB_ICONINFORMATION);
 }
 
 void CMainFrame::OnFileOpen()
@@ -94,7 +100,7 @@ void CMainFrame::OnFileOpen()
 		return;
 
 	// 关闭老工程
-	if (!CloseSkinProject(m_strCurSkinDir, m_strCurSkinName))
+	if (!CloseSkinProject())
 		return;
 
 	// 打开工程
@@ -114,7 +120,7 @@ void CMainFrame::OnFileClose()
 		return;
 
 	// 关闭老工程
-	if (!CloseSkinProject(m_strCurSkinDir, m_strCurSkinName))
+	if (!CloseSkinProject())
 		return;
 }
 
@@ -178,6 +184,13 @@ bool CMainFrame::OpenSkinProject(bool bIsNew, CString strSkinDir, CString strSki
 		m_wndWindowView.InitShowNewProject();
 	}
 
+	m_strCurUfpPath = m_strNewUfpPath;
+	m_strCurSkinName = m_strNewSkinName;
+	m_strCurSkinDir = m_strNewSkinDir;
+
+	m_strNewUfpPath = _T("");
+	m_strNewSkinName = _T("");
+	m_strNewSkinDir = _T("");
 	return true;
 }
 
@@ -185,6 +198,10 @@ bool CMainFrame::OpenSkinProject(bool bIsNew, CString strSkinDir, CString strSki
 bool CMainFrame::SaveSkinProject(CString strSkinDir, CString strSkinName, bool bNeedErroInfo)
 {
 	USES_CONVERSION;
+
+	if (strSkinDir.GetLength() <= 0 || strSkinName.GetLength() <= 0)
+		return true;
+
 	if (m_pKernelWindow == NULL)
 		return false;
 
@@ -192,21 +209,22 @@ bool CMainFrame::SaveSkinProject(CString strSkinDir, CString strSkinName, bool b
 	if (bNeedErroInfo)
 	{
 		if (bOk)
-		{
 			AfxMessageBox(_T("保存皮肤工程成功！"), MB_OK | MB_ICONINFORMATION);
-		}
 		else
-		{
 			AfxMessageBox(_T("保存皮肤工程失败！"), MB_OK | MB_ICONERROR);
-		}
 	}
-	return true;
+	return bOk;
 }
 
 // 保存
-bool CMainFrame::CloseSkinProject(CString strSkinDir, CString strSkinName)
+bool CMainFrame::CloseSkinProject()
 {
 	SetProjectInitState(false);
+
+	if (m_pKernelWindow == NULL)
+		return false;
+
+	m_pKernelWindow->BD_CloseProject();
 
 	m_strCurUfpPath = _T("");
 	m_strCurSkinName = _T("");

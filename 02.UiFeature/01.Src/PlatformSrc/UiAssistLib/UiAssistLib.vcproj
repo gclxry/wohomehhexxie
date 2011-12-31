@@ -401,27 +401,15 @@
 				Name="02.控件基类"
 				>
 				<File
+					RelativePath=".\IControlBase.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Inc\IControlBase.h"
 					>
 				</File>
 				<File
-					RelativePath=".\IControlBaseImpl.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\IControlBaseImpl.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="03.在窗口中的控件属性"
-				>
-				<File
-					RelativePath="..\..\Inc\IPropertyControlManager.h"
-					>
-				</File>
-				<File
-					RelativePath=".\IPropertyControManager.cpp"
+					RelativePath=".\IPropertyContro_Propetry.cpp"
 					>
 				</File>
 			</Filter>

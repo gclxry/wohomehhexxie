@@ -79,7 +79,7 @@ private:
 	// 保存
 	bool SaveSkinProject(CString strSkinDir, CString strSkinName, bool bNeedErroInfo);
 	// 保存
-	bool CloseSkinProject(CString strSkinDir, CString strSkinName);
+	bool CloseSkinProject();
 
 // 生成的消息映射函数
 protected:

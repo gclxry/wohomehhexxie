@@ -1,15 +1,13 @@
 
 #include "StdAfx.h"
-#include "..\..\Inc\IPropertyControlManager.h"
+#include "..\..\Inc\IControlBase.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IControlBase.h"
 
-IPropertyControlManager::IPropertyControlManager(void)
+void IControlBase::InitControlPropetry()
 {
-	SetObjectType("PropertyControl");
 	m_pBaseCtrl = NULL;
 	m_pSkinPropMgr = NULL;
-	m_pParentPropertyControl = NULL;
 	m_ControlPropList.clear();
 
 
@@ -22,72 +20,41 @@ IPropertyControlManager::IPropertyControlManager(void)
 	m_bDragCtrl = false;
 }
 
-IPropertyControlManager::~IPropertyControlManager(void)
-{
-}
-
-void IPropertyControlManager::SetParentPropertyControl(IPropertyControlManager *pParent)
-{
-	if (pParent != NULL)
-		m_pParentPropertyControl = pParent;
-}
-
-IPropertyControlManager* IPropertyControlManager::GetParentPropertyControl()
-{
-	return m_pParentPropertyControl;
-}
-
-void IPropertyControlManager::SetPropertySkinManager(IPropertySkinManager *pMgr)
-{
-	m_pSkinPropMgr = pMgr;
-}
-
 // 可用属性
-void IPropertyControlManager::SetEnable(bool bEnable)
+void IControlBase::SetEnable(bool bEnable)
 {
 	m_bEnable = bEnable;
 }
 
-bool IPropertyControlManager::IsEnable()
+bool IControlBase::IsEnable()
 {
 	return m_bEnable;
 }
 
-// 设置附属控件
-void IPropertyControlManager::SetControlBase(IControlBase *pCtrl)
-{
-	m_pBaseCtrl = pCtrl;
-}
-
-IControlBase* IPropertyControlManager::GetControlBase()
-{
-	return m_pBaseCtrl;
-}
-
 // 可见属性
-void IPropertyControlManager::SetVisible(bool bVisible)
+void IControlBase::SetVisible(bool bVisible)
 {
 	m_bVisible = bVisible;
 }
 
-bool IPropertyControlManager::IsVisible()
+bool IControlBase::IsVisible()
 {
 	return m_bVisible;
 }
 
 // 是否接受鼠标消息
-void IPropertyControlManager::SetReceiveMouseMessage(bool bIsReceive)
+void IControlBase::SetReceiveMouseMessage(bool bIsReceive)
 {
 	m_bIsReceiveMouseMsg = bIsReceive;
 }
 
-bool IPropertyControlManager::GetReceiveMouseMessage()
+bool IControlBase::GetReceiveMouseMessage()
 {
 	return m_bIsReceiveMouseMsg;
 }
 
 // 控件显示位置和大小，这个位置是相对于附着的窗口的
-void IPropertyControlManager::SetCtrlInWindowRect(RECT CtrlWndRct)
+void IControlBase::SetCtrlInWindowRect(RECT CtrlWndRct)
 {
 	m_RectInWindow = CtrlWndRct;
 	int nWidth = RECT_WIDTH(m_RectInWindow);
@@ -174,18 +141,18 @@ void IPropertyControlManager::SetCtrlInWindowRect(RECT CtrlWndRct)
 	}
 }
 
-RECT IPropertyControlManager::GetCtrlInWindowRect()
+RECT IControlBase::GetCtrlInWindowRect()
 {
 	return m_RectInWindow;
 }
 
-RECT IPropertyControlManager::GetCtrlInControlRect()
+RECT IControlBase::GetCtrlInControlRect()
 {
 	return m_RectInParentCtrl;
 }
 
 // 取得控件的大小
-RECT IPropertyControlManager::GetCtrlRect()
+RECT IControlBase::GetCtrlRect()
 {
 	RECT CtrlRct;
 	INIT_RECT(CtrlRct);
@@ -195,41 +162,41 @@ RECT IPropertyControlManager::GetCtrlRect()
 }
 
 // 相对于父控件的布局信息
-void IPropertyControlManager::SetLayout(CONTROL_LAYOUT_INFO &cliLayoutInfo)
+void IControlBase::SetLayout(CONTROL_LAYOUT_INFO &cliLayoutInfo)
 {
 	m_LayoutInfo = cliLayoutInfo;
 }
 
-CONTROL_LAYOUT_INFO IPropertyControlManager::GetLayout()
+CONTROL_LAYOUT_INFO IControlBase::GetLayout()
 {
 	return m_LayoutInfo;
 }
 
 // 控件名称，唯一识别窗口的标志
-void IPropertyControlManager::SetName(char *pCtrlName)
+void IControlBase::PP_SetObjectName(char *pCtrlName)
 {
 	if (pCtrlName != NULL)
 		m_strCtrlName = pCtrlName;
 }
 
-const char* IPropertyControlManager::GetName()
+const char* IControlBase::PP_GetObjectName()
 {
 	return m_strCtrlName.c_str();
 }
 
 // 拖动控件属性
-void IPropertyControlManager::SetDragControl(bool bDrag)
+void IControlBase::SetDragControl(bool bDrag)
 {
 	m_bDragCtrl = bDrag;
 }
 
-bool IPropertyControlManager::GetDragControl()
+bool IControlBase::GetDragControl()
 {
 	return m_bDragCtrl;
 }
 
 // 1. 创建空的属性列表
-bool IPropertyControlManager::CreateEmptyPropList()
+bool IControlBase::CreateEmptyPropList()
 {
 	m_ControlPropList.clear();
 
@@ -252,7 +219,7 @@ bool IPropertyControlManager::CreateEmptyPropList()
 }
 
 // 2.从Builder中新创建一个控件，需要初始化属性的PropId
-bool IPropertyControlManager::InitObjectIdByBuilder(const char* pszBaseId)
+bool IControlBase::InitObjectIdByBuilder(const char* pszBaseId)
 {
 	if (pszBaseId == NULL || m_pSkinPropMgr == NULL || m_pBaseCtrl == NULL || m_pBaseCtrl->GetObjectType() == NULL)
 		return false;
@@ -274,7 +241,7 @@ bool IPropertyControlManager::InitObjectIdByBuilder(const char* pszBaseId)
 	return true;
 }
 
-void IPropertyControlManager::InitControlPropObjectId(GROUP_PROP_VEC *pPropList)
+void IControlBase::InitControlPropObjectId(GROUP_PROP_VEC *pPropList)
 {
 	if (pPropList == NULL || m_pSkinPropMgr == NULL || m_pBaseCtrl == NULL)
 		return;
@@ -307,19 +274,19 @@ void IPropertyControlManager::InitControlPropObjectId(GROUP_PROP_VEC *pPropList)
 }
 
 // 2. 从xml文件填充控件属性
-bool IPropertyControlManager::ReadPropFromControlsXml(const char* pszControlId)
+bool IControlBase::ReadPropFromControlsXml(const char* pszControlId)
 {
 	return true;
 }
 
 // 3. 创建Builder显示用的属性
-bool IPropertyControlManager::CreateBuilderShowPropList()
+bool IControlBase::CreateBuilderShowPropList()
 {
 	return true;
 }
 
 // 创建一个属性
-IPropertyBase* IPropertyControlManager::CreateProperty(IPropertyGroup *pPropGroup, OBJECT_TYPE_ID propType, char *pPropName, char *pPropInfo)
+IPropertyBase* IControlBase::CreateProperty(IPropertyGroup *pPropGroup, OBJECT_TYPE_ID propType, char *pPropName, char *pPropInfo)
 {
 	if (m_pSkinPropMgr == NULL)
 		return NULL;
