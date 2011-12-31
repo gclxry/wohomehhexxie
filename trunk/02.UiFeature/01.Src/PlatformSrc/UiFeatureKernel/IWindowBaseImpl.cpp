@@ -22,7 +22,6 @@ IWindowBaseImpl::IWindowBaseImpl()
 
 	m_hParent = NULL;
 	m_hWnd = NULL;
-	m_bIsLayeredWnd = false;
 	m_ChildCtrlsVec.clear();
 
 	m_bIsLButtonDown = false;
@@ -31,17 +30,13 @@ IWindowBaseImpl::IWindowBaseImpl()
 	m_pFocusCtrl = NULL;
 
 	m_strSkinPath = "";
-	m_strWindowName = "";
+	m_strWindowObjectName = "";
+
+	InitWindowPropMember();
 }
 
 IWindowBaseImpl::~IWindowBaseImpl()
 {
-}
-
-// 设置窗口属性
-void IWindowBaseImpl::SetWindowPropetry(IPropertyWindow *pPropWindow)
-{
-	m_WndPropMgr.SetWindowPropetry(pPropWindow);
 }
 
 // 重绘控件
@@ -54,37 +49,6 @@ void IWindowBaseImpl::RedrawControl(IControlBase* pCtrl, bool bDrawImmediately)
 //	if (this->RedrawWindow())
 //	{
 //	}
-}
-
-// 设置窗体的透明特性
-void IWindowBaseImpl::SetLayeredWindow(bool bIsLayered)
-{
-	m_bIsLayeredWnd = bIsLayered;
-	DWORD dwExStyle = ::GetWindowLong(m_hWnd, GWL_EXSTYLE);
-	if (m_bIsLayeredWnd)
-	{
-		// 透明
-		if ((dwExStyle & WS_EX_LAYERED) != WS_EX_LAYERED)
-		{
-			dwExStyle |= WS_EX_LAYERED;
-			::SetWindowLong(m_hWnd, GWL_EXSTYLE, dwExStyle);
-		}
-	}
-	else
-	{
-		// 不透明
-		if ((dwExStyle & WS_EX_LAYERED) == WS_EX_LAYERED)
-		{
-			dwExStyle &= (~WS_EX_LAYERED);
-			::SetWindowLong(m_hWnd, GWL_EXSTYLE, dwExStyle);
-		}
-	}
-}
-
-// 初始化是否完成
-bool IWindowBaseImpl::IsInit()
-{
-	return m_WndPropMgr.IsInit();
 }
 
 // 当窗口的属性发生变化时需要通知窗口进行刷新时调用
@@ -117,7 +81,7 @@ void IWindowBaseImpl::OnInitWindowBase()
 	}
 
 	// 初始化对话框皮肤
-	IPropertyWindow* pWndProp = pPropSkinMgr->InitWindowSkin(m_strSkinPath.c_str(), m_strWindowName.c_str());
+	IPropertyWindow* pWndProp = pPropSkinMgr->PG_InitWindowSkin(m_strSkinPath.c_str(), m_strWindowObjectName.c_str());
 	if (pWndProp == NULL)
 	{
 		// 向窗口发送通知：初始化皮肤异常
@@ -125,7 +89,7 @@ void IWindowBaseImpl::OnInitWindowBase()
 		return;
 	}
 	// 设置对话框属性
-	m_WndPropMgr.SetWindowPropetry(pWndProp);
+	PP_SetWindowPropetry(pWndProp);
 
 //////////////////////////////////////////////////////////////////////////
 	// 当窗口的属性发生变化时需要通知窗口进行刷新
@@ -174,14 +138,14 @@ bool IWindowBaseImpl::GetControlByName(CHILD_CTRLS_VEC *pCtrlVec, char *pszCtrlN
 }
 
 // 初始化：由外部调用，内部发送开始初始化的消息真正开始初始化
-void IWindowBaseImpl::InitWindowBase(HWND hWnd, char *pszSkinPath, char *pszWndName)
+void IWindowBaseImpl::PG_InitWindowBase(HWND hWnd, char *pszSkinPath, char *pszWndName)
 {
 	if (m_hWnd != NULL || hWnd == NULL || pszSkinPath == NULL || pszWndName == NULL)
 		return;
 
 	m_hWnd = hWnd;
 	m_strSkinPath = pszSkinPath;
-	m_strWindowName = pszWndName;
+	m_strWindowObjectName = pszWndName;
 	// 发送初始化消息
 	::PostMessage(hWnd, UM_INIT_WINDOW_BASE, NULL, NULL);
 }
@@ -246,12 +210,6 @@ void IWindowBaseImpl::CenterWindow()
 
 		::MoveWindow(m_hWnd, CenterRect.left, CenterRect.top, RECT_WIDTH(CenterRect), RECT_HEIGHT(CenterRect), TRUE);
 	}
-}
-
-// 窗口属性
-IPropertyWindowManager* IWindowBaseImpl::GetWindowProp()
-{
-	return &m_WndPropMgr;
 }
 
 // 本窗口的消息处理函数，bPassOn参数为true是，消息会继续传递处理；false时，处理完毕，不再下传
@@ -422,7 +380,7 @@ void IWindowBaseImpl::OnPaint(HDC hWndDc)
 	DrawControl();
 
 	// 绘制到窗口上
-	if (m_bIsLayeredWnd)
+	if (PP_GetLayeredWindow())
 	{
 		POINT ptWinPos = {WndRect.left, WndRect.top};
 		POINT ptSrc = {0, 0};
@@ -616,11 +574,11 @@ void IWindowBaseImpl::OnLButtonDown(int nVirtKey, POINT pt)
 		SetFocusCtrl(NULL);
 
 		// 是否最大化
-		if (m_WndPropMgr.IsFullScreen())
+		if (PP_IsFullScreen())
 			return;
 
 		// 是否支持鼠标点击移动窗口
-		if (m_WndPropMgr.GetDragWindow())
+		if (PP_GetDragWindow())
 			::PostMessage(m_hWnd, WM_NCLBUTTONDOWN, HTCAPTION, MAKELPARAM(pt.x, pt.y));
 
 		return;
@@ -878,12 +836,17 @@ void IWindowBaseImpl::RedrawWindow(RECT* pDrawRct)
 	::RedrawWindow(m_hWnd, pDrawRct, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 }
 
-void IWindowBaseImpl::BuilderInitWindowBase(IPropertyWindow *pWindowProp)
+void IWindowBaseImpl::BD_InitWindowBase(IPropertyWindow *pWindowProp)
 {
 	if (pWindowProp == NULL)
 		return;
 
-	this->SetWindowPropetry(pWindowProp);
+	PP_SetWindowPropetry(pWindowProp);
 	this->SetObjectId(pWindowProp->GetObjectId());
 	this->SetObjectName("【新建窗体名称】");
+}
+
+bool IWindowBaseImpl::IsInit()
+{
+	return (m_pXmlPropWindow != NULL && m_pSkinPropMgr != NULL);
 }

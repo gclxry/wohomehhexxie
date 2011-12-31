@@ -120,7 +120,7 @@ void CMainFrame::OnFileSave()
 	if (m_strCurUfpPath.GetLength() <= 0 || m_pKernelWindow == NULL)
 		return;
 
-	if (m_pKernelWindow->BuilderSaveSkin(W2A(m_strCurSkinDir), W2A(m_strCurSkinName)))
+	if (m_pKernelWindow->BD_SaveSkin(W2A(m_strCurSkinDir), W2A(m_strCurSkinName)))
 	{
 		AfxMessageBox(_T("保存皮肤工程成功！"), MB_OK | MB_ICONINFORMATION);
 	}
@@ -147,25 +147,20 @@ bool CMainFrame::OpenUfpFile()
 
 bool CMainFrame::OpenNewProject()
 {
+	USES_CONVERSION;
 	SetProjectInitState(true);
-
-	if (m_pSkinMgr == NULL)
+	if (m_pKernelWindow == NULL || m_pSkinMgr == NULL)
 		return false;
 
-	m_pSkinMgr->ReleaseSkinManagerPropetry();
+	if (!m_pKernelWindow->BuilderCreateOrOpenProject(W2A(m_strNewSkinDir), W2A(m_strNewSkinName)))
+	{
+		CString strInfo(_T(""));
+		strInfo.Format(_T("没有发现匹配的皮肤文件【%s%s】！"), m_strNewSkinName, _T(NAME_SKIN_FILE_EX_NAME));
+		AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
+		return false;
+	}
 
-	CString strLayoutXml(_T(""));
-	CString strWindowsXml(_T(""));
-	CString strControlsXml(_T(""));
-	CString strResourceXml(_T(""));
-
-	// 初始化：Layout.xml
-	strLayoutXml.Format(_T("%s%s"), m_strNewSkinDir, _T(LAYOUT_XML_NAME));
-	strWindowsXml.Format(_T("%s%s"), m_strNewSkinDir, _T(WINDOWS_XML_NAME));
-	strControlsXml.Format(_T("%s%s"), m_strNewSkinDir, _T(CONTROLS_XML_NAME));
-	strResourceXml.Format(_T("%s%s"), m_strNewSkinDir, _T(RESOURCE_XML_NAME));
-
-	if (!InitResourceXml(strResourceXml))
+	if (!m_pSkinMgr->BD_TranslateResourceXml(RESOURCE_XML_NAME))
 	{
 		CString strInfo(_T(""));
 		strInfo.Format(_T("导入配置文件【%s】错误！"), _T(RESOURCE_XML_NAME));
@@ -173,7 +168,7 @@ bool CMainFrame::OpenNewProject()
 		return false;
 	}
 
-	if (!InitControlsXml(strControlsXml))
+	if (!m_pSkinMgr->BD_TranslateControlsXml(CONTROLS_XML_NAME))
 	{
 		CString strInfo(_T(""));
 		strInfo.Format(_T("导入配置文件【%s】错误！"), _T(CONTROLS_XML_NAME));
@@ -181,7 +176,7 @@ bool CMainFrame::OpenNewProject()
 		return false;
 	}
 
-	if (!InitWindowsXml(strWindowsXml))
+	if (!m_pSkinMgr->BD_TranslateWindowsXml(WINDOWS_XML_NAME))
 	{
 		CString strInfo(_T(""));
 		strInfo.Format(_T("导入配置文件【%s】错误！"), _T(WINDOWS_XML_NAME));
@@ -189,7 +184,7 @@ bool CMainFrame::OpenNewProject()
 		return false;
 	}
 
-	if (!InitLayoutXml(strLayoutXml))
+	if (!m_pSkinMgr->BD_TranslateLayoutXml(LAYOUT_XML_NAME))
 	{
 		CString strInfo(_T(""));
 		strInfo.Format(_T("导入配置文件【%s】错误！"), _T(LAYOUT_XML_NAME));
@@ -198,41 +193,5 @@ bool CMainFrame::OpenNewProject()
 	}
 
 	m_wndWindowView.InitShowNewProject();
-	return true;
-}
-
-bool CMainFrame::InitResourceXml(CString strXmlFile)
-{
-	USES_CONVERSION;
-	if (FileExists(W2A(strXmlFile)))
-		return m_pSkinMgr->BuilderTranslateResourceXml(W2A(strXmlFile));
-
-	return true;
-}
-
-bool CMainFrame::InitControlsXml(CString strXmlFile)
-{
-	USES_CONVERSION;
-	if (FileExists(W2A(strXmlFile)))
-		return m_pSkinMgr->BuilderTranslateControlsXml(W2A(strXmlFile));
-
-	return true;
-}
-
-bool CMainFrame::InitWindowsXml(CString strXmlFile)
-{
-	USES_CONVERSION;
-	if (FileExists(W2A(strXmlFile)))
-		return m_pSkinMgr->BuilderTranslateWindowsXml(W2A(strXmlFile));
-
-	return true;
-}
-
-bool CMainFrame::InitLayoutXml(CString strXmlFile)
-{
-	USES_CONVERSION;
-	if (FileExists(W2A(strXmlFile)))
-		return m_pSkinMgr->BuilderTranslateLayoutXml(W2A(strXmlFile));
-
 	return true;
 }

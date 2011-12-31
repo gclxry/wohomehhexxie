@@ -180,19 +180,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="01.DLL接口"
-			>
-			<File
-				RelativePath=".\UiFeatureKernel.def"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Inc\UiFeatureKernel.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="02.对【Window】的接口"
+			Name="01.Kernel接口"
 			>
 			<File
 				RelativePath="..\..\Inc\IKernelWindow.h"
@@ -206,50 +194,6 @@
 				RelativePath=".\IKernelWindowImpl.h"
 				>
 			</File>
-			<Filter
-				Name="02.子类化窗口"
-				>
-				<File
-					RelativePath="..\..\Inc\IWindowBase.h"
-					>
-				</File>
-				<File
-					RelativePath=".\IWindowBaseImpl.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\IWindowBaseImpl.h"
-					>
-				</File>
-				<Filter
-					Name="01.【Window】属性"
-					>
-					<File
-						RelativePath="..\..\Inc\IPropertyWindowManager.h"
-						>
-					</File>
-					<File
-						RelativePath=".\IPropertyWindowManagerImpl.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\IPropertyWindowManagerImpl.h"
-						>
-					</File>
-				</Filter>
-			</Filter>
-			<Filter
-				Name="01.子类化操作"
-				>
-				<File
-					RelativePath=".\WindowSubclass.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\WindowSubclass.h"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="其他"
@@ -287,12 +231,20 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UiFeatureKernel.def"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Inc\UiFeatureKernel.h"
+				>
+			</File>
+			<File
 				RelativePath=".\UiFeatureKernel.rc"
 				>
 			</File>
 		</Filter>
 		<Filter
-			Name="Common"
+			Name="04.Common"
 			>
 			<File
 				RelativePath="..\..\Inc\UiFeatureDefs.h"
@@ -311,7 +263,19 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="01.Zip"
+				Name="01.子类化操作"
+				>
+				<File
+					RelativePath=".\WindowSubclass.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowSubclass.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="03.Zip"
 				>
 				<File
 					RelativePath=".\ZipFileList.cpp"
@@ -324,7 +288,7 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="03.整个皮肤文件的属性管理"
+			Name="03.【Skin】皮肤包属性管理"
 			>
 			<File
 				RelativePath="..\..\Inc\IPropertySkinManager.h"
@@ -336,6 +300,26 @@
 			</File>
 			<File
 				RelativePath=".\IPropertySkinManagerImpl.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="02.【Window】窗口"
+			>
+			<File
+				RelativePath="..\..\Inc\IWindowBase.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IWindowBaseImpl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IWindowBaseImpl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IWindowBaseImpl_Propetry.cpp"
 				>
 			</File>
 		</Filter>

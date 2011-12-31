@@ -3,16 +3,15 @@
 // Window
 
 #include "StdAfx.h"
-#include "IPropertyWindowManagerImpl.h"
+#include "IWindowBaseImpl.h"
 #include "IPropertySkinManagerImpl.h"
 #include "..\..\Inc\ICommonFun.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 
-IPropertyWindowManagerImpl::IPropertyWindowManagerImpl(void)
+void IWindowBaseImpl::InitWindowPropMember()
 {
 	m_pSkinPropMgr = IPropertySkinManagerImpl::GetInstance();
 
-	m_bIsInit = false;
 	m_bIsFullScreen = false;
 
 	m_pXmlPropWindow = NULL;
@@ -24,6 +23,8 @@ IPropertyWindowManagerImpl::IPropertyWindowManagerImpl(void)
 	m_pPropBase_ObjectId = NULL;
 	// base-name
 	m_pPropBase_Name = NULL;
+	// base-windowtitle
+	m_pPropBase_WindowText = NULL;
 	// base-visible
 	m_pPropBase_Visible = NULL;
 	// base-支持分层窗口
@@ -62,12 +63,16 @@ IPropertyWindowManagerImpl::IPropertyWindowManagerImpl(void)
 	m_pPropGroupWindowRgn = NULL;
 }
 
-IPropertyWindowManagerImpl::~IPropertyWindowManagerImpl(void)
+IPropertyGroup* IWindowBaseImpl::PP_GetWindowPropetryGroup()
 {
+	if (m_pXmlPropWindow == NULL)
+		return NULL;
+
+	return m_pXmlPropWindow->GSetWindowPropGroup();
 }
 
 // 将xml中的属性设置到manager中
-void IPropertyWindowManagerImpl::SetWindowPropetry(IPropertyWindow *pWndPropInXml)
+void IWindowBaseImpl::PP_SetWindowPropetry(IPropertyWindow *pWndPropInXml)
 {
 	if (pWndPropInXml == NULL)
 		return;
@@ -76,13 +81,8 @@ void IPropertyWindowManagerImpl::SetWindowPropetry(IPropertyWindow *pWndPropInXm
 	CreateWindowPropetry();
 }
 
-bool IPropertyWindowManagerImpl::IsInit()
-{
-	return m_bIsInit;
-}
-
-// 窗口名称
-void IPropertyWindowManagerImpl::SetWindowName(char *pszWndName)
+// 窗口Object名称
+void IWindowBaseImpl::PP_SetWindowObjectName(char *pszWndName)
 {
 	if (pszWndName == NULL || m_pPropBase_Name == NULL)
 		return;
@@ -90,7 +90,7 @@ void IPropertyWindowManagerImpl::SetWindowName(char *pszWndName)
 	m_pPropBase_Name->SetString(pszWndName);
 }
 
-const char * IPropertyWindowManagerImpl::GetWindowName()
+const char * IWindowBaseImpl::PP_GetWindowObjectName()
 {
 	if (m_pPropBase_Name == NULL)
 		return NULL;
@@ -98,8 +98,25 @@ const char * IPropertyWindowManagerImpl::GetWindowName()
 	return m_pPropBase_Name->GetString();
 }
 
+// 窗口名称
+void IWindowBaseImpl::PP_SetWindowText(char *pszWndText)
+{
+	if (pszWndText == NULL || m_pPropBase_WindowText == NULL)
+		return;
+
+	m_pPropBase_WindowText->SetString(pszWndText);
+}
+
+const char * IWindowBaseImpl::PP_GetWindowText()
+{
+	if (m_pPropBase_WindowText == NULL)
+		return NULL;
+
+	return m_pPropBase_WindowText->GetString();
+}
+
 // 是否支持全窗口点击移动
-void IPropertyWindowManagerImpl::SetDragWindow(bool bDrag)
+void IWindowBaseImpl::PP_SetDragWindow(bool bDrag)
 {
 	if (m_pPropDrag_Enable == NULL)
 		return;
@@ -107,7 +124,7 @@ void IPropertyWindowManagerImpl::SetDragWindow(bool bDrag)
 	m_pPropDrag_Enable->SetValue(bDrag);
 }
 
-bool IPropertyWindowManagerImpl::GetDragWindow()
+bool IWindowBaseImpl::PP_GetDragWindow()
 {
 	if (m_pPropDrag_Enable == NULL)
 		return false;
@@ -116,7 +133,7 @@ bool IPropertyWindowManagerImpl::GetDragWindow()
 }
 
 // 是否最大化
-void IPropertyWindowManagerImpl::SetCanFullScreen(bool bCanFull)
+void IWindowBaseImpl::PP_SetCanFullScreen(bool bCanFull)
 {
 	if (m_pPropSysBase_CanFullScreen == NULL)
 		return;
@@ -124,7 +141,7 @@ void IPropertyWindowManagerImpl::SetCanFullScreen(bool bCanFull)
 	m_pPropSysBase_CanFullScreen->SetValue(bCanFull);
 }
 
-bool IPropertyWindowManagerImpl::IsCanFullScreen()
+bool IWindowBaseImpl::PP_IsCanFullScreen()
 {
 	if (m_pPropSysBase_CanFullScreen == NULL)
 		return false;
@@ -132,7 +149,7 @@ bool IPropertyWindowManagerImpl::IsCanFullScreen()
 	return m_pPropSysBase_CanFullScreen->GetValue();
 }
 
-void IPropertyWindowManagerImpl::SetFullScreen(bool bFull)
+void IWindowBaseImpl::PP_SetFullScreen(bool bFull)
 {
 	m_bIsFullScreen = false;
 	if (m_pPropSysBase_CanFullScreen == NULL)
@@ -142,12 +159,12 @@ void IPropertyWindowManagerImpl::SetFullScreen(bool bFull)
 		m_bIsFullScreen = bFull;
 }
 
-bool IPropertyWindowManagerImpl::IsFullScreen()
+bool IWindowBaseImpl::PP_IsFullScreen()
 {
 	return m_bIsFullScreen;
 }
 
-IPropertyBase* IPropertyWindowManagerImpl::CreatePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo)
+IPropertyBase* IWindowBaseImpl::CreatePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo)
 {
 	if (m_pSkinPropMgr == NULL || m_pXmlPropWindow == NULL || pszPropName == NULL || strlen(pszPropName) <= 0 || propType <= OTID_NONE || propType >= OTID_LAST)
 		return NULL;
@@ -159,7 +176,7 @@ IPropertyBase* IPropertyWindowManagerImpl::CreatePropetry(IPropertyGroup* pGroup
 }
 
 // 创建空的属性队列
-void IPropertyWindowManagerImpl::CreateWindowPropetry()
+void IWindowBaseImpl::CreateWindowPropetry()
 {
 	if (m_pXmlPropWindow == NULL)
 		return;
@@ -187,6 +204,13 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 		return;
 	if (m_pPropBase_Name->GetString() != NULL && strlen(m_pPropBase_Name->GetString()) <= 0)
 		m_pPropBase_Name->SetString("新建窗口/面板");
+
+	// base-windowtitle
+	m_pPropBase_WindowText = (IPropertyString*)CreatePropetry(m_pPropGroupBase, OTID_STRING, "WindowText", "当前窗口标题");
+	if (m_pPropBase_WindowText == NULL)
+		return;
+	if (m_pPropBase_WindowText->GetString() != NULL && strlen(m_pPropBase_WindowText->GetString()) <= 0)
+		m_pPropBase_WindowText->SetString("无窗口标题");
 
 	// base-visible
 	m_pPropBase_Visible = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, OTID_BOOL, "Visible", "是否可见");
@@ -282,10 +306,38 @@ void IPropertyWindowManagerImpl::CreateWindowPropetry()
 //		return;
 }
 
-IPropertyGroup* IPropertyWindowManagerImpl::GetWindowPropetryBaseGroup()
+bool IWindowBaseImpl::PP_GetLayeredWindow()
 {
-	if (m_pXmlPropWindow == NULL)
-		return NULL;
+	if (m_pPropBase_Layered == NULL)
+		return false;
 
-	return m_pXmlPropWindow->GSetWindowPropGroup();
+	return m_pPropBase_Layered->GetValue();
+}
+
+// 设置窗体的透明特性
+void IWindowBaseImpl::PP_SetLayeredWindow(bool bIsLayered)
+{
+	if (m_pPropBase_Layered == NULL)
+		return;
+	m_pPropBase_Layered->SetValue(bIsLayered);
+
+	DWORD dwExStyle = ::GetWindowLong(m_hWnd, GWL_EXSTYLE);
+	if (bIsLayered)
+	{
+		// 透明
+		if ((dwExStyle & WS_EX_LAYERED) != WS_EX_LAYERED)
+		{
+			dwExStyle |= WS_EX_LAYERED;
+			::SetWindowLong(m_hWnd, GWL_EXSTYLE, dwExStyle);
+		}
+	}
+	else
+	{
+		// 不透明
+		if ((dwExStyle & WS_EX_LAYERED) == WS_EX_LAYERED)
+		{
+			dwExStyle &= (~WS_EX_LAYERED);
+			::SetWindowLong(m_hWnd, GWL_EXSTYLE, dwExStyle);
+		}
+	}
 }

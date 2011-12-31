@@ -14,7 +14,7 @@
 #include "..\..\Inc\IPropertyInt.h"
 #include "..\..\Inc\IPropertyString.h"
 #include "..\..\Inc\IPropertyGroup.h"
-#include "IPropertyWindowManagerImpl.h"
+#include "IWindowBaseImpl.h"
 
 IPropertySkinManager *GetSkinManagerInterface()
 {
@@ -62,8 +62,9 @@ void IPropertySkinManagerImpl::ReleaseSkinManagerPropetry()
 	ReleaseLayoutMap();
 	// 以下两个队列不需要释放，两个队列中所有内容均在 m_AllPropMap 被自动释放
 //	ReleasePropMapItem(&m_AllWindowPropMap);
-//	ReleasePropMap(m_AllCtrlPropMap);
+	ReleasePropMap(m_AllCtrlPropMap);
 	ReleasePropMap(m_AllPropMap);
+	m_AllWindowPropMap.clear();
 }
 
 void IPropertySkinManagerImpl::ReleaseLayoutMap()
@@ -576,7 +577,7 @@ bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 }
 
 // 初始化皮肤
-IPropertyWindow* IPropertySkinManagerImpl::InitWindowSkin(const char *pszSkinPath, const char *pszWndName)
+IPropertyWindow* IPropertySkinManagerImpl::PG_InitWindowSkin(const char *pszSkinPath, const char *pszWndName)
 {
 	if (pszSkinPath == NULL || strlen(pszSkinPath) <= 0 || pszWndName == NULL || strlen(pszWndName) <= 0)
 		return NULL;
@@ -949,7 +950,7 @@ bool IPropertySkinManagerImpl::AppendBasePropToGroup(IPropertyGroup *pGroup, Xml
 // 解析Windows.xml
 bool IPropertySkinManagerImpl::TranslateWindowsXml(ZIP_FILE *pWindowsXml)
 {
-	ReleasePropMapItem(&m_AllWindowPropMap);
+	m_AllWindowPropMap.clear();
 	if (pWindowsXml == NULL || pWindowsXml->pFileData == NULL)
 		return false;
 
@@ -1107,55 +1108,55 @@ IPropertyGroup* IPropertySkinManagerImpl::FindControlPropGroup(char *pszObjectId
 }
 
 // 解析Resource.xml
-bool IPropertySkinManagerImpl::BuilderTranslateResourceXml(char *pszXmlPath)
+bool IPropertySkinManagerImpl::BD_TranslateResourceXml(char *pszXmlPath)
 {
-	ZIP_FILE FileItem;
-	if (!BuilderCreateFileItem(pszXmlPath, FileItem))
+	if (m_pZipFile == NULL || pszXmlPath == NULL || strlen(pszXmlPath) <= 0)
 		return false;
 
-	bool bRet = TranslateResourceXml(&FileItem);
+	ZIP_FILE *pFileItem = m_pZipFile->FindUnZipFile(pszXmlPath);
+	if (pFileItem == NULL)
+		return false;
 
-	BuilderFreeFileItem(FileItem);
-	return bRet;
+	return TranslateResourceXml(pFileItem);
 }
 
 // 解析Controls.xml
-bool IPropertySkinManagerImpl::BuilderTranslateControlsXml(char *pszXmlPath)
+bool IPropertySkinManagerImpl::BD_TranslateControlsXml(char *pszXmlPath)
 {
-	ZIP_FILE FileItem;
-	if (!BuilderCreateFileItem(pszXmlPath, FileItem))
+	if (m_pZipFile == NULL || pszXmlPath == NULL || strlen(pszXmlPath) <= 0)
 		return false;
 
-	bool bRet = TranslateControlsXml(&FileItem);
+	ZIP_FILE *pFileItem = m_pZipFile->FindUnZipFile(pszXmlPath);
+	if (pFileItem == NULL)
+		return false;
 
-	BuilderFreeFileItem(FileItem);
-	return bRet;
+	return TranslateControlsXml(pFileItem);
 }
 
 // 解析Windows.xml
-bool IPropertySkinManagerImpl::BuilderTranslateWindowsXml(char *pszXmlPath)
+bool IPropertySkinManagerImpl::BD_TranslateWindowsXml(char *pszXmlPath)
 {
-	ZIP_FILE FileItem;
-	if (!BuilderCreateFileItem(pszXmlPath, FileItem))
+	if (m_pZipFile == NULL || pszXmlPath == NULL || strlen(pszXmlPath) <= 0)
 		return false;
 
-	bool bRet = TranslateWindowsXml(&FileItem);
+	ZIP_FILE *pFileItem = m_pZipFile->FindUnZipFile(pszXmlPath);
+	if (pFileItem == NULL)
+		return false;
 
-	BuilderFreeFileItem(FileItem);
-	return bRet;
+	return TranslateWindowsXml(pFileItem);
 }
 
 // 解析Layout.xml
-bool IPropertySkinManagerImpl::BuilderTranslateLayoutXml(char *pszXmlPath)
+bool IPropertySkinManagerImpl::BD_TranslateLayoutXml(char *pszXmlPath)
 {
-	ZIP_FILE FileItem;
-	if (!BuilderCreateFileItem(pszXmlPath, FileItem))
+	if (m_pZipFile == NULL || pszXmlPath == NULL || strlen(pszXmlPath) <= 0)
 		return false;
 
-	bool bRet = TranslateLayoutXml(&FileItem);
+	ZIP_FILE *pFileItem = m_pZipFile->FindUnZipFile(pszXmlPath);
+	if (pFileItem == NULL)
+		return false;
 
-	BuilderFreeFileItem(FileItem);
-	return bRet;
+	return TranslateLayoutXml(pFileItem);
 }
 
 bool IPropertySkinManagerImpl::BuilderCreateFileItem(char *pFilePath, ZIP_FILE &FileItem)
@@ -1223,13 +1224,13 @@ void IPropertySkinManagerImpl::BuilderFreeFileItem(ZIP_FILE &FileItem)
 	FileItem.pFileData = NULL;
 }
 
-ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::BuilderGetWindowPropMap()
+ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::BD_GetWindowPropMap()
 {
 	return &m_LayoutWindowMap;
 }
 
 // 保存皮肤包
-bool IPropertySkinManagerImpl::BuilderSaveSkin(char *pszSkinDir, char *pszSkinName)
+bool IPropertySkinManagerImpl::BD_SaveSkin(char *pszSkinDir, char *pszSkinName)
 {
 	if (pszSkinDir == NULL || pszSkinName == NULL || m_pZipFile == NULL)
 		return false;
@@ -1412,7 +1413,7 @@ bool IPropertySkinManagerImpl::SaveWindowsXml(const char *pszSavePath, string &s
 		if (pPropBase == NULL)
 			continue;
 
-		IPropertyGroup *pWndPropGroup = pPropBase->GetWindowProp()->GetWindowPropetryBaseGroup();
+		IPropertyGroup *pWndPropGroup = pPropBase->PP_GetWindowPropetryGroup();
 		if (pWndPropGroup == NULL)
 			return false;
 

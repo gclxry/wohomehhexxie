@@ -2,20 +2,27 @@
 #pragma once
 #include "..\..\Inc\IWindowBase.h"
 #include "..\..\Inc\CMemoryDC.h"
-#include "IPropertyWindowManagerImpl.h"
+#include "..\..\Inc\IPropertyGroup.h"
+#include "..\..\Inc\IPropertyString.h"
+#include "..\..\Inc\IPropertyBool.h"
+#include "..\..\Inc\IPropertyInt.h"
+#include "..\..\Inc\IPropertySkinManager.h"
 
 class IWindowBaseImpl : public IWindowBase
 {
 public:
 	IWindowBaseImpl();
 	virtual ~IWindowBaseImpl();
-//////////////////////////////////////////////////////////////////////////
-	// Builder 使用的函数
-	virtual void BuilderInitWindowBase(IPropertyWindow *pWindowProp);
 
 //////////////////////////////////////////////////////////////////////////
-	// 初始化
-	virtual void InitWindowBase(HWND hWnd, char *pszSkinPath, char *pszWndName);
+	// Builder 使用的函数
+	virtual void BD_InitWindowBase(IPropertyWindow *pWindowProp);
+
+//////////////////////////////////////////////////////////////////////////
+	// 导入皮肤包使用的函数初始化
+	virtual void PG_InitWindowBase(HWND hWnd, char *pszSkinPath, char *pszWndName);
+
+
 	// 窗口居中显示
 	virtual void CenterWindow();
 	// 取得窗口句柄
@@ -26,16 +33,8 @@ public:
 	virtual RECT GetClientRect();
 	// 重绘控件
 	virtual void RedrawControl(IControlBase* pCtrl, bool bDrawImmediately = true);
-	// 窗口属性
-	virtual IPropertyWindowManager* GetWindowProp();
 	// 取得窗口控件指针
 	virtual IControlBase* GetControl(char *pszCtrlName);
-	// 设置窗口属性
-	virtual void SetWindowPropetry(IPropertyWindow *pPropWindow);
-
-protected:
-	// 设置窗体的透明特性、设置窗口是否支持分层
-	void SetLayeredWindow(bool bIsLayered);
 
 protected:
 	// 本窗口的消息处理函数，bPassOn参数为true是，消息会继续传递处理；false时，处理完毕，不再下传
@@ -68,13 +67,12 @@ protected:
 private:
 	// 001.内部接受到初始化消息，开始初始化窗口，加载皮肤
 	void OnInitWindowBase();
+	bool IsInit();
 
 private:
 	// 循环遍历每个控件的绘制
 	void DrawControl();
 	void RedrawWindow(RECT* pDrawRct = NULL);
-	// 初始化是否完成
-	bool IsInit();
 	// 当窗口的属性发生变化时需要通知窗口进行刷新时调用
 	void RefreshWindowStyle();
 	// 取得当前鼠标坐标落在了哪个控件上
@@ -89,19 +87,18 @@ private:
 	bool GetControlByName(CHILD_CTRLS_VEC *pCtrlVec, char *pszCtrlName, IControlBase **ppCtrl);
 
 protected:
+	// 皮肤路径
+	string m_strSkinPath;
+	// 皮肤的object名称
+	string m_strWindowObjectName;
+
 	BLENDFUNCTION m_Blend;
-	// Window属性
-	IPropertyWindowManagerImpl m_WndPropMgr;
 	// 父窗口句柄
 	HWND m_hParent;
 	// 窗口句柄
 	HWND m_hWnd;
 	// 整个对话框的内存DC
 	CMemoryDC m_WndMemDc;
-	// 子控件列表
-	CHILD_CTRLS_VEC m_ChildCtrlsVec;
-	// 是否为layered窗口
-	bool m_bIsLayeredWnd;
 	// 鼠标左键是否按下
 	bool m_bIsLButtonDown;
 	// 鼠标Hover的控件
@@ -110,9 +107,102 @@ protected:
 	IControlBase* m_pLButtonDownCtrl;
 	// 取得焦点的控件
 	IControlBase* m_pFocusCtrl;
-	// 皮肤路径
-	string m_strSkinPath;
-	// 对话框名称
-	string m_strWindowName;
+
+	// 子控件列表
+	CHILD_CTRLS_VEC m_ChildCtrlsVec;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 窗口属性
+public:
+	// 将xml中的属性设置到manager中
+	virtual void PP_SetWindowPropetry(IPropertyWindow *pWndPropInXml);
+
+	// 是否支持全窗口点击移动
+	virtual void PP_SetDragWindow(bool bDrag);
+	virtual bool PP_GetDragWindow();
+
+	// 是否最大化
+	virtual void PP_SetCanFullScreen(bool bCanFull);
+	virtual bool PP_IsCanFullScreen();
+	virtual void PP_SetFullScreen(bool bFull);
+	virtual bool PP_IsFullScreen();
+
+	// 设置窗体的透明特性、设置窗口是否支持分层
+	virtual void PP_SetLayeredWindow(bool bIsLayered);
+	virtual bool PP_GetLayeredWindow();
+
+	// 窗口Object名称
+	virtual void PP_SetWindowObjectName(char *pszWndName);
+	virtual const char * PP_GetWindowObjectName();
+
+	// 窗口名称
+	virtual void PP_SetWindowText(char *pszWndName);
+	virtual const char * PP_GetWindowText();
+
+	virtual IPropertyGroup *PP_GetWindowPropetryGroup();
+
+private:
+	// 初始化属性成员变量
+	void InitWindowPropMember();
+	// 创建空的属性队列
+	void CreateWindowPropetry();
+	IPropertyBase* CreatePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
+
+private:
+	IPropertySkinManager* m_pSkinPropMgr;
+	bool m_bIsFullScreen;
+
+	// 从xml中读入并需要写入xml中的属性窗口属性列表
+	IPropertyWindow *m_pXmlPropWindow;
+
+	// Group:base
+	IPropertyGroup* m_pPropGroupBase;
+	// base-类型名称
+	IPropertyString *m_pPropBase_TypeName;
+	// base-objectid
+	IPropertyString *m_pPropBase_ObjectId;
+	// base-name
+	IPropertyString *m_pPropBase_Name;
+	// base-windowtitle
+	IPropertyString *m_pPropBase_WindowText;
+	// base-visible
+	IPropertyBool *m_pPropBase_Visible;
+	// base-支持分层窗口
+	IPropertyBool *m_pPropBase_Layered;
+	// base-topmost
+	IPropertyBool *m_pPropBase_TopMost;
+	// base-sysbase
+	IPropertyGroup* m_pPropGroupSysBase;
+	// base-sysbase-最大化
+	IPropertyBool *m_pPropSysBase_CanFullScreen;
+	// base-sysbase-最小化
+	IPropertyBool *m_pPropSysBase_CanMiniSize;
+	// base-sysbase-最小尺寸
+	// base-sysbase-最大尺寸
+	// Group-size
+	IPropertyGroup* m_pPropGroupSize;
+	// size-width
+	IPropertyInt *m_pPropSize_Width;
+	// size-height
+	IPropertyInt *m_pPropSize_Height;
+	// Group-drag(拖拽窗口)
+	IPropertyGroup* m_pPropGroupDrag;
+	// drag-enable
+	IPropertyBool *m_pPropDrag_Enable;
+	// Group-stretching(拉伸窗口)
+	IPropertyGroup* m_pPropGroupStretching;
+	// stretching-enable
+	IPropertyBool *m_pPropStretching_Enable;
+	// stretching-leftspace
+	IPropertyInt *m_pPropStretching_LeftSpace;
+	// stretching-rightspace
+	IPropertyInt *m_pPropStretching_RightSpace;
+	// stretching-topspace
+	IPropertyInt *m_pPropStretching_TopSpace;
+	// stretching-bottomspace
+	IPropertyInt *m_pPropStretching_BottomSpace;
+	// Group-WindowRgn
+	IPropertyGroup* m_pPropGroupWindowRgn;
 };
 

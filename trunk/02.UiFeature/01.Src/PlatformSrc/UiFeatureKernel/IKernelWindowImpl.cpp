@@ -90,7 +90,7 @@ IWindowBase* IKernelWindowImpl::InitFeatureSkin(HWND hWnd, char *pszSkinPath, ch
 	}
 
 	// 初始化窗口
-	pWndBase->InitWindowBase(hWnd, pszSkinPath, pszWndName);
+	pWndBase->PG_InitWindowBase(hWnd, pszSkinPath, pszWndName);
 
 	// 记录到窗口队列中
 	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>(hWnd, pWndBaseImpl));
@@ -131,7 +131,7 @@ IWindowBase* IKernelWindowImpl::BuilderCreateEmptyWindow()
 		return NULL;
 	}
 	// 初始化在builder中的属性
-	pWndBase->BuilderInitWindowBase(pPropWindow);
+	pWndBase->BD_InitWindowBase(pPropWindow);
 	ResetWindowBaseInfo(pWndBase);
 
 	// 记录到窗口队列中
@@ -157,20 +157,41 @@ IWindowBase* IKernelWindowImpl::BuilderCreatePropetryWindow(IPropertyWindow *pPr
 		return NULL;
 	}
 	// 初始化在builder中的属性
-	pWndBase->BuilderInitWindowBase(pPropWnd);
+	pWndBase->BD_InitWindowBase(pPropWnd);
 	ResetWindowBaseInfo(pWndBase);
 
 	// 记录到窗口队列中
 	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>((HWND)m_nBuilderHwnd++, pWndBaseImpl));
-	m_pSkinMgr->GetAllWindowPropMap()->insert(pair<string, IPropertyBase*>(pWndBase->GetObjectId(), pWndBase->GetWindowProp()->GetWindowPropetryBaseGroup()));
+	m_pSkinMgr->GetAllWindowPropMap()->insert(pair<string, IPropertyBase*>(pWndBase->GetObjectId(), pWndBase->PP_GetWindowPropetryGroup()));
 	return pWndBase;
 }
 
 // 保存皮肤包
-bool IKernelWindowImpl::BuilderSaveSkin(char *pszSkinDir, char *pszSkinName)
+bool IKernelWindowImpl::BD_SaveSkin(char *pszSkinDir, char *pszSkinName)
 {
 	if (m_pSkinMgr == NULL)
 		return false;
 	
-	return m_pSkinMgr->BuilderSaveSkin(pszSkinDir, pszSkinName);
+	return m_pSkinMgr->BD_SaveSkin(pszSkinDir, pszSkinName);
+}
+
+// 创建/打开一个新的皮肤工程
+bool IKernelWindowImpl::BuilderCreateOrOpenProject(char *pszSkinDir, char *pszSkinName)
+{
+	if (pszSkinDir == NULL || pszSkinName == NULL || m_pSkinMgr == NULL)
+		return false;
+
+	m_pSkinMgr->ReleaseSkinManagerPropetry();
+
+	// 导入zip文件
+	string strZipPath = pszSkinDir;
+	if (pszSkinDir[strlen(pszSkinDir) - 1] != '\\')
+		strZipPath += "\\";
+	strZipPath += pszSkinName;
+	strZipPath += NAME_SKIN_FILE_EX_NAME;
+
+	if (!CZipFileList::GetInstance()->ReadZipFile(strZipPath.c_str()))
+		return false;
+
+	return true;
 }
