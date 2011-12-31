@@ -127,6 +127,25 @@ void CMainFrame::SetProjectInitState(bool bInitOk)
 	m_wndProperties.SetProjectInitState(bInitOk);
 }
 
+void CMainFrame::OnDestroy()
+{
+	CFrameWndEx::OnDestroy();
+
+	// 保存老工程
+	SaveSkinProject(m_strCurSkinDir, m_strCurSkinName, false);
+}
+
+void CMainFrame::OnAppExit()
+{
+	// 保存老工程
+	if (!SaveSkinProject(m_strCurSkinDir, m_strCurSkinName, false))
+		return;
+
+	// 关闭老工程
+	if (!CloseSkinProject())
+		return;
+}
+
 void CMainFrame::OnFileClose()
 {
 	// 保存老工程

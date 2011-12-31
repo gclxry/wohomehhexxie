@@ -97,6 +97,8 @@ public:
 	afx_msg void OnFileOpen();
 	afx_msg void OnFileSave();
 	afx_msg void OnFileClose();
+	afx_msg void OnAppExit();
+	afx_msg void OnDestroy();
 };
 
 
