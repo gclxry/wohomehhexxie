@@ -12,7 +12,7 @@ public:
 	IPropertyWindow();
 	virtual ~IPropertyWindow();
 
-	CHILD_CTRL_PROP_VEC* GetChildControlVec();
+	CHILD_CTRL_PROP_VEC* GetChildCtrlVec();
 	void SetWindowPropGroup(IPropertyGroup *pWindowProp);
 	IPropertyGroup* GSetWindowPropGroup();
 

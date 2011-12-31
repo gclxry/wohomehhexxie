@@ -14,35 +14,35 @@ IPropertyControl::~IPropertyControl(void)
 {
 }
 
-IPropertyControl* IPropertyControl::GetParentProp()
+IPropertyControl* IPropertyControl::GetParentCtrlProp()
 {
 	return m_pPrentCtrlProp;
 }
 
-void IPropertyControl::SetParentProp(IPropertyControl* pCtrlProp)
+void IPropertyControl::SetParentCtrlProp(IPropertyControl* pCtrlProp)
 {
 	if (pCtrlProp != NULL)
 		m_pPrentCtrlProp = pCtrlProp;
 }
 
-void IPropertyControl::AppendControlProp(IPropertyControl* pCtrlProp)
+void IPropertyControl::AppendChildCtrlProp(IPropertyControl* pCtrlProp)
 {
 	if (pCtrlProp != NULL)
 		m_ChildCtrlPropVec.push_back(pCtrlProp);
 }
 
-void IPropertyControl::SetControlBaseProp(IPropertyGroup *pBasePropGroup)
+void IPropertyControl::SetCtrlGroupProp(IPropertyGroup *pBasePropGroup)
 {
 	if (pBasePropGroup != NULL)
 		m_pCtrlPropGroup = pBasePropGroup;
 }
 
-IPropertyGroup* IPropertyControl::GetControlBaseProp()
+IPropertyGroup* IPropertyControl::GetCtrlGroupProp()
 {
 	return m_pCtrlPropGroup;
 }
 
-CHILD_CTRL_PROP_VEC* IPropertyControl::GetChildControlVec()
+CHILD_CTRL_PROP_VEC* IPropertyControl::GetChildCtrlVec()
 {
 	return &m_ChildCtrlPropVec;
 }

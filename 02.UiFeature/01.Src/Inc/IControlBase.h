@@ -66,6 +66,8 @@ struct CONTROL_REG
 	string	strCtrlName;
 	// 控件在Builder显示的图片或者icon文件，这些文件存放在ControlsRes目录下，为空则使用Builder中的默认的图标
 	string	strControlImg;
+	// 控件说明
+	string strControlInfo;
 };
 // 索引：【CONTROL_REG::strCtrlName】
 typedef map<string, CONTROL_REG>	CONTROL_REG_MAP;

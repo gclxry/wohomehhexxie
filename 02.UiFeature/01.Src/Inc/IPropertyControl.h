@@ -15,15 +15,15 @@ public:
 	IPropertyControl(void);
 	virtual ~IPropertyControl(void);
 
-	IPropertyControl* GetParentProp();
-	void SetParentProp(IPropertyControl* pCtrlProp);
+	IPropertyControl* GetParentCtrlProp();
+	void SetParentCtrlProp(IPropertyControl* pCtrlProp);
 	
-	void AppendControlProp(IPropertyControl* pCtrlProp);
+	void AppendChildCtrlProp(IPropertyControl* pCtrlProp);
 	
-	void SetControlBaseProp(IPropertyGroup *pBasePropGroup);
-	IPropertyGroup *GetControlBaseProp();
+	void SetCtrlGroupProp(IPropertyGroup *pBasePropGroup);
+	IPropertyGroup *GetCtrlGroupProp();
 
-	CHILD_CTRL_PROP_VEC* GetChildControlVec();
+	CHILD_CTRL_PROP_VEC* GetChildCtrlVec();
 
 private:
 	// 子控件属性节点 的列表

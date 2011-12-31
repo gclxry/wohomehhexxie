@@ -409,7 +409,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\IPropertyContro_Propetry.cpp"
+					RelativePath=".\IControlBase_Propetry.cpp"
 					>
 				</File>
 			</Filter>
