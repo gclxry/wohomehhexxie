@@ -29,7 +29,6 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_COMMAND(ID_FILE_NEW, &CMainFrame::OnFileNew)
 	ON_COMMAND(ID_FILE_OPEN, &CMainFrame::OnFileOpen)
 	ON_COMMAND(ID_FILE_SAVE, &CMainFrame::OnFileSave)
-	ON_COMMAND(ID_APP_EXIT, &CMainFrame::OnAppExit)
 	ON_COMMAND(ID_FILE_CLOSE, &CMainFrame::OnFileClose)
 END_MESSAGE_MAP()
 

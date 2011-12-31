@@ -78,6 +78,10 @@ void CWindowsViewTree::OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult)
 void CWindowsViewTree::SetProjectInitState(bool bInitOk)
 {
 	m_bProjectInitOk = bInitOk;
+	if (!m_bProjectInitOk)
+	{
+		this->DeleteAllItems();
+	}
 }
 
 void CWindowsViewTree::Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPropCtrl)
@@ -112,7 +116,7 @@ void CWindowsViewTree::OnCreateWindowPanel()
 		return;
 	}
 	
-	IWindowBase *pWndBase = m_pKernelWindow->BuilderCreateEmptyWindow();
+	IWindowBase *pWndBase = m_pKernelWindow->BD_CreateWindowEmptyPropetry();
 	if (pWndBase == NULL)
 	{
 		AfxMessageBox(_T("新建窗口/面板时，创建绘制窗体错误！"), MB_OK | MB_ICONERROR);
@@ -283,7 +287,7 @@ void CWindowsViewTree::InitShowNewProject()
 		if (pPropWnd == NULL)
 			continue;
 
-		IWindowBase* pWndBase = m_pKernelWindow->BuilderCreatePropetryWindow(pPropWnd);
+		IWindowBase* pWndBase = m_pKernelWindow->BD_CreateWindowByPropetry(pPropWnd);
 		if (pWndBase == NULL)
 			continue;
 

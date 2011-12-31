@@ -71,11 +71,15 @@ private:
 
 private:
 	void InitUiFeatureKernel();
-
-	bool OpenUfpFile();
-	bool OpenNewProject();
 	// 设置所有显示的控件的初始化状态
 	void SetProjectInitState(bool bInitOk);
+
+	// 打开一个工程
+	bool OpenSkinProject(bool bIsNew, CString strSkinDir, CString strSkinName);
+	// 保存
+	bool SaveSkinProject(CString strSkinDir, CString strSkinName, bool bNeedErroInfo);
+	// 保存
+	bool CloseSkinProject(CString strSkinDir, CString strSkinName);
 
 // 生成的消息映射函数
 protected:
@@ -92,7 +96,6 @@ public:
 	afx_msg void OnFileNew();
 	afx_msg void OnFileOpen();
 	afx_msg void OnFileSave();
-	afx_msg void OnAppExit();
 	afx_msg void OnFileClose();
 };
 

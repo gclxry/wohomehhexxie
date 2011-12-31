@@ -83,7 +83,7 @@ BOOL CTestMfcDlg::OnInitDialog()
 				string strUfd = szPath;
 				strUfd += SKIN_DATA_DIR;
 				strUfd += "skintest.ufd";
-				m_pWindowBase = pKernelWnd->InitFeatureSkin(m_hWnd, (char*)strUfd.c_str(), "²âÊÔ´°¿Ú");
+				m_pWindowBase = pKernelWnd->PG_InitFeatureSkin(m_hWnd, (char*)strUfd.c_str(), "²âÊÔ´°¿Ú");
 			}
 		}
 	}
