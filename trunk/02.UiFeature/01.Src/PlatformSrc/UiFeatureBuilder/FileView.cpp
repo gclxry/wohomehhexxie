@@ -51,15 +51,15 @@ int CFileView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	// 创建视图:
 	const DWORD dwViewStyle = WS_CHILD | WS_VISIBLE | TVS_HASLINES | TVS_LINESATROOT | TVS_HASBUTTONS;
 
-	if (!m_wndFileView.Create(dwViewStyle, rectDummy, this, 4))
-	{
-		TRACE0("未能创建资源视图\n");
-		return -1;      // 未能创建
-	}
+	//if (!m_wndFileView.Create(dwViewStyle, rectDummy, this, 4))
+	//{
+	//	TRACE0("未能创建资源视图\n");
+	//	return -1;      // 未能创建
+	//}
 
 	// 加载视图图像:
 	m_FileViewImages.Create(IDB_FILE_VIEW, 16, 0, RGB(255, 0, 255));
-	m_wndFileView.SetImageList(&m_FileViewImages, TVSIL_NORMAL);
+//	m_wndFileView.SetImageList(&m_FileViewImages, TVSIL_NORMAL);
 
 	m_wndToolBar.Create(this, AFX_DEFAULT_TOOLBAR_STYLE, IDR_EXPLORER);
 	m_wndToolBar.LoadToolBar(IDR_EXPLORER, 0, 0, TRUE /* 已锁定*/);
@@ -89,7 +89,7 @@ void CFileView::OnSize(UINT nType, int cx, int cy)
 }
 
 void CFileView::FillFileView()
-{
+{/*
 	HTREEITEM hRoot = m_wndFileView.InsertItem(_T("FakeApp 文件"), 0, 0);
 	m_wndFileView.SetItemState(hRoot, TVIS_BOLD, TVIS_BOLD);
 
@@ -120,7 +120,7 @@ void CFileView::FillFileView()
 
 	m_wndFileView.Expand(hRoot, TVE_EXPAND);
 	m_wndFileView.Expand(hSrc, TVE_EXPAND);
-	m_wndFileView.Expand(hInc, TVE_EXPAND);
+	m_wndFileView.Expand(hInc, TVE_EXPAND);*/
 }
 
 void CFileView::OnContextMenu(CWnd* pWnd, CPoint point)
