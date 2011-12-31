@@ -1477,15 +1477,11 @@ bool IPropertySkinManagerImpl::SaveWindowsXml(const char *pszSavePath, string &s
 	for (ONE_RESOURCE_PROP_MAP::iterator pWndItem = m_AllWindowPropMap.begin(); pWndItem != m_AllWindowPropMap.end(); pWndItem++)
 	{
 		string strObjId = pWndItem->first;
-		IWindowBase* pPropBase = dynamic_cast<IWindowBase*>(pWndItem->second);
-		if (pPropBase == NULL)
+		IPropertyGroup *pWndPropGroup = dynamic_cast<IPropertyGroup*>(pWndItem->second);
+		if (pWndPropGroup == NULL)
 			continue;
 
-		IPropertyGroup *pWndPropGroup = pPropBase->PP_GetWindowPropetryGroup();
-		if (pWndPropGroup == NULL)
-			return false;
-
-		CUiXmlWriteNode* pWindowNode = XmlStrObj.CreateNode(pRootNode, pPropBase->GetObjectType());
+		CUiXmlWriteNode* pWindowNode = XmlStrObj.CreateNode(pRootNode, pWndPropGroup->GetObjectType());
 		if (pWindowNode == NULL)
 			return false;
 		pWindowNode->AddAttribute(SKIN_OBJECT_ID, pWndPropGroup->GetObjectId());

@@ -61,10 +61,13 @@ void CMainFrame::OnFileNew()
 	if (m_strNewSkinDir.GetLength() <= 0 || m_strNewSkinName.GetLength() <= 0)
 		return;
 
+	if (m_strNewSkinDir.GetAt(m_strNewSkinDir.GetLength() - 1) != '\\')
+		m_strNewSkinDir += "\\";
+
 	CString strInfo(_T(""));
 	strInfo.Format(_T("创建皮肤工程文件【%s%s】成功！"), m_strNewSkinName, _T(NAME_SKIN_FILE_EX_NAME));
 
-	m_strNewUfpPath.Format(_T("%s\\%s%s"), m_strNewSkinDir, m_strNewSkinName, _T(NAME_SKIN_PROJ_EX_NAME));
+	m_strNewUfpPath.Format(_T("%s%s%s"), m_strNewSkinDir, m_strNewSkinName, _T(NAME_SKIN_PROJ_EX_NAME));
 
 	// 保存老工程
 	if (!SaveSkinProject(m_strCurSkinDir, m_strCurSkinName, true))
@@ -95,6 +98,12 @@ void CMainFrame::OnFileOpen()
 	if (m_strNewUfpPath.GetLength() <= 0 || m_strNewSkinName.GetLength() <= 0 || m_strNewSkinDir.GetLength() <= 0)
 		return;
 
+	if (m_strNewSkinDir.CompareNoCase(m_strCurSkinDir) == 0 && m_strNewSkinName.CompareNoCase(m_strCurSkinName) == 0)
+	{
+		AfxMessageBox(_T("此工程已经被打开！"), MB_OK | MB_ICONERROR);
+		return;
+	}
+
 	// 保存老工程
 	if (!SaveSkinProject(m_strCurSkinDir, m_strCurSkinName, true))
 		return;
@@ -104,7 +113,12 @@ void CMainFrame::OnFileOpen()
 		return;
 
 	// 打开工程
-	OpenSkinProject(false, m_strNewSkinDir, m_strNewSkinName);
+	if (!OpenSkinProject(false, m_strNewSkinDir, m_strNewSkinName))
+		return;
+
+	CString strInfo(_T(""));
+	strInfo.Format(_T("打开皮肤工程文件【%s%s】成功！"), m_strCurSkinName, _T(NAME_SKIN_FILE_EX_NAME));
+	AfxMessageBox(strInfo, MB_OK | MB_ICONINFORMATION);
 }
 
 void CMainFrame::SetProjectInitState(bool bInitOk)
