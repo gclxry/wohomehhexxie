@@ -1,9 +1,10 @@
 
 #include "StdAfx.h"
-#include "IControlBaseImpl.h"
+#include "..\..\Inc\IControlBase.h"
+#include "..\..\Inc\IWindowBase.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 
-IControlBaseImpl::IControlBaseImpl(void)
+IControlBase::IControlBase()
 {
 	SetObjectType("ControlBase");
 	m_pUiEngine = NULL;
@@ -11,20 +12,18 @@ IControlBaseImpl::IControlBaseImpl(void)
 	m_ChildCtrlsVec.clear();
 	m_bNeedRedraw = true;
 	m_bMouseHover = false;
-	m_pCtrlProp = NULL;
+
+	InitControlPropetry();
 }
 
-IControlBaseImpl::~IControlBaseImpl(void)
+IControlBase::~IControlBase()
 {
 }
 
 // 设置控件在下次绘制的时候是否需要进行重绘
-void IControlBaseImpl::SetNeedRedraw(bool bNeedRedraw)
-{
-	if (m_pCtrlProp == NULL)
-		return;
-	
-	if (!m_pCtrlProp->IsVisible())
+void IControlBase::SetNeedRedraw(bool bNeedRedraw)
+{	
+	if (!IsVisible())
 	{
 		m_bNeedRedraw = false;
 		return;
@@ -34,13 +33,13 @@ void IControlBaseImpl::SetNeedRedraw(bool bNeedRedraw)
 }
 
 // 重绘控件，这个重绘动画定时器中调用
-void IControlBaseImpl::RedrawControlInAnimationTimer()
+void IControlBase::RedrawControlInAnimationTimer()
 {
 
 }
 
 // 重绘控件
-void IControlBaseImpl::RedrawControl(bool bDrawImmediately)
+void IControlBase::RedrawControl(bool bDrawImmediately)
 {
 	if (m_pParentWindowBase != NULL)
 	{
@@ -53,7 +52,7 @@ void IControlBaseImpl::RedrawControl(bool bDrawImmediately)
 }
 
 // 设置子控件都必须自绘
-void IControlBaseImpl::SetChildCtrlToRedraw()
+void IControlBase::SetChildCtrlToRedraw()
 {
 	m_bNeedRedraw = true;
 	for (CHILD_CTRLS_VEC::iterator pCtrlItem = m_ChildCtrlsVec.begin(); pCtrlItem != m_ChildCtrlsVec.end(); pCtrlItem++)
@@ -65,24 +64,18 @@ void IControlBaseImpl::SetChildCtrlToRedraw()
 }
 
 // 取得子控件列表
-CHILD_CTRLS_VEC* IControlBaseImpl::GetChildCtrlsVec()
+CHILD_CTRLS_VEC* IControlBase::GetChildCtrlsVec()
 {
 	return &m_ChildCtrlsVec;
 }
 
-// 取得属性
-IPropertyControlManager* IControlBaseImpl::GetControlBaseProp()
-{
-	return m_pCtrlProp;
-}
-
 // 绘制当前控件，参数为父窗口/父控件的内存DC
-void IControlBaseImpl::OnPaintControl(CMemoryDC &WndMemDc)
+void IControlBase::OnPaintControl(CMemoryDC &WndMemDc)
 {
-	if (m_pCtrlProp == NULL || WndMemDc.GetSafeHdc() == NULL && m_pUiEngine != NULL)
+	if (WndMemDc.GetSafeHdc() == NULL && m_pUiEngine != NULL)
 		return;
 
-	RECT RectInWnd = m_pCtrlProp->GetCtrlInWindowRect();
+	RECT RectInWnd = GetCtrlInWindowRect();
 	m_CtrlMemDc.Create(RECT_WIDTH(RectInWnd), RECT_HEIGHT(RectInWnd), 0, false, m_bNeedRedraw);
 	if (m_CtrlMemDc.GetBits() == NULL)
 		return;
@@ -106,18 +99,18 @@ void IControlBaseImpl::OnPaintControl(CMemoryDC &WndMemDc)
 	}
 }
 
-void IControlBaseImpl::OnPaint()
+void IControlBase::OnPaint()
 {
 
 }
 
 // 鼠标是否Hover
-void IControlBaseImpl::SetMouseHover(bool bHover)
+void IControlBase::SetMouseHover(bool bHover)
 {
 	m_bMouseHover = bHover;
 }
 
-bool IControlBaseImpl::IsMousehover()
+bool IControlBase::IsMousehover()
 {
 	return m_bMouseHover;
 }

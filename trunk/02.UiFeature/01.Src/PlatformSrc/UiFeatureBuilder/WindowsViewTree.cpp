@@ -78,9 +78,13 @@ void CWindowsViewTree::OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult)
 void CWindowsViewTree::SetProjectInitState(bool bInitOk)
 {
 	m_bProjectInitOk = bInitOk;
-	if (!m_bProjectInitOk)
+
+	this->DeleteAllItems();
+	if (m_bProjectInitOk)
 	{
-		this->DeleteAllItems();
+		HTREEITEM hRootItem = this->InsertItem(_T("¡¾´°¿Ú/Ãæ°å¡¿"), 1, 1);
+		this->SetItemState(hRootItem, TVIS_BOLD, TVIS_BOLD);
+		this->RedrawWindow();
 	}
 }
 

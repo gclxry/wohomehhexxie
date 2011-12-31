@@ -53,6 +53,7 @@ CMainFrame::CMainFrame()
 	m_hControlDll = NULL;
 	m_pRegControlMap = NULL;
 	m_bInitOk = false;
+
 	m_strCurSkinDir = _T("");
 	m_strCurSkinName = _T("");
 	m_strCurUfpPath = _T("");
