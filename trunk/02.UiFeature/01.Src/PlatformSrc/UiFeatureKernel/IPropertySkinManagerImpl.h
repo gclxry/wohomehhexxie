@@ -93,7 +93,7 @@ private:
 	bool TranslateWindowsXml(ZIP_FILE *pWindowsXml);
 
 	bool SaveWindowsXml(const char *pszSavePath, string &strXmlData);
-	bool SaveWindowsXml_GroupProp(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentNode, IPropertyGroup *pPropGroup);
+	bool SaveXml_GroupProp(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentNode, IPropertyGroup *pPropGroup);
 
 //////////////////////////////////////////////////////////////////////////
 	// Layout.xml ฯเนุ
