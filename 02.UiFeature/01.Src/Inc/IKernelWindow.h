@@ -9,6 +9,8 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 // Builder 使用函数
+	// 创建/打开一个新的皮肤工程
+	virtual bool BuilderCreateOrOpenProject(char *pszSkinDir, char *pszSkinName) = 0;
 	// 取得所有支持的控件
 	virtual CONTROL_REG_MAP *BuilderRegisterControl() = 0;
 	// 创建一个Builder使用的空的窗口
@@ -16,7 +18,7 @@ public:
 	// 创建一个Builder使用的窗口，并配置上属性
 	virtual IWindowBase* BuilderCreatePropetryWindow(IPropertyWindow *pPropWnd) = 0;
 	// 保存皮肤包
-	virtual bool BuilderSaveSkin(char *pszSkinDir, char *pszSkinName) = 0;
+	virtual bool BD_SaveSkin(char *pszSkinDir, char *pszSkinName) = 0;
 
 //////////////////////////////////////////////////////////////////////////
 	// 一个对话框从一个皮肤包里使用指定的对话框皮肤资源初始化自己

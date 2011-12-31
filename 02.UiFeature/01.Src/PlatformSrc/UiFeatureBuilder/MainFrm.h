@@ -77,12 +77,6 @@ private:
 	// 设置所有显示的控件的初始化状态
 	void SetProjectInitState(bool bInitOk);
 
-	bool InitResourceXml(CString strXmlFile);
-	bool InitControlsXml(CString strXmlFile);
-	bool InitWindowsXml(CString strXmlFile);
-	bool InitLayoutXml(CString strXmlFile);
-
-
 // 生成的消息映射函数
 protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);

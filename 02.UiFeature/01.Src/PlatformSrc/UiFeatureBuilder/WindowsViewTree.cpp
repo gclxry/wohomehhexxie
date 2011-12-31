@@ -171,11 +171,7 @@ void CWindowsViewTree::OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase)
 	if (m_pPropCtrl == NULL || pWndBase == NULL)
 		return;
 
-	IPropertyWindowManager* pPropWndMgr = pWndBase->GetWindowProp();
-	if (pPropWndMgr == NULL)
-		return;
-
-	IPropertyGroup* pPropGroup = pPropWndMgr->GetWindowPropetryBaseGroup();
+	IPropertyGroup* pPropGroup = pWndBase->PP_GetWindowPropetryGroup();
 	if (pPropGroup == NULL)
 		return;
 
@@ -241,7 +237,7 @@ void CWindowsViewTree::RefreshTreeItem(HTREEITEM hItem)
 			IWindowBase* pWnd = dynamic_cast<IWindowBase*>(pPropBase);
 			if (pWnd != NULL)
 			{
-				IPropertyGroup *pWnpPropGroup = pWnd->GetWindowProp()->GetWindowPropetryBaseGroup();
+				IPropertyGroup *pWnpPropGroup = pWnd->PP_GetWindowPropetryGroup();
 				if (pWnpPropGroup != NULL)
 				{
 					pWnd->SetObjectName(pWnpPropGroup->GetObjectName());
@@ -277,7 +273,7 @@ void CWindowsViewTree::InitShowNewProject()
 	if (m_pSkinMgr == NULL || m_pKernelWindow == NULL)
 		return;
 
-	ONE_RESOURCE_PROP_MAP* pWndPropMap = m_pSkinMgr->BuilderGetWindowPropMap();
+	ONE_RESOURCE_PROP_MAP* pWndPropMap = m_pSkinMgr->BD_GetWindowPropMap();
 	if (pWndPropMap == NULL)
 		return;
 
