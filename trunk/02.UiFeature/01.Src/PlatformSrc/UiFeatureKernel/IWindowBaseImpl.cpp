@@ -822,7 +822,16 @@ void IWindowBaseImpl::BD_InitWindowBase(IPropertyWindow *pWindowProp)
 
 	PP_SetWindowPropetry(pWindowProp);
 	this->SetObjectId(pWindowProp->GetObjectId());
-	this->SetObjectName("【新建窗体名称】");
+	if (m_pPropBase_Name == NULL || m_pPropBase_Name->GetString() == NULL || strlen(m_pPropBase_Name->GetString()) <= 0)
+	{
+		if (m_pPropBase_Name != NULL)
+			m_pPropBase_Name->SetString("【新建窗体名称】");
+		this->SetObjectName("【新建窗体名称】");
+	}
+	else
+	{
+		this->SetObjectName(m_pPropBase_Name->GetString());
+	}
 }
 
 bool IWindowBaseImpl::IsInit()

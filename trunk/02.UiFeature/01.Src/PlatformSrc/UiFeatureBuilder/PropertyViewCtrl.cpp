@@ -354,32 +354,52 @@ void CPropertyViewCtrl::RefreshBoolProp(CMFCPropertyGridProperty* pProperty, IPr
 
 void CPropertyViewCtrl::RefreshColorProp(CMFCPropertyGridProperty* pProperty, IPropertyColor *pColorProp)
 {
-
-}
-
-void CPropertyViewCtrl::RefreshComboBoxProp(CMFCPropertyGridProperty* pProperty, IPropertyComboBox *pComboboxProp)
-{
-
+	RefreshHaveBasePropPropetry(pProperty, dynamic_cast<IPropertyBase*>(pColorProp));
 }
 
 void CPropertyViewCtrl::RefreshCursorProp(CMFCPropertyGridProperty* pProperty, IPropertyCursor *pCursorProp)
 {
-
+	RefreshHaveBasePropPropetry(pProperty, dynamic_cast<IPropertyBase*>(pCursorProp));
 }
 
 void CPropertyViewCtrl::RefreshFontProp(CMFCPropertyGridProperty* pProperty, IPropertyFont *pFontProp)
 {
+	RefreshHaveBasePropPropetry(pProperty, dynamic_cast<IPropertyBase*>(pFontProp));
+}
 
+void CPropertyViewCtrl::RefreshHaveBasePropPropetry(CMFCPropertyGridProperty* pProperty, IPropertyBase *pBaseProp)
+{
+	USES_CONVERSION;
+	if (pProperty == NULL || pBaseProp == NULL)
+		return;
+
+	COleVariant NewVariant = pProperty->GetValue();
+	if (NewVariant.bstrVal == NULL)
+	{
+		pBaseProp->SetRelevancyPropName(NULL);
+		pBaseProp->SetRelevancyProp(NULL);
+		return;
+	}
+
+	CString strValue(NewVariant.bstrVal);
+	::SysFreeString(NewVariant.bstrVal);
+
+	pBaseProp->SetRelevancyPropName(W2A(strValue));
+	pBaseProp->SetRelevancyProp(NULL);
 }
 
 void CPropertyViewCtrl::RefreshImageProp(CMFCPropertyGridProperty* pProperty, IPropertyImage *pImageProp)
 {
-
+	RefreshHaveBasePropPropetry(pProperty, dynamic_cast<IPropertyBase*>(pImageProp));
 }
 
 void CPropertyViewCtrl::RefreshIntProp(CMFCPropertyGridProperty* pProperty, IPropertyInt *pIntProp)
 {
+	if (pProperty == NULL || pIntProp == NULL)
+		return;
 
+	COleVariant NewVariant = pProperty->GetValue();
+	pIntProp->SetValue(NewVariant.lVal);
 }
 
 void CPropertyViewCtrl::RefreshStringProp(CMFCPropertyGridProperty* pProperty, IPropertyString *pStringProp)
@@ -388,7 +408,6 @@ void CPropertyViewCtrl::RefreshStringProp(CMFCPropertyGridProperty* pProperty, I
 	if (pProperty == NULL || pStringProp == NULL)
 		return;
 
-	CString strName = pProperty->GetName();
 	COleVariant NewVariant = pProperty->GetValue();
 	if (NewVariant.bstrVal == NULL)
 		return;
@@ -396,6 +415,7 @@ void CPropertyViewCtrl::RefreshStringProp(CMFCPropertyGridProperty* pProperty, I
 	CString strValue(NewVariant.bstrVal);
 	::SysFreeString(NewVariant.bstrVal);
 
+	CString strName = pProperty->GetName();
 	if (strName.CompareNoCase(_T(NAME_SKIN_PROP_NAME)) == 0)
 	{
 		if (strValue.GetLength() <= 0)
@@ -406,10 +426,12 @@ void CPropertyViewCtrl::RefreshStringProp(CMFCPropertyGridProperty* pProperty, I
 			AfxMessageBox(_T("¡¾Name¡¿×Ö¶Î²»ÔÊÐíÎª¿Õ£¡"), MB_OK | MB_ICONERROR);
 			return;
 		}
-
-		if (m_pCurrentPropGroup != NULL)
-			m_pCurrentPropGroup->SetObjectName(W2A(strValue));
 	}
 
 	pStringProp->SetString(W2A(strValue));
+}
+
+void CPropertyViewCtrl::RefreshComboBoxProp(CMFCPropertyGridProperty* pProperty, IPropertyComboBox *pComboboxProp)
+{
+
 }

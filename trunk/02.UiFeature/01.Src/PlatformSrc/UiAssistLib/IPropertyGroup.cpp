@@ -48,6 +48,10 @@ void IPropertyGroup::AppendProperty(IPropertyBase* pProperty)
 // 写入xml
 bool IPropertyGroup::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode)
 {
+	// name 字段为空的group不写入属性表
+	if (GetObjectName() == NULL || strlen(GetObjectName()) <= 0)
+		return true;
+
 	if (pParentXmlNode == NULL)
 		return false;
 

@@ -240,14 +240,10 @@ void CWindowsViewTree::RefreshTreeItem(HTREEITEM hItem)
 		{
 			// ´°¿Ú
 			IWindowBase* pWnd = dynamic_cast<IWindowBase*>(pPropBase);
-			if (pWnd != NULL)
+			if (pWnd != NULL && pWnd->PP_GetWindowObjectName() != NULL)
 			{
-				IPropertyGroup *pWnpPropGroup = pWnd->PP_GetWindowPropetryGroup();
-				if (pWnpPropGroup != NULL)
-				{
-					pWnd->SetObjectName(pWnpPropGroup->GetObjectName());
-					this->SetItemText(hItem, A2W(pWnd->GetObjectName()));
-				}
+				this->SetItemText(hItem, A2W(pWnd->PP_GetWindowObjectName()));
+				pWnd->SetObjectName(pWnd->PP_GetWindowObjectName());
 			}
 		}
 		else if (pPropBase->GetObjectTypeId() == OTID_CONTROL)

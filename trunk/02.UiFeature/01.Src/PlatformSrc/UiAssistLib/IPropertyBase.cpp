@@ -37,7 +37,10 @@ const char* IPropertyBase::GetRelevancyPropName()
 void IPropertyBase::SetRelevancyPropName(char *pszPropName)
 {
 	if (pszPropName == NULL)
+	{
+		m_strRelevancyPropName = "";
 		return;
+	}
 
 	m_strRelevancyPropName = pszPropName;
 }
@@ -49,9 +52,6 @@ IPropertyBase* IPropertyBase::GetRelevancyProp()
 
 void IPropertyBase::SetRelevancyProp(IPropertyBase *pszProp)
 {
-	if (pszProp == NULL)
-		return;
-
 	m_pRelevancyProp = pszProp;
 }
 
