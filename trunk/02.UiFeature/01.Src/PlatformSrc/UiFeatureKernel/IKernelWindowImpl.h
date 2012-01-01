@@ -31,6 +31,9 @@ public:
 	// 关闭一个工程
 	virtual bool BD_CloseProject();
 
+	// 创建一个Builder使用的空的控件
+	virtual IControlBase* BD_CreateCtrlEmptyPropetry();
+
 //////////////////////////////////////////////////////////////////////////
 	// 一个对话框从一个皮肤包里使用指定的对话框皮肤资源初始化自己
 	virtual IWindowBase* PG_InitFeatureSkin(HWND hWnd, char *pszSkinPath, char *pszWndName);
