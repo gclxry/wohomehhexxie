@@ -412,6 +412,10 @@
 					RelativePath=".\IControlBase_Propetry.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\Inc\ICtrlInterface.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
