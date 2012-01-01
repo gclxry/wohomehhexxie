@@ -2,6 +2,8 @@
 #include "StdAfx.h"
 #include "IControlManagerImpl.h"
 #include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\IControlManager.h"
+#include "..\..\Inc\ICtrlBasePanel.h"
 
 
 IControlManager *GetControlManager()
@@ -15,8 +17,6 @@ IControlManagerImpl::IControlManagerImpl(void)
 
 IControlManagerImpl::~IControlManagerImpl(void)
 {
-	int i = 0;
-	i++;
 }
 
 IControlManager* IControlManagerImpl::GetInstance()
@@ -42,20 +42,80 @@ void IControlManagerImpl::SetRegControl(CONTROL_REG_MAP *pCtrlMap, string strCtr
 	pCtrlMap->insert(pair<string, CONTROL_REG>(RegInfo.strCtrlName, RegInfo));
 }
 
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 需要修改和扩展的函数
 // 取得所有支持的控件
 void IControlManagerImpl::SetRegControlMap(CONTROL_REG_MAP *pCtrlMap)
 {
 	if (pCtrlMap == NULL)
 		return;
-
 	pCtrlMap->clear();
 
-	// 注册一个控件
-	SetRegControl(pCtrlMap, "基本控件", "Button", "Ctrl (1).png", "基本按钮控件");
-	SetRegControl(pCtrlMap, "基本控件", "CheckBox", "Ctrl (2).png", "基本 CheckBox 控件");
-	SetRegControl(pCtrlMap, "项目组控件", "StaticBox", "Ctrl (3).png", "基本静态文本控件件");
-	SetRegControl(pCtrlMap, "项目组控件", "Link", "Ctrl (4).png", "基本超链接控件");
-	// 注册一个控件
+	// 添加控件，步骤2：向Builder工具注册控件
+	SetRegControl(pCtrlMap, "基本控件", CTRL_NAME_BASE_PANEL, "BasePanel.png", "对话框背景、面板控件");
+}
+
+// 创建一个控件，参数为步骤1的宏
+ICtrlInterface* IControlManagerImpl::CreateCtrl(char *pCtrlType, char *pszObjectId)
+{
+	if (pCtrlType == NULL || pszObjectId == NULL)
+		return NULL;
+
+	ICtrlInterface *pRetCtrl = NULL;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// 添加控件，步骤4：创建一个控件
+	if (lstrcmpiA(pCtrlType, CTRL_NAME_BASE_PANEL) == NULL)
+	{
+		ICtrlBasePanel *pCtrl = new ICtrlBasePanel;
+		if (pCtrl != NULL)
+		{
+			pRetCtrl = dynamic_cast<ICtrlInterface*>(pCtrl);
+			if (pRetCtrl == NULL)
+			{
+				SAFE_DELETE(pCtrl);
+			}
+		}
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	if (pRetCtrl == NULL)
+		return NULL;
+
+	pRetCtrl->SetObjectId(pszObjectId);
+	return pRetCtrl;
+}
+
+// 销毁一个控件
+bool IControlManagerImpl::ReleaseCtrl(ICtrlInterface **ppCtrl)
+{
+	if (ppCtrl == NULL || *ppCtrl == NULL)
+		return false;
+
+	const char * pszObjType = (*ppCtrl)->GetObjectType();
+	if (pszObjType == NULL || strlen(pszObjType) <= 0)
+	{
+		SAFE_DELETE(*ppCtrl);
+		return true;
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// 添加控件，步骤5：销毁一个控件
+	if (lstrcmpiA(pszObjType, CTRL_NAME_BASE_PANEL) == NULL)
+	{
+		ICtrlBasePanel *pPanel = dynamic_cast<ICtrlBasePanel*>(*ppCtrl);
+		if (pPanel != NULL)
+		{
+			SAFE_DELETE(pPanel);
+			*ppCtrl = NULL;
+			return true;
+		}
+	}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	SAFE_DELETE(*ppCtrl);
+	return true;
 }
