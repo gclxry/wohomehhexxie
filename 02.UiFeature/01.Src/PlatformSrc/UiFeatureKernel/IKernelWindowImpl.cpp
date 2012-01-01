@@ -203,3 +203,45 @@ bool IKernelWindowImpl::BD_OpenProject(char *pszSkinDir, char *pszSkinName)
 
 	return true;
 }
+
+// 创建一个Builder使用的空的窗口
+IControlBase* IKernelWindowImpl::BD_CreateCtrlEmptyPropetry(char *pszCtrlType)
+{
+	if (m_pSkinMgr == NULL)
+		return NULL;
+
+	IPropertyGroup *pCtrlPropGroup = dynamic_cast<IPropertyGroup*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_GROUP));
+	if (pCtrlPropGroup == NULL)
+		return NULL;
+
+	IPropertyControl *pPropCtrl = dynamic_cast<IPropertyWindow*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_CONTROL));
+	if (pPropCtrl == NULL)
+		return NULL;
+
+	pPropCtrl->SetCtrlGroupProp(pCtrlPropGroup);
+
+	// 设置objecid
+	char szId[MAX_PATH];
+	memset(szId, 0, MAX_PATH);
+	sprintf_s(szId, MAX_PATH-1, "%s%d", PROP_TYPE_WINDOW_NAME, m_pSkinMgr->GetNewId());
+	pWindowPropGroup->SetObjectId(szId);
+	pPropWindow->SetObjectId(szId);
+
+	IWindowBaseImpl *pWndBaseImpl = new IWindowBaseImpl;
+	if (pWndBaseImpl == NULL)
+		return NULL;
+
+	IWindowBase* pWndBase = (dynamic_cast<IWindowBase*>(pWndBaseImpl));
+	if (pWndBase == NULL)
+	{
+		SAFE_DELETE(pWndBaseImpl);
+		return NULL;
+	}
+	// 初始化在builder中的属性
+	pWndBase->BD_InitWindowBase(pPropWindow);
+
+	// 记录到窗口队列中
+	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>((HWND)m_nBuilderHwnd++, pWndBaseImpl));
+	m_pSkinMgr->GetAllWindowPropMap()->insert(pair<string, IPropertyBase*>(pWndBase->GetObjectId(), pWindowPropGroup));
+	return pWndBase;
+}

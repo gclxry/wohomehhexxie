@@ -6,6 +6,7 @@
 #include "IPropertySkinManager.h"
 
 class IWindowBase;
+class IWindowBaseImpl;
 class IPropertyControl;
 class IControlBase;
 
@@ -123,10 +124,14 @@ typedef vector<IControlBase*>			CHILD_CTRLS_VEC;
 
 class IControlBase : public IFeatureObject
 {
+	friend class IWindowBaseImpl;
 public:
 	IControlBase();
 	virtual ~IControlBase();
 
+
+	
+protected:
 	// 绘制当前控件，参数为父窗口/父控件的内存DC
 	virtual void OnPaintControl(CMemoryDC &WndMemDc);
 
@@ -203,8 +208,7 @@ public:
 	// 接受到默认回车键，执行控件操作
 	virtual void OnEnterRun();
 
-
-private:
+protected:
 	// 整个控件的内存DC
 	CMemoryDC m_CtrlMemDc;
 	// 附着的窗口
@@ -275,12 +279,10 @@ protected:
 	// 创建一个属性
 	IPropertyBase* CreateProperty(IPropertyGroup *pPropGroup, OBJECT_TYPE_ID propType, char *pPropName, char *pPropInfo);
 
-private:
 	void InitControlPropetry();
 	// 2.从Builder中新创建一个控件，需要初始化属性的PropId
 	void InitControlPropObjectId(GROUP_PROP_VEC *pPropList);
 
-private:
 	// 存储Builder可见可设置属性列表，也就是当前控件的属性列表
 	GROUP_PROP_VEC m_ControlPropList;
 	// 附属控件
@@ -302,6 +304,4 @@ private:
 	string m_strCtrlName;
 	// 拖动控件
 	bool m_bDragCtrl;
-
 };
-
