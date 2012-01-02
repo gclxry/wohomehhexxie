@@ -293,3 +293,9 @@ IPropertyBase* IControlBase::CreateProperty(IPropertyGroup *pPropGroup, OBJECT_T
 
 	return NULL;
 }
+
+// ÉèÖÃ¸½Êô¿Ø¼þ
+void IControlBase::SetPropertySkinManager(IPropertySkinManager *pMgr)
+{
+	m_pSkinPropMgr = pMgr;
+}
