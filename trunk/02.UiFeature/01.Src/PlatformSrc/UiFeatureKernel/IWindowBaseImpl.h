@@ -151,7 +151,7 @@ private:
 	void InitWindowPropMember();
 	// 创建空的属性队列
 	void CreateWindowPropetry();
-	IPropertyBase* CreatePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
+	IPropertyBase* CreateCtrlOnePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
 
 private:
 	IPropertySkinManager* m_pSkinPropMgr;

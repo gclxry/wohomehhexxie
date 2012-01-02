@@ -417,6 +417,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\ICtrlInterface.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Inc\ICtrlInterface.h"
 					>
 				</File>
