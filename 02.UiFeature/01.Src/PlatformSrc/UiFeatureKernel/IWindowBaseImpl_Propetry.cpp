@@ -68,7 +68,7 @@ IPropertyGroup* IWindowBaseImpl::PP_GetWindowPropetryGroup()
 	if (m_pXmlPropWindow == NULL)
 		return NULL;
 
-	return m_pXmlPropWindow->GSetWindowPropGroup();
+	return m_pXmlPropWindow->GetWindowPropGroup();
 }
 
 // 将xml中的属性设置到manager中
@@ -170,7 +170,7 @@ IPropertyBase* IWindowBaseImpl::CreatePropetry(IPropertyGroup* pGroup, OBJECT_TY
 		return NULL;
 
 	if (pGroup == NULL)
-		pGroup = m_pXmlPropWindow->GSetWindowPropGroup();
+		pGroup = m_pXmlPropWindow->GetWindowPropGroup();
 
 	return CreateResourcePropetry(m_pSkinPropMgr, pGroup, propType, pszPropName, pszPropInfo);
 }

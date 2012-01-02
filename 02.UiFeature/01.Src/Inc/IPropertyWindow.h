@@ -14,7 +14,7 @@ public:
 
 	CHILD_CTRL_PROP_VEC* GetChildCtrlVec();
 	void SetWindowPropGroup(IPropertyGroup *pWindowProp);
-	IPropertyGroup* GSetWindowPropGroup();
+	IPropertyGroup* GetWindowPropGroup();
 
 private:
 	IPropertyGroup *m_pWindowProp;

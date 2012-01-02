@@ -26,7 +26,7 @@ void IPropertyWindow::SetWindowPropGroup(IPropertyGroup *pWindowProp)
 	m_pWindowProp = pWindowProp;
 }
 
-IPropertyGroup* IPropertyWindow::GSetWindowPropGroup()
+IPropertyGroup* IPropertyWindow::GetWindowPropGroup()
 {
 	return m_pWindowProp;
 }
