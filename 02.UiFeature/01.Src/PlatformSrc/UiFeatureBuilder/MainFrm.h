@@ -21,6 +21,8 @@ public:
 
 // 操作
 public:
+	// true:设置为正常鼠标样式，false:设置为拖动控件鼠标样式
+	void SetCrossCursor(bool bIsCross);
 
 // 重写
 public:
@@ -59,6 +61,8 @@ private:
 
 //////////////////////////////////////////////////////////////////////////
 	bool	m_bInitOk;
+	// 是否为十字架光标
+	bool m_bIsCross;
 
 	// 当前项目工程文件
 	CString m_strCurUfpPath;
@@ -99,6 +103,7 @@ public:
 	afx_msg void OnFileClose();
 	afx_msg void OnAppExit();
 	afx_msg void OnDestroy();
+	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 };
 
 

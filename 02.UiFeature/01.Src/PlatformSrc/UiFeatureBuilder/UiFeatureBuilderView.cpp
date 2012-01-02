@@ -7,6 +7,7 @@
 
 #include "UiFeatureBuilderDoc.h"
 #include "UiFeatureBuilderView.h"
+#include "MainFrm.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -22,6 +23,7 @@ BEGIN_MESSAGE_MAP(CUiFeatureBuilderView, CView)
 	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CUiFeatureBuilderView::OnFilePrintPreview)
+	ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
 // CUiFeatureBuilderView 构造/析构
@@ -115,3 +117,19 @@ CUiFeatureBuilderDoc* CUiFeatureBuilderView::GetDocument() const // 非调试版本是
 
 
 // CUiFeatureBuilderView 消息处理程序
+
+void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	CView::OnLButtonUp(nFlags, point);
+
+	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
+	if (pMain != NULL)
+	{
+		// 设置光标
+		::ShowCursor(FALSE);
+		pMain->SetCrossCursor(false);
+		::ShowCursor(TRUE);
+	}
+
+	::PostMessage(pMain->m_hWnd, WM_SETCURSOR, NULL, NULL);
+}

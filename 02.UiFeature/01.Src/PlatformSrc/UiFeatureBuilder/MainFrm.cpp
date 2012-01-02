@@ -32,6 +32,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_COMMAND(ID_FILE_CLOSE, &CMainFrame::OnFileClose)
 	ON_COMMAND(ID_APP_EXIT, &CMainFrame::OnAppExit)
 	ON_WM_DESTROY()
+	ON_WM_SETCURSOR()
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -55,6 +56,7 @@ CMainFrame::CMainFrame()
 	m_hControlDll = NULL;
 	m_pRegControlMap = NULL;
 	m_bInitOk = false;
+	m_bIsCross = false;
 
 	m_strCurSkinDir = _T("");
 	m_strCurSkinName = _T("");
@@ -417,4 +419,20 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 	}
 
 	return TRUE;
+}
+
+BOOL CMainFrame::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
+{
+	if (m_bIsCross)
+	{
+		HCURSOR hCursor = ::LoadCursor(NULL, IDC_CROSS);
+		if (hCursor != NULL)
+		{
+			HCURSOR hSetCur = ::SetCursor(hCursor);
+			if (hSetCur != NULL)
+				return TRUE;
+		}
+	}
+
+	return CFrameWndEx::OnSetCursor(pWnd, nHitTest, message);
 }

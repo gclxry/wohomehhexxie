@@ -179,3 +179,8 @@ void CControlsWnd::OnGroupSelchangeCombo()
 	string strNewGroup(W2A(strGroup));
 	SetCurrentSelectList(strNewGroup);
 }
+
+void CControlsWnd::SetProjectInitState(bool bInitOk)
+{
+	m_wndCtrlList.SetProjectInitState(bInitOk);
+}
