@@ -6,6 +6,8 @@
 #include "FileView.h"
 #include "WindowsView.h"
 #include "PropertiesWnd.h"
+#include "UiFeatureBuilderDoc.h"
+#include "UiFeatureBuilderView.h"
 #include "ControlsWnd.h"
 #include "UiFeatureKernel.h"
 
@@ -23,6 +25,7 @@ public:
 public:
 	// true:设置为正常鼠标样式，false:设置为拖动控件鼠标样式
 	void SetCrossCursor(bool bIsCross);
+	void SetView(CUiFeatureBuilderView *pView);
 
 // 重写
 public:
@@ -46,6 +49,7 @@ protected:  // 控件条嵌入成员
 	CWindowsView    m_wndWindowView;
 	CPropertiesWnd    m_wndProperties;
 	CControlsWnd      m_wndControls;
+	CUiFeatureBuilderView *m_pView;
 
 private:
 //////////////////////////////////////////////////////////////////////////

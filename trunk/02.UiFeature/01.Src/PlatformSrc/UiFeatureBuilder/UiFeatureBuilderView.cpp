@@ -8,6 +8,7 @@
 #include "UiFeatureBuilderDoc.h"
 #include "UiFeatureBuilderView.h"
 #include "MainFrm.h"
+#include "FeatureControlList.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -30,8 +31,10 @@ END_MESSAGE_MAP()
 
 CUiFeatureBuilderView::CUiFeatureBuilderView()
 {
-	// TODO: 在此处添加构造代码
-
+	m_pKernelWindow = NULL;
+	m_pControlList = NULL;
+	m_bNewCtrl = false;
+	m_bInitOk = false;
 }
 
 CUiFeatureBuilderView::~CUiFeatureBuilderView()
@@ -61,6 +64,11 @@ void CUiFeatureBuilderView::OnDraw(CDC* /*pDC*/)
 
 // CUiFeatureBuilderView 打印
 
+void CUiFeatureBuilderView::Init(IKernelWindow* pKernelWindow, CFeatureControlList *pCtrlList)
+{
+	m_pKernelWindow = pKernelWindow;
+	m_pControlList = pCtrlList;
+}
 
 void CUiFeatureBuilderView::OnFilePrintPreview()
 {
@@ -122,6 +130,9 @@ void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	CView::OnLButtonUp(nFlags, point);
 
+	if (!m_bInitOk)
+		return;
+
 	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
 	if (pMain != NULL)
 	{
@@ -132,4 +143,36 @@ void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 	}
 
 	::PostMessage(pMain->m_hWnd, WM_SETCURSOR, NULL, NULL);
+
+	// 创建新控件
+	if (m_pControlList != NULL)
+	{
+		NMITEMACTIVATE *pSelItem = m_pControlList->GetSelectControlItem();
+		if (pSelItem != NULL && pSelItem->iItem >= 0)
+		{
+			CString strCtrlTypeName = m_pControlList->GetItemText(pSelItem->iItem, CONTROL_NAME_COLUMN);
+			int i = 0;
+		}
+	}
+}
+
+void CUiFeatureBuilderView::SetProjectInitState(bool bInitOk)
+{
+	m_bInitOk = bInitOk;
+}
+
+void CUiFeatureBuilderView::SetNewControl(bool bIsNew)
+{
+	m_bNewCtrl = bIsNew;
+}
+
+void CUiFeatureBuilderView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView)
+{
+	// TODO: Add your specialized code here and/or call the base class
+
+	CView::OnActivateView(bActivate, pActivateView, pDeactiveView);
+
+	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
+	if (pMain != NULL)
+		pMain->SetView(this);
 }

@@ -1,14 +1,22 @@
 #include "StdAfx.h"
 #include "FeatureControlList.h"
 #include "MainFrm.h"
+#include "UiFeatureBuilderView.h"
 
 CFeatureControlList::CFeatureControlList(void)
 {
 	m_bInitOk = false;
+	m_pView = NULL;
+	m_pSelectItem = NULL;
 }
 
 CFeatureControlList::~CFeatureControlList(void)
 {
+}
+
+void CFeatureControlList::Sort(int iColumn, BOOL bAscending, BOOL bAdd)
+{
+
 }
 
 void CFeatureControlList::SetProjectInitState(bool bInitOk)
@@ -27,20 +35,25 @@ BEGIN_MESSAGE_MAP(CFeatureControlList, CMFCListCtrl)
 	ON_NOTIFY_REFLECT(NM_CLICK, &CFeatureControlList::OnNMClick)
 END_MESSAGE_MAP()
 
+NMITEMACTIVATE* CFeatureControlList::GetSelectControlItem()
+{
+	return m_pSelectItem;
+}
+
 void CFeatureControlList::OnNMClick(NMHDR *pNMHDR, LRESULT *pResult)
 {
-//	if (!m_bInitOk)
-//		return;
+	if (!m_bInitOk)
+		return;
 
-	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	m_pSelectItem = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
 	// TODO: Add your control notification handler code here
 	*pResult = 0;
 
-	if (pNMItemActivate == NULL)
+	if (m_pSelectItem == NULL)
 		return;
 
 	// 
-	if (pNMItemActivate->iItem < 0)
+	if (m_pSelectItem->iItem < 0)
 	{
 		// 没有选择相应的控件
 		SetCtrlListCursor(true);
@@ -53,29 +66,22 @@ void CFeatureControlList::OnNMClick(NMHDR *pNMHDR, LRESULT *pResult)
 // 设置为正常鼠标样式，设置为拖动控件鼠标样式
 void CFeatureControlList::SetCtrlListCursor(bool bIsNormal)
 {
-////	HINSTANCE hInstance = ::GetModuleHandle(NULL);
-//	HCURSOR hCursor = NULL;
-//	if (bIsNormal)
-//		hCursor = ::LoadCursor(NULL, IDC_ARROW);
-//	else
-//		hCursor = ::LoadCursor(NULL, IDC_CROSS);
-//
-////	DWORD dwErr = GetLastError();
-//
-//	::ShowCursor(FALSE) ;//隐藏原来的光标
-//	HCURSOR hSetCur = ::SetCursor(hCursor);
-//	::ShowCursor(TRUE) ;//显示新的光标 
-//	DWORD dwErr = GetLastError();
-////	int i = 0;
-
 	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
 	if (pMain != NULL)
 	{
 		::ShowCursor(FALSE);
-		if (bIsNormal)
-			pMain->SetCrossCursor(false);
-		else
-			pMain->SetCrossCursor(true);
+		pMain->SetCrossCursor(!bIsNormal);
 		::ShowCursor(TRUE);
 	}
+
+	if (m_pView != NULL)
+	{
+		// 是否需要创建一个新控件
+		m_pView->SetNewControl(!bIsNormal);
+	}
+}
+
+void CFeatureControlList::SetBuilderView(CUiFeatureBuilderView *pView)
+{
+	m_pView = pView;
 }
