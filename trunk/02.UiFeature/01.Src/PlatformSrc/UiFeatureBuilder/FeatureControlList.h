@@ -17,7 +17,7 @@ public:
 
 	void SetProjectInitState(bool bInitOk);
 	void SetBuilderView(CUiFeatureBuilderView *pView);
-	NMITEMACTIVATE *GetSelectControlItem();
+	CString GetSelectCtrlTypeName();
 
 private:
 	// true:设置为正常鼠标样式，false:设置为拖动控件鼠标样式

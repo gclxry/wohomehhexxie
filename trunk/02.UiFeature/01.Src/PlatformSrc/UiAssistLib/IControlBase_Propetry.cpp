@@ -3,12 +3,177 @@
 #include "..\..\Inc\IControlBase.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IControlBase.h"
+#include "..\..\Inc\IWindowBase.h"
+
+
+// 初始化在builder中的属性
+bool IControlBase::BD_InitControlBase(IPropertyControl *pCtrlProp)
+{
+	if (pCtrlProp == NULL)
+		return false;
+
+	m_pXmlPropCtrl = m_pXmlPropCtrl;
+	CreateCtrlPropetry();
+	return true;
+}
+
+IPropertyBase* IControlBase::CreatePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo)
+{
+	if (m_pSkinPropMgr == NULL || m_pXmlPropWindow == NULL || pszPropName == NULL || strlen(pszPropName) <= 0 || propType <= OTID_NONE || propType >= OTID_LAST)
+		return NULL;
+
+	if (pGroup == NULL)
+		pGroup = m_pXmlPropCtrl->GSetWindowPropGroup();
+
+	return CreateResourcePropetry(m_pSkinPropMgr, pGroup, propType, pszPropName, pszPropInfo);
+}
+
+// 创建空的属性队列
+void IControlBase::CreateCtrlPropetry()
+{
+	if (m_pXmlPropCtrl == NULL)
+		return;
+
+	// Group:base
+	m_pPropGroupBase = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "WindowBase", "窗口/面板基本属性");
+	if (m_pPropGroupBase == NULL)
+		return;
+
+	// base-类型名称
+	m_pPropBase_TypeName = (IPropertyString*)CreatePropetry(m_pPropGroupBase, OTID_STRING, NAME_SKIN_PROP_NAME_TYPE, "当前 Object 类型");
+	if (m_pPropBase_TypeName == NULL)
+		return;
+	m_pPropBase_TypeName->SetString(PROP_TYPE_WINDOW_NAME);
+
+	// base-objectid
+	m_pPropBase_ObjectId = (IPropertyString*)CreatePropetry(m_pPropGroupBase, OTID_STRING, NAME_SKIN_PROP_NAME_OBJ_ID, "当前 Object Id");
+	if (m_pPropBase_ObjectId == NULL)
+		return;
+	m_pPropBase_ObjectId->SetString((char*)m_pXmlPropCtrl->GetObjectId());
+
+	// base-name
+	m_pPropBase_Name = (IPropertyString*)CreatePropetry(m_pPropGroupBase, OTID_STRING, NAME_SKIN_PROP_NAME, "当前 Object 名称");
+	if (m_pPropBase_Name == NULL)
+		return;
+	if (m_pPropBase_Name->GetString() != NULL && strlen(m_pPropBase_Name->GetString()) <= 0)
+		m_pPropBase_Name->SetString("新建窗口/面板");
+
+	// base-windowtitle
+	m_pPropBase_WindowText = (IPropertyString*)CreatePropetry(m_pPropGroupBase, OTID_STRING, "WindowText", "当前窗口标题");
+	if (m_pPropBase_WindowText == NULL)
+		return;
+	if (m_pPropBase_WindowText->GetString() != NULL && strlen(m_pPropBase_WindowText->GetString()) <= 0)
+		m_pPropBase_WindowText->SetString("无窗口标题");
+
+	// base-visible
+	m_pPropBase_Visible = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, OTID_BOOL, "Visible", "是否可见");
+	if (m_pPropBase_Visible == NULL)
+		return;
+
+	// base-支持分层窗口
+	m_pPropBase_Layered = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, OTID_BOOL, "LayeredWindow", "是否支持分层窗口");
+	if (m_pPropBase_Layered == NULL)
+		return;
+
+	// base-topmost
+	m_pPropBase_TopMost = (IPropertyBool*)CreatePropetry(m_pPropGroupBase, OTID_BOOL, "TopMost", "窗口是否在最上层");
+	if (m_pPropBase_TopMost == NULL)
+		return;
+
+	// base-sysbase
+	m_pPropGroupSysBase = (IPropertyGroup*)CreatePropetry(m_pPropGroupBase, OTID_GROUP, "SysBase", "窗口系统属性，只限于窗口，其他类型不适用");
+	if (m_pPropGroupSysBase == NULL)
+		return;
+
+	// base-sysbase-最大化
+	m_pPropSysBase_CanFullScreen = (IPropertyBool*)CreatePropetry(m_pPropGroupSysBase, OTID_BOOL, "CanFullScreen", "是否可以最大化");
+	if (m_pPropSysBase_CanFullScreen == NULL)
+		return;
+
+	// base-sysbase-最小化
+	m_pPropSysBase_CanMiniSize = (IPropertyBool*)CreatePropetry(m_pPropGroupSysBase, OTID_BOOL, "CanMiniSize", "是否可以最小化");
+	if (m_pPropSysBase_CanMiniSize == NULL)
+		return;
+
+	// base-sysbase-最小尺寸
+	// base-sysbase-最大尺寸
+
+	// Group-size
+	m_pPropGroupSize = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "Size", "窗口/面板大小");
+	if (m_pPropGroupSize == NULL)
+		return;
+
+	// size-width
+	m_pPropSize_Width = (IPropertyInt*)CreatePropetry(m_pPropGroupSize, OTID_INT, "Width", "窗口宽度");
+	if (m_pPropSize_Width == NULL)
+		return;
+
+	// size-height
+	m_pPropSize_Height = (IPropertyInt*)CreatePropetry(m_pPropGroupSize, OTID_INT, "Height", "窗口高度");
+	if (m_pPropSize_Height == NULL)
+		return;
+
+	// Group-drag(拖拽窗口)
+	m_pPropGroupDrag = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "Drag", "拖拽窗口");
+	if (m_pPropGroupDrag == NULL)
+		return;
+
+	// drag-enable
+	m_pPropDrag_Enable = (IPropertyBool*)CreatePropetry(m_pPropGroupDrag, OTID_BOOL, "Enable", "是否可以拖动窗口，随处移动");
+	if (m_pPropDrag_Enable == NULL)
+		return;
+
+	// Group-stretching(拉伸窗口)
+	m_pPropGroupStretching = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "Stretching", "拉伸窗口");
+	if (m_pPropGroupStretching == NULL)
+		return;
+
+	// stretching-enable
+	m_pPropStretching_Enable = (IPropertyBool*)CreatePropetry(m_pPropGroupStretching, OTID_BOOL, "Enable", "是否可以拉伸窗口，使窗口可以变大变小");
+	if (m_pPropStretching_Enable == NULL)
+		return;
+
+	// stretching-leftspace
+	m_pPropStretching_LeftSpace = (IPropertyInt*)CreatePropetry(m_pPropGroupStretching, OTID_INT, "LeftSpace", "拉伸窗口，窗口左侧鼠标探测范围");
+	if (m_pPropStretching_LeftSpace == NULL)
+		return;
+
+	// stretching-rightspace
+	m_pPropStretching_RightSpace = (IPropertyInt*)CreatePropetry(m_pPropGroupStretching, OTID_INT, "RightSpace", "拉伸窗口，窗口右侧鼠标探测范围");
+	if (m_pPropStretching_RightSpace == NULL)
+		return;
+
+	// stretching-topspace
+	m_pPropStretching_TopSpace = (IPropertyInt*)CreatePropetry(m_pPropGroupStretching, OTID_INT, "TopSpace", "拉伸窗口，窗口上方鼠标探测范围");
+	if (m_pPropStretching_TopSpace == NULL)
+		return;
+
+	// stretching-bottomspace
+	m_pPropStretching_BottomSpace = (IPropertyInt*)CreatePropetry(m_pPropGroupStretching, OTID_INT, "BottomSpace", "拉伸窗口，窗口下方鼠标探测范围");
+	if (m_pPropStretching_BottomSpace == NULL)
+		return;
+
+	//	// Group-WindowRgn
+	//	m_pPropGroupWindowRgn = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "WindowRgn", "窗口裁剪");
+	//	if (m_pPropGroupWindowRgn == NULL)
+	//		return;
+}
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 
 void IControlBase::InitControlPropetry()
 {
-	m_pBaseCtrl = NULL;
+	m_pXmlPropCtrl = NULL;
+
 	m_pSkinPropMgr = NULL;
-	m_ControlPropList.clear();
 
 
 	m_bVisible = true;
@@ -198,8 +363,6 @@ bool IControlBase::GetDragControl()
 // 1. 创建空的属性列表
 bool IControlBase::CreateEmptyPropList()
 {
-	m_ControlPropList.clear();
-
 	// 基础属性组
 	IPropertyGroup *pBaseGroupProp = (IPropertyGroup *)CreateProperty(NULL, OTID_GROUP, "控件基本属性", NULL);
 
@@ -221,10 +384,10 @@ bool IControlBase::CreateEmptyPropList()
 // 2.从Builder中新创建一个控件，需要初始化属性的PropId
 bool IControlBase::InitObjectIdByBuilder(const char* pszBaseId)
 {
-	if (pszBaseId == NULL || m_pSkinPropMgr == NULL || m_pBaseCtrl == NULL || m_pBaseCtrl->GetObjectType() == NULL)
+	if (pszBaseId == NULL || m_pSkinPropMgr == NULL || m_pOwnerWindowBase == NULL || m_pOwnerWindowBase->GetObjectType() == NULL)
 		return false;
 
-	string strCtrlType = m_pBaseCtrl->GetObjectType();
+	string strCtrlType = m_pOwnerWindowBase->GetObjectType();
 	if (strCtrlType.size() <= 0)
 		return false;
 
@@ -236,17 +399,17 @@ bool IControlBase::InitObjectIdByBuilder(const char* pszBaseId)
 	SetObjectType(szId);
 
 	// 循环设置属性的ID
-	InitControlPropObjectId(&m_ControlPropList);
+//	InitControlPropObjectId(&m_ControlPropList);
 
 	return true;
 }
 
 void IControlBase::InitControlPropObjectId(GROUP_PROP_VEC *pPropList)
 {
-	if (pPropList == NULL || m_pSkinPropMgr == NULL || m_pBaseCtrl == NULL)
+	if (pPropList == NULL || m_pSkinPropMgr == NULL || m_pOwnerWindowBase == NULL)
 		return;
 
-	string strCtrlType = m_pBaseCtrl->GetObjectType();
+	string strCtrlType = m_pOwnerWindowBase->GetObjectType();
 	if (strCtrlType.size() <= 0)
 		return;
 

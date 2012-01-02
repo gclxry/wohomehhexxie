@@ -129,6 +129,33 @@ public:
 	IControlBase();
 	virtual ~IControlBase();
 
+	// 初始化在builder中的属性
+	bool BD_InitControlBase(IPropertyControl *pCtrlProp);
+
+	// 向队列未插入一个控件
+	void AppendChildContrl(IControlBase *pCtrl);
+
+	void SetPropertySkinManager(IPropertySkinManager *pMgr);
+
+protected:
+	IPropertyBase* CreatePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
+	
+
+private:
+	// 创建控件属性
+	void CreateCtrlPropetry();
+
+
+protected:
+	// 附着的窗口
+	IWindowBase* m_pOwnerWindowBase;
+	// 子控件列表
+	CHILD_CTRLS_VEC m_ChildCtrlsVec;
+	IPropertyControl *m_pXmlPropCtrl;
+
+private:
+	IPropertySkinManager *m_pSkinPropMgr;
+
 
 	
 protected:
@@ -211,10 +238,6 @@ protected:
 protected:
 	// 整个控件的内存DC
 	CMemoryDC m_CtrlMemDc;
-	// 附着的窗口
-	IWindowBase* m_pOwnerWindowBase;
-	// 子控件列表
-	CHILD_CTRLS_VEC m_ChildCtrlsVec;
 	// 是否需重绘控件
 	bool m_bNeedRedraw;
 	// 绘图引擎
@@ -229,8 +252,6 @@ protected:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 属性相关
 public:
-	// 设置附属控件
-	virtual void SetPropertySkinManager(IPropertySkinManager *pMgr);
 
 	// 控件显示位置和大小，这个位置是相对于附着的窗口的
 	virtual void SetCtrlInWindowRect(RECT CtrlWndRct);
@@ -284,12 +305,6 @@ protected:
 	void InitControlPropetry();
 	// 2.从Builder中新创建一个控件，需要初始化属性的PropId
 	void InitControlPropObjectId(GROUP_PROP_VEC *pPropList);
-
-	// 存储Builder可见可设置属性列表，也就是当前控件的属性列表
-	GROUP_PROP_VEC m_ControlPropList;
-	// 附属控件
-	IControlBase *m_pBaseCtrl;
-	IPropertySkinManager *m_pSkinPropMgr;
 
 	// 是否可见
 	bool m_bVisible;

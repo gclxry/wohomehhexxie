@@ -22,6 +22,13 @@ IControlBase::~IControlBase()
 {
 }
 
+// 向队列未插入一个控件
+void IControlBase::AppendChildContrl(IControlBase *pCtrl)
+{
+	if (pCtrl != NULL)
+		m_ChildCtrlsVec.push_back(pCtrl);
+}
+
 void IControlBase::OnControlMessage(CONTROL_MSG nMsgId, WPARAM wParam, LPARAM lParam)
 {
 

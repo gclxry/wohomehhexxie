@@ -35,11 +35,6 @@ BEGIN_MESSAGE_MAP(CFeatureControlList, CMFCListCtrl)
 	ON_NOTIFY_REFLECT(NM_CLICK, &CFeatureControlList::OnNMClick)
 END_MESSAGE_MAP()
 
-NMITEMACTIVATE* CFeatureControlList::GetSelectControlItem()
-{
-	return m_pSelectItem;
-}
-
 void CFeatureControlList::OnNMClick(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	if (!m_bInitOk)
@@ -84,4 +79,13 @@ void CFeatureControlList::SetCtrlListCursor(bool bIsNormal)
 void CFeatureControlList::SetBuilderView(CUiFeatureBuilderView *pView)
 {
 	m_pView = pView;
+}
+
+CString CFeatureControlList::GetSelectCtrlTypeName()
+{
+	CString strName(_T(""));
+	if (m_pSelectItem != NULL && m_pSelectItem->iItem >= 0)
+		strName = this->GetItemText(m_pSelectItem->iItem, CONTROL_NAME_COLUMN);
+
+	return strName;
 }
