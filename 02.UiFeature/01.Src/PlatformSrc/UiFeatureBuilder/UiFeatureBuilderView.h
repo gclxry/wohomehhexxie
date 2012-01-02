@@ -43,6 +43,7 @@ public:
 protected:
 	CFeatureControlList *m_pControlList;
 	IKernelWindow* m_pKernelWindow;
+	IPropertySkinManager *m_pSkinManager;
 	bool m_bNewCtrl;
 	bool m_bInitOk;
 
@@ -56,6 +57,9 @@ public:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 protected:
 	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
+public:
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // UiFeatureBuilderView.cpp 中的调试版本

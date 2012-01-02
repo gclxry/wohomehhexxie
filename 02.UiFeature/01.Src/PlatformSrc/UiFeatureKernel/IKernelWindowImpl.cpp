@@ -8,6 +8,8 @@
 #include "WindowSubclass.h"
 #include "ControlImpl.h"
 #include "IPropertySkinManagerImpl.h"
+#include "..\..\Inc\ICtrlInterface.h"
+#include "..\..\Inc\IPropertyControl.h"
 
 // 内核对【对话框】的接口
 IKernelWindow *GetKernelWindowInterface()
@@ -20,10 +22,25 @@ IKernelWindowImpl::IKernelWindowImpl(void)
 	m_nBuilderHwnd = 1;
 	m_CtrlRegMap.clear();
 	m_pSkinMgr = (IPropertySkinManagerImpl *)GetSkinManager();
+
+	m_pControlMgr = NULL;
+	m_hControlDll = NULL;
+	string strPath = PathHelper(NAME_CONTROL_DLL);
+	if (strPath.size() > 0)
+	{
+		m_hControlDll = ::LoadLibraryA(strPath.c_str());
+		if (m_hControlDll != NULL)
+		{
+			GETCONTROLMANAGER GetControl = (GETCONTROLMANAGER)::GetProcAddress(m_hControlDll, "GetControlManager");
+			if (GetControl != NULL)
+				m_pControlMgr = GetControl();
+		}
+	}
 }
 
 IKernelWindowImpl::~IKernelWindowImpl(void)
 {
+	SAFE_FREE_LIBRARY(m_hControlDll);
 	ReleaseKernelWindow();
 }
 
@@ -204,46 +221,61 @@ bool IKernelWindowImpl::BD_OpenProject(char *pszSkinDir, char *pszSkinName)
 	return true;
 }
 
-// 创建一个Builder使用的空的窗口
-IControlBase* IKernelWindowImpl::BD_CreateCtrlEmptyPropetry(char *pszCtrlType)
-{/*
-	if (m_pSkinMgr == NULL)
+// 创建一个Builder使用的空的控件
+IControlBase* IKernelWindowImpl::BD_CreateControlEmptyPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, char *pszNewCtrlTypeName)
+{
+	if (m_pControlMgr == NULL || m_pSkinMgr == NULL || pParentWnd == NULL || pszNewCtrlTypeName == NULL || strlen(pszNewCtrlTypeName) <= 0)
 		return NULL;
+
+	// 设置新控件的ObjectID
+	string strObjId(pParentWnd->GetObjectId());
+	if (pParentCtrl != NULL)
+	{
+		strObjId = pParentCtrl->GetObjectId();
+	}
+
+	char szId[1024];
+	memset(szId, 0, 1024);
+	sprintf_s(szId, 1023, "%s.%s%d", strObjId.c_str(), pszNewCtrlTypeName, m_pSkinMgr->GetNewId());
+
+	// 创建新控件
+	ICtrlInterface* pCtrlIfc = m_pControlMgr->CreateCtrl(pszNewCtrlTypeName, szId);
+	if (pCtrlIfc == NULL)
+		return NULL;
+
+	IControlBase *pCtrlBase = dynamic_cast<IControlBase*>(pCtrlIfc);
+	if (pCtrlBase == NULL)
+	{
+		m_pControlMgr->ReleaseCtrl(&pCtrlIfc);
+		return NULL;
+	}
+	pCtrlBase->SetPropertySkinManager(m_pSkinMgr);
+
+	// 插入控件队列
+	if (pParentCtrl != NULL)
+		pParentCtrl->AppendChildContrl(pCtrlBase);
+	else
+		pParentWnd->AppendChildContrl(pCtrlBase);
+
+	// 设置新控件的属性
 
 	IPropertyGroup *pCtrlPropGroup = dynamic_cast<IPropertyGroup*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_GROUP));
 	if (pCtrlPropGroup == NULL)
-		return NULL;
-
-	IPropertyControl *pPropCtrl = dynamic_cast<IPropertyWindow*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_CONTROL));
-	if (pPropCtrl == NULL)
-		return NULL;
-
-	pPropCtrl->SetCtrlGroupProp(pCtrlPropGroup);
-
-	// 设置objecid
-	char szId[MAX_PATH];
-	memset(szId, 0, MAX_PATH);
-	sprintf_s(szId, MAX_PATH-1, "%s%d", PROP_TYPE_WINDOW_NAME, m_pSkinMgr->GetNewId());
-	pWindowPropGroup->SetObjectId(szId);
-	pPropWindow->SetObjectId(szId);
-
-	IWindowBaseImpl *pWndBaseImpl = new IWindowBaseImpl;
-	if (pWndBaseImpl == NULL)
-		return NULL;
-
-	IWindowBase* pWndBase = (dynamic_cast<IWindowBase*>(pWndBaseImpl));
-	if (pWndBase == NULL)
 	{
-		SAFE_DELETE(pWndBaseImpl);
+		m_pControlMgr->ReleaseCtrl(&pCtrlIfc);
 		return NULL;
 	}
-	// 初始化在builder中的属性
-	pWndBase->BD_InitWindowBase(pPropWindow);
 
-	// 记录到窗口队列中
-	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>((HWND)m_nBuilderHwnd++, pWndBaseImpl));
-	m_pSkinMgr->GetAllWindowPropMap()->insert(pair<string, IPropertyBase*>(pWndBase->GetObjectId(), pWindowPropGroup));
-	return pWndBase;
-	*/
-	return NULL;
+	IPropertyControl *pPropCtrl = dynamic_cast<IPropertyControl*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_CONTROL));
+	if (pPropCtrl == NULL)
+	{
+		m_pControlMgr->ReleaseCtrl(&pCtrlIfc);
+		return NULL;
+	}
+	pPropCtrl->SetCtrlGroupProp(pCtrlPropGroup);
+
+	pCtrlBase->BD_InitControlBase(pPropCtrl);
+
+
+	return pCtrlBase;
 }

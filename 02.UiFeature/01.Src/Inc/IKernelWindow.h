@@ -18,13 +18,12 @@ public:
 	virtual IWindowBase* BD_CreateWindowEmptyPropetry() = 0;
 	// 创建一个Builder使用的窗口，并配置上属性
 	virtual IWindowBase* BD_CreateWindowByPropetry(IPropertyWindow *pPropWnd) = 0;
+	// 创建一个Builder使用的空的控件
+	virtual IControlBase* BD_CreateControlEmptyPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, char *pszNewCtrlTypeName) = 0;
 	// 保存皮肤包
 	virtual bool BD_SaveProject(char *pszSkinDir, char *pszSkinName) = 0;
 	// 关闭一个工程
 	virtual bool BD_CloseProject() = 0;
-
-	// 创建一个Builder使用的空的控件
-	virtual IControlBase* BD_CreateCtrlEmptyPropetry(char *pszCtrlType) = 0;
 
 //////////////////////////////////////////////////////////////////////////
 	// 一个对话框从一个皮肤包里使用指定的对话框皮肤资源初始化自己

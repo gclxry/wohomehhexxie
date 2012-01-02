@@ -2,6 +2,7 @@
 #pragma once
 #include "..\..\Inc\IKernelWindow.h"
 #include "IPropertySkinManagerImpl.h"
+#include "..\..\Inc\IControlManager.h"
 
 class IWindowBaseImpl;
 typedef map<HWND, IWindowBaseImpl*>		WINDOW_IMPL_MAP;
@@ -26,13 +27,12 @@ public:
 	virtual IWindowBase* BD_CreateWindowEmptyPropetry();
 	// 创建一个Builder使用的窗口，并配置上属性
 	virtual IWindowBase* BD_CreateWindowByPropetry(IPropertyWindow *pPropWnd);
+	// 创建一个Builder使用的空的控件
+	virtual IControlBase* BD_CreateControlEmptyPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, char *pszNewCtrlTypeName);
 	// 保存皮肤包
 	virtual bool BD_SaveProject(char *pszSkinDir, char *pszSkinName);
 	// 关闭一个工程
 	virtual bool BD_CloseProject();
-
-	// 创建一个Builder使用的空的控件
-	virtual IControlBase* BD_CreateCtrlEmptyPropetry(char *pszCtrlType);
 
 //////////////////////////////////////////////////////////////////////////
 	// 一个对话框从一个皮肤包里使用指定的对话框皮肤资源初始化自己
@@ -44,6 +44,9 @@ private:
 	void ReleaseKernelWindow();
 
 private:
+	HMODULE m_hControlDll;
+	IControlManager *m_pControlMgr;
+
 	WINDOW_IMPL_MAP m_WndImplMap;
 	// 所有支持的控件
 	CONTROL_REG_MAP m_CtrlRegMap;

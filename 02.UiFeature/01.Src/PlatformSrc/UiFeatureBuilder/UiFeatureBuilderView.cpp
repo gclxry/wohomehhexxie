@@ -25,6 +25,8 @@ BEGIN_MESSAGE_MAP(CUiFeatureBuilderView, CView)
 	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CUiFeatureBuilderView::OnFilePrintPreview)
 	ON_WM_LBUTTONUP()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 // CUiFeatureBuilderView 构造/析构
@@ -32,6 +34,7 @@ END_MESSAGE_MAP()
 CUiFeatureBuilderView::CUiFeatureBuilderView()
 {
 	m_pKernelWindow = NULL;
+	m_pSkinManager = NULL;
 	m_pControlList = NULL;
 	m_bNewCtrl = false;
 	m_bInitOk = false;
@@ -68,6 +71,8 @@ void CUiFeatureBuilderView::Init(IKernelWindow* pKernelWindow, CFeatureControlLi
 {
 	m_pKernelWindow = pKernelWindow;
 	m_pControlList = pCtrlList;
+	if (m_pKernelWindow != NULL)
+		m_pSkinManager = m_pKernelWindow->GetSkinManager();
 }
 
 void CUiFeatureBuilderView::OnFilePrintPreview()
@@ -147,12 +152,7 @@ void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 	// 创建新控件
 	if (m_pControlList != NULL)
 	{
-		NMITEMACTIVATE *pSelItem = m_pControlList->GetSelectControlItem();
-		if (pSelItem != NULL && pSelItem->iItem >= 0)
-		{
-			CString strCtrlTypeName = m_pControlList->GetItemText(pSelItem->iItem, CONTROL_NAME_COLUMN);
-			int i = 0;
-		}
+		CString strCtrlTypeName = m_pControlList->GetSelectCtrlTypeName();
 	}
 }
 
@@ -168,11 +168,26 @@ void CUiFeatureBuilderView::SetNewControl(bool bIsNew)
 
 void CUiFeatureBuilderView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView)
 {
-	// TODO: Add your specialized code here and/or call the base class
-
 	CView::OnActivateView(bActivate, pActivateView, pDeactiveView);
 
 	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
 	if (pMain != NULL)
 		pMain->SetView(this);
+}
+
+void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	CView::OnLButtonDown(nFlags, point);
+	if (m_pSkinManager == NULL || m_pKernelWindow == NULL)
+		return;
+
+	// 判断数遍左键点击在哪个控件上
+}
+
+void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	CView::OnMouseMove(nFlags, point);
+	if (m_pSkinManager == NULL || m_pKernelWindow == NULL)
+		return;
+
 }
