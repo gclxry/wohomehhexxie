@@ -4,6 +4,7 @@
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IControlBase.h"
 #include "..\..\Inc\IWindowBase.h"
+#include "..\..\Inc\ICommonFun.h"
 
 
 // 初始化在builder中的属性
@@ -19,11 +20,11 @@ bool IControlBase::BD_InitControlBase(IPropertyControl *pCtrlProp)
 
 IPropertyBase* IControlBase::CreatePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo)
 {
-	if (m_pSkinPropMgr == NULL || m_pXmlPropWindow == NULL || pszPropName == NULL || strlen(pszPropName) <= 0 || propType <= OTID_NONE || propType >= OTID_LAST)
+	if (m_pSkinPropMgr == NULL || m_pXmlPropCtrl == NULL || pszPropName == NULL || strlen(pszPropName) <= 0 || propType <= OTID_NONE || propType >= OTID_LAST)
 		return NULL;
 
 	if (pGroup == NULL)
-		pGroup = m_pXmlPropCtrl->GSetWindowPropGroup();
+		pGroup = m_pXmlPropCtrl->GetCtrlGroupProp();
 
 	return CreateResourcePropetry(m_pSkinPropMgr, pGroup, propType, pszPropName, pszPropInfo);
 }

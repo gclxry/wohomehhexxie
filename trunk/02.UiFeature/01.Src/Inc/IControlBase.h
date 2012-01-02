@@ -4,6 +4,15 @@
 #include "IFeatureObject.h"
 #include "IUiEngine.h"
 #include "IPropertySkinManager.h"
+#include "IPropertyString.h"
+#include "IPropertyGroup.h"
+#include "IPropertyBool.h"
+#include "IPropertyInt.h"
+#include "IPropertyColor.h"
+#include "IPropertyComboBox.h"
+#include "IPropertyCursor.h"
+#include "IPropertyFont.h"
+#include "IPropertyImage.h"
 
 class IWindowBase;
 class IWindowBaseImpl;
@@ -155,6 +164,55 @@ protected:
 
 private:
 	IPropertySkinManager *m_pSkinPropMgr;
+
+	// Group:base
+	IPropertyGroup* m_pPropGroupBase;
+	// base-类型名称
+	IPropertyString *m_pPropBase_TypeName;
+	// base-objectid
+	IPropertyString *m_pPropBase_ObjectId;
+	// base-name
+	IPropertyString *m_pPropBase_Name;
+	// base-windowtitle
+	IPropertyString *m_pPropBase_WindowText;
+	// base-visible
+	IPropertyBool *m_pPropBase_Visible;
+	// base-支持分层窗口
+	IPropertyBool *m_pPropBase_Layered;
+	// base-topmost
+	IPropertyBool *m_pPropBase_TopMost;
+	// base-sysbase
+	IPropertyGroup* m_pPropGroupSysBase;
+	// base-sysbase-最大化
+	IPropertyBool *m_pPropSysBase_CanFullScreen;
+	// base-sysbase-最小化
+	IPropertyBool *m_pPropSysBase_CanMiniSize;
+	// base-sysbase-最小尺寸
+	// base-sysbase-最大尺寸
+	// Group-size
+	IPropertyGroup* m_pPropGroupSize;
+	// size-width
+	IPropertyInt *m_pPropSize_Width;
+	// size-height
+	IPropertyInt *m_pPropSize_Height;
+	// Group-drag(拖拽窗口)
+	IPropertyGroup* m_pPropGroupDrag;
+	// drag-enable
+	IPropertyBool *m_pPropDrag_Enable;
+	// Group-stretching(拉伸窗口)
+	IPropertyGroup* m_pPropGroupStretching;
+	// stretching-enable
+	IPropertyBool *m_pPropStretching_Enable;
+	// stretching-leftspace
+	IPropertyInt *m_pPropStretching_LeftSpace;
+	// stretching-rightspace
+	IPropertyInt *m_pPropStretching_RightSpace;
+	// stretching-topspace
+	IPropertyInt *m_pPropStretching_TopSpace;
+	// stretching-bottomspace
+	IPropertyInt *m_pPropStretching_BottomSpace;
+	// Group-WindowRgn
+	IPropertyGroup* m_pPropGroupWindowRgn;
 
 
 	
