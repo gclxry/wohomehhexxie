@@ -117,7 +117,7 @@ bool IWindowBaseImpl::GetControlByName(CHILD_CTRLS_VEC *pCtrlVec, char *pszCtrlN
 		IControlBase *pCtrl = m_ChildCtrlsVec[i];
 		if (pCtrl != NULL)
 		{
-			string strCtrlName = pCtrl->PP_GetObjectName();
+			string strCtrlName = pCtrl->GetObjectName();
 			if (strCtrlName.compare(pszCtrlName) == 0)
 			{
 				*ppCtrl = pCtrl;

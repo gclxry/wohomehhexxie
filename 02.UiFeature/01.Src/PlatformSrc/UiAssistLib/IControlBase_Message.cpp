@@ -4,124 +4,102 @@
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IControlBase.h"
 
-// 初始化控件
-void IControlBase::OnCreate()
+void IControlBase::OnCtrlMessage(int nMsgId, WPARAM wParam, LPARAM lParam)
 {
+	switch (nMsgId)
+	{
+		// 初始化控件
+	case CM_Create:
+		OnCreate();
+		break;
 
-}
+		// 控件初始化完毕
+	case CM_FinalCreate:
+		OnFinalCreate();
+		break;
 
-// 控件初始化完毕
-void IControlBase::OnFinalCreate()
-{
+		// Builder刷新属性
+	case CM_BuilderRefreshProp:
+		OnBuilderRefreshProp();
+		break;
 
-}
+		// 鼠标进入
+	case CM_MouseEnter:
+		break;
 
-// Builder刷新属性
-void IControlBase::OnRefreshProp()
-{
+		// 鼠标移出
+	case CM_MouseLeave:
+		OnMouseLeave();
+		break;
 
-}
+		// 鼠标移动
+	case CM_MouseMove:
+		break;
 
-// 鼠标进入
-void IControlBase::OnMouseEnter(POINT pt)
-{
+		// 鼠标左键点击
+	case CM_LButtonDown:
+		break;
 
-}
+		// 鼠标左键抬起
+	case CM_LButtonUp:
+		break;
 
-// 鼠标移出
-void IControlBase::OnMouseLeave()
-{
+		// 鼠标左键双击
+	case CM_LButtonDbClick:
+		break;
 
-}
+		// 鼠标右键点击
+	case CM_RButtonDown:
+		break;
 
-// 鼠标移动
-void IControlBase::OnMouseMove(POINT pt)
-{
+		// 移动、设置控件位置
+	case CM_Size:
+		OnSize();
+		break;
 
-}
+		// 绘制控件
+	case CM_Paint:
+		break;
 
-// 鼠标左键点击
-void IControlBase::OnLButtonDown(POINT pt)
-{
+		// 移动窗口开始
+	case CM_EnterSizeMove:
+		OnEnterSizeMove();
+		break;
 
-}
+		// 移动窗口结束
+	case CM_ExitSizeMove:
+		OnExitSizeMove();
+		break;
 
-// 鼠标左键抬起
-void IControlBase::OnLButtonUp(POINT pt)
-{
+		// 销毁控件
+	case CM_Destroy:
+		OnDestroy();
+		break;
 
-}
+		// 控件取得焦点，通过Tab键跳转，激活控件
+	case CM_SetFocus:
+		OnSetFocus();
+		break;
 
-// 鼠标左键双击
-void IControlBase::OnLButtonDbClick(POINT pt)
-{
+		// 控件失去焦点
+	case CM_KillFocus:
+		OnKillFocus();
+		break;
 
-}
+		// 控件取得键盘输入消息
+	case CM_Char:
+		OnChar(wParam, lParam);
+		break;
 
-// 鼠标拖动控件
-void IControlBase::OnMouseDrag(POINT pt)
-{
+		// 接受到默认回车键信息
+	case CM_DefaultEnterCtrl:
+		OnDefaultEnterCtrl();
+		break;
 
-}
-
-// 鼠标右键点击
-void IControlBase::OnRButtonDown(POINT pt)
-{
-
-}
-
-// 移动、设置控件位置
-void IControlBase::OnSize()
-{
-
-}
-
-// 绘制控件
-void IControlBase::OnPaint()
-{
-
-}
-
-// 移动窗口开始
-void IControlBase::OnEnterSizeMove()
-{
-
-}
-
-// 移动窗口结束
-void IControlBase::OnExitSizeMove()
-{
-
-}
-
-// 销毁控件
-void IControlBase::OnDestroy()
-{
-
-}
-
-// 控件取得焦点，通过Tab键跳转，激活控件
-void IControlBase::OnSetFocus()
-{
-
-}
-
-// 控件失去焦点
-void IControlBase::OnKillFocus()
-{
-
-}
-
-// 控件取得键盘输入消息
-void IControlBase::OnChar(WPARAM wParam, LPARAM lParam)
-{
-
-}
-
-// 接受到默认回车键，执行控件操作
-void IControlBase::OnEnterRun()
-{
-
+	default:
+		OnNotification(nMsgId, wParam, lParam);
+		break;
+	}
 }
 
 // 绘制当前控件，参数为父窗口/父控件的内存DC

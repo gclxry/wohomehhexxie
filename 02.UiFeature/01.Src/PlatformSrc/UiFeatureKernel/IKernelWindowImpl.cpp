@@ -258,7 +258,6 @@ IControlBase* IKernelWindowImpl::BD_CreateControlEmptyPropetry(IWindowBase *pPar
 		pParentWnd->AppendChildContrl(pCtrlBase);
 
 	// 设置新控件的属性
-
 	IPropertyGroup *pCtrlPropGroup = dynamic_cast<IPropertyGroup*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_GROUP));
 	if (pCtrlPropGroup == NULL)
 	{
@@ -273,9 +272,7 @@ IControlBase* IKernelWindowImpl::BD_CreateControlEmptyPropetry(IWindowBase *pPar
 		return NULL;
 	}
 	pPropCtrl->SetCtrlGroupProp(pCtrlPropGroup);
-
 	pCtrlBase->BD_InitControlBase(pPropCtrl);
-
-
+	pCtrlBase->OnFinalCreate();
 	return pCtrlBase;
 }
