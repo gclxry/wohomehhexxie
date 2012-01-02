@@ -36,6 +36,7 @@ public:
 
 	// 设置控件列表
 	void SetControlList(CONTROL_REG_MAP* pRegControlMap);
+	void SetProjectInitState(bool bInitOk);
 
 private:
 	void SetCurrentSelectList(string strGroupName);

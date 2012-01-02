@@ -49,6 +49,11 @@ void CMainFrame::InitUiFeatureKernel()
 	SetProjectInitState(false);
 }
 
+void CMainFrame::SetCrossCursor(bool bIsCross)
+{
+	m_bIsCross = bIsCross;
+}
+
 void CMainFrame::OnFileNew()
 {
 	// 创建新工程

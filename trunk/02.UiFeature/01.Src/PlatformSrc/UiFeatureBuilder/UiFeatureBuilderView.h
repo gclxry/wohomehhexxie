@@ -44,6 +44,8 @@ protected:
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 };
 
 #ifndef _DEBUG  // UiFeatureBuilderView.cpp 中的调试版本
