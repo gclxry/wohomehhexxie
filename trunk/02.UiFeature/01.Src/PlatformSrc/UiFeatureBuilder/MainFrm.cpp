@@ -7,6 +7,8 @@
 #include "MainFrm.h"
 #include "UiFeatureDefs.h"
 #include "CreateNewSkinProject.h"
+#include "UiFeatureBuilderDoc.h"
+#include "UiFeatureBuilderView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -425,12 +427,23 @@ BOOL CMainFrame::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
 	if (m_bIsCross)
 	{
-		HCURSOR hCursor = ::LoadCursor(NULL, IDC_CROSS);
-		if (hCursor != NULL)
+		POINT pt;
+		::GetCursorPos(&pt);
+		CUiFeatureBuilderView *pView = (CUiFeatureBuilderView*)this->GetActiveView();
+		if (pView != NULL)
 		{
-			HCURSOR hSetCur = ::SetCursor(hCursor);
-			if (hSetCur != NULL)
-				return TRUE;
+			RECT ViewRct;
+			pView->GetWindowRect(&ViewRct);
+			if (PtInRect(&ViewRct, pt))
+			{
+				HCURSOR hCursor = ::LoadCursor(NULL, IDC_CROSS);
+				if (hCursor != NULL)
+				{
+					HCURSOR hSetCur = ::SetCursor(hCursor);
+					if (hSetCur != NULL)
+						return TRUE;
+				}
+			}
 		}
 	}
 
