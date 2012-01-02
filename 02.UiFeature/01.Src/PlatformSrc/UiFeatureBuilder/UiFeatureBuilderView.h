@@ -4,8 +4,9 @@
 
 
 #pragma once
+#include "IKernelWindow.h"
 
-
+class CFeatureControlList;
 class CUiFeatureBuilderView : public CView
 {
 protected: // 仅从序列化创建
@@ -15,9 +16,12 @@ protected: // 仅从序列化创建
 // 属性
 public:
 	CUiFeatureBuilderDoc* GetDocument() const;
+	void SetNewControl(bool bIsNew);
+	void SetProjectInitState(bool bInitOk);
 
 // 操作
 public:
+	void Init(IKernelWindow* pKernelWindow, CFeatureControlList *pCtrlList);
 
 // 重写
 public:
@@ -37,6 +41,10 @@ public:
 #endif
 
 protected:
+	CFeatureControlList *m_pControlList;
+	IKernelWindow* m_pKernelWindow;
+	bool m_bNewCtrl;
+	bool m_bInitOk;
 
 // 生成的消息映射函数
 protected:
@@ -46,6 +54,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+protected:
+	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
 };
 
 #ifndef _DEBUG  // UiFeatureBuilderView.cpp 中的调试版本

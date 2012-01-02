@@ -52,6 +52,7 @@ CMainFrame::CMainFrame()
 	theApp.m_nAppLook = theApp.GetInt(_T("ApplicationLook"), ID_VIEW_APPLOOK_OFF_2007_SILVER);
 	theApp.InitShellManager();
 
+	m_pView = NULL;
 	m_hKernelDll = NULL;
 	m_pKernelWindow = NULL;
 	m_pSkinMgr = NULL;
@@ -77,6 +78,16 @@ CMainFrame::~CMainFrame()
 //		m_pKernelWindow->BuilderRelease();
 
 	SAFE_FREE_LIBRARY(m_hKernelDll);
+}
+
+void CMainFrame::SetView(CUiFeatureBuilderView *pView)
+{
+	m_pView = pView;
+	if (m_pView != NULL)
+	{
+		m_pView->Init(m_pKernelWindow, m_wndControls.GetControlList());
+		m_wndControls.GetControlList()->SetBuilderView(m_pView);
+	}
 }
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -427,6 +438,7 @@ BOOL CMainFrame::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
 	if (m_bIsCross)
 	{
+		// 只有需要创建新空间，鼠标进入view，才显示十字架
 		POINT pt;
 		::GetCursorPos(&pt);
 		CUiFeatureBuilderView *pView = (CUiFeatureBuilderView*)this->GetActiveView();

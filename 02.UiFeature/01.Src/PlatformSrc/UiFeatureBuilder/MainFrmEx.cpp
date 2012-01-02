@@ -5,6 +5,8 @@
 #include "UiFeatureDefs.h"
 #include "CreateNewSkinProject.h"
 #include "..\..\Inc\ICommonFun.h"
+#include "UiFeatureBuilderDoc.h"
+#include "UiFeatureBuilderView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -130,6 +132,9 @@ void CMainFrame::SetProjectInitState(bool bInitOk)
 {
 	m_wndWindowView.SetProjectInitState(bInitOk);
 	m_wndProperties.SetProjectInitState(bInitOk);
+	m_wndControls.SetProjectInitState(bInitOk);
+	if (m_pView != NULL)
+		m_pView->SetProjectInitState(bInitOk);
 }
 
 void CMainFrame::OnDestroy()
@@ -229,6 +234,8 @@ bool CMainFrame::OpenSkinProject(bool bIsNew, CString strSkinDir, CString strSki
 	m_strNewUfpPath = _T("");
 	m_strNewSkinName = _T("");
 	m_strNewSkinDir = _T("");
+
+	SetProjectInitState(true);
 	return true;
 }
 

@@ -37,6 +37,7 @@ public:
 	// 设置控件列表
 	void SetControlList(CONTROL_REG_MAP* pRegControlMap);
 	void SetProjectInitState(bool bInitOk);
+	CFeatureControlList *GetControlList();
 
 private:
 	void SetCurrentSelectList(string strGroupName);

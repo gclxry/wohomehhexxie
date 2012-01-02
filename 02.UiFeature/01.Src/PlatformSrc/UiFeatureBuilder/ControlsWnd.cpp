@@ -6,8 +6,6 @@
 #include "MainFrm.h"
 #include "UiFeatureBuilder.h"
 
-// 显示控件名称的列
-#define CONTROL_NAME_COLUMN					(1)
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -166,6 +164,11 @@ void CControlsWnd::SetCurrentSelectList(string strGroupName)
 		m_wndCtrlList.SetItemText(nCtns, CONTROL_NAME_COLUMN + 1, A2W(Item.strControlInfo.c_str()));
 		nCtns++;
 	}
+}
+
+CFeatureControlList* CControlsWnd::GetControlList()
+{
+	return &m_wndCtrlList;
 }
 
 void CControlsWnd::OnGroupSelchangeCombo()
