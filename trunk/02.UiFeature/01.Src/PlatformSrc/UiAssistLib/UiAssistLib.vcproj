@@ -409,6 +409,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\IControlBase_Message.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\IControlBase_Propetry.cpp"
 					>
 				</File>

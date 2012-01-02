@@ -212,7 +212,7 @@ protected:
 	// 整个控件的内存DC
 	CMemoryDC m_CtrlMemDc;
 	// 附着的窗口
-	IWindowBase* m_pParentWindowBase;
+	IWindowBase* m_pOwnerWindowBase;
 	// 子控件列表
 	CHILD_CTRLS_VEC m_ChildCtrlsVec;
 	// 是否需重绘控件
@@ -221,6 +221,8 @@ protected:
 	IUiEngine *m_pUiEngine;
 	// 鼠标Hover状态
 	bool m_bMouseHover;
+	// 父控件
+	IControlBase* m_pParentCtrl;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

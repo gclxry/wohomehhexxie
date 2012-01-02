@@ -206,7 +206,7 @@ bool IKernelWindowImpl::BD_OpenProject(char *pszSkinDir, char *pszSkinName)
 
 // 创建一个Builder使用的空的窗口
 IControlBase* IKernelWindowImpl::BD_CreateCtrlEmptyPropetry(char *pszCtrlType)
-{
+{/*
 	if (m_pSkinMgr == NULL)
 		return NULL;
 
@@ -244,4 +244,6 @@ IControlBase* IKernelWindowImpl::BD_CreateCtrlEmptyPropetry(char *pszCtrlType)
 	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>((HWND)m_nBuilderHwnd++, pWndBaseImpl));
 	m_pSkinMgr->GetAllWindowPropMap()->insert(pair<string, IPropertyBase*>(pWndBase->GetObjectId(), pWindowPropGroup));
 	return pWndBase;
+	*/
+	return NULL;
 }

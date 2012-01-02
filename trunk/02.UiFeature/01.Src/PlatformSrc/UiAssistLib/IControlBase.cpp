@@ -8,16 +8,45 @@ IControlBase::IControlBase()
 {
 	SetObjectType("ControlBase");
 	m_pUiEngine = NULL;
-	m_pParentWindowBase = NULL;
+	m_pOwnerWindowBase = NULL;
 	m_ChildCtrlsVec.clear();
 	m_bNeedRedraw = true;
 	m_bMouseHover = false;
+
+	m_pParentCtrl = NULL;
 
 	InitControlPropetry();
 }
 
 IControlBase::~IControlBase()
 {
+}
+
+void IControlBase::OnControlMessage(CONTROL_MSG nMsgId, WPARAM wParam, LPARAM lParam)
+{
+
+}
+
+void IControlBase::SetOwnerWindow(IWindowBase* pWindowsBase)
+{
+	m_pOwnerWindowBase = pWindowsBase;
+}
+
+IWindowBase* IControlBase::GetOwnerWindow()
+{
+	return m_pOwnerWindowBase;
+}
+
+// 设置父控件
+void IControlBase::SetParentControl(IControlBase* pParentCtrl)
+{
+	m_pParentCtrl = pParentCtrl;
+}
+
+// 设置父控件
+IControlBase* IControlBase::GetParentControl()
+{
+	return m_pParentCtrl;
 }
 
 // 设置控件在下次绘制的时候是否需要进行重绘
@@ -41,10 +70,10 @@ void IControlBase::RedrawControlInAnimationTimer()
 // 重绘控件
 void IControlBase::RedrawControl(bool bDrawImmediately)
 {
-	if (m_pParentWindowBase != NULL)
+	if (m_pOwnerWindowBase != NULL)
 	{
 		IControlBase *pCtrl = dynamic_cast<IControlBase*>(this);
-		m_pParentWindowBase->RedrawControl(pCtrl);
+		m_pOwnerWindowBase->RedrawControl(pCtrl);
 	}
 
 	m_bNeedRedraw = true;
@@ -67,41 +96,6 @@ void IControlBase::SetChildCtrlToRedraw()
 CHILD_CTRLS_VEC* IControlBase::GetChildCtrlsVec()
 {
 	return &m_ChildCtrlsVec;
-}
-
-// 绘制当前控件，参数为父窗口/父控件的内存DC
-void IControlBase::OnPaintControl(CMemoryDC &WndMemDc)
-{
-	if (WndMemDc.GetSafeHdc() == NULL && m_pUiEngine != NULL)
-		return;
-
-	RECT RectInWnd = GetCtrlInWindowRect();
-	m_CtrlMemDc.Create(RECT_WIDTH(RectInWnd), RECT_HEIGHT(RectInWnd), 0, false, m_bNeedRedraw);
-	if (m_CtrlMemDc.GetBits() == NULL)
-		return;
-
-	// 重绘控件自身
-	if (m_bNeedRedraw)
-		OnPaint();
-
-	// 绘制到父控件的DC上
-	int nWidth = RECT_WIDTH(RectInWnd);
-	int nHeight = RECT_HEIGHT(RectInWnd);
-	m_pUiEngine->AlphaBlend(WndMemDc, RectInWnd.left, RectInWnd.top, nWidth, nHeight,
-		m_CtrlMemDc, 0, 0, nWidth, nHeight);
-
-	// 绘制子控件
-	for (CHILD_CTRLS_VEC::iterator pCtrlItem = m_ChildCtrlsVec.begin(); pCtrlItem != m_ChildCtrlsVec.end(); pCtrlItem++)
-	{
-		IControlBase* pCtrl = *pCtrlItem;
-		if (pCtrl != NULL)
-			pCtrl->OnPaintControl(WndMemDc);
-	}
-}
-
-void IControlBase::OnPaint()
-{
-
 }
 
 // 鼠标是否Hover

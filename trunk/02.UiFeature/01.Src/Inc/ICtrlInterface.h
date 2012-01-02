@@ -6,7 +6,7 @@
 class ICtrlInterface : public IControlBase
 {
 public:
-	ICtrlInterface();
-	virtual ~ICtrlInterface();
+	ICtrlInterface() {};
+	virtual ~ICtrlInterface() {};
 
 };
