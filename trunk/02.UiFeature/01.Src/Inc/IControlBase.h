@@ -1,6 +1,6 @@
 
 #pragma once
-#include "CMemoryDC.h"
+#include "CDrawingBoard.h"
 #include "IFeatureObject.h"
 #include "IUiEngine.h"
 #include "IPropertySkinManager.h"
@@ -158,64 +158,112 @@ class IControlBase : public IFeatureObject
 {
 	friend class IWindowBaseImpl;
 	friend class IKernelWindowImpl;
+
 public:
 	IControlBase();
 	virtual ~IControlBase();
 
+	// 取得父控件的指针，如果为NULL，说明父控件是对话框
+	IControlBase* GetParentControl();
+	IWindowBase* GetOwnerWindow();
+
+	// 取得子控件列表
+	CHILD_CTRLS_VEC* GetChildCtrlsVec();
+
+	// 重绘控件
+	void RedrawControl(bool bDrawImmediately = true);
+	// 重绘控件，这个重绘动画定时器中调用
+	void RedrawControlInAnimationTimer();
+
+
+	// 控件显示位置和大小，这个位置是相对于附着的窗口的
+	void SetCtrlInWindowRect(RECT CtrlWndRct);
+	RECT GetCtrlInWindowRect();
+	// 控件显示位置和大小，这个位置是相对于父控件的
+	RECT GetCtrlInControlRect();
+	// 取得控件的大小
+	RECT GetCtrlRect();
+
+	// 是否接受鼠标消息
+	void SetReceiveMouseMessage(bool bIsReceive);
+	bool GetReceiveMouseMessage();
+
+	// 可见属性
+	void SetVisible(bool bVisible, bool bSetChild = true);
+	bool IsVisible();
+
+	// 拖动控件属性
+	void SetDragInControl(bool bDrag);
+	bool GetDragInControl();
+
+	// 可用属性
+	void SetEnable(bool bEnable, bool bSetChild = true);
+	bool IsEnable();
+
+	// 相对于父控件的布局信息
+	void SetLayout(CONTROL_LAYOUT_INFO &cliLayoutInfo);
+	CONTROL_LAYOUT_INFO GetLayout();
+
+	// 鼠标是否Hover
+	bool IsMousehover();
+
+protected:
+	// 设置子控件都必须自绘
+	void SetChildCtrlToRedraw();
+	// 设置控件在下次绘制的时候是否需要进行重绘
+	void SetNeedRedraw(bool bNeedRedraw);
 
 protected:
 	// 派生控件用于创建一个属性
 	IPropertyBase* CreatePropetry(OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
-
 	// 派生控件用于创建属于自己的控件属性
 	virtual bool CreateControlPropetry() = 0;
-	// 派生控件处理的消息
-	virtual void OnNotification(int nMsgId, WPARAM wParam, LPARAM lParam) = 0;
-
-//////////////////////////////////////////////////////////////////////////
-	// 控件消息处理
 	// 初始化控件
 	virtual void OnCreate() = 0;
 	// 控件初始化完毕
 	virtual void OnFinalCreate() = 0;
+	// 销毁控件
+	virtual void OnDestroy() = 0;
+	// 绘制控件
+	virtual void OnPaint() = 0;
+	// 派生控件处理的消息
+	virtual void OnCtrlMessage(int nMsgId, WPARAM wParam, LPARAM lParam) = 0;
 	// Builder刷新属性
 	virtual void OnBuilderRefreshProp() = 0;
 	// 鼠标进入
-	virtual void OnMouseEnter(POINT pt);
+	virtual void OnMouseEnter(POINT pt) = 0;
 	// 鼠标移出
 	virtual void OnMouseLeave() = 0;
 	// 鼠标移动
-	virtual void OnMouseMove(POINT pt);
+	virtual void OnMouseMove(POINT pt) = 0;
 	// 鼠标左键点击
-	virtual void OnLButtonDown(POINT pt);
+	virtual void OnLButtonDown(POINT pt) = 0;
 	// 鼠标左键抬起
-	virtual void OnLButtonUp(POINT pt);
+	virtual void OnLButtonUp(POINT pt) = 0;
 	// 鼠标左键双击
-	virtual void OnLButtonDbClick(POINT pt);
+	virtual void OnLButtonDbClick(POINT pt) = 0;
 	// 鼠标拖动控件
-	virtual void OnMouseDrag(POINT pt);
+	virtual void OnMouseDragInCtrl(POINT pt) = 0;
 	// 鼠标右键点击
-	virtual void OnRButtonDown(POINT pt);
+	virtual void OnRButtonDown(POINT pt) = 0;
 	// 移动、设置控件位置
 	virtual void OnSize() = 0;
-	// 绘制控件
-	virtual void OnPaint();
 	// 移动窗口开始
 	virtual void OnEnterSizeMove() = 0;
 	// 移动窗口结束
 	virtual void OnExitSizeMove() = 0;
-	// 销毁控件
-	virtual void OnDestroy() = 0;
 	// 控件取得焦点，通过Tab键跳转，激活控件
 	virtual void OnSetFocus() = 0;
 	// 控件失去焦点
 	virtual void OnKillFocus() = 0;
-	// 控件取得键盘输入消息
-	virtual void OnChar(WPARAM wParam, LPARAM lParam);
 	// 接受到默认回车键，执行控件操作
 	virtual void OnDefaultEnterCtrl() = 0;
+	// 控件取得键盘输入消息
+	virtual void OnChar(WPARAM wParam, LPARAM lParam) = 0;
+	// 按键按下
+	virtual void OnKeyDown(WPARAM wParam, LPARAM lParam) = 0;
+	virtual void OnKeyUp(WPARAM wParam, LPARAM lParam) = 0;
 
-	
 
 private:
 	// 创建控件属性
@@ -228,11 +276,21 @@ private:
 	// 向队列未插入一个控件
 	void AppendChildContrl(IControlBase *pCtrl);
 
-	virtual void OnCtrlMessage(int nMsgId, WPARAM wParam, LPARAM lParam);
+	void SetUiEngine(IUiEngine *pUiEngine);
+	// 设置父控件
+	void SetParentControl(IControlBase* pParentCtrl);
+	// 附着对话框
+	void SetOwnerWindow(IWindowBase* pWindowsBase);
+
+	// 鼠标是否Hover
+	void SetMouseHover(bool bHover);
+
+	// 此函数由窗口调用，绘制当前控件，参数为父窗口/父控件的内存DC
+	virtual void OnPaintControl(CDrawingBoard &WndMemDc);
 
 protected:
 	// 整个控件的内存DC
-	CMemoryDC m_CtrlMemDc;
+	CDrawingBoard m_CtrlMemDc;
 	// 附着的窗口
 	IWindowBase* m_pOwnerWindowBase;
 	// 父控件
@@ -298,78 +356,12 @@ protected:
 	// Group:CtrlDefs
 	IPropertyGroup* m_pPropGroupCtrlDefs;
 	
-protected:
-	// 绘制当前控件，参数为父窗口/父控件的内存DC
-	virtual void OnPaintControl(CMemoryDC &WndMemDc);
-
-	// 重绘控件
-	virtual void RedrawControl(bool bDrawImmediately = true);
-	// 重绘控件，这个重绘动画定时器中调用
-	virtual void RedrawControlInAnimationTimer();
-	// 设置子控件都必须自绘
-	virtual void SetChildCtrlToRedraw();
-	// 设置控件在下次绘制的时候是否需要进行重绘
-	virtual void SetNeedRedraw(bool bNeedRedraw);
-	// 取得子控件列表
-	virtual CHILD_CTRLS_VEC* GetChildCtrlsVec();
-
-	// 鼠标是否Hover
-	virtual void SetMouseHover(bool bHover);
-	virtual bool IsMousehover();
-
-
-//////////////////////////////////////////////////////////////////////////
-// 编码用的控制属性
-	// 设置父控件
-	virtual void SetParentControl(IControlBase* pParentCtrl);
-	// 取得父控件的指针，如果为NULL，说明父控件是对话框
-	virtual IControlBase* GetParentControl();
-
-//////////////////////////////////////////////////////////////////////////
-// 对话框相关
-	// 附着对话框
-	virtual void SetOwnerWindow(IWindowBase* pWindowsBase);
-	virtual IWindowBase* GetOwnerWindow();
 
 protected:
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// 属性相关
-public:
-
-	// 控件显示位置和大小，这个位置是相对于附着的窗口的
-	virtual void SetCtrlInWindowRect(RECT CtrlWndRct);
-	virtual RECT GetCtrlInWindowRect();
-	// 控件显示位置和大小，这个位置是相对于父控件的
-	virtual RECT GetCtrlInControlRect();
-	// 取得控件的大小
-	virtual RECT GetCtrlRect();
-
-	// 是否接受鼠标消息
-	virtual void SetReceiveMouseMessage(bool bIsReceive);
-	virtual bool GetReceiveMouseMessage();
-
-	// 可见属性
-	virtual void SetVisible(bool bVisible);
-	virtual bool IsVisible();
-
-	// 相对于父控件的布局信息
-	virtual void SetLayout(CONTROL_LAYOUT_INFO &cliLayoutInfo);
-	virtual CONTROL_LAYOUT_INFO GetLayout();
-
-	// 拖动控件属性
-	virtual void SetDragControl(bool bDrag);
-	virtual bool GetDragControl();
-
-	// 可用属性
-	virtual void SetEnable(bool bEnable);
-	virtual bool IsEnable();
 
 	//////////////////////////////////////////////////////////////////////////
 	// 以下3个函数创建、显示属性用，执行顺序由上到下
 	// 1. 创建空的属性列表
-	virtual bool CreateEmptyPropList();
 	// 2. 从xml文件中读取控件属性时，不需要初始化属性的PropId，PropId来源于xml文件
 	virtual bool ReadPropFromControlsXml(const char* pszControlId);
 	// 2.从Builder中新创建一个控件，需要初始化属性的PropId
@@ -378,12 +370,7 @@ public:
 	virtual bool CreateBuilderShowPropList();
 
 protected:
-	//	// 1.1 在派生控件中创建属性
-	//	virtual bool CreateDedicationProp() = 0;
-	// 创建一个属性
-	IPropertyBase* CreateProperty(IPropertyGroup *pPropGroup, OBJECT_TYPE_ID propType, char *pPropName, char *pPropInfo);
 
-	void InitControlPropetry();
 	// 2.从Builder中新创建一个控件，需要初始化属性的PropId
 	void InitControlPropObjectId(GROUP_PROP_VEC *pPropList);
 

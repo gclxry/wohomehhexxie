@@ -374,11 +374,11 @@
 			Name="03.ÄÚ´æDC"
 			>
 			<File
-				RelativePath=".\CMemoryDC.cpp"
+				RelativePath=".\CDrawingBoard.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Inc\CMemoryDC.h"
+				RelativePath="..\..\Inc\CDrawingBoard.h"
 				>
 			</File>
 		</Filter>

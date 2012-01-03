@@ -1,8 +1,8 @@
 
 #include "stdafx.h"
-#include "..\..\Inc\CMemoryDC.h"
+#include "..\..\Inc\CDrawingBoard.h"
 
-CMemoryDC::CMemoryDC(void)
+CDrawingBoard::CDrawingBoard(void)
 {
     m_pBits = NULL;
     m_hBmp = NULL;
@@ -10,32 +10,32 @@ CMemoryDC::CMemoryDC(void)
 	m_DcSize.cx = m_DcSize.cy = 0;
 }
 
-CMemoryDC::~CMemoryDC(void)
+CDrawingBoard::~CDrawingBoard(void)
 {
    Delete();
 }
 
-SIZE CMemoryDC::GetDcSize()
+SIZE CDrawingBoard::GetDcSize()
 {
 	return m_DcSize;
 }
 
-HDC& CMemoryDC::GetSafeHdc()
+HDC& CDrawingBoard::GetSafeHdc()
 {
 	return m_hDC;
 }
 
-HBITMAP& CMemoryDC::GetBmpHandle()
+HBITMAP& CDrawingBoard::GetBmpHandle()
 {
 	return m_hBmp;
 }
 
-BYTE* CMemoryDC::GetBits()
+BYTE* CDrawingBoard::GetBits()
 {
 	return m_pBits;
 }
 
-void CMemoryDC::Create(int nWidth, int nHeight, DWORD nDefaultColor, bool bReCreate, bool bNoCreateInit)
+void CDrawingBoard::Create(int nWidth, int nHeight, DWORD nDefaultColor, bool bReCreate, bool bNoCreateInit)
 {
 	if ((nWidth <= 0) || (nHeight<= 0))
 		return;
@@ -79,7 +79,7 @@ void CMemoryDC::Create(int nWidth, int nHeight, DWORD nDefaultColor, bool bReCre
 	}
 }
 
-void CMemoryDC::Delete()
+void CDrawingBoard::Delete()
 {
 	if (m_hBmp != NULL)
 	{

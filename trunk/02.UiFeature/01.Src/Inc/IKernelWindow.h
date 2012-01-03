@@ -2,11 +2,13 @@
 #pragma once
 #include "IWindowBase.h"
 #include "IControlBase.h"
+#include "IUiEngine.h"
 
 class IKernelWindow
 {
 public:
 	virtual IPropertySkinManager* GetSkinManager() = 0;
+	virtual IUiEngine* GetUiEngine() = 0;
 
 //////////////////////////////////////////////////////////////////////////
 // Builder Ê¹ÓÃº¯Êý

@@ -19,8 +19,10 @@ protected:
 	virtual void OnFinalCreate() = 0;
 	// 销毁控件
 	virtual void OnDestroy() = 0;
-	// 派生控件处理的消息
-	virtual void OnNotification(int nMsgId, WPARAM wParam, LPARAM lParam);
+	// 绘制控件
+	virtual void OnPaint() = 0;
+	// 派生控件其他处理的消息
+	virtual void OnCtrlMessage(int nMsgId, WPARAM wParam, LPARAM lParam);
 	// Builder刷新属性，此函数中只要重新加载控件属性即可
 	virtual void OnBuilderRefreshProp();
 	// 鼠标进入
@@ -36,7 +38,7 @@ protected:
 	// 鼠标左键双击
 	virtual void OnLButtonDbClick(POINT pt);
 	// 鼠标在控件内部点击按下并移动鼠标
-	virtual void OnMouseDrag(POINT pt);
+	virtual void OnMouseDragInCtrl(POINT pt);
 	// 鼠标右键点击
 	virtual void OnRButtonDown(POINT pt);
 	// 移动、设置控件位置
@@ -49,8 +51,11 @@ protected:
 	virtual void OnSetFocus();
 	// 控件失去焦点
 	virtual void OnKillFocus();
-	// 控件取得键盘输入消息
-	virtual void OnChar(WPARAM wParam, LPARAM lParam);
 	// 接受到默认回车键，执行控件操作
 	virtual void OnDefaultEnterCtrl();
+	// 控件取得键盘输入消息
+	virtual void OnChar(WPARAM wParam, LPARAM lParam);
+	// 按键按下
+	virtual void OnKeyDown(WPARAM wParam, LPARAM lParam);
+	virtual void OnKeyUp(WPARAM wParam, LPARAM lParam);
 };

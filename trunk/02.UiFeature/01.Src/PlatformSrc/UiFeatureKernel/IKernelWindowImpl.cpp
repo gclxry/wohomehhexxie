@@ -10,6 +10,7 @@
 #include "IPropertySkinManagerImpl.h"
 #include "..\..\Inc\ICtrlInterface.h"
 #include "..\..\Inc\IPropertyControl.h"
+#include "..\..\Inc\UiFeatureEngine.h"
 
 // 内核对【对话框】的接口
 IKernelWindow *GetKernelWindowInterface()
@@ -22,6 +23,10 @@ IKernelWindowImpl::IKernelWindowImpl(void)
 	m_nBuilderHwnd = 1;
 	m_CtrlRegMap.clear();
 	m_pSkinMgr = (IPropertySkinManagerImpl *)GetSkinManager();
+
+	m_hUiEngineDll = NULL;
+	m_pUiEngine = NULL;
+	GetUiEngine();
 
 	m_pControlMgr = NULL;
 	m_hControlDll = NULL;
@@ -41,6 +46,7 @@ IKernelWindowImpl::IKernelWindowImpl(void)
 IKernelWindowImpl::~IKernelWindowImpl(void)
 {
 	SAFE_FREE_LIBRARY(m_hControlDll);
+	SAFE_FREE_LIBRARY(m_hUiEngineDll);
 	ReleaseKernelWindow();
 }
 
@@ -272,7 +278,33 @@ IControlBase* IKernelWindowImpl::BD_CreateControlEmptyPropetry(IWindowBase *pPar
 		return NULL;
 	}
 	pPropCtrl->SetCtrlGroupProp(pCtrlPropGroup);
+	pCtrlBase->SetUiEngine(GetUiEngine());
+	pCtrlBase->SetPropertySkinManager(m_pSkinMgr);
+	pCtrlBase->SetOwnerWindow(pParentWnd);
+	pCtrlBase->SetParentControl(pParentCtrl);
+
 	pCtrlBase->BD_InitControlBase(pPropCtrl);
 	pCtrlBase->OnFinalCreate();
 	return pCtrlBase;
+}
+
+IUiEngine* IKernelWindowImpl::GetUiEngine()
+{
+	if (m_hUiEngineDll == NULL || m_pUiEngine == NULL)
+	{
+		SAFE_FREE_LIBRARY(m_hUiEngineDll);
+		string strPath = PathHelper(NAME_ENGINE_DLL);
+		if (strPath.size() > 0)
+		{
+			m_hUiEngineDll = ::LoadLibraryA(strPath.c_str());
+			if (m_hUiEngineDll != NULL)
+			{
+				GETUIENGINEINTERFACE pUiEngine = (GETUIENGINEINTERFACE)::GetProcAddress(m_hUiEngineDll, "GetUiEngineInterface");
+				if (pUiEngine != NULL)
+					m_pUiEngine = pUiEngine();
+			}
+		}
+	}
+
+	return m_pUiEngine;
 }

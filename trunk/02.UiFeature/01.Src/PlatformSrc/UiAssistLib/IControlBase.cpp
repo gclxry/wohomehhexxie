@@ -9,18 +9,73 @@ IControlBase::IControlBase()
 	SetObjectType("ControlBase");
 	m_pUiEngine = NULL;
 	m_pOwnerWindowBase = NULL;
+	m_pParentCtrl = NULL;
 	m_ChildCtrlsVec.clear();
+
+	m_pXmlPropCtrl = NULL;
+	m_pSkinPropMgr = NULL;
+
 	m_bNeedRedraw = true;
 	m_bMouseHover = false;
 
-	m_pParentCtrl = NULL;
+	// 皮肤包管理类
+	m_pSkinPropMgr = NULL;
+	// 记录到xml中的属性
+	m_pXmlPropCtrl = NULL;
+	// Group:base
+	m_pPropGroupBase = NULL;
+	// base-类型名称
+	m_pPropBase_TypeName = NULL;
+	// base-objectid
+	m_pPropBase_ObjectId = NULL;
+	// base-name
+	m_pPropBase_Name = NULL;
+	// base-visible
+	m_pPropBase_Visible = NULL;
+	// base-ReceiveMouseMessage
+	m_pPropBase_RcvMouseMsg = NULL;
+	// base-enable
+	m_pPropBase_Enable = NULL;
+	// base-dragInCtrl
+	m_pPropBase_DragInCtrl = NULL;
+	// base-taborder
+	m_pPropBase_TabOrder = NULL;
+	// base-defaultenterctrl
+	m_pPropBase_DefaultEnterCtrl = NULL;
+	// base-layout
+	m_pPropBase_LayoutGroup = NULL;
+	// layout-width
+	m_pPropBase_Layout_Width = NULL;
+	// layout-height
+	m_pPropBase_Layout_Height = NULL;
 
-	InitControlPropetry();
+	// layout-leftspace
+	m_pPropBase_Layout_Layout = NULL;
+	// layout-leftspace
+	m_pPropBase_Layout_LeftSpace = NULL;
+	// layout-rightspace
+	m_pPropBase_Layout_RightSpace = NULL;
+	// layout-topspace
+	m_pPropBase_Layout_TopSpace = NULL;
+	// layout-bottomspace
+	m_pPropBase_Layout_BottomSpace = NULL;
+
+	// Group:CtrlDefs
+	m_pPropGroupCtrlDefs = NULL;
+
+	INIT_RECT(m_RectInWindow);
+	INIT_RECT(m_RectInParentCtrl);
+}
+
+
+void IControlBase::SetUiEngine(IUiEngine *pUiEngine)
+{
+	if (pUiEngine != NULL)
+		m_pUiEngine = pUiEngine;
 }
 
 IControlBase::~IControlBase()
 {
-	OnDestroy();
 }
 
 // 向队列未插入一个控件

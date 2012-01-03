@@ -2,11 +2,11 @@
 #pragma once
 #include <Windows.h>
 
-class CMemoryDC
+class CDrawingBoard
 {
 public:
-    CMemoryDC(void);
-    virtual ~CMemoryDC(void);
+    CDrawingBoard(void);
+    virtual ~CDrawingBoard(void);
 
 	// 参数：宽度、高度、默认填充颜色值、每次都重新创建、不重新创建的情况下是否使用默认颜色值填充
 	void Create(int nWidth, int nHeight, DWORD nDefaultColor = 0, bool bReCreate = false, bool bNoCreateInit = false);

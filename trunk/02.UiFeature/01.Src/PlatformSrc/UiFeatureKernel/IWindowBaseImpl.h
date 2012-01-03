@@ -1,7 +1,7 @@
 
 #pragma once
 #include "..\..\Inc\IWindowBase.h"
-#include "..\..\Inc\CMemoryDC.h"
+#include "..\..\Inc\CDrawingBoard.h"
 #include "..\..\Inc\IPropertyGroup.h"
 #include "..\..\Inc\IPropertyString.h"
 #include "..\..\Inc\IPropertyBool.h"
@@ -102,7 +102,7 @@ protected:
 	// 窗口句柄
 	HWND m_hWnd;
 	// 整个对话框的内存DC
-	CMemoryDC m_WndMemDc;
+	CDrawingBoard m_WndMemDc;
 	// 鼠标左键是否按下
 	bool m_bIsLButtonDown;
 	// 鼠标Hover的控件
@@ -147,15 +147,15 @@ public:
 	virtual IPropertyGroup *PP_GetWindowPropetryGroup();
 
 private:
-	// 初始化属性成员变量
-	void InitWindowPropMember();
 	// 创建空的属性队列
 	void CreateWindowPropetry();
 	IPropertyBase* CreateCtrlOnePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
+	// 释放子控件列表
+	void ReleaseChildVec(CHILD_CTRLS_VEC *pChildCtrlsVec);
 
 private:
-	IPropertySkinManager* m_pSkinPropMgr;
 	bool m_bIsFullScreen;
+	IPropertySkinManager* m_pSkinPropMgr;
 
 	// 从xml中读入并需要写入xml中的属性窗口属性列表
 	IPropertyWindow *m_pXmlPropWindow;
@@ -209,4 +209,3 @@ private:
 	// Group-WindowRgn
 	IPropertyGroup* m_pPropGroupWindowRgn;
 };
-

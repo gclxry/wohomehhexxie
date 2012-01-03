@@ -16,6 +16,7 @@ public:
 	static IKernelWindow* GetInstance();
 
 	virtual IPropertySkinManager* GetSkinManager();
+	virtual IUiEngine* GetUiEngine();
 
 //////////////////////////////////////////////////////////////////////////
 	// Builder 使用函数
@@ -46,6 +47,9 @@ private:
 private:
 	HMODULE m_hControlDll;
 	IControlManager *m_pControlMgr;
+
+	HMODULE m_hUiEngineDll;
+	IUiEngine *m_pUiEngine;
 
 	WINDOW_IMPL_MAP m_WndImplMap;
 	// 所有支持的控件

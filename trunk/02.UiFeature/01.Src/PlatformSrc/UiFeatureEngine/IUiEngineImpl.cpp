@@ -45,8 +45,8 @@ void IUiEngineImpl::LoadImpl()
 	}
 }
 
-bool IUiEngineImpl::AlphaBlend(CMemoryDC &DestMemDc, int nXOriginDest, int nYOriginDest, int nWidthDest, int nHeightDest,
-						CMemoryDC &SrcMemDc, int nXOriginSrc, int nYOriginSrc, int nWidthSrc, int nHeightSrc, BLENDFUNCTION *pBlendFunction)
+bool IUiEngineImpl::AlphaBlend(CDrawingBoard &DestMemDc, int nXOriginDest, int nYOriginDest, int nWidthDest, int nHeightDest,
+						CDrawingBoard &SrcMemDc, int nXOriginSrc, int nYOriginSrc, int nWidthSrc, int nHeightSrc, BLENDFUNCTION *pBlendFunction)
 {
 	if (AlphaBlendImpl == NULL)
 		return false;
