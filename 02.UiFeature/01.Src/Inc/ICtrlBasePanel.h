@@ -17,4 +17,6 @@ protected:
 	virtual void OnFinalCreate();
 	// 销毁控件
 	virtual void OnDestroy();
+	// 绘制控件
+	virtual void OnPaint();
 };

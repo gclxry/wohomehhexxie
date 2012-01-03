@@ -3,7 +3,7 @@
 
 #pragma once
 #include "IPropertyBase.h"
-#include "CMemoryDC.h"
+#include "CDrawingBoard.h"
 
 // ¾Å¹¬¸ñÊý¾Ý
 struct JGG_INFO
@@ -49,7 +49,7 @@ public:
 	void SetImageProp(IMAGE_BASE_PROP* pImgProp);
 	IMAGE_BASE_PROP* GetImageProp();
 
-	bool DrawImage(CMemoryDC &DstDc, RECT DstRct);
+	bool DrawImage(CDrawingBoard &DstDc, RECT DstRct);
 
 private:
 	IMAGE_BASE_PROP m_ImageProp;

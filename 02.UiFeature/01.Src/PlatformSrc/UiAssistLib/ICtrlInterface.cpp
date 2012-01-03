@@ -12,7 +12,7 @@ ICtrlInterface::~ICtrlInterface()
 }
 
 // 派生控件处理的消息
-void ICtrlInterface::OnNotification(int nMsgId, WPARAM wParam, LPARAM lParam)
+void ICtrlInterface::OnCtrlMessage(int nMsgId, WPARAM wParam, LPARAM lParam)
 {
 }
 
@@ -52,7 +52,7 @@ void ICtrlInterface::OnLButtonDbClick(POINT pt)
 }
 
 // 鼠标在控件内部点击按下并移动鼠标
-void ICtrlInterface::OnMouseDrag(POINT pt)
+void ICtrlInterface::OnMouseDragInCtrl(POINT pt)
 {
 }
 
@@ -88,6 +88,16 @@ void ICtrlInterface::OnKillFocus()
 
 // 控件取得键盘输入消息
 void ICtrlInterface::OnChar(WPARAM wParam, LPARAM lParam)
+{
+}
+
+// 控件取得键盘输入消息
+void ICtrlInterface::OnKeyDown(WPARAM wParam, LPARAM lParam)
+{
+}
+
+// 控件取得键盘输入消息
+void ICtrlInterface::OnKeyUp(WPARAM wParam, LPARAM lParam)
 {
 }
 

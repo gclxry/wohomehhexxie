@@ -180,51 +180,95 @@ IPropertyBase* IControlBase::CreatePropetry(OBJECT_TYPE_ID propType, const char*
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
-void IControlBase::InitControlPropetry()
-{
-	m_pXmlPropCtrl = NULL;
-
-	m_pSkinPropMgr = NULL;
-
-	m_bVisible = true;
-	m_bEnable = true;
-	m_bIsReceiveMouseMsg = true;
-	INIT_RECT(m_RectInWindow);
-	INIT_RECT(m_RectInParentCtrl);
-	m_bDragCtrl = false;
-}
-
 // 可用属性
-void IControlBase::SetEnable(bool bEnable)
+void IControlBase::SetEnable(bool bEnable, bool bSetChild)
 {
-	m_bEnable = bEnable;
+	if (m_pPropBase_Enable != NULL)
+		m_pPropBase_Enable->SetValue(bEnable);
+
+	// 设置子控件
+	if (bSetChild)
+	{
+		for (CHILD_CTRLS_VEC::iterator pCtrlItem = m_ChildCtrlsVec.begin(); pCtrlItem != m_ChildCtrlsVec.end(); pCtrlItem++)
+		{
+			IControlBase* pCtrl = *pCtrlItem;
+			if (pCtrl == NULL)
+				continue;
+
+			pCtrl->SetEnable(bEnable);
+		}
+	}
 }
 
 bool IControlBase::IsEnable()
 {
-	return m_bEnable;
+	if (m_pPropBase_Enable == NULL)
+		return true;
+
+	return m_pPropBase_Enable->GetValue();
 }
 
 // 可见属性
-void IControlBase::SetVisible(bool bVisible)
+void IControlBase::SetVisible(bool bVisible, bool bSetChild)
 {
-	m_bVisible = bVisible;
+	if (m_pPropBase_Visible != NULL)
+		m_pPropBase_Visible->SetValue(bVisible);
+
+	// 设置子控件
+	if (bSetChild)
+	{
+		for (CHILD_CTRLS_VEC::iterator pCtrlItem = m_ChildCtrlsVec.begin(); pCtrlItem != m_ChildCtrlsVec.end(); pCtrlItem++)
+		{
+			IControlBase* pCtrl = *pCtrlItem;
+			if (pCtrl == NULL)
+				continue;
+
+			pCtrl->SetVisible(bVisible);
+		}
+	}
 }
 
 bool IControlBase::IsVisible()
 {
-	return m_bVisible;
+	if (m_pPropBase_Visible == NULL)
+		return true;
+
+	return m_pPropBase_Visible->GetValue();
 }
 
 // 是否接受鼠标消息
 void IControlBase::SetReceiveMouseMessage(bool bIsReceive)
 {
-	m_bIsReceiveMouseMsg = bIsReceive;
+	if (m_pPropBase_RcvMouseMsg != NULL)
+		m_pPropBase_RcvMouseMsg->SetValue(bIsReceive);
 }
 
 bool IControlBase::GetReceiveMouseMessage()
 {
-	return m_bIsReceiveMouseMsg;
+	return m_pPropBase_RcvMouseMsg->GetValue();
+}
+
+// 拖动控件属性
+void IControlBase::SetDragInControl(bool bDrag)
+{
+	if (m_pPropBase_DragInCtrl != NULL)
+		m_pPropBase_DragInCtrl->SetValue(bDrag);
+}
+
+bool IControlBase::GetDragInControl()
+{
+	return m_pPropBase_DragInCtrl->GetValue();
+}
+
+// 相对于父控件的布局信息
+void IControlBase::SetLayout(CONTROL_LAYOUT_INFO &cliLayoutInfo)
+{
+	m_LayoutInfo = cliLayoutInfo;
+}
+
+CONTROL_LAYOUT_INFO IControlBase::GetLayout()
+{
+	return m_LayoutInfo;
 }
 
 // 控件显示位置和大小，这个位置是相对于附着的窗口的
@@ -335,49 +379,6 @@ RECT IControlBase::GetCtrlRect()
 	return CtrlRct;
 }
 
-// 相对于父控件的布局信息
-void IControlBase::SetLayout(CONTROL_LAYOUT_INFO &cliLayoutInfo)
-{
-	m_LayoutInfo = cliLayoutInfo;
-}
-
-CONTROL_LAYOUT_INFO IControlBase::GetLayout()
-{
-	return m_LayoutInfo;
-}
-
-// 拖动控件属性
-void IControlBase::SetDragControl(bool bDrag)
-{
-	m_bDragCtrl = bDrag;
-}
-
-bool IControlBase::GetDragControl()
-{
-	return m_bDragCtrl;
-}
-
-// 1. 创建空的属性列表
-bool IControlBase::CreateEmptyPropList()
-{
-	// 基础属性组
-	IPropertyGroup *pBaseGroupProp = (IPropertyGroup *)CreateProperty(NULL, OTID_GROUP, "控件基本属性", NULL);
-
-	// 控件类型(只读)
-	// 控件ID(只读)
-
-	// 控件名称
-	IPropertyBase* pNameProp = CreateProperty(pBaseGroupProp, OTID_STRING, "Name", "控件名称");
-
-	// Visible
-	// Enable
-	// 是否接受鼠标消息
-	// 布局
-	// 是否支持动画
-
-	return true;
-}
-
 // 2.从Builder中新创建一个控件，需要初始化属性的PropId
 bool IControlBase::InitObjectIdByBuilder(const char* pszBaseId)
 {
@@ -443,15 +444,6 @@ bool IControlBase::ReadPropFromControlsXml(const char* pszControlId)
 bool IControlBase::CreateBuilderShowPropList()
 {
 	return true;
-}
-
-// 创建一个属性
-IPropertyBase* IControlBase::CreateProperty(IPropertyGroup *pPropGroup, OBJECT_TYPE_ID propType, char *pPropName, char *pPropInfo)
-{
-	if (m_pSkinPropMgr == NULL)
-		return NULL;
-
-	return NULL;
 }
 
 // 设置附属控件

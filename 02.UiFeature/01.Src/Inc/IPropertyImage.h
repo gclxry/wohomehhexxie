@@ -3,7 +3,7 @@
 
 #pragma once
 #include "IPropertyBase.h"
-#include "CMemoryDC.h"
+#include "CDrawingBoard.h"
 #include "IPropertyImageBase.h"
 
 class IPropertyImage : public IPropertyBase
@@ -29,5 +29,5 @@ public:
 
 	const char * GetImageBaseName();
 
-	bool DrawImage(CMemoryDC &DstDc, RECT DstRct);
+	bool DrawImage(CDrawingBoard &DstDc, RECT DstRct);
 };

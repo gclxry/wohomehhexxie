@@ -1,11 +1,11 @@
 
 #pragma once
-#include "..\..\Inc\CMemoryDC.h"
+#include "..\..\Inc\CDrawingBoard.h"
 
 class IUiEngine
 {
 public:
-	virtual bool AlphaBlend(CMemoryDC &DestMemDc, int nXOriginDest, int nYOriginDest, int nWidthDest, int nHeightDest,
-		CMemoryDC &SrcMemDc, int nXOriginSrc, int nYOriginSrc, int nWidthSrc, int nHeightSrc, BLENDFUNCTION *pBlendFunction = NULL) = 0;
+	virtual bool AlphaBlend(CDrawingBoard &DestMemDc, int nXOriginDest, int nYOriginDest, int nWidthDest, int nHeightDest,
+		CDrawingBoard &SrcMemDc, int nXOriginSrc, int nYOriginSrc, int nWidthSrc, int nHeightSrc, BLENDFUNCTION *pBlendFunction = NULL) = 0;
 
 };

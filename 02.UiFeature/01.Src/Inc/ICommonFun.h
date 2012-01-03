@@ -16,5 +16,5 @@ bool FileExists(const char *pszFilePath);
 
 // 设置IWindowBase的 objectname ，objectId
 void ResetWindowBaseInfo(IWindowBase *pWndBase);
-
+// 向一个xml节点插入一个int属性
 void AddIntAttrToNode(CUiXmlWriteNode* pNode, const char* pszAttrName, int nInt);

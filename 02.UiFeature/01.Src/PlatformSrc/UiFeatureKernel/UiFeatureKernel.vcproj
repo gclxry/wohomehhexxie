@@ -246,10 +246,6 @@
 		<Filter
 			Name="04.Common"
 			>
-			<File
-				RelativePath="..\..\Inc\UiFeatureDefs.h"
-				>
-			</File>
 			<Filter
 				Name="02.管理所有的控件DLL"
 				>
@@ -323,6 +319,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath="..\..\Inc\UiFeatureDefs.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

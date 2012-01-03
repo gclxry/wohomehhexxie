@@ -8,61 +8,6 @@
 #include "..\..\Inc\ICommonFun.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 
-void IWindowBaseImpl::InitWindowPropMember()
-{
-	m_pSkinPropMgr = IPropertySkinManagerImpl::GetInstance();
-
-	m_bIsFullScreen = false;
-
-	m_pXmlPropWindow = NULL;
-	// Group:base
-	m_pPropGroupBase = NULL;
-	// base-类型名称
-	m_pPropBase_TypeName = NULL;
-	// base-objectid
-	m_pPropBase_ObjectId = NULL;
-	// base-name
-	m_pPropBase_Name = NULL;
-	// base-windowtitle
-	m_pPropBase_WindowText = NULL;
-	// base-visible
-	m_pPropBase_Visible = NULL;
-	// base-支持分层窗口
-	m_pPropBase_Layered = NULL;
-	// base-topmost
-	m_pPropBase_TopMost = NULL;
-	// base-sysbase
-	m_pPropGroupSysBase = NULL;
-	// base-sysbase-最大化
-	m_pPropSysBase_CanFullScreen = NULL;
-	// base-sysbase-最小化
-	m_pPropSysBase_CanMiniSize = NULL;
-	// Group-size
-	m_pPropGroupSize = NULL;
-	// size-width
-	m_pPropSize_Width = NULL;
-	// size-height
-	m_pPropSize_Height = NULL;
-	// Group-drag(拖拽窗口)
-	m_pPropGroupDrag = NULL;
-	// drag-enable
-	m_pPropDrag_Enable = NULL;
-	// Group-stretching(拉伸窗口)
-	m_pPropGroupStretching = NULL;
-	// stretching-enable
-	m_pPropStretching_Enable = NULL;
-	// stretching-leftspace
-	m_pPropStretching_LeftSpace = NULL;
-	// stretching-rightspace
-	m_pPropStretching_RightSpace = NULL;
-	// stretching-topspace
-	m_pPropStretching_TopSpace = NULL;
-	// stretching-bottomspace
-	m_pPropStretching_BottomSpace = NULL;
-	// Group-WindowRgn
-	m_pPropGroupWindowRgn = NULL;
-}
-
 IPropertyGroup* IWindowBaseImpl::PP_GetWindowPropetryGroup()
 {
 	if (m_pXmlPropWindow == NULL)

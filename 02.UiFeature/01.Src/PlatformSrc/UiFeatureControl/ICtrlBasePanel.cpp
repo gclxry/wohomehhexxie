@@ -33,3 +33,9 @@ void ICtrlBasePanel::OnFinalCreate()
 void ICtrlBasePanel::OnDestroy()
 {
 }
+
+// »æÖÆ¿Ø¼þ
+void ICtrlBasePanel::OnPaint()
+{
+
+}
