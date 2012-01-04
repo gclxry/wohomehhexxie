@@ -23,7 +23,7 @@ public:
 	void OnChangeVisualStyle();
 
 	CWindowsViewTree *GetViewTreeCtrl();
-	void Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPropCtrl);
+	void Init(IUiFeatureKernel* pKernelWindow, CPropertyViewCtrl *pPropCtrl);
 	void InitShowNewProject();
 	void SetProjectInitState(bool bInitOk);
 

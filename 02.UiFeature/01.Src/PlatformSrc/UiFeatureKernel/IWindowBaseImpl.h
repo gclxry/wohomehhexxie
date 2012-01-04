@@ -6,6 +6,7 @@
 #include "..\..\Inc\IPropertyString.h"
 #include "..\..\Inc\IPropertyBool.h"
 #include "..\..\Inc\IPropertyInt.h"
+#include "..\..\Inc\IPropertyImage.h"
 #include "..\..\Inc\IPropertySkinManager.h"
 
 class IWindowBaseImpl : public IWindowBase
@@ -17,11 +18,11 @@ public:
 //////////////////////////////////////////////////////////////////////////
 	// Builder 使用的函数
 	virtual void BD_InitWindowBase(IPropertyWindow *pWindowProp, bool bSetDftProp);
+	virtual void BD_DrawWindowView(CDrawingBoard &ViewMemDc);
 
 //////////////////////////////////////////////////////////////////////////
 	// 导入皮肤包使用的函数初始化
 	virtual void PG_InitWindowBase(HWND hWnd, char *pszSkinPath, char *pszWndName);
-
 
 	// 窗口居中显示
 	virtual void CenterWindow();
@@ -73,6 +74,10 @@ private:
 	void OnInitWindowBase();
 	bool IsInit();
 
+	// 在Builder中绘制用的边框色块
+	void BD_NewFrameImage();
+	void BD_NewFrameImageBase(IPropertyImageBase *pImgBase, string strImgPath);
+
 private:
 	// 循环遍历每个控件的绘制
 	void DrawControl();
@@ -95,6 +100,12 @@ protected:
 	string m_strSkinPath;
 	// 皮肤的object名称
 	string m_strWindowObjectName;
+
+	// 在Builder中绘制用的边框色块
+	IPropertyImage m_BuilderWndFrameImage;
+	IPropertyImageBase m_BuilderWndFrameImageBase;
+	IPropertyImage m_BuilderCtrlFrameImage;
+	IPropertyImageBase m_BuilderCtrlFrameImageBase;
 
 	BLENDFUNCTION m_Blend;
 	// 父窗口句柄

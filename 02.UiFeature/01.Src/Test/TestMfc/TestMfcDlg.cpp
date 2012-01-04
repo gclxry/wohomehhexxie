@@ -76,7 +76,7 @@ BOOL CTestMfcDlg::OnInitDialog()
 		GETKERNELWINDOWINTERFACE GetKernel = (GETKERNELWINDOWINTERFACE)::GetProcAddress(m_hKernelDll, "GetKernelWindowInterface");
 		if (GetKernel != NULL)
 		{
-			IKernelWindow *pKernelWnd = GetKernel();
+			IUiFeatureKernel *pKernelWnd = GetKernel();
 			if (pKernelWnd != NULL)
 			{
 				// TBD

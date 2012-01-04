@@ -34,7 +34,7 @@ void CMainFrame::InitUiFeatureKernel()
 	m_pKernelWindow = GetKernel();
 	if (m_pKernelWindow == NULL)
 	{
-		AfxMessageBox(_T("找不到UiFeature内核DLL的【IKernelWindow】接口！"), MB_OK | MB_ICONERROR);
+		AfxMessageBox(_T("找不到UiFeature内核DLL的【IUiFeatureKernel】接口！"), MB_OK | MB_ICONERROR);
 		return;
 	}
 	m_pSkinMgr = m_pKernelWindow->GetSkinManager();

@@ -94,7 +94,7 @@ void CWindowsView::SetProjectInitState(bool bInitOk)
 	m_wndWindowTree.SetProjectInitState(bInitOk);
 }
 
-void CWindowsView::Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPropCtrl)
+void CWindowsView::Init(IUiFeatureKernel* pKernelWindow, CPropertyViewCtrl *pPropCtrl)
 {
 	m_wndWindowTree.Init(pKernelWindow, pPropCtrl);
 }

@@ -7,6 +7,7 @@
 #include "CUiXmlWrite.h"
 
 class IPropertyBase;
+class IUiFeatureKernel;
 
 // 语言种类
 enum AREA_TYPE
@@ -59,7 +60,10 @@ public:
 	virtual IPropertyBase* GetRelevancyProp();
 	virtual void SetRelevancyProp(IPropertyBase *pszProp);
 
+	virtual void SetUiKernel(IUiFeatureKernel *pUiKernel);
+
 private:
+	IUiFeatureKernel *m_pUiKernel;
 	// 关联属性名称
 	string m_strRelevancyPropName;
 	// 关联属性

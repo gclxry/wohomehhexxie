@@ -9,7 +9,7 @@
 #include "..\..\Inc\IPropertyImage.h"
 #include "..\..\Inc\IPropertyInt.h"
 #include "..\..\Inc\IPropertyString.h"
-#include "..\..\Inc\IKernelWindow.h"
+#include "..\..\Inc\IUiFeatureKernel.h"
 
 class CWindowsViewTree;
 class CPropertyViewCtrl : public CMFCPropertyGridCtrl
@@ -24,7 +24,7 @@ public:
 	void SetShowPropGroup(IPropertyGroup *pPropGroup);
 	// 属性发生改变的时候
 	void OnPropertyChanged(CMFCPropertyGridProperty* pProperty);
-	void Init(IKernelWindow* pKernelWindow, CWindowsViewTree *pViewTree);
+	void Init(IUiFeatureKernel* pKernelWindow, CWindowsViewTree *pViewTree);
 	void SetProjectInitState(bool bInitOk);
 
 private:
@@ -51,6 +51,6 @@ private:
 private:
 	bool m_bProjectInitOk;
 	IPropertyGroup* m_pCurrentPropGroup;
-	IKernelWindow* m_pKernelWindow;
+	IUiFeatureKernel* m_pKernelWindow;
 	CWindowsViewTree* m_pViewTree;
 };

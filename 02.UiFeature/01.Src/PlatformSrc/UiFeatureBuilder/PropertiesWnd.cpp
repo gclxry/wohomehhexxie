@@ -192,7 +192,7 @@ void CPropertiesWnd::SetPropListFont()
 	m_wndPropList.SetFont(&m_fntPropList);
 }
 
-void CPropertiesWnd::Init(IKernelWindow* pKernelWindow, CWindowsViewTree *pViewTree)
+void CPropertiesWnd::Init(IUiFeatureKernel* pKernelWindow, CWindowsViewTree *pViewTree)
 {
 	m_wndPropList.Init(pKernelWindow, pViewTree);
 }

@@ -3,7 +3,7 @@
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IFeatureObject.h"
 #include "..\..\Inc\ICommonFun.h"
-#include "IKernelWindowImpl.h"
+#include "IUiFeatureKernelImpl.h"
 #include "IWindowBaseImpl.h"
 #include "WindowSubclass.h"
 #include "ControlImpl.h"
@@ -13,12 +13,12 @@
 #include "..\..\Inc\UiFeatureEngine.h"
 
 // 内核对【对话框】的接口
-IKernelWindow *GetKernelWindowInterface()
+IUiFeatureKernel *GetKernelWindowInterface()
 {
-	return IKernelWindowImpl::GetInstance();
+	return IUiFeatureKernelImpl::GetInstance();
 }
 
-IKernelWindowImpl::IKernelWindowImpl(void)
+IUiFeatureKernelImpl::IUiFeatureKernelImpl(void)
 {
 	m_nBuilderHwnd = 1;
 	m_CtrlRegMap.clear();
@@ -43,14 +43,14 @@ IKernelWindowImpl::IKernelWindowImpl(void)
 	}
 }
 
-IKernelWindowImpl::~IKernelWindowImpl(void)
+IUiFeatureKernelImpl::~IUiFeatureKernelImpl(void)
 {
 	SAFE_FREE_LIBRARY(m_hControlDll);
 	SAFE_FREE_LIBRARY(m_hUiEngineDll);
 	ReleaseKernelWindow();
 }
 
-void IKernelWindowImpl::ReleaseKernelWindow()
+void IUiFeatureKernelImpl::ReleaseKernelWindow()
 {
 	for (WINDOW_IMPL_MAP::iterator pWndItem = m_WndImplMap.begin(); pWndItem != m_WndImplMap.end(); pWndItem++)
 	{
@@ -61,26 +61,26 @@ void IKernelWindowImpl::ReleaseKernelWindow()
 	m_CtrlRegMap.clear();
 }
 
-IKernelWindow* IKernelWindowImpl::GetInstance()
+IUiFeatureKernel* IUiFeatureKernelImpl::GetInstance()
 {
-	static IKernelWindowImpl _KernelWindowInstance;
+	static IUiFeatureKernelImpl _KernelWindowInstance;
 	return &_KernelWindowInstance;
 }
 
 // 取得所有支持的控件
-CONTROL_REG_MAP* IKernelWindowImpl::BD_GetRegisterControl()
+CONTROL_REG_MAP* IUiFeatureKernelImpl::BD_GetRegisterControl()
 {
 	CControlImpl::GetInstance()->SetRegControlMap(&m_CtrlRegMap);
 	return &m_CtrlRegMap;
 }
 
-IPropertySkinManager* IKernelWindowImpl::GetSkinManager()
+IPropertySkinManager* IUiFeatureKernelImpl::GetSkinManager()
 {
 	return IPropertySkinManagerImpl::GetInstance();
 }
 
 // 一个对话框释放皮肤资源
-void IKernelWindowImpl::PG_ReleaseFeatureSkin(HWND hWnd)
+void IUiFeatureKernelImpl::PG_ReleaseFeatureSkin(HWND hWnd)
 {
 	WINDOW_IMPL_MAP::iterator pWndImplItem = m_WndImplMap.find(hWnd);
 	if (pWndImplItem != m_WndImplMap.end())
@@ -92,7 +92,7 @@ void IKernelWindowImpl::PG_ReleaseFeatureSkin(HWND hWnd)
 }
 
 // 关闭一个工程
-bool IKernelWindowImpl::BD_CloseProject()
+bool IUiFeatureKernelImpl::BD_CloseProject()
 {
 	ReleaseKernelWindow();
 	if (m_pSkinMgr != NULL)
@@ -102,7 +102,7 @@ bool IKernelWindowImpl::BD_CloseProject()
 }
 
 // 一个对话框从一个皮肤包里使用指定的对话框皮肤资源初始化自己
-IWindowBase* IKernelWindowImpl::PG_InitFeatureSkin(HWND hWnd, char *pszSkinPath, char *pszWndName)
+IWindowBase* IUiFeatureKernelImpl::PG_InitFeatureSkin(HWND hWnd, char *pszSkinPath, char *pszWndName)
 {
 	if (!::IsWindow(hWnd) || pszSkinPath == NULL || pszWndName == NULL || strlen(pszSkinPath) <= 0 || strlen(pszWndName) <= 0)
 		return NULL;
@@ -131,7 +131,7 @@ IWindowBase* IKernelWindowImpl::PG_InitFeatureSkin(HWND hWnd, char *pszSkinPath,
 }
 
 // 创建一个Builder使用的空的窗口
-IWindowBase* IKernelWindowImpl::BD_CreateWindowEmptyPropetry()
+IWindowBase* IUiFeatureKernelImpl::BD_CreateWindowEmptyPropetry()
 {
 	if (m_pSkinMgr == NULL)
 		return NULL;
@@ -173,7 +173,7 @@ IWindowBase* IKernelWindowImpl::BD_CreateWindowEmptyPropetry()
 }
 
 // 创建一个Builder使用的空的窗口
-IWindowBase* IKernelWindowImpl::BD_CreateWindowByPropetry(IPropertyWindow *pPropWnd)
+IWindowBase* IUiFeatureKernelImpl::BD_CreateWindowByPropetry(IPropertyWindow *pPropWnd)
 {
 	if (pPropWnd == NULL)
 		return NULL;
@@ -198,7 +198,7 @@ IWindowBase* IKernelWindowImpl::BD_CreateWindowByPropetry(IPropertyWindow *pProp
 }
 
 // 保存皮肤包
-bool IKernelWindowImpl::BD_SaveProject(char *pszSkinDir, char *pszSkinName)
+bool IUiFeatureKernelImpl::BD_SaveProject(char *pszSkinDir, char *pszSkinName)
 {
 	if (m_pSkinMgr == NULL)
 		return false;
@@ -207,7 +207,7 @@ bool IKernelWindowImpl::BD_SaveProject(char *pszSkinDir, char *pszSkinName)
 }
 
 // 创建/打开一个新的皮肤工程
-bool IKernelWindowImpl::BD_OpenProject(char *pszSkinDir, char *pszSkinName)
+bool IUiFeatureKernelImpl::BD_OpenProject(char *pszSkinDir, char *pszSkinName)
 {
 	if (pszSkinDir == NULL || pszSkinName == NULL || m_pSkinMgr == NULL)
 		return false;
@@ -228,7 +228,7 @@ bool IKernelWindowImpl::BD_OpenProject(char *pszSkinDir, char *pszSkinName)
 }
 
 // 创建一个Builder使用的空的控件
-IControlBase* IKernelWindowImpl::BD_CreateControlEmptyPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, char *pszNewCtrlTypeName)
+IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, char *pszNewCtrlTypeName)
 {
 	if (m_pControlMgr == NULL || m_pSkinMgr == NULL || pParentWnd == NULL || pszNewCtrlTypeName == NULL || strlen(pszNewCtrlTypeName) <= 0)
 		return NULL;
@@ -288,7 +288,7 @@ IControlBase* IKernelWindowImpl::BD_CreateControlEmptyPropetry(IWindowBase *pPar
 	return pCtrlBase;
 }
 
-IUiEngine* IKernelWindowImpl::GetUiEngine()
+IUiEngine* IUiFeatureKernelImpl::GetUiEngine()
 {
 	if (m_hUiEngineDll == NULL || m_pUiEngine == NULL)
 	{

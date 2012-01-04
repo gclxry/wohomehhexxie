@@ -4,7 +4,7 @@
 #include "IControlBase.h"
 #include "IUiEngine.h"
 
-class IKernelWindow
+class IUiFeatureKernel
 {
 public:
 	virtual IPropertySkinManager* GetSkinManager() = 0;

@@ -2,7 +2,7 @@
 #include "StdAfx.h"
 #include "WindowSubclass.h"
 #include "..\..\Inc\UiFeatureDefs.h"
-#include "IKernelWindowImpl.h"
+#include "IUiFeatureKernelImpl.h"
 
 LRESULT CALLBACK WindowSubProc(HWND hWnd, UINT nMsgId, WPARAM wParam, LPARAM lParam)
 {
@@ -21,7 +21,7 @@ LRESULT CALLBACK WindowSubProc(HWND hWnd, UINT nMsgId, WPARAM wParam, LPARAM lPa
 					::SetWindowLongPtr(hWnd, GWL_WNDPROC, (LONG_PTR)SubFun.pOldWndProc);
 
 				// 释放当前皮肤资源和子类化资源
-				IKernelWindowImpl::GetInstance()->PG_ReleaseFeatureSkin(hWnd);
+				IUiFeatureKernelImpl::GetInstance()->PG_ReleaseFeatureSkin(hWnd);
 
 				// 消息需要继续往下传了
 				if (SubFun.pOldWndProc != NULL)

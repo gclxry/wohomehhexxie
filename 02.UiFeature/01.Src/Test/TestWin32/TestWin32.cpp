@@ -132,7 +132,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	   GETKERNELWINDOWINTERFACE GetKernel = (GETKERNELWINDOWINTERFACE)::GetProcAddress(m_hKernelDll, "GetKernelWindowInterface");
 	   if (GetKernel != NULL)
 	   {
-		   IKernelWindow *pKernelWnd = GetKernel();
+		   IUiFeatureKernel *pKernelWnd = GetKernel();
 		   if (pKernelWnd != NULL)
 		   {
 			   pKernelWnd->PG_InitFeatureSkin(hWnd, "G:\\04.VcKBase\\UiFeature\\Bin\\SkinData\\skintest.ufd", "²âÊÔ´°¿Ú");
