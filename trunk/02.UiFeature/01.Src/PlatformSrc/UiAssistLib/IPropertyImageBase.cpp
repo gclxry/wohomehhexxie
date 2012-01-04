@@ -98,3 +98,8 @@ bool IPropertyImageBase::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 
 	return true;
 }
+
+bool IPropertyImageBase::DrawImage(CDrawingBoard &DstDc, RECT DstRct)
+{
+	return true;
+}

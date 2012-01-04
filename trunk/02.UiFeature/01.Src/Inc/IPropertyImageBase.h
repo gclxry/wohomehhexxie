@@ -4,6 +4,7 @@
 #pragma once
 #include "IPropertyBase.h"
 #include "CDrawingBoard.h"
+#include "CDrawingImage.h"
 
 // ¾Å¹¬¸ñÊý¾Ý
 struct JGG_INFO
@@ -33,6 +34,7 @@ struct IMAGE_BASE_PROP
 
 class IPropertyImageBase : public IPropertyBase
 {
+	friend class IPropertyImage;
 public:
 	IPropertyImageBase();
 	virtual ~IPropertyImageBase();
@@ -50,8 +52,11 @@ public:
 	void SetImageProp(IMAGE_BASE_PROP* pImgProp);
 	IMAGE_BASE_PROP* GetImageProp();
 
+private:
 	bool DrawImage(CDrawingBoard &DstDc, RECT DstRct);
 
 private:
 	IMAGE_BASE_PROP m_ImageProp;
+
+	CDrawingImage m_DrawImg;
 };
