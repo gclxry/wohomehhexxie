@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 #include "..\..\Inc\CDrawingImage.h"
+#include "..\..\Inc\UiFeatureDefs.h"
 
 CDrawingImage::CDrawingImage(void)
 {
@@ -35,50 +36,6 @@ BYTE* CDrawingImage::GetBits()
 	return m_pBits;
 }
 
-void CDrawingImage::Create(int nWidth, int nHeight, DWORD nDefaultColor, bool bReCreate, bool bNoCreateInit)
-{
-	if ((nWidth <= 0) || (nHeight<= 0))
-		return;
-
-	if (bReCreate || (nWidth != m_DcSize.cx) || (nHeight != m_DcSize.cy))
-	{
-		Delete();
-		
-		m_DcSize.cx = nWidth;
-		m_DcSize.cy = nHeight;
-
-		BITMAPINFOHEADER bih;
-		memset(&bih, 0, sizeof(BITMAPINFOHEADER));
-		bih.biSize = sizeof(BITMAPINFOHEADER);
-		bih.biHeight = nHeight;
-		bih.biWidth = nWidth;
-		bih.biPlanes = 1;
-		bih.biBitCount = 32;
-		bih.biCompression = BI_RGB;
-
-		m_hDC = ::CreateCompatibleDC(NULL);
-		if (m_hDC != NULL)
-		{
-			m_hBmp = ::CreateDIBSection(GetSafeHdc(), (BITMAPINFO*)&bih,
-				DIB_RGB_COLORS, (void**)(&m_pBits), NULL, 0);
-
-			if (m_hBmp != NULL && m_pBits != NULL)
-				::SelectObject(m_hDC, m_hBmp);
-			else
-				Delete();
-		}
-		else
-		{
-			Delete();
-		}
-	}
-	else
-	{
-		if (m_pBits != NULL && bNoCreateInit)
-			memset(m_pBits, nDefaultColor, m_DcSize.cx * m_DcSize.cy * 4);
-	}
-}
-
 void CDrawingImage::Delete()
 {
 	if (m_hBmp != NULL)
@@ -95,4 +52,63 @@ void CDrawingImage::Delete()
 
 	m_pBits = NULL;
 	m_DcSize.cx = m_DcSize.cy = 0;
+}
+
+// 从一段内存中创建
+void CDrawingImage::CreateByMem(BYTE *pImgFileMem, int nLen)
+{
+	if (pImgFileMem == NULL || nLen <= 0)
+		return;
+
+}
+
+// 从文件内存中创建
+void CDrawingImage::CreateByFile(const char *pszFilePath)
+{
+	if (pszFilePath == NULL || strlen(pszFilePath) <= 0)
+		return;
+
+	WIN32_FILE_ATTRIBUTE_DATA FileAttr;
+	if (!::GetFileAttributesExA(pszFilePath, GetFileExInfoStandard, &FileAttr))
+		return;
+
+	FILE *pFile = NULL;
+	fopen_s(&pFile, pszFilePath, "rb");
+	if (pFile == NULL)
+		return;
+
+	BYTE *pReadBuf = new BYTE[FileAttr.nFileSizeLow];
+	if (pReadBuf == NULL)
+	{
+		fclose(pFile);
+		return;
+	}
+
+	int nReadCtns = 0;
+	while(nReadCtns < (int)FileAttr.nFileSizeLow)
+	{
+		BYTE *pRead = pReadBuf + nReadCtns;
+		int nNeedRead = FileAttr.nFileSizeLow - nReadCtns;
+
+		int nRead = fread_s(pRead, nNeedRead, 1, nNeedRead, pFile);
+		nReadCtns += nRead;
+
+		if (errno != 0)
+		{
+			SAFE_DELETE(pReadBuf);
+			fclose(pFile);
+			return;
+		}
+	}
+
+	if (nReadCtns != (int)FileAttr.nFileSizeLow)
+	{
+		SAFE_DELETE(pReadBuf);
+		fclose(pFile);
+		return;
+	}
+
+
+
+	SAFE_DELETE(pReadBuf);
 }
