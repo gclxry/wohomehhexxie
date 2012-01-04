@@ -71,8 +71,9 @@ bool IPropertyImage::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pP
 
 bool IPropertyImage::DrawImage(CDrawingBoard &DstDc, RECT DstRct)
 {
-	if (!IsRightData())
+	IPropertyImageBase *pImgBase = (IPropertyImageBase*)GetRelevancyProp();
+	if (pImgBase == NULL)
 		return false;
 
-	return true;
+	return pImgBase->DrawImage(DstDc, DstRct);
 }
