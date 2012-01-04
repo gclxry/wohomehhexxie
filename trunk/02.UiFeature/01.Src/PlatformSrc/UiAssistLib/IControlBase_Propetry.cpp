@@ -8,13 +8,13 @@
 
 
 // 初始化在builder中的属性
-bool IControlBase::BD_InitControlBase(IPropertyControl *pCtrlProp)
+bool IControlBase::BD_InitControlBase(IPropertyControl *pCtrlProp, bool bNeedSetDftProp)
 {
 	if (pCtrlProp == NULL)
 		return false;
 
 	m_pXmlPropCtrl = m_pXmlPropCtrl;
-	CreateCtrlAllPropetry();
+	CreateCtrlAllPropetry(bNeedSetDftProp);
 	// 控件创建
 	OnCreate();
 	return true;
@@ -32,7 +32,7 @@ IPropertyBase* IControlBase::CreateCtrlOnePropetry(IPropertyGroup* pGroup, OBJEC
 }
 
 // 创建空的属性队列
-void IControlBase::CreateCtrlAllPropetry()
+void IControlBase::CreateCtrlAllPropetry(bool bNeedSetDftProp)
 {
 	if (m_pXmlPropCtrl == NULL)
 		return;
@@ -158,8 +158,24 @@ void IControlBase::CreateCtrlAllPropetry()
 	if (m_pPropGroupCtrlDefs == NULL)
 		return;
 
+	if (bNeedSetDftProp)
+	{
+		m_pPropBase_Visible->SetValue(true);
+		m_pPropBase_RcvMouseMsg->SetValue(true);
+		m_pPropBase_Enable->SetValue(true);
+		m_pPropBase_DragInCtrl->SetValue(false);
+		m_pPropBase_TabOrder->SetValue(0);
+		m_pPropBase_DefaultEnterCtrl->SetValue(false);
+		m_pPropBase_Layout_Width->SetValue(20);
+		m_pPropBase_Layout_Height->SetValue(20);
+		m_pPropBase_Layout_LeftSpace->SetValue(0);
+		m_pPropBase_Layout_RightSpace->SetValue(0);
+		m_pPropBase_Layout_TopSpace->SetValue(0);
+		m_pPropBase_Layout_BottomSpace->SetValue(0);
+	}
+
 	// 控件创建自定义的属性
-	CreateControlPropetry();
+	CreateControlPropetry(bNeedSetDftProp);
 }
 
 IPropertyBase* IControlBase::CreatePropetry(OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo)

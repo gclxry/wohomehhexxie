@@ -16,7 +16,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 	// Builder 使用的函数
-	virtual void BD_InitWindowBase(IPropertyWindow *pWindowProp);
+	virtual void BD_InitWindowBase(IPropertyWindow *pWindowProp, bool bSetDftProp);
 
 //////////////////////////////////////////////////////////////////////////
 	// 导入皮肤包使用的函数初始化
@@ -120,7 +120,7 @@ protected:
 	// 窗口属性
 public:
 	// 将xml中的属性设置到manager中
-	virtual void PP_SetWindowPropetry(IPropertyWindow *pWndPropInXml);
+	virtual void PP_SetWindowPropetry(IPropertyWindow *pWndPropInXml, bool bSetDftProp);
 
 	// 是否支持全窗口点击移动
 	virtual void PP_SetDragWindow(bool bDrag);
@@ -148,7 +148,7 @@ public:
 
 private:
 	// 创建空的属性队列
-	void CreateWindowPropetry();
+	void CreateWindowPropetry(bool bSetDftProp);
 	IPropertyBase* CreateCtrlOnePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
 	// 释放子控件列表
 	void ReleaseChildVec(CHILD_CTRLS_VEC *pChildCtrlsVec);
