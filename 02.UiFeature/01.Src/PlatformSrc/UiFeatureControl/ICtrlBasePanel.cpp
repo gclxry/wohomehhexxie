@@ -14,7 +14,7 @@ ICtrlBasePanel::~ICtrlBasePanel(void)
 }
 
 // 派生控件用于创建属于自己的控件属性
-bool ICtrlBasePanel::CreateControlPropetry()
+bool ICtrlBasePanel::CreateControlPropetry(bool bNeedSetDftProp)
 {
 	return true;
 }

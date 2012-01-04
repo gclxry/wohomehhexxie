@@ -217,7 +217,9 @@ protected:
 	// 派生控件用于创建一个属性
 	IPropertyBase* CreatePropetry(OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
 	// 派生控件用于创建属于自己的控件属性
-	virtual bool CreateControlPropetry() = 0;
+	// bNeedSetDftProp：true时说明是Builder调用，新创建一个控件，需要初始化属性的各个默认值
+	// false：说明整个皮肤包已经初始化完毕，属性创建完毕的时候，从xml中读取的属性值已经赋值完毕了，不能再初始化，否则xml中的值会被冲掉
+	virtual bool CreateControlPropetry(bool bNeedSetDftProp) = 0;
 	// 初始化控件
 	virtual void OnCreate() = 0;
 	// 控件初始化完毕
@@ -267,11 +269,11 @@ protected:
 
 private:
 	// 创建控件属性
-	void CreateCtrlAllPropetry();
+	void CreateCtrlAllPropetry(bool bNeedSetDftProp);
 	IPropertyBase* CreateCtrlOnePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
 
 	// 初始化在builder中的属性
-	bool BD_InitControlBase(IPropertyControl *pCtrlProp);
+	bool BD_InitControlBase(IPropertyControl *pCtrlProp, bool bNeedSetDftProp);
 	void SetPropertySkinManager(IPropertySkinManager *pMgr);
 	// 向队列未插入一个控件
 	void AppendChildContrl(IControlBase *pCtrl);

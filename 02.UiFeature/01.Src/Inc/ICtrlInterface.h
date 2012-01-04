@@ -12,7 +12,9 @@ public:
 
 protected:
 	// 派生控件用于创建属于自己的控件属性
-	virtual bool CreateControlPropetry() = 0;
+	// bNeedSetDftProp：true时说明是Builder调用，新创建一个控件，需要初始化属性的各个默认值
+	// false：说明整个皮肤包已经初始化完毕，属性创建完毕的时候，从xml中读取的属性值已经赋值完毕了，不能再初始化，否则xml中的值会被冲掉
+	virtual bool CreateControlPropetry(bool bNeedSetDftProp) = 0;
 	// 初始化控件
 	virtual void OnCreate() = 0;
 	// 整个皮肤包初始化完毕

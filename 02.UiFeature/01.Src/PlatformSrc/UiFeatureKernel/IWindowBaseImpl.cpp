@@ -159,7 +159,7 @@ void IWindowBaseImpl::OnInitWindowBase()
 		return;
 	}
 	// 设置对话框属性
-	PP_SetWindowPropetry(pWndProp);
+	PP_SetWindowPropetry(pWndProp, false);
 
 //////////////////////////////////////////////////////////////////////////
 	// 当窗口的属性发生变化时需要通知窗口进行刷新
@@ -893,12 +893,12 @@ void IWindowBaseImpl::RedrawWindow(RECT* pDrawRct)
 	::RedrawWindow(m_hWnd, pDrawRct, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 }
 
-void IWindowBaseImpl::BD_InitWindowBase(IPropertyWindow *pWindowProp)
+void IWindowBaseImpl::BD_InitWindowBase(IPropertyWindow *pWindowProp, bool bSetDftProp)
 {
 	if (pWindowProp == NULL)
 		return;
 
-	PP_SetWindowPropetry(pWindowProp);
+	PP_SetWindowPropetry(pWindowProp, bSetDftProp);
 	this->SetObjectId(pWindowProp->GetObjectId());
 	if (m_pPropBase_Name == NULL || m_pPropBase_Name->GetString() == NULL || strlen(m_pPropBase_Name->GetString()) <= 0)
 	{

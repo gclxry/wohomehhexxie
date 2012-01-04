@@ -164,7 +164,7 @@ IWindowBase* IKernelWindowImpl::BD_CreateWindowEmptyPropetry()
 		return NULL;
 	}
 	// 初始化在builder中的属性
-	pWndBase->BD_InitWindowBase(pPropWindow);
+	pWndBase->BD_InitWindowBase(pPropWindow, true);
 
 	// 记录到窗口队列中
 	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>((HWND)m_nBuilderHwnd++, pWndBaseImpl));
@@ -189,7 +189,7 @@ IWindowBase* IKernelWindowImpl::BD_CreateWindowByPropetry(IPropertyWindow *pProp
 		return NULL;
 	}
 	// 初始化在builder中的属性
-	pWndBase->BD_InitWindowBase(pPropWnd);
+	pWndBase->BD_InitWindowBase(pPropWnd, false);
 
 	// 记录到窗口队列中
 	m_WndImplMap.insert(pair<HWND, IWindowBaseImpl*>((HWND)m_nBuilderHwnd++, pWndBaseImpl));
@@ -283,7 +283,7 @@ IControlBase* IKernelWindowImpl::BD_CreateControlEmptyPropetry(IWindowBase *pPar
 	pCtrlBase->SetOwnerWindow(pParentWnd);
 	pCtrlBase->SetParentControl(pParentCtrl);
 
-	pCtrlBase->BD_InitControlBase(pPropCtrl);
+	pCtrlBase->BD_InitControlBase(pPropCtrl, true);
 	pCtrlBase->OnFinalCreate();
 	return pCtrlBase;
 }

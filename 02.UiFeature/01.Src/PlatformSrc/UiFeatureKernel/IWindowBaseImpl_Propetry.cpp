@@ -17,13 +17,13 @@ IPropertyGroup* IWindowBaseImpl::PP_GetWindowPropetryGroup()
 }
 
 // 将xml中的属性设置到manager中
-void IWindowBaseImpl::PP_SetWindowPropetry(IPropertyWindow *pWndPropInXml)
+void IWindowBaseImpl::PP_SetWindowPropetry(IPropertyWindow *pWndPropInXml, bool bSetDftProp)
 {
 	if (pWndPropInXml == NULL)
 		return;
 
 	m_pXmlPropWindow = pWndPropInXml;
-	CreateWindowPropetry();
+	CreateWindowPropetry(bSetDftProp);
 }
 
 // 窗口Object名称
@@ -121,7 +121,7 @@ IPropertyBase* IWindowBaseImpl::CreateCtrlOnePropetry(IPropertyGroup* pGroup, OB
 }
 
 // 创建空的属性队列
-void IWindowBaseImpl::CreateWindowPropetry()
+void IWindowBaseImpl::CreateWindowPropetry(bool bSetDftProp)
 {
 	if (m_pXmlPropWindow == NULL)
 		return;
@@ -249,6 +249,25 @@ void IWindowBaseImpl::CreateWindowPropetry()
 //	m_pPropGroupWindowRgn = (IPropertyGroup*)CreateCtrlOnePropetry(NULL, OTID_GROUP, "WindowRgn", "窗口裁剪");
 //	if (m_pPropGroupWindowRgn == NULL)
 //		return;
+
+	if (bSetDftProp)
+	{
+		// 设置默认值
+		m_pPropBase_WindowText->SetString("窗口标题");
+		m_pPropBase_Visible->SetValue(true);
+		m_pPropBase_Layered->SetValue(false);
+		m_pPropBase_TopMost->SetValue(false);
+		m_pPropSysBase_CanFullScreen->SetValue(false);
+		m_pPropSysBase_CanMiniSize->SetValue(false);
+		m_pPropSize_Width->SetValue(500);
+		m_pPropSize_Height->SetValue(500);
+		m_pPropDrag_Enable->SetValue(false);
+		m_pPropStretching_Enable->SetValue(false);
+		m_pPropStretching_LeftSpace->SetValue(0);
+		m_pPropStretching_RightSpace->SetValue(0);
+		m_pPropStretching_TopSpace->SetValue(0);
+		m_pPropStretching_BottomSpace->SetValue(0);
+	}
 }
 
 bool IWindowBaseImpl::PP_GetLayeredWindow()

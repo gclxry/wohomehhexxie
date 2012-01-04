@@ -9,7 +9,7 @@ class IWindowBase : public IFeatureObject
 public:
 //////////////////////////////////////////////////////////////////////////
 // Builder 使用的函数
-	virtual void BD_InitWindowBase(IPropertyWindow *pWindowProp) = 0;
+	virtual void BD_InitWindowBase(IPropertyWindow *pWindowProp, bool bSetDftProp) = 0;
 
 //////////////////////////////////////////////////////////////////////////
 	// 窗口居中显示
