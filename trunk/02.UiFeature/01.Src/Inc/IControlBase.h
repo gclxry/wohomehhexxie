@@ -16,7 +16,7 @@
 
 class IWindowBase;
 class IWindowBaseImpl;
-class IKernelWindowImpl;
+class IUiFeatureKernelImpl;
 class IPropertyControl;
 class IControlBase;
 
@@ -157,7 +157,7 @@ typedef vector<IControlBase*>			CHILD_CTRLS_VEC;
 class IControlBase : public IFeatureObject
 {
 	friend class IWindowBaseImpl;
-	friend class IKernelWindowImpl;
+	friend class IUiFeatureKernelImpl;
 
 public:
 	IControlBase();

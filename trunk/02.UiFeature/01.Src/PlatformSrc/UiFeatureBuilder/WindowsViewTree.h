@@ -1,11 +1,12 @@
 
 #pragma once
 #include "..\..\Inc\IPropertySkinManager.h"
-#include "..\..\Inc\IKernelWindow.h"
+#include "..\..\Inc\IUiFeatureKernel.h"
 #include "PropertyViewCtrl.h"
 /////////////////////////////////////////////////////////////////////////////
 // CWindowsViewTree ´°¿Ú
 
+class CUiFeatureBuilderView;
 class CWindowsViewTree : public CTreeCtrl
 {
 // ¹¹Ôì
@@ -13,7 +14,8 @@ public:
 	CWindowsViewTree();
 	virtual ~CWindowsViewTree();
 
-	void Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPropCtrl);
+	void SetBuilderView(CUiFeatureBuilderView* pWndView);
+	void Init(IUiFeatureKernel* pKernelWindow, CPropertyViewCtrl *pPropCtrl);
 	void RefreshObjectName();
 	void InitShowNewProject();
 	void SetProjectInitState(bool bInitOk);
@@ -31,8 +33,9 @@ private:
 private:
 	bool m_bProjectInitOk;
 	IPropertySkinManager *m_pSkinMgr;
-	IKernelWindow* m_pKernelWindow;
+	IUiFeatureKernel* m_pKernelWindow;
 	CPropertyViewCtrl *m_pPropCtrl;
+	CUiFeatureBuilderView *m_pWindowView;
 
 protected:
 	DECLARE_MESSAGE_MAP()

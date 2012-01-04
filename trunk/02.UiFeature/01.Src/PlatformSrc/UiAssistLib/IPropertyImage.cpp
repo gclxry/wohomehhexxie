@@ -68,3 +68,11 @@ bool IPropertyImage::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pP
 	pPropNode->AddAttribute("imagebasename", GetRelevancyPropName());
 	return true;
 }
+
+bool IPropertyImage::DrawImage(CDrawingBoard &DstDc, RECT DstRct)
+{
+	if (!IsRightData())
+		return false;
+
+	return true;
+}

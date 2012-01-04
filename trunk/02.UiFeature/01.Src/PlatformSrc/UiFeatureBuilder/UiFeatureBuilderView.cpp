@@ -9,10 +9,16 @@
 #include "UiFeatureBuilderView.h"
 #include "MainFrm.h"
 #include "FeatureControlList.h"
+#include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\ICommonFun.h"
+#include "..\..\Inc\UiFeatureEngine.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
+
+// 窗口显示距离view的边框距离
+#define SHOW_WINDOW_SPACE						(50)
 
 
 // CUiFeatureBuilderView
@@ -21,27 +27,47 @@ IMPLEMENT_DYNCREATE(CUiFeatureBuilderView, CView)
 
 BEGIN_MESSAGE_MAP(CUiFeatureBuilderView, CView)
 	// 标准打印命令
-	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
-	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CUiFeatureBuilderView::OnFilePrintPreview)
 	ON_WM_LBUTTONUP()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_MOUSEMOVE()
+	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 // CUiFeatureBuilderView 构造/析构
 
 CUiFeatureBuilderView::CUiFeatureBuilderView()
 {
+	GdiplusStartupInput gdiplusStartupInput;
+	GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
+
+	m_hUiEngineDll = NULL;
+	m_pUiEngine = NULL;
 	m_pKernelWindow = NULL;
 	m_pSkinManager = NULL;
 	m_pControlList = NULL;
 	m_bNewCtrl = false;
 	m_bInitOk = false;
+	m_pCurrentWnd = NULL;
+
+	GetUiEngine();
 }
 
 CUiFeatureBuilderView::~CUiFeatureBuilderView()
 {
+	SAFE_FREE_LIBRARY(m_hUiEngineDll);
+	GdiplusShutdown(m_gdiplusToken);
+}
+
+void CUiFeatureBuilderView::ResetViewSize()
+{
+	if (m_pCurrentWnd == NULL)
+		return;
+}
+
+void CUiFeatureBuilderView::ResetShowWindow(IWindowBase *pCurrentWnd)
+{
+	m_pCurrentWnd = pCurrentWnd;
+	this->RedrawWindow();
 }
 
 BOOL CUiFeatureBuilderView::PreCreateWindow(CREATESTRUCT& cs)
@@ -54,46 +80,41 @@ BOOL CUiFeatureBuilderView::PreCreateWindow(CREATESTRUCT& cs)
 
 // CUiFeatureBuilderView 绘制
 
-void CUiFeatureBuilderView::OnDraw(CDC* /*pDC*/)
+IUiEngine* CUiFeatureBuilderView::GetUiEngine()
 {
-	CUiFeatureBuilderDoc* pDoc = GetDocument();
-	ASSERT_VALID(pDoc);
-	if (!pDoc)
-		return;
+	if (m_hUiEngineDll == NULL || m_pUiEngine == NULL)
+	{
+		SAFE_FREE_LIBRARY(m_hUiEngineDll);
+		string strPath = PathHelper(NAME_ENGINE_DLL);
+		if (strPath.size() > 0)
+		{
+			m_hUiEngineDll = ::LoadLibraryA(strPath.c_str());
+			if (m_hUiEngineDll != NULL)
+			{
+				GETUIENGINEINTERFACE pUiEngine = (GETUIENGINEINTERFACE)::GetProcAddress(m_hUiEngineDll, "GetUiEngineInterface");
+				if (pUiEngine != NULL)
+					m_pUiEngine = pUiEngine();
+			}
+		}
+	}
 
-	// TODO: 在此处为本机数据添加绘制代码
+	return m_pUiEngine;
+}
+
+BOOL CUiFeatureBuilderView::OnEraseBkgnd(CDC* pDC)
+{
+	return TRUE;
 }
 
 
 // CUiFeatureBuilderView 打印
 
-void CUiFeatureBuilderView::Init(IKernelWindow* pKernelWindow, CFeatureControlList *pCtrlList)
+void CUiFeatureBuilderView::Init(IUiFeatureKernel* pKernelWindow, CFeatureControlList *pCtrlList)
 {
 	m_pKernelWindow = pKernelWindow;
 	m_pControlList = pCtrlList;
 	if (m_pKernelWindow != NULL)
 		m_pSkinManager = m_pKernelWindow->GetSkinManager();
-}
-
-void CUiFeatureBuilderView::OnFilePrintPreview()
-{
-	AFXPrintPreview(this);
-}
-
-BOOL CUiFeatureBuilderView::OnPreparePrinting(CPrintInfo* pInfo)
-{
-	// 默认准备
-	return DoPreparePrinting(pInfo);
-}
-
-void CUiFeatureBuilderView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
-{
-	// TODO: 添加额外的打印前进行的初始化过程
-}
-
-void CUiFeatureBuilderView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
-{
-	// TODO: 添加打印后进行的清理过程
 }
 
 void CUiFeatureBuilderView::OnRButtonUp(UINT nFlags, CPoint point)
@@ -190,4 +211,35 @@ void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
 	if (m_pSkinManager == NULL || m_pKernelWindow == NULL)
 		return;
 
+}
+
+void CUiFeatureBuilderView::OnDraw(CDC* pDC)
+{
+	if (pDC == NULL || !IS_SAFE_HANDLE(pDC->GetSafeHdc()) || m_pUiEngine == NULL)
+		return;
+
+	CRect ViewRct(0, 0, 0, 0);
+	this->GetClientRect(&ViewRct);
+	m_MemDc.Create(ViewRct.Width(), ViewRct.Height(), RGB(255,255,255), false, true);
+	if (!IS_SAFE_HANDLE(m_MemDc.GetSafeHdc()))
+		return;
+
+	DrawWindowView();
+
+	::BitBlt(pDC->GetSafeHdc(), 0, 0, ViewRct.Width(), ViewRct.Height(), m_MemDc.GetSafeHdc(), 0, 0, SRCCOPY);
+}
+
+void CUiFeatureBuilderView::DrawWindowView()
+{
+	CRect ViewRct(0, 0, 0, 0);
+	this->GetClientRect(&ViewRct);
+
+	// 背景
+	Graphics DoGrap(m_MemDc.GetSafeHdc());
+	SolidBrush sBrush(Color(MAX_ALPHA, 255, 255, 255));
+	DoGrap.FillRectangle(&sBrush, 0, 0, ViewRct.Width(), ViewRct.Height());
+
+	// 窗口绘制
+	if (m_pCurrentWnd != NULL)
+		m_pCurrentWnd->BD_DrawWindowView(m_MemDc);
 }

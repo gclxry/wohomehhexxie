@@ -25,7 +25,7 @@ void CPropertyViewCtrl::SetProjectInitState(bool bInitOk)
 	}
 }
 
-void CPropertyViewCtrl::Init(IKernelWindow* pKernelWindow, CWindowsViewTree *pViewTree)
+void CPropertyViewCtrl::Init(IUiFeatureKernel* pKernelWindow, CWindowsViewTree *pViewTree)
 {
 	if (pKernelWindow == NULL || pViewTree == NULL)
 		return;

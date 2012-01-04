@@ -72,3 +72,7 @@ using namespace ATL;
 using namespace std;
 
 #pragma comment(lib, "../../lib/UiAssistLib.lib")
+
+#include "GdiPlus.h"
+#pragma comment(lib, "GdiPlus.lib")
+using namespace Gdiplus;

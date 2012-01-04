@@ -23,7 +23,7 @@ public:
 
 	CPropertyViewCtrl* GetPropetryCtrl();
 
-	void Init(IKernelWindow* pKernelWindow, CWindowsViewTree *pViewTree);
+	void Init(IUiFeatureKernel* pKernelWindow, CWindowsViewTree *pViewTree);
 	void SetProjectInitState(bool bInitOk);
 
 //  Ù–‘

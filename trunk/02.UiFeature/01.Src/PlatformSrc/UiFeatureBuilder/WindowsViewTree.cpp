@@ -6,6 +6,8 @@
 #include "..\..\Inc\IFeatureObject.h"
 #include "..\..\Inc\IPropertyWindow.h"
 #include "..\..\Inc\ICommonFun.h"
+#include "UiFeatureBuilderDoc.h"
+#include "UiFeatureBuilderView.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -21,6 +23,7 @@ CWindowsViewTree::CWindowsViewTree()
 	m_pSkinMgr = NULL;
 	m_pKernelWindow = NULL;
 	m_pPropCtrl = NULL;
+	m_pWindowView = NULL;
 	m_bProjectInitOk = false;
 }
 
@@ -88,7 +91,15 @@ void CWindowsViewTree::SetProjectInitState(bool bInitOk)
 	}
 }
 
-void CWindowsViewTree::Init(IKernelWindow* pKernelWindow, CPropertyViewCtrl *pPropCtrl)
+void CWindowsViewTree::SetBuilderView(CUiFeatureBuilderView* pWndView)
+{
+	if (pWndView == NULL)
+		return;
+
+	m_pWindowView = pWndView;
+}
+
+void CWindowsViewTree::Init(IUiFeatureKernel* pKernelWindow, CPropertyViewCtrl *pPropCtrl)
 {
 	if (pKernelWindow == NULL || pPropCtrl == NULL)
 		return;
@@ -163,17 +174,18 @@ void CWindowsViewTree::OnTvnSelchanged(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CWindowsViewTree::OnTvnSelchanged_SelectRoot()
 {
-	if (m_pPropCtrl == NULL)
-		return;
+	if (m_pPropCtrl != NULL)
+		m_pPropCtrl->ClearAll();
 
-	m_pPropCtrl->ClearAll();
+	if (m_pWindowView != NULL)
+		m_pWindowView->ResetShowWindow(NULL);
 }
 
 void CWindowsViewTree::OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase)
 {
 	OnTvnSelchanged_SelectRoot();
 
-	if (m_pPropCtrl == NULL || pWndBase == NULL)
+	if (m_pWindowView == NULL || m_pPropCtrl == NULL || pWndBase == NULL)
 		return;
 
 	IPropertyGroup* pPropGroup = pWndBase->PP_GetWindowPropetryGroup();
@@ -181,6 +193,7 @@ void CWindowsViewTree::OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase)
 		return;
 
 	m_pPropCtrl->SetShowPropGroup(pPropGroup);
+	m_pWindowView->ResetShowWindow(pWndBase);
 }
 
 void CWindowsViewTree::RefreshObjectName()

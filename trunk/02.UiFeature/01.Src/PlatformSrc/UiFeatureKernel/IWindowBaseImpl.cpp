@@ -3,6 +3,7 @@
 #include "IWindowBaseImpl.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IPropertyControl.h"
+#include "..\..\Inc\ICommonFun.h"
 #include "IPropertySkinManagerImpl.h"
 
 // 弹出任务栏菜单消息，XP以下适用
@@ -898,6 +899,10 @@ void IWindowBaseImpl::BD_InitWindowBase(IPropertyWindow *pWindowProp, bool bSetD
 	if (pWindowProp == NULL)
 		return;
 
+	// 在Builder中绘制用的边框色块
+	if (bSetDftProp)
+		BD_NewFrameImage();
+
 	PP_SetWindowPropetry(pWindowProp, bSetDftProp);
 	this->SetObjectId(pWindowProp->GetObjectId());
 	if (m_pPropBase_Name == NULL || m_pPropBase_Name->GetString() == NULL || strlen(m_pPropBase_Name->GetString()) <= 0)
@@ -912,7 +917,51 @@ void IWindowBaseImpl::BD_InitWindowBase(IPropertyWindow *pWindowProp, bool bSetD
 	}
 }
 
+// 在Builder中绘制用的边框色块
+void IWindowBaseImpl::BD_NewFrameImage()
+{
+	if (m_pSkinPropMgr == NULL)
+		return;
+
+	// 在Builder中绘制用的边框色块
+	m_BuilderWndFrameImage.SetRelevancyProp(&m_BuilderWndFrameImageBase);
+	m_BuilderCtrlFrameImage.SetRelevancyProp(&m_BuilderCtrlFrameImageBase);
+
+	string strPath = PathHelper("ControlsRes\\BuilderWindowFrame.bmp");
+	BD_NewFrameImageBase(&m_BuilderWndFrameImageBase, strPath);
+
+	strPath = PathHelper("ControlsRes\\BuilderCtrlFrame.bmp");
+	BD_NewFrameImageBase(&m_BuilderCtrlFrameImageBase, strPath);
+}
+
+void IWindowBaseImpl::BD_NewFrameImageBase(IPropertyImageBase *pImgBase, string strImgPath)
+{
+	if (pImgBase == NULL)
+		return;
+
+	IMAGE_BASE_PROP ImgBase;
+
+	ImgBase.bIsZipFile = false;
+	ImgBase.strFileName = strImgPath;
+	ImgBase.RectInImage.left = ImgBase.RectInImage.top = 0;
+	ImgBase.RectInImage.right = ImgBase.RectInImage.bottom = 6;
+
+	ImgBase.jggInfo.bMiddleStretch = true;
+	ImgBase.jggInfo.bBottomStretch = false;
+	ImgBase.jggInfo.bLeftStretch = false;
+	ImgBase.jggInfo.bRightStretch = false;
+	ImgBase.jggInfo.bTopStretch = false;
+	ImgBase.jggInfo.nBottomSpace = ImgBase.jggInfo.nLeftSpace = ImgBase.jggInfo.nRightSpace = ImgBase.jggInfo.nTopSpace = 0;
+
+	pImgBase->SetImageProp(&ImgBase);
+}
+
 bool IWindowBaseImpl::IsInit()
 {
 	return (m_pXmlPropWindow != NULL && m_pSkinPropMgr != NULL);
+}
+
+void IWindowBaseImpl::BD_DrawWindowView(CDrawingBoard &ViewMemDc)
+{
+
 }

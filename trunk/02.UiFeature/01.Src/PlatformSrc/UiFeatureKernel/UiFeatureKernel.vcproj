@@ -183,15 +183,15 @@
 			Name="01.Kernel½Ó¿Ú"
 			>
 			<File
-				RelativePath="..\..\Inc\IKernelWindow.h"
+				RelativePath="..\..\Inc\IUiFeatureKernel.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IKernelWindowImpl.cpp"
+				RelativePath=".\IUiFeatureKernelImpl.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\IKernelWindowImpl.h"
+				RelativePath=".\IUiFeatureKernelImpl.h"
 				>
 			</File>
 		</Filter>

@@ -2,6 +2,7 @@
 #include "StdAfx.h"
 #include <assert.h>
 #include "IPropertySkinManagerImpl.h"
+#include "IUiFeatureKernelImpl.h"
 #include "..\..\Inc\ICommonFun.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IPropertyFont.h"
@@ -411,6 +412,8 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 
 	if (pBaseProp != NULL)
 	{
+		pBaseProp->SetUiKernel(IUiFeatureKernelImpl::GetInstance());
+
 		char szObjId[MAX_PATH + 1];
 		memset(szObjId, 0, MAX_PATH + 1);
 		if (pszObjectId == NULL)

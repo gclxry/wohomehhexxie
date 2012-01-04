@@ -7,7 +7,8 @@ IPropertyImageBase::IPropertyImageBase()
 {
 	SetObjectType(PROP_TYPE_IMAGE_BASE_NAME);
 
-	m_ImageProp.strZipFile = "";
+	m_ImageProp.bIsZipFile = true;
+	m_ImageProp.strFileName = "";
 	INIT_RECT(m_ImageProp.RectInImage);
 	memset(&m_ImageProp.jggInfo, 0, sizeof(JGG_INFO));
 }
@@ -19,7 +20,7 @@ IPropertyImageBase::~IPropertyImageBase()
 
 bool IPropertyImageBase::IsRightData()
 {
-	return (m_ImageProp.strZipFile.c_str() > 0 && RECT_WIDTH(m_ImageProp.RectInImage) > 0 && RECT_HEIGHT(m_ImageProp.RectInImage) > 0);
+	return (m_ImageProp.strFileName.c_str() > 0 && RECT_WIDTH(m_ImageProp.RectInImage) > 0 && RECT_HEIGHT(m_ImageProp.RectInImage) > 0);
 }
 
 IMAGE_BASE_PROP* IPropertyImageBase::GetImageProp()
@@ -77,7 +78,8 @@ bool IPropertyImageBase::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 
 	SetObjectId((const char *)psz_id);
 	SetObjectName((const char *)psz_name);
-	m_ImageProp.strZipFile = psz_imageinzip;
+	m_ImageProp.bIsZipFile = true;
+	m_ImageProp.strFileName = psz_imageinzip;
 
 	m_ImageProp.RectInImage.left = atoi(psz_left);
 	m_ImageProp.RectInImage.top = atoi(psz_top);

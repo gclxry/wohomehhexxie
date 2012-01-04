@@ -2,10 +2,12 @@
 #include "stdafx.h"
 #include "..\..\Inc\IPropertyBase.h"
 #include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\IUiFeatureKernel.h"
 
 IPropertyBase::IPropertyBase()
 {
 	SetObjectType("PropertyBase");
+	m_pUiKernel = NULL;
 
 	// 关联属性名称
 	m_strRelevancyPropName = "";
@@ -16,6 +18,12 @@ IPropertyBase::IPropertyBase()
 IPropertyBase::~IPropertyBase()
 {
 
+}
+
+void IPropertyBase::SetUiKernel(IUiFeatureKernel *pUiKernel)
+{
+	if (pUiKernel != NULL)
+		m_pUiKernel = pUiKernel;
 }
 
 bool IPropertyBase::IsRightData()

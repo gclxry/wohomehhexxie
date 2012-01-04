@@ -1,19 +1,19 @@
 
 #pragma once
-#include "..\..\Inc\IKernelWindow.h"
+#include "..\..\Inc\IUiFeatureKernel.h"
 #include "IPropertySkinManagerImpl.h"
 #include "..\..\Inc\IControlManager.h"
 
 class IWindowBaseImpl;
 typedef map<HWND, IWindowBaseImpl*>		WINDOW_IMPL_MAP;
 
-class IKernelWindowImpl : public IKernelWindow
+class IUiFeatureKernelImpl : public IUiFeatureKernel
 {
 public:
-	IKernelWindowImpl(void);
-	virtual ~IKernelWindowImpl(void);
+	IUiFeatureKernelImpl(void);
+	virtual ~IUiFeatureKernelImpl(void);
 
-	static IKernelWindow* GetInstance();
+	static IUiFeatureKernel* GetInstance();
 
 	virtual IPropertySkinManager* GetSkinManager();
 	virtual IUiEngine* GetUiEngine();

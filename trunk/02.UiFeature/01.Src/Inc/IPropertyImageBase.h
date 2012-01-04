@@ -25,7 +25,8 @@ struct JGG_INFO
 struct IMAGE_BASE_PROP
 {
 	// 在压缩文件中的文件名
-	string strZipFile;
+	bool bIsZipFile;
+	string strFileName;
 	RECT RectInImage;
 	JGG_INFO jggInfo;
 };
