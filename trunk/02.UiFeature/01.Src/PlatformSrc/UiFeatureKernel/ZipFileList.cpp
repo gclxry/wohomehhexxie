@@ -180,6 +180,7 @@ bool CZipFileList::WriteZipAppendFile(char *pFilePath)
 
 		if (errno != 0)
 		{
+			SAFE_DELETE(pReadBuf);
 			fclose(pFile);
 			return false;
 		}
@@ -187,6 +188,7 @@ bool CZipFileList::WriteZipAppendFile(char *pFilePath)
 
 	if (nReadCtns != (int)FileAttr.nFileSizeLow)
 	{
+		SAFE_DELETE(pReadBuf);
 		fclose(pFile);
 		return false;
 	}
@@ -194,8 +196,8 @@ bool CZipFileList::WriteZipAppendFile(char *pFilePath)
 	ZIP_FILE *pFileItem = new ZIP_FILE;
 	if (pFileItem == NULL)
 	{
-		fclose(pFile);
 		SAFE_DELETE(pReadBuf);
+		fclose(pFile);
 		return false;
 	}
 
