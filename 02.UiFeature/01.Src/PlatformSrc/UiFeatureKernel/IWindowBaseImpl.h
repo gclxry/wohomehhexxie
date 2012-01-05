@@ -18,7 +18,7 @@ public:
 //////////////////////////////////////////////////////////////////////////
 	// Builder 使用的函数
 	virtual void BD_InitWindowBase(IPropertyWindow *pWindowProp, bool bSetDftProp);
-	virtual void BD_DrawWindowView(CDrawingBoard &ViewMemDc);
+	virtual void BD_DrawWindowView(HWND hViewWnd, CDrawingBoard &ViewMemDc);
 
 //////////////////////////////////////////////////////////////////////////
 	// 导入皮肤包使用的函数初始化
@@ -122,7 +122,6 @@ protected:
 	IControlBase* m_pLButtonDownCtrl;
 	// 取得焦点的控件
 	IControlBase* m_pFocusCtrl;
-
 	// 子控件列表
 	CHILD_CTRLS_VEC m_ChildCtrlsVec;
 
@@ -163,10 +162,14 @@ private:
 	IPropertyBase* CreateCtrlOnePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
 	// 释放子控件列表
 	void ReleaseChildVec(CHILD_CTRLS_VEC *pChildCtrlsVec);
+	// 绘制窗口和被选中的控件的边框的8个方块
+	void DrawSelectRect(CDrawingBoard &MemDc, RECT DrawRct);
 
 private:
-	bool m_bIsFullScreen;
+	IUiEngine *m_pUiEngine;
 	IPropertySkinManager* m_pSkinPropMgr;
+
+	bool m_bIsFullScreen;
 
 	// 从xml中读入并需要写入xml中的属性窗口属性列表
 	IPropertyWindow *m_pXmlPropWindow;
