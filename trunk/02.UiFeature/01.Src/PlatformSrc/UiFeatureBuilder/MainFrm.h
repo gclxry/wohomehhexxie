@@ -46,7 +46,7 @@ protected:  // 控件条嵌入成员
 	CMFCStatusBar     m_wndStatusBar;
 	CMFCToolBarImages m_UserImages;
 //	CFileView         m_wndFileView;
-	CWindowsView    m_wndWindowView;
+	CWindowsView	  m_wndWindowView;
 	CPropertiesWnd    m_wndProperties;
 	CControlsWnd      m_wndControls;
 	CUiFeatureBuilderView *m_pView;

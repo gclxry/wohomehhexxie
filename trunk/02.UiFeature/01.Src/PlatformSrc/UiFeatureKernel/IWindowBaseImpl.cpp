@@ -929,6 +929,11 @@ void IWindowBaseImpl::BD_NewFrameImage()
 	if (m_pSkinPropMgr == NULL)
 		return;
 
+	m_BuilderWndFrameImage.SetUiKernel(IUiFeatureKernelImpl::GetInstance());
+	m_BuilderCtrlFrameImage.SetUiKernel(IUiFeatureKernelImpl::GetInstance());
+	m_BuilderWndFrameImageBase.SetUiKernel(IUiFeatureKernelImpl::GetInstance());
+	m_BuilderCtrlFrameImageBase.SetUiKernel(IUiFeatureKernelImpl::GetInstance());
+
 	// 在Builder中绘制用的边框色块
 	m_BuilderWndFrameImage.SetRelevancyProp(&m_BuilderWndFrameImageBase);
 	m_BuilderCtrlFrameImage.SetRelevancyProp(&m_BuilderCtrlFrameImageBase);
