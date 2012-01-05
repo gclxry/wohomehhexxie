@@ -906,8 +906,7 @@ void IWindowBaseImpl::BD_InitWindowBase(IPropertyWindow *pWindowProp, bool bSetD
 		return;
 
 	// 在Builder中绘制用的边框色块
-	if (bSetDftProp)
-		BD_NewFrameImage();
+	BD_NewFrameImage();
 
 	PP_SetWindowPropetry(pWindowProp, bSetDftProp);
 	this->SetObjectId(pWindowProp->GetObjectId());

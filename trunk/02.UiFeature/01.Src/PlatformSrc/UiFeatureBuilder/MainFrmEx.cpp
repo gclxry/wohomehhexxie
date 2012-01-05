@@ -224,7 +224,12 @@ bool CMainFrame::OpenSkinProject(bool bIsNew, CString strSkinDir, CString strSki
 			return false;
 		}
 
+		SetProjectInitState(true);
 		m_wndWindowView.InitShowNewProject();
+	}
+	else
+	{
+		SetProjectInitState(true);
 	}
 
 	m_strCurUfpPath = m_strNewUfpPath;
@@ -235,7 +240,6 @@ bool CMainFrame::OpenSkinProject(bool bIsNew, CString strSkinDir, CString strSki
 	m_strNewSkinName = _T("");
 	m_strNewSkinDir = _T("");
 
-	SetProjectInitState(true);
 	return true;
 }
 
