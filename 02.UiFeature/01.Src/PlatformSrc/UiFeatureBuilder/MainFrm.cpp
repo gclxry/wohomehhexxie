@@ -87,6 +87,7 @@ void CMainFrame::SetView(CUiFeatureBuilderView *pView)
 	{
 		m_pView->Init(m_pKernelWindow, m_wndControls.GetControlList());
 		m_wndControls.GetControlList()->SetBuilderView(m_pView);
+		m_wndWindowView.GetViewTreeCtrl()->SetBuilderView(m_pView);
 	}
 }
 

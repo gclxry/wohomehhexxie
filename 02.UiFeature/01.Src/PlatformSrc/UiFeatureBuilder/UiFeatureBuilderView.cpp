@@ -58,6 +58,11 @@ CUiFeatureBuilderView::~CUiFeatureBuilderView()
 	GdiplusShutdown(m_gdiplusToken);
 }
 
+BOOL CUiFeatureBuilderView::OnEraseBkgnd(CDC* pDC)
+{
+	return TRUE;
+}
+
 void CUiFeatureBuilderView::ResetViewSize()
 {
 	if (m_pCurrentWnd == NULL)
@@ -99,11 +104,6 @@ IUiEngine* CUiFeatureBuilderView::GetUiEngine()
 	}
 
 	return m_pUiEngine;
-}
-
-BOOL CUiFeatureBuilderView::OnEraseBkgnd(CDC* pDC)
-{
-	return TRUE;
 }
 
 
