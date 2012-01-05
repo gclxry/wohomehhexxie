@@ -8,11 +8,14 @@
 #include "..\..\Inc\IWindowBase.h"
 
 class CFeatureControlList;
-class CUiFeatureBuilderView : public CView
+class CUiFeatureBuilderView : public CFormView
 {
 protected: // 仅从序列化创建
 	CUiFeatureBuilderView();
 	DECLARE_DYNCREATE(CUiFeatureBuilderView)
+
+public:
+	enum{ IDD = IDD_UIFEATUREBUILDER_FORM };
 
 // 属性
 public:
@@ -31,6 +34,9 @@ private:
 public:
 	virtual void OnDraw(CDC* pDC);  // 重写以绘制该视图
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
+	virtual void OnInitialUpdate(); // 构造后第一次调用
 
 // 实现
 public:
@@ -70,10 +76,10 @@ public:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 };
 
 #ifndef _DEBUG  // UiFeatureBuilderView.cpp 中的调试版本
 inline CUiFeatureBuilderDoc* CUiFeatureBuilderView::GetDocument() const
    { return reinterpret_cast<CUiFeatureBuilderDoc*>(m_pDocument); }
 #endif
-

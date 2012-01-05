@@ -57,6 +57,7 @@
 #endif
 #endif
 
+#include "Resource.h"
 
 
 #include <atlbase.h>
