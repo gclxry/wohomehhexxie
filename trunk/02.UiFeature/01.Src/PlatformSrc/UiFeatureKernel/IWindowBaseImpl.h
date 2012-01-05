@@ -163,7 +163,7 @@ private:
 	// 释放子控件列表
 	void ReleaseChildVec(CHILD_CTRLS_VEC *pChildCtrlsVec);
 	// 绘制窗口和被选中的控件的边框的8个方块
-	void DrawSelectRect(CDrawingBoard &MemDc, RECT DrawRct);
+	void DrawSelectRect(CDrawingBoard &MemDc, RECT DrawRct, bool bIsWndFrame);
 
 private:
 	IUiEngine *m_pUiEngine;
