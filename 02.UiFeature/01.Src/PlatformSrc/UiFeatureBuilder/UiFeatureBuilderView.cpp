@@ -17,6 +17,8 @@
 #define new DEBUG_NEW
 #endif
 
+// 窗口显示距离view的边框距离
+#define SHOW_WINDOW_SPACE						(50)
 
 
 // CUiFeatureBuilderView
@@ -77,6 +79,8 @@ BOOL CUiFeatureBuilderView::OnEraseBkgnd(CDC* pDC)
 void CUiFeatureBuilderView::ResetShowWindow(IWindowBase *pCurrentWnd)
 {
 	m_pCurrentWnd = pCurrentWnd;
+
+	ResetViewShowSize();
 	this->RedrawWindow();
 }
 
@@ -253,5 +257,27 @@ void CUiFeatureBuilderView::OnSize(UINT nType, int cx, int cy)
 {
 	CFormView::OnSize(nType, cx, cy);
 
+	ResetViewShowSize();
 	this->RedrawWindow();
+}
+
+void CUiFeatureBuilderView::ResetViewShowSize()
+{
+	int nWidth = 100, nHeight = 100;
+	if (m_pCurrentWnd != NULL)
+	{
+		CRect ViewRct(0, 0, 0, 0);
+		::GetClientRect(m_hWnd, &ViewRct);
+		CSize WndSize = m_pCurrentWnd->PP_GetWindowPropSize();
+
+		// 设置View的大小
+		nWidth = ViewRct.Width();
+		if (nWidth < WndSize.cx + SHOW_WINDOW_SPACE)
+			nWidth = WndSize.cx + SHOW_WINDOW_SPACE;
+
+		 nHeight = ViewRct.Height();
+		if (nHeight < WndSize.cy + SHOW_WINDOW_SPACE)
+			nHeight = WndSize.cy + SHOW_WINDOW_SPACE;
+	}
+	this->SetScrollSizes(MM_TEXT, CSize(nWidth, nHeight));
 }

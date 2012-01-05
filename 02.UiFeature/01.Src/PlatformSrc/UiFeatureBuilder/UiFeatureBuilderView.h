@@ -30,6 +30,8 @@ private:
 	void DrawWindowView();
 	IUiEngine* GetUiEngine();
 
+	void ResetViewShowSize();
+
 // 重写
 public:
 	virtual void OnDraw(CDC* pDC);  // 重写以绘制该视图

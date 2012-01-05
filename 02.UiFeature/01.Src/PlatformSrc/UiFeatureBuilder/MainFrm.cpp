@@ -14,8 +14,6 @@
 #define new DEBUG_NEW
 #endif
 
-// 窗口显示距离view的边框距离
-#define SHOW_WINDOW_SPACE						(50)
 // CMainFrame
 
 IMPLEMENT_DYNCREATE(CMainFrame, CFrameWndEx)
@@ -82,27 +80,6 @@ void CMainFrame::ResetShowWindow(IWindowBase *pCurrentWnd)
 {
 	if (m_pView == NULL)
 		return;
-
-	if (pCurrentWnd != NULL)
-	{
-		CRect ViewRct(0, 0, 0, 0);
-		::GetClientRect(m_pView->m_hWnd, &ViewRct);
-		CSize WndSize = pCurrentWnd->PP_GetWindowPropSize();
-
-		// 设置View的大小
-		int nWidth = ViewRct.Width();
-		if (nWidth < WndSize.cx + SHOW_WINDOW_SPACE)
-			nWidth = WndSize.cx + SHOW_WINDOW_SPACE;
-
-		int nHeight = ViewRct.Height();
-		if (nHeight < WndSize.cy + SHOW_WINDOW_SPACE)
-			nHeight = WndSize.cy + SHOW_WINDOW_SPACE;
-
-		if (nWidth != ViewRct.Width() || nHeight != ViewRct.Height())
-		{
-	//		::SetWindowPos(m_pView->m_hWnd, 0, 0, 0, nWidth, nHeight, SWP_NOACTIVATE | SWP_DRAWFRAME);
-		}
-	}
 
 	// 重新绘制View
 	m_pView->ResetShowWindow(pCurrentWnd);
