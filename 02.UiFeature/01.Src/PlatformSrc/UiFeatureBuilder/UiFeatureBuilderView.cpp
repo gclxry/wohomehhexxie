@@ -32,6 +32,8 @@ BEGIN_MESSAGE_MAP(CUiFeatureBuilderView, CView)
 	ON_WM_MOUSEMOVE()
 	ON_WM_ERASEBKGND()
 	ON_WM_SIZE()
+	ON_WM_HSCROLL()
+	ON_WM_VSCROLL()
 END_MESSAGE_MAP()
 
 // CUiFeatureBuilderView ¹¹Ôì/Îö¹¹
@@ -290,4 +292,18 @@ void CUiFeatureBuilderView::ResetViewShowSize()
 	}
 
 	this->SetScrollSizes(MM_TEXT, CSize(nWidth, nHeight));
+}
+
+void CUiFeatureBuilderView::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CFormView::OnHScroll(nSBCode, nPos, pScrollBar);
+}
+
+void CUiFeatureBuilderView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CFormView::OnVScroll(nSBCode, nPos, pScrollBar);
 }
