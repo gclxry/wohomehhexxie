@@ -296,14 +296,10 @@ void CUiFeatureBuilderView::ResetViewShowSize()
 
 void CUiFeatureBuilderView::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
-	// TODO: Add your message handler code here and/or call default
-
 	CFormView::OnHScroll(nSBCode, nPos, pScrollBar);
 }
 
 void CUiFeatureBuilderView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
-	// TODO: Add your message handler code here and/or call default
-
 	CFormView::OnVScroll(nSBCode, nPos, pScrollBar);
 }
