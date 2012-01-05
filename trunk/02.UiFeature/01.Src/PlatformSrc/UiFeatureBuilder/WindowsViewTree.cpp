@@ -8,6 +8,7 @@
 #include "..\..\Inc\ICommonFun.h"
 #include "UiFeatureBuilderDoc.h"
 #include "UiFeatureBuilderView.h"
+#include "MainFrm.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -177,8 +178,9 @@ void CWindowsViewTree::OnTvnSelchanged_SelectRoot()
 	if (m_pPropCtrl != NULL)
 		m_pPropCtrl->ClearAll();
 
-	if (m_pWindowView != NULL)
-		m_pWindowView->ResetShowWindow(NULL);
+	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
+	if (pMain != NULL)
+		pMain->ResetShowWindow(NULL);
 }
 
 void CWindowsViewTree::OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase)
@@ -193,7 +195,9 @@ void CWindowsViewTree::OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase)
 		return;
 
 	m_pPropCtrl->SetShowPropGroup(pPropGroup);
-	m_pWindowView->ResetShowWindow(pWndBase);
+	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
+	if (pMain != NULL)
+		pMain->ResetShowWindow(pWndBase);
 }
 
 void CWindowsViewTree::RefreshObjectName()
