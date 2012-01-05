@@ -17,8 +17,6 @@
 #define new DEBUG_NEW
 #endif
 
-// 窗口显示距离view的边框距离
-#define SHOW_WINDOW_SPACE						(50)
 
 
 // CUiFeatureBuilderView
@@ -31,11 +29,12 @@ BEGIN_MESSAGE_MAP(CUiFeatureBuilderView, CView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_MOUSEMOVE()
 	ON_WM_ERASEBKGND()
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 // CUiFeatureBuilderView 构造/析构
 
-CUiFeatureBuilderView::CUiFeatureBuilderView()
+CUiFeatureBuilderView::CUiFeatureBuilderView() : CFormView(CUiFeatureBuilderView::IDD)
 {
 	GdiplusStartupInput gdiplusStartupInput;
 	GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
@@ -56,6 +55,18 @@ CUiFeatureBuilderView::~CUiFeatureBuilderView()
 {
 	SAFE_FREE_LIBRARY(m_hUiEngineDll);
 	GdiplusShutdown(m_gdiplusToken);
+}
+
+void CUiFeatureBuilderView::DoDataExchange(CDataExchange* pDX)
+{
+	CFormView::DoDataExchange(pDX);
+}
+
+void CUiFeatureBuilderView::OnInitialUpdate()
+{
+	CFormView::OnInitialUpdate();
+	GetParentFrame()->RecalcLayout();
+	ResizeParentToFit();
 }
 
 BOOL CUiFeatureBuilderView::OnEraseBkgnd(CDC* pDC)
@@ -236,4 +247,11 @@ void CUiFeatureBuilderView::DrawWindowView()
 	// 窗口绘制
 	if (m_pCurrentWnd != NULL)
 		m_pCurrentWnd->BD_DrawWindowView(m_hWnd, m_MemDc);
+}
+
+void CUiFeatureBuilderView::OnSize(UINT nType, int cx, int cy)
+{
+	CFormView::OnSize(nType, cx, cy);
+
+	this->RedrawWindow();
 }

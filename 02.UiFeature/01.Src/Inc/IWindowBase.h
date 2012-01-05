@@ -43,6 +43,8 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// 窗口属性相关
+	virtual IPropertyGroup *PP_GetWindowPropetryGroup() = 0;
+
 	// 是否支持全窗口点击移动
 	virtual void PP_SetDragWindow(bool bDrag) = 0;
 	virtual bool PP_GetDragWindow() = 0;
@@ -61,6 +63,7 @@ public:
 	virtual void PP_SetWindowText(char *pszWndName) = 0;
 	virtual const char * PP_GetWindowText() = 0;
 
-	virtual IPropertyGroup *PP_GetWindowPropetryGroup() = 0;
+	// 取得窗口中设置属性的窗口大小
+	virtual SIZE PP_GetWindowPropSize() = 0;
 
 };

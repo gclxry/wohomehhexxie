@@ -1083,3 +1083,12 @@ void IWindowBaseImpl::DrawSelectRect(CDrawingBoard &MemDc, RECT DrawRct, bool bI
 	RightBottom.bottom = RightBottom.top + FANGKUAI_SIZE;
 	pPropImg->DrawImage(MemDc, RightBottom);
 }
+
+// 取得窗口中设置属性的窗口大小
+SIZE IWindowBaseImpl::PP_GetWindowPropSize()
+{
+	SIZE WndSize;
+	WndSize.cx = m_pPropSize_Width->GetValue();
+	WndSize.cy = m_pPropSize_Height->GetValue();
+	return WndSize;
+}

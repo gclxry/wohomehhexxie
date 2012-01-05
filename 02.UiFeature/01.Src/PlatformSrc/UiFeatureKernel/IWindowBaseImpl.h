@@ -130,6 +130,8 @@ protected:
 	// 窗口属性
 public:
 	// 将xml中的属性设置到manager中
+	virtual IPropertyGroup *PP_GetWindowPropetryGroup();
+
 	virtual void PP_SetWindowPropetry(IPropertyWindow *pWndPropInXml, bool bSetDftProp);
 
 	// 是否支持全窗口点击移动
@@ -154,7 +156,8 @@ public:
 	virtual void PP_SetWindowText(char *pszWndName);
 	virtual const char * PP_GetWindowText();
 
-	virtual IPropertyGroup *PP_GetWindowPropetryGroup();
+	// 取得窗口中设置属性的窗口大小
+	virtual SIZE PP_GetWindowPropSize();
 
 private:
 	// 创建空的属性队列
