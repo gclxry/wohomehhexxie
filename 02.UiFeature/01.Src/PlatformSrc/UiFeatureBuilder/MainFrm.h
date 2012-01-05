@@ -13,28 +13,23 @@
 
 class CMainFrame : public CFrameWndEx
 {
+// 实现
+public:
+	virtual ~CMainFrame();
+
+	// true:设置为正常鼠标样式，false:设置为拖动控件鼠标样式
+	void SetCrossCursor(bool bIsCross);
+	void SetView(CUiFeatureBuilderView *pView);
+	void ResetShowWindow(IWindowBase *pCurrentWnd);
 	
 protected: // 仅从序列化创建
 	CMainFrame();
 	DECLARE_DYNCREATE(CMainFrame)
 
-// 属性
-public:
-
-// 操作
-public:
-	// true:设置为正常鼠标样式，false:设置为拖动控件鼠标样式
-	void SetCrossCursor(bool bIsCross);
-	void SetView(CUiFeatureBuilderView *pView);
-
-// 重写
 public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = NULL, CCreateContext* pContext = NULL);
 
-// 实现
-public:
-	virtual ~CMainFrame();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

@@ -32,9 +32,6 @@ public:
 	virtual void OnDraw(CDC* pDC);  // 重写以绘制该视图
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
-private:
-	void ResetViewSize();
-
 // 实现
 public:
 	virtual ~CUiFeatureBuilderView();

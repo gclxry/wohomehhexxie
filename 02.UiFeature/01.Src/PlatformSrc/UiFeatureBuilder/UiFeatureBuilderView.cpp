@@ -63,12 +63,6 @@ BOOL CUiFeatureBuilderView::OnEraseBkgnd(CDC* pDC)
 	return TRUE;
 }
 
-void CUiFeatureBuilderView::ResetViewSize()
-{
-	if (m_pCurrentWnd == NULL)
-		return;
-}
-
 void CUiFeatureBuilderView::ResetShowWindow(IWindowBase *pCurrentWnd)
 {
 	m_pCurrentWnd = pCurrentWnd;
