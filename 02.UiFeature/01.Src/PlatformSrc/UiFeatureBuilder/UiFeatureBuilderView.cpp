@@ -263,7 +263,7 @@ void CUiFeatureBuilderView::OnSize(UINT nType, int cx, int cy)
 
 void CUiFeatureBuilderView::ResetViewShowSize()
 {
-	int nWidth = 100, nHeight = 100;
+	int nWidth = 500, nHeight = 500;
 	if (m_pCurrentWnd != NULL)
 	{
 		CRect ViewRct(0, 0, 0, 0);
