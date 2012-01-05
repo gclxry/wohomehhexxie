@@ -18,7 +18,7 @@ public:
 //////////////////////////////////////////////////////////////////////////
 	// Builder 使用的函数
 	virtual void BD_InitWindowBase(IPropertyWindow *pWindowProp, bool bSetDftProp);
-	virtual void BD_DrawWindowView(HWND hViewWnd, CDrawingBoard &ViewMemDc);
+	virtual void BD_DrawWindowView(CDrawingBoard &ViewMemDc);
 
 //////////////////////////////////////////////////////////////////////////
 	// 导入皮肤包使用的函数初始化

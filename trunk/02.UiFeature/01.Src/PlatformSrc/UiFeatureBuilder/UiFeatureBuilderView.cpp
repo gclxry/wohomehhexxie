@@ -251,7 +251,7 @@ void CUiFeatureBuilderView::DrawWindowView()
 
 	// ´°¿Ú»æÖÆ
 	if (m_pCurrentWnd != NULL)
-		m_pCurrentWnd->BD_DrawWindowView(m_hWnd, m_MemDc);
+		m_pCurrentWnd->BD_DrawWindowView(m_MemDc);
 }
 
 void CUiFeatureBuilderView::OnSize(UINT nType, int cx, int cy)
