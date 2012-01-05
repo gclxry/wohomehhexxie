@@ -971,19 +971,20 @@ bool IWindowBaseImpl::IsInit()
 	return (m_pXmlPropWindow != NULL && m_pSkinPropMgr != NULL);
 }
 
-void IWindowBaseImpl::BD_DrawWindowView(HWND hViewWnd, CDrawingBoard &ViewMemDc)
+void IWindowBaseImpl::BD_DrawWindowView(CDrawingBoard &ViewMemDc)
 {
-	if (!IS_SAFE_HANDLE(hViewWnd) || ViewMemDc.GetSafeHdc() == NULL || m_pUiEngine == NULL || m_pPropSize_Width == NULL || m_pPropSize_Height == NULL)
+	if (ViewMemDc.GetSafeHdc() == NULL || m_pUiEngine == NULL || m_pPropSize_Width == NULL || m_pPropSize_Height == NULL)
 		return;
-
-	RECT ViewRct;
-	INIT_RECT(ViewRct);
-	::GetClientRect(hViewWnd, &ViewRct);
 
 	RECT WndRct;
 	INIT_RECT(WndRct);
 	WndRct.right = m_pPropSize_Width->GetValue();
 	WndRct.bottom = m_pPropSize_Height->GetValue();
+
+	RECT ViewRct;
+	INIT_RECT(ViewRct);
+	ViewRct.right = ViewMemDc.GetDcSize().cx;
+	ViewRct.bottom = ViewMemDc.GetDcSize().cy;
 
 	RECT WndDrawRct;
 	INIT_RECT(WndDrawRct);
