@@ -5,9 +5,12 @@
 #include "..\..\Inc\IPropertyControl.h"
 #include "..\..\Inc\ICommonFun.h"
 #include "IPropertySkinManagerImpl.h"
+#include "IUiFeatureKernelImpl.h"
 
 // 弹出任务栏菜单消息，XP以下适用
 #define WM_POPUPSYSTEMMENU						(0x0313)
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,6 +36,7 @@ IWindowBaseImpl::IWindowBaseImpl()
 	m_strWindowObjectName = "";
 
 	m_pSkinPropMgr = IPropertySkinManagerImpl::GetInstance();
+	m_pUiEngine = IUiFeatureKernelImpl::GetInstance()->GetUiEngine();
 
 	m_bIsFullScreen = false;
 
@@ -961,7 +965,60 @@ bool IWindowBaseImpl::IsInit()
 	return (m_pXmlPropWindow != NULL && m_pSkinPropMgr != NULL);
 }
 
-void IWindowBaseImpl::BD_DrawWindowView(CDrawingBoard &ViewMemDc)
+void IWindowBaseImpl::BD_DrawWindowView(HWND hViewWnd, CDrawingBoard &ViewMemDc)
 {
+	if (!IS_SAFE_HANDLE(hViewWnd) || ViewMemDc.GetSafeHdc() == NULL || m_pUiEngine == NULL || m_pPropSize_Width == NULL || m_pPropSize_Height == NULL)
+		return;
 
+	RECT ViewRct;
+	INIT_RECT(ViewRct);
+	::GetClientRect(hViewWnd, &ViewRct);
+
+	RECT WndRct;
+	INIT_RECT(WndRct);
+	WndRct.right = m_pPropSize_Width->GetValue();
+	WndRct.bottom = m_pPropSize_Height->GetValue();
+
+	RECT WndDrawRct;
+	INIT_RECT(WndDrawRct);
+	WndDrawRct.left = (RECT_WIDTH(ViewRct) - RECT_WIDTH(WndRct)) / 2;
+	WndDrawRct.right = WndDrawRct.left + RECT_WIDTH(WndRct);
+	WndDrawRct.top = (RECT_HEIGHT(ViewRct) - RECT_HEIGHT(WndRct)) / 2;
+	WndDrawRct.bottom = WndDrawRct.top + RECT_HEIGHT(WndRct);
+
+	// 创建内存dc
+	m_WndMemDc.Create(RECT_WIDTH(WndRct), RECT_HEIGHT(WndRct), 0, false, true);
+	if (m_WndMemDc.GetBits() == NULL)
+		return;
+
+	// 循环遍历每个控件的绘制
+	DrawControl();
+
+	// 绘制到父DC上
+	int nWidth = RECT_WIDTH(WndRct);
+	int nHeight = RECT_HEIGHT(WndRct);
+	m_pUiEngine->AlphaBlend(ViewMemDc, WndDrawRct.left, WndDrawRct.top, nWidth, nHeight,
+		m_WndMemDc, 0, 0, nWidth, nHeight);
+
+	// 绘制窗口的选择状态
+	DrawSelectRect(ViewMemDc, WndDrawRct);
+
+	// 绘制焦点控件的选择状态
+	if (m_pFocusCtrl != NULL)
+	{
+		RECT CtrlRct = m_pFocusCtrl->GetCtrlInWindowRect();
+		nWidth = RECT_WIDTH(CtrlRct);
+		nHeight = RECT_HEIGHT(CtrlRct);
+		CtrlRct.left += WndDrawRct.left;
+		CtrlRct.top += WndDrawRct.top;
+		CtrlRct.right = CtrlRct.left + nWidth;
+		CtrlRct.bottom = CtrlRct.top + nHeight;
+
+		DrawSelectRect(ViewMemDc, CtrlRct);
+	}
+}
+
+// 绘制窗口和被选中的控件的边框的8个方块
+void IWindowBaseImpl::DrawSelectRect(CDrawingBoard &MemDc, RECT DrawRct)
+{
 }
