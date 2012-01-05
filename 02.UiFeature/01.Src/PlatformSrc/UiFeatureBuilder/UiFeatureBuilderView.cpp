@@ -228,15 +228,16 @@ void CUiFeatureBuilderView::OnDraw(CDC* pDC)
 	if (pDC == NULL || !IS_SAFE_HANDLE(pDC->GetSafeHdc()) || m_pUiEngine == NULL)
 		return;
 
-	CRect ViewRct(0, 0, 0, 0);
-	this->GetClientRect(&ViewRct);
-	m_MemDc.Create(ViewRct.Width(), ViewRct.Height(), RGB(255,255,255), false, true);
+	CSize ViewSize, sizePage, sizeLine;
+	int nMode = 0;
+	this->GetDeviceScrollSizes(nMode, ViewSize, sizePage, sizeLine);
+	m_MemDc.Create(ViewSize.cx, ViewSize.cy, RGB(255,255,255), false, true);
 	if (!IS_SAFE_HANDLE(m_MemDc.GetSafeHdc()))
 		return;
 
 	DrawWindowView();
 
-	::BitBlt(pDC->GetSafeHdc(), 0, 0, ViewRct.Width(), ViewRct.Height(), m_MemDc.GetSafeHdc(), 0, 0, SRCCOPY);
+	::BitBlt(pDC->GetSafeHdc(), 0, 0, ViewSize.cx, ViewSize.cy, m_MemDc.GetSafeHdc(), 0, 0, SRCCOPY);
 }
 
 void CUiFeatureBuilderView::DrawWindowView()
@@ -280,5 +281,13 @@ void CUiFeatureBuilderView::ResetViewShowSize()
 		if (nHeight < WndSize.cy + SHOW_WINDOW_SPACE)
 			nHeight = WndSize.cy + SHOW_WINDOW_SPACE;
 	}
+	else
+	{
+		CRect ViewRct;
+		::GetClientRect(m_hWnd, ViewRct);
+		nWidth = ViewRct.Width();
+		nHeight = ViewRct.Height();
+	}
+
 	this->SetScrollSizes(MM_TEXT, CSize(nWidth, nHeight));
 }
