@@ -139,7 +139,7 @@ BOOL JabberXmlSetCallback(XmlState *xmlState, int depth, XmlElemType type, XMLPR
 }
 
 #define TAG_MAX_LEN 50
-#define ATTR_MAX_LEN 1024
+#define ATTR_MAX_LEN 4096
 inline int _IsSpace(int c)
 {
 	return ((c >= 0x09 && c<= 0x0D) || (c == 0x20)) ? c:0;

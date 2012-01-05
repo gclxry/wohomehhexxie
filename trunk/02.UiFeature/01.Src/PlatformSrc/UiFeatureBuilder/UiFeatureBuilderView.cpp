@@ -67,8 +67,9 @@ void CUiFeatureBuilderView::DoDataExchange(CDataExchange* pDX)
 void CUiFeatureBuilderView::OnInitialUpdate()
 {
 	CFormView::OnInitialUpdate();
-	GetParentFrame()->RecalcLayout();
-	ResizeParentToFit();
+	// 没错,相信你的眼睛,就是下面这两行代码了,干掉他们就能达到你的目的！可以记录关闭Builder布局了
+//	GetParentFrame()->RecalcLayout();
+//	ResizeParentToFit();
 }
 
 BOOL CUiFeatureBuilderView::OnEraseBkgnd(CDC* pDC)
