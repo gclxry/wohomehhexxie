@@ -24,6 +24,9 @@ IUiEngineImpl::IUiEngineImpl(void)
 
 IUiEngineImpl::~IUiEngineImpl(void)
 {
+	AlphaBlendImpl = NULL;
+	TransparentBltImpl = NULL;
+	GradientFillImpl = NULL;
 	SAFE_FREE_LIBRARY(m_hMsimg32Dll);
 }
 
@@ -48,7 +51,7 @@ void IUiEngineImpl::LoadImpl()
 bool IUiEngineImpl::AlphaBlend(CDrawingBoard &DestMemDc, int nXOriginDest, int nYOriginDest, int nWidthDest, int nHeightDest,
 						CDrawingBoard &SrcMemDc, int nXOriginSrc, int nYOriginSrc, int nWidthSrc, int nHeightSrc, BLENDFUNCTION *pBlendFunction)
 {
-	if (AlphaBlendImpl == NULL)
+	if (AlphaBlendImpl == NULL || !IS_SAFE_HANDLE(DestMemDc.GetSafeHdc()) || !IS_SAFE_HANDLE(SrcMemDc.GetSafeHdc()))
 		return false;
 
 	BLENDFUNCTION Blend;
@@ -59,22 +62,4 @@ bool IUiEngineImpl::AlphaBlend(CDrawingBoard &DestMemDc, int nXOriginDest, int n
 
 	return (AlphaBlendImpl(DestMemDc.GetSafeHdc(), nXOriginDest, nYOriginDest, nWidthDest, nHeightDest,
 		SrcMemDc.GetSafeHdc(), nXOriginSrc, nYOriginSrc, nWidthSrc, nHeightSrc, Blend) == TRUE);
-}
-
-bool IUiEngineImpl::AlphaBlend(CDrawingBoard &DestMemDc, int nXOriginDest, int nYOriginDest, int nWidthDest, int nHeightDest,
-						CDrawingImage &SrcImgDc, int nXOriginSrc, int nYOriginSrc, int nWidthSrc, int nHeightSrc, BLENDFUNCTION *pBlendFunction)
-{
-	if (AlphaBlendImpl == NULL)
-		return false;
-
-	BLENDFUNCTION Blend;
-	if (pBlendFunction != NULL)
-		Blend = *pBlendFunction;
-	else
-		Blend = m_Blend;
-
-//	return (AlphaBlendImpl(DestMemDc.GetSafeHdc(), nXOriginDest, nYOriginDest, nWidthDest, nHeightDest,
-//		SrcMemDc.GetSafeHdc(), nXOriginSrc, nYOriginSrc, nWidthSrc, nHeightSrc, Blend) == TRUE);
-
-	return true;
 }

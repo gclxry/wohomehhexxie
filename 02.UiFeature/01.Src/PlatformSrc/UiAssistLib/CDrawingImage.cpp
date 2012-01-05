@@ -1,65 +1,17 @@
 
 #include "stdafx.h"
+#include <iostream>
+#include <atlcomcli.h>
 #include "..\..\Inc\CDrawingImage.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 
 CDrawingImage::CDrawingImage(void)
 {
-    m_pBits = NULL;
-    m_hBmp = NULL;
-	m_hDC = NULL;
-	m_DcSize.cx = m_DcSize.cy = 0;
+	CoInitialize(NULL);
 }
 
 CDrawingImage::~CDrawingImage(void)
 {
-   Delete();
-}
-
-SIZE CDrawingImage::GetDcSize()
-{
-	return m_DcSize;
-}
-
-HDC& CDrawingImage::GetSafeHdc()
-{
-	return m_hDC;
-}
-
-HBITMAP& CDrawingImage::GetBmpHandle()
-{
-	return m_hBmp;
-}
-
-BYTE* CDrawingImage::GetBits()
-{
-	return m_pBits;
-}
-
-void CDrawingImage::Delete()
-{
-	if (m_hBmp != NULL)
-	{
-		::DeleteObject(m_hBmp);
-		m_hBmp = NULL;
-	}
-
-	if (m_hDC != NULL)
-	{
-		::DeleteDC(m_hDC);
-		m_hDC = NULL;
-	}
-
-	m_pBits = NULL;
-	m_DcSize.cx = m_DcSize.cy = 0;
-}
-
-// 从一段内存中创建
-void CDrawingImage::CreateByMem(BYTE *pImgFileMem, int nLen)
-{
-	if (pImgFileMem == NULL || nLen <= 0)
-		return;
-
 }
 
 // 从文件内存中创建
@@ -108,7 +60,34 @@ void CDrawingImage::CreateByFile(const char *pszFilePath)
 		return;
 	}
 
-
+	CreateByMem(pReadBuf, nReadCtns);
 
 	SAFE_DELETE(pReadBuf);
+}
+
+// 从一段内存中创建
+void CDrawingImage::CreateByMem(BYTE *pImgFileMem, int nLen)
+{
+	if (pImgFileMem == NULL || nLen <= 0)
+		return;
+
+	Delete();
+	CComPtr<IStream> ImgStream;
+	if (::CreateStreamOnHGlobal(NULL, TRUE, &ImgStream) != S_OK)
+		return;
+
+	ImgStream->Write(pImgFileMem, nLen, NULL);
+	Bitmap* pBitmap = Gdiplus::Bitmap::FromStream(ImgStream);
+	if (pBitmap == NULL)
+		return;
+
+	Create(pBitmap->GetWidth(), pBitmap->GetHeight(), 0, false, true);
+	if (IS_SAFE_HANDLE(m_hDC))
+	{
+		Graphics DoGrap(m_hDC);
+		DoGrap.DrawImage(pBitmap, 0, 0);
+	}
+
+	SAFE_DELETE(pBitmap);
+	ImgStream.Release();
 }

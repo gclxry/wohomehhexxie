@@ -26,6 +26,11 @@ void IPropertyBase::SetUiKernel(IUiFeatureKernel *pUiKernel)
 		m_pUiKernel = pUiKernel;
 }
 
+IUiFeatureKernel* IPropertyBase::GetUiKernel()
+{
+	return m_pUiKernel;
+}
+
 bool IPropertyBase::IsRightData()
 {
 	return (strlen(this->GetObjectName()) > 0);

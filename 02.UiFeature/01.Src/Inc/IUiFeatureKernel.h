@@ -33,4 +33,6 @@ public:
 	virtual IWindowBase* PG_InitFeatureSkin(HWND hWnd, char *pszSkinPath, char *pszWndName) = 0;
 	// 一个对话框释放皮肤资源，这个Kernel内核会调用，外部对话框不需要调用
 	virtual void PG_ReleaseFeatureSkin(HWND hWnd) = 0;
+	// 从zip文件中找到指定文件
+	virtual bool FindUnZipFile(const char *pFileName, BYTE **ppOutBuffer, int *pnFileLen) = 0;
 };

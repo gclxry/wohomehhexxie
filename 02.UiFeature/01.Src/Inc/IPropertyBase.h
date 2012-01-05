@@ -53,14 +53,16 @@ public:
 	virtual bool AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode);
 
 	// 关联属性名称
-	virtual const char* GetRelevancyPropName();
-	virtual void SetRelevancyPropName(char *pszPropName);
+	const char* GetRelevancyPropName();
+	void SetRelevancyPropName(char *pszPropName);
 
 	// 关联属性
-	virtual IPropertyBase* GetRelevancyProp();
-	virtual void SetRelevancyProp(IPropertyBase *pszProp);
+	IPropertyBase* GetRelevancyProp();
+	void SetRelevancyProp(IPropertyBase *pszProp);
 
-	virtual void SetUiKernel(IUiFeatureKernel *pUiKernel);
+	void SetUiKernel(IUiFeatureKernel *pUiKernel);
+	IUiFeatureKernel *GetUiKernel();
+	
 
 private:
 	IUiFeatureKernel *m_pUiKernel;

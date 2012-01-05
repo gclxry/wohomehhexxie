@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "..\..\Inc\IPropertyImageBase.h"
 #include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\IUiFeatureKernel.h"
 
 IPropertyImageBase::IPropertyImageBase()
 {
@@ -101,5 +102,26 @@ bool IPropertyImageBase::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 
 bool IPropertyImageBase::DrawImage(CDrawingBoard &DstDc, RECT DstRct)
 {
-	return true;
+	if (GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
+		return false;
+
+	if (!IS_SAFE_HANDLE(m_DrawImg.GetSafeHdc()))
+	{
+		if (m_ImageProp.bIsZipFile)
+		{
+			BYTE *pBuffer = NULL;
+			int nLen = 0;
+			if (!GetUiKernel()->FindUnZipFile(m_ImageProp.strFileName.c_str(), &pBuffer, &nLen))
+				return false;
+
+			m_DrawImg.CreateByMem(pBuffer, nLen);
+		}
+		else
+		{
+			m_DrawImg.CreateByFile(m_ImageProp.strFileName.c_str());
+		}
+	}
+
+	return GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left, DstRct.top, RECT_WIDTH(DstRct), RECT_HEIGHT(DstRct),
+		m_DrawImg, 0, 0, m_DrawImg.GetDcSize().cx, m_DrawImg.GetDcSize().cy);
 }

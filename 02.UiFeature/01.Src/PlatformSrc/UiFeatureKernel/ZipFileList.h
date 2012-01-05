@@ -35,7 +35,7 @@ public:
 	virtual bool ReadZipFile(const char *pZipFilePath);
 	// 取得解压缩文件后的文件列表
 	virtual ZIP_FILE_MAP *GetUnZipFileMap();
-	virtual ZIP_FILE *FindUnZipFile(char *pFileName);	
+	virtual ZIP_FILE *FindUnZipFile(char *pFileName);
 
 //// 创建zip文件 //////////////////////////////////////////////////////////////////////
 	// 初始化zip文件，pSrcFileDir：需要压缩的源文件目录
