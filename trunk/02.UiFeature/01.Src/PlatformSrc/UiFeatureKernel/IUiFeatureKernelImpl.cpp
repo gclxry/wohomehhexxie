@@ -61,6 +61,26 @@ void IUiFeatureKernelImpl::ReleaseKernelWindow()
 	m_CtrlRegMap.clear();
 }
 
+// 从zip文件中找到指定文件
+bool IUiFeatureKernelImpl::FindUnZipFile(const char *pFileName, BYTE **ppOutBuffer, int *pnFileLen)
+{
+	CZipFileList* pZip = CZipFileList::GetInstance();
+	if (pZip == NULL || pFileName == NULL || strlen(pFileName) <= 0 || ppOutBuffer == NULL || pnFileLen == NULL)
+		return false;
+
+	*ppOutBuffer = NULL;
+	*pnFileLen = 0;
+
+	ZIP_FILE *pZipFile = pZip->FindUnZipFile((char*)pFileName);
+	if (pZipFile == NULL)
+		return false;
+
+	*ppOutBuffer = pZipFile->pFileData;
+	*pnFileLen = pZipFile->dwSrcFileLen;
+
+	return true;
+}
+
 IUiFeatureKernel* IUiFeatureKernelImpl::GetInstance()
 {
 	static IUiFeatureKernelImpl _KernelWindowInstance;

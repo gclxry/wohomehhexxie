@@ -57,6 +57,5 @@ private:
 
 private:
 	IMAGE_BASE_PROP m_ImageProp;
-
 	CDrawingImage m_DrawImg;
 };
