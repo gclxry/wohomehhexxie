@@ -9,6 +9,8 @@
 
 // 弹出任务栏菜单消息，XP以下适用
 #define WM_POPUPSYSTEMMENU						(0x0313)
+// 绘制窗口和被选中的控件的边框的8个方块的宽度
+#define FANGKUAI_SIZE							(6)
 
 
 
@@ -948,7 +950,7 @@ void IWindowBaseImpl::BD_NewFrameImageBase(IPropertyImageBase *pImgBase, string 
 	ImgBase.bIsZipFile = false;
 	ImgBase.strFileName = strImgPath;
 	ImgBase.RectInImage.left = ImgBase.RectInImage.top = 0;
-	ImgBase.RectInImage.right = ImgBase.RectInImage.bottom = 6;
+	ImgBase.RectInImage.right = ImgBase.RectInImage.bottom = FANGKUAI_SIZE;
 
 	ImgBase.jggInfo.bMiddleStretch = true;
 	ImgBase.jggInfo.bBottomStretch = false;
@@ -1001,7 +1003,7 @@ void IWindowBaseImpl::BD_DrawWindowView(HWND hViewWnd, CDrawingBoard &ViewMemDc)
 		m_WndMemDc, 0, 0, nWidth, nHeight);
 
 	// 绘制窗口的选择状态
-	DrawSelectRect(ViewMemDc, WndDrawRct);
+	DrawSelectRect(ViewMemDc, WndDrawRct, true);
 
 	// 绘制焦点控件的选择状态
 	if (m_pFocusCtrl != NULL)
@@ -1014,11 +1016,66 @@ void IWindowBaseImpl::BD_DrawWindowView(HWND hViewWnd, CDrawingBoard &ViewMemDc)
 		CtrlRct.right = CtrlRct.left + nWidth;
 		CtrlRct.bottom = CtrlRct.top + nHeight;
 
-		DrawSelectRect(ViewMemDc, CtrlRct);
+		DrawSelectRect(ViewMemDc, CtrlRct, false);
 	}
 }
 
 // 绘制窗口和被选中的控件的边框的8个方块
-void IWindowBaseImpl::DrawSelectRect(CDrawingBoard &MemDc, RECT DrawRct)
+void IWindowBaseImpl::DrawSelectRect(CDrawingBoard &MemDc, RECT DrawRct, bool bIsWndFrame)
 {
+	IPropertyImage *pPropImg = &m_BuilderCtrlFrameImage;
+	if (bIsWndFrame)
+		pPropImg = &m_BuilderWndFrameImage;
+
+	RECT LeftTop, LeftMid, LeftBottom, MidTop, MidBottom, RightTop, RightMid, RightBottom;
+	INIT_RECT(LeftTop), INIT_RECT(LeftMid), INIT_RECT(LeftBottom), INIT_RECT(MidTop);
+	INIT_RECT(RightTop), INIT_RECT(RightMid), INIT_RECT(RightBottom), INIT_RECT(MidBottom);
+
+	LeftTop.left = DrawRct.left - FANGKUAI_SIZE;
+	LeftTop.top = DrawRct.top - FANGKUAI_SIZE;
+	LeftTop.right = LeftTop.left + FANGKUAI_SIZE;
+	LeftTop.bottom = LeftTop.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, LeftTop);
+
+	LeftMid.left = DrawRct.left - FANGKUAI_SIZE;
+	LeftMid.top = DrawRct.top + (RECT_HEIGHT(DrawRct) / 2) - (FANGKUAI_SIZE / 2);
+	LeftMid.right = LeftMid.left + FANGKUAI_SIZE;
+	LeftMid.bottom = LeftMid.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, LeftMid);
+
+	LeftBottom.left = DrawRct.left - FANGKUAI_SIZE;
+	LeftBottom.top = DrawRct.bottom;
+	LeftBottom.right = LeftBottom.left + FANGKUAI_SIZE;
+	LeftBottom.bottom = LeftBottom.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, LeftBottom);
+
+	MidTop.left = DrawRct.left + (RECT_WIDTH(DrawRct) / 2) - (FANGKUAI_SIZE / 2);
+	MidTop.top = DrawRct.top - FANGKUAI_SIZE;
+	MidTop.right = MidTop.left + FANGKUAI_SIZE;
+	MidTop.bottom = MidTop.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, MidTop);
+
+	MidBottom.left = DrawRct.left + (RECT_WIDTH(DrawRct) / 2) - (FANGKUAI_SIZE / 2);
+	MidBottom.top = DrawRct.bottom;
+	MidBottom.right = MidBottom.left + FANGKUAI_SIZE;
+	MidBottom.bottom = MidBottom.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, MidBottom);
+
+	RightTop.left = DrawRct.right;
+	RightTop.top = DrawRct.top - FANGKUAI_SIZE;
+	RightTop.right = RightTop.left + FANGKUAI_SIZE;
+	RightTop.bottom = RightTop.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, RightTop);
+
+	RightMid.left = DrawRct.right;
+	RightMid.top = DrawRct.top + (RECT_HEIGHT(DrawRct) / 2) - (FANGKUAI_SIZE / 2);
+	RightMid.right = RightMid.left + FANGKUAI_SIZE;
+	RightMid.bottom = RightMid.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, RightMid);
+
+	RightBottom.left = DrawRct.right;
+	RightBottom.top = DrawRct.bottom;
+	RightBottom.right = RightBottom.left + FANGKUAI_SIZE;
+	RightBottom.bottom = RightBottom.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, RightBottom);
 }
