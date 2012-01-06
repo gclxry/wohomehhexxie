@@ -70,7 +70,7 @@ protected:
 	IUiEngine *m_pUiEngine;
 
 	CFeatureControlList *m_pControlList;
-	IUiFeatureKernel* m_pKernelWindow;
+	IUiFeatureKernel* m_pUiKernel;
 	IPropertySkinManager *m_pSkinManager;
 	bool m_bInitOk;
 	CDrawingBoard m_MemDc;

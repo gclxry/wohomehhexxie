@@ -54,7 +54,7 @@ CMainFrame::CMainFrame()
 
 	m_pView = NULL;
 	m_hKernelDll = NULL;
-	m_pKernelWindow = NULL;
+	m_pUiKernel = NULL;
 	m_pSkinMgr = NULL;
 	m_hControlDll = NULL;
 	m_pRegControlMap = NULL;
@@ -90,7 +90,7 @@ void CMainFrame::SetView(CUiFeatureBuilderView *pView)
 	m_pView = pView;
 	if (m_pView != NULL)
 	{
-		m_pView->Init(m_pKernelWindow, m_wndControls.GetControlList());
+		m_pView->Init(m_pUiKernel, m_wndControls.GetControlList());
 		m_wndControls.GetControlList()->SetBuilderView(m_pView);
 		m_wndWindowView.GetViewTreeCtrl()->SetBuilderView(m_pView);
 	}

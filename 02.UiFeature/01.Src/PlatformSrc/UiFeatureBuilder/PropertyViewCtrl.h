@@ -51,6 +51,6 @@ private:
 private:
 	bool m_bProjectInitOk;
 	IPropertyGroup* m_pCurrentPropGroup;
-	IUiFeatureKernel* m_pKernelWindow;
+	IUiFeatureKernel* m_pUiKernel;
 	CWindowsViewTree* m_pViewTree;
 };

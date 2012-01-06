@@ -33,7 +33,7 @@ private:
 private:
 	bool m_bProjectInitOk;
 	IPropertySkinManager *m_pSkinMgr;
-	IUiFeatureKernel* m_pKernelWindow;
+	IUiFeatureKernel* m_pUiKernel;
 	CPropertyViewCtrl *m_pPropCtrl;
 	CUiFeatureBuilderView *m_pWindowView;
 
