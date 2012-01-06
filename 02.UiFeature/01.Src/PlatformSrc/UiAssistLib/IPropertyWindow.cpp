@@ -13,7 +13,15 @@ IPropertyWindow::~IPropertyWindow(void)
 {
 }
 
-CHILD_CTRL_PROP_VEC* IPropertyWindow::GetChildCtrlVec()
+void IPropertyWindow::AppendChildCtrlProp(IPropertyControl *pPropCtrl)
+{
+	if (pPropCtrl == NULL)
+		return;
+
+	m_ChildCtrlPropVec.push_back(pPropCtrl);
+}
+
+PROP_CONTROL_VEC* IPropertyWindow::GetChildPropControlVec()
 {
 	return &m_ChildCtrlPropVec;
 }

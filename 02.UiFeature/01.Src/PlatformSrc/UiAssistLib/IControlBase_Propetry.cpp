@@ -20,6 +20,11 @@ bool IControlBase::BD_InitControlBase(IPropertyControl *pCtrlProp, bool bNeedSet
 	return true;
 }
 
+IPropertyControl* IControlBase::PP_GetControlPropetry()
+{
+	return m_pXmlPropCtrl;
+}
+
 IPropertyBase* IControlBase::CreateCtrlOnePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo)
 {
 	if (m_pSkinPropMgr == NULL || m_pXmlPropCtrl == NULL || pszPropName == NULL || strlen(pszPropName) <= 0 || propType <= OTID_NONE || propType >= OTID_LAST)

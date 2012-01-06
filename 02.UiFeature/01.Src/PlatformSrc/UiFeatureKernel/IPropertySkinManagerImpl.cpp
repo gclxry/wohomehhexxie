@@ -73,23 +73,23 @@ void IPropertySkinManagerImpl::ReleaseLayoutMap()
 		IPropertyWindow* pWnd = dynamic_cast<IPropertyWindow*>(pWndItem->second);
 		if (pWnd != NULL)
 		{
-			ReleaseLayoutMapChildCtrlVec(pWnd->GetChildCtrlVec());
+			ReleaseLayoutMapPropControlVec(pWnd->GetChildPropControlVec());
 			SAFE_DELETE(pWnd);
 		}
 	}
 	m_LayoutWindowMap.clear();
 }
 
-void IPropertySkinManagerImpl::ReleaseLayoutMapChildCtrlVec(CHILD_CTRL_PROP_VEC* pCtrlVec)
+void IPropertySkinManagerImpl::ReleaseLayoutMapPropControlVec(PROP_CONTROL_VEC* pCtrlVec)
 {
 	if (pCtrlVec == NULL)
 		return;
 
-	for (CHILD_CTRL_PROP_VEC::iterator pVecItem = pCtrlVec->begin(); pVecItem != pCtrlVec->end(); pVecItem++)
+	for (PROP_CONTROL_VEC::iterator pVecItem = pCtrlVec->begin(); pVecItem != pCtrlVec->end(); pVecItem++)
 	{
 		IPropertyControl* pCtrl = *pVecItem;
 		if (pCtrl != NULL)
-			ReleaseLayoutMapChildCtrlVec(pCtrl->GetChildCtrlVec());
+			ReleaseLayoutMapPropControlVec(pCtrl->GetChildPropControlVec());
 		SAFE_DELETE(pCtrl);
 	}
 	pCtrlVec->clear();
@@ -397,6 +397,18 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 	case OTID_WINDOW:
 		{
 			IPropertyWindow* pProp = new IPropertyWindow;
+			if (pProp != NULL)
+			{
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+					SAFE_DELETE(pProp);
+			}
+		}
+		break;
+
+	case OTID_CONTROL:
+		{
+			IPropertyControl* pProp = new IPropertyControl;
 			if (pProp != NULL)
 			{
 				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
@@ -1033,7 +1045,7 @@ bool IPropertySkinManagerImpl::TranslateLayoutXml(ZIP_FILE *pLayoutXml)
 					return false;
 
 				pOneWndLayoutProp->SetWindowPropGroup(pWndPropGroup);
-				if (!GeneralCreateWindowLayoutProp(pWindowNode, pOneWndLayoutProp->GetChildCtrlVec(), NULL))
+				if (!GeneralCreateWindowLayoutProp(pWindowNode, pOneWndLayoutProp->GetChildPropControlVec(), NULL))
 					return false;
 			}
 		}
@@ -1047,7 +1059,7 @@ bool IPropertySkinManagerImpl::TranslateLayoutXml(ZIP_FILE *pLayoutXml)
 	return true;
 }
 
-bool IPropertySkinManagerImpl::GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, CHILD_CTRL_PROP_VEC* pChildCtrlVec, IPropertyControl* pParentProp)
+bool IPropertySkinManagerImpl::GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, PROP_CONTROL_VEC* pChildCtrlVec, IPropertyControl* pParentProp)
 {
 	if (pXmlNode == NULL || pChildCtrlVec == NULL)
 		return false;
@@ -1076,7 +1088,7 @@ bool IPropertySkinManagerImpl::GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, 
 
 			if (pCtrlNode->numChild > 0)
 			{
-				if (!GeneralCreateWindowLayoutProp(pCtrlNode, pCtrlProp->GetChildCtrlVec(), pCtrlProp))
+				if (!GeneralCreateWindowLayoutProp(pCtrlNode, pCtrlProp->GetChildPropControlVec(), pCtrlProp))
 					return false;
 			}
 		}
@@ -1315,7 +1327,7 @@ bool IPropertySkinManagerImpl::SaveLayoutXml(const char *pszSavePath, string &st
 
 		pWndNode->AddAttribute(SKIN_OBJECT_ID, pPropWnd->GetObjectId());
 
-		CHILD_CTRL_PROP_VEC* pWndChildVec = pPropWnd->GetChildCtrlVec();
+		PROP_CONTROL_VEC* pWndChildVec = pPropWnd->GetChildPropControlVec();
 		if (!SaveLayoutXml_ChildCtrl(XmlStrObj, pWndNode, pWndChildVec))
 			return false;
 	}
@@ -1325,7 +1337,7 @@ bool IPropertySkinManagerImpl::SaveLayoutXml(const char *pszSavePath, string &st
 	return true;
 }
 
-bool IPropertySkinManagerImpl::SaveLayoutXml_ChildCtrl(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pNode, CHILD_CTRL_PROP_VEC* pWndChildVec)
+bool IPropertySkinManagerImpl::SaveLayoutXml_ChildCtrl(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pNode, PROP_CONTROL_VEC* pWndChildVec)
 {
 	if (pWndChildVec == NULL)
 		return false;
@@ -1342,7 +1354,7 @@ bool IPropertySkinManagerImpl::SaveLayoutXml_ChildCtrl(CUiXmlWrite &XmlStrObj, C
 
 		pCtrlNode->AddAttribute(SKIN_OBJECT_ID, pPropCtrl->GetObjectId());
 
-		CHILD_CTRL_PROP_VEC* pCtrlChildVec = pPropCtrl->GetChildCtrlVec();
+		PROP_CONTROL_VEC* pCtrlChildVec = pPropCtrl->GetChildPropControlVec();
 		if (!SaveLayoutXml_ChildCtrl(XmlStrObj, pCtrlNode, pCtrlChildVec))
 			return false;
 	}

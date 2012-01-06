@@ -16,6 +16,11 @@ IPropertyGroup* IWindowBaseImpl::PP_GetWindowPropetryGroup()
 	return m_pXmlPropWindow->GetWindowPropGroup();
 }
 
+IPropertyWindow* IWindowBaseImpl::PP_GetWindowPropetry()
+{
+	return m_pXmlPropWindow;
+}
+
 // 将xml中的属性设置到manager中
 void IWindowBaseImpl::PP_SetWindowPropetry(IPropertyWindow *pWndPropInXml, bool bSetDftProp)
 {

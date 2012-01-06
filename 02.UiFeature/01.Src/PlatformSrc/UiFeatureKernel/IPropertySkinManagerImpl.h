@@ -98,13 +98,13 @@ private:
 //////////////////////////////////////////////////////////////////////////
 	// Layout.xml œ‡πÿ
 	bool TranslateLayoutXml(ZIP_FILE *pLayoutXml);
-	bool GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, CHILD_CTRL_PROP_VEC* pChildCtrlVec, IPropertyControl* pParentProp);
+	bool GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, PROP_CONTROL_VEC* pChildCtrlVec, IPropertyControl* pParentProp);
 	IPropertyGroup* FindControlPropGroup(char *pszObjectId);
 	void ReleaseLayoutMap();
-	void ReleaseLayoutMapChildCtrlVec(CHILD_CTRL_PROP_VEC* pCtrlVec);
+	void ReleaseLayoutMapPropControlVec(PROP_CONTROL_VEC* pCtrlVec);
 
 	bool SaveLayoutXml(const char *pszSavePath, string &strXmlData);
-	bool SaveLayoutXml_ChildCtrl(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pNode, CHILD_CTRL_PROP_VEC* pWndChildVec);
+	bool SaveLayoutXml_ChildCtrl(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pNode, PROP_CONTROL_VEC* pWndChildVec);
 
 	void SaveToFile(char *pszFilePath, BYTE *pData, int nDataLen);
 private:

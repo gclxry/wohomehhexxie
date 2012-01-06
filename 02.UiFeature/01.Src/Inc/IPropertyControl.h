@@ -7,7 +7,7 @@
 
 // 子控件属性队列
 class IPropertyControl;
-typedef vector<IPropertyControl*>			CHILD_CTRL_PROP_VEC;
+typedef vector<IPropertyControl*>			PROP_CONTROL_VEC;
 
 class IPropertyControl : public IPropertyBase
 {
@@ -23,11 +23,11 @@ public:
 	void SetCtrlGroupProp(IPropertyGroup *pBasePropGroup);
 	IPropertyGroup *GetCtrlGroupProp();
 
-	CHILD_CTRL_PROP_VEC* GetChildCtrlVec();
+	PROP_CONTROL_VEC* GetChildPropControlVec();
 
 private:
 	// 子控件属性节点 的列表
-	CHILD_CTRL_PROP_VEC m_ChildCtrlPropVec;
+	PROP_CONTROL_VEC m_ChildCtrlPropVec;
 	// 父控件属性节点
 	IPropertyControl* m_pPrentCtrlProp;
 	// 自身控件属性列表

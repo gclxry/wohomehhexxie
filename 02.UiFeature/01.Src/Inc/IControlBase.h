@@ -287,6 +287,7 @@ private:
 	// 创建控件属性
 	void CreateCtrlAllPropetry(bool bNeedSetDftProp);
 	IPropertyBase* CreateCtrlOnePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
+	IPropertyControl *PP_GetControlPropetry();
 
 	// 初始化在builder中的属性
 	bool BD_InitControlBase(IPropertyControl *pCtrlProp, bool bNeedSetDftProp);

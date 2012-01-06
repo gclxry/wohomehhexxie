@@ -50,6 +50,8 @@ private:
 	void DrawCreateCtrlRect();
 	// 取得选择的控件
 	IControlBase* GetSelectControl(CPoint point);
+	// 通过鼠标拖拽，创建一个新控件
+	void CreateNewControl();
 
 // 重写
 public:
