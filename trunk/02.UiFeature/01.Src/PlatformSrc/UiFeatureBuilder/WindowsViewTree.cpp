@@ -22,7 +22,7 @@ static char THIS_FILE[] = __FILE__;
 CWindowsViewTree::CWindowsViewTree()
 {
 	m_pSkinMgr = NULL;
-	m_pKernelWindow = NULL;
+	m_pUiKernel = NULL;
 	m_pPropCtrl = NULL;
 	m_pWindowView = NULL;
 	m_bProjectInitOk = false;
@@ -105,8 +105,8 @@ void CWindowsViewTree::Init(IUiFeatureKernel* pKernelWindow, CPropertyViewCtrl *
 	if (pKernelWindow == NULL || pPropCtrl == NULL)
 		return;
 
-	m_pKernelWindow = pKernelWindow;
-	m_pSkinMgr = m_pKernelWindow->GetSkinManager();
+	m_pUiKernel = pKernelWindow;
+	m_pSkinMgr = m_pUiKernel->GetSkinManager();
 	m_pPropCtrl = pPropCtrl;
 
 	this->DeleteAllItems();
@@ -114,7 +114,7 @@ void CWindowsViewTree::Init(IUiFeatureKernel* pKernelWindow, CPropertyViewCtrl *
 
 void CWindowsViewTree::OnCreateWindowPanel()
 {
-	if (!m_bProjectInitOk || m_pSkinMgr == NULL || m_pKernelWindow == NULL || m_pPropCtrl == NULL)
+	if (!m_bProjectInitOk || m_pSkinMgr == NULL || m_pUiKernel == NULL || m_pPropCtrl == NULL)
 	{
 		AfxMessageBox(_T("列表没有被初始化"), MB_OK | MB_ICONERROR);
 		return;
@@ -129,7 +129,7 @@ void CWindowsViewTree::OnCreateWindowPanel()
 		return;
 	}
 	
-	IWindowBase *pWndBase = m_pKernelWindow->BD_CreateWindowEmptyPropetry();
+	IWindowBase *pWndBase = m_pUiKernel->BD_CreateWindowEmptyPropetry();
 	if (pWndBase == NULL)
 	{
 		AfxMessageBox(_T("新建窗口/面板时，创建绘制窗体错误！"), MB_OK | MB_ICONERROR);
@@ -250,7 +250,7 @@ void CWindowsViewTree::InitShowNewProject()
 	HTREEITEM hRootItem = this->InsertItem(_T("【窗口/面板】"), 1, 1);
 	this->SetItemState(hRootItem, TVIS_BOLD, TVIS_BOLD);
 
-	if (m_pSkinMgr == NULL || m_pKernelWindow == NULL)
+	if (m_pSkinMgr == NULL || m_pUiKernel == NULL)
 		return;
 
 	ONE_RESOURCE_PROP_MAP* pWndPropMap = m_pSkinMgr->BD_GetWindowPropMap();
@@ -263,7 +263,7 @@ void CWindowsViewTree::InitShowNewProject()
 		if (pPropWnd == NULL)
 			continue;
 
-		IWindowBase* pWndBase = m_pKernelWindow->BD_CreateWindowByPropetry(pPropWnd);
+		IWindowBase* pWndBase = m_pUiKernel->BD_CreateWindowByPropetry(pPropWnd);
 		if (pWndBase == NULL)
 			continue;
 

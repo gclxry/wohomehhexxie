@@ -49,7 +49,7 @@ private:
 //////////////////////////////////////////////////////////////////////////
 	// Kernel ฯเนุ
 	HMODULE m_hKernelDll;
-	IUiFeatureKernel* m_pKernelWindow;
+	IUiFeatureKernel* m_pUiKernel;
 	IPropertySkinManager* m_pSkinMgr;
 	CONTROL_REG_MAP* m_pRegControlMap;
 

@@ -7,7 +7,7 @@
 CPropertyViewCtrl::CPropertyViewCtrl(void)
 {
 	m_pCurrentPropGroup = NULL;
-	m_pKernelWindow = NULL;
+	m_pUiKernel = NULL;
 	m_pViewTree = NULL;
 	m_bProjectInitOk = false;
 }
@@ -30,7 +30,7 @@ void CPropertyViewCtrl::Init(IUiFeatureKernel* pKernelWindow, CWindowsViewTree *
 	if (pKernelWindow == NULL || pViewTree == NULL)
 		return;
 
-	m_pKernelWindow = pKernelWindow;
+	m_pUiKernel = pKernelWindow;
 	m_pViewTree = pViewTree;
 }
 

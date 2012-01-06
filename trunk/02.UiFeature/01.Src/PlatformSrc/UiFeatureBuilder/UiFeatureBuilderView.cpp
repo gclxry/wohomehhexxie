@@ -46,7 +46,7 @@ CUiFeatureBuilderView::CUiFeatureBuilderView() : CFormView(CUiFeatureBuilderView
 
 	m_hUiEngineDll = NULL;
 	m_pUiEngine = NULL;
-	m_pKernelWindow = NULL;
+	m_pUiKernel = NULL;
 	m_pSkinManager = NULL;
 	m_pControlList = NULL;
 	m_bInitOk = false;
@@ -132,10 +132,10 @@ IUiEngine* CUiFeatureBuilderView::GetUiEngine()
 
 void CUiFeatureBuilderView::Init(IUiFeatureKernel* pKernelWindow, CFeatureControlList *pCtrlList)
 {
-	m_pKernelWindow = pKernelWindow;
+	m_pUiKernel = pKernelWindow;
 	m_pControlList = pCtrlList;
-	if (m_pKernelWindow != NULL)
-		m_pSkinManager = m_pKernelWindow->GetSkinManager();
+	if (m_pUiKernel != NULL)
+		m_pSkinManager = m_pUiKernel->GetSkinManager();
 }
 
 void CUiFeatureBuilderView::OnRButtonUp(UINT nFlags, CPoint point)
@@ -229,8 +229,6 @@ void CUiFeatureBuilderView::DrawCreateCtrlRect()
 	DoGrap.DrawLine(&LinePen, m_MouseMovePos.x, m_LBtnDownPos.y, m_MouseMovePos.x, m_MouseMovePos.y);
 	DoGrap.DrawLine(&LinePen, m_MouseMovePos.x, m_MouseMovePos.y, m_LBtnDownPos.x, m_MouseMovePos.y);
 	DoGrap.DrawLine(&LinePen, m_LBtnDownPos.x, m_MouseMovePos.y, m_LBtnDownPos.x, m_LBtnDownPos.y);
-
-//	DoGrap.DrawRectangle(&LinePen, m_LBtnDownPos.x, m_LBtnDownPos.y, m_MouseMovePos.x - m_LBtnDownPos.x, m_MouseMovePos.y - m_LBtnDownPos.y);
 }
 
 void CUiFeatureBuilderView::DrawWindowView()
@@ -305,7 +303,7 @@ void CUiFeatureBuilderView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	CFormView::OnMouseMove(nFlags, point);
-	if (m_pSkinManager == NULL || m_pKernelWindow == NULL)
+	if (m_pSkinManager == NULL || m_pUiKernel == NULL)
 		return;
 
 	if (m_bIsLButtonDown)
@@ -438,22 +436,30 @@ void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 	}
 }
 
-//void CUiFeatureBuilderView::CreateNewControl(CPoint point)
-//{
-//
-//	// 创建新控件
-//	if (m_pControlList != NULL)
-//	{
-//		CString strCtrlTypeName = m_pControlList->GetSelectCtrlTypeName();
-//	}
-//}
+void CUiFeatureBuilderView::CreateNewControl()
+{
+	// 创建新控件
+	if (m_pControlList == NULL || m_pUiKernel == NULL || m_pCurrentWnd == NULL)
+		return;
+
+	CString strCtrlTypeName = m_pControlList->GetSelectCtrlTypeName();
+
+	m_pSelectControl = m_pUiKernel->BD_CreateControlEmptyPropetry(m_pCurrentWnd, , W2A(strCtrlTypeName));
+	if (m_pSelectControl == NULL)
+	{
+		CString strInfo(_T(""));
+		strInfo.Format(_T("创建控件【%s】失败！"), strCtrlTypeName);
+		AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
+		return;
+	}
+}
 
 void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	CFormView::OnLButtonDown(nFlags, point);
 	m_LBtnDownPos = point;
 
-	if (m_pSkinManager == NULL || m_pKernelWindow == NULL)
+	if (m_pSkinManager == NULL || m_pUiKernel == NULL)
 		return;
 
 	m_bIsLButtonDown = true;

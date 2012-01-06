@@ -31,19 +31,19 @@ void CMainFrame::InitUiFeatureKernel()
 		return;
 	}
 
-	m_pKernelWindow = GetKernel();
-	if (m_pKernelWindow == NULL)
+	m_pUiKernel = GetKernel();
+	if (m_pUiKernel == NULL)
 	{
 		AfxMessageBox(_T("找不到UiFeature内核DLL的【IUiFeatureKernel】接口！"), MB_OK | MB_ICONERROR);
 		return;
 	}
-	m_pSkinMgr = m_pKernelWindow->GetSkinManager();
+	m_pSkinMgr = m_pUiKernel->GetSkinManager();
 
-	m_wndWindowView.Init(m_pKernelWindow, m_wndProperties.GetPropetryCtrl());
-	m_wndProperties.Init(m_pKernelWindow, m_wndWindowView.GetViewTreeCtrl());
+	m_wndWindowView.Init(m_pUiKernel, m_wndProperties.GetPropetryCtrl());
+	m_wndProperties.Init(m_pUiKernel, m_wndWindowView.GetViewTreeCtrl());
 
 	// 加载控件显示数据
-	m_pRegControlMap = m_pKernelWindow->BD_GetRegisterControl();
+	m_pRegControlMap = m_pUiKernel->BD_GetRegisterControl();
 	// 显示控件
 	m_wndControls.SetControlList(m_pRegControlMap);
 
@@ -182,12 +182,12 @@ bool CMainFrame::OpenSkinProject(bool bIsNew, CString strSkinDir, CString strSki
 {
 	USES_CONVERSION;
 	SetProjectInitState(true);
-	if (m_pKernelWindow == NULL || m_pSkinMgr == NULL)
+	if (m_pUiKernel == NULL || m_pSkinMgr == NULL)
 		return false;
 
 	if (!bIsNew)
 	{
-		if (!m_pKernelWindow->BD_OpenProject(W2A(m_strNewSkinDir), W2A(m_strNewSkinName)))
+		if (!m_pUiKernel->BD_OpenProject(W2A(m_strNewSkinDir), W2A(m_strNewSkinName)))
 		{
 			CString strInfo(_T(""));
 			strInfo.Format(_T("没有发现匹配的皮肤文件【%s%s】！"), m_strNewSkinName, _T(NAME_SKIN_FILE_EX_NAME));
@@ -254,10 +254,10 @@ bool CMainFrame::SaveSkinProject(CString strSkinDir, CString strSkinName, bool b
 	if (strSkinDir.GetLength() <= 0 || strSkinName.GetLength() <= 0)
 		return true;
 
-	if (m_pKernelWindow == NULL)
+	if (m_pUiKernel == NULL)
 		return false;
 
-	bool bOk = m_pKernelWindow->BD_SaveProject(W2A(strSkinDir), W2A(strSkinName));
+	bool bOk = m_pUiKernel->BD_SaveProject(W2A(strSkinDir), W2A(strSkinName));
 	if (bNeedErroInfo && !bOk)
 		AfxMessageBox(_T("保存皮肤工程失败！"), MB_OK | MB_ICONERROR);
 	return bOk;
@@ -268,10 +268,10 @@ bool CMainFrame::CloseSkinProject()
 {
 	SetProjectInitState(false);
 
-	if (m_pKernelWindow == NULL)
+	if (m_pUiKernel == NULL)
 		return false;
 
-	m_pKernelWindow->BD_CloseProject();
+	m_pUiKernel->BD_CloseProject();
 
 	m_strCurUfpPath = _T("");
 	m_strCurSkinName = _T("");
