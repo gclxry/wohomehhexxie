@@ -46,6 +46,8 @@ private:
 	// 是否在窗口的8个方块内移动
 	bool OnMouseMove_FangKuai8(CPoint point, bool bIsWnd);
 	void OnMouseMove_LButtonDown(CPoint point);
+	// 绘制创建新控件时的矩形
+	void DrawCreateCtrlRect();
 
 // 重写
 public:
@@ -70,11 +72,12 @@ protected:
 	CFeatureControlList *m_pControlList;
 	IUiFeatureKernel* m_pKernelWindow;
 	IPropertySkinManager *m_pSkinManager;
-	bool m_bNewCtrl;
 	bool m_bInitOk;
 	CDrawingBoard m_MemDc;
 
 	bool m_bIsLButtonDown;
+	CPoint m_LBtnDownPos;
+	CPoint m_MouseMovePos;
 
 	bool m_bCreateNewCtrl;
 

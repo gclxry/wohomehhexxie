@@ -24,7 +24,7 @@ void CFeatureControlList::SetProjectInitState(bool bInitOk)
 	m_bInitOk = bInitOk;
 
 	if (!m_bInitOk)
-		SetCtrlListCursor(true);
+		SelectCtrlToCreate(true);
 }
 
 COLORREF CFeatureControlList::OnGetCellBkColor(int nRow, int nColum)
@@ -37,39 +37,41 @@ END_MESSAGE_MAP()
 
 void CFeatureControlList::OnNMClick(NMHDR *pNMHDR, LRESULT *pResult)
 {
+	m_pSelectItem = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	*pResult = 0;
+
 	if (!m_bInitOk)
 		return;
 
-	m_pSelectItem = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
-	// TODO: Add your control notification handler code here
-	*pResult = 0;
-
 	if (m_pSelectItem == NULL)
+	{
+		SelectCtrlToCreate(false);
 		return;
+	}
 
-	// 
 	if (m_pSelectItem->iItem < 0)
 	{
 		// 没有选择相应的控件
-		SetCtrlListCursor(true);
+		SelectCtrlToCreate(false);
 		return;
 	}
 
-	SetCtrlListCursor(false);
+	SelectCtrlToCreate(true);
 }
 
 // 设置为正常鼠标样式，设置为拖动控件鼠标样式
-void CFeatureControlList::SetCtrlListCursor(bool bIsNormal)
+void CFeatureControlList::SelectCtrlToCreate(bool bCreate)
 {
 	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
-	if (pMain != NULL)
-		pMain->SetViewCursor(UF_IDC_CROSS);
+	if (pMain == NULL || m_pView == NULL)
+		return;
 
-	if (m_pView != NULL)
-	{
-		// 是否需要创建一个新控件
-		m_pView->SetNewControl(!bIsNormal);
-	}
+	if (bCreate)
+		pMain->SetViewCursor(UF_IDC_CROSS);
+	else
+		pMain->SetViewCursor(UF_IDC_ARROW);
+
+	m_pView->SetNewControl(bCreate);
 }
 
 void CFeatureControlList::SetBuilderView(CUiFeatureBuilderView *pView)

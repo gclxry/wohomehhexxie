@@ -21,7 +21,7 @@ public:
 
 private:
 	// true:设置为正常鼠标样式，false:设置为拖动控件鼠标样式
-	void SetCtrlListCursor(bool bIsNormal);
+	void SelectCtrlToCreate(bool bCreate);
 
 protected:
 	virtual void Sort(int iColumn, BOOL bAscending = TRUE, BOOL bAdd = FALSE);
