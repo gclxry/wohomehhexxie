@@ -36,6 +36,8 @@ public:
 	void ResetShowWindow(IWindowBase *pCurrentWnd);
 	void Init(IUiFeatureKernel* pKernelWindow, CFeatureControlList *pCtrlList);
 
+	// 判断鼠标坐标是否落在了窗口内部
+	bool PtInWindow(CPoint point);
 private:
 	void DrawWindowView();
 	IUiEngine* GetUiEngine();

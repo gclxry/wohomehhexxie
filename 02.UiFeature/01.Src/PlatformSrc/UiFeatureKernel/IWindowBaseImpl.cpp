@@ -982,18 +982,11 @@ void IWindowBaseImpl::BD_DrawWindowView(CDrawingBoard &ViewMemDc)
 	INIT_RECT(WndRct);
 	WndRct.right = m_pPropSize_Width->GetValue();
 	WndRct.bottom = m_pPropSize_Height->GetValue();
-
-	RECT ViewRct;
-	INIT_RECT(ViewRct);
-	ViewRct.right = ViewMemDc.GetDcSize().cx;
-	ViewRct.bottom = ViewMemDc.GetDcSize().cy;
-
-	RECT WndDrawRct;
-	INIT_RECT(WndDrawRct);
-	WndDrawRct.left = (RECT_WIDTH(ViewRct) - RECT_WIDTH(WndRct)) / 2;
-	WndDrawRct.right = WndDrawRct.left + RECT_WIDTH(WndRct);
-	WndDrawRct.top = (RECT_HEIGHT(ViewRct) - RECT_HEIGHT(WndRct)) / 2;
-	WndDrawRct.bottom = WndDrawRct.top + RECT_HEIGHT(WndRct);
+	
+	m_BD_FangKuai8.EntityRct.left = (ViewMemDc.GetDcSize().cx - RECT_WIDTH(WndRct)) / 2;
+	m_BD_FangKuai8.EntityRct.right = m_BD_FangKuai8.EntityRct.left + RECT_WIDTH(WndRct);
+	m_BD_FangKuai8.EntityRct.top = (ViewMemDc.GetDcSize().cy - RECT_HEIGHT(WndRct)) / 2;
+	m_BD_FangKuai8.EntityRct.bottom = m_BD_FangKuai8.EntityRct.top + RECT_HEIGHT(WndRct);
 
 	// 创建内存dc
 	m_WndMemDc.Create(RECT_WIDTH(WndRct), RECT_HEIGHT(WndRct), 0, false, true);
@@ -1006,11 +999,11 @@ void IWindowBaseImpl::BD_DrawWindowView(CDrawingBoard &ViewMemDc)
 	// 绘制到父DC上
 	int nWidth = RECT_WIDTH(WndRct);
 	int nHeight = RECT_HEIGHT(WndRct);
-	m_pUiEngine->AlphaBlend(ViewMemDc, WndDrawRct.left, WndDrawRct.top, nWidth, nHeight,
+	m_pUiEngine->AlphaBlend(ViewMemDc, m_BD_FangKuai8.EntityRct.left, m_BD_FangKuai8.EntityRct.top, nWidth, nHeight,
 		m_WndMemDc, 0, 0, nWidth, nHeight);
 
 	// 绘制窗口的选择状态
-	BD_DrawSelectRect(ViewMemDc, WndDrawRct, true);
+	BD_DrawSelectRect(ViewMemDc, m_BD_FangKuai8.EntityRct, true);
 
 	// 绘制焦点控件的选择状态
 	if (m_pFocusCtrl != NULL)
@@ -1018,8 +1011,8 @@ void IWindowBaseImpl::BD_DrawWindowView(CDrawingBoard &ViewMemDc)
 		RECT CtrlRct = m_pFocusCtrl->GetCtrlInWindowRect();
 		nWidth = RECT_WIDTH(CtrlRct);
 		nHeight = RECT_HEIGHT(CtrlRct);
-		CtrlRct.left += WndDrawRct.left;
-		CtrlRct.top += WndDrawRct.top;
+		CtrlRct.left += m_BD_FangKuai8.EntityRct.left;
+		CtrlRct.top += m_BD_FangKuai8.EntityRct.top;
 		CtrlRct.right = CtrlRct.left + nWidth;
 		CtrlRct.bottom = CtrlRct.top + nHeight;
 

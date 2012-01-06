@@ -53,6 +53,7 @@ public:
 //////////////////////////////////////////////////////////////////////////
 	ONE_RESOURCE_PROP_MAP * GetAllWindowPropMap();
 
+	void ReleaseBaseProp(IPropertyBase *pCtrlProp);
 private:
 //////////////////////////////////////////////////////////////////////////
 	// Builder使用函数
@@ -69,7 +70,6 @@ private:
 	// 解析Resource.xml
 	bool TranslateResourceXml(ZIP_FILE *pResurceXml);
 	void ReleasePropMap(RESOURCE_PROP_MAP &PropMap);
-	void ReleaseBaseProp(IPropertyBase *pCtrlProp);
 	void ReleasePropMapItem(ONE_RESOURCE_PROP_MAP* pPropMapItem);
 	// 通用的从资源xml中创建属性
 	bool GeneralCreateBaseProp(char *pPropType, XmlNode* pXmlNode, ONE_RESOURCE_PROP_MAP* pPropMap);
