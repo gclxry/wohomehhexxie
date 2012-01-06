@@ -18,6 +18,7 @@ IControlBase::IControlBase()
 	m_bNeedRedraw = true;
 	m_bMouseHover = false;
 
+	memset(&m_BD_FangKuai8, 0, sizeof(FANGKUAI_8));
 	// 皮肤包管理类
 	m_pSkinPropMgr = NULL;
 	// 记录到xml中的属性
@@ -72,6 +73,12 @@ void IControlBase::SetUiEngine(IUiEngine *pUiEngine)
 {
 	if (pUiEngine != NULL)
 		m_pUiEngine = pUiEngine;
+}
+
+// 得到在Builder中显示的四周8个方块的位置
+FANGKUAI_8* IControlBase::BD_GetFangKuai8Rect()
+{
+	return &m_BD_FangKuai8;
 }
 
 IControlBase::~IControlBase()

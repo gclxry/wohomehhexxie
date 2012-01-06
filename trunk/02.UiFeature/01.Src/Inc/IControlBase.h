@@ -176,6 +176,9 @@ public:
 	IControlBase();
 	virtual ~IControlBase();
 
+	// 得到在Builder中显示的四周8个方块的位置
+	virtual FANGKUAI_8* BD_GetFangKuai8Rect();
+
 	// 取得父控件的指针，如果为NULL，说明父控件是对话框
 	IControlBase* GetParentControl();
 	IWindowBase* GetOwnerWindow();
@@ -371,6 +374,9 @@ protected:
 	// Group:CtrlDefs
 	IPropertyGroup* m_pPropGroupCtrlDefs;
 	
+private:
+	// Builder 专用，显示控件的边框的8个方块
+	FANGKUAI_8 m_BD_FangKuai8;
 
 protected:
 
