@@ -49,7 +49,6 @@ CUiFeatureBuilderView::CUiFeatureBuilderView() : CFormView(CUiFeatureBuilderView
 	m_pKernelWindow = NULL;
 	m_pSkinManager = NULL;
 	m_pControlList = NULL;
-	m_bNewCtrl = false;
 	m_bInitOk = false;
 	m_pCurrentWnd = NULL;
 	m_pSelectControl = NULL;
@@ -59,6 +58,8 @@ CUiFeatureBuilderView::CUiFeatureBuilderView() : CFormView(CUiFeatureBuilderView
 	m_bCreateNewCtrl = false;
 
 	m_ScrollOffset.cx = m_ScrollOffset.cy = 0;
+	m_LBtnDownPos.x = m_LBtnDownPos.y = 0;
+	m_MouseMovePos.x = m_MouseMovePos.y = 0;
 
 	GetUiEngine();
 }
@@ -179,7 +180,7 @@ void CUiFeatureBuilderView::SetProjectInitState(bool bInitOk)
 
 void CUiFeatureBuilderView::SetNewControl(bool bIsNew)
 {
-	m_bNewCtrl = bIsNew;
+	m_bCreateNewCtrl = bIsNew;
 }
 
 void CUiFeatureBuilderView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView)
@@ -205,7 +206,31 @@ void CUiFeatureBuilderView::OnDraw(CDC* pDC)
 
 	DrawWindowView();
 
+	// 绘制创建新控件时的矩形
+	DrawCreateCtrlRect();
+
 	::BitBlt(pDC->GetSafeHdc(), 0, 0, ViewSize.cx, ViewSize.cy, m_MemDc.GetSafeHdc(), 0, 0, SRCCOPY);
+}
+
+// 绘制创建新控件时的矩形
+void CUiFeatureBuilderView::DrawCreateCtrlRect()
+{
+	if (!m_bCreateNewCtrl)
+		return;
+
+	Graphics DoGrap(m_MemDc.GetSafeHdc());
+
+	Pen LinePen(Color(255, 255, 0, 0), 1.5f);
+	REAL dashVals[2] = {0.8f, 2.0f};
+	LinePen.SetDashPattern(dashVals, 2);
+	LinePen.SetDashOffset(30);
+
+	DoGrap.DrawLine(&LinePen, m_LBtnDownPos.x, m_LBtnDownPos.y, m_MouseMovePos.x, m_LBtnDownPos.y);
+	DoGrap.DrawLine(&LinePen, m_MouseMovePos.x, m_LBtnDownPos.y, m_MouseMovePos.x, m_MouseMovePos.y);
+	DoGrap.DrawLine(&LinePen, m_MouseMovePos.x, m_MouseMovePos.y, m_LBtnDownPos.x, m_MouseMovePos.y);
+	DoGrap.DrawLine(&LinePen, m_LBtnDownPos.x, m_MouseMovePos.y, m_LBtnDownPos.x, m_LBtnDownPos.y);
+
+//	DoGrap.DrawRectangle(&LinePen, m_LBtnDownPos.x, m_LBtnDownPos.y, m_MouseMovePos.x - m_LBtnDownPos.x, m_MouseMovePos.y - m_LBtnDownPos.y);
 }
 
 void CUiFeatureBuilderView::DrawWindowView()
@@ -283,14 +308,15 @@ void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
 	if (m_pSkinManager == NULL || m_pKernelWindow == NULL)
 		return;
 
-	point.x += m_ScrollOffset.cx;
-	point.y += m_ScrollOffset.cy;
-
 	if (m_bIsLButtonDown)
 	{
 		OnMouseMove_LButtonDown(point);
 		return;
 	}
+
+	// 如果需要创建一个新控件
+	if (m_bCreateNewCtrl)
+		return;
 
 	m_bMoveInWndFangKuai8 = OnMouseMove_FangKuai8(point, true);
 	if (m_bMoveInWndFangKuai8)
@@ -305,16 +331,28 @@ void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
 
 void CUiFeatureBuilderView::OnMouseMove_LButtonDown(CPoint point)
 {
-
-	// 判断是否需要创建一个新控件
-//	if (PtInRect())
-//	{
-//	}
-//	m_bCreateNewCtrl = true;
+	// 如果需要创建一个新控件
+	if (m_bCreateNewCtrl)
+	{
+		// 绘制创建新控件时的矩形
+		m_MouseMovePos = point;
+		this->RedrawWindow();
+	}
+	else if (m_bMoveInWndFangKuai8)
+	{
+		// 拖动窗口
+	}
+	else if (m_bMoveInCtrlFangKuai8)
+	{
+		// 拖动控件，改变控件大小
+	}
 }
 
 bool CUiFeatureBuilderView::OnMouseMove_FangKuai8(CPoint point, bool bIsWnd)
 {
+	point.x += m_ScrollOffset.cx;
+	point.y += m_ScrollOffset.cy;
+
 	FANGKUAI_8* pFk8 = NULL;
 	if (bIsWnd)
 	{
@@ -386,33 +424,44 @@ void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	CFormView::OnLButtonUp(nFlags, point);
 
-	point.x += m_ScrollOffset.cx;
-	point.y += m_ScrollOffset.cy;
-
-	m_bIsLButtonDown = false;
 	if (!m_bInitOk)
 		return;
 
-	SetViewCursor(UF_IDC_CROSS);
+	m_bIsLButtonDown = false;
 
-	// 创建新控件
-	if (m_pControlList != NULL)
+	// 如果需要创建一个新控件
+	if (m_bCreateNewCtrl)
 	{
-		CString strCtrlTypeName = m_pControlList->GetSelectCtrlTypeName();
+		m_bCreateNewCtrl = false;
+		this->RedrawWindow();
+		return;
 	}
 }
+
+//void CUiFeatureBuilderView::CreateNewControl(CPoint point)
+//{
+//
+//	// 创建新控件
+//	if (m_pControlList != NULL)
+//	{
+//		CString strCtrlTypeName = m_pControlList->GetSelectCtrlTypeName();
+//	}
+//}
 
 void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	CFormView::OnLButtonDown(nFlags, point);
-
-	point.x += m_ScrollOffset.cx;
-	point.y += m_ScrollOffset.cy;
+	m_LBtnDownPos = point;
 
 	if (m_pSkinManager == NULL || m_pKernelWindow == NULL)
 		return;
 
 	m_bIsLButtonDown = true;
+
+	// 如果需要创建一个新控件
+	if (m_bCreateNewCtrl)
+		return;
+
 
 	// 判断数遍左键点击在哪个控件上
 }
