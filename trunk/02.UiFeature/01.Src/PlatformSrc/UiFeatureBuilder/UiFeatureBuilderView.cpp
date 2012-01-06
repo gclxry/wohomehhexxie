@@ -379,13 +379,7 @@ void CUiFeatureBuilderView::SetViewCursor(int nCursor)
 {
 	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
 	if (pMain != NULL)
-	{
-		// ÉèÖÃ¹â±ê
-		::ShowCursor(FALSE);
 		pMain->SetViewCursor(nCursor);
-		::ShowCursor(TRUE);
-		::PostMessage(pMain->m_hWnd, WM_SETCURSOR, NULL, NULL);
-	}
 }
 
 void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)

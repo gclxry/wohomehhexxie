@@ -63,12 +63,7 @@ void CFeatureControlList::SetCtrlListCursor(bool bIsNormal)
 {
 	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
 	if (pMain != NULL)
-	{
-		::ShowCursor(FALSE);
 		pMain->SetViewCursor(UF_IDC_CROSS);
-		::ShowCursor(TRUE);
-		::PostMessage(pMain->m_hWnd, WM_SETCURSOR, NULL, NULL);
-	}
 
 	if (m_pView != NULL)
 	{
