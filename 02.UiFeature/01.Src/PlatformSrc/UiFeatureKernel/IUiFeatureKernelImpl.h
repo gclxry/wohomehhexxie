@@ -1,6 +1,7 @@
 
 #pragma once
 #include "..\..\Inc\IUiFeatureKernel.h"
+#include "IUiEngineImpl.h"
 #include "IPropertySkinManagerImpl.h"
 #include "..\..\Inc\IControlManager.h"
 
@@ -50,13 +51,12 @@ private:
 	HMODULE m_hControlDll;
 	IControlManager *m_pControlMgr;
 
-	HMODULE m_hUiEngineDll;
-	IUiEngine *m_pUiEngine;
+	IUiEngineImpl *m_pUiEngine;
+	IPropertySkinManagerImpl *m_pSkinMgr;
 
 	WINDOW_IMPL_MAP m_WndImplMap;
 	// 所有支持的控件
 	CONTROL_REG_MAP m_CtrlRegMap;
 	// Builder中使用的hwnd的索引值
 	int m_nBuilderHwnd;
-	IPropertySkinManagerImpl *m_pSkinMgr;
 };

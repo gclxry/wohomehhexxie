@@ -59,7 +59,6 @@ public:
 
 private:
 	void DrawWindowView();
-	IUiEngine* GetUiEngine();
 	// …Ë÷√π‚±Í
 	void SetViewCursor(int nCursor);
 
@@ -75,14 +74,13 @@ private:
 	void CreateNewControl();
 
 protected:
-	HMODULE m_hUiEngineDll;
+	IUiFeatureKernel* m_pUiKernel;
+	IPropertySkinManager *m_pSkinManager;
 	IUiEngine *m_pUiEngine;
 
 	CFeatureControlList *m_pControlList;
 	CWindowsViewTree *m_pWindowViewTree;
 
-	IUiFeatureKernel* m_pUiKernel;
-	IPropertySkinManager *m_pSkinManager;
 	bool m_bInitOk;
 	CDrawingBoard m_MemDc;
 

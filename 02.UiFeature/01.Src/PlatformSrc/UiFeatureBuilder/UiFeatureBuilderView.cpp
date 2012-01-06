@@ -12,7 +12,6 @@
 #include "WindowsViewTree.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\ICommonFun.h"
-#include "..\..\Inc\UiFeatureEngine.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -45,7 +44,6 @@ CUiFeatureBuilderView::CUiFeatureBuilderView() : CFormView(CUiFeatureBuilderView
 	GdiplusStartupInput gdiplusStartupInput;
 	GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
 
-	m_hUiEngineDll = NULL;
 	m_pUiEngine = NULL;
 	m_pUiKernel = NULL;
 	m_pSkinManager = NULL;
@@ -63,13 +61,10 @@ CUiFeatureBuilderView::CUiFeatureBuilderView() : CFormView(CUiFeatureBuilderView
 	m_LBtnDownPos.x = m_LBtnDownPos.y = 0;
 	m_MouseMovePos.x = m_MouseMovePos.y = 0;
 	m_LBtnUpPos.x = m_LBtnUpPos.y = 0;
-
-	GetUiEngine();
 }
 
 CUiFeatureBuilderView::~CUiFeatureBuilderView()
 {
-	SAFE_FREE_LIBRARY(m_hUiEngineDll);
 	GdiplusShutdown(m_gdiplusToken);
 }
 
@@ -107,39 +102,16 @@ BOOL CUiFeatureBuilderView::PreCreateWindow(CREATESTRUCT& cs)
 	return CFormView::PreCreateWindow(cs);
 }
 
-// CUiFeatureBuilderView »æÖÆ
-
-IUiEngine* CUiFeatureBuilderView::GetUiEngine()
-{
-	if (m_hUiEngineDll == NULL || m_pUiEngine == NULL)
-	{
-		SAFE_FREE_LIBRARY(m_hUiEngineDll);
-		string strPath = PathHelper(NAME_ENGINE_DLL);
-		if (strPath.size() > 0)
-		{
-			m_hUiEngineDll = ::LoadLibraryA(strPath.c_str());
-			if (m_hUiEngineDll != NULL)
-			{
-				GETUIENGINEINTERFACE pUiEngine = (GETUIENGINEINTERFACE)::GetProcAddress(m_hUiEngineDll, "GetUiEngineInterface");
-				if (pUiEngine != NULL)
-					m_pUiEngine = pUiEngine();
-			}
-		}
-	}
-
-	return m_pUiEngine;
-}
-
-
-// CUiFeatureBuilderView ´òÓ¡
-
 void CUiFeatureBuilderView::Init(IUiFeatureKernel* pKernelWindow, CFeatureControlList *pCtrlList, CWindowsViewTree *pWndTree)
 {
 	m_pUiKernel = pKernelWindow;
 	m_pControlList = pCtrlList;
 	m_pWindowViewTree = pWndTree;
 	if (m_pUiKernel != NULL)
+	{
 		m_pSkinManager = m_pUiKernel->GetSkinManager();
+		m_pUiEngine = m_pUiKernel->GetUiEngine();
+	}
 }
 
 void CUiFeatureBuilderView::OnRButtonUp(UINT nFlags, CPoint point)

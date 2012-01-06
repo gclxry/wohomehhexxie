@@ -244,7 +244,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="04.Common"
+			Name="05.Common"
 			>
 			<Filter
 				Name="02.管理所有的控件DLL"
@@ -316,6 +316,22 @@
 			</File>
 			<File
 				RelativePath=".\IWindowBaseImpl_Propetry.cpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="04.UiEngine"
+			>
+			<File
+				RelativePath="..\..\Inc\IUiEngine.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IUiEngineImpl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IUiEngineImpl.h"
 				>
 			</File>
 		</Filter>
