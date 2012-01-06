@@ -5,6 +5,32 @@
 #include "..\..\Inc\IControlManager.h"
 #include "..\..\Inc\ICtrlBasePanel.h"
 
+// 创建一个控件的宏
+#define CREATE_CONTROL(ctrl_name, ctrl_class_type)				{if (lstrcmpiA(pCtrlType, ctrl_name) == 0)\
+																{\
+																	ctrl_class_type *pCtrl = new ctrl_class_type;\
+																	if (pCtrl != NULL)\
+																	{\
+																		pRetCtrl = dynamic_cast<ICtrlInterface*>(pCtrl);\
+																		if (pRetCtrl == NULL)\
+																		{\
+																			SAFE_DELETE(pCtrl);\
+																		}\
+																	}\
+																}}
+
+
+// 销毁一个控件的宏
+#define DELETE_CONTROL(ctrl_name, ctrl_class_type)				{if (lstrcmpiA(pszObjType, ctrl_name) == 0)\
+																{\
+																	ctrl_class_type *pPanel = dynamic_cast<ctrl_class_type*>(*ppCtrl);\
+																	if (pPanel != NULL)\
+																	{\
+																		SAFE_DELETE(pPanel);\
+																		*ppCtrl = NULL;\
+																		return true;\
+																	}\
+																}}
 
 IControlManager *GetControlManager()
 {
@@ -53,7 +79,7 @@ void IControlManagerImpl::SetRegControlMap(CONTROL_REG_MAP *pCtrlMap)
 	pCtrlMap->clear();
 
 	// 添加控件，步骤2：向Builder工具注册控件
-	SetRegControl(pCtrlMap, "基本控件", CTRL_NAME_BASE_PANEL, "BasePanel.png", "对话框背景、面板控件");
+	SetRegControl(pCtrlMap, "基本控件组", CTRL_NAME_BASE_PANEL, "BasePanel.png", "对话框背景、面板控件");
 }
 
 // 创建一个控件，参数为步骤1的宏
@@ -67,18 +93,7 @@ ICtrlInterface* IControlManagerImpl::CreateCtrl(char *pCtrlType, char *pszObject
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// 添加控件，步骤4：创建一个控件
-	if (lstrcmpiA(pCtrlType, CTRL_NAME_BASE_PANEL) == NULL)
-	{
-		ICtrlBasePanel *pCtrl = new ICtrlBasePanel;
-		if (pCtrl != NULL)
-		{
-			pRetCtrl = dynamic_cast<ICtrlInterface*>(pCtrl);
-			if (pRetCtrl == NULL)
-			{
-				SAFE_DELETE(pCtrl);
-			}
-		}
-	}
+	CREATE_CONTROL(CTRL_NAME_BASE_PANEL, ICtrlBasePanel);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if (pRetCtrl == NULL)
@@ -104,16 +119,7 @@ bool IControlManagerImpl::ReleaseCtrl(ICtrlInterface **ppCtrl)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// 添加控件，步骤5：销毁一个控件
-	if (lstrcmpiA(pszObjType, CTRL_NAME_BASE_PANEL) == NULL)
-	{
-		ICtrlBasePanel *pPanel = dynamic_cast<ICtrlBasePanel*>(*ppCtrl);
-		if (pPanel != NULL)
-		{
-			SAFE_DELETE(pPanel);
-			*ppCtrl = NULL;
-			return true;
-		}
-	}
+	DELETE_CONTROL(CTRL_NAME_BASE_PANEL, ICtrlBasePanel);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	SAFE_DELETE(*ppCtrl);

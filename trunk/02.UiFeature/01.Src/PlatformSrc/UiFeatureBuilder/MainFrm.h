@@ -52,6 +52,7 @@ private:
 	IUiFeatureKernel* m_pUiKernel;
 	IPropertySkinManager* m_pSkinMgr;
 	CONTROL_REG_MAP* m_pRegControlMap;
+	IWindowBase *m_pCurrentWnd;
 
 //////////////////////////////////////////////////////////////////////////
 	// ¿Ø¼þÏà¹Ø

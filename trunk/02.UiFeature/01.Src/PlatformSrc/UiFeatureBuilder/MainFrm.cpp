@@ -52,6 +52,7 @@ CMainFrame::CMainFrame()
 	theApp.m_nAppLook = theApp.GetInt(_T("ApplicationLook"), ID_VIEW_APPLOOK_OFF_2007_SILVER);
 	theApp.InitShellManager();
 
+	m_pCurrentWnd = NULL;
 	m_pView = NULL;
 	m_hKernelDll = NULL;
 	m_pUiKernel = NULL;
@@ -81,6 +82,7 @@ void CMainFrame::ResetShowWindow(IWindowBase *pCurrentWnd)
 	if (m_pView == NULL)
 		return;
 
+	m_pCurrentWnd = pCurrentWnd;
 	// 重新绘制View
 	m_pView->ResetShowWindow(pCurrentWnd);
 }
@@ -444,17 +446,27 @@ BOOL CMainFrame::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
 	if (m_nViewCursor != -1)
 	{
-		// 只有需要创建新控件，鼠标进入view，才显示十字架
-		POINT pt;
-		::GetCursorPos(&pt);
 		CUiFeatureBuilderView *pView = (CUiFeatureBuilderView*)this->GetActiveView();
 		if (pView != NULL)
 		{
+			POINT pt;
+			::GetCursorPos(&pt);
+
 			RECT ViewRct;
 			pView->GetWindowRect(&ViewRct);
+
 			if (PtInRect(&ViewRct, pt))
 			{
-				HCURSOR hCursor = ::LoadCursor(NULL, MAKEINTRESOURCE(m_nViewCursor));
+				int nCur = m_nViewCursor;
+				if (m_nViewCursor == UF_IDC_CROSS && m_pCurrentWnd != NULL)
+				{
+					// 只有需要创建新控件，鼠标进入窗口范围，才显示十字架
+					pView->ScreenToClient(&pt);
+					if (!pView->PtInWindow(pt))
+						nCur = UF_IDC_ARROW;
+				}
+
+				HCURSOR hCursor = ::LoadCursor(NULL, MAKEINTRESOURCE(nCur));
 				if (hCursor != NULL)
 				{
 					HCURSOR hSetCur = ::SetCursor(hCursor);

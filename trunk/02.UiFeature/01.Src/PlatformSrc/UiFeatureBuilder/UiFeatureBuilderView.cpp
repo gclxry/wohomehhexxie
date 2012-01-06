@@ -422,6 +422,7 @@ void CUiFeatureBuilderView::SetViewCursor(int nCursor)
 
 void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 {
+	SetViewCursor(UF_IDC_ARROW);
 	CFormView::OnLButtonUp(nFlags, point);
 	m_LBtnUpPos = point;
 	m_bIsLButtonDown = false;
@@ -465,16 +466,42 @@ void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 	m_LBtnDownPos = point;
 	m_bIsLButtonDown = true;
 
-	if (m_pSkinManager == NULL || m_pUiKernel == NULL)
+	if (m_pSkinManager == NULL || m_pUiKernel == NULL || m_pCurrentWnd == NULL)
 		return;
 
+	FANGKUAI_8* pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
+	if (pFk8 == NULL)
+		return;
 
 	// 如果需要创建一个新控件
 	if (m_bCreateNewCtrl)
+	{
+		m_bCreateNewCtrl = PtInWindow(point);
+		if (!m_bCreateNewCtrl)
+			SetViewCursor(UF_IDC_ARROW);
 		return;
+	}
 
 
 	// 判断数遍左键点击在哪个控件上
+}
+
+bool CUiFeatureBuilderView::PtInWindow(CPoint point)
+{
+	if (m_pCurrentWnd == NULL)
+		return false;
+
+	FANGKUAI_8* pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
+	if (pFk8 == NULL)
+		return false;
+
+	point.x += m_ScrollOffset.cx;
+	point.y += m_ScrollOffset.cy;
+
+	if (::PtInRect(&(pFk8->EntityRct), point))
+		return true;
+
+	return false;
 }
 
 // 取得选择的控件s

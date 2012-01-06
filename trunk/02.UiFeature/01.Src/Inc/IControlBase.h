@@ -23,6 +23,7 @@ class IControlBase;
 // Builder 专用，显示控件的边框的8个方块
 struct FANGKUAI_8
 {
+	RECT EntityRct;
 	RECT LeftTop;
 	RECT LeftMid;
 	RECT LeftBottom;
