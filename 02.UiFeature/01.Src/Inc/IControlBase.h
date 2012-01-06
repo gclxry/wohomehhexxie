@@ -20,6 +20,19 @@ class IUiFeatureKernelImpl;
 class IPropertyControl;
 class IControlBase;
 
+// Builder 专用，显示控件的边框的8个方块
+struct FANGKUAI_8
+{
+	RECT LeftTop;
+	RECT LeftMid;
+	RECT LeftBottom;
+	RECT MidTop;
+	RECT MidBottom;
+	RECT RightTop;
+	RECT RightMid;
+	RECT RightBottom;
+};
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 当前控件相对于父控件的布局类型
 

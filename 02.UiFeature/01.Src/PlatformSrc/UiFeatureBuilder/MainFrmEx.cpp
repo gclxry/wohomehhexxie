@@ -51,9 +51,9 @@ void CMainFrame::InitUiFeatureKernel()
 	SetProjectInitState(false);
 }
 
-void CMainFrame::SetCrossCursor(bool bIsCross)
+void CMainFrame::SetViewCursor(int nCursor)
 {
-	m_bIsCross = bIsCross;
+	m_nViewCursor = nCursor;
 }
 
 void CMainFrame::OnFileNew()

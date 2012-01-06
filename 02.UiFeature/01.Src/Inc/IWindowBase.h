@@ -4,6 +4,8 @@
 #include "IFeatureObject.h"
 #include "IPropertyWindow.h"
 
+
+
 class IWindowBase : public IFeatureObject
 {
 public:
@@ -11,6 +13,8 @@ public:
 // Builder 使用的函数
 	virtual void BD_InitWindowBase(IPropertyWindow *pWindowProp, bool bSetDftProp) = 0;
 	virtual void BD_DrawWindowView(CDrawingBoard &ViewMemDc) = 0;
+	// 得到在Builder中显示的四周8个方块的位置
+	virtual FANGKUAI_8* BD_GetFangKuai8Rect() = 0;
 
 //////////////////////////////////////////////////////////////////////////
 	// 窗口居中显示

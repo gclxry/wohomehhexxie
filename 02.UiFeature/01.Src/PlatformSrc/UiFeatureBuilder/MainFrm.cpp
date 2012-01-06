@@ -59,7 +59,7 @@ CMainFrame::CMainFrame()
 	m_hControlDll = NULL;
 	m_pRegControlMap = NULL;
 	m_bInitOk = false;
-	m_bIsCross = false;
+	m_nViewCursor = -1;
 
 	m_strCurSkinDir = _T("");
 	m_strCurSkinName = _T("");
@@ -442,9 +442,9 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
 
 BOOL CMainFrame::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
-	if (m_bIsCross)
+	if (m_nViewCursor != -1)
 	{
-		// 只有需要创建新空间，鼠标进入view，才显示十字架
+		// 只有需要创建新控件，鼠标进入view，才显示十字架
 		POINT pt;
 		::GetCursorPos(&pt);
 		CUiFeatureBuilderView *pView = (CUiFeatureBuilderView*)this->GetActiveView();
@@ -454,7 +454,7 @@ BOOL CMainFrame::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 			pView->GetWindowRect(&ViewRct);
 			if (PtInRect(&ViewRct, pt))
 			{
-				HCURSOR hCursor = ::LoadCursor(NULL, IDC_CROSS);
+				HCURSOR hCursor = ::LoadCursor(NULL, MAKEINTRESOURCE(m_nViewCursor));
 				if (hCursor != NULL)
 				{
 					HCURSOR hSetCur = ::SetCursor(hCursor);

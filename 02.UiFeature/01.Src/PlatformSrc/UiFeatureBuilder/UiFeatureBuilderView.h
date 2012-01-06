@@ -7,6 +7,15 @@
 #include "..\..\Inc\IUiFeatureKernel.h"
 #include "..\..\Inc\IWindowBase.h"
 
+
+#define UF_IDC_ARROW           (32512)
+#define UF_IDC_CROSS           (32515)
+#define UF_IDC_SIZENWSE        (32642)
+#define UF_IDC_SIZENESW        (32643)
+#define UF_IDC_SIZEWE          (32644)
+#define UF_IDC_SIZENS          (32645)
+#define UF_IDC_SIZEALL         (32646)
+
 class CFeatureControlList;
 class CUiFeatureBuilderView : public CFormView
 {
@@ -29,8 +38,13 @@ public:
 private:
 	void DrawWindowView();
 	IUiEngine* GetUiEngine();
+	// 设置光标
+	void SetViewCursor(int nCursor);
 
 	void ResetViewShowSize();
+	// 是否在窗口的8个方块内移动
+	bool OnMouseMove_WindowFangKuai8(CPoint point);
+	void OnMouseMove_LButtonDown(CPoint point);
 
 // 重写
 public:
@@ -59,7 +73,15 @@ protected:
 	bool m_bInitOk;
 	CDrawingBoard m_MemDc;
 
+	bool m_bIsLButtonDown;
+
+	bool m_bCreateNewCtrl;
+
 	IWindowBase *m_pCurrentWnd;
+	bool m_bMoveInWndFangKuai8;
+
+	// 滚动条滚动后视图的偏移量
+	CSize m_ScrollOffset;
 
 private:
 	ULONG_PTR m_gdiplusToken;
@@ -81,6 +103,7 @@ public:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
 
 #ifndef _DEBUG  // UiFeatureBuilderView.cpp 中的调试版本

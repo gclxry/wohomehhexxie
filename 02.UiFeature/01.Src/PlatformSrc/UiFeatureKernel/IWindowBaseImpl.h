@@ -19,6 +19,8 @@ public:
 	// Builder 使用的函数
 	virtual void BD_InitWindowBase(IPropertyWindow *pWindowProp, bool bSetDftProp);
 	virtual void BD_DrawWindowView(CDrawingBoard &ViewMemDc);
+	// 得到在Builder中显示的四周8个方块的位置
+	virtual FANGKUAI_8* BD_GetFangKuai8Rect();
 
 //////////////////////////////////////////////////////////////////////////
 	// 导入皮肤包使用的函数初始化
@@ -100,6 +102,8 @@ protected:
 	string m_strSkinPath;
 	// 皮肤的object名称
 	string m_strWindowObjectName;
+	// Builder 专用，显示控件的边框的8个方块
+	FANGKUAI_8 m_BD_FangKuai8;
 
 	// 在Builder中绘制用的边框色块
 	IPropertyImage m_BuilderWndFrameImage;
@@ -166,7 +170,7 @@ private:
 	// 释放子控件列表
 	void ReleaseChildVec(CHILD_CTRLS_VEC *pChildCtrlsVec);
 	// 绘制窗口和被选中的控件的边框的8个方块
-	void DrawSelectRect(CDrawingBoard &MemDc, RECT DrawRct, bool bIsWndFrame);
+	void BD_DrawSelectRect(CDrawingBoard &MemDc, RECT DrawRct, bool bIsWndFrame);
 
 private:
 	IUiEngine *m_pUiEngine;

@@ -34,6 +34,8 @@ IWindowBaseImpl::IWindowBaseImpl()
 	m_pMouseHoverCtrl = NULL;
 	m_pFocusCtrl = NULL;
 
+	memset(&m_BD_FangKuai8, 0, sizeof(FANGKUAI_8));
+
 	m_strSkinPath = "";
 	m_strWindowObjectName = "";
 
@@ -1008,7 +1010,7 @@ void IWindowBaseImpl::BD_DrawWindowView(CDrawingBoard &ViewMemDc)
 		m_WndMemDc, 0, 0, nWidth, nHeight);
 
 	// 绘制窗口的选择状态
-	DrawSelectRect(ViewMemDc, WndDrawRct, true);
+	BD_DrawSelectRect(ViewMemDc, WndDrawRct, true);
 
 	// 绘制焦点控件的选择状态
 	if (m_pFocusCtrl != NULL)
@@ -1021,68 +1023,64 @@ void IWindowBaseImpl::BD_DrawWindowView(CDrawingBoard &ViewMemDc)
 		CtrlRct.right = CtrlRct.left + nWidth;
 		CtrlRct.bottom = CtrlRct.top + nHeight;
 
-		DrawSelectRect(ViewMemDc, CtrlRct, false);
+		BD_DrawSelectRect(ViewMemDc, CtrlRct, false);
 	}
 }
 
 // 绘制窗口和被选中的控件的边框的8个方块
-void IWindowBaseImpl::DrawSelectRect(CDrawingBoard &MemDc, RECT DrawRct, bool bIsWndFrame)
+void IWindowBaseImpl::BD_DrawSelectRect(CDrawingBoard &MemDc, RECT DrawRct, bool bIsWndFrame)
 {
 	IPropertyImage *pPropImg = &m_BuilderCtrlFrameImage;
 	if (bIsWndFrame)
 		pPropImg = &m_BuilderWndFrameImage;
 
-	RECT LeftTop, LeftMid, LeftBottom, MidTop, MidBottom, RightTop, RightMid, RightBottom;
-	INIT_RECT(LeftTop), INIT_RECT(LeftMid), INIT_RECT(LeftBottom), INIT_RECT(MidTop);
-	INIT_RECT(RightTop), INIT_RECT(RightMid), INIT_RECT(RightBottom), INIT_RECT(MidBottom);
+	m_BD_FangKuai8.LeftTop.left = DrawRct.left - FANGKUAI_SIZE;
+	m_BD_FangKuai8.LeftTop.top = DrawRct.top - FANGKUAI_SIZE;
+	m_BD_FangKuai8.LeftTop.right = m_BD_FangKuai8.LeftTop.left + FANGKUAI_SIZE;
+	m_BD_FangKuai8.LeftTop.bottom = m_BD_FangKuai8.LeftTop.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, m_BD_FangKuai8.LeftTop);
 
-	LeftTop.left = DrawRct.left - FANGKUAI_SIZE;
-	LeftTop.top = DrawRct.top - FANGKUAI_SIZE;
-	LeftTop.right = LeftTop.left + FANGKUAI_SIZE;
-	LeftTop.bottom = LeftTop.top + FANGKUAI_SIZE;
-	pPropImg->DrawImage(MemDc, LeftTop);
+	m_BD_FangKuai8.LeftMid.left = DrawRct.left - FANGKUAI_SIZE;
+	m_BD_FangKuai8.LeftMid.top = DrawRct.top + (RECT_HEIGHT(DrawRct) / 2) - (FANGKUAI_SIZE / 2);
+	m_BD_FangKuai8.LeftMid.right = m_BD_FangKuai8.LeftMid.left + FANGKUAI_SIZE;
+	m_BD_FangKuai8.LeftMid.bottom = m_BD_FangKuai8.LeftMid.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, m_BD_FangKuai8.LeftMid);
 
-	LeftMid.left = DrawRct.left - FANGKUAI_SIZE;
-	LeftMid.top = DrawRct.top + (RECT_HEIGHT(DrawRct) / 2) - (FANGKUAI_SIZE / 2);
-	LeftMid.right = LeftMid.left + FANGKUAI_SIZE;
-	LeftMid.bottom = LeftMid.top + FANGKUAI_SIZE;
-	pPropImg->DrawImage(MemDc, LeftMid);
+	m_BD_FangKuai8.LeftBottom.left = DrawRct.left - FANGKUAI_SIZE;
+	m_BD_FangKuai8.LeftBottom.top = DrawRct.bottom;
+	m_BD_FangKuai8.LeftBottom.right = m_BD_FangKuai8.LeftBottom.left + FANGKUAI_SIZE;
+	m_BD_FangKuai8.LeftBottom.bottom = m_BD_FangKuai8.LeftBottom.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, m_BD_FangKuai8.LeftBottom);
 
-	LeftBottom.left = DrawRct.left - FANGKUAI_SIZE;
-	LeftBottom.top = DrawRct.bottom;
-	LeftBottom.right = LeftBottom.left + FANGKUAI_SIZE;
-	LeftBottom.bottom = LeftBottom.top + FANGKUAI_SIZE;
-	pPropImg->DrawImage(MemDc, LeftBottom);
+	m_BD_FangKuai8.MidTop.left = DrawRct.left + (RECT_WIDTH(DrawRct) / 2) - (FANGKUAI_SIZE / 2);
+	m_BD_FangKuai8.MidTop.top = DrawRct.top - FANGKUAI_SIZE;
+	m_BD_FangKuai8.MidTop.right = m_BD_FangKuai8.MidTop.left + FANGKUAI_SIZE;
+	m_BD_FangKuai8.MidTop.bottom = m_BD_FangKuai8.MidTop.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, m_BD_FangKuai8.MidTop);
 
-	MidTop.left = DrawRct.left + (RECT_WIDTH(DrawRct) / 2) - (FANGKUAI_SIZE / 2);
-	MidTop.top = DrawRct.top - FANGKUAI_SIZE;
-	MidTop.right = MidTop.left + FANGKUAI_SIZE;
-	MidTop.bottom = MidTop.top + FANGKUAI_SIZE;
-	pPropImg->DrawImage(MemDc, MidTop);
+	m_BD_FangKuai8.MidBottom.left = DrawRct.left + (RECT_WIDTH(DrawRct) / 2) - (FANGKUAI_SIZE / 2);
+	m_BD_FangKuai8.MidBottom.top = DrawRct.bottom;
+	m_BD_FangKuai8.MidBottom.right = m_BD_FangKuai8.MidBottom.left + FANGKUAI_SIZE;
+	m_BD_FangKuai8.MidBottom.bottom = m_BD_FangKuai8.MidBottom.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, m_BD_FangKuai8.MidBottom);
 
-	MidBottom.left = DrawRct.left + (RECT_WIDTH(DrawRct) / 2) - (FANGKUAI_SIZE / 2);
-	MidBottom.top = DrawRct.bottom;
-	MidBottom.right = MidBottom.left + FANGKUAI_SIZE;
-	MidBottom.bottom = MidBottom.top + FANGKUAI_SIZE;
-	pPropImg->DrawImage(MemDc, MidBottom);
+	m_BD_FangKuai8.RightTop.left = DrawRct.right;
+	m_BD_FangKuai8.RightTop.top = DrawRct.top - FANGKUAI_SIZE;
+	m_BD_FangKuai8.RightTop.right = m_BD_FangKuai8.RightTop.left + FANGKUAI_SIZE;
+	m_BD_FangKuai8.RightTop.bottom = m_BD_FangKuai8.RightTop.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, m_BD_FangKuai8.RightTop);
 
-	RightTop.left = DrawRct.right;
-	RightTop.top = DrawRct.top - FANGKUAI_SIZE;
-	RightTop.right = RightTop.left + FANGKUAI_SIZE;
-	RightTop.bottom = RightTop.top + FANGKUAI_SIZE;
-	pPropImg->DrawImage(MemDc, RightTop);
+	m_BD_FangKuai8.RightMid.left = DrawRct.right;
+	m_BD_FangKuai8.RightMid.top = DrawRct.top + (RECT_HEIGHT(DrawRct) / 2) - (FANGKUAI_SIZE / 2);
+	m_BD_FangKuai8.RightMid.right = m_BD_FangKuai8.RightMid.left + FANGKUAI_SIZE;
+	m_BD_FangKuai8.RightMid.bottom = m_BD_FangKuai8.RightMid.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, m_BD_FangKuai8.RightMid);
 
-	RightMid.left = DrawRct.right;
-	RightMid.top = DrawRct.top + (RECT_HEIGHT(DrawRct) / 2) - (FANGKUAI_SIZE / 2);
-	RightMid.right = RightMid.left + FANGKUAI_SIZE;
-	RightMid.bottom = RightMid.top + FANGKUAI_SIZE;
-	pPropImg->DrawImage(MemDc, RightMid);
-
-	RightBottom.left = DrawRct.right;
-	RightBottom.top = DrawRct.bottom;
-	RightBottom.right = RightBottom.left + FANGKUAI_SIZE;
-	RightBottom.bottom = RightBottom.top + FANGKUAI_SIZE;
-	pPropImg->DrawImage(MemDc, RightBottom);
+	m_BD_FangKuai8.RightBottom.left = DrawRct.right;
+	m_BD_FangKuai8.RightBottom.top = DrawRct.bottom;
+	m_BD_FangKuai8.RightBottom.right = m_BD_FangKuai8.RightBottom.left + FANGKUAI_SIZE;
+	m_BD_FangKuai8.RightBottom.bottom = m_BD_FangKuai8.RightBottom.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, m_BD_FangKuai8.RightBottom);
 }
 
 // 取得窗口中设置属性的窗口大小
@@ -1092,4 +1090,10 @@ SIZE IWindowBaseImpl::PP_GetWindowPropSize()
 	WndSize.cx = m_pPropSize_Width->GetValue();
 	WndSize.cy = m_pPropSize_Height->GetValue();
 	return WndSize;
+}
+
+// 得到在Builder中显示的四周8个方块的位置
+FANGKUAI_8* IWindowBaseImpl::BD_GetFangKuai8Rect()
+{
+	return &m_BD_FangKuai8;
 }
