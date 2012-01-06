@@ -448,7 +448,7 @@ void CUiFeatureBuilderView::CreateNewControl()
 	if (m_pControlList == NULL || m_pUiKernel == NULL || m_pCurrentWnd == NULL)
 		return;
 
-	IControlBase* pParentCtrl = GetSelectControl(m_LBtnUpPos);
+	IControlBase* pParentCtrl = GetSelectControl(m_LBtnDownPos);
 	CString strCtrlTypeName = m_pControlList->GetSelectCtrlTypeName();
 	m_pSelectControl = m_pUiKernel->BD_CreateControlEmptyPropetry(m_pCurrentWnd, pParentCtrl, W2A(strCtrlTypeName));
 	if (m_pSelectControl == NULL)
