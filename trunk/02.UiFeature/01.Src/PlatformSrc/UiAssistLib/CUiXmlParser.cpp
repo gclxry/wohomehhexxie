@@ -1,23 +1,5 @@
-/*
 
- Jabber Protocol Plugin for Miranda IM
- Copyright (C) 2002-2004  Santithorn Bunchua
- 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-  
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-   
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-	
-*/
+
 #include "stdafx.h"
 #include <ctype.h>
 #include <stdlib.h>
@@ -42,11 +24,47 @@ char* mystrdup(const char* pszSrc)
 	}
 	return 0;
 }
+char* ConvertToRaw(char* pszStr)
+{
+	char* pR = pszStr;
+	char* pW = pszStr;
+	while (*pR)
+	{
+		if (     pR[0] == '&' && pR[1] == 'l' && pR[2] == 't' && pR[3] == ';')
+			*pW++ = '<', pR+=4;
+		else if (pR[0] == '&' && pR[1] == 'g' && pR[2] == 't' && pR[3] == ';')
+			*pW++ = '>', pR+=4;
+		else if (pR[0] == '&' && pR[1] == 'a' && pR[2] == 'm' && pR[3] == 'p' && pR[4] == ';')
+			*pW++ = '&', pR+=5;
+		else if (pR[0] == '&' && pR[1] == 'q' && pR[2] == 'u' && pR[3] == 'o' && pR[4] == 't' && pR[5] == ';')
+			*pW++ = '"', pR+=6;
+		else if (pR[0] == '&' && pR[1] == 'a' && pR[2] == 'p' && pR[3] == 'o' && pR[4] == 's' && pR[5] == ';')
+			*pW++ = '\'', pR+=6;
+		else
+			*pW++ = *pR++;
+	}
+	*pW = 0;
+	return pszStr;
+}
+void ScanConvert(XmlNode*& node)
+{
+	if (node == 0) return;
+	if (node->numAttr > 0)
+	{
+		for (int i = 0; i < node->numAttr; ++i)
+		{
+			if (node->attr[i]->value && node->attr[i]->value[0])
+				ConvertToRaw(node->attr[i]->value);
+		}
+	}
+	if (node->text && node->text[0])
+		ConvertToRaw(node->text);
+}
 
-void JabberXmlFreeNode(XmlNode *node);
+void JabberXmlFreeNode(XmlNode *& node);
 int JabberXmlDumpNode(XmlNode *node,char** str,int& nSize);
 BOOL JabberXmlProcessElem(XmlState *xmlState, XmlElemType elemType, char *elemText, size_t textSize, char *elemAttr, size_t attrSize);
-void JabberXmlRemoveChild(XmlNode *node, XmlNode *child);
+void JabberXmlRemoveChild(XmlNode *node, XmlNode *& child);
 int  JabberXmlGetAttrIndex(XmlNode* node,char* pKey);
 void CopyString(char** src,char* dst,int& srcSize)
 {
@@ -377,6 +395,13 @@ BOOL JabberXmlProcessElem(XmlState *xmlState, XmlElemType elemType, char *elemTe
 	
 	if (node->state != NODE_OPEN) return FALSE;
 	
+	struct tmpFinish
+	{
+		XmlNode ** m_ppXn;
+		tmpFinish(XmlNode ** ppXn){m_ppXn = ppXn;}
+		~tmpFinish(){if (*m_ppXn)ScanConvert(*m_ppXn);}
+	}_tmpFinish(&n);
+
 	//text = mystrdup(elemText);
 	text = (char*)malloc(textSize+1);
 	char* pS = elemText;
@@ -387,7 +412,7 @@ BOOL JabberXmlProcessElem(XmlState *xmlState, XmlElemType elemType, char *elemTe
 	
 	if (elemAttr && elemAttr[0])
 	{
-		// modified by haoyongjian,from mystrdup to memcpy,because boundscheck report overrun error,but in fact,no errorss
+		// modified by haoyongjian,from mystrdup to memcpy,because boundscheck report overrun error,but in fact,no errors
 		attr = mystrdup(elemAttr);
 	}
 	else
@@ -554,7 +579,7 @@ XmlNode *JabberXmlGetNthChild(XmlNode *node, char *tag, int nth)
 
 XmlNode *JabberXmlGetNthChildWithoutTag(XmlNode *node, int nth)
 {
-	if (node==NULL || node->numChild<=0)
+	if (node==NULL || node->numChild<=0 || nth >= node->numChild)
 		return NULL;
 	
 	return node->child[nth];
@@ -675,7 +700,7 @@ void JabberFreeDumpBuffer(char* buf)
 		free(buf);
 }
 
-void JabberXmlRemoveChild(XmlNode *node, XmlNode *child)
+void JabberXmlRemoveChild(XmlNode *node, XmlNode *&child)
 {
 	int i;
 	
@@ -694,7 +719,7 @@ void JabberXmlRemoveChild(XmlNode *node, XmlNode *child)
 	}
 }
 
-void JabberXmlFreeNode(XmlNode *node)
+void JabberXmlFreeNode(XmlNode *&node)
 {
 	int i = 0;
 	

@@ -275,8 +275,6 @@ void CUiFeatureBuilderView::ResetViewShowSize()
 void CUiFeatureBuilderView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	CFormView::OnKeyDown(nChar, nRepCnt, nFlags);
-
-
 }
 
 void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
