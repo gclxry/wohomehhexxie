@@ -16,16 +16,6 @@ class CMainFrame : public CFrameWndEx
 // 实现
 public:
 	virtual ~CMainFrame();
-
-	void SetViewCursor(int nCursor);
-	void SetView(CUiFeatureBuilderView *pView);
-	void ResetShowWindow(IWindowBase *pCurrentWnd);
-	
-protected: // 仅从序列化创建
-	CMainFrame();
-	DECLARE_DYNCREATE(CMainFrame)
-
-public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = NULL, CCreateContext* pContext = NULL);
 
@@ -34,6 +24,20 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
+protected: // 仅从序列化创建
+	CMainFrame();
+	DECLARE_DYNCREATE(CMainFrame)
+
+	BOOL CreateDockingWindows();
+	void SetDockingWindowIcons(BOOL bHiColorIcons);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+public:
+	void SetViewCursor(int nCursor);
+	void SetView(CUiFeatureBuilderView *pView);
+	
 protected:  // 控件条嵌入成员
 	CMFCMenuBar       m_wndMenuBar;
 	CMFCToolBar       m_wndToolBar;
@@ -52,14 +56,13 @@ private:
 	IUiFeatureKernel* m_pUiKernel;
 	IPropertySkinManager* m_pSkinMgr;
 	CONTROL_REG_MAP* m_pRegControlMap;
-	IWindowBase *m_pCurrentWnd;
 
 //////////////////////////////////////////////////////////////////////////
 	// 控件相关
-	HMODULE			m_hControlDll;
+	HMODULE m_hControlDll;
 
 //////////////////////////////////////////////////////////////////////////
-	bool	m_bInitOk;
+	bool m_bInitOk;
 	// 光标
 	int m_nViewCursor;
 
@@ -93,8 +96,6 @@ protected:
 	afx_msg void OnUpdateApplicationLook(CCmdUI* pCmdUI);
 	DECLARE_MESSAGE_MAP()
 
-	BOOL CreateDockingWindows();
-	void SetDockingWindowIcons(BOOL bHiColorIcons);
 public:
 	afx_msg void OnFileNew();
 	afx_msg void OnFileOpen();

@@ -257,6 +257,14 @@ bool IControlBase::IsVisible()
 	return m_pPropBase_Visible->GetValue();
 }
 
+const char * IControlBase::PP_GetControlObjectName()
+{
+	if (m_pPropBase_Name == NULL)
+		return NULL;
+
+	return m_pPropBase_Name->GetString();
+}
+
 // 是否接受鼠标消息
 void IControlBase::SetReceiveMouseMessage(bool bIsReceive)
 {

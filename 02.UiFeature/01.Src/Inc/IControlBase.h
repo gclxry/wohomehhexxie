@@ -185,7 +185,7 @@ public:
 	IWindowBase* GetOwnerWindow();
 
 	// 取得子控件列表
-	CHILD_CTRLS_VEC* GetChildCtrlsVec();
+	CHILD_CTRLS_VEC* GetChildControlsVec();
 
 	// 重绘控件
 	void RedrawControl(bool bDrawImmediately = true);
@@ -200,6 +200,8 @@ public:
 	RECT GetCtrlInControlRect();
 	// 取得控件的大小
 	RECT GetCtrlRect();
+
+	const char * PP_GetControlObjectName();
 
 	// 是否接受鼠标消息
 	void SetReceiveMouseMessage(bool bIsReceive);

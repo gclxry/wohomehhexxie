@@ -37,7 +37,7 @@ void CDrawingImage::CreateByFile(const char *pszFilePath)
 	}
 
 	int nReadCtns = 0;
-	while(nReadCtns < (int)FileAttr.nFileSizeLow)
+	while (nReadCtns < (int)FileAttr.nFileSizeLow)
 	{
 		BYTE *pRead = pReadBuf + nReadCtns;
 		int nNeedRead = FileAttr.nFileSizeLow - nReadCtns;

@@ -9,6 +9,7 @@
 #include "UiFeatureBuilderView.h"
 #include "MainFrm.h"
 #include "FeatureControlList.h"
+#include "WindowsViewTree.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\ICommonFun.h"
 #include "..\..\Inc\UiFeatureEngine.h"
@@ -49,6 +50,7 @@ CUiFeatureBuilderView::CUiFeatureBuilderView() : CFormView(CUiFeatureBuilderView
 	m_pUiKernel = NULL;
 	m_pSkinManager = NULL;
 	m_pControlList = NULL;
+	m_pWindowViewTree = NULL;
 	m_bInitOk = false;
 	m_pCurrentWnd = NULL;
 	m_pSelectControl = NULL;
@@ -131,10 +133,11 @@ IUiEngine* CUiFeatureBuilderView::GetUiEngine()
 
 // CUiFeatureBuilderView 打印
 
-void CUiFeatureBuilderView::Init(IUiFeatureKernel* pKernelWindow, CFeatureControlList *pCtrlList)
+void CUiFeatureBuilderView::Init(IUiFeatureKernel* pKernelWindow, CFeatureControlList *pCtrlList, CWindowsViewTree *pWndTree)
 {
 	m_pUiKernel = pKernelWindow;
 	m_pControlList = pCtrlList;
+	m_pWindowViewTree = pWndTree;
 	if (m_pUiKernel != NULL)
 		m_pSkinManager = m_pUiKernel->GetSkinManager();
 }
@@ -458,6 +461,10 @@ void CUiFeatureBuilderView::CreateNewControl()
 		AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
 		return;
 	}
+
+	// 重新绘制WindowTree
+	if (m_pWindowViewTree != NULL)
+		m_pWindowViewTree->AddNewControlToWindowTreeNode(m_pCurrentWnd, pParentCtrl, m_pSelectControl);
 }
 
 void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)

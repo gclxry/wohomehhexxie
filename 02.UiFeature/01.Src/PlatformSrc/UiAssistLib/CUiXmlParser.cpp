@@ -664,7 +664,7 @@ int JabberXmlDumpNode(XmlNode *node,char** str,int& nSize)
 		if (node->text)
 		{
 			char* p = node->text;
-			while(_IsSpace(*p)) p++;
+			while (_IsSpace(*p)) p++;
 			for (i=0; i<node->depth-1; i++)
 				CopyString(str, NODE_SPACE,nSize);
 			CopyString(str,p,nSize);

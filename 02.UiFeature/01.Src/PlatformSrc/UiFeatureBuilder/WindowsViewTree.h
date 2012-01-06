@@ -2,6 +2,7 @@
 #pragma once
 #include "..\..\Inc\IPropertySkinManager.h"
 #include "..\..\Inc\IUiFeatureKernel.h"
+#include "..\..\Inc\IControlBase.h"
 #include "PropertyViewCtrl.h"
 /////////////////////////////////////////////////////////////////////////////
 // CWindowsViewTree 窗口
@@ -19,6 +20,8 @@ public:
 	void RefreshObjectName();
 	void InitShowNewProject();
 	void SetProjectInitState(bool bInitOk);
+	// 向树中插入一个新节点
+	void AddNewControlToWindowTreeNode(IWindowBase *pWindow, IControlBase* pParentCtrl, IControlBase *pControl);
 
 // 重写
 protected:
@@ -29,6 +32,12 @@ private:
 	void OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase);
 
 	void RefreshItemObjectName(HTREEITEM hParentItem);
+	// 查找指定的控件
+	HTREEITEM FindControlTreeNode(HTREEITEM hParentNode, IControlBase* pCtrl);
+	// 在指定节点的子节点末尾插入新节点
+	HTREEITEM InsertControlNodeToEnd(HTREEITEM hParentNode, IControlBase *pControl);
+	// 向树中插入一个新节点
+	void InsertControlVec(HTREEITEM hParentItem, CHILD_CTRLS_VEC* pCtrlVec);
 
 private:
 	bool m_bProjectInitOk;
