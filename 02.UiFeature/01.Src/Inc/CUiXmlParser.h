@@ -37,26 +37,26 @@ typedef struct tagXmlState {
 	void *userdata2_close;
 } XmlState;
 
-extern "C"  void JabberXmlInitState(XmlState *xmlState);
-extern "C"  void JabberXmlDestroyState(XmlState *xmlState);
-extern "C"  BOOL JabberXmlSetCallback(XmlState *xmlState, int depth, XmlElemType type, XMLPROC callback, void *userdata);
-extern "C"  int JabberXmlParse(XmlState *xmlState, char *buffer, int datalen);
-extern "C"  char *JabberXmlGetAttrValue(XmlNode *node, char *key);
-extern "C"  int JabberXmlGetAttrCount(XmlNode *node);
-extern "C"  char *JabberXmlGetAttr(XmlNode *node, int nIndex, char **ppkey);
-extern "C"  XmlNode *JabberXmlGetChild(XmlNode *node, char *tag);
-extern "C"  XmlNode *JabberXmlGetNthChild(XmlNode *node, char *tag, int nth);
-extern "C"  XmlNode *JabberXmlGetNthChildWithoutTag(XmlNode *node, int nth);
-extern "C"  XmlNode *JabberXmlGetChildWithGivenAttrValue(XmlNode *node, char *tag, char *attrKey, char *attrValue);
-extern "C"  char* JabberXmlDumpAll(XmlState *xmlState);
-extern "C"  XmlNode *JabberXmlCopyNode(XmlNode *node);
-extern "C"  void JabberFreeDumpBuffer(char* buf);
-extern "C"  void JabberXmlRemoveAttr(XmlNode* node,char* pKey);
-extern "C"  void JabberXmlRemoveChild(XmlNode *node, XmlNode *child);
+extern "C" void JabberXmlInitState(XmlState *xmlState);
+extern "C" void JabberXmlDestroyState(XmlState *xmlState);
+extern "C" BOOL JabberXmlSetCallback(XmlState *xmlState, int depth, XmlElemType type, XMLPROC callback, void *userdata);
+extern "C" int JabberXmlParse(XmlState *xmlState, char *buffer, int datalen);
+extern "C" char *JabberXmlGetAttrValue(XmlNode *node, char *key);
+extern "C" int JabberXmlGetAttrCount(XmlNode *node);
+extern "C" char *JabberXmlGetAttr(XmlNode *node, int nIndex, char **ppkey);
+extern "C" XmlNode *JabberXmlGetChild(XmlNode *node, char *tag);
+extern "C" XmlNode *JabberXmlGetNthChild(XmlNode *node, char *tag, int nth);
+extern "C" XmlNode *JabberXmlGetNthChildWithoutTag(XmlNode *node, int nth);
+extern "C" XmlNode *JabberXmlGetChildWithGivenAttrValue(XmlNode *node, char *tag, char *attrKey, char *attrValue);
+extern "C" char* JabberXmlDumpAll(XmlState *xmlState);
+extern "C" XmlNode *JabberXmlCopyNode(XmlNode *node);
+extern "C" void JabberFreeDumpBuffer(char* buf);
+extern "C" void JabberXmlRemoveAttr(XmlNode* node,char* pKey);
+extern "C" void JabberXmlRemoveChild(XmlNode *node, XmlNode *& child);
 
-extern "C"  XmlNode *JabberXmlCreateNode(char *name);
-extern "C"  void JabberXmlAddAttr(XmlNode *n, char *name, char *value);
-extern "C"  XmlNode *JabberXmlAddChild(XmlNode *n, char *name);
-extern "C"  void JabberXmlAddText(XmlNode *n, char *text);
+extern "C" XmlNode *JabberXmlCreateNode(char *name);
+extern "C" void JabberXmlAddAttr(XmlNode *n, char *name, char *value);
+extern "C" XmlNode *JabberXmlAddChild(XmlNode *n, char *name);
+extern "C" void JabberXmlAddText(XmlNode *n, char *text);
 
 #endif
