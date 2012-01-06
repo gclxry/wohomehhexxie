@@ -48,6 +48,8 @@ private:
 	void OnMouseMove_LButtonDown(CPoint point);
 	// 绘制创建新控件时的矩形
 	void DrawCreateCtrlRect();
+	// 取得选择的控件
+	IControlBase* GetSelectControl(CPoint point);
 
 // 重写
 public:
@@ -77,6 +79,7 @@ protected:
 
 	bool m_bIsLButtonDown;
 	CPoint m_LBtnDownPos;
+	CPoint m_LBtnUpPos;
 	CPoint m_MouseMovePos;
 
 	bool m_bCreateNewCtrl;

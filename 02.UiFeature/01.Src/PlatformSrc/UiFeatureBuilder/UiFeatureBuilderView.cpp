@@ -60,6 +60,7 @@ CUiFeatureBuilderView::CUiFeatureBuilderView() : CFormView(CUiFeatureBuilderView
 	m_ScrollOffset.cx = m_ScrollOffset.cy = 0;
 	m_LBtnDownPos.x = m_LBtnDownPos.y = 0;
 	m_MouseMovePos.x = m_MouseMovePos.y = 0;
+	m_LBtnUpPos.x = m_LBtnUpPos.y = 0;
 
 	GetUiEngine();
 }
@@ -303,7 +304,9 @@ void CUiFeatureBuilderView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	CFormView::OnMouseMove(nFlags, point);
-	if (m_pSkinManager == NULL || m_pUiKernel == NULL)
+	m_MouseMovePos = point;
+
+	if (!m_bInitOk || m_pSkinManager == NULL || m_pUiKernel == NULL)
 		return;
 
 	if (m_bIsLButtonDown)
@@ -333,7 +336,6 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown(CPoint point)
 	if (m_bCreateNewCtrl)
 	{
 		// 绘制创建新控件时的矩形
-		m_MouseMovePos = point;
 		this->RedrawWindow();
 	}
 	else if (m_bMoveInWndFangKuai8)
@@ -421,6 +423,7 @@ void CUiFeatureBuilderView::SetViewCursor(int nCursor)
 void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	CFormView::OnLButtonUp(nFlags, point);
+	m_LBtnUpPos = point;
 
 	if (!m_bInitOk)
 		return;
@@ -442,9 +445,9 @@ void CUiFeatureBuilderView::CreateNewControl()
 	if (m_pControlList == NULL || m_pUiKernel == NULL || m_pCurrentWnd == NULL)
 		return;
 
+	IControlBase* pParentCtrl = GetSelectControl(m_LBtnUpPos);
 	CString strCtrlTypeName = m_pControlList->GetSelectCtrlTypeName();
-
-	m_pSelectControl = m_pUiKernel->BD_CreateControlEmptyPropetry(m_pCurrentWnd, , W2A(strCtrlTypeName));
+	m_pSelectControl = m_pUiKernel->BD_CreateControlEmptyPropetry(m_pCurrentWnd, pParentCtrl, W2A(strCtrlTypeName));
 	if (m_pSelectControl == NULL)
 	{
 		CString strInfo(_T(""));
@@ -470,4 +473,14 @@ void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 
 
 	// 判断数遍左键点击在哪个控件上
+}
+
+// 取得选择的控件s
+IControlBase* CUiFeatureBuilderView::GetSelectControl(CPoint point)
+{
+	point.x += m_ScrollOffset.cx;
+	point.y += m_ScrollOffset.cy;
+
+
+	return NULL;
 }
