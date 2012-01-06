@@ -17,8 +17,7 @@ class CMainFrame : public CFrameWndEx
 public:
 	virtual ~CMainFrame();
 
-	// true:设置为正常鼠标样式，false:设置为拖动控件鼠标样式
-	void SetCrossCursor(bool bIsCross);
+	void SetViewCursor(int nCursor);
 	void SetView(CUiFeatureBuilderView *pView);
 	void ResetShowWindow(IWindowBase *pCurrentWnd);
 	
@@ -60,8 +59,8 @@ private:
 
 //////////////////////////////////////////////////////////////////////////
 	bool	m_bInitOk;
-	// 是否为十字架光标
-	bool m_bIsCross;
+	// 光标
+	int m_nViewCursor;
 
 	// 当前项目工程文件
 	CString m_strCurUfpPath;

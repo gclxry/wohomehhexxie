@@ -23,9 +23,9 @@
 
 // CUiFeatureBuilderView
 
-IMPLEMENT_DYNCREATE(CUiFeatureBuilderView, CView)
+IMPLEMENT_DYNCREATE(CUiFeatureBuilderView, CFormView)
 
-BEGIN_MESSAGE_MAP(CUiFeatureBuilderView, CView)
+BEGIN_MESSAGE_MAP(CUiFeatureBuilderView, CFormView)
 	// 标准打印命令
 	ON_WM_LBUTTONUP()
 	ON_WM_LBUTTONDOWN()
@@ -34,6 +34,7 @@ BEGIN_MESSAGE_MAP(CUiFeatureBuilderView, CView)
 	ON_WM_SIZE()
 	ON_WM_HSCROLL()
 	ON_WM_VSCROLL()
+	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 // CUiFeatureBuilderView 构造/析构
@@ -51,6 +52,11 @@ CUiFeatureBuilderView::CUiFeatureBuilderView() : CFormView(CUiFeatureBuilderView
 	m_bNewCtrl = false;
 	m_bInitOk = false;
 	m_pCurrentWnd = NULL;
+	m_bIsLButtonDown = false;
+	m_bMoveInWndFangKuai8 = false;
+	m_bCreateNewCtrl = false;
+
+	m_ScrollOffset.cx = m_ScrollOffset.cy = 0;
 
 	GetUiEngine();
 }
@@ -92,7 +98,7 @@ BOOL CUiFeatureBuilderView::PreCreateWindow(CREATESTRUCT& cs)
 	// TODO: 在此处通过修改
 	//  CREATESTRUCT cs 来修改窗口类或样式
 
-	return CView::PreCreateWindow(cs);
+	return CFormView::PreCreateWindow(cs);
 }
 
 // CUiFeatureBuilderView 绘制
@@ -146,12 +152,12 @@ void CUiFeatureBuilderView::OnContextMenu(CWnd* pWnd, CPoint point)
 #ifdef _DEBUG
 void CUiFeatureBuilderView::AssertValid() const
 {
-	CView::AssertValid();
+	CFormView::AssertValid();
 }
 
 void CUiFeatureBuilderView::Dump(CDumpContext& dc) const
 {
-	CView::Dump(dc);
+	CFormView::Dump(dc);
 }
 
 CUiFeatureBuilderDoc* CUiFeatureBuilderView::GetDocument() const // 非调试版本是内联的
@@ -163,31 +169,6 @@ CUiFeatureBuilderDoc* CUiFeatureBuilderView::GetDocument() const // 非调试版本是
 
 
 // CUiFeatureBuilderView 消息处理程序
-
-void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
-{
-	CView::OnLButtonUp(nFlags, point);
-
-	if (!m_bInitOk)
-		return;
-
-	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
-	if (pMain != NULL)
-	{
-		// 设置光标
-		::ShowCursor(FALSE);
-		pMain->SetCrossCursor(false);
-		::ShowCursor(TRUE);
-	}
-
-	::PostMessage(pMain->m_hWnd, WM_SETCURSOR, NULL, NULL);
-
-	// 创建新控件
-	if (m_pControlList != NULL)
-	{
-		CString strCtrlTypeName = m_pControlList->GetSelectCtrlTypeName();
-	}
-}
 
 void CUiFeatureBuilderView::SetProjectInitState(bool bInitOk)
 {
@@ -201,28 +182,11 @@ void CUiFeatureBuilderView::SetNewControl(bool bIsNew)
 
 void CUiFeatureBuilderView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView)
 {
-	CView::OnActivateView(bActivate, pActivateView, pDeactiveView);
+	CFormView::OnActivateView(bActivate, pActivateView, pDeactiveView);
 
 	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
 	if (pMain != NULL)
 		pMain->SetView(this);
-}
-
-void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
-{
-	CView::OnLButtonDown(nFlags, point);
-	if (m_pSkinManager == NULL || m_pKernelWindow == NULL)
-		return;
-
-	// 判断数遍左键点击在哪个控件上
-}
-
-void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
-{
-	CView::OnMouseMove(nFlags, point);
-	if (m_pSkinManager == NULL || m_pKernelWindow == NULL)
-		return;
-
 }
 
 void CUiFeatureBuilderView::OnDraw(CDC* pDC)
@@ -294,12 +258,154 @@ void CUiFeatureBuilderView::ResetViewShowSize()
 	this->SetScrollSizes(MM_TEXT, CSize(nWidth, nHeight));
 }
 
+void CUiFeatureBuilderView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	CFormView::OnKeyDown(nChar, nRepCnt, nFlags);
+
+
+}
+
 void CUiFeatureBuilderView::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 	CFormView::OnHScroll(nSBCode, nPos, pScrollBar);
+
+	m_ScrollOffset.cx = this->GetScrollPos(SB_HORZ);
 }
 
 void CUiFeatureBuilderView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 	CFormView::OnVScroll(nSBCode, nPos, pScrollBar);
+
+	m_ScrollOffset.cy = this->GetScrollPos(SB_VERT);
+}
+
+void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	CFormView::OnMouseMove(nFlags, point);
+	if (m_pSkinManager == NULL || m_pKernelWindow == NULL)
+		return;
+
+	point.x += m_ScrollOffset.cx;
+	point.y += m_ScrollOffset.cy;
+
+	if (m_bIsLButtonDown)
+	{
+		OnMouseMove_LButtonDown(point);
+		return;
+	}
+
+	m_bMoveInWndFangKuai8 = OnMouseMove_WindowFangKuai8(point);
+	if (m_bMoveInWndFangKuai8)
+		return;
+
+	SetViewCursor(UF_IDC_ARROW);
+}
+
+void CUiFeatureBuilderView::OnMouseMove_LButtonDown(CPoint point)
+{
+
+	// 判断是否需要创建一个新控件
+//	if (PtInRect())
+//	{
+//	}
+//	m_bCreateNewCtrl = true;
+}
+
+bool CUiFeatureBuilderView::OnMouseMove_WindowFangKuai8(CPoint point)
+{
+	if (m_pCurrentWnd == NULL || m_pCurrentWnd->BD_GetFangKuai8Rect() == NULL)
+		return false;
+
+	FANGKUAI_8* pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
+	if (PtInRect(&pFk8->LeftTop, point))
+	{
+		SetViewCursor(UF_IDC_SIZENWSE);
+		return true;
+	}
+	else if (PtInRect(&pFk8->LeftMid, point))
+	{
+		SetViewCursor(UF_IDC_SIZEWE);
+		return true;
+	}
+	else if (PtInRect(&pFk8->LeftBottom, point))
+	{
+		SetViewCursor(UF_IDC_SIZENESW);
+		return true;
+	}
+	else if (PtInRect(&pFk8->MidTop, point))
+	{
+		SetViewCursor(UF_IDC_SIZENS);
+		return true;
+	}
+	else if (PtInRect(&pFk8->MidBottom, point))
+	{
+		SetViewCursor(UF_IDC_SIZENS);
+		return true;
+	}
+	else if (PtInRect(&pFk8->RightTop, point))
+	{
+		SetViewCursor(UF_IDC_SIZENESW);
+		return true;
+	}
+	else if (PtInRect(&pFk8->RightMid, point))
+	{
+		SetViewCursor(UF_IDC_SIZEWE);
+		return true;
+	}
+	else if (PtInRect(&pFk8->RightBottom, point))
+	{
+		SetViewCursor(UF_IDC_SIZENWSE);
+		return true;
+	}
+
+	return false;
+}
+
+// 设置光标
+void CUiFeatureBuilderView::SetViewCursor(int nCursor)
+{
+	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
+	if (pMain != NULL)
+	{
+		// 设置光标
+		::ShowCursor(FALSE);
+		pMain->SetViewCursor(nCursor);
+		::ShowCursor(TRUE);
+		::PostMessage(pMain->m_hWnd, WM_SETCURSOR, NULL, NULL);
+	}
+}
+
+void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	CFormView::OnLButtonUp(nFlags, point);
+
+	point.x += m_ScrollOffset.cx;
+	point.y += m_ScrollOffset.cy;
+
+	m_bIsLButtonDown = false;
+	if (!m_bInitOk)
+		return;
+
+	SetViewCursor(UF_IDC_CROSS);
+
+	// 创建新控件
+	if (m_pControlList != NULL)
+	{
+		CString strCtrlTypeName = m_pControlList->GetSelectCtrlTypeName();
+	}
+}
+
+void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	CFormView::OnLButtonDown(nFlags, point);
+
+	point.x += m_ScrollOffset.cx;
+	point.y += m_ScrollOffset.cy;
+
+	if (m_pSkinManager == NULL || m_pKernelWindow == NULL)
+		return;
+
+	m_bIsLButtonDown = true;
+
+	// 判断数遍左键点击在哪个控件上
 }
