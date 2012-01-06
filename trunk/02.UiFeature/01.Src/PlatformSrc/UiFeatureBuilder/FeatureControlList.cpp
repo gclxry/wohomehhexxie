@@ -7,7 +7,8 @@ CFeatureControlList::CFeatureControlList(void)
 {
 	m_bInitOk = false;
 	m_pView = NULL;
-	m_pSelectItem = NULL;
+	memset(&m_SelectItem, 0, sizeof(NMITEMACTIVATE));
+	m_SelectItem.iItem = -1;
 }
 
 CFeatureControlList::~CFeatureControlList(void)
@@ -24,7 +25,7 @@ void CFeatureControlList::SetProjectInitState(bool bInitOk)
 	m_bInitOk = bInitOk;
 
 	if (!m_bInitOk)
-		SelectCtrlToCreate(true);
+		SelectCtrlToCreate(false);
 }
 
 COLORREF CFeatureControlList::OnGetCellBkColor(int nRow, int nColum)
@@ -37,19 +38,24 @@ END_MESSAGE_MAP()
 
 void CFeatureControlList::OnNMClick(NMHDR *pNMHDR, LRESULT *pResult)
 {
-	m_pSelectItem = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	LPNMITEMACTIVATE pSelectItem = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
 	*pResult = 0;
 
 	if (!m_bInitOk)
 		return;
 
-	if (m_pSelectItem == NULL)
+	memset(&m_SelectItem, 0, sizeof(NMITEMACTIVATE));
+	m_SelectItem.iItem = -1;
+
+	if (pSelectItem == NULL)
 	{
 		SelectCtrlToCreate(false);
 		return;
 	}
 
-	if (m_pSelectItem->iItem < 0)
+	m_SelectItem = *pSelectItem;
+
+	if (m_SelectItem.iItem < 0)
 	{
 		// 没有选择相应的控件
 		SelectCtrlToCreate(false);
@@ -82,8 +88,8 @@ void CFeatureControlList::SetBuilderView(CUiFeatureBuilderView *pView)
 CString CFeatureControlList::GetSelectCtrlTypeName()
 {
 	CString strName(_T(""));
-	if (m_pSelectItem != NULL && m_pSelectItem->iItem >= 0)
-		strName = this->GetItemText(m_pSelectItem->iItem, CONTROL_NAME_COLUMN);
+	if (m_SelectItem.iItem >= 0)
+		strName = this->GetItemText(m_SelectItem.iItem, CONTROL_NAME_COLUMN);
 
 	return strName;
 }

@@ -29,7 +29,7 @@ protected:
 private:
 	bool m_bInitOk;
 	CUiFeatureBuilderView *m_pView;
-	NMITEMACTIVATE *m_pSelectItem;
+	NMITEMACTIVATE m_SelectItem;
 
 public:
 	DECLARE_MESSAGE_MAP()

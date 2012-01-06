@@ -135,6 +135,7 @@ protected:
 public:
 	// 将xml中的属性设置到manager中
 	virtual IPropertyGroup *PP_GetWindowPropetryGroup();
+	virtual IPropertyWindow *PP_GetWindowPropetry();
 
 	virtual void PP_SetWindowPropetry(IPropertyWindow *pWndPropInXml, bool bSetDftProp);
 

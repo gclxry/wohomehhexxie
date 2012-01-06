@@ -42,7 +42,7 @@ IPropertyGroup* IPropertyControl::GetCtrlGroupProp()
 	return m_pCtrlPropGroup;
 }
 
-CHILD_CTRL_PROP_VEC* IPropertyControl::GetChildCtrlVec()
+PROP_CONTROL_VEC* IPropertyControl::GetChildPropControlVec()
 {
 	return &m_ChildCtrlPropVec;
 }

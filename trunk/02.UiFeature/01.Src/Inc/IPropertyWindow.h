@@ -12,12 +12,13 @@ public:
 	IPropertyWindow();
 	virtual ~IPropertyWindow();
 
-	CHILD_CTRL_PROP_VEC* GetChildCtrlVec();
+	PROP_CONTROL_VEC* GetChildPropControlVec();
 	void SetWindowPropGroup(IPropertyGroup *pWindowProp);
 	IPropertyGroup* GetWindowPropGroup();
+	void AppendChildCtrlProp(IPropertyControl *pPropCtrl);
 
 private:
 	IPropertyGroup *m_pWindowProp;
 	// 子控件属性节点 的列表
-	CHILD_CTRL_PROP_VEC m_ChildCtrlPropVec;
+	PROP_CONTROL_VEC m_ChildCtrlPropVec;
 };

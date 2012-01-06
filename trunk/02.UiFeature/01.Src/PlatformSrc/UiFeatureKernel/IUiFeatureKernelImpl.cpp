@@ -250,7 +250,7 @@ bool IUiFeatureKernelImpl::BD_OpenProject(char *pszSkinDir, char *pszSkinName)
 // 创建一个Builder使用的空的控件
 IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, char *pszNewCtrlTypeName)
 {
-	if (m_pControlMgr == NULL || m_pSkinMgr == NULL || pParentWnd == NULL || pszNewCtrlTypeName == NULL || strlen(pszNewCtrlTypeName) <= 0)
+	if (pParentWnd == NULL || pParentWnd->PP_GetWindowPropetry() == NULL || m_pControlMgr == NULL || m_pSkinMgr == NULL || pszNewCtrlTypeName == NULL || strlen(pszNewCtrlTypeName) <= 0)
 		return NULL;
 
 	// 设置新控件的ObjectID
@@ -277,26 +277,30 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *p
 	}
 	pCtrlBase->SetPropertySkinManager(m_pSkinMgr);
 
-	// 插入控件队列
-	if (pParentCtrl != NULL)
-		pParentCtrl->AppendChildContrl(pCtrlBase);
-	else
-		pParentWnd->AppendChildContrl(pCtrlBase);
-
-	// 设置新控件的属性
-	IPropertyGroup *pCtrlPropGroup = dynamic_cast<IPropertyGroup*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_GROUP));
-	if (pCtrlPropGroup == NULL)
-	{
-		m_pControlMgr->ReleaseCtrl(&pCtrlIfc);
-		return NULL;
-	}
-
 	IPropertyControl *pPropCtrl = dynamic_cast<IPropertyControl*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_CONTROL));
 	if (pPropCtrl == NULL)
 	{
 		m_pControlMgr->ReleaseCtrl(&pCtrlIfc);
 		return NULL;
 	}
+
+	// 插入控件队列
+	if (pParentCtrl != NULL)
+	{
+		pParentCtrl->AppendChildContrl(pCtrlBase);
+		pParentCtrl->PP_GetControlPropetry()->AppendChildCtrlProp(pPropCtrl);
+	}
+	else
+	{
+		pParentWnd->AppendChildContrl(pCtrlBase);
+		pParentWnd->PP_GetWindowPropetry()->AppendChildCtrlProp(pPropCtrl);
+	}
+
+	// 设置新控件的属性
+	IPropertyGroup *pCtrlPropGroup = dynamic_cast<IPropertyGroup*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_GROUP));
+	if (pCtrlPropGroup == NULL)
+		return NULL;
+
 	pPropCtrl->SetCtrlGroupProp(pCtrlPropGroup);
 	pCtrlBase->SetUiEngine(GetUiEngine());
 	pCtrlBase->SetPropertySkinManager(m_pSkinMgr);

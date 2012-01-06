@@ -216,7 +216,7 @@ void CUiFeatureBuilderView::OnDraw(CDC* pDC)
 // 绘制创建新控件时的矩形
 void CUiFeatureBuilderView::DrawCreateCtrlRect()
 {
-	if (!m_bCreateNewCtrl)
+	if (!m_bCreateNewCtrl || !m_bIsLButtonDown)
 		return;
 
 	Graphics DoGrap(m_MemDc.GetSafeHdc());
@@ -424,15 +424,16 @@ void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	CFormView::OnLButtonUp(nFlags, point);
 	m_LBtnUpPos = point;
+	m_bIsLButtonDown = false;
 
 	if (!m_bInitOk)
 		return;
 
-	m_bIsLButtonDown = false;
 
 	// 如果需要创建一个新控件
 	if (m_bCreateNewCtrl)
 	{
+		CreateNewControl();
 		m_bCreateNewCtrl = false;
 		this->RedrawWindow();
 		return;
@@ -441,6 +442,7 @@ void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 
 void CUiFeatureBuilderView::CreateNewControl()
 {
+	USES_CONVERSION;
 	// 创建新控件
 	if (m_pControlList == NULL || m_pUiKernel == NULL || m_pCurrentWnd == NULL)
 		return;
@@ -461,11 +463,11 @@ void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	CFormView::OnLButtonDown(nFlags, point);
 	m_LBtnDownPos = point;
+	m_bIsLButtonDown = true;
 
 	if (m_pSkinManager == NULL || m_pUiKernel == NULL)
 		return;
 
-	m_bIsLButtonDown = true;
 
 	// 如果需要创建一个新控件
 	if (m_bCreateNewCtrl)
