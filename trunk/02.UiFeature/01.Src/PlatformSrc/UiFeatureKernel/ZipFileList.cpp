@@ -170,7 +170,7 @@ bool CZipFileList::WriteZipAppendFile(char *pFilePath)
 	}
 
 	int nReadCtns = 0;
-	while(nReadCtns < (int)FileAttr.nFileSizeLow)
+	while (nReadCtns < (int)FileAttr.nFileSizeLow)
 	{
 		BYTE *pRead = pReadBuf + nReadCtns;
 		int nNeedRead = FileAttr.nFileSizeLow - nReadCtns;
@@ -397,7 +397,7 @@ bool CZipFileList::ReadZipFile(const char *pZipFilePath)
 			return false;
 		}
 		nReadLen = 0;
-		while(nReadLen < (int)dwZipDataLen)
+		while (nReadLen < (int)dwZipDataLen)
 		{
 			BYTE *pRead = pZipData + nReadLen;
 			int nNeedRead = dwZipDataLen - nReadLen;

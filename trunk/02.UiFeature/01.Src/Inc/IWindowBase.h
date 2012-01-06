@@ -33,6 +33,8 @@ public:
 	virtual IControlBase* GetControl(char *pszCtrlName) = 0;
 	// 向队列未插入一个控件
 	virtual void AppendChildContrl(IControlBase *pCtrl) = 0;
+	// 取得子控件列表
+	virtual CHILD_CTRLS_VEC* GetChildControlsVec() = 0;
 
 public:
 ////// 以下函数非外部窗口调用 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

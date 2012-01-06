@@ -42,6 +42,8 @@ public:
 	virtual IControlBase* GetControl(char *pszCtrlName);
 	// 向队列未插入一个控件
 	virtual void AppendChildContrl(IControlBase *pCtrl);
+	// 取得子控件列表
+	virtual CHILD_CTRLS_VEC* GetChildControlsVec();
 
 protected:
 	// 本窗口的消息处理函数，bPassOn参数为true是，消息会继续传递处理；false时，处理完毕，不再下传

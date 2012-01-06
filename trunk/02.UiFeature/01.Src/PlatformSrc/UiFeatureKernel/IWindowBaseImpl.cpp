@@ -112,7 +112,7 @@ void IWindowBaseImpl::ReleaseChildVec(CHILD_CTRLS_VEC *pChildCtrlsVec)
 
 		pCtrl->OnDestroy();
 		// 释放子控件
-		ReleaseChildVec(pCtrl->GetChildCtrlsVec());
+		ReleaseChildVec(pCtrl->GetChildControlsVec());
 		SAFE_DELETE(pCtrl);
 	}
 	pChildCtrlsVec->clear();
@@ -204,7 +204,7 @@ bool IWindowBaseImpl::GetControlByName(CHILD_CTRLS_VEC *pCtrlVec, char *pszCtrlN
 				return true;
 			}
 
-			if (GetControlByName(pCtrl->GetChildCtrlsVec(), pszCtrlName, ppCtrl))
+			if (GetControlByName(pCtrl->GetChildControlsVec(), pszCtrlName, ppCtrl))
 				return true;
 		}
 	}
@@ -485,14 +485,14 @@ bool IWindowBaseImpl::CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt, I
 				if (::PtInRect(&CtrlRct, pt))
 				{
 					*ppControl = pCtrl;
-					CHILD_CTRLS_VEC *pCtrlsVec = pCtrl->GetChildCtrlsVec();
+					CHILD_CTRLS_VEC *pCtrlsVec = pCtrl->GetChildControlsVec();
 					CheckMouseInControl(pCtrlsVec, pt, ppControl);
 					return true;
 				}
 			}
 			else
 			{
-				CHILD_CTRLS_VEC *pCtrlsVec = pCtrl->GetChildCtrlsVec();
+				CHILD_CTRLS_VEC *pCtrlsVec = pCtrl->GetChildControlsVec();
 				if (CheckMouseInControl(pCtrlsVec, pt, ppControl))
 					return true;
 			}
@@ -714,7 +714,7 @@ void IWindowBaseImpl::SetControlPostion(CHILD_CTRLS_VEC *pCtrlVec, SIZE NewSize)
 			SetControlWindowPostion(pCtrl, ParentRctInWnd);
 
 			// 设置子控件的位置
-			SetControlPostion(pCtrl->GetChildCtrlsVec(), NewSize);
+			SetControlPostion(pCtrl->GetChildControlsVec(), NewSize);
 		}
 	}
 }
@@ -1089,4 +1089,10 @@ SIZE IWindowBaseImpl::PP_GetWindowPropSize()
 FANGKUAI_8* IWindowBaseImpl::BD_GetFangKuai8Rect()
 {
 	return &m_BD_FangKuai8;
+}
+
+// 取得子控件列表
+CHILD_CTRLS_VEC* IWindowBaseImpl::GetChildControlsVec()
+{
+	return &m_ChildCtrlsVec;
 }

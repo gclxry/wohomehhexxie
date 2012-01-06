@@ -8,6 +8,8 @@
 #include "..\..\Inc\IWindowBase.h"
 #include "..\..\Inc\IControlBase.h"
 
+class CFeatureControlList;
+class CWindowsViewTree;
 
 #define UF_IDC_ARROW           (32512)
 #define UF_IDC_CROSS           (32515)
@@ -17,7 +19,6 @@
 #define UF_IDC_SIZENS          (32645)
 #define UF_IDC_SIZEALL         (32646)
 
-class CFeatureControlList;
 class CUiFeatureBuilderView : public CFormView
 {
 protected: // 仅从序列化创建
@@ -25,19 +26,37 @@ protected: // 仅从序列化创建
 	DECLARE_DYNCREATE(CUiFeatureBuilderView)
 
 public:
+	virtual ~CUiFeatureBuilderView();
 	enum{ IDD = IDD_UIFEATUREBUILDER_FORM };
-
-// 属性
-public:
 	CUiFeatureBuilderDoc* GetDocument() const;
+
+	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
+
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
+	virtual void OnInitialUpdate(); // 构造后第一次调用
+
+#ifdef _DEBUG
+	virtual void AssertValid() const;
+	virtual void Dump(CDumpContext& dc) const;
+#endif
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+protected:
+	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
+	virtual void OnDraw(CDC* pDC);  // 重写以绘制该视图
+
+public:
 	void SetNewControl(bool bIsNew);
 	void SetProjectInitState(bool bInitOk);
 
 	void ResetShowWindow(IWindowBase *pCurrentWnd);
-	void Init(IUiFeatureKernel* pKernelWindow, CFeatureControlList *pCtrlList);
+	void Init(IUiFeatureKernel* pKernelWindow, CFeatureControlList *pCtrlList, CWindowsViewTree *pWndTree);
 
 	// 判断鼠标坐标是否落在了窗口内部
 	bool PtInWindow(CPoint point);
+
 private:
 	void DrawWindowView();
 	IUiEngine* GetUiEngine();
@@ -55,27 +74,13 @@ private:
 	// 通过鼠标拖拽，创建一个新控件
 	void CreateNewControl();
 
-// 重写
-public:
-	virtual void OnDraw(CDC* pDC);  // 重写以绘制该视图
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
-	virtual void OnInitialUpdate(); // 构造后第一次调用
-
-// 实现
-public:
-	virtual ~CUiFeatureBuilderView();
-#ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
-#endif
-
 protected:
 	HMODULE m_hUiEngineDll;
 	IUiEngine *m_pUiEngine;
 
 	CFeatureControlList *m_pControlList;
+	CWindowsViewTree *m_pWindowViewTree;
+
 	IUiFeatureKernel* m_pUiKernel;
 	IPropertySkinManager *m_pSkinManager;
 	bool m_bInitOk;
@@ -100,8 +105,6 @@ protected:
 private:
 	ULONG_PTR m_gdiplusToken;
 
-protected:
-	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
 
 // 生成的消息映射函数
 protected:

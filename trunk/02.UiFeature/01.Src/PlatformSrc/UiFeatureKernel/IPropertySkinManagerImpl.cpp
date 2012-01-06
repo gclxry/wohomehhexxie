@@ -1203,7 +1203,7 @@ bool IPropertySkinManagerImpl::BuilderCreateFileItem(char *pFilePath, ZIP_FILE &
 	}
 
 	int nReadCtns = 0;
-	while(nReadCtns < (int)FileAttr.nFileSizeLow)
+	while (nReadCtns < (int)FileAttr.nFileSizeLow)
 	{
 		BYTE *pRead = FileItem.pFileData + nReadCtns;
 		int nNeedRead = FileAttr.nFileSizeLow - nReadCtns;

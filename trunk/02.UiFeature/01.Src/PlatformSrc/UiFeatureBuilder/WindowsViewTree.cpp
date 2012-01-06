@@ -121,7 +121,7 @@ void CWindowsViewTree::OnCreateWindowPanel()
 	}
 
 	HTREEITEM hRootItem = this->GetRootItem();
-	HTREEITEM hWindow = this->InsertItem(_T("新建窗口/面板"), 0, 0, hRootItem);
+	HTREEITEM hWindow = this->InsertItem(_T("新建窗口/面板"), 0, 0, hRootItem, TVI_LAST);
 	this->Expand(hRootItem, TVE_EXPAND);
 	if (hWindow == NULL)
 	{
@@ -178,9 +178,8 @@ void CWindowsViewTree::OnTvnSelchanged_SelectRoot()
 	if (m_pPropCtrl != NULL)
 		m_pPropCtrl->ClearAll();
 
-	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
-	if (pMain != NULL)
-		pMain->ResetShowWindow(NULL);
+	if (m_pWindowView != NULL)
+		m_pWindowView->ResetShowWindow(NULL);
 }
 
 void CWindowsViewTree::OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase)
@@ -195,9 +194,7 @@ void CWindowsViewTree::OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase)
 		return;
 
 	m_pPropCtrl->SetShowPropGroup(pPropGroup);
-	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
-	if (pMain != NULL)
-		pMain->ResetShowWindow(pWndBase);
+	m_pWindowView->ResetShowWindow(pWndBase);
 }
 
 void CWindowsViewTree::RefreshObjectName()
@@ -213,7 +210,7 @@ void CWindowsViewTree::RefreshItemObjectName(HTREEITEM hParentItem)
 		return;
 
 	HTREEITEM hChild = this->GetChildItem(hParentItem);
-	while(hChild != NULL)
+	while (hChild != NULL)
 	{
 		IFeatureObject *pPropBase = (IFeatureObject*)this->GetItemData(hChild);
 		if (pPropBase != NULL)
@@ -232,7 +229,12 @@ void CWindowsViewTree::RefreshItemObjectName(HTREEITEM hParentItem)
 			else if (pPropBase->GetObjectTypeId() == OTID_CONTROL)
 			{
 				// 控件
-				//this->SetItemText(hChild, A2W(pPropBase->GetObjectName()));
+				IControlBase* pCtrl = dynamic_cast<IControlBase*>(pPropBase);
+				if (pCtrl != NULL && pCtrl->PP_GetControlObjectName() != NULL)
+				{
+					this->SetItemText(hChild, A2W(pCtrl->PP_GetControlObjectName()));
+					pCtrl->SetObjectName(pCtrl->PP_GetControlObjectName());
+				}
 			}
 		}
 
@@ -267,16 +269,103 @@ void CWindowsViewTree::InitShowNewProject()
 		if (pWndBase == NULL)
 			continue;
 
-		HTREEITEM hWindowItem = this->InsertItem(A2W(pWndBase->GetObjectName()), 0, 0, hRootItem);
+		HTREEITEM hWindowItem = this->InsertItem(A2W(pWndBase->GetObjectName()), 0, 0, hRootItem, TVI_LAST);
 		if (hWindowItem == NULL)
 			continue;
 
 		this->SetItemData(hWindowItem, (DWORD_PTR)pWndBase);
 
-		// TBD 子控件显示
+		// 子控件显示
+		InsertControlVec(hWindowItem, pWndBase->GetChildControlsVec());
 	}
 
 	// 选中并打开根节点
 	this->SelectItem(hRootItem);
 	this->Expand(hRootItem, TVE_EXPAND);
+}
+
+// 向树中插入一个新节点
+void CWindowsViewTree::InsertControlVec(HTREEITEM hParentItem, CHILD_CTRLS_VEC* pCtrlVec)
+{
+	if (hParentItem == NULL || pCtrlVec == NULL)
+		return;
+
+	// 绘制子控件
+	for (CHILD_CTRLS_VEC::iterator pCtrlItem = pCtrlVec->begin(); pCtrlItem != pCtrlVec->end(); pCtrlItem++)
+	{
+		IControlBase* pCtrl = *pCtrlItem;
+		if (pCtrl == NULL)
+			continue;
+
+		HTREEITEM hItem = InsertControlNodeToEnd(hParentItem, pCtrl);
+		if (hItem == NULL)
+			continue;
+
+		InsertControlVec(hItem, pCtrl->GetChildControlsVec());
+	}
+}
+
+// 查找指定的控件
+HTREEITEM CWindowsViewTree::FindControlTreeNode(HTREEITEM hParentNode, IControlBase* pCtrl)
+{
+	if (hParentNode == NULL || pCtrl == NULL)
+		return NULL;
+
+	HTREEITEM hChildNode = this->GetChildItem(hParentNode);
+	while (hChildNode != NULL)
+	{
+		IControlBase *pCtrlBase = (IControlBase*)this->GetItemData(hChildNode);
+		if (pCtrlBase == pCtrl)
+			return hChildNode;
+
+		HTREEITEM hFind = FindControlTreeNode(hChildNode, pCtrl);
+		if (hFind != NULL)
+			return hFind;
+
+		hChildNode = this->GetNextItem(hChildNode, TVGN_NEXT);
+	}
+
+	return NULL;
+}
+
+// 向树中插入一个新节点
+void CWindowsViewTree::AddNewControlToWindowTreeNode(IWindowBase *pWindow, IControlBase* pParentCtrl, IControlBase *pControl)
+{
+	if (pWindow == NULL || pControl == NULL)
+		return;
+
+	HTREEITEM hRootItem = this->GetRootItem();
+	if (hRootItem == NULL)
+		return;
+
+	HTREEITEM hWindowNode = this->GetChildItem(hRootItem);
+	while (hWindowNode != NULL)
+	{
+		IWindowBase *pWndBase = (IWindowBase*)this->GetItemData(hWindowNode);
+		if (pWndBase == pWindow)
+		{
+			HTREEITEM hFind = FindControlTreeNode(hWindowNode, pParentCtrl);
+			if (hFind == NULL)
+				return;
+
+			InsertControlNodeToEnd(hFind, pControl);
+			break;
+		}
+
+		hWindowNode = this->GetNextItem(hWindowNode, TVGN_NEXT);
+	}
+}
+
+// 在指定节点的子节点末尾插入新节点
+HTREEITEM CWindowsViewTree::InsertControlNodeToEnd(HTREEITEM hParentNode, IControlBase *pControl)
+{
+	USES_CONVERSION;
+	if (hParentNode == NULL || pControl == NULL)
+		return NULL;
+
+	HTREEITEM hItem = this->InsertItem(A2W(pControl->GetObjectName()), 3, 3, hParentNode, TVI_LAST);
+	if (hItem != NULL)
+		this->SetItemData(hItem, (DWORD_PTR)pControl);
+
+	return hItem;
 }

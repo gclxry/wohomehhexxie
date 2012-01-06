@@ -158,7 +158,7 @@ void IControlBase::SetChildCtrlToRedraw()
 }
 
 // 取得子控件列表
-CHILD_CTRLS_VEC* IControlBase::GetChildCtrlsVec()
+CHILD_CTRLS_VEC* IControlBase::GetChildControlsVec()
 {
 	return &m_ChildCtrlsVec;
 }

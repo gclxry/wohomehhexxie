@@ -52,7 +52,6 @@ CMainFrame::CMainFrame()
 	theApp.m_nAppLook = theApp.GetInt(_T("ApplicationLook"), ID_VIEW_APPLOOK_OFF_2007_SILVER);
 	theApp.InitShellManager();
 
-	m_pCurrentWnd = NULL;
 	m_pView = NULL;
 	m_hKernelDll = NULL;
 	m_pUiKernel = NULL;
@@ -77,22 +76,12 @@ CMainFrame::~CMainFrame()
 	SAFE_FREE_LIBRARY(m_hKernelDll);
 }
 
-void CMainFrame::ResetShowWindow(IWindowBase *pCurrentWnd)
-{
-	if (m_pView == NULL)
-		return;
-
-	m_pCurrentWnd = pCurrentWnd;
-	// 重新绘制View
-	m_pView->ResetShowWindow(pCurrentWnd);
-}
-
 void CMainFrame::SetView(CUiFeatureBuilderView *pView)
 {
 	m_pView = pView;
 	if (m_pView != NULL)
 	{
-		m_pView->Init(m_pUiKernel, m_wndControls.GetControlList());
+		m_pView->Init(m_pUiKernel, m_wndControls.GetControlList(), m_wndWindowView.GetViewTreeCtrl());
 		m_wndControls.GetControlList()->SetBuilderView(m_pView);
 		m_wndWindowView.GetViewTreeCtrl()->SetBuilderView(m_pView);
 	}
@@ -458,7 +447,7 @@ BOOL CMainFrame::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 			if (PtInRect(&ViewRct, pt))
 			{
 				int nCur = m_nViewCursor;
-				if (m_nViewCursor == UF_IDC_CROSS && m_pCurrentWnd != NULL)
+				if (m_nViewCursor == UF_IDC_CROSS)
 				{
 					// 只有需要创建新控件，鼠标进入窗口范围，才显示十字架
 					pView->ScreenToClient(&pt);

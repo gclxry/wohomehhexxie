@@ -30,7 +30,7 @@ public:
 			if (p == 0) break;
 			pN = p+1;
 			if (*pN == 0) break;
-		} while(p);
+		} while (p);
 		m_sName = pN;
 	}
 	virtual ~CUiXmlWriteNode()
