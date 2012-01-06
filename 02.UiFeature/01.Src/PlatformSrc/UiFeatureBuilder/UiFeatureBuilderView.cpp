@@ -52,8 +52,10 @@ CUiFeatureBuilderView::CUiFeatureBuilderView() : CFormView(CUiFeatureBuilderView
 	m_bNewCtrl = false;
 	m_bInitOk = false;
 	m_pCurrentWnd = NULL;
+	m_pSelectControl = NULL;
 	m_bIsLButtonDown = false;
 	m_bMoveInWndFangKuai8 = false;
+	m_bMoveInCtrlFangKuai8 = false;
 	m_bCreateNewCtrl = false;
 
 	m_ScrollOffset.cx = m_ScrollOffset.cy = 0;
@@ -221,6 +223,18 @@ void CUiFeatureBuilderView::DrawWindowView()
 		m_pCurrentWnd->BD_DrawWindowView(m_MemDc);
 }
 
+void CUiFeatureBuilderView::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	CFormView::OnHScroll(nSBCode, nPos, pScrollBar);
+	m_ScrollOffset.cx = this->GetScrollPos(SB_HORZ);
+}
+
+void CUiFeatureBuilderView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	CFormView::OnVScroll(nSBCode, nPos, pScrollBar);
+	m_ScrollOffset.cy = this->GetScrollPos(SB_VERT);
+}
+
 void CUiFeatureBuilderView::OnSize(UINT nType, int cx, int cy)
 {
 	CFormView::OnSize(nType, cx, cy);
@@ -265,20 +279,6 @@ void CUiFeatureBuilderView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 }
 
-void CUiFeatureBuilderView::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
-{
-	CFormView::OnHScroll(nSBCode, nPos, pScrollBar);
-
-	m_ScrollOffset.cx = this->GetScrollPos(SB_HORZ);
-}
-
-void CUiFeatureBuilderView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
-{
-	CFormView::OnVScroll(nSBCode, nPos, pScrollBar);
-
-	m_ScrollOffset.cy = this->GetScrollPos(SB_VERT);
-}
-
 void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	CFormView::OnMouseMove(nFlags, point);
@@ -294,8 +294,12 @@ void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
 		return;
 	}
 
-	m_bMoveInWndFangKuai8 = OnMouseMove_WindowFangKuai8(point);
+	m_bMoveInWndFangKuai8 = OnMouseMove_FangKuai8(point, true);
 	if (m_bMoveInWndFangKuai8)
+		return;
+
+	m_bMoveInCtrlFangKuai8 = OnMouseMove_FangKuai8(point, false);
+	if (m_bMoveInCtrlFangKuai8)
 		return;
 
 	SetViewCursor(UF_IDC_ARROW);
@@ -311,12 +315,23 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown(CPoint point)
 //	m_bCreateNewCtrl = true;
 }
 
-bool CUiFeatureBuilderView::OnMouseMove_WindowFangKuai8(CPoint point)
+bool CUiFeatureBuilderView::OnMouseMove_FangKuai8(CPoint point, bool bIsWnd)
 {
-	if (m_pCurrentWnd == NULL || m_pCurrentWnd->BD_GetFangKuai8Rect() == NULL)
+	FANGKUAI_8* pFk8 = NULL;
+	if (bIsWnd)
+	{
+		if (m_pCurrentWnd != NULL)
+			pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
+	}
+	else
+	{
+		if (m_pSelectControl != NULL)
+			pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
+	}
+
+	if (pFk8 == NULL)
 		return false;
 
-	FANGKUAI_8* pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
 	if (PtInRect(&pFk8->LeftTop, point))
 	{
 		SetViewCursor(UF_IDC_SIZENWSE);

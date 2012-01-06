@@ -6,6 +6,7 @@
 #pragma once
 #include "..\..\Inc\IUiFeatureKernel.h"
 #include "..\..\Inc\IWindowBase.h"
+#include "..\..\Inc\IControlBase.h"
 
 
 #define UF_IDC_ARROW           (32512)
@@ -43,7 +44,7 @@ private:
 
 	void ResetViewShowSize();
 	// 是否在窗口的8个方块内移动
-	bool OnMouseMove_WindowFangKuai8(CPoint point);
+	bool OnMouseMove_FangKuai8(CPoint point, bool bIsWnd);
 	void OnMouseMove_LButtonDown(CPoint point);
 
 // 重写
@@ -79,6 +80,9 @@ protected:
 
 	IWindowBase *m_pCurrentWnd;
 	bool m_bMoveInWndFangKuai8;
+
+	IControlBase *m_pSelectControl;
+	bool m_bMoveInCtrlFangKuai8;
 
 	// 滚动条滚动后视图的偏移量
 	CSize m_ScrollOffset;
