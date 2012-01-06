@@ -53,7 +53,10 @@ void CMainFrame::InitUiFeatureKernel()
 
 void CMainFrame::SetViewCursor(int nCursor)
 {
+	::ShowCursor(FALSE);
 	m_nViewCursor = nCursor;
+	::ShowCursor(TRUE);
+	::PostMessage(this->m_hWnd, WM_SETCURSOR, NULL, NULL);
 }
 
 void CMainFrame::OnFileNew()
