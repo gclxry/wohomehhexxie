@@ -1513,3 +1513,40 @@ ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::GetAllWindowPropMap()
 {
 	return &m_AllWindowPropMap;
 }
+
+// 向控件队列添加一个控件
+bool IPropertySkinManagerImpl::BD_AppendControlToVec(char *pszCtrlType, IPropertyGroup* pCtrlPropGroup)
+{
+	if (pszCtrlType == NULL || pCtrlPropGroup == NULL)
+		return false;
+
+	string strObjId = pCtrlPropGroup->GetObjectId();
+	if (strObjId.size() <= 0)
+		return false;
+
+	IPropertyBase *pPropBase = dynamic_cast<IPropertyBase*>(pCtrlPropGroup);
+	if (pPropBase == NULL)
+		return false;
+
+	ONE_RESOURCE_PROP_MAP* pCtrlType = NULL;
+	string strCtrlType = pszCtrlType;
+	RESOURCE_PROP_MAP::iterator pCtrlTypeItem = m_AllCtrlPropMap.find(strCtrlType);
+	if (pCtrlTypeItem == m_AllCtrlPropMap.end())
+	{
+		pCtrlType = new ONE_RESOURCE_PROP_MAP;
+		if (pCtrlType == NULL)
+			return false;
+
+		m_AllCtrlPropMap.insert(pair<string, ONE_RESOURCE_PROP_MAP*>(strCtrlType, pCtrlType));
+	}
+	else
+	{
+		pCtrlType = pCtrlTypeItem->second;
+	}
+
+	if (pCtrlType == NULL)
+		return false;
+
+	pCtrlType->insert(pair<string, IPropertyBase*>(strObjId, pPropBase));
+	return true;
+}

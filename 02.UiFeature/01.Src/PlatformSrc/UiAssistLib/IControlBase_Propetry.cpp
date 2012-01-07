@@ -13,7 +13,7 @@ bool IControlBase::BD_InitControlBase(IPropertyControl *pCtrlProp, bool bNeedSet
 	if (pCtrlProp == NULL)
 		return false;
 
-	m_pXmlPropCtrl = m_pXmlPropCtrl;
+	m_pXmlPropCtrl = pCtrlProp;
 	CreateCtrlAllPropetry(bNeedSetDftProp);
 	// ¿Ø¼þ´´½¨
 	OnCreate();
