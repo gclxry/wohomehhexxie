@@ -242,6 +242,8 @@ void CWindowsViewTree::RefreshItemObjectName(HTREEITEM hParentItem)
 				{
 					this->SetItemText(hChild, A2W(pWnd->PP_GetWindowObjectName()));
 					pWnd->SetObjectName(pWnd->PP_GetWindowObjectName());
+					if (pWnd->PP_GetWindowPropetry() != NULL)
+						pWnd->PP_GetWindowPropetry()->SetObjectName(pWnd->PP_GetWindowObjectName());
 				}
 			}
 			else
@@ -254,6 +256,8 @@ void CWindowsViewTree::RefreshItemObjectName(HTREEITEM hParentItem)
 					strName.Format(_T("%s[%s]"), A2W(pCtrl->PP_GetControlObjectName()), A2W(pCtrl->GetObjectType()));
 					this->SetItemText(hChild, strName);
 					pCtrl->SetObjectName(pCtrl->PP_GetControlObjectName());
+					if (pCtrl->PP_GetControlPropetry() != NULL)
+						pCtrl->PP_GetControlPropetry()->SetObjectName(pCtrl->PP_GetControlObjectName());
 				}
 			}
 		}
@@ -296,7 +300,7 @@ void CWindowsViewTree::InitShowNewProject()
 		this->SetItemData(hWindowItem, (DWORD_PTR)pWndBase);
 
 		// 子控件显示
-		InsertControlVec(hWindowItem, pWndBase->GetChildControlsVec());
+		InsertCtrlVecByPropCtrlVec(hWindowItem, pWndBase, NULL, pWndBase->GetChildPropControlVec(), pWndBase->GetChildControlsVec());
 	}
 
 	// 选中并打开根节点
@@ -305,23 +309,28 @@ void CWindowsViewTree::InitShowNewProject()
 }
 
 // 向树中插入一个新节点
-void CWindowsViewTree::InsertControlVec(HTREEITEM hParentItem, CHILD_CTRLS_VEC* pCtrlVec)
+void CWindowsViewTree::InsertCtrlVecByPropCtrlVec(HTREEITEM hParentItem, IWindowBase *pParentWnd, IControlBase *pParentCtrl, PROP_CONTROL_VEC* pPropCtrlVec, CHILD_CTRLS_VEC* pCtrlVec)
 {
-	if (hParentItem == NULL || pCtrlVec == NULL)
+	if (hParentItem == NULL || pCtrlVec == NULL || m_pUiKernel == NULL)
 		return;
 
-	// 绘制子控件
-	for (CHILD_CTRLS_VEC::iterator pCtrlItem = pCtrlVec->begin(); pCtrlItem != pCtrlVec->end(); pCtrlItem++)
+	for (PROP_CONTROL_VEC::iterator pCtrlItem = pPropCtrlVec->begin(); pCtrlItem != pPropCtrlVec->end(); pCtrlItem++)
 	{
-		IControlBase* pCtrl = *pCtrlItem;
-		if (pCtrl == NULL)
+		IPropertyControl* pPropCtrl = *pCtrlItem;
+		if (pPropCtrl == NULL)
 			continue;
 
-		HTREEITEM hItem = InsertControlNodeToEnd(hParentItem, pCtrl);
+		IControlBase *pNewCtrl = m_pUiKernel->BD_CreateControlByPropetry(pParentWnd, pParentCtrl, pPropCtrl);
+		if (pNewCtrl == NULL)
+			return;
+
+		pCtrlVec->push_back(pNewCtrl);
+
+		HTREEITEM hItem = InsertControlNodeToEnd(hParentItem, pNewCtrl);
 		if (hItem == NULL)
 			continue;
 
-		InsertControlVec(hItem, pCtrl->GetChildControlsVec());
+		InsertCtrlVecByPropCtrlVec(hItem, pParentWnd, pNewCtrl, pPropCtrl->GetChildPropControlVec(), pNewCtrl->GetChildControlsVec());
 	}
 }
 

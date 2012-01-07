@@ -24,6 +24,9 @@ public:
 	void SetCtrlGroupProp(IPropertyGroup *pBasePropGroup);
 	IPropertyGroup *GetControlPropGroup();
 
+	const char * GetControlType();
+	void SetControlType(char *pszCtrlType);
+
 	PROP_CONTROL_VEC* GetChildPropControlVec();
 
 private:
@@ -33,4 +36,6 @@ private:
 	IPropertyControl* m_pPrentCtrlProp;
 	// 自身控件属性列表
 	IPropertyGroup *m_pCtrlPropGroup;
+	// 控件类型名称
+	string m_strControlType;
 };

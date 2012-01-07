@@ -22,6 +22,8 @@ public:
 	virtual IWindowBase* BD_CreateWindowByPropetry(IPropertyWindow *pPropWnd) = 0;
 	// 创建一个Builder使用的空的控件
 	virtual IControlBase* BD_CreateControlEmptyPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, char *pszNewCtrlTypeName) = 0;
+	// 创建一个Builder使用的控件，并配置上属性
+	virtual IControlBase* BD_CreateControlByPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, IPropertyControl *pPropCtrl) = 0;
 	// 保存皮肤包
 	virtual bool BD_SaveProject(char *pszSkinDir, char *pszSkinName) = 0;
 	// 关闭一个工程

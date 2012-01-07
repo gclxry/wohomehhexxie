@@ -1068,7 +1068,7 @@ bool IPropertySkinManagerImpl::GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, 
 	for (int i = 0; i < nItemCount; i++)
 	{
 		XmlNode* pCtrlNode = JabberXmlGetNthChildWithoutTag(pXmlNode, i);
-		if (pCtrlNode != NULL)
+		if (pCtrlNode != NULL && pCtrlNode->name != NULL)
 		{
 			char* psz_id = JabberXmlGetAttrValue(pCtrlNode, SKIN_OBJECT_ID);
 			if (psz_id == NULL)
@@ -1082,6 +1082,7 @@ bool IPropertySkinManagerImpl::GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, 
 			if (pCtrlProp == NULL)
 				return false;
 
+			pCtrlProp->SetControlType(pCtrlNode->name);
 			pCtrlProp->SetCtrlGroupProp(pCtrlPropGroup);
 			pCtrlProp->SetParentCtrlProp(pParentProp);
 			pChildCtrlVec->push_back(pCtrlProp);

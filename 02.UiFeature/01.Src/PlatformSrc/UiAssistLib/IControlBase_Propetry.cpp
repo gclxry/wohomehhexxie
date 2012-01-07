@@ -488,3 +488,12 @@ IPropertyGroup* IControlBase::PP_GetControlPropetryGroup()
 
 	return m_pXmlPropCtrl->GetControlPropGroup();
 }
+
+// 取得子控件的属性列表：Layout.xml 中的布局
+PROP_CONTROL_VEC* IControlBase::GetChildPropControlVec()
+{
+	if (m_pXmlPropCtrl == NULL)
+		return NULL;
+
+	return m_pXmlPropCtrl->GetChildPropControlVec();
+}

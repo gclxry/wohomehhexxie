@@ -35,6 +35,8 @@ public:
 	virtual void AppendChildContrl(IControlBase *pCtrl) = 0;
 	// 取得子控件列表
 	virtual CHILD_CTRLS_VEC* GetChildControlsVec() = 0;
+	// 取得子控件的属性列表：Layout.xml 中的布局
+	virtual PROP_CONTROL_VEC* GetChildPropControlVec() = 0;
 
 public:
 ////// 以下函数非外部窗口调用 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -44,6 +44,8 @@ public:
 	virtual void AppendChildContrl(IControlBase *pCtrl);
 	// 取得子控件列表
 	virtual CHILD_CTRLS_VEC* GetChildControlsVec();
+	// 取得子控件的属性列表：Layout.xml 中的布局
+	virtual PROP_CONTROL_VEC* GetChildPropControlVec();
 
 protected:
 	// 本窗口的消息处理函数，bPassOn参数为true是，消息会继续传递处理；false时，处理完毕，不再下传

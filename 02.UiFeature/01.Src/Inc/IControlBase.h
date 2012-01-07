@@ -186,6 +186,8 @@ public:
 
 	// 取得子控件列表
 	CHILD_CTRLS_VEC* GetChildControlsVec();
+	// 取得子控件的属性列表：Layout.xml 中的布局
+	PROP_CONTROL_VEC* GetChildPropControlVec();
 
 	// 重绘控件
 	void RedrawControl(bool bDrawImmediately = true);
@@ -227,6 +229,8 @@ public:
 	bool IsMousehover();
 
 	IPropertyGroup* PP_GetControlPropetryGroup();
+	IPropertyControl *PP_GetControlPropetry();
+
 protected:
 	// 设置子控件都必须自绘
 	void SetChildCtrlToRedraw();
@@ -291,7 +295,6 @@ private:
 	// 创建控件属性
 	void CreateCtrlAllPropetry(bool bNeedSetDftProp);
 	IPropertyBase* CreateCtrlOnePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
-	IPropertyControl *PP_GetControlPropetry();
 
 	// 初始化在builder中的属性
 	bool BD_InitControlBase(IPropertyControl *pCtrlProp, bool bNeedSetDftProp);
