@@ -338,15 +338,20 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlByPropetry(IWindowBase *pPar
 	pCtrlBase->SetOwnerWindow(pParentWnd);
 	pCtrlBase->SetParentControl(pParentCtrl);
 
-	pCtrlBase->SetObjectName(pPropCtrl->GetObjectName());
-
 	// 插入控件队列
 	if (pParentCtrl != NULL)
 		pParentCtrl->AppendChildContrl(pCtrlBase);
 	else
 		pParentWnd->AppendChildContrl(pCtrlBase);
 
+	// 初始化属性
 	pCtrlBase->BD_InitControlBase(pPropCtrl, false);
+
+	// 设置ObjName
+	pCtrlBase->SetObjectName(pCtrlBase->PP_GetControlObjectName());
+	pPropCtrl->SetObjectName(pCtrlBase->PP_GetControlObjectName());
+
+	// 创建控件完毕
 	pCtrlBase->OnFinalCreate();
 	return pCtrlBase;
 }
