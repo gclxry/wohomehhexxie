@@ -38,7 +38,7 @@ private:
 	// 在指定节点的子节点末尾插入新节点
 	HTREEITEM InsertControlNodeToEnd(HTREEITEM hParentNode, IControlBase *pControl);
 	// 向树中插入一个新节点
-	void InsertControlVec(HTREEITEM hParentItem, CHILD_CTRLS_VEC* pCtrlVec);
+	void InsertCtrlVecByPropCtrlVec(HTREEITEM hParentItem, IWindowBase *pParentWnd, IControlBase *pParentCtrl, PROP_CONTROL_VEC* pPropCtrlVec, CHILD_CTRLS_VEC* pCtrlVec);
 
 private:
 	bool m_bProjectInitOk;

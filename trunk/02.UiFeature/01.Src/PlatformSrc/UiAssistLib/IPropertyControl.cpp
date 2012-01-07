@@ -8,10 +8,24 @@ IPropertyControl::IPropertyControl(void)
 	m_ChildCtrlPropVec.clear();
 	m_pPrentCtrlProp = NULL;
 	m_pCtrlPropGroup = NULL;
+	m_strControlType = "";
 }
 
 IPropertyControl::~IPropertyControl(void)
 {
+}
+
+const char * IPropertyControl::GetControlType()
+{
+	return m_strControlType.c_str();
+}
+
+void IPropertyControl::SetControlType(char *pszCtrlType)
+{
+	if (pszCtrlType == NULL)
+		return;
+
+	m_strControlType = pszCtrlType;
 }
 
 IPropertyControl* IPropertyControl::GetParentCtrlProp()

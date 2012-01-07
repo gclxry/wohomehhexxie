@@ -315,6 +315,42 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *p
 	return pCtrlBase;
 }
 
+// 创建一个Builder使用的控件，并配置上属性
+IControlBase* IUiFeatureKernelImpl::BD_CreateControlByPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, IPropertyControl *pPropCtrl)
+{
+	if (pParentWnd == NULL || pPropCtrl == NULL || m_pControlMgr == NULL || m_pSkinMgr == NULL)
+		return NULL;
+
+	// 创建新控件
+	ICtrlInterface* pCtrlIfc = m_pControlMgr->CreateCtrl((char*)pPropCtrl->GetControlType(), (char*)pPropCtrl->GetObjectId());
+	if (pCtrlIfc == NULL)
+		return NULL;
+
+	IControlBase *pCtrlBase = dynamic_cast<IControlBase*>(pCtrlIfc);
+	if (pCtrlBase == NULL)
+	{
+		m_pControlMgr->ReleaseCtrl(&pCtrlIfc);
+		return NULL;
+	}
+	pCtrlBase->SetPropertySkinManager(m_pSkinMgr);
+	pCtrlBase->SetUiEngine(GetUiEngine());
+	pCtrlBase->SetPropertySkinManager(m_pSkinMgr);
+	pCtrlBase->SetOwnerWindow(pParentWnd);
+	pCtrlBase->SetParentControl(pParentCtrl);
+
+	pCtrlBase->SetObjectName(pPropCtrl->GetObjectName());
+
+	// 插入控件队列
+	if (pParentCtrl != NULL)
+		pParentCtrl->AppendChildContrl(pCtrlBase);
+	else
+		pParentWnd->AppendChildContrl(pCtrlBase);
+
+	pCtrlBase->BD_InitControlBase(pPropCtrl, false);
+	pCtrlBase->OnFinalCreate();
+	return pCtrlBase;
+}
+
 IUiEngine* IUiFeatureKernelImpl::GetUiEngine()
 {
 	return IUiEngineImpl::GetInstance();

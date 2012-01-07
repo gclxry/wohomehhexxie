@@ -310,3 +310,12 @@ void IWindowBaseImpl::PP_SetLayeredWindow(bool bIsLayered)
 		}
 	}
 }
+
+// 取得子控件的属性列表：Layout.xml 中的布局
+PROP_CONTROL_VEC* IWindowBaseImpl::GetChildPropControlVec()
+{
+	if (m_pXmlPropWindow == NULL)
+		return NULL;
+
+	return m_pXmlPropWindow->GetChildPropControlVec();
+}
