@@ -37,7 +37,7 @@ void IPropertyControl::SetCtrlGroupProp(IPropertyGroup *pBasePropGroup)
 		m_pCtrlPropGroup = pBasePropGroup;
 }
 
-IPropertyGroup* IPropertyControl::GetCtrlGroupProp()
+IPropertyGroup* IPropertyControl::GetControlPropGroup()
 {
 	return m_pCtrlPropGroup;
 }

@@ -226,6 +226,7 @@ public:
 	// 鼠标是否Hover
 	bool IsMousehover();
 
+	IPropertyGroup* PP_GetControlPropetryGroup();
 protected:
 	// 设置子控件都必须自绘
 	void SetChildCtrlToRedraw();
@@ -337,6 +338,7 @@ protected:
 	IPropertySkinManager *m_pSkinPropMgr;
 	// 记录到xml中的属性
 	IPropertyControl *m_pXmlPropCtrl;
+
 	// Group:base
 	IPropertyGroup* m_pPropGroupBase;
 	// base-类型名称

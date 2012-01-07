@@ -337,7 +337,7 @@ bool CUiFeatureBuilderView::OnMouseMove_FangKuai8(CPoint point, bool bIsWnd)
 	else
 	{
 		if (m_pSelectControl != NULL)
-			pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
+			pFk8 = m_pSelectControl->BD_GetFangKuai8Rect();
 	}
 
 	if (pFk8 == NULL)
