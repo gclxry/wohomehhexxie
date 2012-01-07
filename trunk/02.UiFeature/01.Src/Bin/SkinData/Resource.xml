@@ -13,7 +13,7 @@
 		<item objid="Window1.string2" name="Window1.string1" counts="3" defaultarea="2" data1="超链接正常状态专用字体" area1="1" data2="sdfgsdg" area2="3" data3="3523452345" area3="4"/>
 	</string>
 	<combobox>
-		<combobox objid="3" name="01.UiTestDlg.g-base.combobox" counts="5" select="3" data0="ABC" data1="abc" data2="123" data3="YUI" data4="*(--)"/>
+		<item objid="3" name="01.UiTestDlg.g-base.combobox" counts="5" select="3" data0="ABC" data1="abc" data2="123" data3="YUI" data4="*(--)"/>
 	</combobox>
 	<image>
 		<item objid="4" name="01.bk.normal" imagebasename="V5.Default.Menu.Bk.png_001"/>
