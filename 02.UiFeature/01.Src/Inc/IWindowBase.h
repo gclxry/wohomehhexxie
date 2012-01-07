@@ -15,6 +15,8 @@ public:
 	virtual void BD_DrawWindowView(CDrawingBoard &ViewMemDc) = 0;
 	// 得到在Builder中显示的四周8个方块的位置
 	virtual FANGKUAI_8* BD_GetFangKuai8Rect() = 0;
+	// 取得当前输入位置的控件
+	virtual IControlBase *BD_GetMouseInControl(POINT pt) = 0;
 
 //////////////////////////////////////////////////////////////////////////
 	// 窗口居中显示

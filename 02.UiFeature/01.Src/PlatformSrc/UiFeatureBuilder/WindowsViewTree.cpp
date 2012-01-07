@@ -198,7 +198,7 @@ void CWindowsViewTree::OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase)
 		return;
 
 	m_pPropCtrl->SetShowPropGroup(pPropGroup);
-	m_pWindowView->ResetShowWindow(pWndBase);
+	m_pWindowView->ResetShowWindow(pWndBase, NULL);
 }
 
 void CWindowsViewTree::OnTvnSelchanged_SelectControl(IControlBase *pCtrlBase)
@@ -213,7 +213,7 @@ void CWindowsViewTree::OnTvnSelchanged_SelectControl(IControlBase *pCtrlBase)
 		return;
 
 	m_pPropCtrl->SetShowPropGroup(pPropGroup);
-	m_pWindowView->ResetShowWindow(pCtrlBase->GetOwnerWindow());
+	m_pWindowView->ResetShowWindow(pCtrlBase->GetOwnerWindow(), pCtrlBase);
 }
 
 void CWindowsViewTree::RefreshObjectName()

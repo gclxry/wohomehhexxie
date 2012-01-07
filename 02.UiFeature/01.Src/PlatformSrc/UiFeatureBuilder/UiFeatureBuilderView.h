@@ -51,7 +51,7 @@ public:
 	void SetNewControl(bool bIsNew);
 	void SetProjectInitState(bool bInitOk);
 
-	void ResetShowWindow(IWindowBase *pCurrentWnd);
+	void ResetShowWindow(IWindowBase *pCurrentWnd, IControlBase *pCtrlBase);
 	void Init(IUiFeatureKernel* pKernelWindow, CFeatureControlList *pCtrlList, CWindowsViewTree *pWndTree);
 
 	// 判断鼠标坐标是否落在了窗口内部
@@ -96,6 +96,9 @@ protected:
 
 	IControlBase *m_pSelectControl;
 	bool m_bMoveInCtrlFangKuai8;
+
+	// 创建新控件时的父控件
+	IControlBase *m_pCreateCtrlParentCtrl;
 
 	// 滚动条滚动后视图的偏移量
 	CSize m_ScrollOffset;
