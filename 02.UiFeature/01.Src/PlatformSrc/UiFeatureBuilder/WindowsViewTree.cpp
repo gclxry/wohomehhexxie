@@ -213,6 +213,7 @@ void CWindowsViewTree::OnTvnSelchanged_SelectControl(IControlBase *pCtrlBase)
 		return;
 
 	m_pPropCtrl->SetShowPropGroup(pPropGroup);
+	m_pWindowView->ResetShowWindow(pCtrlBase->GetOwnerWindow());
 }
 
 void CWindowsViewTree::RefreshObjectName()
