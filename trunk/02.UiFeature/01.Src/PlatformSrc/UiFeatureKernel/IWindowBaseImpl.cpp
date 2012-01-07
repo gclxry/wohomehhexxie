@@ -1096,3 +1096,47 @@ CHILD_CTRLS_VEC* IWindowBaseImpl::GetChildControlsVec()
 {
 	return &m_ChildCtrlsVec;
 }
+
+// 取得当前输入位置的控件
+IControlBase* IWindowBaseImpl::BD_GetMouseInControl(POINT pt)
+{
+	if (!::PtInRect(&(m_BD_FangKuai8.EntityRct), pt))
+		return NULL;
+
+
+
+}
+
+IControlBase* IWindowBaseImpl::BD_CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt)
+{
+	if (pCtrlVec == NULL)
+		return false;
+
+	int nCtns = pCtrlVec->size();
+	for (int i = nCtns - 1; i >= 0; i--)
+	{
+		IControlBase* pCtrl = (*pCtrlVec)[i];
+		if (pCtrl != NULL && pCtrl->IsVisible())
+		{
+			if (pCtrl->GetReceiveMouseMessage())
+			{
+				RECT CtrlRct = pCtrl->GetCtrlInWindowRect();
+				if (::PtInRect(&CtrlRct, pt))
+				{
+					*ppControl = pCtrl;
+					CHILD_CTRLS_VEC *pCtrlsVec = pCtrl->GetChildControlsVec();
+					CheckMouseInControl(pCtrlsVec, pt, ppControl);
+					return true;
+				}
+			}
+			else
+			{
+				CHILD_CTRLS_VEC *pCtrlsVec = pCtrl->GetChildControlsVec();
+				if (CheckMouseInControl(pCtrlsVec, pt, ppControl))
+					return true;
+			}
+		}
+	}
+
+	return false;
+}

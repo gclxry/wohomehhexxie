@@ -52,6 +52,7 @@ CUiFeatureBuilderView::CUiFeatureBuilderView() : CFormView(CUiFeatureBuilderView
 	m_bInitOk = false;
 	m_pCurrentWnd = NULL;
 	m_pSelectControl = NULL;
+	m_pCreateCtrlParentCtrl = NULL;
 	m_bIsLButtonDown = false;
 	m_bMoveInWndFangKuai8 = false;
 	m_bMoveInCtrlFangKuai8 = false;
@@ -86,9 +87,10 @@ BOOL CUiFeatureBuilderView::OnEraseBkgnd(CDC* pDC)
 	return TRUE;
 }
 
-void CUiFeatureBuilderView::ResetShowWindow(IWindowBase *pCurrentWnd)
+void CUiFeatureBuilderView::ResetShowWindow(IWindowBase *pCurrentWnd, IControlBase *pCtrlBase)
 {
 	m_pCurrentWnd = pCurrentWnd;
+	m_pSelectControl = pCtrlBase;
 
 	ResetViewShowSize();
 	this->RedrawWindow();
@@ -434,6 +436,8 @@ void CUiFeatureBuilderView::CreateNewControl()
 		return;
 	}
 
+	// 计算新控件的位置和大小
+
 	// 重新绘制WindowTree
 	if (m_pWindowViewTree != NULL)
 		m_pWindowViewTree->AddNewControlToWindowTreeNode(m_pCurrentWnd, pParentCtrl, m_pSelectControl);
@@ -444,6 +448,7 @@ void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 	CFormView::OnLButtonDown(nFlags, point);
 	m_LBtnDownPos = point;
 	m_bIsLButtonDown = true;
+	m_pCreateCtrlParentCtrl = NULL;
 
 	if (m_pSkinManager == NULL || m_pUiKernel == NULL || m_pCurrentWnd == NULL)
 		return;
@@ -457,7 +462,14 @@ void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 	{
 		m_bCreateNewCtrl = PtInWindow(point);
 		if (!m_bCreateNewCtrl)
+		{
 			SetViewCursor(UF_IDC_ARROW);
+		}
+		else
+		{
+			// 取得选中的父控件
+			m_pCreateCtrlParentCtrl = m_pCurrentWnd->BD_Get
+		}
 		return;
 	}
 

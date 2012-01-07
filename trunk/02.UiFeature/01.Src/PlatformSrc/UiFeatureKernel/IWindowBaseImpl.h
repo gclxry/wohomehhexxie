@@ -21,6 +21,8 @@ public:
 	virtual void BD_DrawWindowView(CDrawingBoard &ViewMemDc);
 	// 得到在Builder中显示的四周8个方块的位置
 	virtual FANGKUAI_8* BD_GetFangKuai8Rect();
+	// 取得当前输入位置的控件
+	virtual IControlBase *BD_GetMouseInControl(POINT pt);
 
 //////////////////////////////////////////////////////////////////////////
 	// 导入皮肤包使用的函数初始化
@@ -83,6 +85,7 @@ private:
 	// 在Builder中绘制用的边框色块
 	void BD_NewFrameImage();
 	void BD_NewFrameImageBase(IPropertyImageBase *pImgBase, string strImgPath);
+	IControlBase* BD_CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt);
 
 private:
 	// 循环遍历每个控件的绘制
