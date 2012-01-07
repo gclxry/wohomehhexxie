@@ -272,7 +272,7 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *p
 	}
 	pCtrlBase->SetPropertySkinManager(m_pSkinMgr);
 
-	IPropertyControl *pPropCtrl = dynamic_cast<IPropertyControl*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_CONTROL));
+	IPropertyControl *pPropCtrl = dynamic_cast<IPropertyControl*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_CONTROL, szId));
 	if (pPropCtrl == NULL)
 	{
 		m_pControlMgr->ReleaseCtrl(&pCtrlIfc);
@@ -280,7 +280,7 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *p
 	}
 
 	// 设置新控件的属性
-	IPropertyGroup *pCtrlPropGroup = dynamic_cast<IPropertyGroup*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_GROUP));
+	IPropertyGroup *pCtrlPropGroup = dynamic_cast<IPropertyGroup*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_GROUP, szId));
 	if (pCtrlPropGroup == NULL)
 	{
 		m_pSkinMgr->ReleaseBaseProp((IPropertyBase*)pPropCtrl);
@@ -292,6 +292,10 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *p
 	pCtrlBase->SetPropertySkinManager(m_pSkinMgr);
 	pCtrlBase->SetOwnerWindow(pParentWnd);
 	pCtrlBase->SetParentControl(pParentCtrl);
+
+	pCtrlBase->SetObjectName("新建控件");
+	pPropCtrl->SetObjectName("新建控件");
+	pCtrlPropGroup->SetObjectName("新建控件");
 
 	m_pSkinMgr->BD_AppendControlToVec(pszNewCtrlTypeName, pCtrlPropGroup);
 	// 插入控件队列
