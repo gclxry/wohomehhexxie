@@ -344,11 +344,25 @@ void CWindowsViewTree::AddNewControlToWindowTreeNode(IWindowBase *pWindow, ICont
 		IWindowBase *pWndBase = (IWindowBase*)this->GetItemData(hWindowNode);
 		if (pWndBase == pWindow)
 		{
-			HTREEITEM hFind = FindControlTreeNode(hWindowNode, pParentCtrl);
-			if (hFind == NULL)
-				return;
+			HTREEITEM hNewItem = NULL;
+			if (pParentCtrl == NULL)
+			{
+				hNewItem = InsertControlNodeToEnd(hWindowNode, pControl);
+				this->Expand(hWindowNode, TVE_EXPAND);
+			}
+			else
+			{
+				HTREEITEM hFind = FindControlTreeNode(hWindowNode, pParentCtrl);
+				if (hFind == NULL)
+					return;
 
-			InsertControlNodeToEnd(hFind, pControl);
+				hNewItem  = InsertControlNodeToEnd(hFind, pControl);
+				this->Expand(hFind, TVE_EXPAND);
+			}
+
+			// 选中并打开根节点
+			this->SelectItem(hNewItem);
+			this->RedrawWindow();
 			break;
 		}
 
@@ -363,7 +377,9 @@ HTREEITEM CWindowsViewTree::InsertControlNodeToEnd(HTREEITEM hParentNode, IContr
 	if (hParentNode == NULL || pControl == NULL)
 		return NULL;
 
-	HTREEITEM hItem = this->InsertItem(A2W(pControl->GetObjectName()), 3, 3, hParentNode, TVI_LAST);
+	CString strName(_T(""));
+	strName.Format(_T("%s[%s]"), A2W(pControl->GetObjectName()), A2W(pControl->GetObjectType()));
+	HTREEITEM hItem = this->InsertItem(strName, 3, 3, hParentNode, TVI_LAST);
 	if (hItem != NULL)
 		this->SetItemData(hItem, (DWORD_PTR)pControl);
 
