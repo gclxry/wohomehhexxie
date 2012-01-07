@@ -287,13 +287,13 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *p
 		m_pControlMgr->ReleaseCtrl(&pCtrlIfc);
 		return NULL;
 	}
-
 	pPropCtrl->SetCtrlGroupProp(pCtrlPropGroup);
 	pCtrlBase->SetUiEngine(GetUiEngine());
 	pCtrlBase->SetPropertySkinManager(m_pSkinMgr);
 	pCtrlBase->SetOwnerWindow(pParentWnd);
 	pCtrlBase->SetParentControl(pParentCtrl);
 
+	m_pSkinMgr->BD_AppendControlToVec(pszNewCtrlTypeName, pCtrlPropGroup);
 	// 插入控件队列
 	if (pParentCtrl != NULL)
 	{

@@ -28,8 +28,10 @@ public:
 	virtual bool BD_TranslateWindowsXml(char *pszXmlPath);
 	// 解析Layout.xml
 	virtual bool BD_TranslateLayoutXml(char *pszXmlPath);
-
+	// 取得所有窗口的队列
 	virtual ONE_RESOURCE_PROP_MAP* BD_GetWindowPropMap();
+	// 向控件队列添加一个控件
+	virtual bool BD_AppendControlToVec(char *pszCtrlType, IPropertyGroup* pCtrlPropGroup);
 
 	// 保存皮肤包
 	virtual bool BD_SaveProject(char *pszSkinDir, char *pszSkinName);
@@ -110,13 +112,16 @@ private:
 private:
 	// 皮肤路径
 	string m_strSkinPath;
-	// 所有种类的属性的队列
+
+	// Resource.xml 所有种类的属性的队列
 	RESOURCE_PROP_MAP m_AllPropMap;
-	// 所有控件种类的属性的队列，KEY：控件类型名称，如：Button
+	// Controls.xml 所有控件种类的属性的队列，KEY：控件类型名称，如：Button
+	// 存储每一个控件的具体的属性，所有控件属性都存放在一个 IPropertyGroup 下
 	RESOURCE_PROP_MAP m_AllCtrlPropMap;
-	// 所有窗口的属性管理器map
+	// Windows.xml 所有窗口的属性管理器map
+	// 存储每一个窗口的具体的属性，所有窗口属性都存放在一个 IPropertyGroup 下
 	ONE_RESOURCE_PROP_MAP m_AllWindowPropMap;
-	// 布局队列，KEY：ObjectID
+	// 布局队列，KEY：ObjectID，存储 IPropertyWindow IPropertyControl
 	ONE_RESOURCE_PROP_MAP m_LayoutWindowMap;
 
 	// ImageBase 属性队列
