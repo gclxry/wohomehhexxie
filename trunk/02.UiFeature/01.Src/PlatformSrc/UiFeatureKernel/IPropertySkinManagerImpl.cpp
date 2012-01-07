@@ -1074,7 +1074,8 @@ bool IPropertySkinManagerImpl::GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, 
 			if (psz_id == NULL)
 				return false;
 
-			IPropertyGroup* pCtrlPropGroup = FindControlPropGroup(psz_id);
+			string strCtrlType = "";
+			IPropertyGroup* pCtrlPropGroup = FindControlPropGroup(psz_id, strCtrlType);
 			if (pCtrlPropGroup == NULL)
 				return false;
 
@@ -1082,7 +1083,7 @@ bool IPropertySkinManagerImpl::GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, 
 			if (pCtrlProp == NULL)
 				return false;
 
-			pCtrlProp->SetControlType(pCtrlNode->name);
+			pCtrlProp->SetControlType((char*)strCtrlType.c_str());
 			pCtrlProp->SetCtrlGroupProp(pCtrlPropGroup);
 			pCtrlProp->SetParentCtrlProp(pParentProp);
 			pChildCtrlVec->push_back(pCtrlProp);
@@ -1098,8 +1099,9 @@ bool IPropertySkinManagerImpl::GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, 
 	return true;
 }
 
-IPropertyGroup* IPropertySkinManagerImpl::FindControlPropGroup(char *pszObjectId)
+IPropertyGroup* IPropertySkinManagerImpl::FindControlPropGroup(char *pszObjectId, string &strCtrlType)
 {
+	strCtrlType = "";
 	if (pszObjectId == NULL)
 		return NULL;
 
@@ -1117,6 +1119,7 @@ IPropertyGroup* IPropertySkinManagerImpl::FindControlPropGroup(char *pszObjectId
 			if (pPropBase == NULL)
 				continue;
 
+			strCtrlType = pGroupItem->first;
 			IPropertyGroup* pFindGroup = dynamic_cast<IPropertyGroup*>(pPropBase);
 			return pFindGroup;
 		}
