@@ -22,7 +22,7 @@ public:
 	void AppendChildCtrlProp(IPropertyControl* pCtrlProp);
 	
 	void SetCtrlGroupProp(IPropertyGroup *pBasePropGroup);
-	IPropertyGroup *GetCtrlGroupProp();
+	IPropertyGroup *GetControlPropGroup();
 
 	PROP_CONTROL_VEC* GetChildPropControlVec();
 

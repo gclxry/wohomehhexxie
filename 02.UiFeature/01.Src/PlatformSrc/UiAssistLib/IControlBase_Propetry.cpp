@@ -31,7 +31,7 @@ IPropertyBase* IControlBase::CreateCtrlOnePropetry(IPropertyGroup* pGroup, OBJEC
 		return NULL;
 
 	if (pGroup == NULL)
-		pGroup = m_pXmlPropCtrl->GetCtrlGroupProp();
+		pGroup = m_pXmlPropCtrl->GetControlPropGroup();
 
 	return CreateResourcePropetry(m_pSkinPropMgr, pGroup, propType, pszPropName, pszPropInfo);
 }
@@ -479,4 +479,12 @@ bool IControlBase::CreateBuilderShowPropList()
 void IControlBase::SetPropertySkinManager(IPropertySkinManager *pMgr)
 {
 	m_pSkinPropMgr = pMgr;
+}
+
+IPropertyGroup* IControlBase::PP_GetControlPropetryGroup()
+{
+	if (m_pXmlPropCtrl == NULL)
+		return NULL;
+
+	return m_pXmlPropCtrl->GetControlPropGroup();
 }

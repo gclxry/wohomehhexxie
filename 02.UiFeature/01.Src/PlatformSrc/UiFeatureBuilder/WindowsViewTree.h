@@ -30,6 +30,7 @@ protected:
 private:
 	void OnTvnSelchanged_SelectRoot();
 	void OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase);
+	void OnTvnSelchanged_SelectControl(IControlBase *pCtrlBase);
 
 	void RefreshItemObjectName(HTREEITEM hParentItem);
 	// 查找指定的控件

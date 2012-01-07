@@ -142,6 +142,7 @@ void CWindowsViewTree::OnCreateWindowPanel()
 
 void CWindowsViewTree::OnTvnSelchanged(NMHDR *pNMHDR, LRESULT *pResult)
 {
+	*pResult = 0;
 	if (!m_bProjectInitOk)
 		return;
 
@@ -167,10 +168,13 @@ void CWindowsViewTree::OnTvnSelchanged(NMHDR *pNMHDR, LRESULT *pResult)
 	{
 		IWindowBase *pWndBase = dynamic_cast<IWindowBase*>(pObj);
 		OnTvnSelchanged_SelectWindow(pWndBase);
-		return;
 	}
-
-	*pResult = 0;
+	else
+	{
+		// Ñ¡ÔñÁË¿Ø¼þ
+		IControlBase *pCtrlBase = dynamic_cast<IControlBase*>(pObj);
+		OnTvnSelchanged_SelectControl(pCtrlBase);
+	}
 }
 
 void CWindowsViewTree::OnTvnSelchanged_SelectRoot()
@@ -195,6 +199,20 @@ void CWindowsViewTree::OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase)
 
 	m_pPropCtrl->SetShowPropGroup(pPropGroup);
 	m_pWindowView->ResetShowWindow(pWndBase);
+}
+
+void CWindowsViewTree::OnTvnSelchanged_SelectControl(IControlBase *pCtrlBase)
+{
+	OnTvnSelchanged_SelectRoot();
+
+	if (m_pWindowView == NULL || m_pPropCtrl == NULL || pCtrlBase == NULL)
+		return;
+
+	IPropertyGroup* pPropGroup = pCtrlBase->PP_GetControlPropetryGroup();
+	if (pPropGroup == NULL)
+		return;
+
+	m_pPropCtrl->SetShowPropGroup(pPropGroup);
 }
 
 void CWindowsViewTree::RefreshObjectName()
