@@ -295,7 +295,7 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *p
 
 	pCtrlBase->SetObjectName("新建控件");
 	pPropCtrl->SetObjectName("新建控件");
-	pCtrlPropGroup->SetObjectName("新建控件");
+	pCtrlPropGroup->SetObjectName("");
 
 	m_pSkinMgr->BD_AppendControlToVec(pszNewCtrlTypeName, pCtrlPropGroup);
 	// 插入控件队列

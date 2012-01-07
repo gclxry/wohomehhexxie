@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "..\..\Inc\IPropertyComboBox.h"
 #include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\ICommonFun.h"
 
 IPropertyComboBox::IPropertyComboBox()
 {
@@ -65,6 +66,39 @@ bool IPropertyComboBox::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 
 		string strData = psz_data;
 		m_ComboBoxPro.DataVec.push_back(strData);
+	}
+
+	return true;
+}
+
+// Ð´Èëxml
+bool IPropertyComboBox::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode)
+{
+	if (pParentXmlNode == NULL)
+		return false;
+
+	CUiXmlWriteNode* pPropNode = XmlStrObj.CreateNode(pParentXmlNode, "item");
+	if (pPropNode == NULL)
+		return false;
+
+	pPropNode->AddAttribute(SKIN_OBJECT_ID, GetObjectId());
+	pPropNode->AddAttribute("name", GetObjectName());
+	AddIntAttrToNode(pPropNode, "counts", m_ComboBoxPro.DataVec.size());
+	AddIntAttrToNode(pPropNode, "select", m_ComboBoxPro.nSelect);
+
+	int nNo = 0;
+	for (STRING_VEC::iterator pStringItem = m_ComboBoxPro.DataVec.begin(); pStringItem != m_ComboBoxPro.DataVec.end(); pStringItem++)
+	{
+		string strString = *pStringItem;
+		if (strString.size() <= 0)
+			continue;
+
+		char pszDataName[MAX_PATH + 1];
+		memset(pszDataName, 0, MAX_PATH + 1);
+		sprintf_s(pszDataName, MAX_PATH, "data%d", nNo);
+
+		pPropNode->AddAttribute(pszDataName, strString.c_str());
+		nNo++;
 	}
 
 	return true;

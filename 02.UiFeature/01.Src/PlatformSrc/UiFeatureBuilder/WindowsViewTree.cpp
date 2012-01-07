@@ -244,13 +244,15 @@ void CWindowsViewTree::RefreshItemObjectName(HTREEITEM hParentItem)
 					pWnd->SetObjectName(pWnd->PP_GetWindowObjectName());
 				}
 			}
-			else if (pPropBase->GetObjectTypeId() == OTID_CONTROL)
+			else
 			{
 				// ¿Ø¼þ
 				IControlBase* pCtrl = dynamic_cast<IControlBase*>(pPropBase);
 				if (pCtrl != NULL && pCtrl->PP_GetControlObjectName() != NULL)
 				{
-					this->SetItemText(hChild, A2W(pCtrl->PP_GetControlObjectName()));
+					CString strName(_T(""));
+					strName.Format(_T("%s[%s]"), A2W(pCtrl->PP_GetControlObjectName()), A2W(pCtrl->GetObjectType()));
+					this->SetItemText(hChild, strName);
 					pCtrl->SetObjectName(pCtrl->PP_GetControlObjectName());
 				}
 			}
