@@ -79,16 +79,16 @@ public:
 				sRet += "/>\n";
 			else
 			{
-				sRet += ">";
+				sRet += ">\n";
 				sRet += m_sText;
 				sRet += "</";
 				sRet += m_sName;
-				sRet += ">";
+				sRet += ">\n";
 			}
 		}
 		else 
 		{
-			sRet += ">";
+			sRet += ">\n";
 			for (vector<CUiXmlWriteNode*>::iterator it = m_vctChild.begin(); it != m_vctChild.end(); it++)
 				sRet += (*it)->ToXmlString();
 			if (m_sText.length() > 0)

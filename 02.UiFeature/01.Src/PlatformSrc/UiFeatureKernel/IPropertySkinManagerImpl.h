@@ -101,7 +101,7 @@ private:
 	// Layout.xml ฯเนุ
 	bool TranslateLayoutXml(ZIP_FILE *pLayoutXml);
 	bool GeneralCreateWindowLayoutProp(XmlNode* pXmlNode, PROP_CONTROL_VEC* pChildCtrlVec, IPropertyControl* pParentProp);
-	IPropertyGroup* FindControlPropGroup(char *pszObjectId);
+	IPropertyGroup* FindControlPropGroup(char *pszObjectId, string &strCtrlType);
 	void ReleaseLayoutMap();
 	void ReleaseLayoutMapPropControlVec(PROP_CONTROL_VEC* pCtrlVec);
 
