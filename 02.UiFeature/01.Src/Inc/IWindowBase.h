@@ -21,6 +21,8 @@ public:
 	virtual IControlBase *BD_GetFocusControl() = 0;
 	// 设置当前激活的控件
 	virtual void BD_SetFocusControl(IControlBase* pControl) = 0;
+	// 设置控件在编辑模式下的位置和大小
+	virtual void BD_SetControlRect(IControlBase* pControl, RECT RctInView) = 0;
 
 //////////////////////////////////////////////////////////////////////////
 	// 窗口居中显示

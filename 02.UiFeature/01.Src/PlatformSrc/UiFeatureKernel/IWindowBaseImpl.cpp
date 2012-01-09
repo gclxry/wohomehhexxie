@@ -1138,3 +1138,22 @@ void IWindowBaseImpl::BD_SetFocusControl(IControlBase* pControl)
 {
 	m_pFocusCtrl = pControl;
 }
+
+// 设置控件在编辑模式下的位置和大小
+void IWindowBaseImpl::BD_SetControlRect(IControlBase* pControl, RECT RctInView)
+{
+	if (pControl == NULL || pControl->BD_GetFangKuai8Rect() == NULL)
+		return;
+
+	FANGKUAI_8* pFk8 = pControl->BD_GetFangKuai8Rect();
+	pFk8->EntityRct = RctInView;
+
+	RECT InWindowRect;
+	INIT_RECT(InWindowRect);
+	InWindowRect.left = RctInView.left - m_BD_FangKuai8.EntityRct.left;
+	InWindowRect.right = InWindowRect.left + RECT_WIDTH(RctInView);
+	InWindowRect.top = RctInView.top - m_BD_FangKuai8.EntityRct.top;
+	InWindowRect.bottom = InWindowRect.top + RECT_HEIGHT(RctInView);
+
+	pControl->SetCtrlInWindowRect(InWindowRect);
+}

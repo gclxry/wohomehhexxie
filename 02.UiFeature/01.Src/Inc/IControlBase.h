@@ -315,6 +315,9 @@ private:
 	// 此函数由窗口调用，绘制当前控件，参数为父窗口/父控件的内存DC
 	virtual void OnPaintControl(CDrawingBoard &WndMemDc);
 
+	// 从成员变量更新数据到属性
+	void MemberValueToPropetyValue();
+
 protected:
 	// 整个控件的内存DC
 	CDrawingBoard m_CtrlMemDc;
@@ -370,7 +373,7 @@ protected:
 	// layout-height
 	IPropertyInt *m_pPropBase_Layout_Height;
 
-	// layout-leftspace
+	// layout-
 	IPropertyComboBox *m_pPropBase_Layout_Layout;
 	// layout-leftspace
 	IPropertyInt *m_pPropBase_Layout_LeftSpace;

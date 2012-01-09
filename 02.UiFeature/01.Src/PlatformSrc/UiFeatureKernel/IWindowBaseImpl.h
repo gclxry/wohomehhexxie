@@ -27,6 +27,8 @@ public:
 	virtual IControlBase *BD_GetFocusControl();
 	// 设置当前激活的控件
 	virtual void BD_SetFocusControl(IControlBase* pControl);
+	// 设置控件在编辑模式下的位置和大小
+	virtual void BD_SetControlRect(IControlBase* pControl, RECT RctInView);
 
 //////////////////////////////////////////////////////////////////////////
 	// 导入皮肤包使用的函数初始化
