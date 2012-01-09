@@ -193,11 +193,26 @@ void CUiFeatureBuilderView::OnDraw(CDC* pDC)
 // 绘制创建新控件时的矩形
 void CUiFeatureBuilderView::DrawCreateCtrlRect()
 {
-	if (!m_bCreateNewCtrl || !m_bIsLButtonDown)
+	if (!m_bCreateNewCtrl || !m_bIsLButtonDown || m_pCurrentWnd == NULL)
 		return;
 
 	Graphics DoGrap(m_MemDc.GetSafeHdc());
 
+	FANGKUAI_8* pFk8 = NULL;
+	// 先绘制被选中的父控件的朦罩
+	if (m_pCreateCtrlParentCtrl == NULL)
+	{
+		pFk8 = m_pCreateCtrlParentCtrl->BD_GetFangKuai8Rect();
+	}
+	else
+	{
+		pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
+	}
+
+	SolidBrush PinkBrs(Color(100, 255, 0, 255));
+	DoGrap.FillRectangle(&PinkBrs, pFk8->EntityRct.left, pFk8->EntityRct.top, RECT_WIDTH(pFk8->EntityRct), RECT_HEIGHT(pFk8->EntityRct));
+
+	// 绘制新控件的边框
 	Pen LinePen(Color(255, 255, 0, 0), 1.5f);
 	REAL dashVals[2] = {0.8f, 2.0f};
 	LinePen.SetDashPattern(dashVals, 2);
@@ -425,9 +440,8 @@ void CUiFeatureBuilderView::CreateNewControl()
 	if (m_pControlList == NULL || m_pUiKernel == NULL || m_pCurrentWnd == NULL)
 		return;
 
-	IControlBase* pParentCtrl = GetSelectControl(m_LBtnDownPos);
 	CString strCtrlTypeName = m_pControlList->GetSelectCtrlTypeName();
-	m_pSelectControl = m_pUiKernel->BD_CreateControlEmptyPropetry(m_pCurrentWnd, pParentCtrl, W2A(strCtrlTypeName));
+	m_pSelectControl = m_pUiKernel->BD_CreateControlEmptyPropetry(m_pCurrentWnd, m_pCreateCtrlParentCtrl, W2A(strCtrlTypeName));
 	if (m_pSelectControl == NULL)
 	{
 		CString strInfo(_T(""));
@@ -440,7 +454,9 @@ void CUiFeatureBuilderView::CreateNewControl()
 
 	// 重新绘制WindowTree
 	if (m_pWindowViewTree != NULL)
-		m_pWindowViewTree->AddNewControlToWindowTreeNode(m_pCurrentWnd, pParentCtrl, m_pSelectControl);
+	{
+		m_pWindowViewTree->AddNewControlToWindowTreeNode(m_pCurrentWnd, m_pCreateCtrlParentCtrl, m_pSelectControl);
+	}
 }
 
 void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
@@ -461,14 +477,14 @@ void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 	if (m_bCreateNewCtrl)
 	{
 		m_bCreateNewCtrl = PtInWindow(point);
-		if (!m_bCreateNewCtrl)
+		if (m_bCreateNewCtrl)
 		{
-			SetViewCursor(UF_IDC_ARROW);
+			// 取得选中的父控件
+			m_pCreateCtrlParentCtrl = GetSelectControl(point);
 		}
 		else
 		{
-			// 取得选中的父控件
-			m_pCreateCtrlParentCtrl = m_pCurrentWnd->BD_Get
+			SetViewCursor(UF_IDC_ARROW);
 		}
 		return;
 	}
@@ -495,12 +511,11 @@ bool CUiFeatureBuilderView::PtInWindow(CPoint point)
 	return false;
 }
 
-// 取得选择的控件s
+// 取得选择的控件
 IControlBase* CUiFeatureBuilderView::GetSelectControl(CPoint point)
 {
 	point.x += m_ScrollOffset.cx;
 	point.y += m_ScrollOffset.cy;
 
-
-	return NULL;
+	return m_pCurrentWnd->BD_GetMouseInControl(point);
 }

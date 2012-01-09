@@ -85,7 +85,7 @@ private:
 	// 在Builder中绘制用的边框色块
 	void BD_NewFrameImage();
 	void BD_NewFrameImageBase(IPropertyImageBase *pImgBase, string strImgPath);
-	IControlBase* BD_CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt);
+	bool BD_CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt, IControlBase** ppControl);
 
 private:
 	// 循环遍历每个控件的绘制
