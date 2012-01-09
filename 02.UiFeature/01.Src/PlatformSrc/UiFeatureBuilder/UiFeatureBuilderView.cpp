@@ -405,7 +405,7 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown_MoveCtrl(CPoint point, ICont
 
 	RECT NewRect;
 	INIT_RECT(NewRect);
-	NewRect.left = (point.x - m_LBtnDownPos.x) + pFk8->EntityRct.left;
+	NewRect.left = point.x - RECT_WIDTH(pFk8->EntityRct) / 2 + m_ScrollOffset.cx;
 	if (NewRect.left < pParentFk8->EntityRct.left)
 		NewRect.left = pParentFk8->EntityRct.left;
 	if ((NewRect.left + RECT_WIDTH(pFk8->EntityRct)) > pParentFk8->EntityRct.right)
@@ -413,7 +413,7 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown_MoveCtrl(CPoint point, ICont
 
 	NewRect.right = NewRect.left + RECT_WIDTH(pFk8->EntityRct);
 
-	NewRect.top = (point.y - m_LBtnDownPos.y) + pFk8->EntityRct.top;
+	NewRect.top = point.y - RECT_HEIGHT(pFk8->EntityRct) / 2 + m_ScrollOffset.cy;
 	if (NewRect.top < pParentFk8->EntityRct.top)
 		NewRect.top = pParentFk8->EntityRct.top;
 	if ((NewRect.top + RECT_HEIGHT(pFk8->EntityRct)) > pParentFk8->EntityRct.bottom)
