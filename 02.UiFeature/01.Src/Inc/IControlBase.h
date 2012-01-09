@@ -181,6 +181,10 @@ public:
 	// 得到在Builder中显示的四周8个方块的位置
 	virtual FANGKUAI_8* BD_GetFangKuai8Rect();
 
+	// 是否锁定在Builder中鼠标改变控件大小和位置
+	void SetLockControl(bool bLock);
+	bool GetLockControl();
+
 	// 取得父控件的指针，如果为NULL，说明父控件是对话框
 	IControlBase* GetParentControl();
 	IWindowBase* GetOwnerWindow();
@@ -196,13 +200,11 @@ public:
 	void RedrawControlInAnimationTimer();
 
 
-	// 控件显示位置和大小，这个位置是相对于附着的窗口的
-	void SetCtrlInWindowRect(RECT CtrlWndRct);
-	RECT GetCtrlInWindowRect();
-	// 控件显示位置和大小，这个位置是相对于父控件的
-	RECT GetCtrlInControlRect();
-	// 取得控件的大小
-	RECT GetCtrlRect();
+	// 移动控件，会改变布局信息，参数：CtrlInWndRct控件位于窗口的位置
+	void MoveWindowRect(RECT CtrlInWndRct);
+	// 控件显示位置和大小，这个位置是相对于附着的窗口的，不会改变布局信息
+	void SetWindowRect(RECT CtrlInWndRct);
+	RECT GetWindowRect();
 
 	const char * PP_GetControlObjectName();
 
@@ -222,8 +224,6 @@ public:
 	void SetEnable(bool bEnable, bool bSetChild = true);
 	bool IsEnable();
 
-	// 相对于父控件的布局信息
-	void SetLayout(CONTROL_LAYOUT_INFO &cliLayoutInfo);
 	CONTROL_LAYOUT_INFO GetLayout();
 
 	// 鼠标是否Hover
@@ -317,6 +317,8 @@ private:
 
 	// 从成员变量更新数据到属性
 	void MemberValueToPropetyValue();
+	// 从属性更新数据到成员变量
+	void PropetyValueToMemberValue();
 
 protected:
 	// 整个控件的内存DC
@@ -336,10 +338,6 @@ protected:
 	bool m_bMouseHover;
 	// 控件位置，这个位置是相对于窗口的位置
 	RECT m_RectInWindow;
-	// 控件位置，这个位置是相对于父控件的位置
-	RECT m_RectInParentCtrl;
-	// 控件布局信息
-	CONTROL_LAYOUT_INFO m_LayoutInfo;
 
 	// 皮肤包管理类
 	IPropertySkinManager *m_pSkinPropMgr;
@@ -354,6 +352,8 @@ protected:
 	IPropertyString *m_pPropBase_ObjectId;
 	// base-name
 	IPropertyString *m_pPropBase_Name;
+	// base-lock
+	IPropertyBool *m_pPropBase_Lock;
 	// base-visible
 	IPropertyBool *m_pPropBase_Visible;
 	// base-ReceiveMouseMessage

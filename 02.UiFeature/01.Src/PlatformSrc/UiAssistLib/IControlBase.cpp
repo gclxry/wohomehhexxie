@@ -31,6 +31,8 @@ IControlBase::IControlBase()
 	m_pPropBase_ObjectId = NULL;
 	// base-name
 	m_pPropBase_Name = NULL;
+	// base-lock
+	m_pPropBase_Lock = NULL;
 	// base-visible
 	m_pPropBase_Visible = NULL;
 	// base-ReceiveMouseMessage
@@ -65,7 +67,6 @@ IControlBase::IControlBase()
 	m_pPropGroupCtrlDefs = NULL;
 
 	INIT_RECT(m_RectInWindow);
-	INIT_RECT(m_RectInParentCtrl);
 }
 
 
