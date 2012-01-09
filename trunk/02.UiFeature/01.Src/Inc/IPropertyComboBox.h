@@ -27,6 +27,7 @@ public:
 	COMBOBOX_PROP* GetComboBoxData();
 	// 设置选中项
 	void SetSelect(int nSel);
+	int GetSelect();
 
 private:
 	void Clear();

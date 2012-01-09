@@ -66,12 +66,17 @@ void IControlBase::CreateCtrlAllPropetry(bool bNeedSetDftProp)
 	if (m_pPropBase_Name->GetString() != NULL && strlen(m_pPropBase_Name->GetString()) <= 0)
 		m_pPropBase_Name->SetString("新建控件");
 
+	// base-lock
+	m_pPropBase_Lock = (IPropertyBool*)CreateCtrlOnePropetry(m_pPropGroupBase, OTID_BOOL, "Lock", "是否锁定在Builder中鼠标改变控件大小和位置");
+	if (m_pPropBase_Lock == NULL)
+		return;
+
 	// base-visible
 	m_pPropBase_Visible = (IPropertyBool*)CreateCtrlOnePropetry(m_pPropGroupBase, OTID_BOOL, "Visible", "是否可见");
 	if (m_pPropBase_Visible == NULL)
 		return;
 
-	// base-visible
+	// base-enable
 	m_pPropBase_Enable = (IPropertyBool*)CreateCtrlOnePropetry(m_pPropGroupBase, OTID_BOOL, "Enable", "是否可用");
 	if (m_pPropBase_Enable == NULL)
 		return;
@@ -165,6 +170,7 @@ void IControlBase::CreateCtrlAllPropetry(bool bNeedSetDftProp)
 
 	if (bNeedSetDftProp)
 	{
+		m_pPropBase_Lock->SetValue(false);
 		m_pPropBase_Visible->SetValue(true);
 		m_pPropBase_RcvMouseMsg->SetValue(true);
 		m_pPropBase_Enable->SetValue(true);
@@ -179,6 +185,9 @@ void IControlBase::CreateCtrlAllPropetry(bool bNeedSetDftProp)
 		m_pPropBase_Layout_BottomSpace->SetValue(0);
 	}
 
+	// 从属性更新数据到成员变量
+	PropetyValueToMemberValue();
+
 	// 控件创建自定义的属性
 	CreateControlPropetry(bNeedSetDftProp);
 }
@@ -192,11 +201,28 @@ IPropertyBase* IControlBase::CreatePropetry(OBJECT_TYPE_ID propType, const char*
 }
 
 
+// 从属性更新数据到成员变量
+void IControlBase::PropetyValueToMemberValue()
+{
+	if (m_pOwnerWindowBase == NULL)
+		return;
 
+	if (m_pPropBase_Layout_Width == NULL || m_pPropBase_Layout_Height == NULL || m_pPropBase_Layout_Layout == NULL
+	 || m_pPropBase_Layout_LeftSpace == NULL || m_pPropBase_Layout_RightSpace == NULL || m_pPropBase_Layout_TopSpace == NULL || m_pPropBase_Layout_BottomSpace == NULL)
+		return;
 
+	RECT ParentRct;
+	INIT_RECT(ParentRct);
+	if (m_pParentCtrl == NULL)
+		ParentRct = m_pOwnerWindowBase->GetClientRect();
+	else
+		ParentRct = m_pParentCtrl->GetWindowRect();
 
-
-
+	m_RectInWindow.left = ParentRct.left + m_pPropBase_Layout_LeftSpace->GetValue();
+	m_RectInWindow.right = m_RectInWindow.left + m_pPropBase_Layout_Width->GetValue();
+	m_RectInWindow.top = ParentRct.top + m_pPropBase_Layout_TopSpace->GetValue();
+	m_RectInWindow.bottom = m_RectInWindow.top + m_pPropBase_Layout_Height->GetValue();
+}
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -289,172 +315,65 @@ bool IControlBase::GetDragInControl()
 	return m_pPropBase_DragInCtrl->GetValue();
 }
 
-// 相对于父控件的布局信息
-void IControlBase::SetLayout(CONTROL_LAYOUT_INFO &cliLayoutInfo)
-{
-	m_LayoutInfo = cliLayoutInfo;
-}
-
 CONTROL_LAYOUT_INFO IControlBase::GetLayout()
 {
-	return m_LayoutInfo;
+	CONTROL_LAYOUT_INFO LayoutInfo;
+	memset(&LayoutInfo, 0, sizeof(CONTROL_LAYOUT_INFO));
+
+	if (m_pPropBase_Layout_Width == NULL || m_pPropBase_Layout_Height == NULL || m_pPropBase_Layout_Layout == NULL
+	 || m_pPropBase_Layout_LeftSpace == NULL || m_pPropBase_Layout_RightSpace == NULL || m_pPropBase_Layout_TopSpace == NULL || m_pPropBase_Layout_BottomSpace == NULL)
+		return LayoutInfo;
+
+	LayoutInfo.clType = (CONTROL_LAYOUT)m_pPropBase_Layout_Layout->GetSelect();
+	LayoutInfo.nBottomSpace = m_pPropBase_Layout_BottomSpace->GetValue();
+	LayoutInfo.nHeight = RECT_HEIGHT(m_RectInWindow);
+	LayoutInfo.nLeftSpace = m_pPropBase_Layout_LeftSpace->GetValue();
+	LayoutInfo.nRightSpace = m_pPropBase_Layout_RightSpace->GetValue();
+	LayoutInfo.nTopSpace = m_pPropBase_Layout_TopSpace->GetValue();
+	LayoutInfo.nWidth = RECT_WIDTH(m_RectInWindow);
+
+	return LayoutInfo;
 }
 
-// 控件显示位置和大小，这个位置是相对于附着的窗口的
-void IControlBase::SetCtrlInWindowRect(RECT CtrlWndRct)
+// 移动控件，会改变布局信息，参数：CtrlInWndRct控件位于窗口的位置
+void IControlBase::MoveWindowRect(RECT CtrlInWndRct)
 {
-	if (GetOwnerWindow() == NULL)
+	if (m_pOwnerWindowBase == NULL)
 		return;
 
-	// 本控件位于窗口的位置
-	m_RectInWindow = CtrlWndRct;
-	int nWidth = RECT_WIDTH(m_RectInWindow);
-	int nHeight = RECT_HEIGHT(m_RectInWindow);
+	if (m_pPropBase_Layout_Width == NULL || m_pPropBase_Layout_Height == NULL || m_pPropBase_Layout_Layout == NULL
+	 || m_pPropBase_Layout_LeftSpace == NULL || m_pPropBase_Layout_RightSpace == NULL || m_pPropBase_Layout_TopSpace == NULL || m_pPropBase_Layout_BottomSpace == NULL)
+		return;
 
-	// 取得父控件的位置
+	m_RectInWindow = CtrlInWndRct;
+
+	m_pPropBase_Layout_Width->SetValue(RECT_WIDTH(m_RectInWindow));
+	m_pPropBase_Layout_Height->SetValue(RECT_HEIGHT(m_RectInWindow));
+
 	RECT ParentRct;
 	INIT_RECT(ParentRct);
 	IControlBase* pParentCtrl = GetParentControl();
 	if (pParentCtrl != NULL)
-		ParentRct = pParentCtrl->GetCtrlInWindowRect();
+		ParentRct = pParentCtrl->GetWindowRect();
 	else
 		ParentRct = GetOwnerWindow()->GetClientRect();
 
 	// 设置本控件相对父控件的布局位置
-	m_LayoutInfo.nLeftSpace = m_RectInWindow.left - ParentRct.left;
-	m_LayoutInfo.nTopSpace = m_RectInWindow.top - ParentRct.top;
-	m_LayoutInfo.nRightSpace = ParentRct.right - m_RectInWindow.right;
-	m_LayoutInfo.nBottomSpace = ParentRct.bottom - m_RectInWindow.bottom;
-	m_LayoutInfo.nHeight = nHeight;
-	m_LayoutInfo.nWidth = nWidth;
-
-	INIT_RECT(m_RectInParentCtrl);
-	if (m_LayoutInfo.clType == CL_G_LEFT_TOP)
-	{
-		// 固定大小：左上角定位
-		m_RectInParentCtrl.left = m_LayoutInfo.nLeftSpace;
-		m_RectInParentCtrl.right = m_RectInParentCtrl.left + m_LayoutInfo.nWidth;
-		m_RectInParentCtrl.top = m_LayoutInfo.nTopSpace;
-		m_RectInParentCtrl.bottom = m_RectInParentCtrl.top + m_LayoutInfo.nHeight;
-	}
-	else if (m_LayoutInfo.clType == CL_G_LEFT_BOTTOM)
-	{
-		// 固定大小：左下角定位
-		m_RectInParentCtrl.left = m_LayoutInfo.nLeftSpace;
-		m_RectInParentCtrl.right = m_RectInParentCtrl.left + m_LayoutInfo.nWidth;
-		m_RectInParentCtrl.bottom = m_LayoutInfo.nBottomSpace;
-		m_RectInParentCtrl.top = m_RectInParentCtrl.bottom - m_LayoutInfo.nHeight;
-	}
-	else if (m_LayoutInfo.clType == CL_G_RIGHT_TOP)
-	{
-		// 固定大小：右上角定位
-		m_RectInParentCtrl.right = nWidth - m_LayoutInfo.nRightSpace;
-		m_RectInParentCtrl.left = m_RectInParentCtrl.right - m_LayoutInfo.nWidth;
-		m_RectInParentCtrl.top = m_LayoutInfo.nTopSpace;
-		m_RectInParentCtrl.bottom = m_RectInParentCtrl.top + m_LayoutInfo.nHeight;
-	}
-	else if (m_LayoutInfo.clType == CL_G_RIGHT_BOTTOM)
-	{
-		// 固定大小：右下角定位
-		m_RectInParentCtrl.right = nWidth - m_LayoutInfo.nRightSpace;
-		m_RectInParentCtrl.left = m_RectInParentCtrl.right - m_LayoutInfo.nWidth;
-		m_RectInParentCtrl.bottom = nHeight - m_LayoutInfo.nBottomSpace;
-		m_RectInParentCtrl.top = m_RectInParentCtrl.bottom - m_LayoutInfo.nHeight;
-	}
-	else if (m_LayoutInfo.clType == CL_L_LEFT)
-	{
-		// 拉伸变动大小：撑满左侧
-		m_RectInParentCtrl.left = m_LayoutInfo.nLeftSpace;
-		m_RectInParentCtrl.right = m_RectInParentCtrl.left + m_LayoutInfo.nWidth;
-		m_RectInParentCtrl.top = m_LayoutInfo.nTopSpace;
-		m_RectInParentCtrl.bottom = nHeight - m_LayoutInfo.nBottomSpace;
-	}
-	else if (m_LayoutInfo.clType == CL_L_RIGHT)
-	{
-		// 拉伸变动大小：撑满右侧
-		m_RectInParentCtrl.right = nWidth - m_LayoutInfo.nRightSpace;
-		m_RectInParentCtrl.left = m_RectInParentCtrl.right - m_LayoutInfo.nWidth;
-		m_RectInParentCtrl.top = m_LayoutInfo.nTopSpace;
-		m_RectInParentCtrl.bottom = nHeight - m_LayoutInfo.nBottomSpace;
-	}
-	else if (m_LayoutInfo.clType == CL_L_TOP)
-	{
-		// 拉伸变动大小：撑满上方
-		m_RectInParentCtrl.left = m_LayoutInfo.nLeftSpace;
-		m_RectInParentCtrl.right = nWidth - m_LayoutInfo.nRightSpace;
-		m_RectInParentCtrl.top = m_LayoutInfo.nTopSpace;
-		m_RectInParentCtrl.bottom = m_RectInParentCtrl.top + m_LayoutInfo.nHeight;
-	}
-	else if (m_LayoutInfo.clType == CL_L_BOTTOM)
-	{
-		// 拉伸变动大小：撑满下方
-		m_RectInParentCtrl.left = m_LayoutInfo.nLeftSpace;
-		m_RectInParentCtrl.right = nWidth - m_LayoutInfo.nRightSpace;
-		m_RectInParentCtrl.bottom = nHeight - m_LayoutInfo.nBottomSpace;
-		m_RectInParentCtrl.top = m_RectInParentCtrl.bottom - m_LayoutInfo.nHeight;
-	}
-	else if (m_LayoutInfo.clType == CL_L_ALL)
-	{
-		// 拉伸变动大小：撑满全部
-		m_RectInParentCtrl.right = nWidth;
-		m_RectInParentCtrl.bottom = nHeight;
-	}
-	else if (m_LayoutInfo.clType == CL_L_MIDDLE)
-	{
-		// 拉伸变动大小：居中
-		m_RectInParentCtrl.left = m_LayoutInfo.nLeftSpace;
-		m_RectInParentCtrl.right = nWidth - m_LayoutInfo.nRightSpace;
-		m_RectInParentCtrl.top = m_LayoutInfo.nTopSpace;
-		m_RectInParentCtrl.bottom = nHeight - m_LayoutInfo.nBottomSpace;
-	}
-
-	// 从成员变量更新数据到属性
-	MemberValueToPropetyValue();
+	m_pPropBase_Layout_LeftSpace->SetValue(m_RectInWindow.left - ParentRct.left);
+	m_pPropBase_Layout_TopSpace->SetValue(m_RectInWindow.top - ParentRct.top);
+	m_pPropBase_Layout_RightSpace->SetValue(ParentRct.right - m_RectInWindow.right);
+	m_pPropBase_Layout_BottomSpace->SetValue(ParentRct.bottom - m_RectInWindow.bottom);
 }
 
-// 从成员变量更新数据到属性
-void IControlBase::MemberValueToPropetyValue()
+// 控件显示位置和大小，这个位置是相对于附着的窗口的
+void IControlBase::SetWindowRect(RECT CtrlInWndRct)
 {
-	if (m_pPropBase_Layout_Width != NULL)
-		m_pPropBase_Layout_Width->SetValue(m_LayoutInfo.nWidth);
-
-	if (m_pPropBase_Layout_Height != NULL)
-		m_pPropBase_Layout_Height->SetValue(m_LayoutInfo.nHeight);
-
-	if (m_pPropBase_Layout_Layout != NULL)
-		m_pPropBase_Layout_Layout->SetSelect(m_LayoutInfo.clType);
-
-	if (m_pPropBase_Layout_LeftSpace != NULL)
-		m_pPropBase_Layout_LeftSpace->SetValue(m_LayoutInfo.nLeftSpace);
-
-	if (m_pPropBase_Layout_RightSpace != NULL)
-		m_pPropBase_Layout_RightSpace->SetValue(m_LayoutInfo.nRightSpace);
-
-	if (m_pPropBase_Layout_TopSpace != NULL)
-		m_pPropBase_Layout_TopSpace->SetValue(m_LayoutInfo.nTopSpace);
-
-	if (m_pPropBase_Layout_BottomSpace != NULL)
-		m_pPropBase_Layout_BottomSpace->SetValue(m_LayoutInfo.nBottomSpace);
+	m_RectInWindow = CtrlInWndRct;
 }
 
-RECT IControlBase::GetCtrlInWindowRect()
+RECT IControlBase::GetWindowRect()
 {
 	return m_RectInWindow;
-}
-
-RECT IControlBase::GetCtrlInControlRect()
-{
-	return m_RectInParentCtrl;
-}
-
-// 取得控件的大小
-RECT IControlBase::GetCtrlRect()
-{
-	RECT CtrlRct;
-	INIT_RECT(CtrlRct);
-	CtrlRct.right = RECT_WIDTH(m_RectInWindow);
-	CtrlRct.bottom = RECT_HEIGHT(m_RectInWindow);
-	return CtrlRct;
 }
 
 // 2.从Builder中新创建一个控件，需要初始化属性的PropId
@@ -545,4 +464,21 @@ PROP_CONTROL_VEC* IControlBase::GetChildPropControlVec()
 		return NULL;
 
 	return m_pXmlPropCtrl->GetChildPropControlVec();
+}
+
+// 是否锁定在Builder中鼠标改变控件大小和位置
+void IControlBase::SetLockControl(bool bLock)
+{
+	if (m_pPropBase_Lock == NULL)
+		return;
+
+	m_pPropBase_Lock->SetValue(bLock);	
+}
+
+bool IControlBase::GetLockControl()
+{
+	if (m_pPropBase_Lock == NULL)
+		return false;
+
+	return m_pPropBase_Lock->GetValue();
 }

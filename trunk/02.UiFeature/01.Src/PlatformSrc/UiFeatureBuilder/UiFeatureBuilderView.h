@@ -67,7 +67,7 @@ private:
 	bool OnMouseMove_FangKuai8(CPoint point, bool bIsWnd);
 	void OnMouseMove_LButtonDown(CPoint point);
 	// 绘制创建新控件时的矩形
-	void DrawCreateCtrlRect();
+	void DrawMark();
 	// 设置新控件的大小
 	void CreateNewControlf_SetNewCtrlRect();
 	// 取得选择的控件
@@ -99,6 +99,9 @@ protected:
 
 	// 创建新控件时的父控件
 	IControlBase *m_pCreateCtrlParentCtrl;
+
+	// 鼠标移动时经过的控件
+	IControlBase *m_pMouseMoveCtrl;
 
 	// 滚动条滚动后视图的偏移量
 	CSize m_ScrollOffset;

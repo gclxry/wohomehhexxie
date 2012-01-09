@@ -112,3 +112,8 @@ void IPropertyComboBox::SetSelect(int nSel)
 
 	m_ComboBoxPro.nSelect = nSel;
 }
+
+int IPropertyComboBox::GetSelect()
+{
+	return m_ComboBoxPro.nSelect;
+}

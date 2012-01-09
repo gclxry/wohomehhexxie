@@ -488,7 +488,7 @@ bool IWindowBaseImpl::CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt, I
 		{
 			if (pCtrl->GetReceiveMouseMessage())
 			{
-				RECT CtrlRct = pCtrl->GetCtrlInWindowRect();
+				RECT CtrlRct = pCtrl->GetWindowRect();
 				if (::PtInRect(&CtrlRct, pt))
 				{
 					*ppControl = pCtrl;
@@ -529,7 +529,7 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 		// 鼠标按下是，需要锁定一个控件进行鼠标移动处理
 		if (m_pMouseHoverCtrl != NULL)
 		{
-			RECT CtrlRct = m_pMouseHoverCtrl->GetCtrlInWindowRect();
+			RECT CtrlRct = m_pMouseHoverCtrl->GetWindowRect();
 			if (::PtInRect(&CtrlRct, pt))
 			{
 				if (m_pMouseHoverCtrl->IsMousehover())
@@ -714,7 +714,7 @@ void IWindowBaseImpl::SetControlPostion(CHILD_CTRLS_VEC *pCtrlVec, SIZE NewSize)
 			}
 			else
 			{
-				ParentRctInWnd = pParentCtrl->GetCtrlInWindowRect();
+				ParentRctInWnd = pParentCtrl->GetWindowRect();
 			}
 
 			// 计算当前控件的位置
@@ -813,7 +813,7 @@ void IWindowBaseImpl::SetControlWindowPostion(IControlBase* pCtrl, RECT ParentRc
 		RctInWnd.bottom = ParentRctInWnd.bottom - CtrlLayout.nBottomSpace;
 	}
 
-	pCtrl->SetCtrlInWindowRect(RctInWnd);
+	pCtrl->SetWindowRect(RctInWnd);
 }
 
 // 销毁子类化窗口、释放资源
@@ -1162,5 +1162,5 @@ void IWindowBaseImpl::BD_SetControlRect(IControlBase* pControl, RECT RctInView)
 	InWindowRect.top = RctInView.top - m_BD_FangKuai8.EntityRct.top;
 	InWindowRect.bottom = InWindowRect.top + RECT_HEIGHT(RctInView);
 
-	pControl->SetCtrlInWindowRect(InWindowRect);
+	pControl->MoveWindowRect(InWindowRect);
 }

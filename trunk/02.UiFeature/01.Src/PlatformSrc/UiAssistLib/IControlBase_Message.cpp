@@ -10,7 +10,7 @@ void IControlBase::OnPaintControl(CDrawingBoard &WndMemDc)
 	if (WndMemDc.GetSafeHdc() == NULL && m_pUiEngine != NULL)
 		return;
 
-	RECT RectInWnd = GetCtrlInWindowRect();
+	RECT RectInWnd = GetWindowRect();
 	m_CtrlMemDc.Create(RECT_WIDTH(RectInWnd), RECT_HEIGHT(RectInWnd), 0, false, m_bNeedRedraw);
 	if (m_CtrlMemDc.GetBits() == NULL)
 		return;
