@@ -17,6 +17,10 @@ public:
 	virtual FANGKUAI_8* BD_GetFangKuai8Rect() = 0;
 	// 取得当前输入位置的控件
 	virtual IControlBase *BD_GetMouseInControl(POINT pt) = 0;
+	// 取得当前激活的控件
+	virtual IControlBase *BD_GetFocusControl() = 0;
+	// 设置当前激活的控件
+	virtual void BD_SetFocusControl(IControlBase* pControl) = 0;
 
 //////////////////////////////////////////////////////////////////////////
 	// 窗口居中显示

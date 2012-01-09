@@ -23,6 +23,10 @@ public:
 	virtual FANGKUAI_8* BD_GetFangKuai8Rect();
 	// 取得当前输入位置的控件
 	virtual IControlBase *BD_GetMouseInControl(POINT pt);
+	// 取得当前激活的控件
+	virtual IControlBase *BD_GetFocusControl();
+	// 设置当前激活的控件
+	virtual void BD_SetFocusControl(IControlBase* pControl);
 
 //////////////////////////////////////////////////////////////////////////
 	// 导入皮肤包使用的函数初始化
@@ -178,7 +182,7 @@ private:
 	// 释放子控件列表
 	void ReleaseChildVec(CHILD_CTRLS_VEC *pChildCtrlsVec);
 	// 绘制窗口和被选中的控件的边框的8个方块
-	void BD_DrawSelectRect(CDrawingBoard &MemDc, RECT DrawRct, bool bIsWndFrame);
+	void BD_DrawSelectRect(CDrawingBoard &MemDc, FANGKUAI_8 &FangKuai8, bool bIsWndFrame);
 
 private:
 	IUiEngine *m_pUiEngine;

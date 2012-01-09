@@ -1003,77 +1003,71 @@ void IWindowBaseImpl::BD_DrawWindowView(CDrawingBoard &ViewMemDc)
 		m_WndMemDc, 0, 0, nWidth, nHeight);
 
 	// 绘制窗口的选择状态
-	BD_DrawSelectRect(ViewMemDc, m_BD_FangKuai8.EntityRct, true);
+	BD_DrawSelectRect(ViewMemDc, m_BD_FangKuai8, true);
 
 	// 绘制焦点控件的选择状态
 	if (m_pFocusCtrl != NULL)
 	{
-		RECT CtrlRct = m_pFocusCtrl->GetCtrlInWindowRect();
-		nWidth = RECT_WIDTH(CtrlRct);
-		nHeight = RECT_HEIGHT(CtrlRct);
-		CtrlRct.left += m_BD_FangKuai8.EntityRct.left;
-		CtrlRct.top += m_BD_FangKuai8.EntityRct.top;
-		CtrlRct.right = CtrlRct.left + nWidth;
-		CtrlRct.bottom = CtrlRct.top + nHeight;
+		FANGKUAI_8 *pFangKuai8 = m_pFocusCtrl->BD_GetFangKuai8Rect();
 
-		BD_DrawSelectRect(ViewMemDc, CtrlRct, false);
+		BD_DrawSelectRect(ViewMemDc, *pFangKuai8, false);
 	}
 }
 
 // 绘制窗口和被选中的控件的边框的8个方块
-void IWindowBaseImpl::BD_DrawSelectRect(CDrawingBoard &MemDc, RECT DrawRct, bool bIsWndFrame)
+void IWindowBaseImpl::BD_DrawSelectRect(CDrawingBoard &MemDc, FANGKUAI_8 &FangKuai8, bool bIsWndFrame)
 {
 	IPropertyImage *pPropImg = &m_BuilderCtrlFrameImage;
 	if (bIsWndFrame)
 		pPropImg = &m_BuilderWndFrameImage;
 
-	m_BD_FangKuai8.LeftTop.left = DrawRct.left - FANGKUAI_SIZE;
-	m_BD_FangKuai8.LeftTop.top = DrawRct.top - FANGKUAI_SIZE;
-	m_BD_FangKuai8.LeftTop.right = m_BD_FangKuai8.LeftTop.left + FANGKUAI_SIZE;
-	m_BD_FangKuai8.LeftTop.bottom = m_BD_FangKuai8.LeftTop.top + FANGKUAI_SIZE;
-	pPropImg->DrawImage(MemDc, m_BD_FangKuai8.LeftTop);
+	FangKuai8.LeftTop.left = FangKuai8.EntityRct.left - FANGKUAI_SIZE;
+	FangKuai8.LeftTop.top = FangKuai8.EntityRct.top - FANGKUAI_SIZE;
+	FangKuai8.LeftTop.right = FangKuai8.LeftTop.left + FANGKUAI_SIZE;
+	FangKuai8.LeftTop.bottom = FangKuai8.LeftTop.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, FangKuai8.LeftTop);
 
-	m_BD_FangKuai8.LeftMid.left = DrawRct.left - FANGKUAI_SIZE;
-	m_BD_FangKuai8.LeftMid.top = DrawRct.top + (RECT_HEIGHT(DrawRct) / 2) - (FANGKUAI_SIZE / 2);
-	m_BD_FangKuai8.LeftMid.right = m_BD_FangKuai8.LeftMid.left + FANGKUAI_SIZE;
-	m_BD_FangKuai8.LeftMid.bottom = m_BD_FangKuai8.LeftMid.top + FANGKUAI_SIZE;
-	pPropImg->DrawImage(MemDc, m_BD_FangKuai8.LeftMid);
+	FangKuai8.LeftMid.left = FangKuai8.EntityRct.left - FANGKUAI_SIZE;
+	FangKuai8.LeftMid.top = FangKuai8.EntityRct.top + (RECT_HEIGHT(FangKuai8.EntityRct) / 2) - (FANGKUAI_SIZE / 2);
+	FangKuai8.LeftMid.right = FangKuai8.LeftMid.left + FANGKUAI_SIZE;
+	FangKuai8.LeftMid.bottom = FangKuai8.LeftMid.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, FangKuai8.LeftMid);
 
-	m_BD_FangKuai8.LeftBottom.left = DrawRct.left - FANGKUAI_SIZE;
-	m_BD_FangKuai8.LeftBottom.top = DrawRct.bottom;
-	m_BD_FangKuai8.LeftBottom.right = m_BD_FangKuai8.LeftBottom.left + FANGKUAI_SIZE;
-	m_BD_FangKuai8.LeftBottom.bottom = m_BD_FangKuai8.LeftBottom.top + FANGKUAI_SIZE;
-	pPropImg->DrawImage(MemDc, m_BD_FangKuai8.LeftBottom);
+	FangKuai8.LeftBottom.left = FangKuai8.EntityRct.left - FANGKUAI_SIZE;
+	FangKuai8.LeftBottom.top = FangKuai8.EntityRct.bottom;
+	FangKuai8.LeftBottom.right = FangKuai8.LeftBottom.left + FANGKUAI_SIZE;
+	FangKuai8.LeftBottom.bottom = FangKuai8.LeftBottom.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, FangKuai8.LeftBottom);
 
-	m_BD_FangKuai8.MidTop.left = DrawRct.left + (RECT_WIDTH(DrawRct) / 2) - (FANGKUAI_SIZE / 2);
-	m_BD_FangKuai8.MidTop.top = DrawRct.top - FANGKUAI_SIZE;
-	m_BD_FangKuai8.MidTop.right = m_BD_FangKuai8.MidTop.left + FANGKUAI_SIZE;
-	m_BD_FangKuai8.MidTop.bottom = m_BD_FangKuai8.MidTop.top + FANGKUAI_SIZE;
-	pPropImg->DrawImage(MemDc, m_BD_FangKuai8.MidTop);
+	FangKuai8.MidTop.left = FangKuai8.EntityRct.left + (RECT_WIDTH(FangKuai8.EntityRct) / 2) - (FANGKUAI_SIZE / 2);
+	FangKuai8.MidTop.top = FangKuai8.EntityRct.top - FANGKUAI_SIZE;
+	FangKuai8.MidTop.right = FangKuai8.MidTop.left + FANGKUAI_SIZE;
+	FangKuai8.MidTop.bottom = FangKuai8.MidTop.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, FangKuai8.MidTop);
 
-	m_BD_FangKuai8.MidBottom.left = DrawRct.left + (RECT_WIDTH(DrawRct) / 2) - (FANGKUAI_SIZE / 2);
-	m_BD_FangKuai8.MidBottom.top = DrawRct.bottom;
-	m_BD_FangKuai8.MidBottom.right = m_BD_FangKuai8.MidBottom.left + FANGKUAI_SIZE;
-	m_BD_FangKuai8.MidBottom.bottom = m_BD_FangKuai8.MidBottom.top + FANGKUAI_SIZE;
-	pPropImg->DrawImage(MemDc, m_BD_FangKuai8.MidBottom);
+	FangKuai8.MidBottom.left = FangKuai8.EntityRct.left + (RECT_WIDTH(FangKuai8.EntityRct) / 2) - (FANGKUAI_SIZE / 2);
+	FangKuai8.MidBottom.top = FangKuai8.EntityRct.bottom;
+	FangKuai8.MidBottom.right = FangKuai8.MidBottom.left + FANGKUAI_SIZE;
+	FangKuai8.MidBottom.bottom = FangKuai8.MidBottom.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, FangKuai8.MidBottom);
 
-	m_BD_FangKuai8.RightTop.left = DrawRct.right;
-	m_BD_FangKuai8.RightTop.top = DrawRct.top - FANGKUAI_SIZE;
-	m_BD_FangKuai8.RightTop.right = m_BD_FangKuai8.RightTop.left + FANGKUAI_SIZE;
-	m_BD_FangKuai8.RightTop.bottom = m_BD_FangKuai8.RightTop.top + FANGKUAI_SIZE;
-	pPropImg->DrawImage(MemDc, m_BD_FangKuai8.RightTop);
+	FangKuai8.RightTop.left = FangKuai8.EntityRct.right;
+	FangKuai8.RightTop.top = FangKuai8.EntityRct.top - FANGKUAI_SIZE;
+	FangKuai8.RightTop.right = FangKuai8.RightTop.left + FANGKUAI_SIZE;
+	FangKuai8.RightTop.bottom = FangKuai8.RightTop.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, FangKuai8.RightTop);
 
-	m_BD_FangKuai8.RightMid.left = DrawRct.right;
-	m_BD_FangKuai8.RightMid.top = DrawRct.top + (RECT_HEIGHT(DrawRct) / 2) - (FANGKUAI_SIZE / 2);
-	m_BD_FangKuai8.RightMid.right = m_BD_FangKuai8.RightMid.left + FANGKUAI_SIZE;
-	m_BD_FangKuai8.RightMid.bottom = m_BD_FangKuai8.RightMid.top + FANGKUAI_SIZE;
-	pPropImg->DrawImage(MemDc, m_BD_FangKuai8.RightMid);
+	FangKuai8.RightMid.left = FangKuai8.EntityRct.right;
+	FangKuai8.RightMid.top = FangKuai8.EntityRct.top + (RECT_HEIGHT(FangKuai8.EntityRct) / 2) - (FANGKUAI_SIZE / 2);
+	FangKuai8.RightMid.right = FangKuai8.RightMid.left + FANGKUAI_SIZE;
+	FangKuai8.RightMid.bottom = FangKuai8.RightMid.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, FangKuai8.RightMid);
 
-	m_BD_FangKuai8.RightBottom.left = DrawRct.right;
-	m_BD_FangKuai8.RightBottom.top = DrawRct.bottom;
-	m_BD_FangKuai8.RightBottom.right = m_BD_FangKuai8.RightBottom.left + FANGKUAI_SIZE;
-	m_BD_FangKuai8.RightBottom.bottom = m_BD_FangKuai8.RightBottom.top + FANGKUAI_SIZE;
-	pPropImg->DrawImage(MemDc, m_BD_FangKuai8.RightBottom);
+	FangKuai8.RightBottom.left = FangKuai8.EntityRct.right;
+	FangKuai8.RightBottom.top = FangKuai8.EntityRct.bottom;
+	FangKuai8.RightBottom.right = FangKuai8.RightBottom.left + FANGKUAI_SIZE;
+	FangKuai8.RightBottom.bottom = FangKuai8.RightBottom.top + FANGKUAI_SIZE;
+	pPropImg->DrawImage(MemDc, FangKuai8.RightBottom);
 }
 
 // 取得窗口中设置属性的窗口大小
@@ -1131,4 +1125,16 @@ bool IWindowBaseImpl::BD_CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt
 	}
 
 	return false;
+}
+
+// 取得当前激活的控件
+IControlBase* IWindowBaseImpl::BD_GetFocusControl()
+{
+	return m_pFocusCtrl;
+}
+
+// 设置当前激活的控件
+void IWindowBaseImpl::BD_SetFocusControl(IControlBase* pControl)
+{
+	m_pFocusCtrl = pControl;
 }

@@ -51,7 +51,6 @@ CUiFeatureBuilderView::CUiFeatureBuilderView() : CFormView(CUiFeatureBuilderView
 	m_pWindowViewTree = NULL;
 	m_bInitOk = false;
 	m_pCurrentWnd = NULL;
-	m_pSelectControl = NULL;
 	m_pCreateCtrlParentCtrl = NULL;
 	m_bIsLButtonDown = false;
 	m_bMoveInWndFangKuai8 = false;
@@ -90,7 +89,8 @@ BOOL CUiFeatureBuilderView::OnEraseBkgnd(CDC* pDC)
 void CUiFeatureBuilderView::ResetShowWindow(IWindowBase *pCurrentWnd, IControlBase *pCtrlBase)
 {
 	m_pCurrentWnd = pCurrentWnd;
-	m_pSelectControl = pCtrlBase;
+	if (m_pCurrentWnd != NULL)
+		m_pCurrentWnd->BD_SetFocusControl(pCtrlBase);
 
 	ResetViewShowSize();
 	this->RedrawWindow();
@@ -182,6 +182,7 @@ void CUiFeatureBuilderView::OnDraw(CDC* pDC)
 	if (!IS_SAFE_HANDLE(m_MemDc.GetSafeHdc()))
 		return;
 
+	// 绘制窗口以及所有控件
 	DrawWindowView();
 
 	// 绘制创建新控件时的矩形
@@ -200,14 +201,10 @@ void CUiFeatureBuilderView::DrawCreateCtrlRect()
 
 	FANGKUAI_8* pFk8 = NULL;
 	// 先绘制被选中的父控件的朦罩
-	if (m_pCreateCtrlParentCtrl == NULL)
-	{
+	if (m_pCreateCtrlParentCtrl != NULL)
 		pFk8 = m_pCreateCtrlParentCtrl->BD_GetFangKuai8Rect();
-	}
 	else
-	{
 		pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
-	}
 
 	SolidBrush PinkBrs(Color(100, 255, 0, 255));
 	DoGrap.FillRectangle(&PinkBrs, pFk8->EntityRct.left, pFk8->EntityRct.top, RECT_WIDTH(pFk8->EntityRct), RECT_HEIGHT(pFk8->EntityRct));
@@ -353,8 +350,8 @@ bool CUiFeatureBuilderView::OnMouseMove_FangKuai8(CPoint point, bool bIsWnd)
 	}
 	else
 	{
-		if (m_pSelectControl != NULL)
-			pFk8 = m_pSelectControl->BD_GetFangKuai8Rect();
+		if (m_pCurrentWnd->BD_GetFocusControl() != NULL)
+			pFk8 = m_pCurrentWnd->BD_GetFocusControl()->BD_GetFangKuai8Rect();
 	}
 
 	if (pFk8 == NULL)
@@ -433,32 +430,6 @@ void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 	}
 }
 
-void CUiFeatureBuilderView::CreateNewControl()
-{
-	USES_CONVERSION;
-	// 创建新控件
-	if (m_pControlList == NULL || m_pUiKernel == NULL || m_pCurrentWnd == NULL)
-		return;
-
-	CString strCtrlTypeName = m_pControlList->GetSelectCtrlTypeName();
-	m_pSelectControl = m_pUiKernel->BD_CreateControlEmptyPropetry(m_pCurrentWnd, m_pCreateCtrlParentCtrl, W2A(strCtrlTypeName));
-	if (m_pSelectControl == NULL)
-	{
-		CString strInfo(_T(""));
-		strInfo.Format(_T("创建控件【%s】失败！"), strCtrlTypeName);
-		AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
-		return;
-	}
-
-	// 计算新控件的位置和大小
-
-	// 重新绘制WindowTree
-	if (m_pWindowViewTree != NULL)
-	{
-		m_pWindowViewTree->AddNewControlToWindowTreeNode(m_pCurrentWnd, m_pCreateCtrlParentCtrl, m_pSelectControl);
-	}
-}
-
 void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	CFormView::OnLButtonDown(nFlags, point);
@@ -488,9 +459,6 @@ void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 		}
 		return;
 	}
-
-
-	// 判断数遍左键点击在哪个控件上
 }
 
 bool CUiFeatureBuilderView::PtInWindow(CPoint point)
@@ -518,4 +486,55 @@ IControlBase* CUiFeatureBuilderView::GetSelectControl(CPoint point)
 	point.y += m_ScrollOffset.cy;
 
 	return m_pCurrentWnd->BD_GetMouseInControl(point);
+}
+
+void CUiFeatureBuilderView::CreateNewControl()
+{
+	USES_CONVERSION;
+	// 创建新控件
+	if (m_pControlList == NULL || m_pUiKernel == NULL || m_pCurrentWnd == NULL)
+		return;
+
+	CString strCtrlTypeName = m_pControlList->GetSelectCtrlTypeName();
+	IControlBase *pControl = m_pUiKernel->BD_CreateControlEmptyPropetry(m_pCurrentWnd, m_pCreateCtrlParentCtrl, W2A(strCtrlTypeName));
+	if (pControl == NULL)
+	{
+		CString strInfo(_T(""));
+		strInfo.Format(_T("创建控件【%s】失败！"), strCtrlTypeName);
+		AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
+		return;
+	}
+	m_pCurrentWnd->BD_SetFocusControl(pControl);
+
+	// 计算新控件的位置和大小
+	CreateNewControlf_SetNewCtrlRect();
+
+	// 重新绘制WindowTree
+	if (m_pWindowViewTree != NULL)
+	{
+		m_pWindowViewTree->AddNewControlToWindowTreeNode(m_pCurrentWnd, m_pCreateCtrlParentCtrl, m_pCurrentWnd->BD_GetFocusControl());
+	}
+}
+
+// 取得新控件的大小
+void CUiFeatureBuilderView::CreateNewControlf_SetNewCtrlRect()
+{
+	if (m_pCurrentWnd->BD_GetFocusControl() == NULL)
+		return;
+
+	FANGKUAI_8* pFk8 = NULL;
+	// 先绘制被选中的父控件的朦罩
+	if (m_pCreateCtrlParentCtrl != NULL)
+		pFk8 = m_pCreateCtrlParentCtrl->BD_GetFangKuai8Rect();
+	else
+		pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
+
+	FANGKUAI_8 *pNewFk8 = m_pCurrentWnd->BD_GetFocusControl()->BD_GetFangKuai8Rect();
+	if (pNewFk8 == NULL || pFk8 == NULL)
+		return;
+
+	pNewFk8->EntityRct.left = ((m_LBtnDownPos.x  <= m_LBtnUpPos.x) ? m_LBtnDownPos.x : m_LBtnUpPos.x);
+	pNewFk8->EntityRct.right = ((m_LBtnUpPos.x  >= m_LBtnDownPos.x) ? m_LBtnUpPos.x : m_LBtnDownPos.x);
+	pNewFk8->EntityRct.top = ((m_LBtnDownPos.y  <= m_LBtnUpPos.y) ? m_LBtnDownPos.y : m_LBtnUpPos.y);
+	pNewFk8->EntityRct.bottom = ((m_LBtnUpPos.y  >= m_LBtnDownPos.y) ? m_LBtnUpPos.y : m_LBtnDownPos.y);
 }
