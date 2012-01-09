@@ -206,7 +206,7 @@ void CUiFeatureBuilderView::DrawCreateCtrlRect()
 	else
 		pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
 
-	SolidBrush PinkBrs(Color(100, 255, 0, 255));
+	SolidBrush PinkBrs(Color(30, 255, 0, 255));
 	DoGrap.FillRectangle(&PinkBrs, pFk8->EntityRct.left, pFk8->EntityRct.top, RECT_WIDTH(pFk8->EntityRct), RECT_HEIGHT(pFk8->EntityRct));
 
 	// 绘制新控件的边框
@@ -452,6 +452,7 @@ void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 		{
 			// 取得选中的父控件
 			m_pCreateCtrlParentCtrl = GetSelectControl(point);
+			this->RedrawWindow();
 		}
 		else
 		{
