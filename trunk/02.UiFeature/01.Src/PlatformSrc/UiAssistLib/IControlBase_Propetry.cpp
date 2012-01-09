@@ -315,14 +315,14 @@ void IControlBase::SetCtrlInWindowRect(RECT CtrlWndRct)
 	RECT ParentRct;
 	INIT_RECT(ParentRct);
 	IControlBase* pParentCtrl = GetParentControl();
-	if (pParentCtrl == NULL)
+	if (pParentCtrl != NULL)
 		ParentRct = pParentCtrl->GetCtrlInWindowRect();
 	else
 		ParentRct = GetOwnerWindow()->GetClientRect();
 
 	// 设置本控件相对父控件的布局位置
-	m_LayoutInfo.nLeftSpace = ParentRct.left - m_RectInWindow.left;
-	m_LayoutInfo.nTopSpace = ParentRct.top - m_RectInWindow.top;
+	m_LayoutInfo.nLeftSpace = m_RectInWindow.left - ParentRct.left;
+	m_LayoutInfo.nTopSpace = m_RectInWindow.top - ParentRct.top;
 	m_LayoutInfo.nRightSpace = ParentRct.right - m_RectInWindow.right;
 	m_LayoutInfo.nBottomSpace = ParentRct.bottom - m_RectInWindow.bottom;
 	m_LayoutInfo.nHeight = nHeight;

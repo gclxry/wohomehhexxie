@@ -259,6 +259,13 @@ RECT IWindowBaseImpl::GetClientRect()
 		RetRect.right = nW;
 		RetRect.bottom = nH;
 	}
+	else
+	{
+		// 取得窗口中设置属性的窗口大小
+		SIZE WndSize = PP_GetWindowPropSize();
+		RetRect.right = WndSize.cx;
+		RetRect.bottom = WndSize.cy;
+	}
 
 	return RetRect;
 }
