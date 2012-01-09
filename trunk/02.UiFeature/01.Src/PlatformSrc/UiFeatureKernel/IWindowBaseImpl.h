@@ -31,6 +31,8 @@ public:
 	virtual void BD_SetControlRect(IControlBase* pControl, RECT RctInView);
 	// 初始化所有控件在Builder中的显示位置
 	virtual void BD_SetAllCtrlRectInView();
+	// 重新计算子控件的位置和大小，参数：bMemToProp 是否记录到属性中，Builder时为true
+	virtual void ResetChildCtrlPostion(CHILD_CTRLS_VEC* pChildVec, bool bMemToProp = false);
 
 //////////////////////////////////////////////////////////////////////////
 	// 导入皮肤包使用的函数初始化

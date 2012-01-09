@@ -1190,3 +1190,32 @@ void IWindowBaseImpl::BD_SetAllCtrlRectInView_SetChildVec(CHILD_CTRLS_VEC *pChil
 		BD_SetAllCtrlRectInView_SetChildVec(pCtrl->GetChildControlsVec());
 	}
 }
+
+// 重新计算子控件的位置和大小
+void IWindowBaseImpl::ResetChildCtrlPostion(CHILD_CTRLS_VEC* pChildVec, bool bMemToProp)
+{
+	if (pChildVec == NULL)
+		return;
+
+	for (CHILD_CTRLS_VEC::iterator pCtrlItem = pChildVec->begin(); pCtrlItem != pChildVec->end(); pCtrlItem++)
+	{
+		IControlBase* pCtrl = *pCtrlItem;
+		if (pCtrl == NULL || pCtrl->GetOwnerWindow() == NULL)
+			continue;
+
+		RECT ParentRct;
+		INIT_RECT(ParentRct);
+		IControlBase* pParentCtrl = pCtrl->GetParentControl();
+		if (pParentCtrl != NULL)
+			ParentRct = pParentCtrl->GetWindowRect();
+		else
+			ParentRct = pCtrl->GetOwnerWindow()->GetClientRect();
+
+		SetControlWindowPostion(pCtrl, ParentRct);
+
+		if (bMemToProp)
+			pCtrl->MoveWindowRect(pCtrl->GetWindowRect());
+
+		ResetChildCtrlPostion(pCtrl->GetChildControlsVec(), bMemToProp);
+	}
+}
