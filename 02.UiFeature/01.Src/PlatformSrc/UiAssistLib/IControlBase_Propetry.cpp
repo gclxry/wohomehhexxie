@@ -222,6 +222,15 @@ void IControlBase::PropetyValueToMemberValue()
 	m_RectInWindow.right = m_RectInWindow.left + m_pPropBase_Layout_Width->GetValue();
 	m_RectInWindow.top = ParentRct.top + m_pPropBase_Layout_TopSpace->GetValue();
 	m_RectInWindow.bottom = m_RectInWindow.top + m_pPropBase_Layout_Height->GetValue();
+
+	FANGKUAI_8* pFk8 = m_pOwnerWindowBase->BD_GetFangKuai8Rect();
+	if (pFk8 != NULL)
+	{
+		m_BD_FangKuai8.EntityRct.left = pFk8->EntityRct.left + m_RectInWindow.left;
+		m_BD_FangKuai8.EntityRct.right = m_BD_FangKuai8.EntityRct.left + m_pPropBase_Layout_Width->GetValue();
+		m_BD_FangKuai8.EntityRct.top = pFk8->EntityRct.top + m_RectInWindow.top;
+		m_BD_FangKuai8.EntityRct.bottom = m_BD_FangKuai8.EntityRct.top + m_pPropBase_Layout_Height->GetValue();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
