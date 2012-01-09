@@ -183,7 +183,7 @@ void CWindowsViewTree::OnTvnSelchanged_SelectRoot()
 		m_pPropCtrl->ClearAll();
 
 	if (m_pWindowView != NULL)
-		m_pWindowView->ResetShowWindow(NULL);
+		m_pWindowView->ResetShowWindow(NULL, NULL);
 }
 
 void CWindowsViewTree::OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase)

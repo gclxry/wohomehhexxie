@@ -1103,13 +1103,14 @@ IControlBase* IWindowBaseImpl::BD_GetMouseInControl(POINT pt)
 	if (!::PtInRect(&(m_BD_FangKuai8.EntityRct), pt))
 		return NULL;
 
-
-
+	IControlBase* pControl = NULL;
+	BD_CheckMouseInControl(&m_ChildCtrlsVec, pt, &pControl);
+	return pControl;
 }
 
-IControlBase* IWindowBaseImpl::BD_CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt)
+bool IWindowBaseImpl::BD_CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt, IControlBase** ppControl)
 {
-	if (pCtrlVec == NULL)
+	if (pCtrlVec == NULL || ppControl == NULL)
 		return false;
 
 	int nCtns = pCtrlVec->size();
@@ -1118,22 +1119,13 @@ IControlBase* IWindowBaseImpl::BD_CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec,
 		IControlBase* pCtrl = (*pCtrlVec)[i];
 		if (pCtrl != NULL && pCtrl->IsVisible())
 		{
-			if (pCtrl->GetReceiveMouseMessage())
+			FANGKUAI_8 *pCtrlFangkuai8 = pCtrl->BD_GetFangKuai8Rect();
+			if (::PtInRect(&pCtrlFangkuai8->EntityRct, pt))
 			{
-				RECT CtrlRct = pCtrl->GetCtrlInWindowRect();
-				if (::PtInRect(&CtrlRct, pt))
-				{
-					*ppControl = pCtrl;
-					CHILD_CTRLS_VEC *pCtrlsVec = pCtrl->GetChildControlsVec();
-					CheckMouseInControl(pCtrlsVec, pt, ppControl);
-					return true;
-				}
-			}
-			else
-			{
+				*ppControl = pCtrl;
 				CHILD_CTRLS_VEC *pCtrlsVec = pCtrl->GetChildControlsVec();
-				if (CheckMouseInControl(pCtrlsVec, pt, ppControl))
-					return true;
+				BD_CheckMouseInControl(pCtrlsVec, pt, ppControl);
+				return true;
 			}
 		}
 	}
