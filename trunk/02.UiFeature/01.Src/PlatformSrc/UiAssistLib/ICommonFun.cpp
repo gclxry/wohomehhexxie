@@ -2,6 +2,7 @@
 #include "StdAfx.h"
 #include "..\..\Inc\ICommonFun.h"
 #include "..\..\Inc\IPropertyGroup.h"
+#include "..\..\Inc\UiFeatureDefs.h"
 
 string PathHelper(char *pszFileName)
 {
@@ -255,4 +256,17 @@ void AddIntAttrToNode(CUiXmlWriteNode* pNode, const char* pszAttrName, int nInt)
 	memset(szInt, 0, MAX_PATH);
 	sprintf_s(szInt, MAX_PATH-1, "%d", nInt);	
 	pNode->AddAttribute(pszAttrName, szInt);
+}
+
+void DebugInfoOutput(char *pszFormat, ...)
+{
+	char *pszOut = NULL;
+	pszOut = new char[4096];
+	if (pszOut == NULL)
+		return;
+	memset(pszOut, 0, 4096);
+
+
+
+	SAFE_DELETE_LIST(pszOut);
 }

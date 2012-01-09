@@ -18,3 +18,10 @@ bool FileExists(const char *pszFilePath);
 void ResetWindowBaseInfo(IWindowBase *pWndBase);
 // 向一个xml节点插入一个int属性
 void AddIntAttrToNode(CUiXmlWriteNode* pNode, const char* pszAttrName, int nInt);
+void DebugInfoOutput(char *pszFormat, ...);
+
+#ifndef _DEBUG
+#define DEBUG_INFO
+#else
+#define DEBUG_INFO				DebugInfoOutput
+#endif
