@@ -197,7 +197,7 @@ void CUiFeatureBuilderView::DrawMark()
 {
 	Graphics DoGrap(m_MemDc.GetSafeHdc());
 
-	if (m_pMouseMoveCtrl != NULL)
+	if (m_pMouseMoveCtrl != NULL && !m_bIsLButtonDown)
 	{
 		// 绘制当前鼠标移动到的控件上，绘制控件边框
 		FANGKUAI_8* pFk8 = m_pMouseMoveCtrl->BD_GetFangKuai8Rect();
