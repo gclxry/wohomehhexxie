@@ -51,12 +51,13 @@ CUiFeatureBuilderView::CUiFeatureBuilderView() : CFormView(CUiFeatureBuilderView
 	m_pWindowViewTree = NULL;
 	m_bInitOk = false;
 	m_pCurrentWnd = NULL;
-	m_pCreateCtrlParentCtrl = NULL;
+	m_pDrawParentCtrl = NULL;
 	m_pMouseMoveCtrl = NULL;
 	m_bIsLButtonDown = false;
 	m_bMoveInWndFangKuai8 = false;
 	m_bMoveInCtrlFangKuai8 = false;
-	m_bCreateNewCtrl = false;
+	m_bCreateNewCtrl = false;;
+	m_bSizeMoveCtrl = false;
 
 	m_ScrollOffset.cx = m_ScrollOffset.cy = 0;
 	m_LBtnDownPos.x = m_LBtnDownPos.y = 0;
@@ -208,29 +209,32 @@ void CUiFeatureBuilderView::DrawMark()
 		DoGrap.DrawLine(&LinePen, pFk8->EntityRct.left, pFk8->EntityRct.bottom, pFk8->EntityRct.left, pFk8->EntityRct.top);
 	}
 
-	if (m_bCreateNewCtrl && m_bIsLButtonDown && m_pCurrentWnd != NULL)
+	if ((m_bSizeMoveCtrl || m_bCreateNewCtrl) && m_bIsLButtonDown && m_pCurrentWnd != NULL)
 	{
 		// 绘制创建新控件时的矩形
 		FANGKUAI_8* pFk8 = NULL;
 		// 先绘制被选中的父控件的朦罩
-		if (m_pCreateCtrlParentCtrl != NULL)
-			pFk8 = m_pCreateCtrlParentCtrl->BD_GetFangKuai8Rect();
+		if (m_pDrawParentCtrl != NULL)
+			pFk8 = m_pDrawParentCtrl->BD_GetFangKuai8Rect();
 		else
 			pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
 
 		SolidBrush PinkBrs(Color(30, 255, 0, 255));
 		DoGrap.FillRectangle(&PinkBrs, pFk8->EntityRct.left, pFk8->EntityRct.top, RECT_WIDTH(pFk8->EntityRct), RECT_HEIGHT(pFk8->EntityRct));
 
-		// 绘制新控件的边框
-		Pen LinePen(Color(255, 255, 0, 0), 1.5f);
-		REAL dashVals[2] = {0.8f, 2.0f};
-		LinePen.SetDashPattern(dashVals, 2);
-		LinePen.SetDashOffset(30);
+		if (m_bCreateNewCtrl)
+		{
+			// 绘制新控件的边框
+			Pen LinePen(Color(255, 255, 0, 0), 1.5f);
+			REAL dashVals[2] = {0.8f, 2.0f};
+			LinePen.SetDashPattern(dashVals, 2);
+			LinePen.SetDashOffset(30);
 
-		DoGrap.DrawLine(&LinePen, m_LBtnDownPos.x, m_LBtnDownPos.y, m_MouseMovePos.x, m_LBtnDownPos.y);
-		DoGrap.DrawLine(&LinePen, m_MouseMovePos.x, m_LBtnDownPos.y, m_MouseMovePos.x, m_MouseMovePos.y);
-		DoGrap.DrawLine(&LinePen, m_MouseMovePos.x, m_MouseMovePos.y, m_LBtnDownPos.x, m_MouseMovePos.y);
-		DoGrap.DrawLine(&LinePen, m_LBtnDownPos.x, m_MouseMovePos.y, m_LBtnDownPos.x, m_LBtnDownPos.y);
+			DoGrap.DrawLine(&LinePen, m_LBtnDownPos.x, m_LBtnDownPos.y, m_MouseMovePos.x, m_LBtnDownPos.y);
+			DoGrap.DrawLine(&LinePen, m_MouseMovePos.x, m_LBtnDownPos.y, m_MouseMovePos.x, m_MouseMovePos.y);
+			DoGrap.DrawLine(&LinePen, m_MouseMovePos.x, m_MouseMovePos.y, m_LBtnDownPos.x, m_MouseMovePos.y);
+			DoGrap.DrawLine(&LinePen, m_LBtnDownPos.x, m_MouseMovePos.y, m_LBtnDownPos.x, m_LBtnDownPos.y);
+		}
 	}
 }
 
@@ -324,7 +328,6 @@ void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
 	if (!m_bInitOk || m_pSkinManager == NULL || m_pUiKernel == NULL)
 		return;
 
-	m_pMouseMoveCtrl = GetSelectControl(point);
 	if (m_bIsLButtonDown)
 	{
 		OnMouseMove_LButtonDown(point);
@@ -332,6 +335,7 @@ void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
 		return;
 	}
 
+	m_pMouseMoveCtrl = GetSelectControl(point);
 	// 如果需要创建一个新控件
 	if (m_bCreateNewCtrl)
 	{
@@ -363,7 +367,6 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown(CPoint point)
 	if (m_bCreateNewCtrl)
 	{
 		// 绘制创建新控件时的矩形
-		this->RedrawWindow();
 	}
 	else if (m_bMoveInWndFangKuai8)
 	{
@@ -373,6 +376,65 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown(CPoint point)
 	{
 		// 拖动控件，改变控件大小
 	}
+	else if (m_pCurrentWnd != NULL && m_pCurrentWnd->BD_GetFocusControl() != NULL)
+	{
+		// 移动控件
+		m_bSizeMoveCtrl = true;
+		SetViewCursor(UF_IDC_SIZEALL);
+		IControlBase* pLBtnDownCtrl = m_pCurrentWnd->BD_GetFocusControl();
+		m_pDrawParentCtrl = pLBtnDownCtrl->GetParentControl();
+		OnMouseMove_LButtonDown_MoveCtrl(point, pLBtnDownCtrl);
+	}
+	else
+	{
+		SetViewCursor(UF_IDC_ARROW);
+	}
+}
+
+void CUiFeatureBuilderView::OnMouseMove_LButtonDown_MoveCtrl(CPoint point, IControlBase* pLBtnDownCtrl)
+{
+	if (pLBtnDownCtrl == NULL || m_pCurrentWnd == NULL)
+		return;
+
+//////////////////////////////////////////////////////////////////////////
+	// 设置在builder中的新坐标
+	FANGKUAI_8* pParentFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
+	FANGKUAI_8* pFk8 = pLBtnDownCtrl->BD_GetFangKuai8Rect();
+	if (pParentFk8 == NULL || pFk8 == NULL)
+		return;
+
+	RECT NewRect;
+	INIT_RECT(NewRect);
+	NewRect.left = (point.x - m_LBtnDownPos.x) + pFk8->EntityRct.left;
+	if (NewRect.left < pParentFk8->EntityRct.left)
+		NewRect.left = pParentFk8->EntityRct.left;
+	if ((NewRect.left + RECT_WIDTH(pFk8->EntityRct)) > pParentFk8->EntityRct.right)
+		NewRect.left = pParentFk8->EntityRct.right - RECT_WIDTH(pFk8->EntityRct);
+
+	NewRect.right = NewRect.left + RECT_WIDTH(pFk8->EntityRct);
+
+	NewRect.top = (point.y - m_LBtnDownPos.y) + pFk8->EntityRct.top;
+	if (NewRect.top < pParentFk8->EntityRct.top)
+		NewRect.top = pParentFk8->EntityRct.top;
+	if ((NewRect.top + RECT_HEIGHT(pFk8->EntityRct)) > pParentFk8->EntityRct.bottom)
+		NewRect.top = pParentFk8->EntityRct.bottom - RECT_HEIGHT(pFk8->EntityRct);
+	
+	NewRect.bottom = NewRect.top + RECT_HEIGHT(pFk8->EntityRct);
+
+	pFk8->EntityRct = NewRect;
+
+//////////////////////////////////////////////////////////////////////////
+	// 设置在Window中的新坐标
+	RECT CtrlInWndRct;
+	INIT_RECT(CtrlInWndRct);
+	CtrlInWndRct.left = pFk8->EntityRct.left - pParentFk8->EntityRct.left;
+	CtrlInWndRct.right = CtrlInWndRct.left + RECT_WIDTH(pFk8->EntityRct);
+	CtrlInWndRct.top = pFk8->EntityRct.top - pParentFk8->EntityRct.top;
+	CtrlInWndRct.bottom = CtrlInWndRct.top + RECT_HEIGHT(pFk8->EntityRct);
+	pLBtnDownCtrl->MoveWindowRect(CtrlInWndRct);
+
+	// 重新计算子控件的位置和大小
+	m_pCurrentWnd->ResetChildCtrlPostion(pLBtnDownCtrl->GetChildControlsVec(), true);
 }
 
 bool CUiFeatureBuilderView::OnMouseMove_FangKuai8(CPoint point, bool bIsWnd)
@@ -453,10 +515,11 @@ void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 	CFormView::OnLButtonUp(nFlags, point);
 	m_LBtnUpPos = point;
 	m_bIsLButtonDown = false;
+	m_pDrawParentCtrl = NULL;
+	m_bSizeMoveCtrl = false;
 
 	if (!m_bInitOk)
 		return;
-
 
 	// 如果需要创建一个新控件
 	if (m_bCreateNewCtrl)
@@ -473,7 +536,7 @@ void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 	CFormView::OnLButtonDown(nFlags, point);
 	m_LBtnDownPos = point;
 	m_bIsLButtonDown = true;
-	m_pCreateCtrlParentCtrl = NULL;
+	m_pDrawParentCtrl = NULL;
 
 	if (m_pSkinManager == NULL || m_pUiKernel == NULL || m_pCurrentWnd == NULL)
 		return;
@@ -489,7 +552,7 @@ void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 		if (m_bCreateNewCtrl)
 		{
 			// 取得选中的父控件
-			m_pCreateCtrlParentCtrl = GetSelectControl(point);
+			m_pDrawParentCtrl = GetSelectControl(point);
 			this->RedrawWindow();
 		}
 		else
@@ -542,7 +605,7 @@ void CUiFeatureBuilderView::CreateNewControl()
 		return;
 
 	CString strCtrlTypeName = m_pControlList->GetSelectCtrlTypeName();
-	IControlBase *pControl = m_pUiKernel->BD_CreateControlEmptyPropetry(m_pCurrentWnd, m_pCreateCtrlParentCtrl, W2A(strCtrlTypeName));
+	IControlBase *pControl = m_pUiKernel->BD_CreateControlEmptyPropetry(m_pCurrentWnd, m_pDrawParentCtrl, W2A(strCtrlTypeName));
 	if (pControl == NULL)
 	{
 		CString strInfo(_T(""));
@@ -558,7 +621,7 @@ void CUiFeatureBuilderView::CreateNewControl()
 	// 重新绘制WindowTree
 	if (m_pWindowViewTree != NULL)
 	{
-		m_pWindowViewTree->AddNewControlToWindowTreeNode(m_pCurrentWnd, m_pCreateCtrlParentCtrl, m_pCurrentWnd->BD_GetFocusControl());
+		m_pWindowViewTree->AddNewControlToWindowTreeNode(m_pCurrentWnd, m_pDrawParentCtrl, m_pCurrentWnd->BD_GetFocusControl());
 	}
 	
 	// 更新属性视图
@@ -572,8 +635,8 @@ void CUiFeatureBuilderView::CreateNewControlf_SetNewCtrlRect()
 
 	FANGKUAI_8* pFk8 = NULL;
 	// 先绘制被选中的父控件的朦罩
-	if (m_pCreateCtrlParentCtrl != NULL)
-		pFk8 = m_pCreateCtrlParentCtrl->BD_GetFangKuai8Rect();
+	if (m_pDrawParentCtrl != NULL)
+		pFk8 = m_pDrawParentCtrl->BD_GetFangKuai8Rect();
 	else
 		pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
 

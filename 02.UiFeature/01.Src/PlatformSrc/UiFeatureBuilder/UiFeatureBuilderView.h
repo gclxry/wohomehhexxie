@@ -66,6 +66,7 @@ private:
 	// 是否在窗口的8个方块内移动
 	bool OnMouseMove_FangKuai8(CPoint point, bool bIsWnd);
 	void OnMouseMove_LButtonDown(CPoint point);
+	void OnMouseMove_LButtonDown_MoveCtrl(CPoint point, IControlBase* pLBtnDownCtrl);
 	// 绘制创建新控件时的矩形
 	void DrawMark();
 	// 设置新控件的大小
@@ -91,6 +92,7 @@ protected:
 	CPoint m_LBtnUpPos;
 	CPoint m_MouseMovePos;
 
+	bool m_bSizeMoveCtrl;
 	bool m_bCreateNewCtrl;
 
 	IWindowBase *m_pCurrentWnd;
@@ -98,7 +100,7 @@ protected:
 	bool m_bMoveInCtrlFangKuai8;
 
 	// 创建新控件时的父控件
-	IControlBase *m_pCreateCtrlParentCtrl;
+	IControlBase *m_pDrawParentCtrl;
 
 	// 鼠标移动时经过的控件
 	IControlBase *m_pMouseMoveCtrl;
