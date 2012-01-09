@@ -985,18 +985,11 @@ void IWindowBaseImpl::BD_DrawWindowView(CDrawingBoard &ViewMemDc)
 	if (ViewMemDc.GetSafeHdc() == NULL || m_pUiEngine == NULL || m_pPropSize_Width == NULL || m_pPropSize_Height == NULL)
 		return;
 
-	RECT WndRct;
-	INIT_RECT(WndRct);
-	WndRct.right = m_pPropSize_Width->GetValue();
-	WndRct.bottom = m_pPropSize_Height->GetValue();
+	int nWidth = m_pPropSize_Width->GetValue();
+	int nHeight = m_pPropSize_Height->GetValue();
 	
-	m_BD_FangKuai8.EntityRct.left = (ViewMemDc.GetDcSize().cx - RECT_WIDTH(WndRct)) / 2;
-	m_BD_FangKuai8.EntityRct.right = m_BD_FangKuai8.EntityRct.left + RECT_WIDTH(WndRct);
-	m_BD_FangKuai8.EntityRct.top = (ViewMemDc.GetDcSize().cy - RECT_HEIGHT(WndRct)) / 2;
-	m_BD_FangKuai8.EntityRct.bottom = m_BD_FangKuai8.EntityRct.top + RECT_HEIGHT(WndRct);
-
 	// 创建内存dc
-	m_WndMemDc.Create(RECT_WIDTH(WndRct), RECT_HEIGHT(WndRct), 0, false, true);
+	m_WndMemDc.Create(nWidth, nHeight, 0, false, true);
 	if (m_WndMemDc.GetBits() == NULL)
 		return;
 
@@ -1004,8 +997,6 @@ void IWindowBaseImpl::BD_DrawWindowView(CDrawingBoard &ViewMemDc)
 	DrawControl();
 
 	// 绘制到父DC上
-	int nWidth = RECT_WIDTH(WndRct);
-	int nHeight = RECT_HEIGHT(WndRct);
 	m_pUiEngine->AlphaBlend(ViewMemDc, m_BD_FangKuai8.EntityRct.left, m_BD_FangKuai8.EntityRct.top, nWidth, nHeight,
 		m_WndMemDc, 0, 0, nWidth, nHeight);
 
@@ -1016,7 +1007,6 @@ void IWindowBaseImpl::BD_DrawWindowView(CDrawingBoard &ViewMemDc)
 	if (m_pFocusCtrl != NULL)
 	{
 		FANGKUAI_8 *pFangKuai8 = m_pFocusCtrl->BD_GetFangKuai8Rect();
-
 		BD_DrawSelectRect(ViewMemDc, *pFangKuai8, false);
 	}
 }
@@ -1163,4 +1153,40 @@ void IWindowBaseImpl::BD_SetControlRect(IControlBase* pControl, RECT RctInView)
 	InWindowRect.bottom = InWindowRect.top + RECT_HEIGHT(RctInView);
 
 	pControl->MoveWindowRect(InWindowRect);
+}
+
+// 初始化所有控件在Builder中的显示位置
+void IWindowBaseImpl::BD_SetAllCtrlRectInView()
+{
+	BD_SetAllCtrlRectInView_SetChildVec(&m_ChildCtrlsVec);
+}
+
+void IWindowBaseImpl::BD_SetAllCtrlRectInView_SetChildVec(CHILD_CTRLS_VEC *pChildCtrlsVec)
+{
+	if (pChildCtrlsVec == NULL)
+		return;
+
+	for (CHILD_CTRLS_VEC::iterator pCtrlItem = pChildCtrlsVec->begin(); pCtrlItem != pChildCtrlsVec->end(); pCtrlItem++)
+	{
+		IControlBase* pCtrl = *pCtrlItem;
+		if (pCtrl == NULL || pCtrl->GetOwnerWindow() == NULL)
+			continue;
+
+		FANGKUAI_8* pSetFk8 = pCtrl->BD_GetFangKuai8Rect();
+		if (pSetFk8 == NULL)
+			continue;
+
+		FANGKUAI_8* pWndFk8 = pCtrl->GetOwnerWindow()->BD_GetFangKuai8Rect();
+		if (pWndFk8 == NULL)
+			continue;
+
+		RECT CtrlRct = pCtrl->GetWindowRect();
+
+		pSetFk8->EntityRct.left = pWndFk8->EntityRct.left + CtrlRct.left;
+		pSetFk8->EntityRct.right = pSetFk8->EntityRct.left + RECT_WIDTH(CtrlRct);
+		pSetFk8->EntityRct.top = pWndFk8->EntityRct.top + CtrlRct.top;
+		pSetFk8->EntityRct.bottom = pSetFk8->EntityRct.top + RECT_HEIGHT(CtrlRct);
+
+		BD_SetAllCtrlRectInView_SetChildVec(pCtrl->GetChildControlsVec());
+	}
 }

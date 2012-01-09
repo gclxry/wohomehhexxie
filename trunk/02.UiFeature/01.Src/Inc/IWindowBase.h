@@ -23,6 +23,8 @@ public:
 	virtual void BD_SetFocusControl(IControlBase* pControl) = 0;
 	// 设置控件在编辑模式下的位置和大小
 	virtual void BD_SetControlRect(IControlBase* pControl, RECT RctInView) = 0;
+	// 初始化所有控件在Builder中的显示位置
+	virtual void BD_SetAllCtrlRectInView() = 0;
 
 //////////////////////////////////////////////////////////////////////////
 	// 窗口居中显示
