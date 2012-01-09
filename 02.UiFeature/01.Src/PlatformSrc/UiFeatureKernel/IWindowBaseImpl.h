@@ -29,6 +29,8 @@ public:
 	virtual void BD_SetFocusControl(IControlBase* pControl);
 	// 设置控件在编辑模式下的位置和大小
 	virtual void BD_SetControlRect(IControlBase* pControl, RECT RctInView);
+	// 初始化所有控件在Builder中的显示位置
+	virtual void BD_SetAllCtrlRectInView();
 
 //////////////////////////////////////////////////////////////////////////
 	// 导入皮肤包使用的函数初始化
@@ -92,6 +94,7 @@ private:
 	void BD_NewFrameImage();
 	void BD_NewFrameImageBase(IPropertyImageBase *pImgBase, string strImgPath);
 	bool BD_CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt, IControlBase** ppControl);
+	void BD_SetAllCtrlRectInView_SetChildVec(CHILD_CTRLS_VEC *pChildCtrlsVec);
 
 private:
 	// 循环遍历每个控件的绘制

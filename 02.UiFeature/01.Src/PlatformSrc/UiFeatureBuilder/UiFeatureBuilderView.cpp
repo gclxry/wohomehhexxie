@@ -197,7 +197,7 @@ void CUiFeatureBuilderView::DrawMark()
 {
 	Graphics DoGrap(m_MemDc.GetSafeHdc());
 
-	if (m_pMouseMoveCtrl != NULL && !m_bCreateNewCtrl)
+	if (m_pMouseMoveCtrl != NULL)
 	{
 		// 绘制当前鼠标移动到的控件上，绘制控件边框
 		FANGKUAI_8* pFk8 = m_pMouseMoveCtrl->BD_GetFangKuai8Rect();
@@ -232,8 +232,6 @@ void CUiFeatureBuilderView::DrawMark()
 		DoGrap.DrawLine(&LinePen, m_MouseMovePos.x, m_MouseMovePos.y, m_LBtnDownPos.x, m_MouseMovePos.y);
 		DoGrap.DrawLine(&LinePen, m_LBtnDownPos.x, m_MouseMovePos.y, m_LBtnDownPos.x, m_LBtnDownPos.y);
 	}
-
-
 }
 
 void CUiFeatureBuilderView::DrawWindowView()
@@ -288,6 +286,17 @@ void CUiFeatureBuilderView::ResetViewShowSize()
 		 nHeight = ViewRct.Height();
 		if (nHeight < WndSize.cy + SHOW_WINDOW_SPACE)
 			nHeight = WndSize.cy + SHOW_WINDOW_SPACE;
+
+		FANGKUAI_8* pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
+		if (pFk8 != NULL)
+		{
+			// 设置当前窗口所有子控件的位置
+			pFk8->EntityRct.left = (ViewRct.Width() - WndSize.cx) / 2;
+			pFk8->EntityRct.right = pFk8->EntityRct.left + WndSize.cx;
+			pFk8->EntityRct.top = (ViewRct.Height() - WndSize.cy) / 2;
+			pFk8->EntityRct.bottom = pFk8->EntityRct.top + WndSize.cy;
+			m_pCurrentWnd->BD_SetAllCtrlRectInView();
+		}
 	}
 	else
 	{
@@ -297,6 +306,7 @@ void CUiFeatureBuilderView::ResetViewShowSize()
 		nHeight = ViewRct.Height();
 	}
 
+	m_ScrollOffset.cx = m_ScrollOffset.cy = 0;
 	this->SetScrollSizes(MM_TEXT, CSize(nWidth, nHeight));
 }
 
@@ -314,27 +324,36 @@ void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
 	if (!m_bInitOk || m_pSkinManager == NULL || m_pUiKernel == NULL)
 		return;
 
+	m_pMouseMoveCtrl = GetSelectControl(point);
 	if (m_bIsLButtonDown)
 	{
 		OnMouseMove_LButtonDown(point);
+		this->RedrawWindow();
 		return;
 	}
 
 	// 如果需要创建一个新控件
 	if (m_bCreateNewCtrl)
+	{
+		this->RedrawWindow();
 		return;
+	}
 
 	m_bMoveInWndFangKuai8 = OnMouseMove_FangKuai8(point, true);
 	if (m_bMoveInWndFangKuai8)
+	{
+		this->RedrawWindow();
 		return;
+	}
 
 	m_bMoveInCtrlFangKuai8 = OnMouseMove_FangKuai8(point, false);
 	if (m_bMoveInCtrlFangKuai8)
+	{
+		this->RedrawWindow();
 		return;
+	}
 
-	m_pMouseMoveCtrl = GetSelectControl(point);
 	this->RedrawWindow();
-
 	SetViewCursor(UF_IDC_ARROW);
 }
 
@@ -479,6 +498,10 @@ void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 		}
 		return;
 	}
+
+	IControlBase *pSelCtrl = GetSelectControl(point);
+	m_pCurrentWnd->BD_SetFocusControl(pSelCtrl);
+	this->RedrawWindow();
 }
 
 bool CUiFeatureBuilderView::PtInWindow(CPoint point)
