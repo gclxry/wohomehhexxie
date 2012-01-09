@@ -219,7 +219,7 @@ void CUiFeatureBuilderView::DrawMark()
 		else
 			pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
 
-		SolidBrush PinkBrs(Color(30, 255, 0, 255));
+		SolidBrush PinkBrs(Color(20, 200, 0, 200));
 		DoGrap.FillRectangle(&PinkBrs, pFk8->EntityRct.left, pFk8->EntityRct.top, RECT_WIDTH(pFk8->EntityRct), RECT_HEIGHT(pFk8->EntityRct));
 
 		if (m_bCreateNewCtrl)
@@ -399,6 +399,9 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown_MoveCtrl(CPoint point, ICont
 //////////////////////////////////////////////////////////////////////////
 	// 设置在builder中的新坐标
 	FANGKUAI_8* pParentFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
+	if (pLBtnDownCtrl->GetParentControl() != NULL)
+		pParentFk8 = pLBtnDownCtrl->GetParentControl()->BD_GetFangKuai8Rect();
+
 	FANGKUAI_8* pFk8 = pLBtnDownCtrl->BD_GetFangKuai8Rect();
 	if (pParentFk8 == NULL || pFk8 == NULL)
 		return;
@@ -427,9 +430,10 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown_MoveCtrl(CPoint point, ICont
 	// 设置在Window中的新坐标
 	RECT CtrlInWndRct;
 	INIT_RECT(CtrlInWndRct);
-	CtrlInWndRct.left = pFk8->EntityRct.left - pParentFk8->EntityRct.left;
+	FANGKUAI_8* pWndFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
+	CtrlInWndRct.left = pFk8->EntityRct.left - pWndFk8->EntityRct.left;
 	CtrlInWndRct.right = CtrlInWndRct.left + RECT_WIDTH(pFk8->EntityRct);
-	CtrlInWndRct.top = pFk8->EntityRct.top - pParentFk8->EntityRct.top;
+	CtrlInWndRct.top = pFk8->EntityRct.top - pWndFk8->EntityRct.top;
 	CtrlInWndRct.bottom = CtrlInWndRct.top + RECT_HEIGHT(pFk8->EntityRct);
 	pLBtnDownCtrl->MoveWindowRect(CtrlInWndRct);
 
@@ -511,8 +515,11 @@ void CUiFeatureBuilderView::SetViewCursor(int nCursor)
 
 void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	SetViewCursor(UF_IDC_ARROW);
 	CFormView::OnLButtonUp(nFlags, point);
+
+	::ReleaseCapture();
+
+	SetViewCursor(UF_IDC_ARROW);
 	m_LBtnUpPos = point;
 	m_bIsLButtonDown = false;
 	m_pDrawParentCtrl = NULL;
@@ -534,6 +541,9 @@ void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	CFormView::OnLButtonDown(nFlags, point);
+
+	::SetCapture(m_hWnd);
+
 	m_LBtnDownPos = point;
 	m_bIsLButtonDown = true;
 	m_pDrawParentCtrl = NULL;
