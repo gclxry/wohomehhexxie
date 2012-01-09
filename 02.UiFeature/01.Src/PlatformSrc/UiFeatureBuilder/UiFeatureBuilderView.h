@@ -68,6 +68,8 @@ private:
 	void OnMouseMove_LButtonDown(CPoint point);
 	// 绘制创建新控件时的矩形
 	void DrawCreateCtrlRect();
+	// 取得新控件的大小
+	void CreateNewControlf_SetNewCtrlRect();
 	// 取得选择的控件
 	IControlBase* GetSelectControl(CPoint point);
 	// 通过鼠标拖拽，创建一个新控件
@@ -93,8 +95,6 @@ protected:
 
 	IWindowBase *m_pCurrentWnd;
 	bool m_bMoveInWndFangKuai8;
-
-	IControlBase *m_pSelectControl;
 	bool m_bMoveInCtrlFangKuai8;
 
 	// 创建新控件时的父控件
