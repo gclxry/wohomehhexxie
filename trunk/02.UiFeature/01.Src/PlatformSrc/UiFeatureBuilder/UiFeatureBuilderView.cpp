@@ -350,7 +350,7 @@ bool CUiFeatureBuilderView::OnMouseMove_FangKuai8(CPoint point, bool bIsWnd)
 	}
 	else
 	{
-		if (m_pCurrentWnd->BD_GetFocusControl() != NULL)
+		if (m_pCurrentWnd != NULL && m_pCurrentWnd->BD_GetFocusControl() != NULL)
 			pFk8 = m_pCurrentWnd->BD_GetFocusControl()->BD_GetFangKuai8Rect();
 	}
 
@@ -514,9 +514,11 @@ void CUiFeatureBuilderView::CreateNewControl()
 	{
 		m_pWindowViewTree->AddNewControlToWindowTreeNode(m_pCurrentWnd, m_pCreateCtrlParentCtrl, m_pCurrentWnd->BD_GetFocusControl());
 	}
+	
+	// 更新属性视图
 }
 
-// 取得新控件的大小
+// 设置新控件的大小
 void CUiFeatureBuilderView::CreateNewControlf_SetNewCtrlRect()
 {
 	if (m_pCurrentWnd->BD_GetFocusControl() == NULL)
@@ -529,12 +531,27 @@ void CUiFeatureBuilderView::CreateNewControlf_SetNewCtrlRect()
 	else
 		pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
 
-	FANGKUAI_8 *pNewFk8 = m_pCurrentWnd->BD_GetFocusControl()->BD_GetFangKuai8Rect();
-	if (pNewFk8 == NULL || pFk8 == NULL)
+	if (pFk8 == NULL)
 		return;
 
-	pNewFk8->EntityRct.left = ((m_LBtnDownPos.x  <= m_LBtnUpPos.x) ? m_LBtnDownPos.x : m_LBtnUpPos.x);
-	pNewFk8->EntityRct.right = ((m_LBtnUpPos.x  >= m_LBtnDownPos.x) ? m_LBtnUpPos.x : m_LBtnDownPos.x);
-	pNewFk8->EntityRct.top = ((m_LBtnDownPos.y  <= m_LBtnUpPos.y) ? m_LBtnDownPos.y : m_LBtnUpPos.y);
-	pNewFk8->EntityRct.bottom = ((m_LBtnUpPos.y  >= m_LBtnDownPos.y) ? m_LBtnUpPos.y : m_LBtnDownPos.y);
+	RECT EntityRct;
+	INIT_RECT(EntityRct);
+	EntityRct.left = ((m_LBtnDownPos.x  <= m_LBtnUpPos.x) ? m_LBtnDownPos.x : m_LBtnUpPos.x) + m_ScrollOffset.cx;
+	EntityRct.right = ((m_LBtnUpPos.x  >= m_LBtnDownPos.x) ? m_LBtnUpPos.x : m_LBtnDownPos.x) + m_ScrollOffset.cx;
+	EntityRct.top = ((m_LBtnDownPos.y  <= m_LBtnUpPos.y) ? m_LBtnDownPos.y : m_LBtnUpPos.y) + m_ScrollOffset.cy;
+	EntityRct.bottom = ((m_LBtnUpPos.y  >= m_LBtnDownPos.y) ? m_LBtnUpPos.y : m_LBtnDownPos.y) + m_ScrollOffset.cy;
+
+	if (EntityRct.left < pFk8->EntityRct.left)
+		EntityRct.left = pFk8->EntityRct.left;
+
+	if (EntityRct.right > pFk8->EntityRct.right)
+		EntityRct.right = pFk8->EntityRct.right;
+
+	if (EntityRct.top < pFk8->EntityRct.top)
+		EntityRct.top = pFk8->EntityRct.top;
+
+	if (EntityRct.bottom > pFk8->EntityRct.bottom)
+		EntityRct.bottom = pFk8->EntityRct.bottom;
+	
+	m_pCurrentWnd->BD_SetControlRect(m_pCurrentWnd->BD_GetFocusControl(), EntityRct);
 }

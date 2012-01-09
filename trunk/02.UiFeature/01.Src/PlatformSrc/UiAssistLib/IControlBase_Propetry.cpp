@@ -303,9 +303,30 @@ CONTROL_LAYOUT_INFO IControlBase::GetLayout()
 // 控件显示位置和大小，这个位置是相对于附着的窗口的
 void IControlBase::SetCtrlInWindowRect(RECT CtrlWndRct)
 {
+	if (GetOwnerWindow() == NULL)
+		return;
+
+	// 本控件位于窗口的位置
 	m_RectInWindow = CtrlWndRct;
 	int nWidth = RECT_WIDTH(m_RectInWindow);
 	int nHeight = RECT_HEIGHT(m_RectInWindow);
+
+	// 取得父控件的位置
+	RECT ParentRct;
+	INIT_RECT(ParentRct);
+	IControlBase* pParentCtrl = GetParentControl();
+	if (pParentCtrl == NULL)
+		ParentRct = pParentCtrl->GetCtrlInWindowRect();
+	else
+		ParentRct = GetOwnerWindow()->GetClientRect();
+
+	// 设置本控件相对父控件的布局位置
+	m_LayoutInfo.nLeftSpace = ParentRct.left - m_RectInWindow.left;
+	m_LayoutInfo.nTopSpace = ParentRct.top - m_RectInWindow.top;
+	m_LayoutInfo.nRightSpace = ParentRct.right - m_RectInWindow.right;
+	m_LayoutInfo.nBottomSpace = ParentRct.bottom - m_RectInWindow.bottom;
+	m_LayoutInfo.nHeight = nHeight;
+	m_LayoutInfo.nWidth = nWidth;
 
 	INIT_RECT(m_RectInParentCtrl);
 	if (m_LayoutInfo.clType == CL_G_LEFT_TOP)
@@ -386,6 +407,34 @@ void IControlBase::SetCtrlInWindowRect(RECT CtrlWndRct)
 		m_RectInParentCtrl.top = m_LayoutInfo.nTopSpace;
 		m_RectInParentCtrl.bottom = nHeight - m_LayoutInfo.nBottomSpace;
 	}
+
+	// 从成员变量更新数据到属性
+	MemberValueToPropetyValue();
+}
+
+// 从成员变量更新数据到属性
+void IControlBase::MemberValueToPropetyValue()
+{
+	if (m_pPropBase_Layout_Width != NULL)
+		m_pPropBase_Layout_Width->SetValue(m_LayoutInfo.nWidth);
+
+	if (m_pPropBase_Layout_Height != NULL)
+		m_pPropBase_Layout_Height->SetValue(m_LayoutInfo.nHeight);
+
+	if (m_pPropBase_Layout_Layout != NULL)
+		m_pPropBase_Layout_Layout->SetSelect(m_LayoutInfo.clType);
+
+	if (m_pPropBase_Layout_LeftSpace != NULL)
+		m_pPropBase_Layout_LeftSpace->SetValue(m_LayoutInfo.nLeftSpace);
+
+	if (m_pPropBase_Layout_RightSpace != NULL)
+		m_pPropBase_Layout_RightSpace->SetValue(m_LayoutInfo.nRightSpace);
+
+	if (m_pPropBase_Layout_TopSpace != NULL)
+		m_pPropBase_Layout_TopSpace->SetValue(m_LayoutInfo.nTopSpace);
+
+	if (m_pPropBase_Layout_BottomSpace != NULL)
+		m_pPropBase_Layout_BottomSpace->SetValue(m_LayoutInfo.nBottomSpace);
 }
 
 RECT IControlBase::GetCtrlInWindowRect()

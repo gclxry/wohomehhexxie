@@ -103,3 +103,12 @@ bool IPropertyComboBox::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode*
 
 	return true;
 }
+
+// 设置选中项
+void IPropertyComboBox::SetSelect(int nSel)
+{
+	if (nSel < 0 || nSel >= (int)m_ComboBoxPro.DataVec.size() || m_ComboBoxPro.nSelect == nSel)
+		return;
+
+	m_ComboBoxPro.nSelect = nSel;
+}

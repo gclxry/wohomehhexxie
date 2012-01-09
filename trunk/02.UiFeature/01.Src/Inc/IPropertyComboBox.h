@@ -25,6 +25,8 @@ public:
 	virtual bool AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode);
 
 	COMBOBOX_PROP* GetComboBoxData();
+	// 设置选中项
+	void SetSelect(int nSel);
 
 private:
 	void Clear();

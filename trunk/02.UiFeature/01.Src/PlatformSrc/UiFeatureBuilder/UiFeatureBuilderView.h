@@ -68,7 +68,7 @@ private:
 	void OnMouseMove_LButtonDown(CPoint point);
 	// 绘制创建新控件时的矩形
 	void DrawCreateCtrlRect();
-	// 取得新控件的大小
+	// 设置新控件的大小
 	void CreateNewControlf_SetNewCtrlRect();
 	// 取得选择的控件
 	IControlBase* GetSelectControl(CPoint point);
