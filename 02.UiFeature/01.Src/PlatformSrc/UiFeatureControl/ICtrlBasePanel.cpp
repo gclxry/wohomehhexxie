@@ -7,6 +7,8 @@ ICtrlBasePanel::ICtrlBasePanel(void)
 {
 	// 添加控件，步骤3：向内核系统注册控件
 	SetObjectType(CTRL_NAME_BASE_PANEL);
+
+	m_pPropImage = NULL;
 }
 
 ICtrlBasePanel::~ICtrlBasePanel(void)
@@ -16,6 +18,7 @@ ICtrlBasePanel::~ICtrlBasePanel(void)
 // 派生控件用于创建属于自己的控件属性
 bool ICtrlBasePanel::CreateControlPropetry(bool bNeedSetDftProp)
 {
+	m_pPropImage = CreatePropetry(OTID_IMAGE, "Image", "背景图片");
 	return true;
 }
 
@@ -37,5 +40,4 @@ void ICtrlBasePanel::OnDestroy()
 // 绘制控件
 void ICtrlBasePanel::OnPaint()
 {
-
 }

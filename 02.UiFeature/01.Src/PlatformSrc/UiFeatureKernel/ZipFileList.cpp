@@ -40,7 +40,7 @@ void CZipFileList::Clear()
 		ZIP_FILE* pZip = pZipItem->second;
 		if (pZip != NULL)
 		{
-			SAFE_DELETE(pZip->pFileData);
+			SAFE_DELETE_LIST(pZip->pFileData);
 			SAFE_DELETE(pZip);
 		}
 	}
@@ -57,7 +57,7 @@ void CZipFileList::RemoveFile(ZIP_FILE *pRemove)
 		ZIP_FILE* pZip = pZipItem->second;
 		if (pZip == pRemove)
 		{
-			SAFE_DELETE(pZip->pFileData);
+			SAFE_DELETE_LIST(pZip->pFileData);
 			SAFE_DELETE(pZip);
 			m_ZipFileMap.erase(pZipItem);
 			break;
@@ -122,7 +122,7 @@ bool CZipFileList::WriteZipAppendBuffer(char *pFilePath, BYTE *pBuffer, int nBuf
 
 		if (compress(pFileItem->pFileData, &(pFileItem->dwZipDatalen), pBuffer, nBufferLen) != Z_OK)
 		{
-			SAFE_DELETE(pFileItem->pFileData);
+			SAFE_DELETE_LIST(pFileItem->pFileData);
 			SAFE_DELETE(pFileItem);
 			return false;
 		}
@@ -180,7 +180,7 @@ bool CZipFileList::WriteZipAppendFile(char *pFilePath)
 
 		if (errno != 0)
 		{
-			SAFE_DELETE(pReadBuf);
+			SAFE_DELETE_LIST(pReadBuf);
 			fclose(pFile);
 			return false;
 		}
@@ -188,7 +188,7 @@ bool CZipFileList::WriteZipAppendFile(char *pFilePath)
 
 	if (nReadCtns != (int)FileAttr.nFileSizeLow)
 	{
-		SAFE_DELETE(pReadBuf);
+		SAFE_DELETE_LIST(pReadBuf);
 		fclose(pFile);
 		return false;
 	}
@@ -196,7 +196,7 @@ bool CZipFileList::WriteZipAppendFile(char *pFilePath)
 	ZIP_FILE *pFileItem = new ZIP_FILE;
 	if (pFileItem == NULL)
 	{
-		SAFE_DELETE(pReadBuf);
+		SAFE_DELETE_LIST(pReadBuf);
 		fclose(pFile);
 		return false;
 	}
@@ -211,7 +211,7 @@ bool CZipFileList::WriteZipAppendFile(char *pFilePath)
 		if (ulComLen <= 0)
 		{
 			fclose(pFile);
-			SAFE_DELETE(pReadBuf);
+			SAFE_DELETE_LIST(pReadBuf);
 			SAFE_DELETE(pFileItem);
 			return false;
 		}
@@ -221,7 +221,7 @@ bool CZipFileList::WriteZipAppendFile(char *pFilePath)
 		if (pFileItem->pFileData == NULL)
 		{
 			fclose(pFile);
-			SAFE_DELETE(pReadBuf);
+			SAFE_DELETE_LIST(pReadBuf);
 			SAFE_DELETE(pFileItem);
 			return false;
 		}
@@ -229,12 +229,12 @@ bool CZipFileList::WriteZipAppendFile(char *pFilePath)
 		if (compress(pFileItem->pFileData, &(pFileItem->dwZipDatalen), pReadBuf, nReadCtns) != Z_OK)
 		{
 			fclose(pFile);
-			SAFE_DELETE(pReadBuf);
-			SAFE_DELETE(pFileItem->pFileData);
+			SAFE_DELETE_LIST(pReadBuf);
+			SAFE_DELETE_LIST(pFileItem->pFileData);
 			SAFE_DELETE(pFileItem);
 			return false;
 		}
-		SAFE_DELETE(pReadBuf);
+		SAFE_DELETE_LIST(pReadBuf);
 	}
 	else
 	{
@@ -407,7 +407,7 @@ bool CZipFileList::ReadZipFile(const char *pZipFilePath)
 
 			if (errno != 0)
 			{
-				SAFE_DELETE(pZipData);
+				SAFE_DELETE_LIST(pZipData);
 				fclose(pFile);
 				return false;
 			}
@@ -415,7 +415,7 @@ bool CZipFileList::ReadZipFile(const char *pZipFilePath)
 
 		if (nReadLen != (int)dwZipDataLen)
 		{
-			SAFE_DELETE(pZipData);
+			SAFE_DELETE_LIST(pZipData);
 			fclose(pFile);
 			return false;
 		}
@@ -424,7 +424,7 @@ bool CZipFileList::ReadZipFile(const char *pZipFilePath)
 		ZIP_FILE* pZipItem = new ZIP_FILE;
 		if (pZipItem == NULL)
 		{
-			SAFE_DELETE(pZipData);
+			SAFE_DELETE_LIST(pZipData);
 			fclose(pFile);
 			return false;
 		}
@@ -439,20 +439,20 @@ bool CZipFileList::ReadZipFile(const char *pZipFilePath)
 			if (pZipItem->pFileData == NULL)
 			{
 				SAFE_DELETE(pZipItem);
-				SAFE_DELETE(pZipData);
+				SAFE_DELETE_LIST(pZipData);
 				fclose(pFile);
 				return false;
 			}
 
 			if (uncompress(pZipItem->pFileData, &(pZipItem->dwSrcFileLen), pZipData, pZipItem->dwZipDatalen) != Z_OK)
 			{
-				SAFE_DELETE(pZipItem->pFileData);
+				SAFE_DELETE_LIST(pZipItem->pFileData);
 				SAFE_DELETE(pZipItem);
-				SAFE_DELETE(pZipData);
+				SAFE_DELETE_LIST(pZipData);
 				fclose(pFile);
 				return false;
 			}
-			SAFE_DELETE(pZipData);
+			SAFE_DELETE_LIST(pZipData);
 		}
 		else
 		{

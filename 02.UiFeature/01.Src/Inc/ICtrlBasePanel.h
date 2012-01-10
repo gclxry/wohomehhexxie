@@ -21,4 +21,7 @@ protected:
 	virtual void OnDestroy();
 	// »æÖÆ¿Ø¼þ
 	virtual void OnPaint();
+
+private:
+	IPropertyBase* m_pPropImage;
 };
