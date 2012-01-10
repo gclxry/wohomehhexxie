@@ -10,6 +10,7 @@
 
 class CFeatureControlList;
 class CWindowsViewTree;
+class CPropertyViewCtrl;
 
 #define UF_IDC_ARROW           (32512)
 #define UF_IDC_CROSS           (32515)
@@ -53,7 +54,7 @@ public:
 	void SetProjectInitState(bool bInitOk);
 
 	void ResetShowWindow(IWindowBase *pCurrentWnd, IControlBase *pCtrlBase);
-	void Init(IUiFeatureKernel* pKernelWindow, CFeatureControlList *pCtrlList, CWindowsViewTree *pWndTree);
+	void Init(IUiFeatureKernel* pKernelWindow, CFeatureControlList *pCtrlList, CWindowsViewTree *pWndTree, CPropertyViewCtrl* pPropViewCtrl);
 
 	// 判断鼠标坐标是否落在了窗口内部
 	bool PtInWindow(CPoint point);
@@ -84,6 +85,7 @@ protected:
 
 	CFeatureControlList *m_pControlList;
 	CWindowsViewTree *m_pWindowViewTree;
+	CPropertyViewCtrl *m_pPropViewCtrl;
 
 	bool m_bInitOk;
 	CDrawingBoard m_MemDc;
