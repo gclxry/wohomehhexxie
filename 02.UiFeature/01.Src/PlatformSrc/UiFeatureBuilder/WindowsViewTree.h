@@ -49,6 +49,8 @@ private:
 	CPropertyViewCtrl *m_pPropCtrl;
 	CUiFeatureBuilderView *m_pWindowView;
 
+	HTREEITEM m_hRBtnSelItem;
+
 protected:
 	DECLARE_MESSAGE_MAP()
 public:

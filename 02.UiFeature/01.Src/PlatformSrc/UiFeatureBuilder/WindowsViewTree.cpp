@@ -26,6 +26,7 @@ CWindowsViewTree::CWindowsViewTree()
 	m_pPropCtrl = NULL;
 	m_pWindowView = NULL;
 	m_bProjectInitOk = false;
+	m_hRBtnSelItem = NULL;
 }
 
 CWindowsViewTree::~CWindowsViewTree()
@@ -59,11 +60,12 @@ BOOL CWindowsViewTree::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 
 void CWindowsViewTree::OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult)
 {
+	m_hRBtnSelItem = NULL;
 	if (!m_bProjectInitOk)
 		return;
 
-	HTREEITEM hItem = this->GetSelectedItem();
-	if (!IS_SAFE_HANDLE(hItem))
+	m_hRBtnSelItem = this->GetSelectedItem();
+	if (!IS_SAFE_HANDLE(m_hRBtnSelItem))
 		return;
 
 	POINT pt;
@@ -71,7 +73,7 @@ void CWindowsViewTree::OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult)
 	CMenu CreateMenu;
 
 	HTREEITEM hRootItem = this->GetRootItem();
-	if (hRootItem == hItem)
+	if (hRootItem == m_hRBtnSelItem)
 	{
 		CreateMenu.LoadMenu(IDM_CREATE_WINDOW);
 		CreateMenu.GetSubMenu(0)->TrackPopupMenu(TPM_LEFTALIGN |TPM_RIGHTBUTTON, pt.x, pt.y, this);
@@ -444,20 +446,21 @@ void CWindowsViewTree::SetSaveWindowActivePropetry()
 
 void CWindowsViewTree::OnDeleteWndctrl()
 {
+	USES_CONVERSION;
 	if (!m_bProjectInitOk || m_pSkinMgr == NULL || m_pUiKernel == NULL || m_pPropCtrl == NULL)
 	{
 		AfxMessageBox(_T("列表没有被初始化"), MB_OK | MB_ICONERROR);
 		return;
 	}
 
-	HTREEITEM hSelItem = this->GetSelectedItem();
-	if (hSelItem == NULL)
+	if (m_hRBtnSelItem == NULL)
 	{
 		AfxMessageBox(_T("没有选择需要删除的节点！"), MB_OK | MB_ICONERROR);
 		return;
 	}
+	this->SelectItem(m_hRBtnSelItem);
 
-	IFeatureObject* pObj = (IFeatureObject*)this->GetItemData(hSelItem);
+	IFeatureObject* pObj = (IFeatureObject*)this->GetItemData(m_hRBtnSelItem);
 	if (pObj->GetObjectTypeId() == OTID_WINDOW)
 	{
 		IWindowBase *pWndBase = dynamic_cast<IWindowBase*>(pObj);
@@ -466,6 +469,12 @@ void CWindowsViewTree::OnDeleteWndctrl()
 			AfxMessageBox(_T("错误的【Window】节点！"), MB_OK | MB_ICONERROR);
 			return;
 		}
+
+		CString strInfo(_T(""));
+		strInfo.Format(_T("确定删除窗口/面板【%s】吗？"), A2W(pWndBase->GetObjectName()));
+		if (AfxMessageBox(strInfo, MB_OKCANCEL | MB_ICONWARNING) != IDOK)
+			return;
+
 		m_pUiKernel->BD_DeleteWindow(pWndBase);
 	}
 	else
@@ -476,11 +485,17 @@ void CWindowsViewTree::OnDeleteWndctrl()
 			AfxMessageBox(_T("错误的【Control】节点！"), MB_OK | MB_ICONERROR);
 			return;
 		}
+
+		CString strInfo(_T(""));
+		strInfo.Format(_T("确定删除控件【%s[%s]】吗？"), A2W(pCtrlBase->GetObjectName()), A2W(pCtrlBase->GetObjectType()));
+		if (AfxMessageBox(strInfo, MB_OKCANCEL | MB_ICONWARNING) != IDOK)
+			return;
+
 		m_pUiKernel->BD_DeleteControl(pCtrlBase);
 	}
 
-	HTREEITEM hItem = this->GetParentItem(hSelItem);
-	this->DeleteItem(hSelItem);
+	HTREEITEM hItem = this->GetParentItem(m_hRBtnSelItem);
+	this->DeleteItem(m_hRBtnSelItem);
 
 	if (hItem == NULL)
 		hItem = this->GetRootItem();
