@@ -1572,3 +1572,67 @@ bool IPropertySkinManagerImpl::BD_AppendControlToVec(char *pszCtrlType, IPropert
 	pCtrlType->insert(pair<string, IPropertyBase*>(strObjId, pPropBase));
 	return true;
 }
+
+// 设置可以保存的有效属性
+void IPropertySkinManagerImpl::BD_SetWindowPropetryActiveProp(IWindowBase *pWndBase, bool bActive)
+{
+	if (pWndBase == NULL)
+		return;
+
+	pWndBase->SetActivePropetry(bActive);
+	IPropertyWindow* pPropWnd = pWndBase->PP_GetWindowPropetry();
+	if (pPropWnd != NULL)
+		pPropWnd->SetActivePropetry(bActive);
+
+	if (pWndBase->PP_GetWindowPropetryGroup() != NULL)
+		pWndBase->PP_GetWindowPropetryGroup()->SetActivePropetry(bActive);
+
+	// 设置窗口自身的属性
+	BD_SetGroupPropActiveMark(pWndBase->PP_GetWindowPropetryGroup(), bActive);
+
+	// 设置子窗口
+	BD_SetChildVecActiveMark(pWndBase->GetChildControlsVec(), bActive);
+}
+
+void IPropertySkinManagerImpl::BD_SetChildVecActiveMark(CHILD_CTRLS_VEC* pChildCtrlVec, bool bActive)
+{
+	if (pChildCtrlVec == NULL)
+		return;
+
+	for (CHILD_CTRLS_VEC::iterator pCtrlItem = pChildCtrlVec->begin(); pCtrlItem != pChildCtrlVec->end(); pCtrlItem++)
+	{
+		IControlBase* pCtrl = *pCtrlItem;
+		if (pCtrl == NULL)
+			continue;
+
+		if (pCtrl->PP_GetControlPropetry() != NULL)
+			pCtrl->PP_GetControlPropetry()->SetActivePropetry(bActive);
+
+		if (pCtrl->PP_GetControlPropetryGroup() != NULL)
+			pCtrl->PP_GetControlPropetryGroup()->SetActivePropetry(bActive);
+
+		pCtrl->SetActivePropetry(bActive);
+		BD_SetGroupPropActiveMark(pCtrl->PP_GetControlPropetryGroup(), bActive);
+		BD_SetChildVecActiveMark(pCtrl->GetChildControlsVec(), bActive);
+	}
+}
+
+void IPropertySkinManagerImpl::BD_SetGroupPropActiveMark(IPropertyGroup *pPropGroup, bool bActive)
+{
+	if (pPropGroup == NULL || pPropGroup->GetPropVec() == NULL)
+		return;
+
+	for (GROUP_PROP_VEC::iterator pPropItem = pPropGroup->GetPropVec()->begin(); pPropItem != pPropGroup->GetPropVec()->end(); pPropItem++)
+	{
+		IPropertyBase* pProp = *pPropItem;
+		if (pProp == NULL)
+			continue;
+
+		pProp->SetActivePropetry(bActive);
+		if (pProp->GetObjectTypeId() == OTID_GROUP)
+		{
+			IPropertyGroup *pNextPropGroup = dynamic_cast<IPropertyGroup*>(pProp);
+			BD_SetGroupPropActiveMark(pNextPropGroup, bActive);
+		}
+	}
+}

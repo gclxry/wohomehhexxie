@@ -37,6 +37,12 @@ public:
 	virtual bool BD_SaveProject(char *pszSkinDir, char *pszSkinName);
 	// 关闭一个工程
 	virtual bool BD_CloseProject();
+	// 设置可以保存的有效属性
+	virtual void BD_SetWindowPropetryActiveProp(IWindowBase *pWndBase, bool bActive);
+	// 删除一个windows
+	virtual bool BD_DeleteWindow(IWindowBase *pWndBase);
+	// 删除一个control
+	virtual bool BD_DeleteControl(IControlBase *pCtrlBase);
 
 //////////////////////////////////////////////////////////////////////////
 	// 一个对话框从一个皮肤包里使用指定的对话框皮肤资源初始化自己
@@ -46,8 +52,10 @@ public:
 
 	// 从zip文件中找到指定文件
 	virtual bool FindUnZipFile(const char *pFileName, BYTE **ppOutBuffer, int *pnFileLen);
+
 private:
 	void ReleaseKernelWindow();
+	bool BD_DeleteControl_FromCtrlVec(CHILD_CTRLS_VEC* pCtrlVec, IControlBase *pCtrlBase);
 
 private:
 	HMODULE m_hControlDll;

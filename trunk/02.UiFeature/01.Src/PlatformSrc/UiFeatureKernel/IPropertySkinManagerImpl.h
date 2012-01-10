@@ -5,6 +5,7 @@
 #include "ZipFileList.h"
 #include "..\..\Inc\IPropertyGroup.h"
 #include "..\..\Inc\CUiXmlWrite.h"
+#include "..\..\Inc\IWindowBase.h"
 
 //////////////////////////////////////////////////////////////////////////
 // 资源属性队列
@@ -32,9 +33,13 @@ public:
 	virtual ONE_RESOURCE_PROP_MAP* BD_GetWindowPropMap();
 	// 向控件队列添加一个控件
 	virtual bool BD_AppendControlToVec(char *pszCtrlType, IPropertyGroup* pCtrlPropGroup);
-
 	// 保存皮肤包
 	virtual bool BD_SaveProject(char *pszSkinDir, char *pszSkinName);
+
+	// 设置可以保存的有效属性
+	virtual void BD_SetWindowPropetryActiveProp(IWindowBase *pWndBase, bool bActive);
+	void BD_SetChildVecActiveMark(CHILD_CTRLS_VEC* pChildCtrlVec, bool bActive);
+	void BD_SetGroupPropActiveMark(IPropertyGroup *pPropGroup, bool bActive);
 
 	// 清空属性队列
 	virtual void ReleaseSkinManagerPropetry();
@@ -56,6 +61,7 @@ public:
 	ONE_RESOURCE_PROP_MAP * GetAllWindowPropMap();
 
 	void ReleaseBaseProp(IPropertyBase *pCtrlProp);
+
 private:
 //////////////////////////////////////////////////////////////////////////
 	// Builder使用函数
@@ -109,6 +115,8 @@ private:
 	bool SaveLayoutXml_ChildCtrl(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pNode, PROP_CONTROL_VEC* pWndChildVec);
 
 	void SaveToFile(char *pszFilePath, BYTE *pData, int nDataLen);
+
+
 private:
 	// 皮肤路径
 	string m_strSkinPath;

@@ -42,9 +42,6 @@ private:
 	HTREEITEM InsertControlNodeToEnd(HTREEITEM hParentNode, IControlBase *pControl);
 	// 向树中插入一个新节点
 	void InsertCtrlVecByPropCtrlVec(HTREEITEM hParentItem, IWindowBase *pParentWnd, IControlBase *pParentCtrl, PROP_CONTROL_VEC* pPropCtrlVec, CHILD_CTRLS_VEC* pCtrlVec);
-
-	void SetGroupPropActiveMark(IPropertyGroup *pPropGroup, bool bActive);
-	void SetChildVecActiveMark(CHILD_CTRLS_VEC* pChildCtrlVec, bool bActive);
 private:
 	bool m_bProjectInitOk;
 	IPropertySkinManager *m_pSkinMgr;
@@ -58,4 +55,5 @@ public:
 	afx_msg void OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnCreateWindowPanel();
 	afx_msg void OnTvnSelchanged(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnDeleteWndctrl();
 };

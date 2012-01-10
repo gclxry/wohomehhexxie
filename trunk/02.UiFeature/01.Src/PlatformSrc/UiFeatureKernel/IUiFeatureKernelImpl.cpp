@@ -360,3 +360,91 @@ IUiEngine* IUiFeatureKernelImpl::GetUiEngine()
 {
 	return IUiEngineImpl::GetInstance();
 }
+
+// 设置可以保存的有效属性
+void IUiFeatureKernelImpl::BD_SetWindowPropetryActiveProp(IWindowBase *pWndBase, bool bActive)
+{
+	m_pSkinMgr->BD_SetWindowPropetryActiveProp(pWndBase, bActive);
+}
+
+// 删除一个windows
+bool IUiFeatureKernelImpl::BD_DeleteWindow(IWindowBase *pWndBase)
+{
+	if (pWndBase == NULL)
+		return false;
+
+	for (WINDOW_IMPL_MAP::iterator pWndItem = m_WndImplMap.begin(); pWndItem != m_WndImplMap.end(); pWndItem++)
+	{
+		IWindowBaseImpl* pWndBaseImpl = pWndItem->second;
+		if (pWndBaseImpl == NULL)
+			continue;
+
+		IWindowBase* pComWndBase = dynamic_cast<IWindowBase*>(pWndBaseImpl);
+		if (pComWndBase == NULL)
+			continue;
+
+		if (pComWndBase == pWndBase || lstrcmpiA(pWndBase->GetObjectId(), pComWndBase->GetObjectId()) == 0)
+		{
+			m_pSkinMgr->BD_SetWindowPropetryActiveProp(pWndBase, false);
+			m_WndImplMap.erase(pWndItem);
+			SAFE_DELETE(pWndBaseImpl);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+// 删除一个control
+bool IUiFeatureKernelImpl::BD_DeleteControl(IControlBase *pCtrlBase)
+{
+	if (pCtrlBase == NULL)
+		return false;
+
+	for (WINDOW_IMPL_MAP::iterator pWndItem = m_WndImplMap.begin(); pWndItem != m_WndImplMap.end(); pWndItem++)
+	{
+		IWindowBaseImpl* pWndBaseImpl = pWndItem->second;
+		if (pWndBaseImpl == NULL)
+			continue;
+
+		if (BD_DeleteControl_FromCtrlVec(pWndBaseImpl->GetChildControlsVec(), pCtrlBase))
+			return true;
+	}
+
+	return false;
+}
+
+bool IUiFeatureKernelImpl::BD_DeleteControl_FromCtrlVec(CHILD_CTRLS_VEC* pCtrlVec, IControlBase *pCtrlBase)
+{
+	if (pCtrlVec == NULL || pCtrlBase == NULL)
+		return false;
+
+	for (CHILD_CTRLS_VEC::iterator pCtrlItem = pCtrlVec->begin(); pCtrlItem != pCtrlVec->end(); pCtrlItem++)
+	{
+		IControlBase* pComCtrl = *pCtrlItem;
+		if (pComCtrl == NULL)
+			continue;
+
+		if (pComCtrl == pCtrlBase || lstrcmpiA(pComCtrl->GetObjectId(), pCtrlBase->GetObjectId()) == 0)
+		{
+			if (pComCtrl->PP_GetControlPropetry() != NULL)
+				pComCtrl->PP_GetControlPropetry()->SetActivePropetry(false);
+
+			if (pComCtrl->PP_GetControlPropetryGroup() != NULL)
+				pComCtrl->PP_GetControlPropetryGroup()->SetActivePropetry(false);
+
+			pComCtrl->SetActivePropetry(false);
+			m_pSkinMgr->BD_SetGroupPropActiveMark(pComCtrl->PP_GetControlPropetryGroup(), false);
+			m_pSkinMgr->BD_SetChildVecActiveMark(pComCtrl->GetChildControlsVec(), false);
+
+			pCtrlVec->erase(pCtrlItem);
+			SAFE_DELETE(pComCtrl);
+			return true;
+		}
+
+		if (BD_DeleteControl_FromCtrlVec(pComCtrl->GetChildControlsVec(), pCtrlBase))
+			return true;
+	}
+
+	return false;
+}

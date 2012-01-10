@@ -36,6 +36,7 @@ BEGIN_MESSAGE_MAP(CWindowsViewTree, CTreeCtrl)
 	ON_NOTIFY_REFLECT(NM_RCLICK, &CWindowsViewTree::OnNMRClick)
 	ON_COMMAND(ID_CREATE_WINDOW_PANEL, &CWindowsViewTree::OnCreateWindowPanel)
 	ON_NOTIFY_REFLECT(TVN_SELCHANGED, &CWindowsViewTree::OnTvnSelchanged)
+	ON_COMMAND(IDM_DELETE_WNDCTRL, &CWindowsViewTree::OnDeleteWndctrl)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -65,14 +66,19 @@ void CWindowsViewTree::OnNMRClick(NMHDR *pNMHDR, LRESULT *pResult)
 	if (!IS_SAFE_HANDLE(hItem))
 		return;
 
+	POINT pt;
+	::GetCursorPos(&pt);
+	CMenu CreateMenu;
+
 	HTREEITEM hRootItem = this->GetRootItem();
 	if (hRootItem == hItem)
 	{
-		POINT pt;
-		::GetCursorPos(&pt);
-
-		CMenu CreateMenu;
 		CreateMenu.LoadMenu(IDM_CREATE_WINDOW);
+		CreateMenu.GetSubMenu(0)->TrackPopupMenu(TPM_LEFTALIGN |TPM_RIGHTBUTTON, pt.x, pt.y, this);
+	}
+	else
+	{
+		CreateMenu.LoadMenu(IDR_DELETE_WND_OR_CTRL);
 		CreateMenu.GetSubMenu(0)->TrackPopupMenu(TPM_LEFTALIGN |TPM_RIGHTBUTTON, pt.x, pt.y, this);
 	}
 
@@ -427,66 +433,62 @@ void CWindowsViewTree::SetSaveWindowActivePropetry()
 	while (hWindowNode != NULL)
 	{
 		IWindowBase *pWndBase = (IWindowBase*)this->GetItemData(hWindowNode);
-		if (pWndBase != NULL)
-		{
-			pWndBase->SetActivePropetry(true);
-			IPropertyWindow* pPropWnd = pWndBase->PP_GetWindowPropetry();
-			if (pPropWnd != NULL)
-				pPropWnd->SetActivePropetry(true);
+		if (pWndBase == NULL)
+			continue;
 
-			if (pWndBase->PP_GetWindowPropetryGroup() != NULL)
-				pWndBase->PP_GetWindowPropetryGroup()->SetActivePropetry(true);
-
-			// 设置窗口自身的属性
-			SetGroupPropActiveMark(pWndBase->PP_GetWindowPropetryGroup(), true);
-
-			// 设置子窗口
-			SetChildVecActiveMark(pWndBase->GetChildControlsVec(), true);
-		}
+		m_pUiKernel->BD_SetWindowPropetryActiveProp(pWndBase, true);
 
 		hWindowNode = this->GetNextItem(hWindowNode, TVGN_NEXT);
 	}
 }
 
-void CWindowsViewTree::SetChildVecActiveMark(CHILD_CTRLS_VEC* pChildCtrlVec, bool bActive)
+void CWindowsViewTree::OnDeleteWndctrl()
 {
-	if (pChildCtrlVec == NULL)
-		return;
-
-	for (CHILD_CTRLS_VEC::iterator pCtrlItem = pChildCtrlVec->begin(); pCtrlItem != pChildCtrlVec->end(); pCtrlItem++)
+	if (!m_bProjectInitOk || m_pSkinMgr == NULL || m_pUiKernel == NULL || m_pPropCtrl == NULL)
 	{
-		IControlBase* pCtrl = *pCtrlItem;
-		if (pCtrl == NULL)
-			continue;
-
-		if (pCtrl->PP_GetControlPropetry() != NULL)
-			pCtrl->PP_GetControlPropetry()->SetActivePropetry(bActive);
-
-		if (pCtrl->PP_GetControlPropetryGroup() != NULL)
-			pCtrl->PP_GetControlPropetryGroup()->SetActivePropetry(bActive);
-
-		pCtrl->SetActivePropetry(bActive);
-		SetGroupPropActiveMark(pCtrl->PP_GetControlPropetryGroup(), bActive);
-		SetChildVecActiveMark(pCtrl->GetChildControlsVec(), bActive);
+		AfxMessageBox(_T("列表没有被初始化"), MB_OK | MB_ICONERROR);
+		return;
 	}
-}
 
-void CWindowsViewTree::SetGroupPropActiveMark(IPropertyGroup *pPropGroup, bool bActive)
-{
-	if (pPropGroup == NULL || pPropGroup->GetPropVec() == NULL)
-		return;
-
-	for (GROUP_PROP_VEC::iterator pPropItem = pPropGroup->GetPropVec()->begin(); pPropItem != pPropGroup->GetPropVec()->end(); pPropItem++)
+	HTREEITEM hSelItem = this->GetSelectedItem();
+	if (hSelItem == NULL)
 	{
-		IPropertyBase* pProp = *pPropItem;
-		if (pProp == NULL)
-			continue;
+		AfxMessageBox(_T("没有选择需要删除的节点！"), MB_OK | MB_ICONERROR);
+		return;
+	}
 
-		pProp->SetActivePropetry(bActive);
-		if (pProp->GetObjectTypeId() == OTID_GROUP)
+	IFeatureObject* pObj = (IFeatureObject*)this->GetItemData(hSelItem);
+	if (pObj->GetObjectTypeId() == OTID_WINDOW)
+	{
+		IWindowBase *pWndBase = dynamic_cast<IWindowBase*>(pObj);
+		if (pWndBase == NULL)
 		{
-			IPropertyGroup *pNextPropGroup = dynamic_cast<IPropertyGroup*>(pProp);
-			SetGroupPropActiveMark(pNextPropGroup, bActive);
+			AfxMessageBox(_T("错误的【Window】节点！"), MB_OK | MB_ICONERROR);
+			return;
 		}
+		m_pUiKernel->BD_DeleteWindow(pWndBase);
+	}
+	else
+	{
+		IControlBase *pCtrlBase = dynamic_cast<IControlBase*>(pObj);
+		if (pCtrlBase == NULL)
+		{
+			AfxMessageBox(_T("错误的【Control】节点！"), MB_OK | MB_ICONERROR);
+			return;
+		}
+		m_pUiKernel->BD_DeleteControl(pCtrlBase);
+	}
+
+	HTREEITEM hItem = this->GetParentItem(hSelItem);
+	this->DeleteItem(hSelItem);
+
+	if (hItem == NULL)
+		hItem = this->GetRootItem();
+
+	if (hItem != NULL)
+	{
+		// 选中并打开根节点
+		this->SelectItem(hItem);
+		this->Expand(hItem, TVE_EXPAND);
 	}
 }
