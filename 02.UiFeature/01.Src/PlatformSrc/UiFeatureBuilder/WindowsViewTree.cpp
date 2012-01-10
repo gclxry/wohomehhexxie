@@ -128,6 +128,7 @@ void CWindowsViewTree::OnCreateWindowPanel()
 		return;
 	}
 
+	SetNeedSave();
 	HTREEITEM hRootItem = this->GetRootItem();
 	HTREEITEM hWindow = this->InsertItem(_T("新建窗口/面板"), 0, 0, hRootItem, TVI_LAST);
 	this->Expand(hRootItem, TVE_EXPAND);
@@ -458,6 +459,8 @@ void CWindowsViewTree::OnDeleteWndctrl()
 	}
 	this->SelectItem(m_hRBtnSelItem);
 
+	SetNeedSave();
+
 	IFeatureObject* pObj = (IFeatureObject*)this->GetItemData(m_hRBtnSelItem);
 	if (pObj->GetObjectTypeId() == OTID_WINDOW)
 	{
@@ -504,4 +507,11 @@ void CWindowsViewTree::OnDeleteWndctrl()
 		this->SelectItem(hItem);
 		this->Expand(hItem, TVE_EXPAND);
 	}
+}
+
+void CWindowsViewTree::SetNeedSave()
+{
+	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
+	if (pMain != NULL)
+		pMain->SetPropetryChange();
 }

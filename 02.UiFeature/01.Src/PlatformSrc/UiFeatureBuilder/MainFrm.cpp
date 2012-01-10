@@ -33,8 +33,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_COMMAND(ID_FILE_SAVE, &CMainFrame::OnFileSave)
 	ON_COMMAND(ID_FILE_CLOSE, &CMainFrame::OnFileClose)
 	ON_COMMAND(ID_APP_EXIT, &CMainFrame::OnAppExit)
-	ON_WM_DESTROY()
 	ON_WM_SETCURSOR()
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -59,6 +59,7 @@ CMainFrame::CMainFrame()
 	m_hControlDll = NULL;
 	m_pRegControlMap = NULL;
 	m_bInitOk = false;
+	m_bNeedSave = false;
 	m_nViewCursor = -1;
 
 	m_strCurSkinDir = _T("");
@@ -74,6 +75,12 @@ CMainFrame::~CMainFrame()
 {
 	SAFE_FREE_LIBRARY(m_hControlDll);
 	SAFE_FREE_LIBRARY(m_hKernelDll);
+}
+
+// 设置属性发生变化，需要保存
+void CMainFrame::SetPropetryChange()
+{
+	m_bNeedSave = true;
 }
 
 void CMainFrame::SetView(CUiFeatureBuilderView *pView)
@@ -467,4 +474,22 @@ BOOL CMainFrame::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 	}
 
 	return CFrameWndEx::OnSetCursor(pWnd, nHitTest, message);
+}
+
+void CMainFrame::OnClose()
+{
+	if (m_bNeedSave)
+	{
+		int nRetId = AfxMessageBox(_T("当前工程的设置已经被改变，保存修改吗？"), MB_YESNOCANCEL | MB_ICONINFORMATION);
+		if (nRetId == IDCANCEL)
+		{
+			return;
+		}
+		else if (nRetId == IDYES)
+		{
+			OnFileSave();
+		}
+	}
+
+	CFrameWndEx::OnClose();
 }

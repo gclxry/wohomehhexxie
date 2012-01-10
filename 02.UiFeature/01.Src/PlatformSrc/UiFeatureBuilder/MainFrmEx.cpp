@@ -140,14 +140,6 @@ void CMainFrame::SetProjectInitState(bool bInitOk)
 		m_pView->SetProjectInitState(bInitOk);
 }
 
-void CMainFrame::OnDestroy()
-{
-	CFrameWndEx::OnDestroy();
-
-	// 保存老工程
-	SaveSkinProject(m_strCurSkinDir, m_strCurSkinName, false);
-}
-
 void CMainFrame::OnAppExit()
 {
 	// 保存老工程
@@ -263,6 +255,8 @@ bool CMainFrame::SaveSkinProject(CString strSkinDir, CString strSkinName, bool b
 	bool bOk = m_pUiKernel->BD_SaveProject(W2A(strSkinDir), W2A(strSkinName));
 	if (bNeedErroInfo && !bOk)
 		AfxMessageBox(_T("保存皮肤工程失败！"), MB_OK | MB_ICONERROR);
+
+	m_bNeedSave = !bOk;
 	return bOk;
 }
 

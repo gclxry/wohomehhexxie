@@ -3,6 +3,7 @@
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "PropetryDialogGridProperty.h"
 #include "WindowsViewTree.h"
+#include "MainFrm.h"
 
 CPropertyViewCtrl::CPropertyViewCtrl(void)
 {
@@ -289,6 +290,7 @@ void CPropertyViewCtrl::AppendStringProp(CMFCPropertyGridProperty* pParentPropGr
 
 void CPropertyViewCtrl::OnPropertyChanged(CMFCPropertyGridProperty* pProperty)
 {
+	SetNeedSave();
 	if (pProperty == NULL)
 		return;
 
@@ -433,4 +435,11 @@ void CPropertyViewCtrl::RefreshStringProp(CMFCPropertyGridProperty* pProperty, I
 void CPropertyViewCtrl::RefreshComboBoxProp(CMFCPropertyGridProperty* pProperty, IPropertyComboBox *pComboboxProp)
 {
 
+}
+
+void CPropertyViewCtrl::SetNeedSave()
+{
+	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
+	if (pMain != NULL)
+		pMain->SetPropetryChange();
 }

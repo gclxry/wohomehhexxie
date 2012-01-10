@@ -47,6 +47,7 @@ protected:
 	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
 	virtual void OnDraw(CDC* pDC);  // 重写以绘制该视图
 
+	void SetNeedSave();
 public:
 	void SetNewControl(bool bIsNew);
 	void SetProjectInitState(bool bInitOk);
