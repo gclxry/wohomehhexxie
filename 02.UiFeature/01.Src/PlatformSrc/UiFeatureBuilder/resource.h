@@ -89,6 +89,8 @@
 #define IDM_CREATE_WINDOW               311
 #define IDD_DIALOG1                     312
 #define IDD_UIFEATUREBUILDER_FORM       312
+#define IDR_MENU1                       313
+#define IDR_DELETE_WND_OR_CTRL          313
 #define IDB_BROWER_BTN                  1000
 #define IDE_DIR                         1001
 #define IDC_EDIT2                       1002
@@ -97,13 +99,15 @@
 #define ID_Menu                         32772
 #define ID_CREATE_WINDOW_PANEL          32773
 #define ID_32774                        32774
+#define ID_32775                        32775
+#define IDM_DELETE_WNDCTRL              32776
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        313
-#define _APS_NEXT_COMMAND_VALUE         32775
+#define _APS_NEXT_RESOURCE_VALUE        314
+#define _APS_NEXT_COMMAND_VALUE         32777
 #define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
