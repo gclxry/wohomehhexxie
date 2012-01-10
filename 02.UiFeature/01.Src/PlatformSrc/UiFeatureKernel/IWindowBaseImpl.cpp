@@ -1158,10 +1158,10 @@ void IWindowBaseImpl::BD_SetControlRect(IControlBase* pControl, RECT RctInView)
 // 初始化所有控件在Builder中的显示位置
 void IWindowBaseImpl::BD_SetAllCtrlRectInView()
 {
-	BD_SetAllCtrlRectInView_SetChildVec(&m_ChildCtrlsVec);
+	BD_SetControlRectInView(&m_ChildCtrlsVec);
 }
 
-void IWindowBaseImpl::BD_SetAllCtrlRectInView_SetChildVec(CHILD_CTRLS_VEC *pChildCtrlsVec)
+void IWindowBaseImpl::BD_SetControlRectInView(CHILD_CTRLS_VEC *pChildCtrlsVec)
 {
 	if (pChildCtrlsVec == NULL)
 		return;
@@ -1187,7 +1187,7 @@ void IWindowBaseImpl::BD_SetAllCtrlRectInView_SetChildVec(CHILD_CTRLS_VEC *pChil
 		pSetFk8->EntityRct.top = pWndFk8->EntityRct.top + CtrlRct.top;
 		pSetFk8->EntityRct.bottom = pSetFk8->EntityRct.top + RECT_HEIGHT(CtrlRct);
 
-		BD_SetAllCtrlRectInView_SetChildVec(pCtrl->GetChildControlsVec());
+		BD_SetControlRectInView(pCtrl->GetChildControlsVec());
 	}
 }
 
