@@ -21,7 +21,9 @@
 <int objid="window231.Panel254.group255.group266.int273"/>
 </group>
 </group>
-<group objid="window231.Panel254.group274"/>
+<group objid="window231.Panel254.group274">
+<image objid="window231.Panel254.group274.image340"/>
+</group>
 </Panel>
 <Panel objid="window231.Panel254.Panel317">
 <group objid="window231.Panel254.Panel317.group318">
@@ -45,7 +47,9 @@
 <int objid="window231.Panel254.Panel317.group318.group329.int336"/>
 </group>
 </group>
-<group objid="window231.Panel254.Panel317.group337"/>
+<group objid="window231.Panel254.Panel317.group337">
+<image objid="window231.Panel254.Panel317.group337.image341"/>
+</group>
 </Panel>
 <Panel objid="window231.Panel275">
 <group objid="window231.Panel275.group276">
@@ -69,7 +73,9 @@
 <int objid="window231.Panel275.group276.group287.int294"/>
 </group>
 </group>
-<group objid="window231.Panel275.group295"/>
+<group objid="window231.Panel275.group295">
+<image objid="window231.Panel275.group295.image342"/>
+</group>
 </Panel>
 <Panel objid="window231.Panel275.Panel296">
 <group objid="window231.Panel275.Panel296.group297">
@@ -93,6 +99,8 @@
 <int objid="window231.Panel275.Panel296.group297.group308.int315"/>
 </group>
 </group>
-<group objid="window231.Panel275.Panel296.group316"/>
+<group objid="window231.Panel275.Panel296.group316">
+<image objid="window231.Panel275.Panel296.group316.image343"/>
+</group>
 </Panel>
 </controls>
