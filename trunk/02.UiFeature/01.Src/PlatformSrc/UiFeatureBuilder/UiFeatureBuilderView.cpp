@@ -439,6 +439,7 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown_MoveCtrl(CPoint point, ICont
 
 	// 重新计算子控件的位置和大小
 	m_pCurrentWnd->ResetChildCtrlPostion(pLBtnDownCtrl->GetChildControlsVec(), true);
+	m_pCurrentWnd->BD_SetControlRectInView(pLBtnDownCtrl->GetChildControlsVec());
 }
 
 bool CUiFeatureBuilderView::OnMouseMove_FangKuai8(CPoint point, bool bIsWnd)

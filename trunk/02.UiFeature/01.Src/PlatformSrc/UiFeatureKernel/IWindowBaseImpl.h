@@ -31,6 +31,8 @@ public:
 	virtual void BD_SetControlRect(IControlBase* pControl, RECT RctInView);
 	// 初始化所有控件在Builder中的显示位置
 	virtual void BD_SetAllCtrlRectInView();
+	// 设置指定控件在Builder中的显示位置
+	virtual void BD_SetControlRectInView(CHILD_CTRLS_VEC *pChildCtrlsVec);
 	// 重新计算子控件的位置和大小，参数：bMemToProp 是否记录到属性中，Builder时为true
 	virtual void ResetChildCtrlPostion(CHILD_CTRLS_VEC* pChildVec, bool bMemToProp = false);
 
@@ -96,7 +98,6 @@ private:
 	void BD_NewFrameImage();
 	void BD_NewFrameImageBase(IPropertyImageBase *pImgBase, string strImgPath);
 	bool BD_CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt, IControlBase** ppControl);
-	void BD_SetAllCtrlRectInView_SetChildVec(CHILD_CTRLS_VEC *pChildCtrlsVec);
 
 private:
 	// 循环遍历每个控件的绘制
