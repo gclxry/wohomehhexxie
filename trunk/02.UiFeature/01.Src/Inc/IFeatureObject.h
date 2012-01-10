@@ -58,6 +58,13 @@ public:
 	const char* GetObjectInfo();
 	void SetObjectInfo(const char* pszObjInfo);
 
+	virtual void SetActivePropetry(bool bIsActive);
+	virtual bool GetActivePropetry();
+
+protected:
+	// 是否为有效属性，在Builder保存属性时判断使用。
+	bool m_bIsActiveProp;
+
 private:
 	string m_strObjId;
 	string m_strObjType;

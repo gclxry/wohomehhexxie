@@ -15,6 +15,9 @@ public:
 	CWindowsViewTree();
 	virtual ~CWindowsViewTree();
 
+	// 设置可以保存的有效属性
+	void SetSaveWindowActivePropetry();
+
 	void SetBuilderView(CUiFeatureBuilderView* pWndView);
 	void Init(IUiFeatureKernel* pKernelWindow, CPropertyViewCtrl *pPropCtrl);
 	void RefreshObjectName();
@@ -40,6 +43,8 @@ private:
 	// 向树中插入一个新节点
 	void InsertCtrlVecByPropCtrlVec(HTREEITEM hParentItem, IWindowBase *pParentWnd, IControlBase *pParentCtrl, PROP_CONTROL_VEC* pPropCtrlVec, CHILD_CTRLS_VEC* pCtrlVec);
 
+	void SetGroupPropActiveMark(IPropertyGroup *pPropGroup, bool bActive);
+	void SetChildVecActiveMark(CHILD_CTRLS_VEC* pChildCtrlVec, bool bActive);
 private:
 	bool m_bProjectInitOk;
 	IPropertySkinManager *m_pSkinMgr;

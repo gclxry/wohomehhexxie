@@ -254,8 +254,11 @@ bool CMainFrame::SaveSkinProject(CString strSkinDir, CString strSkinName, bool b
 	if (strSkinDir.GetLength() <= 0 || strSkinName.GetLength() <= 0)
 		return true;
 
-	if (m_pUiKernel == NULL)
+	if (m_pUiKernel == NULL || m_wndWindowView.GetViewTreeCtrl() == NULL)
 		return false;
+
+	// 设置可以保存的有效属性
+	m_wndWindowView.GetViewTreeCtrl()->SetSaveWindowActivePropetry();
 
 	bool bOk = m_pUiKernel->BD_SaveProject(W2A(strSkinDir), W2A(strSkinName));
 	if (bNeedErroInfo && !bOk)

@@ -1325,6 +1325,9 @@ bool IPropertySkinManagerImpl::SaveLayoutXml(const char *pszSavePath, string &st
 		if (pPropWnd == NULL)
 			continue;
 
+		if (!pPropWnd->GetActivePropetry())
+			continue;
+
 		CUiXmlWriteNode* pWndNode = XmlStrObj.CreateNode(pRootNode, "window");
 		if (pWndNode == NULL)
 			return false;
@@ -1350,6 +1353,9 @@ bool IPropertySkinManagerImpl::SaveLayoutXml_ChildCtrl(CUiXmlWrite &XmlStrObj, C
 	{
 		IPropertyControl* pPropCtrl = (*pWndChildVec)[i];
 		if (pPropCtrl == NULL)
+			continue;
+
+		if (!pPropCtrl->GetActivePropetry())
 			continue;
 
 		CUiXmlWriteNode* pCtrlNode = XmlStrObj.CreateNode(pNode, "ctrl");
@@ -1404,6 +1410,9 @@ bool IPropertySkinManagerImpl::SaveResourceXml(const char *pszSavePath, string &
 			if (pPropBase == NULL)
 				continue;
 
+			if (!pPropBase->GetActivePropetry())
+				continue;
+
 			if (!pPropBase->AppendToXmlNode(XmlStrObj, pPropTypeNode))
 				return false;
 		}
@@ -1432,6 +1441,9 @@ bool IPropertySkinManagerImpl::SaveControlsXml(const char *pszSavePath, string &
 		{
 			IPropertyGroup* pCtrlPropGroup = dynamic_cast<IPropertyGroup*>(pCtrlItem->second);
 			if (pCtrlPropGroup == NULL)
+				continue;
+
+			if (!pCtrlPropGroup->GetActivePropetry())
 				continue;
 
 			string strCtrlType = pCtrlTypeItem->first;
@@ -1466,6 +1478,9 @@ bool IPropertySkinManagerImpl::SaveXml_GroupProp(CUiXmlWrite &XmlStrObj, CUiXmlW
 		if (pProp == NULL)
 			continue;
 
+		if (!pProp->GetActivePropetry())
+			continue;
+
 		CUiXmlWriteNode* pPropNode = XmlStrObj.CreateNode(pParentNode, pProp->GetObjectType());
 		if (pPropNode == NULL)
 			return false;
@@ -1498,6 +1513,9 @@ bool IPropertySkinManagerImpl::SaveWindowsXml(const char *pszSavePath, string &s
 		string strObjId = pWndItem->first;
 		IPropertyGroup *pWndPropGroup = dynamic_cast<IPropertyGroup*>(pWndItem->second);
 		if (pWndPropGroup == NULL)
+			continue;
+
+		if (!pWndPropGroup->GetActivePropetry())
 			continue;
 
 		CUiXmlWriteNode* pWindowNode = XmlStrObj.CreateNode(pRootNode, PROP_TYPE_WINDOW_NAME);

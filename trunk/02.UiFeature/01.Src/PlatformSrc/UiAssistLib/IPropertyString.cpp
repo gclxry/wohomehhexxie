@@ -120,6 +120,10 @@ void IPropertyString::ResetDefaultString()
 // 写入xml
 bool IPropertyString::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode)
 {
+	// 如果是无效属性，不写入XML
+	if (!GetActivePropetry())
+		return true;
+
 	if (pParentXmlNode == NULL)
 		return false;
 

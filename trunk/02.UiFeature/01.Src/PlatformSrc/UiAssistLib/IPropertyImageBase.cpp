@@ -8,6 +8,7 @@ IPropertyImageBase::IPropertyImageBase()
 {
 	SetObjectType(PROP_TYPE_IMAGE_BASE_NAME);
 
+	m_nUseCtns = 0;
 	m_ImageProp.bIsZipFile = true;
 	m_ImageProp.strFileName = "";
 	INIT_RECT(m_ImageProp.RectInImage);
@@ -124,4 +125,22 @@ bool IPropertyImageBase::DrawImage(CDrawingBoard &DstDc, RECT DstRct)
 
 	return GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left, DstRct.top, RECT_WIDTH(DstRct), RECT_HEIGHT(DstRct),
 		m_DrawImg, 0, 0, m_DrawImg.GetDcSize().cx, m_DrawImg.GetDcSize().cy);
+}
+
+void IPropertyImageBase::SetActivePropetry(bool bIsActive)
+{
+	if (bIsActive)
+		m_nUseCtns++;
+	else
+		m_nUseCtns--;
+
+	if (m_nUseCtns > 0)
+		m_bIsActiveProp = true;
+	else
+		m_bIsActiveProp = false;
+}
+
+bool IPropertyImageBase::GetActivePropetry()
+{
+	return m_bIsActiveProp;
 }
