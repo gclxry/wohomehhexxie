@@ -30,6 +30,7 @@ public:
 protected:
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 
+	void SetNeedSave();
 private:
 	void OnTvnSelchanged_SelectRoot();
 	void OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase);

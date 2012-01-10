@@ -48,6 +48,7 @@ private:
 	void RefreshStringProp(CMFCPropertyGridProperty* pProperty, IPropertyString *pStringProp);
 	void RefreshHaveBasePropPropetry(CMFCPropertyGridProperty* pProperty, IPropertyBase *pBaseProp);
 
+	void SetNeedSave();
 private:
 	bool m_bProjectInitOk;
 	IPropertyGroup* m_pCurrentPropGroup;

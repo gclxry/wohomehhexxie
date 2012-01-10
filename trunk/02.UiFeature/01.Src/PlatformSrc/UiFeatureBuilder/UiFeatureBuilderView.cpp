@@ -219,7 +219,7 @@ void CUiFeatureBuilderView::DrawMark()
 		else
 			pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
 
-		SolidBrush PinkBrs(Color(20, 200, 0, 200));
+		SolidBrush PinkBrs(Color(15, 255, 0, 255));
 		DoGrap.FillRectangle(&PinkBrs, pFk8->EntityRct.left, pFk8->EntityRct.top, RECT_WIDTH(pFk8->EntityRct), RECT_HEIGHT(pFk8->EntityRct));
 
 		if (m_bCreateNewCtrl)
@@ -330,6 +330,7 @@ void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
 
 	if (m_bIsLButtonDown)
 	{
+		SetNeedSave();
 		OnMouseMove_LButtonDown(point);
 		this->RedrawWindow();
 		return;
@@ -676,4 +677,11 @@ void CUiFeatureBuilderView::CreateNewControlf_SetNewCtrlRect()
 		EntityRct.bottom = pFk8->EntityRct.bottom;
 	
 	m_pCurrentWnd->BD_SetControlRect(m_pCurrentWnd->BD_GetFocusControl(), EntityRct);
+}
+
+void CUiFeatureBuilderView::SetNeedSave()
+{
+	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
+	if (pMain != NULL)
+		pMain->SetPropetryChange();
 }

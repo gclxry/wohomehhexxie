@@ -19,6 +19,9 @@ public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = NULL, CCreateContext* pContext = NULL);
 
+	// 设置属性发生变化，需要保存
+	void SetPropetryChange();
+
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
@@ -48,6 +51,8 @@ protected:  // 控件条嵌入成员
 	CPropertiesWnd    m_wndProperties;
 	CControlsWnd      m_wndControls;
 	CUiFeatureBuilderView *m_pView;
+
+	bool m_bNeedSave;
 
 private:
 //////////////////////////////////////////////////////////////////////////
@@ -102,8 +107,8 @@ public:
 	afx_msg void OnFileSave();
 	afx_msg void OnFileClose();
 	afx_msg void OnAppExit();
-	afx_msg void OnDestroy();
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
+	afx_msg void OnClose();
 };
 
 
