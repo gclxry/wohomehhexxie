@@ -437,6 +437,7 @@ bool IUiFeatureKernelImpl::BD_DeleteControl_FromCtrlVec(CHILD_CTRLS_VEC* pCtrlVe
 			m_pSkinMgr->BD_SetGroupPropActiveMark(pComCtrl->PP_GetControlPropetryGroup(), false);
 			m_pSkinMgr->BD_SetChildVecActiveMark(pComCtrl->GetChildControlsVec(), false);
 
+			int i = pCtrlVec->size();
 			pCtrlVec->erase(pCtrlItem);
 			SAFE_DELETE(pComCtrl);
 			return true;

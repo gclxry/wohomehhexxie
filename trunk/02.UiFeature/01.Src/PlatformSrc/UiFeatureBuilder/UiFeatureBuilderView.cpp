@@ -533,6 +533,7 @@ void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 	if (m_bCreateNewCtrl)
 	{
 		CreateNewControl();
+		m_pDrawParentCtrl = NULL;
 		m_bCreateNewCtrl = false;
 		this->RedrawWindow();
 		return;
@@ -615,6 +616,7 @@ void CUiFeatureBuilderView::CreateNewControl()
 	if (m_pControlList == NULL || m_pUiKernel == NULL || m_pCurrentWnd == NULL)
 		return;
 
+	m_pDrawParentCtrl = GetSelectControl(m_LBtnDownPos);
 	CString strCtrlTypeName = m_pControlList->GetSelectCtrlTypeName();
 	IControlBase *pControl = m_pUiKernel->BD_CreateControlEmptyPropetry(m_pCurrentWnd, m_pDrawParentCtrl, W2A(strCtrlTypeName));
 	if (pControl == NULL)

@@ -333,8 +333,6 @@ void CWindowsViewTree::InsertCtrlVecByPropCtrlVec(HTREEITEM hParentItem, IWindow
 		if (pNewCtrl == NULL)
 			return;
 
-		pCtrlVec->push_back(pNewCtrl);
-
 		HTREEITEM hItem = InsertControlNodeToEnd(hParentItem, pNewCtrl);
 		if (hItem == NULL)
 			continue;
