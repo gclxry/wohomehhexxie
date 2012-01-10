@@ -27,6 +27,9 @@ public:
 	void Init(IUiFeatureKernel* pKernelWindow, CWindowsViewTree *pViewTree);
 	void SetProjectInitState(bool bInitOk);
 
+	// 从属性刷新到界面
+
+
 private:
 	void AppendPropGroup(CMFCPropertyGridProperty* pParentPropGroup, IPropertyGroup *pPropGroup);
 	void AppendBoolProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyBool *pBoolProp);

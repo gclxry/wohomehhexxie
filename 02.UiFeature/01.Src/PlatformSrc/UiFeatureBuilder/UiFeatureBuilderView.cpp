@@ -10,6 +10,7 @@
 #include "MainFrm.h"
 #include "FeatureControlList.h"
 #include "WindowsViewTree.h"
+#include "PropertyViewCtrl.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\ICommonFun.h"
 
@@ -49,6 +50,7 @@ CUiFeatureBuilderView::CUiFeatureBuilderView() : CFormView(CUiFeatureBuilderView
 	m_pSkinManager = NULL;
 	m_pControlList = NULL;
 	m_pWindowViewTree = NULL;
+	m_pPropViewCtrl = NULL;
 	m_bInitOk = false;
 	m_pCurrentWnd = NULL;
 	m_pDrawParentCtrl = NULL;
@@ -106,10 +108,11 @@ BOOL CUiFeatureBuilderView::PreCreateWindow(CREATESTRUCT& cs)
 	return CFormView::PreCreateWindow(cs);
 }
 
-void CUiFeatureBuilderView::Init(IUiFeatureKernel* pKernelWindow, CFeatureControlList *pCtrlList, CWindowsViewTree *pWndTree)
+void CUiFeatureBuilderView::Init(IUiFeatureKernel* pKernelWindow, CFeatureControlList *pCtrlList, CWindowsViewTree *pWndTree, CPropertyViewCtrl* pPropViewCtrl)
 {
 	m_pUiKernel = pKernelWindow;
 	m_pControlList = pCtrlList;
+	m_pPropViewCtrl = pPropViewCtrl;
 	m_pWindowViewTree = pWndTree;
 	if (m_pUiKernel != NULL)
 	{
@@ -441,6 +444,9 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown_MoveCtrl(CPoint point, ICont
 	// 重新计算子控件的位置和大小
 	m_pCurrentWnd->ResetChildCtrlPostion(pLBtnDownCtrl->GetChildControlsVec(), true);
 	m_pCurrentWnd->BD_SetControlRectInView(pLBtnDownCtrl->GetChildControlsVec());
+
+	// 刷新属性区域
+	m_pPropViewCtrl->SetShowPropGroup(pLBtnDownCtrl->PP_GetControlPropetryGroup());
 }
 
 bool CUiFeatureBuilderView::OnMouseMove_FangKuai8(CPoint point, bool bIsWnd)
