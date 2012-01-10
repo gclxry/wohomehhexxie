@@ -12,13 +12,34 @@ class CFeatureControlList;
 class CWindowsViewTree;
 class CPropertyViewCtrl;
 
+// 正常光标
 #define UF_IDC_ARROW           (32512)
+// 十字架光标
 #define UF_IDC_CROSS           (32515)
+// 双箭头指向西北和东南
 #define UF_IDC_SIZENWSE        (32642)
+// 双箭头指向东北和西南
 #define UF_IDC_SIZENESW        (32643)
+// 双箭头指向东西
 #define UF_IDC_SIZEWE          (32644)
+// 双箭头指向南北
 #define UF_IDC_SIZENS          (32645)
+// 四向箭头指向东、西、南、北
 #define UF_IDC_SIZEALL         (32646)
+
+// 改变控件、窗口大小的位置
+enum SIZE_CTRL_TYPE
+{
+	SCT_NONE		= 0,
+	SCT_LEFT_TOP,
+	SCT_LEFT_MID,
+	SCT_LEFT_BOTTOM,
+	SCT_MID_TOP,
+	SCT_MID_BOTTOM,
+	SCT_RIGHT_TOP,
+	SCT_RIGHT_MID,
+	SCT_RIGHT_BOTTOM,
+};
 
 class CUiFeatureBuilderView : public CFormView
 {
@@ -48,7 +69,6 @@ protected:
 	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
 	virtual void OnDraw(CDC* pDC);  // 重写以绘制该视图
 
-	void SetNeedSave();
 public:
 	void SetNewControl(bool bIsNew);
 	void SetProjectInitState(bool bInitOk);
@@ -60,13 +80,14 @@ public:
 	bool PtInWindow(CPoint point);
 
 private:
+	void SetNeedSave();
 	void DrawWindowView();
 	// 设置光标
 	void SetViewCursor(int nCursor);
 
 	void ResetViewShowSize();
 	// 是否在窗口的8个方块内移动
-	bool OnMouseMove_FangKuai8(CPoint point, bool bIsWnd);
+	SIZE_CTRL_TYPE OnMouseMove_FangKuai8(CPoint point, bool bIsWnd);
 	void OnMouseMove_LButtonDown(CPoint point);
 	void OnMouseMove_LButtonDown_MoveCtrl(CPoint point, IControlBase* pLBtnDownCtrl);
 	// 绘制创建新控件时的矩形
@@ -101,6 +122,7 @@ protected:
 	IWindowBase *m_pCurrentWnd;
 	bool m_bMoveInWndFangKuai8;
 	bool m_bMoveInCtrlFangKuai8;
+	SIZE_CTRL_TYPE m_nMoveFangKuai8Type;
 
 	// 创建新控件时的父控件
 	IControlBase *m_pDrawParentCtrl;

@@ -45,6 +45,7 @@ CUiFeatureBuilderView::CUiFeatureBuilderView() : CFormView(CUiFeatureBuilderView
 	GdiplusStartupInput gdiplusStartupInput;
 	GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
 
+	m_nMoveFangKuai8Type = SCT_NONE;
 	m_pUiEngine = NULL;
 	m_pUiKernel = NULL;
 	m_pSkinManager = NULL;
@@ -201,43 +202,51 @@ void CUiFeatureBuilderView::DrawMark()
 {
 	Graphics DoGrap(m_MemDc.GetSafeHdc());
 
+	if (m_pCurrentWnd == NULL)
+		return;
+
+	Pen LinePen(Color(30, 0, 0, 255));
+	SolidBrush PinkBrs(Color(15, 255, 0, 255));
+	Pen FrameLinePen(Color(255, 255, 0, 0), 1.5f);
+	REAL dashVals[2] = {0.8f, 2.0f};
+	FrameLinePen.SetDashPattern(dashVals, 2);
+	FrameLinePen.SetDashOffset(30);
+
+	FANGKUAI_8* pFk8 = NULL;
 	if (m_pMouseMoveCtrl != NULL && !m_bIsLButtonDown)
 	{
 		// 绘制当前鼠标移动到的控件上，绘制控件边框
-		FANGKUAI_8* pFk8 = m_pMouseMoveCtrl->BD_GetFangKuai8Rect();
-		Pen LinePen(Color(30, 0, 0, 255));
+		pFk8 = m_pMouseMoveCtrl->BD_GetFangKuai8Rect();
 		DoGrap.DrawLine(&LinePen, pFk8->EntityRct.left, pFk8->EntityRct.top, pFk8->EntityRct.right, pFk8->EntityRct.top);
 		DoGrap.DrawLine(&LinePen, pFk8->EntityRct.right, pFk8->EntityRct.top, pFk8->EntityRct.right, pFk8->EntityRct.bottom);
 		DoGrap.DrawLine(&LinePen, pFk8->EntityRct.right, pFk8->EntityRct.bottom, pFk8->EntityRct.left, pFk8->EntityRct.bottom);
 		DoGrap.DrawLine(&LinePen, pFk8->EntityRct.left, pFk8->EntityRct.bottom, pFk8->EntityRct.left, pFk8->EntityRct.top);
 	}
 
+	// 绘制创建新控件时的矩形
+	pFk8 = NULL;
+	// 先绘制被选中的父控件的朦罩
+	if (m_pDrawParentCtrl != NULL)
+		pFk8 = m_pDrawParentCtrl->BD_GetFangKuai8Rect();
+	else
+		pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
+
 	if ((m_bSizeMoveCtrl || m_bCreateNewCtrl) && m_bIsLButtonDown && m_pCurrentWnd != NULL)
 	{
-		// 绘制创建新控件时的矩形
-		FANGKUAI_8* pFk8 = NULL;
-		// 先绘制被选中的父控件的朦罩
-		if (m_pDrawParentCtrl != NULL)
-			pFk8 = m_pDrawParentCtrl->BD_GetFangKuai8Rect();
-		else
-			pFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
-
-		SolidBrush PinkBrs(Color(15, 255, 0, 255));
 		DoGrap.FillRectangle(&PinkBrs, pFk8->EntityRct.left, pFk8->EntityRct.top, RECT_WIDTH(pFk8->EntityRct), RECT_HEIGHT(pFk8->EntityRct));
 
 		if (m_bCreateNewCtrl)
 		{
-			// 绘制新控件的边框
-			Pen LinePen(Color(255, 255, 0, 0), 1.5f);
-			REAL dashVals[2] = {0.8f, 2.0f};
-			LinePen.SetDashPattern(dashVals, 2);
-			LinePen.SetDashOffset(30);
-
-			DoGrap.DrawLine(&LinePen, m_LBtnDownPos.x, m_LBtnDownPos.y, m_MouseMovePos.x, m_LBtnDownPos.y);
-			DoGrap.DrawLine(&LinePen, m_MouseMovePos.x, m_LBtnDownPos.y, m_MouseMovePos.x, m_MouseMovePos.y);
-			DoGrap.DrawLine(&LinePen, m_MouseMovePos.x, m_MouseMovePos.y, m_LBtnDownPos.x, m_MouseMovePos.y);
-			DoGrap.DrawLine(&LinePen, m_LBtnDownPos.x, m_MouseMovePos.y, m_LBtnDownPos.x, m_LBtnDownPos.y);
+			DoGrap.DrawLine(&FrameLinePen, m_LBtnDownPos.x, m_LBtnDownPos.y, m_MouseMovePos.x, m_LBtnDownPos.y);
+			DoGrap.DrawLine(&FrameLinePen, m_MouseMovePos.x, m_LBtnDownPos.y, m_MouseMovePos.x, m_MouseMovePos.y);
+			DoGrap.DrawLine(&FrameLinePen, m_MouseMovePos.x, m_MouseMovePos.y, m_LBtnDownPos.x, m_MouseMovePos.y);
+			DoGrap.DrawLine(&FrameLinePen, m_LBtnDownPos.x, m_MouseMovePos.y, m_LBtnDownPos.x, m_LBtnDownPos.y);
 		}
+	}
+
+	if (m_bMoveInCtrlFangKuai8 && m_pDrawParentCtrl != NULL)
+	{
+		DoGrap.FillRectangle(&PinkBrs, pFk8->EntityRct.left, pFk8->EntityRct.top, RECT_WIDTH(pFk8->EntityRct), RECT_HEIGHT(pFk8->EntityRct));
 	}
 }
 
@@ -347,14 +356,16 @@ void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
 		return;
 	}
 
-	m_bMoveInWndFangKuai8 = OnMouseMove_FangKuai8(point, true);
+	m_nMoveFangKuai8Type = OnMouseMove_FangKuai8(point, true);
+	m_bMoveInWndFangKuai8 = (m_nMoveFangKuai8Type != SCT_NONE);
 	if (m_bMoveInWndFangKuai8)
 	{
 		this->RedrawWindow();
 		return;
 	}
 
-	m_bMoveInCtrlFangKuai8 = OnMouseMove_FangKuai8(point, false);
+	m_nMoveFangKuai8Type = OnMouseMove_FangKuai8(point, false);
+	m_bMoveInCtrlFangKuai8 = (m_nMoveFangKuai8Type != SCT_NONE);
 	if (m_bMoveInCtrlFangKuai8)
 	{
 		this->RedrawWindow();
@@ -372,11 +383,11 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown(CPoint point)
 	{
 		// 绘制创建新控件时的矩形
 	}
-	else if (m_bMoveInWndFangKuai8)
+	else if (m_bMoveInWndFangKuai8 && m_nMoveFangKuai8Type != SCT_NONE)
 	{
 		// 拖动窗口
 	}
-	else if (m_bMoveInCtrlFangKuai8)
+	else if (m_bMoveInCtrlFangKuai8 && m_nMoveFangKuai8Type != SCT_NONE)
 	{
 		// 拖动控件，改变控件大小
 	}
@@ -449,7 +460,7 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown_MoveCtrl(CPoint point, ICont
 	m_pPropViewCtrl->SetShowPropGroup(pLBtnDownCtrl->PP_GetControlPropetryGroup());
 }
 
-bool CUiFeatureBuilderView::OnMouseMove_FangKuai8(CPoint point, bool bIsWnd)
+SIZE_CTRL_TYPE CUiFeatureBuilderView::OnMouseMove_FangKuai8(CPoint point, bool bIsWnd)
 {
 	point.x += m_ScrollOffset.cx;
 	point.y += m_ScrollOffset.cy;
@@ -467,50 +478,50 @@ bool CUiFeatureBuilderView::OnMouseMove_FangKuai8(CPoint point, bool bIsWnd)
 	}
 
 	if (pFk8 == NULL)
-		return false;
+		return SCT_NONE;
 
 	if (PtInRect(&pFk8->LeftTop, point))
 	{
 		SetViewCursor(UF_IDC_SIZENWSE);
-		return true;
+		return SCT_LEFT_TOP;
 	}
 	else if (PtInRect(&pFk8->LeftMid, point))
 	{
 		SetViewCursor(UF_IDC_SIZEWE);
-		return true;
+		return SCT_LEFT_MID;
 	}
 	else if (PtInRect(&pFk8->LeftBottom, point))
 	{
 		SetViewCursor(UF_IDC_SIZENESW);
-		return true;
+		return SCT_LEFT_BOTTOM;
 	}
 	else if (PtInRect(&pFk8->MidTop, point))
 	{
 		SetViewCursor(UF_IDC_SIZENS);
-		return true;
+		return SCT_MID_TOP;
 	}
 	else if (PtInRect(&pFk8->MidBottom, point))
 	{
 		SetViewCursor(UF_IDC_SIZENS);
-		return true;
+		return SCT_MID_BOTTOM;
 	}
 	else if (PtInRect(&pFk8->RightTop, point))
 	{
 		SetViewCursor(UF_IDC_SIZENESW);
-		return true;
+		return SCT_RIGHT_TOP;
 	}
 	else if (PtInRect(&pFk8->RightMid, point))
 	{
 		SetViewCursor(UF_IDC_SIZEWE);
-		return true;
+		return SCT_RIGHT_MID;
 	}
 	else if (PtInRect(&pFk8->RightBottom, point))
 	{
 		SetViewCursor(UF_IDC_SIZENWSE);
-		return true;
+		return SCT_RIGHT_BOTTOM;
 	}
 
-	return false;
+	return SCT_NONE;
 }
 
 // 设置光标
@@ -581,8 +592,17 @@ void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 		return;
 	}
 
-	IControlBase *pSelCtrl = GetSelectControl(point);
-	m_pCurrentWnd->BD_SetFocusControl(pSelCtrl);
+	if (!m_bMoveInCtrlFangKuai8)
+	{
+		IControlBase *pSelCtrl = GetSelectControl(point);
+		m_pCurrentWnd->BD_SetFocusControl(pSelCtrl);
+	}
+	else
+	{
+		if (m_pCurrentWnd->BD_GetFocusControl() != NULL)
+			m_pDrawParentCtrl = m_pCurrentWnd->BD_GetFocusControl()->GetParentControl();
+	}
+
 	this->RedrawWindow();
 }
 
