@@ -415,3 +415,78 @@ HTREEITEM CWindowsViewTree::InsertControlNodeToEnd(HTREEITEM hParentNode, IContr
 
 	return hItem;
 }
+
+// 设置可以保存的有效属性
+void CWindowsViewTree::SetSaveWindowActivePropetry()
+{
+	HTREEITEM hRootItem = this->GetRootItem();
+	if (hRootItem == NULL)
+		return;
+
+	HTREEITEM hWindowNode = this->GetChildItem(hRootItem);
+	while (hWindowNode != NULL)
+	{
+		IWindowBase *pWndBase = (IWindowBase*)this->GetItemData(hWindowNode);
+		if (pWndBase != NULL)
+		{
+			pWndBase->SetActivePropetry(true);
+			IPropertyWindow* pPropWnd = pWndBase->PP_GetWindowPropetry();
+			if (pPropWnd != NULL)
+				pPropWnd->SetActivePropetry(true);
+
+			if (pWndBase->PP_GetWindowPropetryGroup() != NULL)
+				pWndBase->PP_GetWindowPropetryGroup()->SetActivePropetry(true);
+
+			// 设置窗口自身的属性
+			SetGroupPropActiveMark(pWndBase->PP_GetWindowPropetryGroup(), true);
+
+			// 设置子窗口
+			SetChildVecActiveMark(pWndBase->GetChildControlsVec(), true);
+		}
+
+		hWindowNode = this->GetNextItem(hWindowNode, TVGN_NEXT);
+	}
+}
+
+void CWindowsViewTree::SetChildVecActiveMark(CHILD_CTRLS_VEC* pChildCtrlVec, bool bActive)
+{
+	if (pChildCtrlVec == NULL)
+		return;
+
+	for (CHILD_CTRLS_VEC::iterator pCtrlItem = pChildCtrlVec->begin(); pCtrlItem != pChildCtrlVec->end(); pCtrlItem++)
+	{
+		IControlBase* pCtrl = *pCtrlItem;
+		if (pCtrl == NULL)
+			continue;
+
+		if (pCtrl->PP_GetControlPropetry() != NULL)
+			pCtrl->PP_GetControlPropetry()->SetActivePropetry(bActive);
+
+		if (pCtrl->PP_GetControlPropetryGroup() != NULL)
+			pCtrl->PP_GetControlPropetryGroup()->SetActivePropetry(bActive);
+
+		pCtrl->SetActivePropetry(bActive);
+		SetGroupPropActiveMark(pCtrl->PP_GetControlPropetryGroup(), bActive);
+		SetChildVecActiveMark(pCtrl->GetChildControlsVec(), bActive);
+	}
+}
+
+void CWindowsViewTree::SetGroupPropActiveMark(IPropertyGroup *pPropGroup, bool bActive)
+{
+	if (pPropGroup == NULL || pPropGroup->GetPropVec() == NULL)
+		return;
+
+	for (GROUP_PROP_VEC::iterator pPropItem = pPropGroup->GetPropVec()->begin(); pPropItem != pPropGroup->GetPropVec()->end(); pPropItem++)
+	{
+		IPropertyBase* pProp = *pPropItem;
+		if (pProp == NULL)
+			continue;
+
+		pProp->SetActivePropetry(bActive);
+		if (pProp->GetObjectTypeId() == OTID_GROUP)
+		{
+			IPropertyGroup *pNextPropGroup = dynamic_cast<IPropertyGroup*>(pProp);
+			SetGroupPropActiveMark(pNextPropGroup, bActive);
+		}
+	}
+}

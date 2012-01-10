@@ -39,6 +39,9 @@ public:
 	IPropertyImageBase();
 	virtual ~IPropertyImageBase();
 
+	virtual void SetActivePropetry(bool bIsActive);
+	virtual bool GetActivePropetry();
+
 	// 是否为合法数据
 	virtual bool IsRightData();
 	// 从XML节点读取属性值，并放入属性队列
@@ -58,4 +61,6 @@ private:
 private:
 	IMAGE_BASE_PROP m_ImageProp;
 	CDrawingImage m_DrawImg;
+	// 被使用的计数器
+	int m_nUseCtns;
 };

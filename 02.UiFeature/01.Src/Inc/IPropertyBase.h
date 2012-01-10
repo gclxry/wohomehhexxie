@@ -63,7 +63,6 @@ public:
 	void SetUiKernel(IUiFeatureKernel *pUiKernel);
 	IUiFeatureKernel *GetUiKernel();
 	
-
 private:
 	IUiFeatureKernel *m_pUiKernel;
 	// 关联属性名称

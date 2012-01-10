@@ -56,6 +56,10 @@ bool IPropertyImage::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 // 写入xml
 bool IPropertyImage::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode)
 {
+	// 如果是无效属性，不写入XML
+	if (!GetActivePropetry())
+		return true;
+
 	if (pParentXmlNode == NULL)
 		return false;
 
@@ -76,4 +80,17 @@ bool IPropertyImage::DrawImage(CDrawingBoard &DstDc, RECT DstRct)
 		return false;
 
 	return pImgBase->DrawImage(DstDc, DstRct);
+}
+
+void IPropertyImage::SetActivePropetry(bool bIsActive)
+{
+	m_bIsActiveProp = bIsActive;
+
+	if (GetRelevancyProp() != NULL)
+		GetRelevancyProp()->SetActivePropetry(bIsActive);
+}
+
+bool IPropertyImage::GetActivePropetry()
+{
+	return m_bIsActiveProp;
 }

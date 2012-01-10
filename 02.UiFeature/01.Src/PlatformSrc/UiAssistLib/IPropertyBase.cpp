@@ -70,5 +70,9 @@ void IPropertyBase::SetRelevancyProp(IPropertyBase *pszProp)
 
 bool IPropertyBase::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode)
 {
+	// 如果是无效属性，不写入XML
+	if (!GetActivePropetry())
+		return true;
+
 	return true;
 }

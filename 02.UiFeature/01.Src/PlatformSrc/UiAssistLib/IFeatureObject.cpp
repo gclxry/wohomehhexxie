@@ -10,6 +10,7 @@ IFeatureObject::IFeatureObject()
 	m_strObjType = "NO_OBJECT_TYPE_NAME";
 	m_strObjName = "";
 	m_strObjInfo = "NO_OBJECT_INFO";
+	m_bIsActiveProp = false;
 }
 
 IFeatureObject::~IFeatureObject()
@@ -72,4 +73,14 @@ void IFeatureObject::SetObjectInfo(const char* pszObjInfo)
 OBJECT_TYPE_ID IFeatureObject::GetObjectTypeId()
 {
 	return PropStringToType(m_strObjType);
+}
+
+void IFeatureObject::SetActivePropetry(bool bIsActive)
+{
+	m_bIsActiveProp = bIsActive;
+}
+
+bool IFeatureObject::GetActivePropetry()
+{
+	return m_bIsActiveProp;
 }
