@@ -20,7 +20,7 @@
 <item objid="window231.Panel254.Panel317.group318.bool325" name="ReceiveMouseMessage" data="1"/>
 <item objid="window231.Panel254.Panel317.group318.bool326" name="DragInCtrl" data="0"/>
 <item objid="window231.Panel254.Panel317.group318.bool328" name="DefaultEnterCtrl" data="0"/>
-<item objid="window231.Panel254.group255.bool259" name="Lock" data="0"/>
+<item objid="window231.Panel254.group255.bool259" name="Lock" data="1"/>
 <item objid="window231.Panel254.group255.bool260" name="Visible" data="1"/>
 <item objid="window231.Panel254.group255.bool261" name="Enable" data="1"/>
 <item objid="window231.Panel254.group255.bool262" name="ReceiveMouseMessage" data="1"/>
@@ -32,7 +32,7 @@
 <item objid="window231.Panel275.Panel296.group297.bool304" name="ReceiveMouseMessage" data="1"/>
 <item objid="window231.Panel275.Panel296.group297.bool305" name="DragInCtrl" data="0"/>
 <item objid="window231.Panel275.Panel296.group297.bool307" name="DefaultEnterCtrl" data="0"/>
-<item objid="window231.Panel275.group276.bool280" name="Lock" data="0"/>
+<item objid="window231.Panel275.group276.bool280" name="Lock" data="1"/>
 <item objid="window231.Panel275.group276.bool281" name="Visible" data="1"/>
 <item objid="window231.Panel275.group276.bool282" name="Enable" data="1"/>
 <item objid="window231.Panel275.group276.bool283" name="ReceiveMouseMessage" data="1"/>
@@ -82,10 +82,10 @@
 <item objid="window231.group248" name="Stretching"/>
 </group>
 <image>
-<item objid="window231.Panel275.group295.image342" name="Image" imagebasename="New value"/>
-<item objid="window231.Panel275.Panel296.group316.image343" name="Image" imagebasename=""/>
-<item objid="window231.Panel254.group274.image340" name="Image" imagebasename=""/>
 <item objid="window231.Panel254.Panel317.group337.image341" name="Image" imagebasename=""/>
+<item objid="window231.Panel254.group274.image340" name="Image" imagebasename=""/>
+<item objid="window231.Panel275.Panel296.group316.image343" name="Image" imagebasename=""/>
+<item objid="window231.Panel275.group295.image342" name="Image" imagebasename="New value"/>
 </image>
 <int>
 <item objid="window178.group190.int191" name="Width" data="500"/>
