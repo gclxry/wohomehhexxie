@@ -894,12 +894,13 @@ void IWindowBaseImpl::AppendChildContrl(IControlBase *pCtrl)
 // 循环遍历每个控件的绘制
 void IWindowBaseImpl::DrawControl()
 {
+	RECT WndRct = this->GetClientRect();
 	for (CHILD_CTRLS_VEC::iterator pCtrlItem = m_ChildCtrlsVec.begin(); pCtrlItem != m_ChildCtrlsVec.end(); pCtrlItem++)
 	{
 		IControlBase* pCtrl = *pCtrlItem;
 		if (pCtrl != NULL)
 		{
-			pCtrl->OnPaintControl(m_WndMemDc);
+			pCtrl->OnPaintControl(m_WndMemDc, WndRct);
 		}
 	}
 }

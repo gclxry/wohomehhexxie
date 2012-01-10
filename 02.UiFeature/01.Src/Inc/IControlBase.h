@@ -232,6 +232,10 @@ public:
 	IPropertyGroup* PP_GetControlPropetryGroup();
 	IPropertyControl *PP_GetControlPropetry();
 
+	// 设置有效的绘制区域
+	void SetActiveDrawRect(RECT ActiveDrawRect);
+	RECT GetActiveDrawRect();
+
 protected:
 	// 设置子控件都必须自绘
 	void SetChildCtrlToRedraw();
@@ -313,7 +317,7 @@ private:
 	void SetMouseHover(bool bHover);
 
 	// 此函数由窗口调用，绘制当前控件，参数为父窗口/父控件的内存DC
-	virtual void OnPaintControl(CDrawingBoard &WndMemDc);
+	virtual void OnPaintControl(CDrawingBoard &WndMemDc, RECT ActiveDrawRct);
 
 	// 从成员变量更新数据到属性
 	void MemberValueToPropetyValue();
@@ -404,7 +408,6 @@ protected:
 	virtual bool CreateBuilderShowPropList();
 
 protected:
-
 	// 2.从Builder中新创建一个控件，需要初始化属性的PropId
 	void InitControlPropObjectId(GROUP_PROP_VEC *pPropList);
 
