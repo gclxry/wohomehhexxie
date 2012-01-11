@@ -354,14 +354,6 @@
 			Name="01.View"
 			>
 			<File
-				RelativePath=".\FeatureBaseList.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\FeatureBaseList.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Inc\UiFeatureDefs.h"
 				>
 			</File>
@@ -421,6 +413,14 @@
 				Name="03.ÊôÐÔÊÓÍ¼"
 				>
 				<File
+					RelativePath=".\FeatureBaseList.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\FeatureBaseList.h"
+					>
+				</File>
+				<File
 					RelativePath=".\PropertiesWnd.cpp"
 					>
 				</File>
@@ -451,6 +451,14 @@
 				<Filter
 					Name="01.Í¼Æ¬ÊôÐÔ±à¼­"
 					>
+					<File
+						RelativePath=".\ImageBaseNameList.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\ImageBaseNameList.h"
+						>
+					</File>
 					<File
 						RelativePath=".\ImageBasePropEditDlg.cpp"
 						>

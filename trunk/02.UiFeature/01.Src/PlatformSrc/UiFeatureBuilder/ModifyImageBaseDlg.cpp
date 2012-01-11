@@ -12,6 +12,7 @@ IMPLEMENT_DYNAMIC(CModifyImageBaseDlg, CDialog)
 
 CModifyImageBaseDlg::CModifyImageBaseDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CModifyImageBaseDlg::IDD, pParent)
+	, m_strImageBaseName(_T(""))
 {
 	m_bIsCreate = true;
 }
@@ -23,6 +24,7 @@ CModifyImageBaseDlg::~CModifyImageBaseDlg()
 void CModifyImageBaseDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
+	DDX_Text(pDX, IDC_EDIT1, m_strImageBaseName);
 }
 
 
@@ -48,6 +50,7 @@ BOOL CModifyImageBaseDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
+	m_strImageBaseName = _T("");
 	if (m_bIsCreate)
 	{
 		this->SetWindowText(_T("新建图片属性名称"));
@@ -60,8 +63,13 @@ BOOL CModifyImageBaseDlg::OnInitDialog()
 	return TRUE;
 }
 
+void CModifyImageBaseDlg::GetImageBaseName(CString &strName)
+{
+	strName = m_strImageBaseName;
+}
+
 void CModifyImageBaseDlg::OnBnClickedOk()
 {
-	// TODO: Add your control notification handler code here
+	this->UpdateData(TRUE);
 	OnOK();
 }
