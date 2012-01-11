@@ -1,4 +1,6 @@
 #pragma once
+#include "afxwin.h"
+#include "afxcmn.h"
 
 
 // CImageBasePropEditDlg dialog
@@ -16,6 +18,24 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual BOOL OnInitDialog();
+	void SetChildPos();
+
+	CStatic m_Static_1;
+	CStatic m_Static_2;
+	CStatic m_Static_3;
+	CButton m_OkBtn;
+	CListCtrl m_ImageBaseList;
+	CListCtrl m_LocalImageList;
+
+	CRect m_Static_1_Rct;
+	int m_Static_1_BottomSpace;
+
+	CRect m_Static_2_Rct;
+	CRect m_Static_3_Rct;
+	CRect m_OkBtn_Rct;
+	CRect m_ImageBaseList_Rct;
+	CRect m_LocalImageList_Rct;
 
 	DECLARE_MESSAGE_MAP()
 public:
@@ -37,4 +57,5 @@ public:
 	afx_msg void OnDeltaposJjgTop(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnDeltaposJjgBottom(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnDeltaposJjgRight(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 };
