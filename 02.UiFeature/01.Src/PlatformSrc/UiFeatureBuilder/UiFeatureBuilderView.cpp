@@ -390,6 +390,8 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown(CPoint point)
 	else if (m_bMoveInCtrlFangKuai8 && m_nMoveFangKuai8Type != SCT_NONE)
 	{
 		// 拖动控件，改变控件大小
+		IControlBase* pLBtnDownCtrl = m_pCurrentWnd->BD_GetFocusControl();
+		OnMouseMove_LButtonDown_SizeCtrl(m_nMoveFangKuai8Type, point, pLBtnDownCtrl);
 	}
 	else if (m_pCurrentWnd != NULL && m_pCurrentWnd->BD_GetFocusControl() != NULL)
 	{
@@ -404,6 +406,92 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown(CPoint point)
 	{
 		SetViewCursor(UF_IDC_ARROW);
 	}
+}
+
+void CUiFeatureBuilderView::OnMouseMove_LButtonDown_SizeCtrl(SIZE_CTRL_TYPE nFangKuai8Type, CPoint point, IControlBase* pLBtnDownCtrl)
+{
+	if (nFangKuai8Type == SCT_NONE || pLBtnDownCtrl == NULL || m_pCurrentWnd == NULL)
+		return;
+
+	point.x += m_ScrollOffset.cx;
+	point.y += m_ScrollOffset.cy;
+
+//////////////////////////////////////////////////////////////////////////
+	// 设置在builder中的新坐标
+	FANGKUAI_8* pParentFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
+	if (pLBtnDownCtrl->GetParentControl() != NULL)
+		pParentFk8 = pLBtnDownCtrl->GetParentControl()->BD_GetFangKuai8Rect();
+
+	FANGKUAI_8* pFk8 = pLBtnDownCtrl->BD_GetFangKuai8Rect();
+	if (pParentFk8 == NULL || pFk8 == NULL)
+		return;
+
+	if (nFangKuai8Type == SCT_LEFT_TOP)
+	{
+		pFk8->EntityRct.left = point.x;
+		pFk8->EntityRct.top = point.y;
+	}
+	else if (nFangKuai8Type == SCT_LEFT_MID)
+	{
+		pFk8->EntityRct.left = point.x;
+	}
+	else if (nFangKuai8Type == SCT_LEFT_BOTTOM)
+	{
+		pFk8->EntityRct.left = point.x;
+		pFk8->EntityRct.bottom = point.y;
+	}
+	else if (nFangKuai8Type == SCT_MID_TOP)
+	{
+		pFk8->EntityRct.top = point.y;
+	}
+	else if (nFangKuai8Type == SCT_MID_BOTTOM)
+	{
+		pFk8->EntityRct.bottom = point.y;
+	}
+	else if (nFangKuai8Type == SCT_RIGHT_TOP)
+	{
+		pFk8->EntityRct.right = point.x;
+		pFk8->EntityRct.top = point.y;
+	}
+	else if (nFangKuai8Type == SCT_RIGHT_MID)
+	{
+		pFk8->EntityRct.right = point.x;
+	}
+	else if (nFangKuai8Type == SCT_RIGHT_BOTTOM)
+	{
+		pFk8->EntityRct.right = point.x;
+		pFk8->EntityRct.bottom = point.y;
+	}
+
+	if (pFk8->EntityRct.left < pParentFk8->EntityRct.left)
+		pFk8->EntityRct.left = pParentFk8->EntityRct.left;
+
+	if (pFk8->EntityRct.right > pParentFk8->EntityRct.right)
+		pFk8->EntityRct.right = pParentFk8->EntityRct.right;
+
+	if (pFk8->EntityRct.top < pParentFk8->EntityRct.top)
+		pFk8->EntityRct.top = pParentFk8->EntityRct.top;
+
+	if (pFk8->EntityRct.bottom > pParentFk8->EntityRct.bottom)
+		pFk8->EntityRct.bottom = pParentFk8->EntityRct.bottom;
+
+//////////////////////////////////////////////////////////////////////////
+	// 设置在Window中的新坐标
+	RECT CtrlInWndRct;
+	INIT_RECT(CtrlInWndRct);
+	FANGKUAI_8* pWndFk8 = m_pCurrentWnd->BD_GetFangKuai8Rect();
+	CtrlInWndRct.left = pFk8->EntityRct.left - pWndFk8->EntityRct.left;
+	CtrlInWndRct.right = CtrlInWndRct.left + RECT_WIDTH(pFk8->EntityRct);
+	CtrlInWndRct.top = pFk8->EntityRct.top - pWndFk8->EntityRct.top;
+	CtrlInWndRct.bottom = CtrlInWndRct.top + RECT_HEIGHT(pFk8->EntityRct);
+	pLBtnDownCtrl->MoveWindowRect(CtrlInWndRct);
+
+	// 重新计算子控件的位置和大小
+	m_pCurrentWnd->ResetChildCtrlPostion(pLBtnDownCtrl->GetChildControlsVec(), true);
+	m_pCurrentWnd->BD_SetControlRectInView(pLBtnDownCtrl->GetChildControlsVec());
+
+	// 刷新属性区域
+	m_pPropViewCtrl->SetShowPropGroup(pLBtnDownCtrl->PP_GetControlPropetryGroup());
 }
 
 void CUiFeatureBuilderView::OnMouseMove_LButtonDown_MoveCtrl(CPoint point, IControlBase* pLBtnDownCtrl)

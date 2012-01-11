@@ -90,6 +90,7 @@ private:
 	SIZE_CTRL_TYPE OnMouseMove_FangKuai8(CPoint point, bool bIsWnd);
 	void OnMouseMove_LButtonDown(CPoint point);
 	void OnMouseMove_LButtonDown_MoveCtrl(CPoint point, IControlBase* pLBtnDownCtrl);
+	void OnMouseMove_LButtonDown_SizeCtrl(SIZE_CTRL_TYPE nFangKuai8Type, CPoint point, IControlBase* pLBtnDownCtrl);
 	// 绘制创建新控件时的矩形
 	void DrawMark();
 	// 设置新控件的大小
