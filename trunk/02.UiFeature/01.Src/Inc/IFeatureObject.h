@@ -46,7 +46,6 @@ public:
 	virtual ~IFeatureObject();
 
 	const char* GetObjectId();
-	void SetObjectId(const char* pszObjId);
 
 	const char* GetObjectType();
 	void SetObjectType(const char* pszObjType);

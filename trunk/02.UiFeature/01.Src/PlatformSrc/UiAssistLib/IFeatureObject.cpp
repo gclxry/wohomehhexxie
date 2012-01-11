@@ -6,11 +6,25 @@
 
 IFeatureObject::IFeatureObject()
 {
+	::CoInitialize(NULL);
 	m_strObjId = "NO_OBJECT_ID";
 	m_strObjType = "NO_OBJECT_TYPE_NAME";
 	m_strObjName = "";
 	m_strObjInfo = "NO_OBJECT_INFO";
 	m_bIsActiveProp = false;
+
+	GUID guid;
+	if (::CoCreateGuid(&guid) == S_OK)
+	{
+		char szObjeId[MAX_PATH];
+		memset(szObjeId, 0, sizeof(szObjeId));
+		sprintf_s(szObjeId, sizeof(szObjeId), "%08X%04X%04X%02X%02X%02X%02X%02X%02X%02X%02X",
+			guid.Data1, guid.Data2, guid.Data3,
+			guid.Data4[0], guid.Data4[1], guid.Data4[2], guid.Data4[3], guid.Data4[4],
+			guid.Data4[5], guid.Data4[6], guid.Data4[7]);
+
+		m_strObjId = szObjeId;
+	}
 }
 
 IFeatureObject::~IFeatureObject()
@@ -21,14 +35,6 @@ IFeatureObject::~IFeatureObject()
 const char* IFeatureObject::GetObjectId()
 {
 	return (m_strObjId.c_str());
-}
-
-void IFeatureObject::SetObjectId(const char* pszObjId)
-{
-	if (pszObjId != NULL)
-		m_strObjId = pszObjId;
-	else
-		m_strObjId = "";
 }
 
 const char* IFeatureObject::GetObjectType()
