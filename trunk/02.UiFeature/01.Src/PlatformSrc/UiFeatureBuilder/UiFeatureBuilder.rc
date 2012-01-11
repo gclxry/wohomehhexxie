@@ -396,6 +396,7 @@ BEGIN
     GROUPBOX        "本地图片",IDS_FRAME_3,166,188,119,138
     GROUPBOX        "图片属性设置",IDS_FRAME_2,159,6,335,327
     LTEXT           "图片显示比例：",IDC_STATIC,295,16,58,10
+    LTEXT           "Static",IDS_IMAGE_VIEW,307,41,121,99
 END
 
 
