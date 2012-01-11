@@ -440,6 +440,18 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="01.Í¼Æ¬ÊôÐÔ±à¼­"
+					>
+					<File
+						RelativePath=".\ImagePropetryEditDlg.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\ImagePropetryEditDlg.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="04.¡¾´°Ìå-Ãæ°å¡¿ÊÓÍ¼"
