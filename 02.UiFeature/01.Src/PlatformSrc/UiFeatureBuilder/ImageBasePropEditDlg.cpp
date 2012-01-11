@@ -13,14 +13,6 @@ IMPLEMENT_DYNAMIC(CImageBasePropEditDlg, CDialog)
 CImageBasePropEditDlg::CImageBasePropEditDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CImageBasePropEditDlg::IDD, pParent)
 {
-	m_Static_1_Rct.SetRectEmpty();
-	m_Static_2_Rct.SetRectEmpty();
-	m_Static_3_Rct.SetRectEmpty();
-	m_OkBtn_Rct.SetRectEmpty();
-	m_ImageBaseList_Rct.SetRectEmpty();
-	m_LocalImageList_Rct.SetRectEmpty();
-
-	m_Static_1_BottomSpace = 0;
 }
 
 CImageBasePropEditDlg::~CImageBasePropEditDlg()
@@ -59,27 +51,11 @@ BEGIN_MESSAGE_MAP(CImageBasePropEditDlg, CDialog)
 	ON_NOTIFY(UDN_DELTAPOS, IDS_JJG_BOTTOM, &CImageBasePropEditDlg::OnDeltaposJjgBottom)
 	ON_NOTIFY(UDN_DELTAPOS, IDS_JJG_RIGHT, &CImageBasePropEditDlg::OnDeltaposJjgRight)
 	ON_WM_SIZE()
+	ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
 
 // CImageBasePropEditDlg message handlers
-
-#define FRAME_TOP					(145)
-#define FRAME_BOTTOM				(24)
-
-#define FRAME_1_LEFT				(86)
-#define FRAME_1_WIDTH				(219)
-
-#define FRAME_2_LEFT				(318)
-
-#define FRAME_3_LEFT				(329)
-#define FRAME_3_TOP					(440)
-#define FRAME_3_WIDTH				(179)
-
-#define OK_BTN_RIGHT_SPACE			(20)
-#define OK_BTN_TOP					(157)
-#define OK_BTN_WIDTH				(80)
-#define OK_BTN_HEIGHT				(18)
 
 void CImageBasePropEditDlg::SetChildPos()
 {
@@ -120,6 +96,16 @@ void CImageBasePropEditDlg::SetChildPos()
 		m_Static_2.MoveWindow(&CtrlRct);
 	}
 
+	//if (::IsWindow(m_ImageView.m_hWnd))
+	//{
+	//	CtrlRct.SetRectEmpty();
+	//	CtrlRct.left = 445;
+	//	CtrlRct.right = WndRct.right - 22;
+	//	CtrlRct.top = 55;
+	//	CtrlRct.bottom = CtrlRct.top + 22;
+	//	m_ImageView.MoveWindow(&CtrlRct);
+	//}
+
 	if (::IsWindow(m_Static_3.m_hWnd))
 	{
 		CtrlRct.SetRectEmpty();
@@ -146,7 +132,7 @@ void CImageBasePropEditDlg::SetChildPos()
 		CtrlRct.right = WndRct.right - 22;
 		CtrlRct.left = CtrlRct.right - 80;
 		CtrlRct.top = 22;
-		CtrlRct.bottom = CtrlRct.top + 20;
+		CtrlRct.bottom = CtrlRct.top + 22;
 		m_OkBtn.MoveWindow(&CtrlRct);
 	}
 }
@@ -154,7 +140,7 @@ void CImageBasePropEditDlg::SetChildPos()
 BOOL CImageBasePropEditDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
-	
+
 	SetChildPos();
 	return TRUE;
 }
@@ -271,4 +257,17 @@ void CImageBasePropEditDlg::OnDeltaposJjgRight(NMHDR *pNMHDR, LRESULT *pResult)
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	// TODO: Add your control notification handler code here
 	*pResult = 0;
+}
+
+void CImageBasePropEditDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CDialog::OnGetMinMaxInfo(lpMMI);
+
+	if (lpMMI != NULL)
+	{
+		lpMMI->ptMinTrackSize.x = 966;
+		lpMMI->ptMinTrackSize.y = 666;
+	}
 }

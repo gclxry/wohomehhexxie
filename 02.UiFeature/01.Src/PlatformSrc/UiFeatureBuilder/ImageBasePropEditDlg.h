@@ -2,7 +2,6 @@
 #include "afxwin.h"
 #include "afxcmn.h"
 
-
 // CImageBasePropEditDlg dialog
 
 class CImageBasePropEditDlg : public CDialog
@@ -28,15 +27,6 @@ protected:
 	CListCtrl m_ImageBaseList;
 	CListCtrl m_LocalImageList;
 
-	CRect m_Static_1_Rct;
-	int m_Static_1_BottomSpace;
-
-	CRect m_Static_2_Rct;
-	CRect m_Static_3_Rct;
-	CRect m_OkBtn_Rct;
-	CRect m_ImageBaseList_Rct;
-	CRect m_LocalImageList_Rct;
-
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedOk();
@@ -58,4 +48,5 @@ public:
 	afx_msg void OnDeltaposJjgBottom(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnDeltaposJjgRight(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 };
