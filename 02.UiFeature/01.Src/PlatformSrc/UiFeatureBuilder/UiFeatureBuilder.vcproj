@@ -451,6 +451,14 @@
 						RelativePath=".\ImageBasePropEditDlg.h"
 						>
 					</File>
+					<File
+						RelativePath=".\ImageBaseView.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\ImageBaseView.h"
+						>
+					</File>
 				</Filter>
 			</Filter>
 			<Filter

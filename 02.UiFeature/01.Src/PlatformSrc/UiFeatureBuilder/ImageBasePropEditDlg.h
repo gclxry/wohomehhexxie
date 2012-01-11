@@ -1,6 +1,7 @@
 #pragma once
 #include "afxwin.h"
 #include "afxcmn.h"
+#include "ImageBaseView.h"
 
 // CImageBasePropEditDlg dialog
 
@@ -26,6 +27,8 @@ protected:
 	CButton m_OkBtn;
 	CListCtrl m_ImageBaseList;
 	CListCtrl m_LocalImageList;
+
+	CImageBaseView *m_pImageView;
 
 	DECLARE_MESSAGE_MAP()
 public:

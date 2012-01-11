@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "UiFeatureBuilder.h"
 #include "ImageBasePropEditDlg.h"
+#include "..\..\Inc\UiFeatureDefs.h"
 
 
 // CImageBasePropEditDlg dialog
@@ -13,10 +14,12 @@ IMPLEMENT_DYNAMIC(CImageBasePropEditDlg, CDialog)
 CImageBasePropEditDlg::CImageBasePropEditDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CImageBasePropEditDlg::IDD, pParent)
 {
+	m_pImageView = NULL;
 }
 
 CImageBasePropEditDlg::~CImageBasePropEditDlg()
 {
+	SAFE_DELETE(m_pImageView);
 }
 
 void CImageBasePropEditDlg::DoDataExchange(CDataExchange* pDX)
@@ -96,15 +99,15 @@ void CImageBasePropEditDlg::SetChildPos()
 		m_Static_2.MoveWindow(&CtrlRct);
 	}
 
-	//if (::IsWindow(m_ImageView.m_hWnd))
-	//{
-	//	CtrlRct.SetRectEmpty();
-	//	CtrlRct.left = 445;
-	//	CtrlRct.right = WndRct.right - 22;
-	//	CtrlRct.top = 55;
-	//	CtrlRct.bottom = CtrlRct.top + 22;
-	//	m_ImageView.MoveWindow(&CtrlRct);
-	//}
+	if (m_pImageView != NULL && ::IsWindow(m_pImageView->m_hWnd))
+	{
+		CtrlRct.SetRectEmpty();
+		CtrlRct.left = 440;
+		CtrlRct.right = WndRct.right - 22;
+		CtrlRct.top = 50;
+		CtrlRct.bottom = WndRct.bottom - 22;
+		m_pImageView->MoveWindow(&CtrlRct);
+	}
 
 	if (::IsWindow(m_Static_3.m_hWnd))
 	{
@@ -140,6 +143,14 @@ void CImageBasePropEditDlg::SetChildPos()
 BOOL CImageBasePropEditDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
+
+	m_pImageView = new CImageBaseView(this);
+	if (m_pImageView != NULL)
+	{
+		CRect ViewRct(0, 0, 0, 0);
+		m_pImageView->MoveWindow(ViewRct);
+		m_pImageView->ShowWindow(SW_SHOW);
+	}
 
 	SetChildPos();
 	return TRUE;
