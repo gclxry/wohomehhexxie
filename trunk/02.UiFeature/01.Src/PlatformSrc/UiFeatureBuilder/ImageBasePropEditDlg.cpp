@@ -13,7 +13,14 @@ IMPLEMENT_DYNAMIC(CImageBasePropEditDlg, CDialog)
 CImageBasePropEditDlg::CImageBasePropEditDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CImageBasePropEditDlg::IDD, pParent)
 {
+	m_Static_1_Rct.SetRectEmpty();
+	m_Static_2_Rct.SetRectEmpty();
+	m_Static_3_Rct.SetRectEmpty();
+	m_OkBtn_Rct.SetRectEmpty();
+	m_ImageBaseList_Rct.SetRectEmpty();
+	m_LocalImageList_Rct.SetRectEmpty();
 
+	m_Static_1_BottomSpace = 0;
 }
 
 CImageBasePropEditDlg::~CImageBasePropEditDlg()
@@ -23,6 +30,12 @@ CImageBasePropEditDlg::~CImageBasePropEditDlg()
 void CImageBasePropEditDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDS_FRAME_1, m_Static_1);
+	DDX_Control(pDX, IDS_FRAME_2, m_Static_2);
+	DDX_Control(pDX, IDS_FRAME_3, m_Static_3);
+	DDX_Control(pDX, IDOK, m_OkBtn);
+	DDX_Control(pDX, IDL_IMAGEBASE_NAME_LIST, m_ImageBaseList);
+	DDX_Control(pDX, IDL_LOCAL_IMAGE_LIST, m_LocalImageList);
 }
 
 
@@ -45,10 +58,112 @@ BEGIN_MESSAGE_MAP(CImageBasePropEditDlg, CDialog)
 	ON_NOTIFY(UDN_DELTAPOS, IDS_JJG_TOP, &CImageBasePropEditDlg::OnDeltaposJjgTop)
 	ON_NOTIFY(UDN_DELTAPOS, IDS_JJG_BOTTOM, &CImageBasePropEditDlg::OnDeltaposJjgBottom)
 	ON_NOTIFY(UDN_DELTAPOS, IDS_JJG_RIGHT, &CImageBasePropEditDlg::OnDeltaposJjgRight)
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
 // CImageBasePropEditDlg message handlers
+
+#define FRAME_TOP					(145)
+#define FRAME_BOTTOM				(24)
+
+#define FRAME_1_LEFT				(86)
+#define FRAME_1_WIDTH				(219)
+
+#define FRAME_2_LEFT				(318)
+
+#define FRAME_3_LEFT				(329)
+#define FRAME_3_TOP					(440)
+#define FRAME_3_WIDTH				(179)
+
+#define OK_BTN_RIGHT_SPACE			(20)
+#define OK_BTN_TOP					(157)
+#define OK_BTN_WIDTH				(80)
+#define OK_BTN_HEIGHT				(18)
+
+void CImageBasePropEditDlg::SetChildPos()
+{
+	if (!::IsWindow(m_hWnd))
+		return;
+
+	CRect WndRct;
+	this->GetClientRect(&WndRct);
+
+	CRect CtrlRct(0, 0, 0, 0);
+	if (::IsWindow(m_Static_1.m_hWnd))
+	{
+		CtrlRct.SetRectEmpty();
+		CtrlRct.left = 11;
+		CtrlRct.right = CtrlRct.left + 218;
+		CtrlRct.top = 11;
+		CtrlRct.bottom = WndRct.bottom - 11;
+		m_Static_1.MoveWindow(&CtrlRct);
+	}
+
+	if (::IsWindow(m_ImageBaseList.m_hWnd))
+	{
+		CtrlRct.SetRectEmpty();
+		CtrlRct.left = 22;
+		CtrlRct.right = CtrlRct.left + 196;
+		CtrlRct.top = 70;
+		CtrlRct.bottom = WndRct.bottom - 22;
+		m_ImageBaseList.MoveWindow(&CtrlRct);
+	}
+
+	if (::IsWindow(m_Static_2.m_hWnd))
+	{
+		CtrlRct.SetRectEmpty();
+		CtrlRct.left = 240;
+		CtrlRct.right = WndRct.right - 11;
+		CtrlRct.top = 11;
+		CtrlRct.bottom = WndRct.bottom - 11;
+		m_Static_2.MoveWindow(&CtrlRct);
+	}
+
+	if (::IsWindow(m_Static_3.m_hWnd))
+	{
+		CtrlRct.SetRectEmpty();
+		CtrlRct.left = 251;
+		CtrlRct.right = CtrlRct.left + 179;
+		CtrlRct.top = 308;
+		CtrlRct.bottom = WndRct.bottom - 22;
+		m_Static_3.MoveWindow(&CtrlRct);
+	}
+
+	if (::IsWindow(m_LocalImageList.m_hWnd))
+	{
+		CtrlRct.SetRectEmpty();
+		CtrlRct.left = 262;
+		CtrlRct.right = CtrlRct.left + 157;
+		CtrlRct.top = 359;
+		CtrlRct.bottom = WndRct.bottom - 33;
+		m_LocalImageList.MoveWindow(&CtrlRct);
+	}
+
+	if (::IsWindow(m_OkBtn.m_hWnd))
+	{
+		CtrlRct.SetRectEmpty();
+		CtrlRct.right = WndRct.right - 22;
+		CtrlRct.left = CtrlRct.right - 80;
+		CtrlRct.top = 22;
+		CtrlRct.bottom = CtrlRct.top + 20;
+		m_OkBtn.MoveWindow(&CtrlRct);
+	}
+}
+
+BOOL CImageBasePropEditDlg::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+	
+	SetChildPos();
+	return TRUE;
+}
+
+void CImageBasePropEditDlg::OnSize(UINT nType, int cx, int cy)
+{
+	CDialog::OnSize(nType, cx, cy);
+	SetChildPos();
+}
 
 void CImageBasePropEditDlg::OnBnClickedCancel()
 {

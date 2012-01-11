@@ -150,6 +150,9 @@
 #define IDR_JJG                         1029
 #define IDC_COMBO1                      1030
 #define IDC_XIANSHIBILI_COMBO           1030
+#define IDS_FRAME_1                     1032
+#define IDS_FRAME_2                     1033
+#define IDS_FRAME_3                     1034
 #define ID_32771                        32771
 #define ID_Menu                         32772
 #define ID_CREATE_WINDOW_PANEL          32773
@@ -163,7 +166,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        315
 #define _APS_NEXT_COMMAND_VALUE         32777
-#define _APS_NEXT_CONTROL_VALUE         1032
+#define _APS_NEXT_CONTROL_VALUE         1035
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
