@@ -354,6 +354,14 @@
 			Name="01.View"
 			>
 			<File
+				RelativePath=".\FeatureBaseList.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\FeatureBaseList.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Inc\UiFeatureDefs.h"
 				>
 			</File>
@@ -459,6 +467,18 @@
 						RelativePath=".\ImageBaseView.h"
 						>
 					</File>
+					<Filter
+						Name="01.新建/修改属性名称对话框"
+						>
+						<File
+							RelativePath=".\ModifyImageBaseDlg.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\ModifyImageBaseDlg.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 			<Filter

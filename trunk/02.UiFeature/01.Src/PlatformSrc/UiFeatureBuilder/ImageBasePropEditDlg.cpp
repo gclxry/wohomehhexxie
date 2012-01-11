@@ -13,6 +13,15 @@ IMPLEMENT_DYNAMIC(CImageBasePropEditDlg, CDialog)
 
 CImageBasePropEditDlg::CImageBasePropEditDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CImageBasePropEditDlg::IDD, pParent)
+	, m_nShowAreaTop(0)
+	, m_nShowAreaLeft(0)
+	, m_nShowAreaBottom(0)
+	, m_nShowAreaRight(0)
+	, m_nJggLeft(0)
+	, m_nJggTop(0)
+	, m_nJggRight(0)
+	, m_nJggBottom(0)
+	, m_nSelelShowImgType(0)
 {
 	m_pImageView = NULL;
 }
@@ -31,6 +40,16 @@ void CImageBasePropEditDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDOK, m_OkBtn);
 	DDX_Control(pDX, IDL_IMAGEBASE_NAME_LIST, m_ImageBaseList);
 	DDX_Control(pDX, IDL_LOCAL_IMAGE_LIST, m_LocalImageList);
+	DDX_Text(pDX, IDE_SHOW_AREA_TOP, m_nShowAreaTop);
+	DDX_Text(pDX, IDE_SHOW_AREA_LEFT, m_nShowAreaLeft);
+	DDX_Text(pDX, IDE_SHOW_AREA_BOTTOM, m_nShowAreaBottom);
+	DDX_Text(pDX, IDE_SHOW_AREA_RIGHT, m_nShowAreaRight);
+	DDX_Text(pDX, IDE_JJG_LEFT, m_nJggLeft);
+	DDX_Text(pDX, IDE_JJG_TOP, m_nJggTop);
+	DDX_Text(pDX, IDE_JJG_RIGHT, m_nJggRight);
+	DDX_Text(pDX, IDE_JJG_BOTTOM, m_nJggBottom);
+	DDX_Control(pDX, IDC_XIANSHIBILI_COMBO, m_ShowBiLi_Combo);
+	DDX_Radio(pDX, IDR_PINGPU, m_nSelelShowImgType);
 }
 
 
@@ -151,8 +170,31 @@ BOOL CImageBasePropEditDlg::OnInitDialog()
 		m_pImageView->MoveWindow(ViewRct);
 		m_pImageView->ShowWindow(SW_SHOW);
 	}
-
 	SetChildPos();
+
+	// ¾Å¹¬¸ñ×´Ì¬
+	SetJjgEditCtrlStyle(m_nSelelShowImgType == 2);
+
+	m_ShowBiLi_Combo.InsertString(0, _T("100%"));
+	m_ShowBiLi_Combo.InsertString(1, _T("200%"));
+	m_ShowBiLi_Combo.InsertString(2, _T("400%"));
+	m_ShowBiLi_Combo.InsertString(3, _T("600%"));
+	m_ShowBiLi_Combo.InsertString(4, _T("800%"));
+	m_ShowBiLi_Combo.InsertString(5, _T("1000%"));
+	m_ShowBiLi_Combo.SetCurSel(0);
+
+	m_ImageBaseList.SendMessage(LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_CHECKBOXES);
+	m_ImageBaseList.ModifyStyle(0, LVS_SINGLESEL | LVS_SHOWSELALWAYS);
+	m_ImageBaseList.InsertColumn(0, _T("#"), LVCFMT_LEFT, 50);
+	m_ImageBaseList.InsertColumn(1, _T("Í¼Æ¬ÊôÐÔÃû³Æ"), LVCFMT_LEFT, 160);
+
+	m_LocalImageList.SendMessage(LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_CHECKBOXES);
+	m_LocalImageList.ModifyStyle(0, LVS_SINGLESEL | LVS_SHOWSELALWAYS);
+	m_LocalImageList.InsertColumn(0, _T("#"), LVCFMT_LEFT, 50);
+	m_LocalImageList.InsertColumn(1, _T("±¾µØÍ¼Æ¬Ãû³Æ"), LVCFMT_LEFT, 160);
+
+
+	this->UpdateData(FALSE);
 	return TRUE;
 }
 
@@ -164,110 +206,7 @@ void CImageBasePropEditDlg::OnSize(UINT nType, int cx, int cy)
 
 void CImageBasePropEditDlg::OnBnClickedCancel()
 {
-	// TODO: Add your control notification handler code here
 	OnCancel();
-}
-
-void CImageBasePropEditDlg::OnBnClickedOk()
-{
-	// TODO: Add your control notification handler code here
-	OnOK();
-}
-
-void CImageBasePropEditDlg::OnBnClickedNewImagebase()
-{
-	// TODO: Add your control notification handler code here
-}
-
-void CImageBasePropEditDlg::OnBnClickedDeleteImagebase()
-{
-	// TODO: Add your control notification handler code here
-}
-
-void CImageBasePropEditDlg::OnBnClickedEditImagebase()
-{
-	// TODO: Add your control notification handler code here
-}
-
-void CImageBasePropEditDlg::OnBnClickedGetLocalImage()
-{
-	// TODO: Add your control notification handler code here
-}
-
-void CImageBasePropEditDlg::OnBnClickedDeleteLocalImage()
-{
-	// TODO: Add your control notification handler code here
-}
-
-void CImageBasePropEditDlg::OnBnClickedPingpu()
-{
-	// TODO: Add your control notification handler code here
-}
-
-void CImageBasePropEditDlg::OnBnClickedQuanlashen()
-{
-	// TODO: Add your control notification handler code here
-}
-
-void CImageBasePropEditDlg::OnBnClickedJjg()
-{
-	// TODO: Add your control notification handler code here
-}
-
-void CImageBasePropEditDlg::OnDeltaposShowAreaLeft(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
-	// TODO: Add your control notification handler code here
-	*pResult = 0;
-}
-
-void CImageBasePropEditDlg::OnDeltaposShowAreaTop(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
-	// TODO: Add your control notification handler code here
-	*pResult = 0;
-}
-
-void CImageBasePropEditDlg::OnDeltaposShowAreaRight(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
-	// TODO: Add your control notification handler code here
-	*pResult = 0;
-}
-
-void CImageBasePropEditDlg::OnDeltaposShowAreaBottom(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
-	// TODO: Add your control notification handler code here
-	*pResult = 0;
-}
-
-void CImageBasePropEditDlg::OnDeltaposJjgLeft(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
-	// TODO: Add your control notification handler code here
-	*pResult = 0;
-}
-
-void CImageBasePropEditDlg::OnDeltaposJjgTop(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
-	// TODO: Add your control notification handler code here
-	*pResult = 0;
-}
-
-void CImageBasePropEditDlg::OnDeltaposJjgBottom(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
-	// TODO: Add your control notification handler code here
-	*pResult = 0;
-}
-
-void CImageBasePropEditDlg::OnDeltaposJjgRight(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
-	// TODO: Add your control notification handler code here
-	*pResult = 0;
 }
 
 void CImageBasePropEditDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
@@ -281,4 +220,165 @@ void CImageBasePropEditDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 		lpMMI->ptMinTrackSize.x = 966;
 		lpMMI->ptMinTrackSize.y = 666;
 	}
+}
+
+void CImageBasePropEditDlg::OnDeltaposShowAreaLeft(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
+	*pResult = 0;
+	if (pNMUpDown == NULL)
+		return;
+
+	SetNewDeltaposValue(m_nShowAreaLeft, pNMUpDown->iDelta);
+}
+
+void CImageBasePropEditDlg::OnDeltaposShowAreaTop(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
+	*pResult = 0;
+	if (pNMUpDown == NULL)
+		return;
+
+	SetNewDeltaposValue(m_nShowAreaTop, pNMUpDown->iDelta);
+}
+
+void CImageBasePropEditDlg::OnDeltaposShowAreaRight(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
+	*pResult = 0;
+	if (pNMUpDown == NULL)
+		return;
+
+	SetNewDeltaposValue(m_nShowAreaRight, pNMUpDown->iDelta);
+}
+
+void CImageBasePropEditDlg::OnDeltaposShowAreaBottom(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
+	*pResult = 0;
+	if (pNMUpDown == NULL)
+		return;
+
+	SetNewDeltaposValue(m_nShowAreaBottom, pNMUpDown->iDelta);
+}
+
+void CImageBasePropEditDlg::OnDeltaposJjgLeft(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
+	*pResult = 0;
+	if (pNMUpDown == NULL)
+		return;
+
+	SetNewDeltaposValue(m_nJggLeft, pNMUpDown->iDelta);
+}
+
+void CImageBasePropEditDlg::OnDeltaposJjgTop(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
+	*pResult = 0;
+	if (pNMUpDown == NULL)
+		return;
+
+	SetNewDeltaposValue(m_nJggTop, pNMUpDown->iDelta);
+}
+
+void CImageBasePropEditDlg::OnDeltaposJjgBottom(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
+	*pResult = 0;
+	if (pNMUpDown == NULL)
+		return;
+
+	SetNewDeltaposValue(m_nJggBottom, pNMUpDown->iDelta);
+}
+
+void CImageBasePropEditDlg::OnDeltaposJjgRight(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
+	*pResult = 0;
+	if (pNMUpDown == NULL)
+		return;
+
+	SetNewDeltaposValue(m_nJggRight, pNMUpDown->iDelta);
+}
+
+void CImageBasePropEditDlg::SetNewDeltaposValue(int &nSetValue, int nDelta)
+{
+	if (nDelta == -1)
+		nSetValue++;
+	else
+		nSetValue--;
+
+	if (nSetValue < 0)
+		nSetValue = 0;
+
+	this->UpdateData(FALSE);
+}
+
+void CImageBasePropEditDlg::OnBnClickedPingpu()
+{
+	this->UpdateData(TRUE);
+	SetJjgEditCtrlStyle(FALSE);
+}
+
+void CImageBasePropEditDlg::OnBnClickedQuanlashen()
+{
+	this->UpdateData(TRUE);
+	SetJjgEditCtrlStyle(FALSE);
+}
+
+void CImageBasePropEditDlg::OnBnClickedJjg()
+{
+	this->UpdateData(TRUE);
+	SetJjgEditCtrlStyle(TRUE);
+}
+
+void CImageBasePropEditDlg::SetJjgEditCtrlStyle(bool bEnable)
+{
+	if (!::IsWindow(m_hWnd))
+		return;
+
+	this->GetDlgItem(IDE_JJG_LEFT)->EnableWindow(bEnable);
+	this->GetDlgItem(IDS_JJG_LEFT)->EnableWindow(bEnable);
+	this->GetDlgItem(IDE_JJG_TOP)->EnableWindow(bEnable);
+	this->GetDlgItem(IDS_JJG_TOP)->EnableWindow(bEnable);
+	this->GetDlgItem(IDE_JJG_RIGHT)->EnableWindow(bEnable);
+	this->GetDlgItem(IDS_JJG_RIGHT)->EnableWindow(bEnable);
+	this->GetDlgItem(IDE_JJG_BOTTOM)->EnableWindow(bEnable);
+	this->GetDlgItem(IDS_JJG_BOTTOM)->EnableWindow(bEnable);
+}
+
+void CImageBasePropEditDlg::OnBnClickedOk()
+{
+	// TODO: Add your control notification handler code here
+	OnOK();
+}
+
+void CImageBasePropEditDlg::OnBnClickedNewImagebase()
+{
+	m_ModifyImgDlg.IsCreateImageBase(true);
+	if (m_ModifyImgDlg.DoModal() != IDOK)
+		return;
+}
+
+void CImageBasePropEditDlg::OnBnClickedDeleteImagebase()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CImageBasePropEditDlg::OnBnClickedEditImagebase()
+{
+	m_ModifyImgDlg.IsCreateImageBase(false);
+	if (m_ModifyImgDlg.DoModal() != IDOK)
+		return;
+}
+
+void CImageBasePropEditDlg::OnBnClickedGetLocalImage()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CImageBasePropEditDlg::OnBnClickedDeleteLocalImage()
+{
+	// TODO: Add your control notification handler code here
 }

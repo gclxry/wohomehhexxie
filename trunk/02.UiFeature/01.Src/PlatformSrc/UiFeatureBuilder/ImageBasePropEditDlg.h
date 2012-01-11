@@ -2,6 +2,8 @@
 #include "afxwin.h"
 #include "afxcmn.h"
 #include "ImageBaseView.h"
+#include "FeatureBaseList.h"
+#include "ModifyImageBaseDlg.h"
 
 // CImageBasePropEditDlg dialog
 
@@ -25,10 +27,27 @@ protected:
 	CStatic m_Static_2;
 	CStatic m_Static_3;
 	CButton m_OkBtn;
-	CListCtrl m_ImageBaseList;
-	CListCtrl m_LocalImageList;
+	CFeatureBaseList m_ImageBaseList;
+	CFeatureBaseList m_LocalImageList;
 
 	CImageBaseView *m_pImageView;
+
+	int m_nShowAreaLeft;
+	int m_nShowAreaTop;
+	int m_nShowAreaBottom;
+	int m_nShowAreaRight;
+	int m_nJggLeft;
+	int m_nJggTop;
+	int m_nJggRight;
+	int m_nJggBottom;
+	int m_nSelelShowImgType;
+	CComboBox m_ShowBiLi_Combo;
+
+	CModifyImageBaseDlg m_ModifyImgDlg;
+
+private:
+	void SetNewDeltaposValue(int &nSetValue, int nDelta);
+	void SetJjgEditCtrlStyle(bool bEnable);
 
 	DECLARE_MESSAGE_MAP()
 public:
