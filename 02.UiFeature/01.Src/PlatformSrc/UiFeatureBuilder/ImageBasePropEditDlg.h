@@ -2,8 +2,8 @@
 #include "afxwin.h"
 #include "afxcmn.h"
 #include "ImageBaseView.h"
-#include "FeatureBaseList.h"
 #include "ModifyImageBaseDlg.h"
+#include "ImageBaseNameList.h"
 
 // CImageBasePropEditDlg dialog
 
@@ -27,7 +27,7 @@ protected:
 	CStatic m_Static_2;
 	CStatic m_Static_3;
 	CButton m_OkBtn;
-	CFeatureBaseList m_ImageBaseList;
+	CImageBaseNameList m_ImageBaseList;
 	CFeatureBaseList m_LocalImageList;
 
 	CImageBaseView *m_pImageView;
@@ -48,6 +48,7 @@ protected:
 private:
 	void SetNewDeltaposValue(int &nSetValue, int nDelta);
 	void SetJjgEditCtrlStyle(bool bEnable);
+	bool FindNameInImageBaseNameList(CString &strName);
 
 	DECLARE_MESSAGE_MAP()
 public:

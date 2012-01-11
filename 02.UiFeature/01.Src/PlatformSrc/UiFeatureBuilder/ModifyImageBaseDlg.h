@@ -8,6 +8,7 @@ class CModifyImageBaseDlg : public CDialog
 	DECLARE_DYNAMIC(CModifyImageBaseDlg)
 
 	void IsCreateImageBase(bool bIsCreate);
+	void GetImageBaseName(CString &strName);
 
 public:
 	CModifyImageBaseDlg(CWnd* pParent = NULL);   // standard constructor
@@ -21,6 +22,7 @@ protected:
 
 private:
 	bool m_bIsCreate;
+	CString m_strImageBaseName;
 
 	DECLARE_MESSAGE_MAP()
 public:

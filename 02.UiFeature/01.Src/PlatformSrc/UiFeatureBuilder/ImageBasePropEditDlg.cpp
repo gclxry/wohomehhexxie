@@ -359,11 +359,33 @@ void CImageBasePropEditDlg::OnBnClickedNewImagebase()
 	m_ModifyImgDlg.IsCreateImageBase(true);
 	if (m_ModifyImgDlg.DoModal() != IDOK)
 		return;
+
+	CString strName;
+	m_ModifyImgDlg.GetImageBaseName(strName);
+	if (strName.GetLength() <= 0 || FindNameInImageBaseNameList(strName))
+		return;
+
+	CString strNo(_T(""));
+	strNo.Format(_T("%d"), m_ImageBaseList.GetItemCount()+1);
+	m_ImageBaseList.InsertItem(0, strNo);
+	m_ImageBaseList.SetItemText(0, 1, strName);
 }
 
-void CImageBasePropEditDlg::OnBnClickedDeleteImagebase()
+bool CImageBasePropEditDlg::FindNameInImageBaseNameList(CString &strName)
 {
-	// TODO: Add your control notification handler code here
+	for (int i = 0; i < m_ImageBaseList.GetItemCount(); i++)
+	{
+		CString strComName = m_ImageBaseList.GetItemText(i, 1);
+		if (strComName.CompareNoCase(strName) == 0)
+		{
+			CString strInfo(_T(""));
+			strInfo.Format(_T("已经存在名为【%s】的图片属性！"), strComName);
+			AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void CImageBasePropEditDlg::OnBnClickedEditImagebase()
@@ -371,6 +393,19 @@ void CImageBasePropEditDlg::OnBnClickedEditImagebase()
 	m_ModifyImgDlg.IsCreateImageBase(false);
 	if (m_ModifyImgDlg.DoModal() != IDOK)
 		return;
+
+
+
+	CString strName;
+	m_ModifyImgDlg.GetImageBaseName(strName);
+	if (strName.GetLength() <= 0 || FindNameInImageBaseNameList(strName))
+		return;
+
+}
+
+void CImageBasePropEditDlg::OnBnClickedDeleteImagebase()
+{
+	// TODO: Add your control notification handler code here
 }
 
 void CImageBasePropEditDlg::OnBnClickedGetLocalImage()
