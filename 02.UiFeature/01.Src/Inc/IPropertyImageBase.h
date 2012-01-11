@@ -22,6 +22,16 @@ struct JGG_INFO
 	bool bMiddleStretch;
 };
 
+enum IMAGE_SHOW_TYPE
+{
+	// 平铺
+	IST_PINGPU		= 0,
+	// 全拉伸
+	IST_ALL_LASHEN,
+	// 九宫格拉伸
+	IST_JGG_LASHEN
+};
+
 // 图片属性
 struct IMAGE_BASE_PROP
 {
@@ -29,6 +39,7 @@ struct IMAGE_BASE_PROP
 	bool bIsZipFile;
 	string strFileName;
 	RECT RectInImage;
+	IMAGE_SHOW_TYPE ImgShowType;
 	JGG_INFO jggInfo;
 };
 

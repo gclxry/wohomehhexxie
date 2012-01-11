@@ -12,6 +12,7 @@ IPropertyImageBase::IPropertyImageBase()
 	m_ImageProp.bIsZipFile = true;
 	m_ImageProp.strFileName = "";
 	INIT_RECT(m_ImageProp.RectInImage);
+	m_ImageProp.ImgShowType = IST_PINGPU;
 	memset(&m_ImageProp.jggInfo, 0, sizeof(JGG_INFO));
 }
 
@@ -47,7 +48,8 @@ bool IPropertyImageBase::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 	char* psz_id = JabberXmlGetAttrValue(pXmlNode, SKIN_OBJECT_ID);
 	char* psz_name = JabberXmlGetAttrValue(pXmlNode, "name");
 	char* psz_imageinzip = JabberXmlGetAttrValue(pXmlNode, "imageinzip");
-	if (psz_id == NULL || psz_name == NULL || psz_imageinzip == NULL)
+	char* psz_showtype = JabberXmlGetAttrValue(pXmlNode, "showtype");
+	if (psz_id == NULL || psz_name == NULL || psz_imageinzip == NULL || psz_showtype == NULL)
 		return false;
 
 	XmlNode* pRectInImage = JabberXmlGetChild(pXmlNode, "rectinimage");
@@ -82,6 +84,7 @@ bool IPropertyImageBase::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 	SetObjectName((const char *)psz_name);
 	m_ImageProp.bIsZipFile = true;
 	m_ImageProp.strFileName = psz_imageinzip;
+	m_ImageProp.ImgShowType = (IMAGE_SHOW_TYPE)atoi(psz_showtype);
 
 	m_ImageProp.RectInImage.left = atoi(psz_left);
 	m_ImageProp.RectInImage.top = atoi(psz_top);
