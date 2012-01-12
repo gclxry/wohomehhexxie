@@ -20,10 +20,20 @@ public:
 	void SetImageEditEnableStyle(bool bEnable);
 	IPropertyImageBase * GetSelectImageBase();
 
-// Dialog Data
-	enum { IDD = IDD_IMAGE_EDIT_DLG };
+public:
+	int m_nShowAreaLeft;
+	int m_nShowAreaTop;
+	int m_nShowAreaBottom;
+	int m_nShowAreaRight;
+	int m_nJggLeft;
+	int m_nJggTop;
+	int m_nJggRight;
+	int m_nJggBottom;
+	int m_nSelelShowImgType;
 
 protected:
+	enum { IDD = IDD_IMAGE_EDIT_DLG };
+
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	virtual BOOL OnInitDialog();
 	void SetChildPos();
@@ -37,23 +47,15 @@ protected:
 
 	CImageBaseView *m_pImageView;
 
-	int m_nShowAreaLeft;
-	int m_nShowAreaTop;
-	int m_nShowAreaBottom;
-	int m_nShowAreaRight;
-	int m_nJggLeft;
-	int m_nJggTop;
-	int m_nJggRight;
-	int m_nJggBottom;
-	int m_nSelelShowImgType;
 	CComboBox m_ShowBiLi_Combo;
 
 	CModifyImageBaseDlg m_ModifyImgDlg;
 
 	IUiFeatureKernel* m_pUiKernel;
 	IPropertyImage* m_pParentImgProp;
+
 private:
-	void SetNewDeltaposValue(int &nSetValue, int nDelta);
+	void SetNewDeltaposValue(int &nSetValue, int nDelta, LONG &nPropValue);
 	void SetJjgEditCtrlStyle(bool bEnable);
 	bool FindNameInImageBaseNameList(CString &strName);
 

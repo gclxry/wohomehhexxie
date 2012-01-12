@@ -70,21 +70,10 @@ void CImageBaseNameList::LoadImageBaseProp()
 			{
 				bFind = true;
 				this->SetItemState(nNo, LVIS_SELECTED, LVIS_SELECTED);
+				m_pImgBaseDlg->SetImageEditEnableStyle(true);
 			}
 		}
 	}
-}
-
-void CImageBaseNameList::OnSelectItem()
-{
-	m_pSelectImgBaseProp = NULL;
-	if (m_pImgBaseDlg == NULL)
-		return;
-
-	if (m_nSelectItem >= 1)
-		m_pSelectImgBaseProp = (IPropertyImageBase*)this->GetItemData(m_nSelectItem);
-
-	m_pImgBaseDlg->SetImageEditEnableStyle((m_nSelectItem >= 1));
 }
 
 void CImageBaseNameList::InitImageBaseShow(IUiFeatureKernel* pUiKernel, IPropertyImage* pParentImgProp)
@@ -138,12 +127,14 @@ bool CImageBaseNameList::OnCreateImageBaseProp(CString strName)
 
 void CImageBaseNameList::OnDeleteImageBaseProp()
 {
+	bool bDelete = false;
 	int nCtns = this->GetItemCount();
 	for (int i = 1; i < nCtns; )
 	{
 		BOOL bCheck = this->GetCheck(i);
 		if (bCheck)
 		{
+			bDelete = true;
 			// 选中，删除
 			IPropertyImageBase *pImgBaseProp = (IPropertyImageBase *)this->GetItemData(i);
 			m_pUiKernel->GetSkinManager()->BD_DeletePropetry(dynamic_cast<IPropertyBase*>(pImgBaseProp));
@@ -164,4 +155,52 @@ void CImageBaseNameList::OnDeleteImageBaseProp()
 	nCtns = this->GetItemCount();
 	if (nCtns >= 1)
 		this->SetCheck(0, FALSE);
+
+	if (!bDelete)
+		AfxMessageBox(_T("请先勾选属性列表中复选框，选择需要删除的图片属性，再进行删除操作！"), MB_OK | MB_ICONWARNING);
+}
+
+void CImageBaseNameList::OnSelectItem()
+{
+	m_pSelectImgBaseProp = NULL;
+	if (m_pImgBaseDlg == NULL)
+		return;
+
+	if (m_nSelectItem >= 1)
+		m_pSelectImgBaseProp = (IPropertyImageBase*)this->GetItemData(m_nSelectItem);
+
+	IMAGE_BASE_PROP* pImgProp = m_pSelectImgBaseProp->GetImageProp();
+	if (pImgProp == NULL)
+	{
+		m_pImgBaseDlg->SetImageEditEnableStyle((m_nSelectItem >= 1));
+		return;
+	}
+
+	if (m_pSelectImgBaseProp == NULL)
+	{
+		m_pImgBaseDlg->m_nShowAreaLeft = 0;
+		m_pImgBaseDlg->m_nShowAreaTop = 0;
+		m_pImgBaseDlg->m_nShowAreaBottom = 0;
+		m_pImgBaseDlg->m_nShowAreaRight = 0;
+		m_pImgBaseDlg->m_nJggLeft = 0;
+		m_pImgBaseDlg->m_nJggTop = 0;
+		m_pImgBaseDlg->m_nJggRight = 0;
+		m_pImgBaseDlg->m_nJggBottom = 0;
+		m_pImgBaseDlg->m_nSelelShowImgType = 0;
+	}
+	else
+	{
+		m_pImgBaseDlg->m_nShowAreaLeft = pImgProp->RectInImage.left;
+		m_pImgBaseDlg->m_nShowAreaTop = pImgProp->RectInImage.top;
+		m_pImgBaseDlg->m_nShowAreaBottom = pImgProp->RectInImage.bottom;
+		m_pImgBaseDlg->m_nShowAreaRight = pImgProp->RectInImage.right;
+		m_pImgBaseDlg->m_nJggLeft = pImgProp->jggInfo.left;
+		m_pImgBaseDlg->m_nJggTop = pImgProp->jggInfo.top;
+		m_pImgBaseDlg->m_nJggRight = pImgProp->jggInfo.right;
+		m_pImgBaseDlg->m_nJggBottom = pImgProp->jggInfo.bottom;
+		m_pImgBaseDlg->m_nSelelShowImgType = pImgProp->ImgShowType;
+	}
+
+	m_pImgBaseDlg->UpdateData(FALSE);
+	m_pImgBaseDlg->SetImageEditEnableStyle((m_nSelectItem >= 1));
 }
