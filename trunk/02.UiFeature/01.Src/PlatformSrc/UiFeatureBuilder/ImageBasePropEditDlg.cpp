@@ -172,8 +172,7 @@ BOOL CImageBasePropEditDlg::OnInitDialog()
 	}
 	SetChildPos();
 
-	// ¾Å¹¬¸ñ×´Ì¬
-	SetJjgEditCtrlStyle(m_nSelelShowImgType == 2);
+	SetImageEditEnableStyle(false);
 
 	m_ShowBiLi_Combo.InsertString(0, _T("100%"));
 	m_ShowBiLi_Combo.InsertString(1, _T("200%"));
@@ -183,16 +182,8 @@ BOOL CImageBasePropEditDlg::OnInitDialog()
 	m_ShowBiLi_Combo.InsertString(5, _T("1000%"));
 	m_ShowBiLi_Combo.SetCurSel(0);
 
-	m_ImageBaseList.SendMessage(LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_CHECKBOXES);
-	m_ImageBaseList.ModifyStyle(0, LVS_SINGLESEL | LVS_SHOWSELALWAYS);
-	m_ImageBaseList.InsertColumn(0, _T("#"), LVCFMT_LEFT, 50);
-	m_ImageBaseList.InsertColumn(1, _T("Í¼Æ¬ÊôÐÔÃû³Æ"), LVCFMT_LEFT, 160);
-
-	m_LocalImageList.SendMessage(LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_CHECKBOXES);
-	m_LocalImageList.ModifyStyle(0, LVS_SINGLESEL | LVS_SHOWSELALWAYS);
-	m_LocalImageList.InsertColumn(0, _T("#"), LVCFMT_LEFT, 50);
-	m_LocalImageList.InsertColumn(1, _T("±¾µØÍ¼Æ¬Ãû³Æ"), LVCFMT_LEFT, 160);
-
+	m_ImageBaseList.Init(this, &m_LocalImageList);
+	m_LocalImageList.Init(this);
 
 	this->UpdateData(FALSE);
 	return TRUE;
@@ -346,6 +337,35 @@ void CImageBasePropEditDlg::SetJjgEditCtrlStyle(bool bEnable)
 	this->GetDlgItem(IDS_JJG_RIGHT)->EnableWindow(bEnable);
 	this->GetDlgItem(IDE_JJG_BOTTOM)->EnableWindow(bEnable);
 	this->GetDlgItem(IDS_JJG_BOTTOM)->EnableWindow(bEnable);
+}
+
+void CImageBasePropEditDlg::SetImageEditEnableStyle(bool bEnable)
+{
+	if (bEnable)
+	{
+		// ¾Å¹¬¸ñ×´Ì¬
+		SetJjgEditCtrlStyle(m_nSelelShowImgType == 2);
+	}
+	else
+	{
+		// ¾Å¹¬¸ñ×´Ì¬
+		SetJjgEditCtrlStyle(false);
+	}
+
+	this->GetDlgItem(IDB_DELETE_IMAGEBASE)->EnableWindow(bEnable);
+	this->GetDlgItem(IDB_EDIT_IMAGEBASE)->EnableWindow(bEnable);
+	this->GetDlgItem(IDE_SHOW_AREA_LEFT)->EnableWindow(bEnable);
+	this->GetDlgItem(IDS_SHOW_AREA_LEFT)->EnableWindow(bEnable);
+	this->GetDlgItem(IDE_SHOW_AREA_TOP)->EnableWindow(bEnable);
+	this->GetDlgItem(IDS_SHOW_AREA_TOP)->EnableWindow(bEnable);
+	this->GetDlgItem(IDE_SHOW_AREA_RIGHT)->EnableWindow(bEnable);
+	this->GetDlgItem(IDS_SHOW_AREA_RIGHT)->EnableWindow(bEnable);
+	this->GetDlgItem(IDE_SHOW_AREA_BOTTOM)->EnableWindow(bEnable);
+	this->GetDlgItem(IDS_SHOW_AREA_BOTTOM)->EnableWindow(bEnable);
+	this->GetDlgItem(IDR_PINGPU)->EnableWindow(bEnable);
+	this->GetDlgItem(IDR_QUANLASHEN)->EnableWindow(bEnable);
+	this->GetDlgItem(IDR_JJG)->EnableWindow(bEnable);
+	this->GetDlgItem(IDOK)->EnableWindow(bEnable);
 }
 
 void CImageBasePropEditDlg::OnBnClickedOk()
