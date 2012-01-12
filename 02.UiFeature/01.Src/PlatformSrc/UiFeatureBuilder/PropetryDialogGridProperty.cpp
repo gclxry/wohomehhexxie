@@ -1,19 +1,22 @@
 #include "StdAfx.h"
 #include "PropetryDialogGridProperty.h"
 #include "ImageBasePropEditDlg.h"
+#include "PropertyViewCtrl.h"
 
 CPropetryDialogGridProperty::CPropetryDialogGridProperty(const CString& strName, const COleVariant& varValue, CString& strInfo) : CMFCPropertyGridProperty(strName, varValue, strInfo)
 {
 	m_ObjType = OTID_NONE;
 	m_pUiKernel = NULL;
+	m_pPropViewList = NULL;
 }
 
 CPropetryDialogGridProperty::~CPropetryDialogGridProperty()
 {
 }
 
-void CPropetryDialogGridProperty::InitDialogPropetry(IUiFeatureKernel* pUiKernel, OBJECT_TYPE_ID ObjType)
+void CPropetryDialogGridProperty::InitDialogPropetry(CPropertyViewCtrl *pPropView, IUiFeatureKernel* pUiKernel, OBJECT_TYPE_ID ObjType)
 {
+	m_pPropViewList = pPropView;
 	m_ObjType = ObjType;
 	m_pUiKernel = pUiKernel;
 }
@@ -23,6 +26,7 @@ void CPropetryDialogGridProperty::OnClickButton(CPoint /*point*/)
 	if (m_ObjType == OTID_IMAGE_BASE)
 	{
 		ImageBaseDialog();
+		m_pPropViewList->RefreshAllData();
 		return;
 	}
 

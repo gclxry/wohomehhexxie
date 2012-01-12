@@ -3,6 +3,7 @@
 #include "..\..\Inc\IPropertyImageBase.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IUiFeatureKernel.h"
+#include "..\..\Inc\ICommonFun.h"
 
 IPropertyImageBase::IPropertyImageBase()
 {
@@ -11,9 +12,9 @@ IPropertyImageBase::IPropertyImageBase()
 	m_nUseCtns = 0;
 	m_ImageProp.bIsZipFile = true;
 	m_ImageProp.strFileName = "";
-	INIT_RECT(m_ImageProp.RectInImage);
 	m_ImageProp.ImgShowType = IST_PINGPU;
-	memset(&m_ImageProp.jggInfo, 0, sizeof(JGG_INFO));
+	INIT_RECT(m_ImageProp.RectInImage);
+	INIT_RECT(m_ImageProp.jggInfo);
 }
 
 IPropertyImageBase::~IPropertyImageBase()
@@ -68,16 +69,9 @@ bool IPropertyImageBase::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 	char* psz_jgg_top = JabberXmlGetAttrValue(pJgg, "top");
 	char* psz_jgg_right = JabberXmlGetAttrValue(pJgg, "right");
 	char* psz_jgg_bottom = JabberXmlGetAttrValue(pJgg, "bottom");
-	char* psz_leftstretch = JabberXmlGetAttrValue(pJgg, "leftstretch");
-	char* psz_topstretch = JabberXmlGetAttrValue(pJgg, "topstretch");
-	char* psz_rightstretch = JabberXmlGetAttrValue(pJgg, "rightstretch");
-	char* psz_bottomstretch = JabberXmlGetAttrValue(pJgg, "bottomstretch");
-	char* psz_middlestretch = JabberXmlGetAttrValue(pJgg, "middlestretch");
 
 	if (psz_left == NULL || psz_top == NULL || psz_right == NULL || psz_bottom == NULL || 
-		psz_jgg_left == NULL || psz_jgg_top == NULL || psz_jgg_right == NULL || psz_jgg_bottom == NULL || 
-		psz_leftstretch == NULL || psz_topstretch == NULL || psz_rightstretch == NULL || psz_bottomstretch == NULL || 
-		psz_middlestretch == NULL)
+		psz_jgg_left == NULL || psz_jgg_top == NULL || psz_jgg_right == NULL || psz_jgg_bottom == NULL)
 		return false;
 
 	SetObjectId((const char *)psz_id);
@@ -91,15 +85,10 @@ bool IPropertyImageBase::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 	m_ImageProp.RectInImage.right = atoi(psz_right);
 	m_ImageProp.RectInImage.bottom = atoi(psz_bottom);
 
-	m_ImageProp.jggInfo.nLeftSpace = atoi(psz_jgg_left);
-	m_ImageProp.jggInfo.nTopSpace = atoi(psz_jgg_top);
-	m_ImageProp.jggInfo.nRightSpace = atoi(psz_jgg_right);
-	m_ImageProp.jggInfo.nBottomSpace = atoi(psz_jgg_bottom);
-	m_ImageProp.jggInfo.bLeftStretch = (atoi(psz_leftstretch) != 0);
-	m_ImageProp.jggInfo.bTopStretch = (atoi(psz_topstretch) != 0);
-	m_ImageProp.jggInfo.bRightStretch = (atoi(psz_rightstretch) != 0);
-	m_ImageProp.jggInfo.bBottomStretch = (atoi(psz_bottomstretch) != 0);
-	m_ImageProp.jggInfo.bMiddleStretch = (atoi(psz_middlestretch) != 0);
+	m_ImageProp.jggInfo.left = atoi(psz_jgg_left);
+	m_ImageProp.jggInfo.top = atoi(psz_jgg_top);
+	m_ImageProp.jggInfo.right = atoi(psz_jgg_right);
+	m_ImageProp.jggInfo.bottom = atoi(psz_jgg_bottom);
 
 	return true;
 }
@@ -145,5 +134,44 @@ void IPropertyImageBase::SetActivePropetry(bool bIsActive)
 
 bool IPropertyImageBase::GetActivePropetry()
 {
-	return m_bIsActiveProp;
+//	return m_bIsActiveProp;
+	return true;
+}
+
+// 写入xml
+bool IPropertyImageBase::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode)
+{
+	// 如果是无效属性，不写入XML
+	if (!GetActivePropetry())
+		return true;
+
+	if (pParentXmlNode == NULL)
+		return false;
+
+	CUiXmlWriteNode* pPropNode = XmlStrObj.CreateNode(pParentXmlNode, "item");
+	if (pPropNode == NULL)
+		return false;
+
+	pPropNode->AddAttribute(SKIN_OBJECT_ID, GetObjectId());
+	pPropNode->AddAttribute("name", GetObjectName());
+	pPropNode->AddAttribute("imageinzip", m_ImageProp.strFileName.c_str());
+	AddIntAttrToNode(pPropNode, "showtype", m_ImageProp.ImgShowType);
+
+	CUiXmlWriteNode* pNode_rectinimage = XmlStrObj.CreateNode(pPropNode, "rectinimage");
+	if (pNode_rectinimage == NULL)
+		return false;
+	AddIntAttrToNode(pNode_rectinimage, "left", m_ImageProp.RectInImage.left);
+	AddIntAttrToNode(pNode_rectinimage, "top", m_ImageProp.RectInImage.top);
+	AddIntAttrToNode(pNode_rectinimage, "right", m_ImageProp.RectInImage.right);
+	AddIntAttrToNode(pNode_rectinimage, "bottom", m_ImageProp.RectInImage.bottom);
+
+	CUiXmlWriteNode* pNode_jgg = XmlStrObj.CreateNode(pPropNode, "jgg");
+	if (pNode_jgg == NULL)
+		return false;
+	AddIntAttrToNode(pNode_jgg, "left", m_ImageProp.jggInfo.left);
+	AddIntAttrToNode(pNode_jgg, "top", m_ImageProp.jggInfo.top);
+	AddIntAttrToNode(pNode_jgg, "right", m_ImageProp.jggInfo.right);
+	AddIntAttrToNode(pNode_jgg, "bottom", m_ImageProp.jggInfo.bottom);
+
+	return true;
 }

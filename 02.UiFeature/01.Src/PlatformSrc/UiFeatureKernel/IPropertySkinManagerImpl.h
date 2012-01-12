@@ -35,6 +35,8 @@ public:
 	virtual bool BD_AppendControlToVec(char *pszCtrlType, IPropertyGroup* pCtrlPropGroup);
 	// 保存皮肤包
 	virtual bool BD_SaveProject(char *pszSkinDir, char *pszSkinName);
+	// 删除属性
+	virtual bool BD_DeletePropetry(IPropertyBase *pPropBase);
 
 	// 设置可以保存的有效属性
 	virtual void BD_SetWindowPropetryActiveProp(IWindowBase *pWndBase, bool bActive);
@@ -117,6 +119,7 @@ private:
 	void SaveToFile(char *pszFilePath, BYTE *pData, int nDataLen);
 
 
+	bool DeleteImageBaseProp(IPropertyImageBase *pImgBaseProp);
 private:
 	// 皮肤路径
 	string m_strSkinPath;

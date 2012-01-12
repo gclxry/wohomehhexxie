@@ -1,11 +1,5 @@
 <resource>
 <bool>
-<item objid="window231.Panel254.Panel317.Panel347.group348.bool352" name="Lock" data="0"/>
-<item objid="window231.Panel254.Panel317.Panel347.group348.bool353" name="Visible" data="1"/>
-<item objid="window231.Panel254.Panel317.Panel347.group348.bool354" name="Enable" data="1"/>
-<item objid="window231.Panel254.Panel317.Panel347.group348.bool355" name="ReceiveMouseMessage" data="1"/>
-<item objid="window231.Panel254.Panel317.Panel347.group348.bool356" name="DragInCtrl" data="0"/>
-<item objid="window231.Panel254.Panel317.Panel347.group348.bool358" name="DefaultEnterCtrl" data="0"/>
 <item objid="window178.group179.bool184" name="Visible" data="1"/>
 <item objid="window178.group179.bool185" name="LayeredWindow" data="0"/>
 <item objid="window178.group179.bool186" name="TopMost" data="0"/>
@@ -20,6 +14,12 @@
 <item objid="window202.group203.group211.bool213" name="CanMiniSize" data="0"/>
 <item objid="window202.group217.bool218" name="Enable" data="0"/>
 <item objid="window202.group219.bool220" name="Enable" data="0"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.bool352" name="Lock" data="0"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.bool353" name="Visible" data="1"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.bool354" name="Enable" data="1"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.bool355" name="ReceiveMouseMessage" data="1"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.bool356" name="DragInCtrl" data="0"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.bool358" name="DefaultEnterCtrl" data="0"/>
 <item objid="window231.Panel254.Panel317.group318.bool322" name="Lock" data="0"/>
 <item objid="window231.Panel254.Panel317.group318.bool323" name="Visible" data="1"/>
 <item objid="window231.Panel254.Panel317.group318.bool324" name="Enable" data="1"/>
@@ -60,9 +60,6 @@
 <item objid="window231.Panel275.group276.group287.combobox290" name="@LayoutType" counts="10" select="0" data0="左上角定位" data1="左下角定位" data2="右上角定位" data3="右下角定位" data4="撑满左侧" data5="撑满右侧" data6="撑满上方" data7="撑满下方" data8="撑满全部" data9="居中"/>
 </combobox>
 <group>
-<item objid="window231.Panel254.Panel317.Panel347.group348.group359" name="Layout"/>
-<item objid="window231.Panel254.Panel317.Panel347.group367" name="ControlPropetry"/>
-<item objid="window231.Panel254.Panel317.Panel347.group348" name="ControlBase"/>
 <item objid="window178.group179" name="WindowBase"/>
 <item objid="window178.group179.group187" name="SysBase"/>
 <item objid="window178.group190" name="Size"/>
@@ -73,6 +70,9 @@
 <item objid="window202.group214" name="Size"/>
 <item objid="window202.group217" name="Drag"/>
 <item objid="window202.group219" name="Stretching"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348" name="ControlBase"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.group359" name="Layout"/>
+<item objid="window231.Panel254.Panel317.Panel347.group367" name="ControlPropetry"/>
 <item objid="window231.Panel254.Panel317.group318" name="ControlBase"/>
 <item objid="window231.Panel254.Panel317.group318.group329" name="Layout"/>
 <item objid="window231.Panel254.Panel317.group337" name="ControlPropetry"/>
@@ -93,19 +93,13 @@
 </group>
 <image>
 <item objid="window231.Panel254.Panel317.Panel347.group367.image368" name="Image" imagebasename=""/>
-<item objid="window231.Panel254.Panel317.group337.image341" name="Image" imagebasename=""/>
-<item objid="window231.Panel254.group274.image340" name="Image" imagebasename=""/>
+<item objid="window231.Panel254.Panel317.group337.image341" name="Image" imagebasename="123"/>
+<item objid="window231.Panel254.group274.image340" name="Image" imagebasename="123"/>
 <item objid="window231.Panel275.Panel296.group316.image343" name="Image" imagebasename=""/>
 <item objid="window231.Panel275.group295.image342" name="Image" imagebasename="New value"/>
 </image>
+<imagebase/>
 <int>
-<item objid="window231.Panel254.Panel317.Panel347.group348.int357" name="TabOrder" data="0"/>
-<item objid="window231.Panel254.Panel317.Panel347.group348.group359.int360" name="Width" data="21"/>
-<item objid="window231.Panel254.Panel317.Panel347.group348.group359.int361" name="Height" data="18"/>
-<item objid="window231.Panel254.Panel317.Panel347.group348.group359.int363" name="LeftSpace" data="13"/>
-<item objid="window231.Panel254.Panel317.Panel347.group348.group359.int364" name="RightSpace" data="0"/>
-<item objid="window231.Panel254.Panel317.Panel347.group348.group359.int365" name="TopSpace" data="18"/>
-<item objid="window231.Panel254.Panel317.Panel347.group348.group359.int366" name="BottomSpace" data="12"/>
 <item objid="window178.group190.int191" name="Width" data="500"/>
 <item objid="window178.group190.int192" name="Height" data="500"/>
 <item objid="window178.group195.int197" name="LeftSpace" data="0"/>
@@ -118,6 +112,13 @@
 <item objid="window202.group219.int222" name="RightSpace" data="0"/>
 <item objid="window202.group219.int223" name="TopSpace" data="0"/>
 <item objid="window202.group219.int224" name="BottomSpace" data="0"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.group359.int360" name="Width" data="21"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.group359.int361" name="Height" data="18"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.group359.int363" name="LeftSpace" data="13"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.group359.int364" name="RightSpace" data="0"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.group359.int365" name="TopSpace" data="18"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.group359.int366" name="BottomSpace" data="12"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.int357" name="TabOrder" data="0"/>
 <item objid="window231.Panel254.Panel317.group318.group329.int330" name="Width" data="34"/>
 <item objid="window231.Panel254.Panel317.group318.group329.int331" name="Height" data="48"/>
 <item objid="window231.Panel254.Panel317.group318.group329.int333" name="LeftSpace" data="45"/>
@@ -154,9 +155,6 @@
 <item objid="window231.group248.int253" name="BottomSpace" data="0"/>
 </int>
 <string>
-<item objid="window231.Panel254.Panel317.Panel347.group348.string350" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window231.Panel254.Panel317.Panel347"/>
-<item objid="window231.Panel254.Panel317.Panel347.group348.string351" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建控件"/>
-<item objid="window231.Panel254.Panel317.Panel347.group348.string349" name="Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
 <item objid="window178.group179.string180" name="Type" counts="1" defaultarea="1" area0="1" data0="window"/>
 <item objid="window178.group179.string181" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window178"/>
 <item objid="window178.group179.string182" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建窗口/"/>
@@ -165,6 +163,9 @@
 <item objid="window202.group203.string205" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window202"/>
 <item objid="window202.group203.string206" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建"/>
 <item objid="window202.group203.string207" name="WindowText" counts="1" defaultarea="1" area0="1" data0="窗口标题"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.string349" name="Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.string350" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window231.Panel254.Panel317.Panel347"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.string351" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建控件"/>
 <item objid="window231.Panel254.Panel317.group318.string319" name="Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
 <item objid="window231.Panel254.Panel317.group318.string320" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window231.Panel254.Panel317"/>
 <item objid="window231.Panel254.Panel317.group318.string321" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="2"/>

@@ -22,6 +22,9 @@ public:
 	// 清空4个xml文件的属性队列
 	virtual void ReleaseSkinManagerPropetry() = 0;
 
+	// 删除属性
+	virtual bool BD_DeletePropetry(IPropertyBase *pPropBase) = 0;
+
 //////////////////////////////////////////////////////////////////////////
 	// 初始化Window皮肤
 	virtual IPropertyWindow* PG_InitWindowSkin(const char *pszSkinPath, const char *pszWndName) = 0;

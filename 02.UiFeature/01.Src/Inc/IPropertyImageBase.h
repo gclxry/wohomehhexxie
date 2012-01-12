@@ -6,22 +6,6 @@
 #include "CDrawingBoard.h"
 #include "CDrawingImage.h"
 
-// 九宫格数据
-struct JGG_INFO
-{
-	// 九宫格边线距离
-	int nLeftSpace;
-	int nRightSpace;
-	int nTopSpace;
-	int nBottomSpace;
-	// 九宫格是否拉伸，不拉伸则平铺
-	bool bLeftStretch;
-	bool bRightStretch;
-	bool bTopStretch;
-	bool bBottomStretch;
-	bool bMiddleStretch;
-};
-
 enum IMAGE_SHOW_TYPE
 {
 	// 平铺
@@ -35,12 +19,14 @@ enum IMAGE_SHOW_TYPE
 // 图片属性
 struct IMAGE_BASE_PROP
 {
-	// 在压缩文件中的文件名
+	// 用于识别 strFileName ，如果不是 zipfile，说明是本地完整的路径
 	bool bIsZipFile;
+	// 在压缩文件中的文件名
 	string strFileName;
-	RECT RectInImage;
 	IMAGE_SHOW_TYPE ImgShowType;
-	JGG_INFO jggInfo;
+	RECT RectInImage;
+// 九宫格数据
+	RECT jggInfo;
 };
 
 class IPropertyImageBase : public IPropertyBase
@@ -57,6 +43,8 @@ public:
 	virtual bool IsRightData();
 	// 从XML节点读取属性值，并放入属性队列
 	virtual bool ReadPropertyFromXmlNode(XmlNode* pXmlNode);
+	// 写入xml
+	virtual bool AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode);
 
 //////////////////////////////////////////////////////////////////////////
 	// Builder使用函数，即：编辑状态下使用函数
