@@ -4,6 +4,7 @@
 #include "ImageBaseView.h"
 #include "ModifyImageBaseDlg.h"
 #include "ImageBaseNameList.h"
+#include "LocalImageList.h"
 
 // CImageBasePropEditDlg dialog
 
@@ -14,6 +15,8 @@ class CImageBasePropEditDlg : public CDialog
 public:
 	CImageBasePropEditDlg(CWnd* pParent = NULL);   // standard constructor
 	virtual ~CImageBasePropEditDlg();
+
+	void SetImageEditEnableStyle(bool bEnable);
 
 // Dialog Data
 	enum { IDD = IDD_IMAGE_EDIT_DLG };
@@ -28,7 +31,7 @@ protected:
 	CStatic m_Static_3;
 	CButton m_OkBtn;
 	CImageBaseNameList m_ImageBaseList;
-	CFeatureBaseList m_LocalImageList;
+	CLocalImageList m_LocalImageList;
 
 	CImageBaseView *m_pImageView;
 
