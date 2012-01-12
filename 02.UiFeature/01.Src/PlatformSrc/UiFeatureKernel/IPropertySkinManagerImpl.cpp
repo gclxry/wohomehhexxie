@@ -1691,3 +1691,18 @@ bool IPropertySkinManagerImpl::DeleteImageBaseProp(IPropertyImageBase *pImgBaseP
 	ReleaseBaseProp(dynamic_cast<IPropertyBase*>(pImgBaseProp));
 	return true;
 }
+
+// 取得指定组的属性
+ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::GetOneResourcePropMap(char *pPropGroupName)
+{
+	if (pPropGroupName == NULL)
+		return NULL;
+
+	ONE_RESOURCE_PROP_MAP* pPropGroupItem = NULL;
+	string strPropGroup(pPropGroupName);
+	RESOURCE_PROP_MAP::iterator pPropGroup = m_AllPropMap.find(strPropGroup);
+	if (pPropGroup != m_AllPropMap.end())
+		pPropGroupItem = pPropGroup->second;
+
+	return pPropGroupItem;
+}

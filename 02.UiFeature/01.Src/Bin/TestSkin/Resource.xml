@@ -94,11 +94,16 @@
 <image>
 <item objid="window231.Panel254.Panel317.Panel347.group367.image368" name="Image" imagebasename=""/>
 <item objid="window231.Panel254.Panel317.group337.image341" name="Image" imagebasename="123"/>
-<item objid="window231.Panel254.group274.image340" name="Image" imagebasename="123"/>
+<item objid="window231.Panel254.group274.image340" name="Image" imagebasename="234"/>
 <item objid="window231.Panel275.Panel296.group316.image343" name="Image" imagebasename=""/>
 <item objid="window231.Panel275.group295.image342" name="Image" imagebasename="New value"/>
 </image>
-<imagebase/>
+<imagebase>
+<item objid="1F594730AA944D3AA1595C27E3E94279" name="234" imageinzip="" showtype="0">
+<rectinimage left="0" top="0" right="0" bottom="0"/>
+<jgg left="0" top="0" right="0" bottom="0"/>
+</item>
+</imagebase>
 <int>
 <item objid="window178.group190.int191" name="Width" data="500"/>
 <item objid="window178.group190.int192" name="Height" data="500"/>

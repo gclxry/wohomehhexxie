@@ -21,6 +21,7 @@ public:
 
 protected:
 	virtual void OnSelectItem();
+	void LoadImageBaseProp();
 
 private:
 	IUiFeatureKernel* m_pUiKernel;

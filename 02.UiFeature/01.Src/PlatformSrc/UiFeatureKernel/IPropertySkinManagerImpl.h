@@ -38,6 +38,9 @@ public:
 	// 删除属性
 	virtual bool BD_DeletePropetry(IPropertyBase *pPropBase);
 
+	// 取得指定组的属性
+	virtual ONE_RESOURCE_PROP_MAP* GetOneResourcePropMap(char *pPropGroupName);
+
 	// 设置可以保存的有效属性
 	virtual void BD_SetWindowPropetryActiveProp(IWindowBase *pWndBase, bool bActive);
 	void BD_SetChildVecActiveMark(CHILD_CTRLS_VEC* pChildCtrlVec, bool bActive);

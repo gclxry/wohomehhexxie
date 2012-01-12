@@ -26,7 +26,7 @@ void CPropetryDialogGridProperty::OnClickButton(CPoint /*point*/)
 	if (m_ObjType == OTID_IMAGE_BASE)
 	{
 		ImageBaseDialog();
-		m_pPropViewList->RefreshAllData();
+//		m_pPropViewList->RefreshAllData();
 		return;
 	}
 
