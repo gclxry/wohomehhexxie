@@ -47,8 +47,6 @@ void CPropetryDialogGridProperty::ImageBaseDialog()
 	if (pImgBase == NULL)
 		return;
 
-	pParentImgProp->SetImageBaseProp(pImgBase);
-	pParentImgProp->SetRelevancyPropName((char*)pImgBase->GetObjectName());
 	COleVariant varValue(A2W(pParentImgProp->GetRelevancyPropName()));
 	SetValue(varValue);
 }

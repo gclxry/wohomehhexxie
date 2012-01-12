@@ -15,7 +15,7 @@ protected:
 	virtual void OnSelectItem();
 
 protected:
-	NMITEMACTIVATE m_SelectItem;
+	int m_nSelectItem;
 
 public:
 	DECLARE_MESSAGE_MAP()

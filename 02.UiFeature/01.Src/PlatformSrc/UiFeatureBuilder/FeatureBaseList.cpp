@@ -4,8 +4,7 @@
 
 CFeatureBaseList::CFeatureBaseList(void)
 {
-	memset(&m_SelectItem, 0, sizeof(NMITEMACTIVATE));
-	m_SelectItem.iItem = -1;
+	m_nSelectItem = -1;
 }
 
 CFeatureBaseList::~CFeatureBaseList(void)
@@ -31,13 +30,10 @@ void CFeatureBaseList::OnNMClick(NMHDR *pNMHDR, LRESULT *pResult)
 	LPNMITEMACTIVATE pSelectItem = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
 	*pResult = 0;
 
-	memset(&m_SelectItem, 0, sizeof(NMITEMACTIVATE));
-	m_SelectItem.iItem = -1;
+	m_nSelectItem = -1;
 
 	if (pSelectItem != NULL)
-	{
-		m_SelectItem = *pSelectItem;
-	}
+		m_nSelectItem = pSelectItem->iItem;
 
 	OnSelectItem();
 }
