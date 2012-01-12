@@ -231,9 +231,8 @@ void CPropertyViewCtrl::AppendImageProp(CMFCPropertyGridProperty* pParentPropGro
 	CPropetryDialogGridProperty *pNewProp = new CPropetryDialogGridProperty(strName, (_variant_t)strData, strInfo);
 	if (pNewProp == NULL)
 		return;
-	pNewProp->SetShowDialogType(OTID_IMAGE_BASE);
+	pNewProp->InitDialogPropetry(m_pUiKernel, OTID_IMAGE_BASE);
 	pNewProp->AllowEdit(FALSE);
-
 	pNewProp->SetData((DWORD_PTR)pPropBase);
 	pParentPropGroup->AddSubItem(pNewProp);
 }

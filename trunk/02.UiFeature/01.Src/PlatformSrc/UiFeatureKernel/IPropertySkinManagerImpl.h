@@ -152,5 +152,4 @@ private:
 
 	// 整个资源ObjectId
 	int m_nObjectIdInRes;
-	int m_nEmptyObjectId;
 };
