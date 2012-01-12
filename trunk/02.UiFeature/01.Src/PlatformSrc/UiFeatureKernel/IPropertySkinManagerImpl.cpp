@@ -1665,7 +1665,7 @@ bool IPropertySkinManagerImpl::DeleteImageBaseProp(IPropertyImageBase *pImgBaseP
 			{
 				IPropertyBase* pPropBase = pImage->second;
 				IPropertyImage* pImageProp = dynamic_cast<IPropertyImage*>(pPropBase);
-				if (pImageProp == NULL || pImageProp->GetRelevancyProp() == NULL)
+				if (pImageProp == NULL)
 					continue;
 
 				IPropertyImageBase *pComImgBase = dynamic_cast<IPropertyImageBase*>(pImageProp->GetRelevancyProp());
@@ -1734,6 +1734,7 @@ bool IPropertySkinManagerImpl::ModifyImageBaseProp(IPropertyImageBase *pImgBaseP
 	if (pImgBaseProp == NULL || pszNewPropName == NULL)
 		return false;
 
+	string strOldName = "";
 	string strPropGroup = "imagebase";
 	RESOURCE_PROP_MAP::iterator pImageBaseGroup = m_AllPropMap.find(strPropGroup);
 	if (pImageBaseGroup != m_AllPropMap.end())
@@ -1753,6 +1754,7 @@ bool IPropertySkinManagerImpl::ModifyImageBaseProp(IPropertyImageBase *pImgBaseP
 				if (pFindImgBaseProp == NULL)
 					return false;
 
+				strOldName = pFindImgBaseProp->GetObjectName();
 				pFindImgBaseProp->SetObjectName(pszNewPropName);
 			}
 		}
@@ -1769,12 +1771,15 @@ bool IPropertySkinManagerImpl::ModifyImageBaseProp(IPropertyImageBase *pImgBaseP
 			{
 				IPropertyBase* pPropBase = pImage->second;
 				IPropertyImage* pImageProp = dynamic_cast<IPropertyImage*>(pPropBase);
-				if (pImageProp == NULL || pImageProp->GetRelevancyProp() == NULL)
+				if (pImageProp == NULL)
 					continue;
 
 				IPropertyImageBase *pComImgBase = dynamic_cast<IPropertyImageBase*>(pImageProp->GetRelevancyProp());
-				if (lstrcmpiA(pImageProp->GetRelevancyPropName(), pImgBaseProp->GetObjectName()) == 0 || pComImgBase == pImgBaseProp)
+				if (lstrcmpiA(pImageProp->GetRelevancyPropName(), strOldName.c_str()) == 0 || pComImgBase == pImgBaseProp)
+				{
 					pImageProp->SetRelevancyPropName(pszNewPropName);
+					pImageProp->SetRelevancyProp(pImgBaseProp);
+				}
 			}
 		}
 	}
