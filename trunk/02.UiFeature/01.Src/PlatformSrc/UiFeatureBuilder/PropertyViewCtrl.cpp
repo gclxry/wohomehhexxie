@@ -35,6 +35,12 @@ void CPropertyViewCtrl::Init(IUiFeatureKernel* pKernelWindow, CWindowsViewTree *
 	m_pViewTree = pViewTree;
 }
 
+// 刷新整个界面
+void CPropertyViewCtrl::RefreshAllData()
+{
+	SetShowPropGroup(m_pCurrentPropGroup);
+}
+
 void CPropertyViewCtrl::SetShowPropGroup(IPropertyGroup *pPropGroup)
 {
 	ClearAll();
@@ -231,7 +237,7 @@ void CPropertyViewCtrl::AppendImageProp(CMFCPropertyGridProperty* pParentPropGro
 	CPropetryDialogGridProperty *pNewProp = new CPropetryDialogGridProperty(strName, (_variant_t)strData, strInfo);
 	if (pNewProp == NULL)
 		return;
-	pNewProp->InitDialogPropetry(m_pUiKernel, OTID_IMAGE_BASE);
+	pNewProp->InitDialogPropetry(this, m_pUiKernel, OTID_IMAGE_BASE);
 	pNewProp->AllowEdit(FALSE);
 	pNewProp->SetData((DWORD_PTR)pPropBase);
 	pParentPropGroup->AddSubItem(pNewProp);

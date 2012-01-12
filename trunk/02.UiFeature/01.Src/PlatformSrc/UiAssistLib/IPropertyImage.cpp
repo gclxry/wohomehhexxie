@@ -30,6 +30,12 @@ IPropertyImageBase* IPropertyImage::GetImageBaseProp()
 
 void IPropertyImage::SetImageBaseProp(IPropertyImageBase* pNewImgBase)
 {
+	if (pNewImgBase == NULL)
+	{
+		SetRelevancyProp(NULL);
+		return;
+	}
+
 	IPropertyBase* pPropBase = dynamic_cast<IPropertyBase*>(pNewImgBase);
 	SetRelevancyProp(pPropBase);
 }

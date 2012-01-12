@@ -1630,3 +1630,64 @@ void IPropertySkinManagerImpl::BD_SetGroupPropActiveMark(IPropertyGroup *pPropGr
 		}
 	}
 }
+
+// É¾³ýÊôÐÔ
+bool IPropertySkinManagerImpl::BD_DeletePropetry(IPropertyBase *pPropBase)
+{
+	if (pPropBase->GetObjectTypeId() == OTID_IMAGE_BASE)
+	{
+		IPropertyImageBase *pImgBaseProp = dynamic_cast<IPropertyImageBase*>(pPropBase);
+		if (pImgBaseProp == NULL)
+			return false;
+
+		return DeleteImageBaseProp(pImgBaseProp);
+	}
+
+	return false;
+}
+
+bool IPropertySkinManagerImpl::DeleteImageBaseProp(IPropertyImageBase *pImgBaseProp)
+{
+	if (pImgBaseProp == false)
+		return false;
+
+	string strPropGroup("image");
+	RESOURCE_PROP_MAP::iterator pImageGroup = m_AllPropMap.find(strPropGroup);
+	if (pImageGroup != m_AllPropMap.end())
+	{
+		ONE_RESOURCE_PROP_MAP* pImageItem = pImageGroup->second;
+		if (pImageItem != NULL)
+		{
+			for (ONE_RESOURCE_PROP_MAP::iterator pImage = pImageItem->begin(); pImage != pImageItem->end(); pImage++)
+			{
+				IPropertyBase* pPropBase = pImage->second;
+				IPropertyImage* pImageProp = dynamic_cast<IPropertyImage*>(pPropBase);
+				if (pImageProp == NULL)
+					continue;
+
+				if (lstrcmpiA(pImageProp->GetRelevancyPropName(), pImgBaseProp->GetObjectName()) == 0)
+				{
+					pImageProp->SetRelevancyProp(NULL);
+					pImageProp->SetRelevancyPropName(NULL);
+				}
+			}
+		}
+	}
+
+	strPropGroup = "imagebase";
+	RESOURCE_PROP_MAP::iterator pImageBaseGroup = m_AllPropMap.find(strPropGroup);
+	if (pImageBaseGroup != m_AllPropMap.end())
+	{
+		ONE_RESOURCE_PROP_MAP* pImageBaseItem = pImageGroup->second;
+		if (pImageBaseItem != NULL)
+		{
+			string strObjId(pImgBaseProp->GetObjectId());
+			ONE_RESOURCE_PROP_MAP::iterator pFindImageBase = pImageBaseItem->find(strObjId);
+			if (pFindImageBase != pImageBaseItem->end())
+				pImageBaseItem->erase(pFindImageBase);
+		}
+	}
+
+	ReleaseBaseProp(dynamic_cast<IPropertyBase*>(pImgBaseProp));
+	return true;
+}

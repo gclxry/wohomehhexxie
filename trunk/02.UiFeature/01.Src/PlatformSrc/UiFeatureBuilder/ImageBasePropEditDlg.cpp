@@ -423,7 +423,7 @@ void CImageBasePropEditDlg::OnBnClickedNewImagebase()
 	if (strName.GetLength() <= 0 || FindNameInImageBaseNameList(strName))
 		return;
 
-	if (!m_ImageBaseList.CreateImageBaseProp(strName))
+	if (!m_ImageBaseList.OnCreateImageBaseProp(strName))
 	{
 		AfxMessageBox(_T("创建图片属性失败！"), MB_OK | MB_ICONERROR);
 		return;
@@ -464,7 +464,10 @@ void CImageBasePropEditDlg::OnBnClickedEditImagebase()
 
 void CImageBasePropEditDlg::OnBnClickedDeleteImagebase()
 {
-	// TODO: Add your control notification handler code here
+	if (AfxMessageBox(_T("确定要删除选择的图片属性吗？"), MB_OKCANCEL | MB_ICONWARNING) != IDOK)
+		return;
+
+	m_ImageBaseList.OnDeleteImageBaseProp();
 }
 
 void CImageBasePropEditDlg::OnBnClickedGetLocalImage()

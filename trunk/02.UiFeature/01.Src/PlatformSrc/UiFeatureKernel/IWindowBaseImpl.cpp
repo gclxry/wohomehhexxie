@@ -963,15 +963,10 @@ void IWindowBaseImpl::BD_NewFrameImageBase(IPropertyImageBase *pImgBase, string 
 
 	ImgBase.bIsZipFile = false;
 	ImgBase.strFileName = strImgPath;
+	ImgBase.ImgShowType = IST_ALL_LASHEN;
 	ImgBase.RectInImage.left = ImgBase.RectInImage.top = 0;
 	ImgBase.RectInImage.right = ImgBase.RectInImage.bottom = FANGKUAI_SIZE;
-
-	ImgBase.jggInfo.bMiddleStretch = true;
-	ImgBase.jggInfo.bBottomStretch = false;
-	ImgBase.jggInfo.bLeftStretch = false;
-	ImgBase.jggInfo.bRightStretch = false;
-	ImgBase.jggInfo.bTopStretch = false;
-	ImgBase.jggInfo.nBottomSpace = ImgBase.jggInfo.nLeftSpace = ImgBase.jggInfo.nRightSpace = ImgBase.jggInfo.nTopSpace = 0;
+	INIT_RECT(ImgBase.jggInfo);
 
 	pImgBase->SetImageProp(&ImgBase);
 }

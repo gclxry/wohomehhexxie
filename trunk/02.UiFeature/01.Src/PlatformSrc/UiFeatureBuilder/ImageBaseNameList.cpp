@@ -59,7 +59,7 @@ IPropertyImageBase* CImageBaseNameList::GetSelectImageBase()
 	return m_pSelectImgBaseProp;
 }
 
-bool CImageBaseNameList::CreateImageBaseProp(CString strName)
+bool CImageBaseNameList::OnCreateImageBaseProp(CString strName)
 {
 	USES_CONVERSION;
 	if (m_pUiKernel == NULL || m_pUiKernel->GetSkinManager() == NULL)
@@ -82,4 +82,34 @@ bool CImageBaseNameList::CreateImageBaseProp(CString strName)
 	this->SetItemData(nCtns, (DWORD_PTR)pNewImgBase);
 
 	return true;
+}
+
+void CImageBaseNameList::OnDeleteImageBaseProp()
+{
+	int nCtns = this->GetItemCount();
+	for (int i = 1; i < nCtns; )
+	{
+		BOOL bCheck = this->GetCheck(i);
+		if (bCheck)
+		{
+			// Ñ¡ÖÐ£¬É¾³ý
+			IPropertyImageBase *pImgBaseProp = (IPropertyImageBase *)this->GetItemData(i);
+			m_pUiKernel->GetSkinManager()->BD_DeletePropetry(dynamic_cast<IPropertyBase*>(pImgBaseProp));
+
+			this->DeleteItem(i);
+			nCtns = this->GetItemCount();
+			if (nCtns <= 1)
+				return;
+
+			i = 1;
+		}
+		else
+		{
+			i++;
+		}
+	}
+
+	nCtns = this->GetItemCount();
+	if (nCtns >= 1)
+		this->SetCheck(0, FALSE);
 }

@@ -13,7 +13,8 @@ public:
 	CImageBaseNameList(void);
 	~CImageBaseNameList(void);
 
-	bool CreateImageBaseProp(CString strName);
+	void OnDeleteImageBaseProp();
+	bool OnCreateImageBaseProp(CString strName);
 	IPropertyImageBase * GetSelectImageBase();
 	void InitImageBaseShow(IUiFeatureKernel* pUiKernel, IPropertyImage* pParentImgProp);
 	void Init(CImageBasePropEditDlg *pImgBaseDlg, CLocalImageList* pLocalImg);

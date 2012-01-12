@@ -27,6 +27,9 @@ public:
 	void Init(IUiFeatureKernel* pKernelWindow, CWindowsViewTree *pViewTree);
 	void SetProjectInitState(bool bInitOk);
 
+	// 刷新整个界面
+	void RefreshAllData();
+
 	// 从属性刷新到界面
 
 
