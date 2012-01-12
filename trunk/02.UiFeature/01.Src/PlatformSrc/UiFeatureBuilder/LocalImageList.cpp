@@ -30,7 +30,7 @@ void CLocalImageList::OnSelectItem()
 	if (m_pImgBaseDlg == NULL)
 		return;
 
-	if (m_SelectItem.iItem<= 0)
+	if (m_nSelectItem <= 0)
 	{
 		// Ã»ÓÐÑ¡Ôñ
 	}

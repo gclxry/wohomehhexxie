@@ -10,6 +10,7 @@ CImageBaseNameList::CImageBaseNameList(void)
 	m_pLocalImgList = NULL;
 	m_pParentImgProp = NULL;
 	m_pUiKernel = NULL;
+	m_pSelectImgBaseProp = NULL;
 }
 
 CImageBaseNameList::~CImageBaseNameList(void)
@@ -37,10 +38,14 @@ void CImageBaseNameList::Init(CImageBasePropEditDlg *pImgBaseDlg, CLocalImageLis
 
 void CImageBaseNameList::OnSelectItem()
 {
+	m_pSelectImgBaseProp = NULL;
 	if (m_pImgBaseDlg == NULL)
 		return;
 
-	m_pImgBaseDlg->SetImageEditEnableStyle((m_SelectItem.iItem >= 1));
+	if (m_nSelectItem >= 1)
+		m_pSelectImgBaseProp = (IPropertyImageBase*)this->GetItemData(m_nSelectItem);
+
+	m_pImgBaseDlg->SetImageEditEnableStyle((m_nSelectItem >= 1));
 }
 
 void CImageBaseNameList::InitImageBaseShow(IUiFeatureKernel* pUiKernel, IPropertyImage* pParentImgProp)
@@ -51,10 +56,7 @@ void CImageBaseNameList::InitImageBaseShow(IUiFeatureKernel* pUiKernel, IPropert
 
 IPropertyImageBase* CImageBaseNameList::GetSelectImageBase()
 {
-	if (m_SelectItem.iItem <= 0)
-		return NULL;
-
-	return (IPropertyImageBase*)m_SelectItem.lParam;
+	return m_pSelectImgBaseProp;
 }
 
 bool CImageBaseNameList::CreateImageBaseProp(CString strName)

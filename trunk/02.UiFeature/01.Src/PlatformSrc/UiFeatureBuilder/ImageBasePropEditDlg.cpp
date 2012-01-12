@@ -25,6 +25,7 @@ CImageBasePropEditDlg::CImageBasePropEditDlg(CWnd* pParent /*=NULL*/)
 {
 	m_pImageView = NULL;
 	m_pUiKernel = NULL;
+	m_pParentImgProp = NULL;
 }
 
 CImageBasePropEditDlg::~CImageBasePropEditDlg()
@@ -371,12 +372,37 @@ void CImageBasePropEditDlg::SetImageEditEnableStyle(bool bEnable)
 
 void CImageBasePropEditDlg::OnBnClickedOk()
 {
-	// TODO: Add your control notification handler code here
+	if (m_pParentImgProp == NULL)
+	{
+		OnCancel();
+		return;
+	}
+
+	IPropertyImageBase* pImgBase = GetSelectImageBase();
+	if (pImgBase == NULL)
+	{
+		OnCancel();
+		return;
+	}
+
+	IPropertyImageBase* pOldImgBase = m_pParentImgProp->GetImageBaseProp();
+	if (pOldImgBase != NULL)
+	{
+		// 当前使用计数器-1
+		pOldImgBase->SetActivePropetry(false);
+	}
+
+	// 当前使用计数器+1
+	pImgBase->SetActivePropetry(true);
+	m_pParentImgProp->SetImageBaseProp(pImgBase);
+	m_pParentImgProp->SetRelevancyPropName((char*)pImgBase->GetObjectName());
+
 	OnOK();
 }
 
 void CImageBasePropEditDlg::InitImageBaseShow(IUiFeatureKernel* pUiKernel, IPropertyImage* pParentImgProp)
 {
+	m_pParentImgProp = pParentImgProp;
 	m_pUiKernel = pUiKernel;
 	m_ImageBaseList.InitImageBaseShow(pUiKernel, pParentImgProp);
 }

@@ -26,4 +26,5 @@ private:
 	CImageBasePropEditDlg *m_pImgBaseDlg;
 	CLocalImageList* m_pLocalImgList;
 	IPropertyImage* m_pParentImgProp;
+	IPropertyImageBase* m_pSelectImgBaseProp;
 };

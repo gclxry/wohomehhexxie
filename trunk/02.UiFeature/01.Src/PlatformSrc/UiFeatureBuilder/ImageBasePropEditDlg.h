@@ -51,6 +51,7 @@ protected:
 	CModifyImageBaseDlg m_ModifyImgDlg;
 
 	IUiFeatureKernel* m_pUiKernel;
+	IPropertyImage* m_pParentImgProp;
 private:
 	void SetNewDeltaposValue(int &nSetValue, int nDelta);
 	void SetJjgEditCtrlStyle(bool bEnable);

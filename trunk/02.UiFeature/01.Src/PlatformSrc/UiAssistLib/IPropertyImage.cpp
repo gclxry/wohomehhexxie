@@ -86,8 +86,8 @@ void IPropertyImage::SetActivePropetry(bool bIsActive)
 {
 	m_bIsActiveProp = bIsActive;
 
-	if (GetRelevancyProp() != NULL)
-		GetRelevancyProp()->SetActivePropetry(bIsActive);
+	if (GetRelevancyProp() != NULL && !bIsActive)
+		GetRelevancyProp()->SetActivePropetry(false);
 }
 
 bool IPropertyImage::GetActivePropetry()
