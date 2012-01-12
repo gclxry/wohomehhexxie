@@ -449,16 +449,23 @@ bool CImageBasePropEditDlg::FindNameInImageBaseNameList(CString &strName)
 
 void CImageBasePropEditDlg::OnBnClickedEditImagebase()
 {
+	IPropertyImageBase* pImgBase = m_ImageBaseList.GetSelectImageBase();
+	if (pImgBase == NULL)
+	{
+		AfxMessageBox(_T("请选择需要编辑的图片属性！"), MB_OK | MB_ICONERROR);
+		return;
+	}
+
 	m_ModifyImgDlg.IsCreateImageBase(false);
 	if (m_ModifyImgDlg.DoModal() != IDOK)
 		return;
-
-
 
 	CString strName;
 	m_ModifyImgDlg.GetImageBaseName(strName);
 	if (strName.GetLength() <= 0 || FindNameInImageBaseNameList(strName))
 		return;
+
+	m_ImageBaseList.OnModifyImageBaseProp(strName);
 
 }
 
