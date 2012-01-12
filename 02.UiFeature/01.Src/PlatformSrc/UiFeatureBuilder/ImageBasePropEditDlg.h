@@ -16,7 +16,9 @@ public:
 	CImageBasePropEditDlg(CWnd* pParent = NULL);   // standard constructor
 	virtual ~CImageBasePropEditDlg();
 
+	void InitImageBaseShow(IUiFeatureKernel* pUiKernel, IPropertyImage* pParentImgProp);
 	void SetImageEditEnableStyle(bool bEnable);
+	IPropertyImageBase * GetSelectImageBase();
 
 // Dialog Data
 	enum { IDD = IDD_IMAGE_EDIT_DLG };
@@ -48,6 +50,7 @@ protected:
 
 	CModifyImageBaseDlg m_ModifyImgDlg;
 
+	IUiFeatureKernel* m_pUiKernel;
 private:
 	void SetNewDeltaposValue(int &nSetValue, int nDelta);
 	void SetJjgEditCtrlStyle(bool bEnable);

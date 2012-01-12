@@ -46,7 +46,6 @@ IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
 	m_pColorPropMap = NULL;
 
 	m_nObjectIdInRes = 1;
-	m_nEmptyObjectId = 1;
 	m_AreaType = AT_CN;
 
 	m_pZipFile = CZipFileList::GetInstance();
@@ -426,13 +425,8 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 	{
 		pBaseProp->SetUiKernel(IUiFeatureKernelImpl::GetInstance());
 
-		char szObjId[MAX_PATH + 1];
-		memset(szObjId, 0, MAX_PATH + 1);
-		if (pszObjectId == NULL)
-			sprintf_s(szObjId, MAX_PATH, "NO_OBJ_ID_%d", m_nEmptyObjectId++);
-		else
-			strcpy_s(szObjId, MAX_PATH, pszObjectId);
-		pBaseProp->SetObjectId((const char*)szObjId);
+		if (pszObjectId != NULL)
+			pBaseProp->SetObjectId((const char*)pszObjectId);
 
 		if (propType == OTID_WINDOW)
 		{
@@ -444,7 +438,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 				return NULL;
 			}
 
-			m_LayoutWindowMap.insert(pair<string, IPropertyWindow*>(szObjId, pWndProp));
+			m_LayoutWindowMap.insert(pair<string, IPropertyWindow*>(pBaseProp->GetObjectId(), pWndProp));
 		}
 		else if (propType == OTID_CONTROL)
 		{
@@ -476,7 +470,7 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 			}
 
 			if (pOnePropMap != NULL)
-				pOnePropMap->insert(pair<string, IPropertyBase*>(szObjId, pBaseProp));
+				pOnePropMap->insert(pair<string, IPropertyBase*>(pBaseProp->GetObjectId(), pBaseProp));
 		}
 	}
 

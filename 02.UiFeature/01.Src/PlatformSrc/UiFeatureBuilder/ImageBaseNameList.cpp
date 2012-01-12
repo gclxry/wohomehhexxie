@@ -2,11 +2,14 @@
 #include "ImageBaseNameList.h"
 #include "ImageBasePropEditDlg.h"
 #include "LocalImageList.h"
+#include "..\..\Inc\ICommonFun.h"
 
 CImageBaseNameList::CImageBaseNameList(void)
 {
 	m_pImgBaseDlg = NULL;
 	m_pLocalImgList = NULL;
+	m_pParentImgProp = NULL;
+	m_pUiKernel = NULL;
 }
 
 CImageBaseNameList::~CImageBaseNameList(void)
@@ -37,5 +40,44 @@ void CImageBaseNameList::OnSelectItem()
 	if (m_pImgBaseDlg == NULL)
 		return;
 
-	m_pImgBaseDlg->SetImageEditEnableStyle((m_SelectItem.iItem > 1));
+	m_pImgBaseDlg->SetImageEditEnableStyle((m_SelectItem.iItem >= 1));
+}
+
+void CImageBaseNameList::InitImageBaseShow(IUiFeatureKernel* pUiKernel, IPropertyImage* pParentImgProp)
+{
+	m_pUiKernel = pUiKernel;
+	m_pParentImgProp = pParentImgProp;
+}
+
+IPropertyImageBase* CImageBaseNameList::GetSelectImageBase()
+{
+	if (m_SelectItem.iItem <= 0)
+		return NULL;
+
+	return (IPropertyImageBase*)m_SelectItem.lParam;
+}
+
+bool CImageBaseNameList::CreateImageBaseProp(CString strName)
+{
+	USES_CONVERSION;
+	if (m_pUiKernel == NULL || m_pUiKernel->GetSkinManager() == NULL)
+		return false;
+
+	IPropertyBase* pPropBase = m_pUiKernel->GetSkinManager()->CreateEmptyBaseProp(OTID_IMAGE_BASE);
+	if (pPropBase == NULL)
+		return false;
+
+	IPropertyImageBase * pNewImgBase = dynamic_cast<IPropertyImageBase*>(pPropBase);
+	if (pNewImgBase == NULL)
+		return false;
+	pNewImgBase->SetObjectName(W2A(strName));
+
+	int nCtns = this->GetItemCount();
+	CString strNo(_T(""));
+	strNo.Format(_T("%d"), nCtns);
+	this->InsertItem(nCtns, strNo);
+	this->SetItemText(nCtns, 1, strName);
+	this->SetItemData(nCtns, (DWORD_PTR)pNewImgBase);
+
+	return true;
 }

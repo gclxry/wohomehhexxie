@@ -24,6 +24,7 @@ CImageBasePropEditDlg::CImageBasePropEditDlg(CWnd* pParent /*=NULL*/)
 	, m_nSelelShowImgType(0)
 {
 	m_pImageView = NULL;
+	m_pUiKernel = NULL;
 }
 
 CImageBasePropEditDlg::~CImageBasePropEditDlg()
@@ -374,6 +375,17 @@ void CImageBasePropEditDlg::OnBnClickedOk()
 	OnOK();
 }
 
+void CImageBasePropEditDlg::InitImageBaseShow(IUiFeatureKernel* pUiKernel, IPropertyImage* pParentImgProp)
+{
+	m_pUiKernel = pUiKernel;
+	m_ImageBaseList.InitImageBaseShow(pUiKernel, pParentImgProp);
+}
+
+IPropertyImageBase* CImageBasePropEditDlg::GetSelectImageBase()
+{
+	return m_ImageBaseList.GetSelectImageBase();
+}
+
 void CImageBasePropEditDlg::OnBnClickedNewImagebase()
 {
 	m_ModifyImgDlg.IsCreateImageBase(true);
@@ -385,10 +397,11 @@ void CImageBasePropEditDlg::OnBnClickedNewImagebase()
 	if (strName.GetLength() <= 0 || FindNameInImageBaseNameList(strName))
 		return;
 
-	CString strNo(_T(""));
-	strNo.Format(_T("%d"), m_ImageBaseList.GetItemCount()+1);
-	m_ImageBaseList.InsertItem(0, strNo);
-	m_ImageBaseList.SetItemText(0, 1, strName);
+	if (!m_ImageBaseList.CreateImageBaseProp(strName))
+	{
+		AfxMessageBox(_T("´´½¨Í¼Æ¬ÊôÐÔÊ§°Ü£¡"), MB_OK | MB_ICONERROR);
+		return;
+	}
 }
 
 bool CImageBasePropEditDlg::FindNameInImageBaseNameList(CString &strName)

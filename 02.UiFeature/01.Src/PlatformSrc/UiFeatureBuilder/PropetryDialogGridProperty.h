@@ -1,7 +1,7 @@
 #pragma once
 #include "afxpropertygridctrl.h"
+#include "..\..\Inc\IUiFeatureKernel.h"
 #include "..\..\Inc\IFeatureObject.h"
-#include "ImageBasePropEditDlg.h"
 
 class CPropetryDialogGridProperty : public CMFCPropertyGridProperty
 {
@@ -9,7 +9,7 @@ public:
 	CPropetryDialogGridProperty(const CString& strName, const COleVariant& varValueconst, CString& strInfo);
 	virtual ~CPropetryDialogGridProperty();
 
-	void SetShowDialogType(OBJECT_TYPE_ID ObjType);
+	void InitDialogPropetry(IUiFeatureKernel* pUiKernel, OBJECT_TYPE_ID ObjType);
 
 protected:
 	virtual BOOL HasButton() const { return TRUE; }
@@ -17,6 +17,6 @@ protected:
 	void ImageBaseDialog();
 
 private:
+	IUiFeatureKernel* m_pUiKernel;
 	OBJECT_TYPE_ID m_ObjType;
-	CImageBasePropEditDlg m_ImageBaseDlg;
 };
