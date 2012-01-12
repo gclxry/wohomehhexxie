@@ -19,7 +19,7 @@ CImageBaseNameList::~CImageBaseNameList(void)
 
 void CImageBaseNameList::Init(CImageBasePropEditDlg *pImgBaseDlg, CLocalImageList* pLocalImg)
 {
-	if (pImgBaseDlg == NULL || pLocalImg == NULL)
+	if (pImgBaseDlg == NULL || pLocalImg == NULL || m_pUiKernel == NULL || m_pUiKernel->GetSkinManager() == NULL)
 		return;
 
 	m_pImgBaseDlg = pImgBaseDlg;
@@ -32,8 +32,47 @@ void CImageBaseNameList::Init(CImageBasePropEditDlg *pImgBaseDlg, CLocalImageLis
 	this->InsertColumn(0, _T("#"), LVCFMT_LEFT, 50);
 	this->InsertColumn(1, _T("Í¼Æ¬ÊôÐÔÃû³Æ"), LVCFMT_LEFT, 160);
 
+	LoadImageBaseProp();
+}
+
+void CImageBaseNameList::LoadImageBaseProp()
+{
+	USES_CONVERSION;
+	if (m_pUiKernel == NULL || m_pUiKernel->GetSkinManager() == NULL)
+		return;
+	
+	ONE_RESOURCE_PROP_MAP* pMap = m_pUiKernel->GetSkinManager()->GetOneResourcePropMap("imagebase");
+	if (pMap == NULL)
+		return;
+
+	this->DeleteAllItems();
 	this->InsertItem(0, _T(""));
 	this->SetItemText(0, 1, _T("µãÎÒä¯ÀÀÍ¼Æ¬"));
+
+	int nNo = 1;
+	bool bFind = false;
+	for (ONE_RESOURCE_PROP_MAP::iterator pImage = pMap->begin(); pImage != pMap->end(); pImage++, nNo++)
+	{
+		IPropertyBase* pPropBase = pImage->second;
+		IPropertyImageBase* pImageProp = dynamic_cast<IPropertyImageBase*>(pPropBase);
+		if (pImageProp == NULL)
+			continue;
+
+		CString strNo(_T(""));
+		strNo.Format(_T("%d"), nNo);
+		this->InsertItem(nNo, strNo);
+		this->SetItemText(nNo, 1, A2W(pImageProp->GetObjectName()));
+		this->SetItemData(nNo, (DWORD_PTR)pImageProp);
+
+		if (m_pParentImgProp != NULL && m_pParentImgProp->GetRelevancyPropName() != NULL && !bFind)
+		{
+			if (lstrcmpiA(m_pParentImgProp->GetRelevancyPropName(), pImageProp->GetObjectName()) == 0)
+			{
+				bFind = true;
+				this->SetItemState(nNo, LVIS_SELECTED, LVIS_SELECTED);
+			}
+		}
+	}
 }
 
 void CImageBaseNameList::OnSelectItem()
