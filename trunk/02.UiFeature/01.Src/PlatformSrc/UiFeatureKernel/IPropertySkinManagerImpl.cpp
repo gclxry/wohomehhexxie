@@ -1634,6 +1634,9 @@ void IPropertySkinManagerImpl::BD_SetGroupPropActiveMark(IPropertyGroup *pPropGr
 // 删除属性
 bool IPropertySkinManagerImpl::BD_DeletePropetry(IPropertyBase *pPropBase)
 {
+	if (pPropBase == NULL)
+		return false;
+
 	if (pPropBase->GetObjectTypeId() == OTID_IMAGE_BASE)
 	{
 		IPropertyImageBase *pImgBaseProp = dynamic_cast<IPropertyImageBase*>(pPropBase);
@@ -1662,10 +1665,11 @@ bool IPropertySkinManagerImpl::DeleteImageBaseProp(IPropertyImageBase *pImgBaseP
 			{
 				IPropertyBase* pPropBase = pImage->second;
 				IPropertyImage* pImageProp = dynamic_cast<IPropertyImage*>(pPropBase);
-				if (pImageProp == NULL)
+				if (pImageProp == NULL || pImageProp->GetRelevancyProp() == NULL)
 					continue;
 
-				if (lstrcmpiA(pImageProp->GetRelevancyPropName(), pImgBaseProp->GetObjectName()) == 0)
+				IPropertyImageBase *pComImgBase = dynamic_cast<IPropertyImageBase*>(pImageProp->GetRelevancyProp());
+				if (lstrcmpiA(pImageProp->GetRelevancyPropName(), pImgBaseProp->GetObjectName()) == 0 || pComImgBase == pImgBaseProp)
 				{
 					pImageProp->SetRelevancyProp(NULL);
 					pImageProp->SetRelevancyPropName(NULL);
@@ -1705,4 +1709,75 @@ ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::GetOneResourcePropMap(char *pPr
 		pPropGroupItem = pPropGroup->second;
 
 	return pPropGroupItem;
+}
+
+// 修改属性名称
+bool IPropertySkinManagerImpl::BD_ModifyPropetryName(IPropertyBase *pPropBase, char *pszNewPropName)
+{
+	if (pPropBase == NULL || pszNewPropName == NULL)
+		return false;
+
+	if (pPropBase->GetObjectTypeId() == OTID_IMAGE_BASE)
+	{
+		IPropertyImageBase *pImgBaseProp = dynamic_cast<IPropertyImageBase*>(pPropBase);
+		if (pImgBaseProp == NULL)
+			return false;
+
+		return ModifyImageBaseProp(pImgBaseProp, pszNewPropName);
+	}
+
+	return false;
+}
+
+bool IPropertySkinManagerImpl::ModifyImageBaseProp(IPropertyImageBase *pImgBaseProp, char *pszNewPropName)
+{
+	if (pImgBaseProp == NULL || pszNewPropName == NULL)
+		return false;
+
+	string strPropGroup = "imagebase";
+	RESOURCE_PROP_MAP::iterator pImageBaseGroup = m_AllPropMap.find(strPropGroup);
+	if (pImageBaseGroup != m_AllPropMap.end())
+	{
+		ONE_RESOURCE_PROP_MAP* pImageBaseItem = pImageBaseGroup->second;
+		if (pImageBaseItem != NULL)
+		{
+			string strObjId(pImgBaseProp->GetObjectId());
+			ONE_RESOURCE_PROP_MAP::iterator pFindImageBase = pImageBaseItem->find(strObjId);
+			if (pFindImageBase != pImageBaseItem->end())
+			{
+				IPropertyBase* pFind = pFindImageBase->second;
+				if (pFind == NULL)
+					return false;
+
+				IPropertyImageBase *pFindImgBaseProp = dynamic_cast<IPropertyImageBase*>(pFind);
+				if (pFindImgBaseProp == NULL)
+					return false;
+
+				pFindImgBaseProp->SetObjectName(pszNewPropName);
+			}
+		}
+	}
+
+	strPropGroup = "image";
+	RESOURCE_PROP_MAP::iterator pImageGroup = m_AllPropMap.find(strPropGroup);
+	if (pImageGroup != m_AllPropMap.end())
+	{
+		ONE_RESOURCE_PROP_MAP* pImageItem = pImageGroup->second;
+		if (pImageItem != NULL)
+		{
+			for (ONE_RESOURCE_PROP_MAP::iterator pImage = pImageItem->begin(); pImage != pImageItem->end(); pImage++)
+			{
+				IPropertyBase* pPropBase = pImage->second;
+				IPropertyImage* pImageProp = dynamic_cast<IPropertyImage*>(pPropBase);
+				if (pImageProp == NULL || pImageProp->GetRelevancyProp() == NULL)
+					continue;
+
+				IPropertyImageBase *pComImgBase = dynamic_cast<IPropertyImageBase*>(pImageProp->GetRelevancyProp());
+				if (lstrcmpiA(pImageProp->GetRelevancyPropName(), pImgBaseProp->GetObjectName()) == 0 || pComImgBase == pImgBaseProp)
+					pImageProp->SetRelevancyPropName(pszNewPropName);
+			}
+		}
+	}
+
+	return true;
 }

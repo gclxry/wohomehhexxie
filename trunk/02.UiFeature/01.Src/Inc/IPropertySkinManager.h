@@ -26,6 +26,8 @@ public:
 
 	// 删除属性
 	virtual bool BD_DeletePropetry(IPropertyBase *pPropBase) = 0;
+	// 修改属性名称
+	virtual bool BD_ModifyPropetryName(IPropertyBase *pPropBase, char *pszNewPropName) = 0;
 
 //////////////////////////////////////////////////////////////////////////
 	// 初始化Window皮肤

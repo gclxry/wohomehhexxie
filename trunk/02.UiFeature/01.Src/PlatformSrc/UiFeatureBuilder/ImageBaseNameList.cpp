@@ -98,10 +98,23 @@ IPropertyImageBase* CImageBaseNameList::GetSelectImageBase()
 	return m_pSelectImgBaseProp;
 }
 
+bool CImageBaseNameList::OnModifyImageBaseProp(CString strName)
+{
+	USES_CONVERSION;
+	if (m_pUiKernel == NULL || m_pUiKernel->GetSkinManager() == NULL || strName.GetLength() <= 0 || m_pSelectImgBaseProp == NULL)
+		return false;
+
+	if (!m_pUiKernel->GetSkinManager()->BD_ModifyPropetryName(dynamic_cast<IPropertyBase*>(m_pSelectImgBaseProp), W2A(strName)))
+		return false;
+
+	this->SetItemText(m_nSelectItem, 1, strName);
+	return true;
+}
+
 bool CImageBaseNameList::OnCreateImageBaseProp(CString strName)
 {
 	USES_CONVERSION;
-	if (m_pUiKernel == NULL || m_pUiKernel->GetSkinManager() == NULL)
+	if (m_pUiKernel == NULL || m_pUiKernel->GetSkinManager() == NULL || strName.GetLength() <= 0)
 		return false;
 
 	IPropertyBase* pPropBase = m_pUiKernel->GetSkinManager()->CreateEmptyBaseProp(OTID_IMAGE_BASE);

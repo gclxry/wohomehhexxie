@@ -37,6 +37,8 @@ public:
 	virtual bool BD_SaveProject(char *pszSkinDir, char *pszSkinName);
 	// 删除属性
 	virtual bool BD_DeletePropetry(IPropertyBase *pPropBase);
+	// 修改属性名称
+	virtual bool BD_ModifyPropetryName(IPropertyBase *pPropBase, char *pszNewPropName);
 
 	// 取得指定组的属性
 	virtual ONE_RESOURCE_PROP_MAP* GetOneResourcePropMap(char *pPropGroupName);
@@ -123,6 +125,7 @@ private:
 
 
 	bool DeleteImageBaseProp(IPropertyImageBase *pImgBaseProp);
+	bool ModifyImageBaseProp(IPropertyImageBase *pImgBaseProp, char *pszNewPropName);
 private:
 	// 皮肤路径
 	string m_strSkinPath;
