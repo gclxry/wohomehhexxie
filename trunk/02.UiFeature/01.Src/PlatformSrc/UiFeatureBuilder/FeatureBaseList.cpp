@@ -19,7 +19,7 @@ void CFeatureBaseList::Sort(int iColumn, BOOL bAscending, BOOL bAdd)
 COLORREF CFeatureBaseList::OnGetCellBkColor(int nRow, int nColum)
 {
 //	return(nRow % 2) == 0 ? RGB(241, 153, 249) : RGB(196, 238, 254);
-	return(nRow % 2) == 0 ? RGB(255, 0, 0) : RGB(196, 238, 254);
+	return(nRow % 2) == 0 ? RGB(255, 0, 0) : RGB(0, 255, 0);
 }
 
 BEGIN_MESSAGE_MAP(CFeatureBaseList, CMFCListCtrl)
