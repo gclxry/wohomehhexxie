@@ -187,6 +187,7 @@ BOOL CImageBasePropEditDlg::OnInitDialog()
 	m_ImageBaseList.Init(this, &m_LocalImageList);
 	m_LocalImageList.Init(this);
 
+	m_ImageBaseList.SetFocus();
 	this->UpdateData(FALSE);
 	return TRUE;
 }
@@ -204,8 +205,6 @@ void CImageBasePropEditDlg::OnBnClickedCancel()
 
 void CImageBasePropEditDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 {
-	// TODO: Add your message handler code here and/or call default
-
 	CDialog::OnGetMinMaxInfo(lpMMI);
 
 	if (lpMMI != NULL)
@@ -219,83 +218,91 @@ void CImageBasePropEditDlg::OnDeltaposShowAreaLeft(NMHDR *pNMHDR, LRESULT *pResu
 {
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	*pResult = 0;
-	if (pNMUpDown == NULL)
+	if (pNMUpDown == NULL || m_ImageBaseList.m_pSelectImgBaseProp == NULL || m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() == NULL)
 		return;
 
-	SetNewDeltaposValue(m_nShowAreaLeft, pNMUpDown->iDelta);
+	IMAGE_BASE_PROP* pSelImgProp = m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp();
+	SetNewDeltaposValue(m_nShowAreaLeft, pNMUpDown->iDelta, pSelImgProp->RectInImage.left);
 }
 
 void CImageBasePropEditDlg::OnDeltaposShowAreaTop(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	*pResult = 0;
-	if (pNMUpDown == NULL)
+	if (pNMUpDown == NULL || m_ImageBaseList.m_pSelectImgBaseProp == NULL || m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() == NULL)
 		return;
 
-	SetNewDeltaposValue(m_nShowAreaTop, pNMUpDown->iDelta);
+	IMAGE_BASE_PROP* pSelImgProp = m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp();
+	SetNewDeltaposValue(m_nShowAreaTop, pNMUpDown->iDelta, pSelImgProp->RectInImage.top);
 }
 
 void CImageBasePropEditDlg::OnDeltaposShowAreaRight(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	*pResult = 0;
-	if (pNMUpDown == NULL)
+	if (pNMUpDown == NULL || m_ImageBaseList.m_pSelectImgBaseProp == NULL || m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() == NULL)
 		return;
 
-	SetNewDeltaposValue(m_nShowAreaRight, pNMUpDown->iDelta);
+	IMAGE_BASE_PROP* pSelImgProp = m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp();
+	SetNewDeltaposValue(m_nShowAreaRight, pNMUpDown->iDelta, pSelImgProp->RectInImage.right);
 }
 
 void CImageBasePropEditDlg::OnDeltaposShowAreaBottom(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	*pResult = 0;
-	if (pNMUpDown == NULL)
+	if (pNMUpDown == NULL || m_ImageBaseList.m_pSelectImgBaseProp == NULL || m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() == NULL)
 		return;
 
-	SetNewDeltaposValue(m_nShowAreaBottom, pNMUpDown->iDelta);
+	IMAGE_BASE_PROP* pSelImgProp = m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp();
+	SetNewDeltaposValue(m_nShowAreaBottom, pNMUpDown->iDelta, pSelImgProp->RectInImage.bottom);
 }
 
 void CImageBasePropEditDlg::OnDeltaposJjgLeft(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	*pResult = 0;
-	if (pNMUpDown == NULL)
+	if (pNMUpDown == NULL || m_ImageBaseList.m_pSelectImgBaseProp == NULL || m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() == NULL)
 		return;
 
-	SetNewDeltaposValue(m_nJggLeft, pNMUpDown->iDelta);
+	IMAGE_BASE_PROP* pSelImgProp = m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp();
+	SetNewDeltaposValue(m_nJggLeft, pNMUpDown->iDelta, pSelImgProp->jggInfo.left);
 }
 
 void CImageBasePropEditDlg::OnDeltaposJjgTop(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	*pResult = 0;
-	if (pNMUpDown == NULL)
+	if (pNMUpDown == NULL || m_ImageBaseList.m_pSelectImgBaseProp == NULL || m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() == NULL)
 		return;
 
-	SetNewDeltaposValue(m_nJggTop, pNMUpDown->iDelta);
+	IMAGE_BASE_PROP* pSelImgProp = m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp();
+	SetNewDeltaposValue(m_nJggTop, pNMUpDown->iDelta, pSelImgProp->jggInfo.top);
 }
 
 void CImageBasePropEditDlg::OnDeltaposJjgBottom(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	*pResult = 0;
-	if (pNMUpDown == NULL)
+	if (pNMUpDown == NULL || m_ImageBaseList.m_pSelectImgBaseProp == NULL || m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() == NULL)
 		return;
 
-	SetNewDeltaposValue(m_nJggBottom, pNMUpDown->iDelta);
+	IMAGE_BASE_PROP* pSelImgProp = m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp();
+	SetNewDeltaposValue(m_nJggBottom, pNMUpDown->iDelta, pSelImgProp->jggInfo.bottom);
 }
 
 void CImageBasePropEditDlg::OnDeltaposJjgRight(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
 	*pResult = 0;
-	if (pNMUpDown == NULL)
+	if (pNMUpDown == NULL || m_ImageBaseList.m_pSelectImgBaseProp == NULL || m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() == NULL)
 		return;
 
-	SetNewDeltaposValue(m_nJggRight, pNMUpDown->iDelta);
+	IMAGE_BASE_PROP* pSelImgProp = m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp();
+	SetNewDeltaposValue(m_nJggRight, pNMUpDown->iDelta, pSelImgProp->jggInfo.right);
 }
 
-void CImageBasePropEditDlg::SetNewDeltaposValue(int &nSetValue, int nDelta)
+void CImageBasePropEditDlg::SetNewDeltaposValue(int &nSetValue, int nDelta, LONG &nPropValue)
 {
 	if (nDelta == -1)
 		nSetValue++;
@@ -305,6 +312,7 @@ void CImageBasePropEditDlg::SetNewDeltaposValue(int &nSetValue, int nDelta)
 	if (nSetValue < 0)
 		nSetValue = 0;
 
+	nPropValue = (LONG)nSetValue;
 	this->UpdateData(FALSE);
 }
 
@@ -312,18 +320,27 @@ void CImageBasePropEditDlg::OnBnClickedPingpu()
 {
 	this->UpdateData(TRUE);
 	SetJjgEditCtrlStyle(FALSE);
+
+	if (m_ImageBaseList.m_pSelectImgBaseProp != NULL && m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() != NULL)
+		m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp()->ImgShowType = (IMAGE_SHOW_TYPE)m_nSelelShowImgType;
 }
 
 void CImageBasePropEditDlg::OnBnClickedQuanlashen()
 {
 	this->UpdateData(TRUE);
 	SetJjgEditCtrlStyle(FALSE);
+
+	if (m_ImageBaseList.m_pSelectImgBaseProp != NULL && m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() != NULL)
+		m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp()->ImgShowType = (IMAGE_SHOW_TYPE)m_nSelelShowImgType;
 }
 
 void CImageBasePropEditDlg::OnBnClickedJjg()
 {
 	this->UpdateData(TRUE);
 	SetJjgEditCtrlStyle(TRUE);
+
+	if (m_ImageBaseList.m_pSelectImgBaseProp != NULL && m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() != NULL)
+		m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp()->ImgShowType = (IMAGE_SHOW_TYPE)m_nSelelShowImgType;
 }
 
 void CImageBasePropEditDlg::SetJjgEditCtrlStyle(bool bEnable)
@@ -346,7 +363,7 @@ void CImageBasePropEditDlg::SetImageEditEnableStyle(bool bEnable)
 	if (bEnable)
 	{
 		// ¾Å¹¬¸ñ×´Ì¬
-		SetJjgEditCtrlStyle(m_nSelelShowImgType == 2);
+		SetJjgEditCtrlStyle(m_nSelelShowImgType == IST_JGG_LASHEN);
 	}
 	else
 	{
@@ -354,7 +371,6 @@ void CImageBasePropEditDlg::SetImageEditEnableStyle(bool bEnable)
 		SetJjgEditCtrlStyle(false);
 	}
 
-	this->GetDlgItem(IDB_DELETE_IMAGEBASE)->EnableWindow(bEnable);
 	this->GetDlgItem(IDB_EDIT_IMAGEBASE)->EnableWindow(bEnable);
 	this->GetDlgItem(IDE_SHOW_AREA_LEFT)->EnableWindow(bEnable);
 	this->GetDlgItem(IDS_SHOW_AREA_LEFT)->EnableWindow(bEnable);
@@ -479,10 +495,8 @@ void CImageBasePropEditDlg::OnBnClickedDeleteImagebase()
 
 void CImageBasePropEditDlg::OnBnClickedGetLocalImage()
 {
-	// TODO: Add your control notification handler code here
 }
 
 void CImageBasePropEditDlg::OnBnClickedDeleteLocalImage()
 {
-	// TODO: Add your control notification handler code here
 }

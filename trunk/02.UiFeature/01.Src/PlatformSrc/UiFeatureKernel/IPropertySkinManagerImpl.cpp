@@ -1682,7 +1682,7 @@ bool IPropertySkinManagerImpl::DeleteImageBaseProp(IPropertyImageBase *pImgBaseP
 	RESOURCE_PROP_MAP::iterator pImageBaseGroup = m_AllPropMap.find(strPropGroup);
 	if (pImageBaseGroup != m_AllPropMap.end())
 	{
-		ONE_RESOURCE_PROP_MAP* pImageBaseItem = pImageGroup->second;
+		ONE_RESOURCE_PROP_MAP* pImageBaseItem = pImageBaseGroup->second;
 		if (pImageBaseItem != NULL)
 		{
 			string strObjId(pImgBaseProp->GetObjectId());

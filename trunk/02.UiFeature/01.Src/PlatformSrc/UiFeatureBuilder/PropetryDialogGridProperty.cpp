@@ -2,6 +2,7 @@
 #include "PropetryDialogGridProperty.h"
 #include "ImageBasePropEditDlg.h"
 #include "PropertyViewCtrl.h"
+#include "MainFrm.h"
 
 CPropetryDialogGridProperty::CPropetryDialogGridProperty(const CString& strName, const COleVariant& varValue, CString& strInfo) : CMFCPropertyGridProperty(strName, varValue, strInfo)
 {
@@ -23,10 +24,14 @@ void CPropetryDialogGridProperty::InitDialogPropetry(CPropertyViewCtrl *pPropVie
 
 void CPropetryDialogGridProperty::OnClickButton(CPoint /*point*/)
 {
+	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
+	if (pMain != NULL)
+		pMain->SetPropetryChange();
+
 	if (m_ObjType == OTID_IMAGE_BASE)
 	{
 		ImageBaseDialog();
-//		m_pPropViewList->RefreshAllData();
+		m_pPropViewList->RefreshAllData();
 		return;
 	}
 

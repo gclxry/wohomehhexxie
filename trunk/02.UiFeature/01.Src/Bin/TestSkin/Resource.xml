@@ -94,12 +94,12 @@
 <image>
 <item objid="window231.Panel254.Panel317.Panel347.group367.image368" name="Image" imagebasename=""/>
 <item objid="window231.Panel254.Panel317.group337.image341" name="Image" imagebasename="123"/>
-<item objid="window231.Panel254.group274.image340" name="Image" imagebasename="234"/>
+<item objid="window231.Panel254.group274.image340" name="Image" imagebasename="123"/>
 <item objid="window231.Panel275.Panel296.group316.image343" name="Image" imagebasename=""/>
 <item objid="window231.Panel275.group295.image342" name="Image" imagebasename="New value"/>
 </image>
 <imagebase>
-<item objid="1F594730AA944D3AA1595C27E3E94279" name="234" imageinzip="" showtype="0">
+<item objid="164FD10A99244835ADCAEC0DE3647AD6" name="123" imageinzip="" showtype="2">
 <rectinimage left="0" top="0" right="0" bottom="0"/>
 <jgg left="0" top="0" right="0" bottom="0"/>
 </item>
@@ -121,8 +121,8 @@
 <item objid="window231.Panel254.Panel317.Panel347.group348.group359.int361" name="Height" data="18"/>
 <item objid="window231.Panel254.Panel317.Panel347.group348.group359.int363" name="LeftSpace" data="13"/>
 <item objid="window231.Panel254.Panel317.Panel347.group348.group359.int364" name="RightSpace" data="0"/>
-<item objid="window231.Panel254.Panel317.Panel347.group348.group359.int365" name="TopSpace" data="18"/>
-<item objid="window231.Panel254.Panel317.Panel347.group348.group359.int366" name="BottomSpace" data="12"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.group359.int365" name="TopSpace" data="0"/>
+<item objid="window231.Panel254.Panel317.Panel347.group348.group359.int366" name="BottomSpace" data="30"/>
 <item objid="window231.Panel254.Panel317.Panel347.group348.int357" name="TabOrder" data="0"/>
 <item objid="window231.Panel254.Panel317.group318.group329.int330" name="Width" data="34"/>
 <item objid="window231.Panel254.Panel317.group318.group329.int331" name="Height" data="48"/>
@@ -133,10 +133,10 @@
 <item objid="window231.Panel254.Panel317.group318.int327" name="TabOrder" data="0"/>
 <item objid="window231.Panel254.group255.group266.int267" name="Width" data="122"/>
 <item objid="window231.Panel254.group255.group266.int268" name="Height" data="98"/>
-<item objid="window231.Panel254.group255.group266.int270" name="LeftSpace" data="134"/>
-<item objid="window231.Panel254.group255.group266.int271" name="RightSpace" data="244"/>
-<item objid="window231.Panel254.group255.group266.int272" name="TopSpace" data="42"/>
-<item objid="window231.Panel254.group255.group266.int273" name="BottomSpace" data="360"/>
+<item objid="window231.Panel254.group255.group266.int270" name="LeftSpace" data="142"/>
+<item objid="window231.Panel254.group255.group266.int271" name="RightSpace" data="236"/>
+<item objid="window231.Panel254.group255.group266.int272" name="TopSpace" data="169"/>
+<item objid="window231.Panel254.group255.group266.int273" name="BottomSpace" data="233"/>
 <item objid="window231.Panel254.group255.int264" name="TabOrder" data="0"/>
 <item objid="window231.Panel275.Panel296.group297.group308.int309" name="Width" data="60"/>
 <item objid="window231.Panel275.Panel296.group297.group308.int310" name="Height" data="84"/>

@@ -20,6 +20,9 @@ public:
 	void InitImageBaseShow(IUiFeatureKernel* pUiKernel, IPropertyImage* pParentImgProp);
 	void Init(CImageBasePropEditDlg *pImgBaseDlg, CLocalImageList* pLocalImg);
 
+public:
+	IPropertyImageBase* m_pSelectImgBaseProp;
+
 protected:
 	virtual void OnSelectItem();
 	void LoadImageBaseProp();
@@ -29,5 +32,4 @@ private:
 	CImageBasePropEditDlg *m_pImgBaseDlg;
 	CLocalImageList* m_pLocalImgList;
 	IPropertyImage* m_pParentImgProp;
-	IPropertyImageBase* m_pSelectImgBaseProp;
 };

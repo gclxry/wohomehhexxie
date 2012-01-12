@@ -5,6 +5,13 @@
 #include "WindowsViewTree.h"
 #include "MainFrm.h"
 
+// 刷新属性界面
+#define REFRESH_PROPETRY					(WM_USER + 0x7000)
+
+BEGIN_MESSAGE_MAP(CPropertyViewCtrl, CMFCPropertyGridCtrl)
+	ON_MESSAGE(REFRESH_PROPETRY, OnRefreshPropetryView)
+END_MESSAGE_MAP()
+
 CPropertyViewCtrl::CPropertyViewCtrl(void)
 {
 	m_pCurrentPropGroup = NULL;
@@ -35,10 +42,16 @@ void CPropertyViewCtrl::Init(IUiFeatureKernel* pKernelWindow, CWindowsViewTree *
 	m_pViewTree = pViewTree;
 }
 
+LRESULT CPropertyViewCtrl::OnRefreshPropetryView(WPARAM wp, LPARAM lp)
+{
+	SetShowPropGroup(m_pCurrentPropGroup);
+	return 0;
+}
+
 // 刷新整个界面
 void CPropertyViewCtrl::RefreshAllData()
 {
-	SetShowPropGroup(m_pCurrentPropGroup);
+	::PostMessage(m_hWnd, REFRESH_PROPETRY, NULL, NULL);
 }
 
 void CPropertyViewCtrl::SetShowPropGroup(IPropertyGroup *pPropGroup)

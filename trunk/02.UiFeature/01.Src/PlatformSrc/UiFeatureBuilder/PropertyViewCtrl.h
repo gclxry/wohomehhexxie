@@ -11,6 +11,7 @@
 #include "..\..\Inc\IPropertyString.h"
 #include "..\..\Inc\IUiFeatureKernel.h"
 
+
 class CWindowsViewTree;
 class CPropertyViewCtrl : public CMFCPropertyGridCtrl
 {
@@ -31,6 +32,7 @@ public:
 	void RefreshAllData();
 
 	// 从属性刷新到界面
+
 
 
 private:
@@ -60,4 +62,7 @@ private:
 	IPropertyGroup* m_pCurrentPropGroup;
 	IUiFeatureKernel* m_pUiKernel;
 	CWindowsViewTree* m_pViewTree;
+public:
+	DECLARE_MESSAGE_MAP()
+	afx_msg LRESULT OnRefreshPropetryView(WPARAM wp, LPARAM lp);
 };
