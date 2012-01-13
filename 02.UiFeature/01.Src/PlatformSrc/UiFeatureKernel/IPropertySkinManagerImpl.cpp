@@ -60,9 +60,34 @@ IPropertySkinManagerImpl::~IPropertySkinManagerImpl(void)
 void IPropertySkinManagerImpl::ReleaseSkinManagerPropetry()
 {
 	ReleaseLayoutMap();
-	ReleasePropMap(m_AllCtrlPropMap);
-	ReleasePropMap(m_AllPropMap);
+	ReleasePropMap(m_AllCtrlPropMap, false);
+	ReleasePropMap(m_AllPropMap, true);
 	m_AllWindowPropMap.clear();
+}
+
+void IPropertySkinManagerImpl::ReleasePropMap(RESOURCE_PROP_MAP &PropMap, bool bReleaseChild)
+{
+	for (RESOURCE_PROP_MAP::iterator pGroupItem = PropMap.begin(); pGroupItem != PropMap.end(); pGroupItem++)
+	{
+		ONE_RESOURCE_PROP_MAP* pGroup = pGroupItem->second;
+		if (pGroup != NULL && bReleaseChild)
+			ReleasePropMapItem(pGroup);
+		SAFE_DELETE(pGroup);
+	}
+	PropMap.clear();
+}
+
+void IPropertySkinManagerImpl::ReleasePropMapItem(ONE_RESOURCE_PROP_MAP* pPropMapItem)
+{
+	if (pPropMapItem == NULL)
+		return;
+
+	for (ONE_RESOURCE_PROP_MAP::iterator pPropItem = pPropMapItem->begin(); pPropItem != pPropMapItem->end(); pPropItem++)
+	{
+		IPropertyBase* pProp = pPropItem->second;
+		ReleaseBaseProp(pProp);
+	}
+	pPropMapItem->clear();
 }
 
 void IPropertySkinManagerImpl::ReleaseLayoutMap()
@@ -92,33 +117,6 @@ void IPropertySkinManagerImpl::ReleaseLayoutMapPropControlVec(PROP_CONTROL_VEC* 
 		SAFE_DELETE(pCtrl);
 	}
 	pCtrlVec->clear();
-}
-
-void IPropertySkinManagerImpl::ReleasePropMap(RESOURCE_PROP_MAP &PropMap)
-{
-	for (RESOURCE_PROP_MAP::iterator pGroupItem = PropMap.begin(); pGroupItem != PropMap.end(); pGroupItem++)
-	{
-		ONE_RESOURCE_PROP_MAP* pGroup = pGroupItem->second;
-		if (pGroup != NULL)
-		{
-			ReleasePropMapItem(pGroup);
-			SAFE_DELETE(pGroup);
-		}
-	}
-	PropMap.clear();
-}
-
-void IPropertySkinManagerImpl::ReleasePropMapItem(ONE_RESOURCE_PROP_MAP* pPropMapItem)
-{
-	if (pPropMapItem == NULL)
-		return;
-
-	for (ONE_RESOURCE_PROP_MAP::iterator pPropItem = pPropMapItem->begin(); pPropItem != pPropMapItem->end(); pPropItem++)
-	{
-		IPropertyBase* pProp = pPropItem->second;
-		ReleaseBaseProp(pProp);
-	}
-	pPropMapItem->clear();
 }
 
 void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
@@ -645,7 +643,7 @@ void IPropertySkinManagerImpl::SetArea(AREA_TYPE areaType)
 // ½âÎöResource.xml
 bool IPropertySkinManagerImpl::TranslateResourceXml(ZIP_FILE *pResurceXml)
 {
-	ReleasePropMap(m_AllPropMap);
+	ReleasePropMap(m_AllPropMap, true);
 	if (pResurceXml == NULL || pResurceXml->pFileData == NULL)
 		return false;
 
@@ -811,7 +809,7 @@ bool IPropertySkinManagerImpl::GeneralCreateBaseProp(char *pPropType, XmlNode* p
 
 bool IPropertySkinManagerImpl::TranslateControlsXml(ZIP_FILE *pControlsXml)
 {
-	ReleasePropMap(m_AllCtrlPropMap);
+	ReleasePropMap(m_AllCtrlPropMap, false);
 	if (pControlsXml == NULL || pControlsXml->pFileData == NULL)
 		return false;
 

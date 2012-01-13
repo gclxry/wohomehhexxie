@@ -81,11 +81,12 @@ void CDrawingBoard::Create(int nWidth, int nHeight, DWORD nDefaultColor, bool bR
 
 void CDrawingBoard::Delete()
 {
-	if (m_hBmp != NULL)
-	{
-		::DeleteObject(m_hBmp);
-		m_hBmp = NULL;
-	}
+	//if (m_hBmp != NULL)
+	//{
+	//	::DeleteObject(m_hBmp);
+	//	m_hBmp = NULL;
+	//}
+	m_hBmp = NULL;
 
 	if (m_hDC != NULL)
 	{
