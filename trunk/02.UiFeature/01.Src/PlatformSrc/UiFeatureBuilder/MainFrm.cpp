@@ -52,6 +52,9 @@ CMainFrame::CMainFrame()
 	theApp.m_nAppLook = theApp.GetInt(_T("ApplicationLook"), ID_VIEW_APPLOOK_OFF_2007_SILVER);
 	theApp.InitShellManager();
 
+	m_hClassViewIcon = NULL;
+	m_hPropertiesBarIcon = NULL;
+
 	m_pView = NULL;
 	m_hKernelDll = NULL;
 	m_pUiKernel = NULL;
@@ -292,13 +295,12 @@ void CMainFrame::SetDockingWindowIcons(BOOL bHiColorIcons)
 //	HICON hFileViewIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_FILE_VIEW_HC : IDI_FILE_VIEW), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
 //	m_wndFileView.SetIcon(hFileViewIcon, FALSE);
 
-	HICON hClassViewIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_CLASS_VIEW_HC : IDI_CLASS_VIEW), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
-	m_wndWindowView.SetIcon(hClassViewIcon, FALSE);
+	m_hClassViewIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_CLASS_VIEW_HC : IDI_CLASS_VIEW), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
+	m_wndWindowView.SetIcon(m_hClassViewIcon, FALSE);
 
-	HICON hPropertiesBarIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_PROPERTIES_WND_HC : IDI_PROPERTIES_WND), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
-	m_wndProperties.SetIcon(hPropertiesBarIcon, FALSE);
-
-	m_wndControls.SetIcon(hPropertiesBarIcon, FALSE);
+	m_hPropertiesBarIcon = (HICON) ::LoadImage(::AfxGetResourceHandle(), MAKEINTRESOURCE(bHiColorIcons ? IDI_PROPERTIES_WND_HC : IDI_PROPERTIES_WND), IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), 0);
+	m_wndProperties.SetIcon(m_hPropertiesBarIcon, FALSE);
+	m_wndControls.SetIcon(m_hPropertiesBarIcon, FALSE);
 }
 
 // CMainFrame ’Ô∂œ
@@ -491,5 +493,7 @@ void CMainFrame::OnClose()
 		}
 	}
 
+//	SAFE_CLOSE_HANDLE(m_hClassViewIcon);
+//	SAFE_CLOSE_HANDLE(m_hPropertiesBarIcon);
 	CFrameWndEx::OnClose();
 }

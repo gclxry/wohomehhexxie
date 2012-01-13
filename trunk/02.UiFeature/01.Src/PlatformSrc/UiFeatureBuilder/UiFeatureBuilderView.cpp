@@ -36,6 +36,7 @@ BEGIN_MESSAGE_MAP(CUiFeatureBuilderView, CFormView)
 	ON_WM_HSCROLL()
 	ON_WM_VSCROLL()
 	ON_WM_KEYDOWN()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 // CUiFeatureBuilderView ¹¹Ôì/Îö¹¹
@@ -798,4 +799,11 @@ void CUiFeatureBuilderView::SetNeedSave()
 	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
 	if (pMain != NULL)
 		pMain->SetPropetryChange();
+}
+
+void CUiFeatureBuilderView::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CFormView::OnTimer(nIDEvent);
 }

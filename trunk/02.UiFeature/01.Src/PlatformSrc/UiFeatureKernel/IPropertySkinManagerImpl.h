@@ -84,7 +84,7 @@ private:
 	// Resource.xml相关
 	// 解析Resource.xml
 	bool TranslateResourceXml(ZIP_FILE *pResurceXml);
-	void ReleasePropMap(RESOURCE_PROP_MAP &PropMap);
+	void ReleasePropMap(RESOURCE_PROP_MAP &PropMap, bool bReleaseChild);
 	void ReleasePropMapItem(ONE_RESOURCE_PROP_MAP* pPropMapItem);
 	// 通用的从资源xml中创建属性
 	bool GeneralCreateBaseProp(char *pPropType, XmlNode* pXmlNode, ONE_RESOURCE_PROP_MAP* pPropMap);

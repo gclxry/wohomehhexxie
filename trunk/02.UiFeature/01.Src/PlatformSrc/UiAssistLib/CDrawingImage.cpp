@@ -63,6 +63,7 @@ void CDrawingImage::CreateByFile(const char *pszFilePath)
 	CreateByMem(pReadBuf, nReadCtns);
 
 	SAFE_DELETE(pReadBuf);
+	fclose(pFile);
 }
 
 // 从一段内存中创建
