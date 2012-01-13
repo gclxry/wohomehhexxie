@@ -18,6 +18,7 @@ IMPLEMENT_DYNCREATE(CUiFeatureBuilderDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CUiFeatureBuilderDoc, CDocument)
 	ON_COMMAND(ID_FILE_SAVE, &CUiFeatureBuilderDoc::OnFileSave)
+	ON_COMMAND(ID_FILE_CLOSE, &CUiFeatureBuilderDoc::OnFileClose)
 END_MESSAGE_MAP()
 
 
@@ -84,4 +85,11 @@ void CUiFeatureBuilderDoc::OnFileSave()
 	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
 	if (pMain != NULL)
 		pMain->OnFileSave();
+}
+
+void CUiFeatureBuilderDoc::OnFileClose()
+{
+	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
+	if (pMain != NULL)
+		pMain->OnFileClose();
 }
