@@ -125,6 +125,9 @@ void CUiFeatureBuilderView::Init(IUiFeatureKernel* pKernelWindow, CFeatureContro
 
 void CUiFeatureBuilderView::OnRButtonUp(UINT nFlags, CPoint point)
 {
+	if (!m_bInitOk)
+		return;
+
 	ClientToScreen(&point);
 	OnContextMenu(this, point);
 }
@@ -161,6 +164,8 @@ CUiFeatureBuilderDoc* CUiFeatureBuilderView::GetDocument() const // 非调试版本是
 void CUiFeatureBuilderView::SetProjectInitState(bool bInitOk)
 {
 	m_bInitOk = bInitOk;
+
+	this->RedrawWindow();
 }
 
 void CUiFeatureBuilderView::SetNewControl(bool bIsNew)
@@ -201,10 +206,10 @@ void CUiFeatureBuilderView::OnDraw(CDC* pDC)
 // 绘制创建新控件时的矩形
 void CUiFeatureBuilderView::DrawMark()
 {
-	Graphics DoGrap(m_MemDc.GetSafeHdc());
-
-	if (m_pCurrentWnd == NULL)
+	if (m_pCurrentWnd == NULL || !m_bInitOk)
 		return;
+
+	Graphics DoGrap(m_MemDc.GetSafeHdc());
 
 	Pen LinePen(Color(30, 0, 0, 255));
 	SolidBrush PinkBrs(Color(15, 255, 0, 255));
@@ -262,7 +267,7 @@ void CUiFeatureBuilderView::DrawWindowView()
 	DoGrap.FillRectangle(&sBrush, 0, 0, ViewRct.Width(), ViewRct.Height());
 
 	// 窗口绘制
-	if (m_pCurrentWnd != NULL)
+	if (m_pCurrentWnd != NULL && m_bInitOk)
 		m_pCurrentWnd->BD_DrawWindowView(m_MemDc);
 }
 
@@ -281,6 +286,9 @@ void CUiFeatureBuilderView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScro
 void CUiFeatureBuilderView::OnSize(UINT nType, int cx, int cy)
 {
 	CFormView::OnSize(nType, cx, cy);
+
+	if (!m_bInitOk)
+		return;
 
 	ResetViewShowSize();
 	this->RedrawWindow();
@@ -330,11 +338,19 @@ void CUiFeatureBuilderView::ResetViewShowSize()
 void CUiFeatureBuilderView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	CFormView::OnKeyDown(nChar, nRepCnt, nFlags);
+
+	if (!m_bInitOk)
+		return;
+
 }
 
 void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	CFormView::OnMouseMove(nFlags, point);
+
+	if (!m_bInitOk)
+		return;
+
 	m_MouseMovePos = point;
 	m_pMouseMoveCtrl = NULL;
 
@@ -625,6 +641,9 @@ void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	CFormView::OnLButtonUp(nFlags, point);
 
+	if (!m_bInitOk)
+		return;
+
 	::ReleaseCapture();
 
 	SetViewCursor(UF_IDC_ARROW);
@@ -650,6 +669,9 @@ void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	CFormView::OnLButtonDown(nFlags, point);
+
+	if (!m_bInitOk)
+		return;
 
 	::SetCapture(m_hWnd);
 
@@ -803,7 +825,9 @@ void CUiFeatureBuilderView::SetNeedSave()
 
 void CUiFeatureBuilderView::OnTimer(UINT_PTR nIDEvent)
 {
-	// TODO: Add your message handler code here and/or call default
-
 	CFormView::OnTimer(nIDEvent);
+
+	if (!m_bInitOk)
+		return;
+
 }

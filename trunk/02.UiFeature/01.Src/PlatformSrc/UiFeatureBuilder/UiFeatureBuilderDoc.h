@@ -38,6 +38,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnFileSave();
+	afx_msg void OnFileClose();
 };
 
 
