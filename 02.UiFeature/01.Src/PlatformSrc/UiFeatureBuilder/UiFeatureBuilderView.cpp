@@ -190,6 +190,15 @@ void CUiFeatureBuilderView::OnDraw(CDC* pDC)
 	CSize ViewSize, sizePage, sizeLine;
 	int nMode = 0;
 	this->GetDeviceScrollSizes(nMode, ViewSize, sizePage, sizeLine);
+
+	CRect ViewRct(0, 0, 0, 0);
+	this->GetClientRect(&ViewRct);
+
+	if (ViewSize.cx < ViewRct.Width())
+		ViewSize.cx = ViewRct.Width();
+	if (ViewSize.cy < ViewRct.Height())
+		ViewSize.cy = ViewRct.Height();
+
 	m_MemDc.Create(ViewSize.cx, ViewSize.cy, RGB(255,255,255), false, true);
 	if (!IS_SAFE_HANDLE(m_MemDc.GetSafeHdc()))
 		return;

@@ -480,7 +480,7 @@
 						</File>
 					</Filter>
 					<Filter
-						Name="02.图片属性列表"
+						Name="02.图片属性名称列表"
 						>
 						<File
 							RelativePath=".\ImageBaseNameList.cpp"
