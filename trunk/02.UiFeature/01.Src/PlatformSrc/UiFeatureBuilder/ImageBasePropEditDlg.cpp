@@ -384,7 +384,6 @@ void CImageBasePropEditDlg::SetImageEditEnableStyle(bool bEnable)
 	this->GetDlgItem(IDR_PINGPU)->EnableWindow(bEnable);
 	this->GetDlgItem(IDR_QUANLASHEN)->EnableWindow(bEnable);
 	this->GetDlgItem(IDR_JJG)->EnableWindow(bEnable);
-	this->GetDlgItem(IDOK)->EnableWindow(bEnable);
 }
 
 void CImageBasePropEditDlg::OnBnClickedOk()
@@ -505,6 +504,8 @@ void CImageBasePropEditDlg::OnBnClickedGetLocalImage()
 
 	CString strFilePath = ImageFileSelDlg.GetPathName();
 	CString strFileName = ImageFileSelDlg.GetFileTitle();
+	strFileName += _T(".");
+	strFileName += ImageFileSelDlg.GetFileExt();
 
 	if (strFilePath.GetLength() <= 0 || strFileName.GetLength() <= 0)
 		return;

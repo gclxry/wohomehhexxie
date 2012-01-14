@@ -19,7 +19,7 @@ CImageBaseNameList::~CImageBaseNameList(void)
 
 void CImageBaseNameList::Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *pImgBaseDlg, CLocalImageList* pLocalImg, IPropertyImage* pParentImgProp)
 {
-	if (pUiKernel == NULL || pImgBaseDlg == NULL || pLocalImg == NULL || pUiKernel == NULL || pUiKernel->GetSkinManager() == NULL)
+	if (pImgBaseDlg == NULL || pLocalImg == NULL || pUiKernel == NULL || pUiKernel->GetSkinManager() == NULL)
 		return;
 
 	m_pUiKernel = pUiKernel;
@@ -34,6 +34,9 @@ void CImageBaseNameList::Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg
 	this->InsertColumn(0, _T("#"), LVCFMT_LEFT, 50);
 	this->InsertColumn(1, _T("图片属性名称"), LVCFMT_LEFT, 160);
 
+	this->InsertItem(0, _T(""));
+	this->SetItemText(0, 1, _T("点我属性设置为空"));
+
 	LoadImageBaseProp();
 }
 
@@ -46,10 +49,6 @@ void CImageBaseNameList::LoadImageBaseProp()
 	ONE_RESOURCE_PROP_MAP* pMap = m_pUiKernel->GetSkinManager()->GetOneResourcePropMap("imagebase");
 	if (pMap == NULL)
 		return;
-
-	this->DeleteAllItems();
-	this->InsertItem(0, _T(""));
-	this->SetItemText(0, 1, _T("点我属性设置为空"));
 
 	int nNo = 1;
 	bool bFind = false;

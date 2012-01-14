@@ -1140,14 +1140,17 @@ bool IPropertySkinManagerImpl::BD_TranslateResourceXml(char *pszXmlPath)
 		return false;
 
 	m_BD_SkinUnZipImageFile.Clear();
-	for (ZIP_FILE_MAP::iterator pZipItem = pFromZipMap->begin(); pZipItem != pFromZipMap->end(); pZipItem++)
+	for (ZIP_FILE_MAP::iterator pZipItem = pFromZipMap->begin(); pZipItem != pFromZipMap->end(); )
 	{
 		ZIP_FILE* pZip = pZipItem->second;
 		if (pZip == NULL || ((ZIP_FILE_TYPE)(pZip->byFileType)) != ZFT_IMAGE)
+		{
+			pZipItem++;
 			continue;
+		}
 
 		pToZipMap->insert(pair<string, ZIP_FILE*>(pZip->strFileName, pZip));
-		pFromZipMap->erase(pZipItem);
+		pZipItem = pFromZipMap->erase(pZipItem);
 	}
 
 	return true;
