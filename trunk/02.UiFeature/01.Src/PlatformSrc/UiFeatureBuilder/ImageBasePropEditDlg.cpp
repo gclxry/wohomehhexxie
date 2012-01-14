@@ -186,7 +186,7 @@ BOOL CImageBasePropEditDlg::OnInitDialog()
 	m_ShowBiLi_Combo.SetCurSel(0);
 
 	m_ImageBaseList.Init(m_pUiKernel, this, &m_LocalImageList, m_pParentImgProp);
-	m_LocalImageList.Init(m_pUiKernel, this, &m_ImageBaseList);
+	m_LocalImageList.Init(m_pUiKernel, this, &m_ImageBaseList, m_ImageBaseList.m_pSelectImgBaseProp);
 
 	m_ImageBaseList.SetFocus();
 	this->UpdateData(FALSE);
@@ -395,7 +395,8 @@ void CImageBasePropEditDlg::OnBnClickedOk()
 		return;
 	}
 
-	IPropertyImageBase* pImgBase = GetSelectImageBase();
+	int nSelItem = -1;
+	IPropertyImageBase* pImgBase = GetSelectImageBase(nSelItem);
 	if (pImgBase == NULL)
 	{
 		OnCancel();
@@ -423,9 +424,9 @@ void CImageBasePropEditDlg::InitImageBaseShow(IUiFeatureKernel* pUiKernel, IProp
 	m_pParentImgProp = pParentImgProp;
 }
 
-IPropertyImageBase* CImageBasePropEditDlg::GetSelectImageBase()
+IPropertyImageBase* CImageBasePropEditDlg::GetSelectImageBase(int &nSeleItem)
 {
-	return m_ImageBaseList.GetSelectImageBase();
+	return m_ImageBaseList.GetSelectImageBase(nSeleItem);
 }
 
 void CImageBasePropEditDlg::OnBnClickedNewImagebase()
@@ -466,7 +467,8 @@ bool CImageBasePropEditDlg::FindNameInImageBaseNameList(CString &strName)
 
 void CImageBasePropEditDlg::OnBnClickedEditImagebase()
 {
-	IPropertyImageBase* pImgBase = m_ImageBaseList.GetSelectImageBase();
+	int nSelItem = -1;
+	IPropertyImageBase* pImgBase = m_ImageBaseList.GetSelectImageBase(nSelItem);
 	if (pImgBase == NULL)
 	{
 		AfxMessageBox(_T("请选择需要编辑的图片属性！"), MB_OK | MB_ICONERROR);

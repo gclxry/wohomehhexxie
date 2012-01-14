@@ -18,7 +18,7 @@ public:
 
 	void InitImageBaseShow(IUiFeatureKernel* pUiKernel, IPropertyImage* pParentImgProp);
 	void SetImageEditEnableStyle(bool bEnable);
-	IPropertyImageBase * GetSelectImageBase();
+	IPropertyImageBase * GetSelectImageBase(int &nSeleItem);
 
 public:
 	int m_nShowAreaLeft;

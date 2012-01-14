@@ -1318,7 +1318,7 @@ bool IPropertySkinManagerImpl::BD_SaveProject(char *pszSkinDir, char *pszSkinNam
 		}
 	}
 
-	return m_pZipFile->WriteZipEnd();
+	return m_pZipFile->WriteZipEnd(true);
 }
 
 bool IPropertySkinManagerImpl::SaveLayoutXml(const char *pszSavePath, string &strXmlData)

@@ -16,7 +16,7 @@ public:
 	void OnDeleteImageBaseProp();
 	bool OnModifyImageBaseProp(CString strName);
 	bool OnCreateImageBaseProp(CString strName);
-	IPropertyImageBase * GetSelectImageBase();
+	IPropertyImageBase * GetSelectImageBase(int &nSeleItem);
 	void Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *pImgBaseDlg, CLocalImageList* pLocalImg, IPropertyImage* pParentImgProp);
 
 public:
