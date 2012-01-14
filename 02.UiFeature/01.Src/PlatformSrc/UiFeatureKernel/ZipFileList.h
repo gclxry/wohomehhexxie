@@ -36,7 +36,7 @@ public:
 	virtual bool WriteZipAppendBuffer(char *pFileName, BYTE *pBuffer, int nBufferLen, ZIP_FILE_TYPE ZipType);
 	// 向zip文件写入一段数据
 	virtual bool WriteZipAppendStruct(ZIP_FILE *pNormalFile);
-	virtual bool WriteZipEnd();
+	virtual bool WriteZipEnd(bool bEntToClear);
 
 //////////////////////////////////////////////////////////////////////////
 	// 测试函数，将解压后的文件写入本地一个指定目录

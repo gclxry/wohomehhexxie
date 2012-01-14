@@ -78,8 +78,9 @@ void CImageBaseNameList::LoadImageBaseProp()
 	}
 }
 
-IPropertyImageBase* CImageBaseNameList::GetSelectImageBase()
+IPropertyImageBase* CImageBaseNameList::GetSelectImageBase(int &nSeleItem)
 {
+	nSeleItem = m_nSelectItem;
 	return m_pSelectImgBaseProp;
 }
 

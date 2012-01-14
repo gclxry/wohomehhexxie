@@ -283,7 +283,7 @@ bool CZipFileList::WriteZipAppendFile(char *pFileName, ZIP_FILE_TYPE ZipType)
 	return true;
 }
 
-bool CZipFileList::WriteZipEnd()
+bool CZipFileList::WriteZipEnd(bool bEntToClear)
 {
 	if (m_ZipFileMap.size() <= 0)
 		return false;
@@ -374,6 +374,8 @@ bool CZipFileList::WriteZipEnd()
 	}
 
 	fclose(pFile);
+	if (bEntToClear)
+		Clear();
 	return true;
 }
 

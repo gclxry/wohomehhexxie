@@ -52,9 +52,19 @@ void CPropetryDialogGridProperty::ImageBaseDialog()
 	if (ImageBaseDlg.DoModal() != IDOK)
 		return;
 
-	IPropertyImageBase *pImgBase = ImageBaseDlg.GetSelectImageBase();
+	int nSelectItem = -1;
+	IPropertyImageBase *pImgBase = ImageBaseDlg.GetSelectImageBase(nSelectItem);
 	if (pImgBase == NULL)
+	{
+		if (nSelectItem == 0)
+		{
+			pParentImgProp->SetImageBaseProp(NULL);
+			pParentImgProp->SetRelevancyPropName(NULL);
+			COleVariant varValue(_T(""));
+			SetValue(varValue);
+		}
 		return;
+	}
 
 	COleVariant varValue(A2W(pParentImgProp->GetRelevancyPropName()));
 	SetValue(varValue);
