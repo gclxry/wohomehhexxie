@@ -5,6 +5,7 @@
 #include "IPropertyBase.h"
 #include "CDrawingBoard.h"
 #include "CDrawingImage.h"
+#include "IZipFile.h"
 
 enum IMAGE_SHOW_TYPE
 {
@@ -54,6 +55,8 @@ public:
 	void SetImageProp(IMAGE_BASE_PROP* pImgProp);
 	IMAGE_BASE_PROP* GetImageProp();
 
+	ZIP_FILE * GetZipFile();
+	void SetZipFile(ZIP_FILE *pZipFile);
 private:
 	bool DrawImage(CDrawingBoard &DstDc, RECT DstRct);
 
@@ -62,4 +65,6 @@ private:
 	CDrawingImage m_DrawImg;
 	// 被使用的计数器
 	int m_nUseCtns;
+	// 写入zip文件的信息
+	ZIP_FILE *m_pZipFile;
 };

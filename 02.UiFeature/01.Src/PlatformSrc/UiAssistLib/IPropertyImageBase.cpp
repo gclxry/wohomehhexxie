@@ -9,6 +9,7 @@ IPropertyImageBase::IPropertyImageBase()
 {
 	SetObjectType(PROP_TYPE_IMAGE_BASE_NAME);
 
+	m_pZipFile = NULL;
 	m_nUseCtns = 0;
 	m_ImageProp.bIsZipFile = true;
 	m_ImageProp.strFileName = "";
@@ -20,6 +21,16 @@ IPropertyImageBase::IPropertyImageBase()
 IPropertyImageBase::~IPropertyImageBase()
 {
 
+}
+
+ZIP_FILE* IPropertyImageBase::GetZipFile()
+{
+	return m_pZipFile;
+}
+
+void IPropertyImageBase::SetZipFile(ZIP_FILE *pZipFile)
+{
+	m_pZipFile = pZipFile;
 }
 
 bool IPropertyImageBase::IsRightData()

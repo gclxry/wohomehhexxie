@@ -17,13 +17,15 @@ CImageBaseNameList::~CImageBaseNameList(void)
 {
 }
 
-void CImageBaseNameList::Init(CImageBasePropEditDlg *pImgBaseDlg, CLocalImageList* pLocalImg)
+void CImageBaseNameList::Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *pImgBaseDlg, CLocalImageList* pLocalImg, IPropertyImage* pParentImgProp)
 {
-	if (pImgBaseDlg == NULL || pLocalImg == NULL || m_pUiKernel == NULL || m_pUiKernel->GetSkinManager() == NULL)
+	if (pUiKernel == NULL || pImgBaseDlg == NULL || pLocalImg == NULL || pUiKernel == NULL || pUiKernel->GetSkinManager() == NULL)
 		return;
 
+	m_pUiKernel = pUiKernel;
 	m_pImgBaseDlg = pImgBaseDlg;
 	m_pLocalImgList = pLocalImg;
+	m_pParentImgProp = pParentImgProp;
 
 	this->DeleteAllItems();
 
@@ -47,7 +49,7 @@ void CImageBaseNameList::LoadImageBaseProp()
 
 	this->DeleteAllItems();
 	this->InsertItem(0, _T(""));
-	this->SetItemText(0, 1, _T("点我浏览图片"));
+	this->SetItemText(0, 1, _T("点我属性设置为空"));
 
 	int nNo = 1;
 	bool bFind = false;
@@ -74,12 +76,6 @@ void CImageBaseNameList::LoadImageBaseProp()
 			}
 		}
 	}
-}
-
-void CImageBaseNameList::InitImageBaseShow(IUiFeatureKernel* pUiKernel, IPropertyImage* pParentImgProp)
-{
-	m_pUiKernel = pUiKernel;
-	m_pParentImgProp = pParentImgProp;
 }
 
 IPropertyImageBase* CImageBaseNameList::GetSelectImageBase()

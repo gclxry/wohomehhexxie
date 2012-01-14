@@ -274,6 +274,10 @@
 				Name="03.Zip"
 				>
 				<File
+					RelativePath="..\..\Inc\IZipFile.h"
+					>
+				</File>
+				<File
 					RelativePath=".\ZipFileList.cpp"
 					>
 				</File>
