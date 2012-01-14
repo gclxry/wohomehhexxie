@@ -516,37 +516,37 @@ bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 		return true;
 
 //////////////////////////////////////////////////////////////////////////
-	// TBD
-	char szPath[MAX_PATH + 1];
-	memset(szPath, 0, MAX_PATH + 1);
-	::GetModuleFileNameA(NULL, szPath, MAX_PATH);
-	while (strlen(szPath) > 0 && szPath[strlen(szPath) - 1] != '\\')
-		szPath[strlen(szPath) - 1] = '\0';
+	//// TBD
+	//char szPath[MAX_PATH + 1];
+	//memset(szPath, 0, MAX_PATH + 1);
+	//::GetModuleFileNameA(NULL, szPath, MAX_PATH);
+	//while (strlen(szPath) > 0 && szPath[strlen(szPath) - 1] != '\\')
+	//	szPath[strlen(szPath) - 1] = '\0';
 
-	string strDir = szPath;
-	strDir += SKIN_DATA_DIR;
+	//string strDir = szPath;
+	//strDir += SKIN_DATA_DIR;
 
-	string strUfd = szPath;
-	strUfd += SKIN_DATA_DIR;
-	strUfd += "skintest.ufd";
+	//string strUfd = szPath;
+	//strUfd += SKIN_DATA_DIR;
+	//strUfd += "skintest.ufd";
 
-	m_pZipFile->WriteZipInit((char*)strDir.c_str(), (char*)strUfd.c_str());
-	m_pZipFile->WriteZipAppendFile(WINDOWS_XML_NAME);
-	m_pZipFile->WriteZipAppendFile(RESOURCE_XML_NAME);
-	m_pZipFile->WriteZipAppendFile(LAYOUT_XML_NAME);
-	m_pZipFile->WriteZipAppendFile(CONTROLS_XML_NAME);
-	m_pZipFile->WriteZipAppendFile("bk.PNG");
-	m_pZipFile->WriteZipAppendFile("V5.Dlg.Close.png");
-	m_pZipFile->WriteZipAppendFile("V5.Dlg.Mini.png");
-	m_pZipFile->WriteZipAppendFile("V5.Logon.ACDC.png");
-	m_pZipFile->WriteZipAppendFile("V5.Logon.Set.png");
-	m_pZipFile->WriteZipAppendFile("V5.LogonBiz.01.jpg");
-	m_pZipFile->WriteZipAppendFile("V5.LogonBiz.02.png");
-	m_pZipFile->WriteZipAppendFile("下拉2标注.png");
-	m_pZipFile->WriteZipAppendFile("下拉菜单效果图_MarkMan.png");
-	m_pZipFile->WriteZipAppendFile("切图副本.png");
-	m_pZipFile->WriteZipAppendFile("最新修改.png");
-	m_pZipFile->WriteZipEnd();
+	//m_pZipFile->WriteZipInit((char*)strDir.c_str(), (char*)strUfd.c_str());
+	//m_pZipFile->WriteZipAppendFile(WINDOWS_XML_NAME, ZFT_NORMAL);
+	//m_pZipFile->WriteZipAppendFile(RESOURCE_XML_NAME);
+	//m_pZipFile->WriteZipAppendFile(LAYOUT_XML_NAME);
+	//m_pZipFile->WriteZipAppendFile(CONTROLS_XML_NAME);
+	//m_pZipFile->WriteZipAppendFile("bk.PNG");
+	//m_pZipFile->WriteZipAppendFile("V5.Dlg.Close.png");
+	//m_pZipFile->WriteZipAppendFile("V5.Dlg.Mini.png");
+	//m_pZipFile->WriteZipAppendFile("V5.Logon.ACDC.png");
+	//m_pZipFile->WriteZipAppendFile("V5.Logon.Set.png");
+	//m_pZipFile->WriteZipAppendFile("V5.LogonBiz.01.jpg");
+	//m_pZipFile->WriteZipAppendFile("V5.LogonBiz.02.png");
+	//m_pZipFile->WriteZipAppendFile("下拉2标注.png");
+	//m_pZipFile->WriteZipAppendFile("下拉菜单效果图_MarkMan.png");
+	//m_pZipFile->WriteZipAppendFile("切图副本.png");
+	//m_pZipFile->WriteZipAppendFile("最新修改.png");
+	//m_pZipFile->WriteZipEnd();
 //////////////////////////////////////////////////////////////////////////
 
 	// 从皮肤文件中初始化皮肤队列 TBD
@@ -1288,14 +1288,35 @@ bool IPropertySkinManagerImpl::BD_SaveProject(char *pszSkinDir, char *pszSkinNam
 	if (!m_pZipFile->WriteZipInit(pszSkinDir, (char*)strZipFile.c_str()))
 		return false;
 
-	if (!m_pZipFile->WriteZipAppendBuffer(RESOURCE_XML_NAME, (BYTE*)strResourceXmlData.c_str(), strResourceXmlData.size()))
+	if (!m_pZipFile->WriteZipAppendBuffer(RESOURCE_XML_NAME, (BYTE*)strResourceXmlData.c_str(), strResourceXmlData.size(), ZFT_NORMAL))
 		return false;
-	if (!m_pZipFile->WriteZipAppendBuffer(CONTROLS_XML_NAME, (BYTE*)strControlsXmlData.c_str(), strControlsXmlData.size()))
+	if (!m_pZipFile->WriteZipAppendBuffer(CONTROLS_XML_NAME, (BYTE*)strControlsXmlData.c_str(), strControlsXmlData.size(), ZFT_NORMAL))
 		return false;
-	if (!m_pZipFile->WriteZipAppendBuffer(WINDOWS_XML_NAME, (BYTE*)strWindowsXmlData.c_str(), strWindowsXmlData.size()))
+	if (!m_pZipFile->WriteZipAppendBuffer(WINDOWS_XML_NAME, (BYTE*)strWindowsXmlData.c_str(), strWindowsXmlData.size(), ZFT_NORMAL))
 		return false;
-	if (!m_pZipFile->WriteZipAppendBuffer(LAYOUT_XML_NAME, (BYTE*)strLayoutXmlData.c_str(), strLayoutXmlData.size()))
+	if (!m_pZipFile->WriteZipAppendBuffer(LAYOUT_XML_NAME, (BYTE*)strLayoutXmlData.c_str(), strLayoutXmlData.size(), ZFT_NORMAL))
 		return false;
+
+	// 写入图片文件
+	string strPropGroup("imagebase");
+	RESOURCE_PROP_MAP::iterator pImageBaseGroup = m_AllPropMap.find(strPropGroup);
+	if (pImageBaseGroup != m_AllPropMap.end())
+	{
+		ONE_RESOURCE_PROP_MAP* pImageBaseItem = pImageBaseGroup->second;
+		if (pImageBaseItem != NULL)
+		{
+			for (ONE_RESOURCE_PROP_MAP::iterator pImage = pImageBaseItem->begin(); pImage != pImageBaseItem->end(); pImage++)
+			{
+				IPropertyBase* pPropBase = pImage->second;
+				IPropertyImageBase* pImageBaseProp = dynamic_cast<IPropertyImageBase*>(pPropBase);
+				if (pImageBaseProp == NULL || pImageBaseProp->GetZipFile() == NULL)
+					continue;
+
+				if (!m_pZipFile->WriteZipAppendStruct(pImageBaseProp->GetZipFile()))
+					return false;
+			}
+		}
+	}
 
 	return m_pZipFile->WriteZipEnd();
 }

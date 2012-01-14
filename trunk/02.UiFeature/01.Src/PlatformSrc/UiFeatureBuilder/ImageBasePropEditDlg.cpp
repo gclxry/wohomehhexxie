@@ -76,6 +76,7 @@ BEGIN_MESSAGE_MAP(CImageBasePropEditDlg, CDialog)
 	ON_NOTIFY(UDN_DELTAPOS, IDS_JJG_RIGHT, &CImageBasePropEditDlg::OnDeltaposJjgRight)
 	ON_WM_SIZE()
 	ON_WM_GETMINMAXINFO()
+	ON_BN_CLICKED(IDB_ANMATION_IMAGE_SETTING, &CImageBasePropEditDlg::OnBnClickedAnmationImageSetting)
 END_MESSAGE_MAP()
 
 
@@ -184,8 +185,8 @@ BOOL CImageBasePropEditDlg::OnInitDialog()
 	m_ShowBiLi_Combo.InsertString(5, _T("1000%"));
 	m_ShowBiLi_Combo.SetCurSel(0);
 
-	m_ImageBaseList.Init(this, &m_LocalImageList);
-	m_LocalImageList.Init(this);
+	m_ImageBaseList.Init(m_pUiKernel, this, &m_LocalImageList, m_pParentImgProp);
+	m_LocalImageList.Init(m_pUiKernel, this, &m_ImageBaseList);
 
 	m_ImageBaseList.SetFocus();
 	this->UpdateData(FALSE);
@@ -418,9 +419,8 @@ void CImageBasePropEditDlg::OnBnClickedOk()
 
 void CImageBasePropEditDlg::InitImageBaseShow(IUiFeatureKernel* pUiKernel, IPropertyImage* pParentImgProp)
 {
-	m_pParentImgProp = pParentImgProp;
 	m_pUiKernel = pUiKernel;
-	m_ImageBaseList.InitImageBaseShow(pUiKernel, pParentImgProp);
+	m_pParentImgProp = pParentImgProp;
 }
 
 IPropertyImageBase* CImageBasePropEditDlg::GetSelectImageBase()
@@ -448,11 +448,12 @@ void CImageBasePropEditDlg::OnBnClickedNewImagebase()
 
 bool CImageBasePropEditDlg::FindNameInImageBaseNameList(CString &strName)
 {
-	for (int i = 0; i < m_ImageBaseList.GetItemCount(); i++)
+	for (int i = 1; i < m_ImageBaseList.GetItemCount(); i++)
 	{
 		CString strComName = m_ImageBaseList.GetItemText(i, 1);
 		if (strComName.CompareNoCase(strName) == 0)
 		{
+			m_ImageBaseList.SetItemState(i, LVIS_SELECTED, LVIS_SELECTED);
 			CString strInfo(_T(""));
 			strInfo.Format(_T("已经存在名为【%s】的图片属性！"), strComName);
 			AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
@@ -495,8 +496,37 @@ void CImageBasePropEditDlg::OnBnClickedDeleteImagebase()
 
 void CImageBasePropEditDlg::OnBnClickedGetLocalImage()
 {
+	// 打开图片文件
+	CFileDialog ImageFileSelDlg(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING,
+		_T("图片 Files (*.bmp;*.jpg;*.jpeg;*.gif;*.png)|*.bmp;*.jpg;*.jpeg;*.gif;*.png;)||"), NULL);
+	ImageFileSelDlg.DoModal();
+
+	CString strFilePath = ImageFileSelDlg.GetPathName();
+	CString strFileName = ImageFileSelDlg.GetFileTitle();
+
+	if (strFilePath.GetLength() <= 0 || strFileName.GetLength() <= 0)
+		return;
+
+	for (int i = 0; i < m_LocalImageList.GetItemCount(); i++)
+	{
+		CString strComName = m_LocalImageList.GetItemText(i, 1);
+		if (strComName.CompareNoCase(strFileName) == 0)
+		{
+			m_LocalImageList.SetItemState(i, LVIS_SELECTED, LVIS_SELECTED);
+			CString strInfo(_T(""));
+			strInfo.Format(_T("已经存在名为【%s】的图片！"), strFileName);
+			AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
+			return;
+		}
+	}
+
+	m_LocalImageList.OnLoadLocalImage(strFilePath, strFileName);
 }
 
 void CImageBasePropEditDlg::OnBnClickedDeleteLocalImage()
+{
+}
+
+void CImageBasePropEditDlg::OnBnClickedAnmationImageSetting()
 {
 }

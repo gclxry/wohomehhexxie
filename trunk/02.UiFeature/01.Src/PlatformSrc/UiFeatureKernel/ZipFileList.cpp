@@ -85,25 +85,56 @@ bool CZipFileList::WriteZipInit(char *pSrcFileDir, char *pSaveZipFile)
 	return true;
 }
 
-// 写入一段buffer
-bool CZipFileList::WriteZipAppendBuffer(char *pFilePath, BYTE *pBuffer, int nBufferLen)
+bool CZipFileList::FindFileName(char *pFileName)
 {
-	if (pFilePath == NULL || strlen(pFilePath) <= 0 || pBuffer == NULL)
+	if (pFileName == NULL)
+		return false;
+
+	for (ZIP_FILE_MAP::iterator pZipItem = m_ZipFileMap.begin(); pZipItem != m_ZipFileMap.end(); pZipItem++)
+	{
+		ZIP_FILE* pZipFile = pZipItem->second;
+		if (pZipFile == NULL)
+			continue;
+
+		if (lstrcmpiA(pZipFile->strFileName.c_str(), pFileName) == 0)
+			return true;
+	}
+
+	return false;
+}
+
+// 向zip文件写入一段数据
+bool CZipFileList::WriteZipAppendStruct(ZIP_FILE *pNormalFile)
+{
+	if (pNormalFile == NULL)
+		return false;
+
+	return WriteZipAppendBuffer((char *)pNormalFile->strFileName.c_str(), pNormalFile->pFileData, pNormalFile->dwSrcFileLen, (ZIP_FILE_TYPE)pNormalFile->byFileType);
+}
+
+// 写入一段buffer
+bool CZipFileList::WriteZipAppendBuffer(char *pFileName, BYTE *pBuffer, int nBufferLen, ZIP_FILE_TYPE ZipType)
+{
+	if (pFileName == NULL || strlen(pFileName) <= 0 || pBuffer == NULL)
 		return false;
 
 	if (nBufferLen <= 0)
 		return true;
 
+	if (FindFileName(pFileName))
+		return false;
+
 	ZIP_FILE *pFileItem = new ZIP_FILE;
 	if (pFileItem == NULL)
 		return false;
 
-	pFileItem->strFileName = pFilePath;
+	pFileItem->strFileName = pFileName;
 	pFileItem->dwSrcFileLen = nBufferLen;
 	pFileItem->dwZipDatalen = 0;
+	pFileItem->byFileType = (BYTE)ZipType;
 	pFileItem->pFileData = NULL;
 
-	if (CheckFileNeedCompress(pFilePath))
+	if (CheckFileNeedCompress(pFileName))
 	{
 		uLong ulComLen = compressBound(nBufferLen);
 		if (ulComLen <= 0)
@@ -145,13 +176,16 @@ bool CZipFileList::WriteZipAppendBuffer(char *pFilePath, BYTE *pBuffer, int nBuf
 }
 
 // 写入一个文件，pFilePath：必须是相对于WriteZipInit函数的pSrcFileDir路径的相对路径
-bool CZipFileList::WriteZipAppendFile(char *pFilePath)
+bool CZipFileList::WriteZipAppendFile(char *pFileName, ZIP_FILE_TYPE ZipType)
 {
-	if (pFilePath == NULL || strlen(pFilePath) <= 0 || m_strSrcFileDir.size() <= 0 || m_strSaveZipFile.size() <= 0)
+	if (pFileName == NULL || strlen(pFileName) <= 0 || m_strSrcFileDir.size() <= 0 || m_strSaveZipFile.size() <= 0)
+		return false;
+
+	if (FindFileName(pFileName))
 		return false;
 
 	string strPath = m_strSrcFileDir;
-	strPath += pFilePath;
+	strPath += pFileName;
 
 	WIN32_FILE_ATTRIBUTE_DATA FileAttr;
 	if (!::GetFileAttributesExA(strPath.c_str(), GetFileExInfoStandard, &FileAttr))
@@ -201,11 +235,12 @@ bool CZipFileList::WriteZipAppendFile(char *pFilePath)
 		return false;
 	}
 
-	pFileItem->strFileName = pFilePath;
+	pFileItem->byFileType = (BYTE)ZipType;
+	pFileItem->strFileName = pFileName;
 	pFileItem->dwSrcFileLen = FileAttr.nFileSizeLow;
 	pFileItem->dwZipDatalen = 0;
 	pFileItem->pFileData = NULL;
-	if (CheckFileNeedCompress(pFilePath))
+	if (CheckFileNeedCompress(pFileName))
 	{
 		uLong ulComLen = compressBound(nReadCtns);
 		if (ulComLen <= 0)
@@ -273,6 +308,14 @@ bool CZipFileList::WriteZipEnd()
 		ZIP_FILE* pZip = pZipItem->second;
 		if (pZip == NULL || pZip->pFileData == NULL || pZip->dwSrcFileLen <= 0 || pZip->dwZipDatalen <= 0 || pZip->strFileName.size() <= 0)
 			continue;
+
+		// 文件类型
+		nWriteLen = fwrite(&(pZip->byFileType), 1, sizeof(BYTE), pFile);
+		if (nWriteLen != sizeof(BYTE))
+		{
+			fclose(pFile);
+			return false;
+		}
 
 		// 文件名称长度
 		SHORT sNameLen = pZip->strFileName.size();
@@ -357,6 +400,14 @@ bool CZipFileList::ReadZipFile(const char *pZipFilePath)
 
 	for (int i = 0; i < (int)nFileCtns; i++)
 	{
+		BYTE byFileType = 0;
+		nReadLen = fread_s(&byFileType, sizeof(BYTE), 1, sizeof(BYTE), pFile);
+		if (nReadLen != sizeof(BYTE))
+		{
+			fclose(pFile);
+			return false;
+		}
+
 		SHORT sNameLen = 0;
 		nReadLen = fread_s(&sNameLen, sizeof(SHORT), 1, sizeof(SHORT), pFile);
 		if (nReadLen != sizeof(SHORT))
@@ -429,6 +480,7 @@ bool CZipFileList::ReadZipFile(const char *pZipFilePath)
 			return false;
 		}
 
+		pZipItem->byFileType = byFileType;
 		pZipItem->strFileName = szName;
 		pZipItem->dwSrcFileLen = dwSrcFileLen;
 		pZipItem->dwZipDatalen = dwZipDataLen;

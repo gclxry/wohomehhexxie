@@ -72,12 +72,26 @@ CMainFrame::CMainFrame()
 	m_strNewUfpPath = _T("");
 	m_strNewSkinDir = _T("");
 	m_strNewSkinName = _T("");
+
+	m_LocalImageFileVec.clear();
 }
 
 CMainFrame::~CMainFrame()
 {
 	SAFE_FREE_LIBRARY(m_hControlDll);
 	SAFE_FREE_LIBRARY(m_hKernelDll);
+
+	// 写入单个文件
+	for (ZIP_FILE_VEC::iterator pZipItem = m_LocalImageFileVec.begin(); pZipItem != m_LocalImageFileVec.end(); pZipItem++)
+	{
+		ZIP_FILE *pZipFile = *pZipItem;
+		if (pZipFile == NULL)
+			continue;
+
+		SAFE_DELETE_LIST(pZipFile->pFileData);
+		SAFE_DELETE(pZipFile);
+	}
+	m_LocalImageFileVec.clear();
 }
 
 // 设置属性发生变化，需要保存
