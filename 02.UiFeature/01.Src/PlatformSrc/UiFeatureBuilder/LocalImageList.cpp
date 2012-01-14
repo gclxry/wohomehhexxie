@@ -9,7 +9,7 @@ CLocalImageList::CLocalImageList(void)
 	m_pImgBaseDlg = NULL;
 	m_pUiKernel = NULL;
 	m_pImgBaseLise = NULL;
-	m_ZipFileVec = NULL;
+	m_ZipFileMap = NULL;
 	m_pSelImgBase = NULL;
 }
 
@@ -40,11 +40,7 @@ void CLocalImageList::Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *p
 	m_pUiKernel = pUiKernel;
 	m_pImgBaseLise = pImgBaseLise;
 	m_pSelImgBase = pSelImgBase;
-
-	m_ZipFileVec = NULL;
-	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
-	if (pMain != NULL)
-		m_ZipFileVec = pMain->GetZipFileVec();
+	m_ZipFileMap = m_pUiKernel->GetSkinManager()->BD_GetUnZipFileMap();
 
 	if (m_pSelImgBase == NULL)
 		RefreshList(NULL);
@@ -62,12 +58,12 @@ void CLocalImageList::RefreshList(ZIP_FILE* pSelZipFile)
 	this->InsertColumn(0, _T("#"), LVCFMT_LEFT, 50);
 	this->InsertColumn(1, _T("±¾µØÍ¼Æ¬Ãû³Æ"), LVCFMT_LEFT, 160);
 
-	if (m_ZipFileVec != NULL)
+	if (m_ZipFileMap != NULL)
 	{
 		int nNo = 0;
-		for (ZIP_FILE_VEC::iterator pZipItem = m_ZipFileVec->begin(); pZipItem != m_ZipFileVec->end(); pZipItem++, nNo++)
+		for (ZIP_FILE_MAP::iterator pZipItem = m_ZipFileMap->begin(); pZipItem != m_ZipFileMap->end(); pZipItem++, nNo++)
 		{
-			ZIP_FILE *pZipFile = *pZipItem;
+			ZIP_FILE *pZipFile = pZipItem->second;
 			if (pZipFile == NULL)
 				continue;
 
@@ -86,7 +82,7 @@ void CLocalImageList::RefreshList(ZIP_FILE* pSelZipFile)
 bool CLocalImageList::OnLoadLocalImage(CString strFilePath, CString strFileName)
 {
 	USES_CONVERSION;
-	if (m_pUiKernel == NULL || strFileName.GetLength() <= 0 || strFilePath.GetLength() <= 0 || m_ZipFileVec == NULL)
+	if (m_pUiKernel == NULL || strFileName.GetLength() <= 0 || strFilePath.GetLength() <= 0 || m_ZipFileMap == NULL)
 		return false;
 
 	WIN32_FILE_ATTRIBUTE_DATA FileAttr;
@@ -144,7 +140,7 @@ bool CLocalImageList::OnLoadLocalImage(CString strFilePath, CString strFileName)
 		return false;
 	}
 
-	m_ZipFileVec->push_back(pFileItem);
+	m_ZipFileMap->insert(pair<string, ZIP_FILE*>(pFileItem->strFileName, pFileItem));
 	RefreshList(pFileItem);
 	return true;
 }

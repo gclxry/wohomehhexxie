@@ -59,14 +59,13 @@ void IUiFeatureKernelImpl::ReleaseKernelWindow()
 // 从zip文件中找到指定文件
 bool IUiFeatureKernelImpl::FindUnZipFile(const char *pFileName, BYTE **ppOutBuffer, int *pnFileLen)
 {
-	CZipFileList* pZip = CZipFileList::GetInstance();
-	if (pZip == NULL || pFileName == NULL || strlen(pFileName) <= 0 || ppOutBuffer == NULL || pnFileLen == NULL)
+	if (pFileName == NULL || strlen(pFileName) <= 0 || ppOutBuffer == NULL || pnFileLen == NULL)
 		return false;
 
 	*ppOutBuffer = NULL;
 	*pnFileLen = 0;
 
-	ZIP_FILE *pZipFile = pZip->FindUnZipFile((char*)pFileName);
+	ZIP_FILE *pZipFile = m_KernelZipFile.FindUnZipFile((char*)pFileName);
 	if (pZipFile == NULL)
 		return false;
 
@@ -236,7 +235,7 @@ bool IUiFeatureKernelImpl::BD_OpenProject(char *pszSkinDir, char *pszSkinName)
 	strZipPath += pszSkinName;
 	strZipPath += NAME_SKIN_FILE_EX_NAME;
 
-	if (!CZipFileList::GetInstance()->ReadZipFile(strZipPath.c_str()))
+	if (!m_KernelZipFile.ReadZipFile(strZipPath.c_str()))
 		return false;
 
 	return true;
@@ -448,4 +447,9 @@ bool IUiFeatureKernelImpl::BD_DeleteControl_FromCtrlVec(CHILD_CTRLS_VEC* pCtrlVe
 	}
 
 	return false;
+}
+
+CZipFileList* IUiFeatureKernelImpl::GetZipFile()
+{
+	return &m_KernelZipFile;
 }

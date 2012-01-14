@@ -20,6 +20,7 @@ void CPropetryDialogGridProperty::InitDialogPropetry(CPropertyViewCtrl *pPropVie
 	m_pPropViewList = pPropView;
 	m_ObjType = ObjType;
 	m_pUiKernel = pUiKernel;
+	AllowEdit(FALSE);
 }
 
 void CPropetryDialogGridProperty::OnClickButton(CPoint /*point*/)

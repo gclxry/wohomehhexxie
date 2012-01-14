@@ -111,18 +111,25 @@ bool IPropertyImageBase::DrawImage(CDrawingBoard &DstDc, RECT DstRct)
 
 	if (!IS_SAFE_HANDLE(m_DrawImg.GetSafeHdc()))
 	{
-		if (m_ImageProp.bIsZipFile)
+		if (m_pZipFile == NULL)
 		{
-			BYTE *pBuffer = NULL;
-			int nLen = 0;
-			if (!GetUiKernel()->FindUnZipFile(m_ImageProp.strFileName.c_str(), &pBuffer, &nLen))
-				return false;
+			if (m_ImageProp.bIsZipFile)
+			{
+				BYTE *pBuffer = NULL;
+				int nLen = 0;
+				if (!GetUiKernel()->FindUnZipFile(m_ImageProp.strFileName.c_str(), &pBuffer, &nLen))
+					return false;
 
-			m_DrawImg.CreateByMem(pBuffer, nLen);
+				m_DrawImg.CreateByMem(pBuffer, nLen);
+			}
+			else
+			{
+				m_DrawImg.CreateByFile(m_ImageProp.strFileName.c_str());
+			}
 		}
 		else
 		{
-			m_DrawImg.CreateByFile(m_ImageProp.strFileName.c_str());
+			m_DrawImg.CreateByMem(m_pZipFile->pFileData, m_pZipFile->dwSrcFileLen);
 		}
 	}
 
