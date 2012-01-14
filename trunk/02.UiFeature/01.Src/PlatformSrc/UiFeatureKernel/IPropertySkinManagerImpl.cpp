@@ -48,7 +48,7 @@ IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
 	m_nObjectIdInRes = 1;
 	m_AreaType = AT_CN;
 
-	m_pZipFile = CZipFileList::GetInstance();
+	m_pKernelZipFile = ((IUiFeatureKernelImpl*)IUiFeatureKernelImpl::GetInstance())->GetZipFile();
 }
 
 IPropertySkinManagerImpl::~IPropertySkinManagerImpl(void)
@@ -508,7 +508,7 @@ IPropertyBase* IPropertySkinManagerImpl::FindBaseProperty(const char* pszPropTyp
 bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 {
 	// TBD，从Builder来和皮肤文件来是不一样的
-	if (pszSkinPath == NULL || strlen(pszSkinPath) <= 0 || m_pZipFile == NULL)
+	if (pszSkinPath == NULL || strlen(pszSkinPath) <= 0 || m_pKernelZipFile == NULL)
 		return false;
 
 	// 初始化
@@ -530,56 +530,56 @@ bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 	//strUfd += SKIN_DATA_DIR;
 	//strUfd += "skintest.ufd";
 
-	//m_pZipFile->WriteZipInit((char*)strDir.c_str(), (char*)strUfd.c_str());
-	//m_pZipFile->WriteZipAppendFile(WINDOWS_XML_NAME, ZFT_NORMAL);
-	//m_pZipFile->WriteZipAppendFile(RESOURCE_XML_NAME);
-	//m_pZipFile->WriteZipAppendFile(LAYOUT_XML_NAME);
-	//m_pZipFile->WriteZipAppendFile(CONTROLS_XML_NAME);
-	//m_pZipFile->WriteZipAppendFile("bk.PNG");
-	//m_pZipFile->WriteZipAppendFile("V5.Dlg.Close.png");
-	//m_pZipFile->WriteZipAppendFile("V5.Dlg.Mini.png");
-	//m_pZipFile->WriteZipAppendFile("V5.Logon.ACDC.png");
-	//m_pZipFile->WriteZipAppendFile("V5.Logon.Set.png");
-	//m_pZipFile->WriteZipAppendFile("V5.LogonBiz.01.jpg");
-	//m_pZipFile->WriteZipAppendFile("V5.LogonBiz.02.png");
-	//m_pZipFile->WriteZipAppendFile("下拉2标注.png");
-	//m_pZipFile->WriteZipAppendFile("下拉菜单效果图_MarkMan.png");
-	//m_pZipFile->WriteZipAppendFile("切图副本.png");
-	//m_pZipFile->WriteZipAppendFile("最新修改.png");
-	//m_pZipFile->WriteZipEnd();
+	//m_pKernelZipFile->WriteZipInit((char*)strDir.c_str(), (char*)strUfd.c_str());
+	//m_pKernelZipFile->WriteZipAppendFile(WINDOWS_XML_NAME, ZFT_NORMAL);
+	//m_pKernelZipFile->WriteZipAppendFile(RESOURCE_XML_NAME);
+	//m_pKernelZipFile->WriteZipAppendFile(LAYOUT_XML_NAME);
+	//m_pKernelZipFile->WriteZipAppendFile(CONTROLS_XML_NAME);
+	//m_pKernelZipFile->WriteZipAppendFile("bk.PNG");
+	//m_pKernelZipFile->WriteZipAppendFile("V5.Dlg.Close.png");
+	//m_pKernelZipFile->WriteZipAppendFile("V5.Dlg.Mini.png");
+	//m_pKernelZipFile->WriteZipAppendFile("V5.Logon.ACDC.png");
+	//m_pKernelZipFile->WriteZipAppendFile("V5.Logon.Set.png");
+	//m_pKernelZipFile->WriteZipAppendFile("V5.LogonBiz.01.jpg");
+	//m_pKernelZipFile->WriteZipAppendFile("V5.LogonBiz.02.png");
+	//m_pKernelZipFile->WriteZipAppendFile("下拉2标注.png");
+	//m_pKernelZipFile->WriteZipAppendFile("下拉菜单效果图_MarkMan.png");
+	//m_pKernelZipFile->WriteZipAppendFile("切图副本.png");
+	//m_pKernelZipFile->WriteZipAppendFile("最新修改.png");
+	//m_pKernelZipFile->WriteZipEnd();
 //////////////////////////////////////////////////////////////////////////
 
 	// 从皮肤文件中初始化皮肤队列 TBD
 	m_strSkinPath = pszSkinPath;
-	if (!m_pZipFile->ReadZipFile(pszSkinPath))
+	if (!m_pKernelZipFile->ReadZipFile(pszSkinPath))
 		return false;
 
-	ZIP_FILE * pResurceXml = m_pZipFile->FindUnZipFile(RESOURCE_XML_NAME);
-	ZIP_FILE * pControlsXml = m_pZipFile->FindUnZipFile(CONTROLS_XML_NAME);
-	ZIP_FILE * pWindowsXml = m_pZipFile->FindUnZipFile(WINDOWS_XML_NAME);
-	ZIP_FILE * pLayoutXml = m_pZipFile->FindUnZipFile(LAYOUT_XML_NAME);
+	ZIP_FILE * pResurceXml = m_pKernelZipFile->FindUnZipFile(RESOURCE_XML_NAME);
+	ZIP_FILE * pControlsXml = m_pKernelZipFile->FindUnZipFile(CONTROLS_XML_NAME);
+	ZIP_FILE * pWindowsXml = m_pKernelZipFile->FindUnZipFile(WINDOWS_XML_NAME);
+	ZIP_FILE * pLayoutXml = m_pKernelZipFile->FindUnZipFile(LAYOUT_XML_NAME);
 	if (pWindowsXml == NULL || pResurceXml == NULL)
 		return false;
 
 	// 解读 Resource.xml
 	if (!TranslateResourceXml(pResurceXml))
 		return false;
-	m_pZipFile->RemoveFile(pResurceXml);
+	m_pKernelZipFile->RemoveFile(pResurceXml);
 
 	// 解读 Controls.xml
 	if (!TranslateControlsXml(pControlsXml))
 		return false;
-	m_pZipFile->RemoveFile(pControlsXml);
+	m_pKernelZipFile->RemoveFile(pControlsXml);
 
 	// 解读 Windows.xml
 	if (!TranslateWindowsXml(pWindowsXml))
 		return false;
-	m_pZipFile->RemoveFile(pWindowsXml);
+	m_pKernelZipFile->RemoveFile(pWindowsXml);
 
 	// 解析 Layout.xml
 	if (!TranslateLayoutXml(pLayoutXml))
 		return false;
-	m_pZipFile->RemoveFile(pLayoutXml);
+	m_pKernelZipFile->RemoveFile(pLayoutXml);
 
 	return true;
 }
@@ -733,6 +733,7 @@ bool IPropertySkinManagerImpl::TranslateResourceXml(ZIP_FILE *pResurceXml)
 void IPropertySkinManagerImpl::SetPropetryBaseRelevancy()
 {
 	SetPropRelevancy(m_pImageBasePropMap, m_pImagePropMap);
+	SetImageFileRelevancy();
 	SetPropRelevancy(m_pFontBasePropMap, m_pFontPropMap);
 	SetPropRelevancy(m_pCursorBasePropMap, m_pCursorPropMap);
 	SetPropRelevancy(m_pColorBasePropMap, m_pColorPropMap);
@@ -1123,23 +1124,68 @@ IPropertyGroup* IPropertySkinManagerImpl::FindControlPropGroup(char *pszObjectId
 // 解析Resource.xml
 bool IPropertySkinManagerImpl::BD_TranslateResourceXml(char *pszXmlPath)
 {
-	if (m_pZipFile == NULL || pszXmlPath == NULL || strlen(pszXmlPath) <= 0)
+	if (m_pKernelZipFile == NULL || pszXmlPath == NULL || strlen(pszXmlPath) <= 0)
 		return false;
 
-	ZIP_FILE *pFileItem = m_pZipFile->FindUnZipFile(pszXmlPath);
+	ZIP_FILE *pFileItem = m_pKernelZipFile->FindUnZipFile(pszXmlPath);
 	if (pFileItem == NULL)
 		return false;
 
-	return TranslateResourceXml(pFileItem);
+	if (!TranslateResourceXml(pFileItem))
+		return false;
+
+	ZIP_FILE_MAP* pFromZipMap = m_pKernelZipFile->GetUnZipFileMap();
+	ZIP_FILE_MAP* pToZipMap = m_BD_SkinUnZipImageFile.GetUnZipFileMap();
+	if (pFromZipMap == NULL || pToZipMap == NULL)
+		return false;
+
+	m_BD_SkinUnZipImageFile.Clear();
+	for (ZIP_FILE_MAP::iterator pZipItem = pFromZipMap->begin(); pZipItem != pFromZipMap->end(); pZipItem++)
+	{
+		ZIP_FILE* pZip = pZipItem->second;
+		if (pZip == NULL || ((ZIP_FILE_TYPE)(pZip->byFileType)) != ZFT_IMAGE)
+			continue;
+
+		pToZipMap->insert(pair<string, ZIP_FILE*>(pZip->strFileName, pZip));
+		pFromZipMap->erase(pZipItem);
+	}
+
+	return true;
+}
+
+bool IPropertySkinManagerImpl::SetImageFileRelevancy()
+{
+	if (m_pImageBasePropMap == NULL || m_pKernelZipFile == NULL)
+		return false;
+
+	for (ONE_RESOURCE_PROP_MAP::iterator pImage = m_pImageBasePropMap->begin(); pImage != m_pImageBasePropMap->end(); pImage++)
+	{
+		IPropertyBase* pPropBase = pImage->second;
+		IPropertyImageBase* pImageBaseProp = dynamic_cast<IPropertyImageBase*>(pPropBase);
+		if (pImageBaseProp == NULL || pImageBaseProp->GetImageProp() == NULL)
+			continue;
+
+		string strFileName = pImageBaseProp->GetImageProp()->strFileName;
+		if (strFileName.size() <= 0)
+			continue;
+
+		ZIP_FILE *pZipFile = m_pKernelZipFile->FindUnZipFile((char*)strFileName.c_str());
+		if (pZipFile == NULL)
+			return false;
+
+		pImageBaseProp->SetZipFile(pZipFile);
+	}
+
+	return true;
 }
 
 // 解析Controls.xml
 bool IPropertySkinManagerImpl::BD_TranslateControlsXml(char *pszXmlPath)
 {
-	if (m_pZipFile == NULL || pszXmlPath == NULL || strlen(pszXmlPath) <= 0)
+	if (m_pKernelZipFile == NULL || pszXmlPath == NULL || strlen(pszXmlPath) <= 0)
 		return false;
 
-	ZIP_FILE *pFileItem = m_pZipFile->FindUnZipFile(pszXmlPath);
+	ZIP_FILE *pFileItem = m_pKernelZipFile->FindUnZipFile(pszXmlPath);
 	if (pFileItem == NULL)
 		return false;
 
@@ -1149,10 +1195,10 @@ bool IPropertySkinManagerImpl::BD_TranslateControlsXml(char *pszXmlPath)
 // 解析Windows.xml
 bool IPropertySkinManagerImpl::BD_TranslateWindowsXml(char *pszXmlPath)
 {
-	if (m_pZipFile == NULL || pszXmlPath == NULL || strlen(pszXmlPath) <= 0)
+	if (m_pKernelZipFile == NULL || pszXmlPath == NULL || strlen(pszXmlPath) <= 0)
 		return false;
 
-	ZIP_FILE *pFileItem = m_pZipFile->FindUnZipFile(pszXmlPath);
+	ZIP_FILE *pFileItem = m_pKernelZipFile->FindUnZipFile(pszXmlPath);
 	if (pFileItem == NULL)
 		return false;
 
@@ -1162,14 +1208,16 @@ bool IPropertySkinManagerImpl::BD_TranslateWindowsXml(char *pszXmlPath)
 // 解析Layout.xml
 bool IPropertySkinManagerImpl::BD_TranslateLayoutXml(char *pszXmlPath)
 {
-	if (m_pZipFile == NULL || pszXmlPath == NULL || strlen(pszXmlPath) <= 0)
+	if (m_pKernelZipFile == NULL || pszXmlPath == NULL || strlen(pszXmlPath) <= 0)
 		return false;
 
-	ZIP_FILE *pFileItem = m_pZipFile->FindUnZipFile(pszXmlPath);
+	ZIP_FILE *pFileItem = m_pKernelZipFile->FindUnZipFile(pszXmlPath);
 	if (pFileItem == NULL)
 		return false;
 
-	return TranslateLayoutXml(pFileItem);
+	bool bRet = TranslateLayoutXml(pFileItem);
+	m_pKernelZipFile->Clear();
+	return bRet;
 }
 
 bool IPropertySkinManagerImpl::BuilderCreateFileItem(char *pFilePath, ZIP_FILE &FileItem)
@@ -1245,7 +1293,7 @@ ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::BD_GetWindowPropMap()
 // 保存皮肤包
 bool IPropertySkinManagerImpl::BD_SaveProject(char *pszSkinDir, char *pszSkinName)
 {
-	if (pszSkinDir == NULL || pszSkinName == NULL || m_pZipFile == NULL)
+	if (pszSkinDir == NULL || pszSkinName == NULL || m_pKernelZipFile == NULL)
 		return false;
 
 	string strDir = pszSkinDir;
@@ -1285,40 +1333,31 @@ bool IPropertySkinManagerImpl::BD_SaveProject(char *pszSkinDir, char *pszSkinNam
 	strZipFile += NAME_SKIN_FILE_EX_NAME;
 	
 	// 写入zip文件
-	if (!m_pZipFile->WriteZipInit(pszSkinDir, (char*)strZipFile.c_str()))
+	if (!m_pKernelZipFile->WriteZipInit(pszSkinDir, (char*)strZipFile.c_str()))
 		return false;
 
-	if (!m_pZipFile->WriteZipAppendBuffer(RESOURCE_XML_NAME, (BYTE*)strResourceXmlData.c_str(), strResourceXmlData.size(), ZFT_NORMAL))
+	if (!m_pKernelZipFile->WriteZipAppendBuffer(RESOURCE_XML_NAME, (BYTE*)strResourceXmlData.c_str(), strResourceXmlData.size(), ZFT_NORMAL))
 		return false;
-	if (!m_pZipFile->WriteZipAppendBuffer(CONTROLS_XML_NAME, (BYTE*)strControlsXmlData.c_str(), strControlsXmlData.size(), ZFT_NORMAL))
+	if (!m_pKernelZipFile->WriteZipAppendBuffer(CONTROLS_XML_NAME, (BYTE*)strControlsXmlData.c_str(), strControlsXmlData.size(), ZFT_NORMAL))
 		return false;
-	if (!m_pZipFile->WriteZipAppendBuffer(WINDOWS_XML_NAME, (BYTE*)strWindowsXmlData.c_str(), strWindowsXmlData.size(), ZFT_NORMAL))
+	if (!m_pKernelZipFile->WriteZipAppendBuffer(WINDOWS_XML_NAME, (BYTE*)strWindowsXmlData.c_str(), strWindowsXmlData.size(), ZFT_NORMAL))
 		return false;
-	if (!m_pZipFile->WriteZipAppendBuffer(LAYOUT_XML_NAME, (BYTE*)strLayoutXmlData.c_str(), strLayoutXmlData.size(), ZFT_NORMAL))
+	if (!m_pKernelZipFile->WriteZipAppendBuffer(LAYOUT_XML_NAME, (BYTE*)strLayoutXmlData.c_str(), strLayoutXmlData.size(), ZFT_NORMAL))
 		return false;
 
 	// 写入图片文件
-	string strPropGroup("imagebase");
-	RESOURCE_PROP_MAP::iterator pImageBaseGroup = m_AllPropMap.find(strPropGroup);
-	if (pImageBaseGroup != m_AllPropMap.end())
+	for (ZIP_FILE_MAP::iterator pZipItem = m_BD_SkinUnZipImageFile.GetUnZipFileMap()->begin();
+		pZipItem != m_BD_SkinUnZipImageFile.GetUnZipFileMap()->end(); pZipItem++)
 	{
-		ONE_RESOURCE_PROP_MAP* pImageBaseItem = pImageBaseGroup->second;
-		if (pImageBaseItem != NULL)
-		{
-			for (ONE_RESOURCE_PROP_MAP::iterator pImage = pImageBaseItem->begin(); pImage != pImageBaseItem->end(); pImage++)
-			{
-				IPropertyBase* pPropBase = pImage->second;
-				IPropertyImageBase* pImageBaseProp = dynamic_cast<IPropertyImageBase*>(pPropBase);
-				if (pImageBaseProp == NULL || pImageBaseProp->GetZipFile() == NULL)
-					continue;
+		ZIP_FILE* pZip = pZipItem->second;
+		if (pZip == NULL)
+			continue;
 
-				if (!m_pZipFile->WriteZipAppendStruct(pImageBaseProp->GetZipFile()))
-					return false;
-			}
-		}
+		if (!m_pKernelZipFile->WriteZipAppendStruct(pZip))
+			return false;
 	}
 
-	return m_pZipFile->WriteZipEnd(true);
+	return m_pKernelZipFile->WriteZipEnd(true);
 }
 
 bool IPropertySkinManagerImpl::SaveLayoutXml(const char *pszSavePath, string &strXmlData)
@@ -1673,42 +1712,30 @@ bool IPropertySkinManagerImpl::DeleteImageBaseProp(IPropertyImageBase *pImgBaseP
 	if (pImgBaseProp == false)
 		return false;
 
-	string strPropGroup("image");
-	RESOURCE_PROP_MAP::iterator pImageGroup = m_AllPropMap.find(strPropGroup);
-	if (pImageGroup != m_AllPropMap.end())
+	if (m_pImagePropMap != NULL)
 	{
-		ONE_RESOURCE_PROP_MAP* pImageItem = pImageGroup->second;
-		if (pImageItem != NULL)
+		for (ONE_RESOURCE_PROP_MAP::iterator pImage = m_pImagePropMap->begin(); pImage != m_pImagePropMap->end(); pImage++)
 		{
-			for (ONE_RESOURCE_PROP_MAP::iterator pImage = pImageItem->begin(); pImage != pImageItem->end(); pImage++)
-			{
-				IPropertyBase* pPropBase = pImage->second;
-				IPropertyImage* pImageProp = dynamic_cast<IPropertyImage*>(pPropBase);
-				if (pImageProp == NULL)
-					continue;
+			IPropertyBase* pPropBase = pImage->second;
+			IPropertyImage* pImageProp = dynamic_cast<IPropertyImage*>(pPropBase);
+			if (pImageProp == NULL)
+				continue;
 
-				IPropertyImageBase *pComImgBase = dynamic_cast<IPropertyImageBase*>(pImageProp->GetRelevancyProp());
-				if (lstrcmpiA(pImageProp->GetRelevancyPropName(), pImgBaseProp->GetObjectName()) == 0 || pComImgBase == pImgBaseProp)
-				{
-					pImageProp->SetRelevancyProp(NULL);
-					pImageProp->SetRelevancyPropName(NULL);
-				}
+			IPropertyImageBase *pComImgBase = dynamic_cast<IPropertyImageBase*>(pImageProp->GetRelevancyProp());
+			if (lstrcmpiA(pImageProp->GetRelevancyPropName(), pImgBaseProp->GetObjectName()) == 0 || pComImgBase == pImgBaseProp)
+			{
+				pImageProp->SetRelevancyProp(NULL);
+				pImageProp->SetRelevancyPropName(NULL);
 			}
 		}
 	}
 
-	strPropGroup = "imagebase";
-	RESOURCE_PROP_MAP::iterator pImageBaseGroup = m_AllPropMap.find(strPropGroup);
-	if (pImageBaseGroup != m_AllPropMap.end())
+	if (m_pImageBasePropMap != NULL)
 	{
-		ONE_RESOURCE_PROP_MAP* pImageBaseItem = pImageBaseGroup->second;
-		if (pImageBaseItem != NULL)
-		{
-			string strObjId(pImgBaseProp->GetObjectId());
-			ONE_RESOURCE_PROP_MAP::iterator pFindImageBase = pImageBaseItem->find(strObjId);
-			if (pFindImageBase != pImageBaseItem->end())
-				pImageBaseItem->erase(pFindImageBase);
-		}
+		string strObjId(pImgBaseProp->GetObjectId());
+		ONE_RESOURCE_PROP_MAP::iterator pFindImageBase = m_pImageBasePropMap->find(strObjId);
+		if (pFindImageBase != m_pImageBasePropMap->end())
+			m_pImageBasePropMap->erase(pFindImageBase);
 	}
 
 	ReleaseBaseProp(dynamic_cast<IPropertyBase*>(pImgBaseProp));
@@ -1754,54 +1781,47 @@ bool IPropertySkinManagerImpl::ModifyImageBaseProp(IPropertyImageBase *pImgBaseP
 		return false;
 
 	string strOldName = "";
-	string strPropGroup = "imagebase";
-	RESOURCE_PROP_MAP::iterator pImageBaseGroup = m_AllPropMap.find(strPropGroup);
-	if (pImageBaseGroup != m_AllPropMap.end())
+	if (m_pImageBasePropMap != NULL)
 	{
-		ONE_RESOURCE_PROP_MAP* pImageBaseItem = pImageBaseGroup->second;
-		if (pImageBaseItem != NULL)
+		string strObjId(pImgBaseProp->GetObjectId());
+		ONE_RESOURCE_PROP_MAP::iterator pFindImageBase = m_pImageBasePropMap->find(strObjId);
+		if (pFindImageBase != m_pImageBasePropMap->end())
 		{
-			string strObjId(pImgBaseProp->GetObjectId());
-			ONE_RESOURCE_PROP_MAP::iterator pFindImageBase = pImageBaseItem->find(strObjId);
-			if (pFindImageBase != pImageBaseItem->end())
-			{
-				IPropertyBase* pFind = pFindImageBase->second;
-				if (pFind == NULL)
-					return false;
+			IPropertyBase* pFind = pFindImageBase->second;
+			if (pFind == NULL)
+				return false;
 
-				IPropertyImageBase *pFindImgBaseProp = dynamic_cast<IPropertyImageBase*>(pFind);
-				if (pFindImgBaseProp == NULL)
-					return false;
+			IPropertyImageBase *pFindImgBaseProp = dynamic_cast<IPropertyImageBase*>(pFind);
+			if (pFindImgBaseProp == NULL)
+				return false;
 
-				strOldName = pFindImgBaseProp->GetObjectName();
-				pFindImgBaseProp->SetObjectName(pszNewPropName);
-			}
+			strOldName = pFindImgBaseProp->GetObjectName();
+			pFindImgBaseProp->SetObjectName(pszNewPropName);
 		}
 	}
 
-	strPropGroup = "image";
-	RESOURCE_PROP_MAP::iterator pImageGroup = m_AllPropMap.find(strPropGroup);
-	if (pImageGroup != m_AllPropMap.end())
+	if (m_pImagePropMap != NULL)
 	{
-		ONE_RESOURCE_PROP_MAP* pImageItem = pImageGroup->second;
-		if (pImageItem != NULL)
+		for (ONE_RESOURCE_PROP_MAP::iterator pImage = m_pImagePropMap->begin(); pImage != m_pImagePropMap->end(); pImage++)
 		{
-			for (ONE_RESOURCE_PROP_MAP::iterator pImage = pImageItem->begin(); pImage != pImageItem->end(); pImage++)
-			{
-				IPropertyBase* pPropBase = pImage->second;
-				IPropertyImage* pImageProp = dynamic_cast<IPropertyImage*>(pPropBase);
-				if (pImageProp == NULL)
-					continue;
+			IPropertyBase* pPropBase = pImage->second;
+			IPropertyImage* pImageProp = dynamic_cast<IPropertyImage*>(pPropBase);
+			if (pImageProp == NULL)
+				continue;
 
-				IPropertyImageBase *pComImgBase = dynamic_cast<IPropertyImageBase*>(pImageProp->GetRelevancyProp());
-				if (lstrcmpiA(pImageProp->GetRelevancyPropName(), strOldName.c_str()) == 0 || pComImgBase == pImgBaseProp)
-				{
-					pImageProp->SetRelevancyPropName(pszNewPropName);
-					pImageProp->SetRelevancyProp(pImgBaseProp);
-				}
+			IPropertyImageBase *pComImgBase = dynamic_cast<IPropertyImageBase*>(pImageProp->GetRelevancyProp());
+			if (lstrcmpiA(pImageProp->GetRelevancyPropName(), strOldName.c_str()) == 0 || pComImgBase == pImgBaseProp)
+			{
+				pImageProp->SetRelevancyPropName(pszNewPropName);
+				pImageProp->SetRelevancyProp(pImgBaseProp);
 			}
 		}
 	}
 
 	return true;
+}
+
+ZIP_FILE_MAP* IPropertySkinManagerImpl::BD_GetUnZipFileMap()
+{
+	return m_BD_SkinUnZipImageFile.GetUnZipFileMap();
 }

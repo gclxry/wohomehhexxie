@@ -24,8 +24,6 @@ public:
 	// 设置属性发生变化，需要保存
 	void SetPropetryChange();
 
-	ZIP_FILE_VEC* GetZipFileVec() { return &m_LocalImageFileVec; };
-
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
@@ -69,8 +67,6 @@ private:
 	IUiFeatureKernel* m_pUiKernel;
 	IPropertySkinManager* m_pSkinMgr;
 	CONTROL_REG_MAP* m_pRegControlMap;
-
-	ZIP_FILE_VEC m_LocalImageFileVec;
 
 //////////////////////////////////////////////////////////////////////////
 	// 控件相关

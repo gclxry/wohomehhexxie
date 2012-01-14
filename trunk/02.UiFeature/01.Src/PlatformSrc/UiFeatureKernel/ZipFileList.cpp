@@ -7,17 +7,6 @@
 #pragma comment(lib, "./zip/lib/zlib.lib")
 #pragma comment(lib, "./zip/lib/Unzip.lib")
 
-CZipFileList *GetZipFileInterface()
-{
-	return CZipFileList::GetInstance();
-}
-
-CZipFileList* CZipFileList::GetInstance()
-{
-	static CZipFileList _ZipFileListInstance;
-	return &_ZipFileListInstance;
-}
-
 CZipFileList::CZipFileList()
 {
 	m_ZipFileMap.clear();

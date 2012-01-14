@@ -2,8 +2,6 @@
 #include "featurebaselist.h"
 #include "..\..\Inc\IUiFeatureKernel.h"
 
-typedef vector<ZIP_FILE*>		ZIP_FILE_VEC;
-
 class CImageBasePropEditDlg;
 class CImageBaseNameList;
 class CLocalImageList : public CFeatureBaseList
@@ -23,6 +21,6 @@ private:
 	CImageBasePropEditDlg *m_pImgBaseDlg;
 	IUiFeatureKernel* m_pUiKernel;
 	CImageBaseNameList* m_pImgBaseLise;
-	ZIP_FILE_VEC* m_ZipFileVec;
+	ZIP_FILE_MAP* m_ZipFileMap;
 	IPropertyImageBase* m_pSelImgBase;
 };

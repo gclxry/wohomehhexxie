@@ -3,6 +3,7 @@
 #include "..\..\Inc\IUiFeatureKernel.h"
 #include "IUiEngineImpl.h"
 #include "IPropertySkinManagerImpl.h"
+#include "ZipFileList.h"
 #include "..\..\Inc\IControlManager.h"
 
 class IWindowBaseImpl;
@@ -53,6 +54,7 @@ public:
 	// 从zip文件中找到指定文件
 	virtual bool FindUnZipFile(const char *pFileName, BYTE **ppOutBuffer, int *pnFileLen);
 
+	CZipFileList *GetZipFile();
 private:
 	void ReleaseKernelWindow();
 	bool BD_DeleteControl_FromCtrlVec(CHILD_CTRLS_VEC* pCtrlVec, IControlBase *pCtrlBase);
@@ -61,6 +63,7 @@ private:
 	HMODULE m_hControlDll;
 	IControlManager *m_pControlMgr;
 
+	CZipFileList m_KernelZipFile;
 	IUiEngineImpl *m_pUiEngine;
 	IPropertySkinManagerImpl *m_pSkinMgr;
 

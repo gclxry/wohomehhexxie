@@ -4,6 +4,7 @@
 #pragma once
 #include "IPropertyBase.h"
 #include "IPropertyWindow.h"
+#include "IZipFile.h"
 
 class IPropertySkinManager
 {
@@ -18,6 +19,7 @@ public:
 	virtual bool BD_TranslateLayoutXml(char *pszXmlPath) = 0;
 	// 得到Layout.xml队列
 	virtual ONE_RESOURCE_PROP_MAP* BD_GetWindowPropMap() = 0;
+	virtual ZIP_FILE_MAP* BD_GetUnZipFileMap() = 0;
 
 	// 清空4个xml文件的属性队列
 	virtual void ReleaseSkinManagerPropetry() = 0;

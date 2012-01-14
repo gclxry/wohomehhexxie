@@ -16,8 +16,6 @@ public:
 	CZipFileList();
 	virtual ~CZipFileList();
 
-	static CZipFileList* GetInstance();
-
 	virtual void RemoveFile(ZIP_FILE *pRemove);
 
 //// 读取zip文件 //////////////////////////////////////////////////////////////////////
@@ -42,8 +40,8 @@ public:
 	// 测试函数，将解压后的文件写入本地一个指定目录
 	virtual void TestWriteUnZipFile(char *pszOutDir);
 
-private:
 	void Clear();
+private:
 	// 通过扩展名来判断文件是否需要加密
 	bool CheckFileNeedCompress(char *pFileName);
 	bool FindFileName(char *pFileName);

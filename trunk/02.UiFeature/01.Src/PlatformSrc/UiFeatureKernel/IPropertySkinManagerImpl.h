@@ -39,6 +39,7 @@ public:
 	virtual bool BD_DeletePropetry(IPropertyBase *pPropBase);
 	// 修改属性名称
 	virtual bool BD_ModifyPropetryName(IPropertyBase *pPropBase, char *pszNewPropName);
+	virtual ZIP_FILE_MAP* BD_GetUnZipFileMap();
 
 	// 取得指定组的属性
 	virtual ONE_RESOURCE_PROP_MAP* GetOneResourcePropMap(char *pPropGroupName);
@@ -90,6 +91,7 @@ private:
 	bool GeneralCreateBaseProp(char *pPropType, XmlNode* pXmlNode, ONE_RESOURCE_PROP_MAP* pPropMap);
 	// 设置属性与base属性的关联
 	void SetPropetryBaseRelevancy();
+	bool SetImageFileRelevancy();
 	void SetPropRelevancy(ONE_RESOURCE_PROP_MAP* pFromMap, ONE_RESOURCE_PROP_MAP* pToMap);
 
 	bool SaveResourceXml(const char *pszSavePath, string &strXmlData);
@@ -155,7 +157,8 @@ private:
 	ONE_RESOURCE_PROP_MAP* m_pColorPropMap;
 
 	// zip文件
-	CZipFileList *m_pZipFile;
+	CZipFileList *m_pKernelZipFile;
+	CZipFileList m_BD_SkinUnZipImageFile;
 
 	AREA_TYPE m_AreaType;
 
