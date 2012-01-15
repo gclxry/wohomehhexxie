@@ -1,212 +1,63 @@
 <resource>
 <bool>
-<item objid="window24.Panel114.group115.bool120" name="Visible" data="1"/>
-<item objid="window1.Panel70.group71.bool81" name="DefaultEnterCtrl" data="0"/>
-<item objid="window1.Panel70.Panel158.group159.bool164" name="Visible" data="1"/>
-<item objid="window1.Panel70.Panel158.group159.bool169" name="DefaultEnterCtrl" data="0"/>
-<item objid="window24.group41.bool42" name="Enable" data="0"/>
-<item objid="window47.Panel92.group93.bool97" name="Lock" data="0"/>
-<item objid="window24.group25.group33.bool35" name="CanMiniSize" data="0"/>
-<item objid="window1.Panel70.Panel158.group159.bool165" name="Enable" data="1"/>
-<item objid="window1.Panel70.group71.bool79" name="DragInCtrl" data="0"/>
-<item objid="window1.group16.bool17" name="Enable" data="0"/>
-<item objid="window24.Panel114.Panel136.group137.bool144" name="ReceiveMouseMessage" data="1"/>
-<item objid="window47.Panel92.group93.bool101" name="DragInCtrl" data="0"/>
-<item objid="window1.Panel180.group181.bool185" name="Lock" data="0"/>
-<item objid="window1.Panel70.Panel158.group159.bool166" name="ReceiveMouseMessage" data="1"/>
-<item objid="window24.Panel114.Panel136.group137.bool142" name="Visible" data="1"/>
-<item objid="window47.group48.bool55" name="TopMost" data="0"/>
-<item objid="window24.Panel114.group115.bool125" name="DefaultEnterCtrl" data="0"/>
-<item objid="window1.group2.bool9" name="TopMost" data="0"/>
-<item objid="window47.Panel92.group93.bool99" name="Enable" data="1"/>
-<item objid="window1.Panel70.Panel158.group159.bool167" name="DragInCtrl" data="0"/>
-<item objid="window1.Panel70.group71.bool77" name="Enable" data="1"/>
-<item objid="window24.group25.bool31" name="LayeredWindow" data="0"/>
-<item objid="window1.group2.group10.bool12" name="CanMiniSize" data="0"/>
-<item objid="window47.group62.bool63" name="Enable" data="0"/>
-<item objid="window47.Panel92.group93.bool103" name="DefaultEnterCtrl" data="0"/>
-<item objid="window24.group39.bool40" name="Enable" data="0"/>
-<item objid="window24.Panel114.Panel136.group137.bool143" name="Enable" data="1"/>
-<item objid="window1.Panel70.Panel158.group159.bool163" name="Lock" data="0"/>
-<item objid="window1.Panel180.group181.bool187" name="Enable" data="1"/>
-<item objid="window47.group48.bool54" name="LayeredWindow" data="0"/>
-<item objid="window1.Panel70.group71.bool75" name="Lock" data="0"/>
-<item objid="window24.group25.bool32" name="TopMost" data="0"/>
-<item objid="window24.Panel114.Panel136.group137.bool147" name="DefaultEnterCtrl" data="0"/>
-<item objid="window47.group48.group56.bool58" name="CanMiniSize" data="0"/>
-<item objid="window24.Panel114.group115.bool123" name="DragInCtrl" data="0"/>
-<item objid="window1.Panel180.group181.bool186" name="Visible" data="1"/>
-<item objid="window1.group2.bool7" name="Visible" data="1"/>
-<item objid="window1.Panel180.group181.bool189" name="DragInCtrl" data="0"/>
-<item objid="window24.group25.group33.bool34" name="CanFullScreen" data="0"/>
-<item objid="window24.Panel114.group115.bool122" name="ReceiveMouseMessage" data="1"/>
-<item objid="window1.Panel70.group71.bool76" name="Visible" data="1"/>
-<item objid="window47.group48.bool53" name="Visible" data="1"/>
 <item objid="window1.group2.group10.bool11" name="CanFullScreen" data="0"/>
-<item objid="window24.Panel114.Panel136.group137.bool141" name="Lock" data="0"/>
-<item objid="window1.Panel70.group71.bool78" name="ReceiveMouseMessage" data="1"/>
-<item objid="window24.Panel114.group115.bool119" name="Lock" data="0"/>
-<item objid="window47.group48.group56.bool57" name="CanFullScreen" data="0"/>
-<item objid="window24.Panel114.group115.bool121" name="Enable" data="1"/>
-<item objid="window1.Panel180.group181.bool188" name="ReceiveMouseMessage" data="1"/>
-<item objid="window47.Panel92.group93.bool100" name="ReceiveMouseMessage" data="1"/>
-<item objid="window1.group2.bool8" name="LayeredWindow" data="0"/>
-<item objid="window1.Panel180.group181.bool191" name="DefaultEnterCtrl" data="0"/>
-<item objid="window47.group64.bool65" name="Enable" data="0"/>
 <item objid="window1.group18.bool19" name="Enable" data="0"/>
-<item objid="window47.Panel92.group93.bool98" name="Visible" data="1"/>
-<item objid="window24.group25.bool30" name="Visible" data="1"/>
-<item objid="window24.Panel114.Panel136.group137.bool145" name="DragInCtrl" data="0"/>
+<item objid="window1.group2.bool9" name="TopMost" data="0"/>
+<item objid="window1.Panel24.group25.bool31" name="Enable" data="1"/>
+<item objid="window1.group16.bool17" name="Enable" data="0"/>
+<item objid="window1.group2.bool8" name="LayeredWindow" data="0"/>
+<item objid="window1.Panel24.group25.bool33" name="DragInCtrl" data="0"/>
+<item objid="window1.Panel24.group25.bool32" name="ReceiveMouseMessage" data="1"/>
+<item objid="window1.Panel24.group25.bool35" name="DefaultEnterCtrl" data="0"/>
+<item objid="window1.Panel24.group25.bool30" name="Visible" data="1"/>
+<item objid="window1.group2.bool7" name="Visible" data="1"/>
+<item objid="window1.Panel24.group25.bool29" name="Lock" data="0"/>
+<item objid="window1.group2.group10.bool12" name="CanMiniSize" data="0"/>
 </bool>
 <combobox>
-<item objid="window47.Panel92.group93.group104.combobox107" name="@LayoutType" counts="10" select="0" data0="左上角定位" data1="左下角定位" data2="右上角定位" data3="右下角定位" data4="撑满左侧" data5="撑满右侧" data6="撑满上方" data7="撑满下方" data8="撑满全部" data9="居中"/>
-<item objid="window24.Panel114.Panel136.group137.group148.combobox151" name="@LayoutType" counts="10" select="0" data0="左上角定位" data1="左下角定位" data2="右上角定位" data3="右下角定位" data4="撑满左侧" data5="撑满右侧" data6="撑满上方" data7="撑满下方" data8="撑满全部" data9="居中"/>
-<item objid="window24.Panel114.group115.group126.combobox129" name="@LayoutType" counts="10" select="0" data0="左上角定位" data1="左下角定位" data2="右上角定位" data3="右下角定位" data4="撑满左侧" data5="撑满右侧" data6="撑满上方" data7="撑满下方" data8="撑满全部" data9="居中"/>
-<item objid="window1.Panel70.Panel158.group159.group170.combobox173" name="@LayoutType" counts="10" select="0" data0="左上角定位" data1="左下角定位" data2="右上角定位" data3="右下角定位" data4="撑满左侧" data5="撑满右侧" data6="撑满上方" data7="撑满下方" data8="撑满全部" data9="居中"/>
-<item objid="window1.Panel70.group71.group82.combobox85" name="@LayoutType" counts="10" select="0" data0="左上角定位" data1="左下角定位" data2="右上角定位" data3="右下角定位" data4="撑满左侧" data5="撑满右侧" data6="撑满上方" data7="撑满下方" data8="撑满全部" data9="居中"/>
-<item objid="window1.Panel180.group181.group192.combobox195" name="@LayoutType" counts="10" select="0" data0="左上角定位" data1="左下角定位" data2="右上角定位" data3="右下角定位" data4="撑满左侧" data5="撑满右侧" data6="撑满上方" data7="撑满下方" data8="撑满全部" data9="居中"/>
+<item objid="window1.Panel24.group25.group36.combobox39" name="@LayoutType" counts="10" select="0" data0="左上角定位" data1="左下角定位" data2="右上角定位" data3="右下角定位" data4="撑满左侧" data5="撑满右侧" data6="撑满上方" data7="撑满下方" data8="撑满全部" data9="居中"/>
 </combobox>
 <group>
-<item objid="window47.Panel92.group93.group104" name="Layout"/>
-<item objid="window1.group18" name="Stretching"/>
-<item objid="window1.group2" name="WindowBase"/>
-<item objid="window24.Panel114.Panel136.group137.group148" name="Layout"/>
-<item objid="window1.group16" name="Drag"/>
-<item objid="window24.group25.group33" name="SysBase"/>
-<item objid="window1.Panel180.group181" name="ControlBase"/>
-<item objid="window47.group48.group56" name="SysBase"/>
-<item objid="window47.group62" name="Drag"/>
-<item objid="window24.group41" name="Stretching"/>
-<item objid="window1.group13" name="Size"/>
-<item objid="window1.Panel70.Panel158.group159" name="ControlBase"/>
-<item objid="window24.Panel114.group134" name="ControlPropetry"/>
-<item objid="window24.Panel114.group115.group126" name="Layout"/>
-<item objid="window47.Panel92.group93" name="ControlBase"/>
-<item objid="window1.Panel70.group71" name="ControlBase"/>
-<item objid="window1.Panel70.Panel158.group159.group170" name="Layout"/>
-<item objid="window1.Panel180.group200" name="ControlPropetry"/>
-<item objid="window1.Panel180.group181.group192" name="Layout"/>
-<item objid="window1.Panel70.group90" name="ControlPropetry"/>
-<item objid="window47.group64" name="Stretching"/>
-<item objid="window47.group48" name="WindowBase"/>
-<item objid="window24.Panel114.Panel136.group137" name="ControlBase"/>
-<item objid="window47.Panel92.group112" name="ControlPropetry"/>
+<item objid="window1.Panel24.group44" name="ControlPropetry"/>
 <item objid="window1.group2.group10" name="SysBase"/>
-<item objid="window24.Panel114.group115" name="ControlBase"/>
-<item objid="window24.group25" name="WindowBase"/>
-<item objid="window47.group59" name="Size"/>
-<item objid="window1.Panel70.Panel158.group178" name="ControlPropetry"/>
-<item objid="window24.Panel114.Panel136.group156" name="ControlPropetry"/>
-<item objid="window24.group39" name="Drag"/>
-<item objid="window1.Panel70.group71.group82" name="Layout"/>
-<item objid="window24.group36" name="Size"/>
+<item objid="window1.group2" name="WindowBase"/>
+<item objid="window1.group16" name="Drag"/>
+<item objid="window1.Panel24.group25.group36" name="Layout"/>
+<item objid="window1.group18" name="Stretching"/>
+<item objid="window1.group13" name="Size"/>
+<item objid="window1.Panel24.group25" name="ControlBase"/>
 </group>
 <image>
-<item objid="window24.Panel114.group134.image135" name="Image" imagebasename=""/>
-<item objid="window1.Panel70.Panel158.group178.image179" name="Image" imagebasename=""/>
-<item objid="window47.Panel92.group112.image113" name="Image" imagebasename=""/>
-<item objid="window1.Panel180.group200.image201" name="Image" imagebasename=""/>
-<item objid="window24.Panel114.Panel136.group156.image157" name="Image" imagebasename=""/>
-<item objid="window1.Panel70.group90.image91" name="Image" imagebasename="A001"/>
+<item objid="window1.Panel24.group44.image45" name="Image" imagebasename="a123"/>
 </image>
 <imagebase>
-<item objid="1831C2C8B07049A08E2FB1B8BB9161C2" name="A001" imageinzip="" showtype="0">
+<item objid="F615E326AC294A4EAEE1161D8054B995" name="a123" imageinzip="T1.jpg" showtype="0">
 <rectinimage left="0" top="0" right="0" bottom="0"/>
 <jgg left="0" top="0" right="0" bottom="0"/>
 </item>
 </imagebase>
 <int>
-<item objid="window24.group41.int44" name="RightSpace" data="0"/>
-<item objid="window24.Panel114.Panel136.group137.group148.int152" name="LeftSpace" data="46"/>
 <item objid="window1.group18.int23" name="BottomSpace" data="0"/>
-<item objid="window47.group64.int68" name="TopSpace" data="0"/>
-<item objid="window1.Panel70.Panel158.group159.group170.int177" name="BottomSpace" data="79"/>
-<item objid="window24.Panel114.group115.group126.int130" name="LeftSpace" data="204"/>
-<item objid="window1.Panel70.group71.group82.int84" name="Height" data="271"/>
-<item objid="window1.Panel180.group181.group192.int193" name="Width" data="329"/>
-<item objid="window1.Panel180.group181.int190" name="TabOrder" data="0"/>
-<item objid="window1.Panel70.Panel158.group159.group170.int176" name="TopSpace" data="50"/>
-<item objid="window1.Panel180.group181.group192.int196" name="LeftSpace" data="68"/>
-<item objid="window1.Panel70.Panel158.group159.group170.int172" name="Height" data="142"/>
-<item objid="window47.Panel92.group93.group104.int110" name="TopSpace" data="110"/>
-<item objid="window1.Panel70.group71.group82.int88" name="TopSpace" data="101"/>
-<item objid="window47.group64.int66" name="LeftSpace" data="0"/>
-<item objid="window24.Panel114.Panel136.group137.int146" name="TabOrder" data="0"/>
-<item objid="window24.group41.int46" name="BottomSpace" data="0"/>
-<item objid="window24.group41.int43" name="LeftSpace" data="0"/>
-<item objid="window24.Panel114.group115.group126.int131" name="RightSpace" data="130"/>
-<item objid="window24.Panel114.Panel136.group137.group148.int153" name="RightSpace" data="29"/>
-<item objid="window1.Panel70.group71.group82.int89" name="BottomSpace" data="128"/>
-<item objid="window47.Panel92.group93.group104.int106" name="Height" data="231"/>
-<item objid="window47.group59.int61" name="Height" data="500"/>
-<item objid="window1.Panel70.group71.group82.int87" name="RightSpace" data="150"/>
-<item objid="window47.group64.int67" name="RightSpace" data="0"/>
-<item objid="window24.Panel114.Panel136.group137.group148.int154" name="TopSpace" data="79"/>
-<item objid="window1.group18.int20" name="LeftSpace" data="0"/>
-<item objid="window47.Panel92.group93.int102" name="TabOrder" data="0"/>
-<item objid="window1.Panel70.group71.group82.int86" name="LeftSpace" data="124"/>
-<item objid="window1.group18.int21" name="RightSpace" data="0"/>
+<item objid="window1.Panel24.group25.group36.int37" name="Width" data="178"/>
+<item objid="window1.Panel24.group25.group36.int40" name="LeftSpace" data="153"/>
+<item objid="window1.Panel24.group25.group36.int38" name="Height" data="199"/>
 <item objid="window1.group18.int22" name="TopSpace" data="0"/>
-<item objid="window47.Panel92.group93.group104.int111" name="BottomSpace" data="159"/>
-<item objid="window47.Panel92.group93.group104.int108" name="LeftSpace" data="129"/>
-<item objid="window24.group36.int37" name="Width" data="500"/>
-<item objid="window24.Panel114.group115.group126.int133" name="BottomSpace" data="120"/>
-<item objid="window24.Panel114.group115.group126.int128" name="Height" data="299"/>
+<item objid="window1.Panel24.group25.group36.int41" name="RightSpace" data="169"/>
 <item objid="window1.group13.int15" name="Height" data="500"/>
-<item objid="window1.Panel180.group181.group192.int199" name="BottomSpace" data="36"/>
-<item objid="window1.Panel70.Panel158.group159.group170.int175" name="RightSpace" data="23"/>
-<item objid="window24.Panel114.group115.group126.int127" name="Width" data="166"/>
-<item objid="window24.Panel114.group115.group126.int132" name="TopSpace" data="81"/>
-<item objid="window1.Panel70.group71.group82.int83" name="Width" data="226"/>
-<item objid="window24.Panel114.Panel136.group137.group148.int149" name="Width" data="91"/>
-<item objid="window47.group64.int69" name="BottomSpace" data="0"/>
-<item objid="window1.Panel180.group181.group192.int198" name="TopSpace" data="359"/>
-<item objid="window1.Panel70.Panel158.group159.int168" name="TabOrder" data="0"/>
-<item objid="window1.Panel180.group181.group192.int194" name="Height" data="105"/>
-<item objid="window1.Panel70.Panel158.group159.group170.int174" name="LeftSpace" data="20"/>
+<item objid="window1.group18.int21" name="RightSpace" data="0"/>
+<item objid="window1.Panel24.group25.int34" name="TabOrder" data="0"/>
 <item objid="window1.group13.int14" name="Width" data="500"/>
-<item objid="window24.group36.int38" name="Height" data="500"/>
-<item objid="window1.Panel70.Panel158.group159.group170.int171" name="Width" data="183"/>
-<item objid="window1.Panel180.group181.group192.int197" name="RightSpace" data="103"/>
-<item objid="window1.Panel70.group71.int80" name="TabOrder" data="0"/>
-<item objid="window24.Panel114.Panel136.group137.group148.int150" name="Height" data="163"/>
-<item objid="window24.Panel114.group115.int124" name="TabOrder" data="0"/>
-<item objid="window47.group59.int60" name="Width" data="500"/>
-<item objid="window24.group41.int45" name="TopSpace" data="0"/>
-<item objid="window24.Panel114.Panel136.group137.group148.int155" name="BottomSpace" data="57"/>
-<item objid="window47.Panel92.group93.group104.int109" name="RightSpace" data="181"/>
-<item objid="window47.Panel92.group93.group104.int105" name="Width" data="190"/>
+<item objid="window1.Panel24.group25.group36.int42" name="TopSpace" data="81"/>
+<item objid="window1.Panel24.group25.group36.int43" name="BottomSpace" data="220"/>
+<item objid="window1.group18.int20" name="LeftSpace" data="0"/>
 </int>
 <string>
-<item objid="window24.Panel114.group115.string117" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window24.Panel114"/>
-<item objid="window47.group48.string52" name="WindowText" counts="1" defaultarea="1" area0="1" data0="窗口标题"/>
-<item objid="window47.group48.string50" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window47"/>
-<item objid="window24.Panel114.Panel136.group137.string138" name="Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
-<item objid="window1.Panel180.group181.string183" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window1.Panel180"/>
+<item objid="window1.Panel24.group25.string27" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window1.Panel24"/>
 <item objid="window1.group2.string4" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window1"/>
-<item objid="window47.Panel92.group93.string95" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window47.Panel92"/>
-<item objid="window1.group2.string6" name="WindowText" counts="1" defaultarea="1" area0="1" data0="窗口标题"/>
-<item objid="window24.Panel114.Panel136.group137.string139" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window24.Panel114.Panel136"/>
-<item objid="window1.Panel180.group181.string182" name="Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
-<item objid="window1.Panel70.Panel158.group159.string162" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新2"/>
-<item objid="window24.Panel114.group115.string118" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建控件"/>
-<item objid="window24.group25.string27" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window24"/>
-<item objid="window1.Panel70.Panel158.group159.string160" name="Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
 <item objid="window1.group2.string3" name="Type" counts="1" defaultarea="1" area0="1" data0="window"/>
-<item objid="window24.group25.string28" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建窗口/面板"/>
-<item objid="window1.Panel70.group71.string73" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window1.Panel70"/>
-<item objid="window47.group48.string51" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建窗口/面板"/>
-<item objid="window47.group48.string49" name="Type" counts="1" defaultarea="1" area0="1" data0="window"/>
-<item objid="window47.Panel92.group93.string94" name="Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
-<item objid="window24.group25.string26" name="Type" counts="1" defaultarea="1" area0="1" data0="window"/>
-<item objid="window1.Panel70.Panel158.group159.string161" name="ObjectId" counts="1" defaultarea="1" area0="1" data0="window1.Panel70.Panel158"/>
-<item objid="window24.Panel114.group115.string116" name="Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
-<item objid="window24.group25.string29" name="WindowText" counts="1" defaultarea="1" area0="1" data0="窗口标题"/>
-<item objid="window1.Panel70.group71.string72" name="Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
-<item objid="window1.Panel180.group181.string184" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新3"/>
-<item objid="window47.Panel92.group93.string96" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建控件"/>
-<item objid="window24.Panel114.Panel136.group137.string140" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建控件"/>
+<item objid="window1.group2.string6" name="WindowText" counts="1" defaultarea="1" area0="1" data0="窗口标题"/>
+<item objid="window1.Panel24.group25.string28" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建控件"/>
+<item objid="window1.Panel24.group25.string26" name="Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
 <item objid="window1.group2.string5" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建窗口/面板"/>
-<item objid="window1.Panel70.group71.string74" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新1"/>
 </string>
 </resource>

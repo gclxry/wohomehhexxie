@@ -677,35 +677,35 @@ bool IPropertySkinManagerImpl::TranslateResourceXml(ZIP_FILE *pResurceXml)
 					pOnePropMap->clear();
 					m_AllPropMap.insert(pair<string, ONE_RESOURCE_PROP_MAP*>(strTypeName, pOnePropMap));
 
-					if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_IMAGE_BASE_NAME))
+					if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_IMAGE_BASE_NAME) == 0)
 					{
 						m_pImageBasePropMap = pOnePropMap;
 					}
-					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_COLOR_BASE_NAME))
+					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_COLOR_BASE_NAME) == 0)
 					{
 						m_pColorBasePropMap = pOnePropMap;
 					}
-					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_CURSOR_BASE_NAME))
+					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_CURSOR_BASE_NAME) == 0)
 					{
 						m_pCursorBasePropMap = pOnePropMap;
 					}
-					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_FONT_BASE_NAME))
+					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_FONT_BASE_NAME) == 0)
 					{
 						m_pFontBasePropMap = pOnePropMap;
 					}
-					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_COLOR_NAME))
+					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_COLOR_NAME) == 0)
 					{
 						m_pColorPropMap = pOnePropMap;
 					}
-					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_CURSOR_NAME))
+					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_CURSOR_NAME) == 0)
 					{
 						m_pCursorPropMap = pOnePropMap;
 					}
-					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_FONT_NAME))
+					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_FONT_NAME) == 0)
 					{
 						m_pFontPropMap = pOnePropMap;
 					}
-					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_IMAGE_NAME))
+					else if (lstrcmpiA(strTypeName.c_str(), PROP_TYPE_IMAGE_NAME) == 0)
 					{
 						m_pImagePropMap = pOnePropMap;
 					}
