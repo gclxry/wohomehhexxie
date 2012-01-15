@@ -7,6 +7,8 @@
 #include "..\..\Inc\UiFeatureDefs.h"
 
 
+#define FRAME_ADD_SIZE					(10)
+
 // CImageBaseView dialog
 
 IMPLEMENT_DYNAMIC(CImageBaseView, CDialogViewBase)
@@ -65,6 +67,9 @@ void CImageBaseView::OnSize_SetViewSize(int cx, int cy)
 
 	if (m_rcViewSize.Height() < pImgMemDc->GetDcSize().cy)
 		m_rcViewSize.bottom = pImgMemDc->GetDcSize().cy;
+
+	m_rcViewSize.right += FRAME_ADD_SIZE;
+	m_rcViewSize.bottom += FRAME_ADD_SIZE;
 }
 
 void CImageBaseView::OnDraw()
