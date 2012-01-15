@@ -2,6 +2,7 @@
 #include "LocalImageList.h"
 #include "ImageBasePropEditDlg.h"
 #include "MainFrm.h"
+#include "ImageBaseView.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 
 CLocalImageList::CLocalImageList(void)
@@ -11,6 +12,7 @@ CLocalImageList::CLocalImageList(void)
 	m_pImgBaseLise = NULL;
 	m_ZipFileMap = NULL;
 	m_pSelImgBase = NULL;
+	m_pImgBaseView = NULL;
 }
 
 CLocalImageList::~CLocalImageList(void)
@@ -22,28 +24,32 @@ void CLocalImageList::OnSelectItem()
 	if (m_pImgBaseDlg == NULL)
 		return;
 
-	if (m_nSelectItem <= 0)
+	if (m_nSelectItem < 0)
 	{
 		// Ã»ÓÐÑ¡Ôñ
+		if (m_pImgBaseView != NULL)
+			m_pImgBaseView->SetCurrentShowImage(m_pUiKernel, m_pSelImgBase, NULL);
 	}
 	else
 	{
-		if (m_pSelImgBase != NULL)
-		{
-			ZIP_FILE *pZipFile = (ZIP_FILE*)this->GetItemData(m_nSelectItem);
-			if (pZipFile == NULL)
-				return;
+		ZIP_FILE *pZipFile = (ZIP_FILE*)this->GetItemData(m_nSelectItem);
+		if (pZipFile == NULL)
+			return;
 
+		if (m_pSelImgBase != NULL)
 			m_pSelImgBase->SetZipFile(pZipFile);
-		}
+
+		if (m_pImgBaseView != NULL)
+			m_pImgBaseView->SetCurrentShowImage(m_pUiKernel, m_pSelImgBase, pZipFile);
 	}
 }
 
-void CLocalImageList::Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *pImgBaseDlg, CImageBaseNameList* pImgBaseLise, IPropertyImageBase* pSelImgBase)
+void CLocalImageList::Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *pImgBaseDlg, CImageBaseNameList* pImgBaseLise, CImageBaseView* pImgBaseView, IPropertyImageBase* pSelImgBase)
 {
-	if (pUiKernel == NULL || pImgBaseDlg == NULL || pImgBaseLise == NULL)
+	if (pUiKernel == NULL || pImgBaseDlg == NULL || pImgBaseLise == NULL || pImgBaseView == NULL)
 		return;
 
+	m_pImgBaseView = pImgBaseView;
 	m_pImgBaseDlg = pImgBaseDlg;
 	m_pUiKernel = pUiKernel;
 	m_pImgBaseLise = pImgBaseLise;

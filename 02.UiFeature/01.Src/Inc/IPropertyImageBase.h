@@ -32,7 +32,6 @@ struct IMAGE_BASE_PROP
 
 class IPropertyImageBase : public IPropertyBase
 {
-	friend class IPropertyImage;
 public:
 	IPropertyImageBase();
 	virtual ~IPropertyImageBase();
@@ -56,9 +55,11 @@ public:
 	IMAGE_BASE_PROP* GetImageProp();
 
 	ZIP_FILE * GetZipFile();
-	void SetZipFile(ZIP_FILE *pZipFile);
-private:
+	void SetZipFile(ZIP_FILE *pZipFile, bool bCreateMemDc = false);
+
 	bool DrawImage(CDrawingBoard &DstDc, RECT DstRct);
+
+	CDrawingImage* GetMemDc();
 
 private:
 	IMAGE_BASE_PROP m_ImageProp;
