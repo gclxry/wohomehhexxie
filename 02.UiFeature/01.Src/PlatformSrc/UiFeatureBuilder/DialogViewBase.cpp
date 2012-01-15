@@ -91,8 +91,12 @@ void CDialogViewBase::OnOK()
 
 void CDialogViewBase::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
+	CRect CtlRct;
+	CtlRct.SetRectEmpty();
+	this->GetClientRect(&CtlRct);
+
 	int nDelta = 0;
-	int nMaxPos = m_rcViewSize.Width();
+	int nMaxPos = m_rcViewSize.Width() - CtlRct.Width();
 
 	switch (nSBCode)
 	{
@@ -137,14 +141,12 @@ void CDialogViewBase::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 void CDialogViewBase::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar) 
 {
-	if (pScrollBar != NULL)
-	{
-		SCROLLBARINFO ScrollInfo;
-		pScrollBar->GetScrollBarInfo(&ScrollInfo);
-	}
+	CRect CtlRct;
+	CtlRct.SetRectEmpty();
+	this->GetClientRect(&CtlRct);
 
 	int nDelta = 0;
-	int nMaxPos = m_rcViewSize.Height();
+	int nMaxPos = m_rcViewSize.Height() - CtlRct.Height();
 
 	switch (nSBCode)
 	{
