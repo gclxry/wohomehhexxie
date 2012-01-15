@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 #include "DialogViewBase.h"
+#include "..\..\Inc\UiFeatureDefs.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -22,12 +23,19 @@ CDialogViewBase::CDialogViewBase(CWnd* pParent /*=NULL*/)
 		// NOTE: the ClassWizard will add member initialization here
 	//}}AFX_DATA_INIT
 
-	m_bDragging=FALSE;
+	m_bIsLBtnDown = false;
+	m_rcViewSize.SetRectEmpty();
+	m_rcDlgSize.SetRectEmpty();
+	m_ptLBtnDown.x = m_ptLBtnDown.y = 0;
+	m_nVScrollPos = 0;
+	m_nHScrollPos = 0;
+	m_nCurHeight = 0;
+	m_nCurWidth = 0;
 
 	// modeless dialog - don't forget to force the
 	// WS_CHILD style in the resource template and remove
 	// caption and system menu
-	Create(CDialogViewBase::IDD,pParent);
+	Create(CDialogViewBase::IDD, pParent);
 }
 
 
@@ -44,13 +52,15 @@ BEGIN_MESSAGE_MAP(CDialogViewBase, CDialog)
 	//{{AFX_MSG_MAP(CDialogViewBase)
 	ON_WM_VSCROLL()
 	ON_WM_SIZE()
-	ON_WM_MOUSEWHEEL()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
 	ON_WM_KILLFOCUS()
 	//}}AFX_MSG_MAP
 	ON_WM_SETCURSOR()
+	ON_WM_HSCROLL()
+	ON_WM_ERASEBKGND()
+	ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -59,111 +69,18 @@ END_MESSAGE_MAP()
 BOOL CDialogViewBase::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
-
-//	m_hCursor1=AfxGetApp()->LoadCursor(IDC_CURSOR1);
-//	m_hCursor2=AfxGetApp()->LoadCursor(IDC_CURSOR2);
-
-	//SetClassLong(m_hWnd,GCL_HCURSOR,(long)m_hCursor1);
-	
-	// save the original size
-	GetWindowRect(m_rcOriginalRect);
-
-	// initial scroll position
-	m_nScrollPos = 0; 
-	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	this->GetClientRect(m_rcViewSize);
+	return TRUE;
 }
 
-void CDialogViewBase::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar) 
+void CDialogViewBase::OnSize_SetViewSize(int cx, int cy)
 {
-	int nDelta;
-	int nMaxPos = m_rcOriginalRect.Height() - m_nCurHeight;
-
-	switch (nSBCode)
-	{
-	case SB_LINEDOWN:
-		if (m_nScrollPos >= nMaxPos)
-			return;
-
-		nDelta = min(max(nMaxPos/20,5),nMaxPos-m_nScrollPos);
-		break;
-
-	case SB_LINEUP:
-		if (m_nScrollPos <= 0)
-			return;
-		nDelta = -min(max(nMaxPos/20,5),m_nScrollPos);
-		break;
-	case SB_PAGEDOWN:
-		if (m_nScrollPos >= nMaxPos)
-			return;
-		nDelta = min(max(nMaxPos/10,5),nMaxPos-m_nScrollPos);
-		break;
-	case SB_THUMBTRACK:
-	case SB_THUMBPOSITION:
-		nDelta = (int)nPos - m_nScrollPos;
-		break;
-
-	case SB_PAGEUP:
-		if (m_nScrollPos <= 0)
-			return;
-		nDelta = -min(max(nMaxPos/10,5),m_nScrollPos);
-		break;
-	
-         default:
-		return;
-	}
-	m_nScrollPos += nDelta;
-	SetScrollPos(SB_VERT,m_nScrollPos,TRUE);
-	ScrollWindow(0,-nDelta);
-	CDialog::OnVScroll(nSBCode, nPos, pScrollBar);
+	m_rcViewSize = m_rcDlgSize;
 }
 
-void CDialogViewBase::OnSize(UINT nType, int cx, int cy) 
+void CDialogViewBase::OnDraw()
 {
-	CDialog::OnSize(nType, cx, cy);
 
-	m_nCurHeight = cy;
-
-	SCROLLINFO si;
-	si.cbSize = sizeof(SCROLLINFO);
-	si.fMask = SIF_ALL; 
-	si.nMin = 0;
-	si.nMax = m_rcOriginalRect.Height();
-	si.nPage = cy;
-	si.nPos = 0;
-    SetScrollInfo(SB_VERT, &si, TRUE); 	
-
-}
-
-BOOL CDialogViewBase::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt) 
-{
-	int nMaxPos = m_rcOriginalRect.Height() - m_nCurHeight;
-
-	if (zDelta<0)
-	{
-		if (m_nScrollPos < nMaxPos)
-		{
-			zDelta = min(max(nMaxPos/20,5),nMaxPos-m_nScrollPos);
-
-			m_nScrollPos += zDelta;
-			SetScrollPos(SB_VERT,m_nScrollPos,TRUE);
-			ScrollWindow(0,-zDelta);
-		}
-	}
-	else
-	{
-		if (m_nScrollPos > 0)
-		{
-			zDelta = -min(max(nMaxPos/20,5),m_nScrollPos);
-
-			m_nScrollPos += zDelta;
-			SetScrollPos(SB_VERT,m_nScrollPos,TRUE);
-			ScrollWindow(0,-zDelta);
-		}
-	}
-	
-	return CDialog::OnMouseWheel(nFlags, zDelta, pt);
 }
 
 void CDialogViewBase::OnCancel() 
@@ -174,44 +91,151 @@ void CDialogViewBase::OnOK()
 {
 }
 
+void CDialogViewBase::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	int nDelta = 0;
+	int nMaxPos = m_rcViewSize.Width();
+
+	switch (nSBCode)
+	{
+	case SB_LINERIGHT:
+		if (m_nHScrollPos < nMaxPos)
+			nDelta = min(max(nMaxPos/20,5),nMaxPos-m_nHScrollPos);
+		break;
+
+	case SB_LINELEFT:
+		if (m_nHScrollPos > 0)
+			nDelta = -min(max(nMaxPos/20,5),m_nHScrollPos);
+		break;
+
+	case SB_PAGERIGHT:
+		if (m_nHScrollPos < nMaxPos)
+			nDelta = min(max(nMaxPos/10,5),nMaxPos-m_nHScrollPos);
+		break;
+
+	case SB_THUMBTRACK:
+	case SB_THUMBPOSITION:
+		nDelta = (int)nPos - m_nHScrollPos;
+		break;
+
+	case SB_PAGELEFT:
+		if (m_nHScrollPos > 0)
+			nDelta = -min(max(nMaxPos/10,5),m_nHScrollPos);
+		break;
+
+	default:
+		return;
+	}
+	m_nHScrollPos += nDelta;
+	if (m_nHScrollPos > nMaxPos)
+		m_nHScrollPos = nMaxPos;
+	if (m_nHScrollPos < 0)
+		m_nHScrollPos = 0;
+
+	SetScrollPos(SB_HORZ, m_nHScrollPos, TRUE);
+	CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
+	this->RedrawWindow();
+}
+
+void CDialogViewBase::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar) 
+{
+	int nDelta = 0;
+	int nMaxPos = m_rcViewSize.Height();
+
+	switch (nSBCode)
+	{
+	case SB_LINEDOWN:
+		if (m_nVScrollPos < nMaxPos)
+			nDelta = min(max(nMaxPos/20,5),nMaxPos-m_nVScrollPos);
+		break;
+
+	case SB_LINEUP:
+		if (m_nVScrollPos > 0)
+			nDelta = -min(max(nMaxPos/20,5),m_nVScrollPos);
+		break;
+	case SB_PAGEDOWN:
+		if (m_nVScrollPos < nMaxPos)
+			nDelta = min(max(nMaxPos/10,5),nMaxPos-m_nVScrollPos);
+		break;
+	case SB_THUMBTRACK:
+	case SB_THUMBPOSITION:
+		nDelta = (int)nPos - m_nVScrollPos;
+		break;
+
+	case SB_PAGEUP:
+		if (m_nVScrollPos > 0)
+			nDelta = -min(max(nMaxPos/10,5),m_nVScrollPos);
+		break;
+	
+	default:
+		return;
+	}
+	m_nVScrollPos += nDelta;
+	if (m_nVScrollPos > nMaxPos)
+		m_nVScrollPos = nMaxPos;
+	if (m_nVScrollPos < 0)
+		m_nVScrollPos = 0;
+
+	SetScrollPos(SB_VERT, m_nVScrollPos, TRUE);
+	CDialog::OnVScroll(nSBCode, nPos, pScrollBar);
+	this->RedrawWindow();
+}
+
+void CDialogViewBase::OnSize(UINT nType, int cx, int cy) 
+{
+	CDialog::OnSize(nType, cx, cy);
+	SetScrollBarSize(cx, cy);
+}
+
+void CDialogViewBase::SetScrollBarSize(int cx, int cy) 
+{
+	m_rcDlgSize.SetRectEmpty();
+	m_rcDlgSize.right = cx;
+	m_rcDlgSize.bottom = cy;
+
+	m_nCurHeight = cy;
+	m_nCurWidth = cx;
+
+	OnSize_SetViewSize(cx, cy);
+
+	SCROLLINFO si;
+	memset(&si, 0, sizeof(SCROLLINFO));
+	si.cbSize = sizeof(SCROLLINFO);
+	si.fMask = SIF_RANGE | SIF_PAGE;
+	si.nMin = 0;
+	si.nMax = m_rcViewSize.Width();
+	si.nPage = cx;
+	si.nPos = 0;
+	SetScrollInfo(SB_HORZ, &si, TRUE);
+
+	memset(&si, 0, sizeof(SCROLLINFO));
+	si.cbSize = sizeof(SCROLLINFO);
+	si.fMask = SIF_RANGE | SIF_PAGE;
+	si.nMin = 0;
+	si.nMax = m_rcViewSize.Height();
+	si.nPage = cy;
+	si.nPos = 0;
+	SetScrollInfo(SB_VERT, &si, TRUE);
+}
+
 void CDialogViewBase::OnLButtonDown(UINT nFlags, CPoint point) 
 {
-	m_bDragging=TRUE;
+	m_bIsLBtnDown=TRUE;
 	SetCapture();
-
-	m_ptDragPoint=point;
-
-	SetCursor(m_hCursor2);
-	
+	m_ptLBtnDown=point;
 	CDialog::OnLButtonDown(nFlags, point);
 }
 
 void CDialogViewBase::OnLButtonUp(UINT nFlags, CPoint point) 
 {
 	EndDrag();
-	
 	CDialog::OnLButtonUp(nFlags, point);
 }
 
 void CDialogViewBase::OnMouseMove(UINT nFlags, CPoint point) 
 {
-	if (m_bDragging)
+	if (m_bIsLBtnDown)
 	{
-		int nDelta=m_ptDragPoint.y-point.y;
-		m_ptDragPoint=point;
-
-		int nNewPos=m_nScrollPos+nDelta;
-
-		if (nNewPos<0)
-			nNewPos=0;
-		else if (nNewPos>m_rcOriginalRect.Height() - m_nCurHeight)
-			nNewPos=m_rcOriginalRect.Height() - m_nCurHeight;
-
-		nDelta=nNewPos-m_nScrollPos;
-		m_nScrollPos=nNewPos;
-
-		SetScrollPos(SB_VERT,m_nScrollPos,TRUE);
-		ScrollWindow(0,-nDelta);
 	}
 	
 	CDialog::OnMouseMove(nFlags, point);
@@ -220,28 +244,54 @@ void CDialogViewBase::OnMouseMove(UINT nFlags, CPoint point)
 void CDialogViewBase::OnKillFocus(CWnd* pNewWnd) 
 {
 	CDialog::OnKillFocus(pNewWnd);
-
 	EndDrag();
 }
 
 void CDialogViewBase::EndDrag()
 {
-	m_bDragging=FALSE;
+	m_bIsLBtnDown = false;
 	ReleaseCapture();
-	SetCursor(m_hCursor1);
 }
 
 BOOL CDialogViewBase::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
 	BOOL bRet=TRUE;
 
-	if (nHitTest==HTCLIENT)
+	if (nHitTest == HTCLIENT)
 	{
-		SetCursor(m_hCursor1);
 		bRet=FALSE;
 	}
 	else
+	{
 		bRet=CDialog::OnSetCursor(pWnd,nHitTest,message);
+	}
 
 	return bRet;
+}
+
+BOOL CDialogViewBase::OnEraseBkgnd(CDC* pDC)
+{
+	return TRUE;
+}
+
+void CDialogViewBase::OnPaint()
+{
+	CPaintDC dc(this);
+
+	m_MemDc.Create(m_rcViewSize.Width(), m_rcViewSize.Height(), RGB(255,255,255), false, true);
+	if (!IS_SAFE_HANDLE(m_MemDc.GetSafeHdc()))
+		return;
+
+	// ±³¾°
+	Graphics DoGrap(m_MemDc.GetSafeHdc());
+	SolidBrush sBrush(Color(MAX_ALPHA, 255, 255, 255));
+	DoGrap.FillRectangle(&sBrush, 0, 0, m_rcViewSize.Width(), m_rcViewSize.Height());
+
+	OnDraw();
+
+	CRect CltRct;
+	CltRct.SetRectEmpty();
+	this->GetClientRect(&CltRct);
+	::BitBlt(dc.GetSafeHdc(), 0, 0, CltRct.Width(), CltRct.Height(),
+		m_MemDc.GetSafeHdc(), m_nHScrollPos, m_nVScrollPos, SRCCOPY);
 }

@@ -186,7 +186,7 @@ BOOL CImageBasePropEditDlg::OnInitDialog()
 	m_ShowBiLi_Combo.SetCurSel(0);
 
 	m_ImageBaseList.Init(m_pUiKernel, this, &m_LocalImageList, m_pParentImgProp);
-	m_LocalImageList.Init(m_pUiKernel, this, &m_ImageBaseList, m_ImageBaseList.m_pSelectImgBaseProp);
+	m_LocalImageList.Init(m_pUiKernel, this, &m_ImageBaseList, m_pImageView, m_ImageBaseList.m_pSelectImgBaseProp);
 
 	m_ImageBaseList.SetFocus();
 	this->UpdateData(FALSE);

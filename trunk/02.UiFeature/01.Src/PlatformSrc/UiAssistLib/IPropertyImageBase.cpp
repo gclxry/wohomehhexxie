@@ -28,18 +28,33 @@ ZIP_FILE* IPropertyImageBase::GetZipFile()
 	return m_pZipFile;
 }
 
-void IPropertyImageBase::SetZipFile(ZIP_FILE *pZipFile)
+void IPropertyImageBase::SetZipFile(ZIP_FILE *pZipFile, bool bCreateMemDc)
 {
+	m_DrawImg.Delete();
 	m_pZipFile = pZipFile;
+
+	if (m_pZipFile == NULL)
+	{
+		m_ImageProp.bIsZipFile = true;
+		m_ImageProp.strFileName = "";
+		return;
+	}
 
 	m_ImageProp.bIsZipFile = true;
 	m_ImageProp.strFileName = pZipFile->strFileName;
-	m_DrawImg.Delete();
+
+	if (bCreateMemDc && m_pZipFile != NULL)
+		m_DrawImg.CreateByMem(m_pZipFile->pFileData, m_pZipFile->dwSrcFileLen);
 }
 
 bool IPropertyImageBase::IsRightData()
 {
 	return (m_ImageProp.strFileName.c_str() > 0 && RECT_WIDTH(m_ImageProp.RectInImage) > 0 && RECT_HEIGHT(m_ImageProp.RectInImage) > 0);
+}
+
+CDrawingImage* IPropertyImageBase::GetMemDc()
+{
+	return &m_DrawImg;
 }
 
 IMAGE_BASE_PROP* IPropertyImageBase::GetImageProp()
@@ -121,7 +136,7 @@ bool IPropertyImageBase::DrawImage(CDrawingBoard &DstDc, RECT DstRct)
 			{
 				BYTE *pBuffer = NULL;
 				int nLen = 0;
-				if (!GetUiKernel()->FindUnZipFile(m_ImageProp.strFileName.c_str(), &pBuffer, &nLen))
+				if (GetUiKernel() == NULL || !GetUiKernel()->FindUnZipFile(m_ImageProp.strFileName.c_str(), &pBuffer, &nLen))
 					return false;
 
 				m_DrawImg.CreateByMem(pBuffer, nLen);

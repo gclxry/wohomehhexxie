@@ -8,6 +8,7 @@
 //
 
 #include "Resource.h"
+#include "..\..\Inc\CDrawingBoard.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CDialogViewBase dialog
@@ -19,20 +20,33 @@ public:
 	void EndDrag();
 	CDialogViewBase(CWnd* pParent = NULL);   // standard constructor
 
-	HCURSOR m_hCursor1, m_hCursor2;
+
+protected:
+	bool m_bIsLBtnDown;
+	CPoint m_ptLBtnDown;
+
+	// 真实的滚动条位置
+	int m_nVScrollPos;
+	int m_nHScrollPos;
+
+	// 真实的对话框高度、宽度
+	int m_nCurHeight;
+	int m_nCurWidth;
 
 	// dialog size as you see in the resource view (original size)
-	CRect	m_rcOriginalRect;
+	// 在View中看到的尺寸，包括看不见的部分，最小不小于对话框的尺寸
+	CRect m_rcViewSize;
+	// 实际对话框的大小
+	CRect m_rcDlgSize;
 
-	// dragging
-	BOOL	m_bDragging;
-	CPoint	m_ptDragPoint;
 
-	// actual scroll position
-	int		m_nScrollPos;
+protected:
+	CDrawingBoard m_MemDc;
 
-	// actual dialog height
-	int		m_nCurHeight;
+protected:
+	void SetScrollBarSize(int cx, int cy);
+	virtual void OnSize_SetViewSize(int cx, int cy);
+	virtual void OnDraw();
 
 // Dialog Data
 	//{{AFX_DATA(CDialogViewBase)
@@ -44,7 +58,7 @@ public:
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CDialogViewBase)
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	//}}AFX_VIRTUAL
 
@@ -56,7 +70,6 @@ protected:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	virtual void OnCancel();
 	virtual void OnOK();
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
@@ -67,6 +80,9 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	afx_msg void OnPaint();
 };
 
 //{{AFX_INSERT_LOCATION}}

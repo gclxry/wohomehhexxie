@@ -96,7 +96,6 @@
 #define IDD_IMAGEBASE_VIEW              316
 #define IDD_DIALOG3                     317
 #define IDD_IMAGE_BASE_EDIT_CRATE_DLG   317
-#define IDD_IMAGEBASEVIEW               318
 #define IDB_BROWER_BTN                  1000
 #define IDE_DIR                         1001
 #define IDC_EDIT2                       1002
