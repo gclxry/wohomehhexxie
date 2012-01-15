@@ -1360,6 +1360,7 @@ bool IPropertySkinManagerImpl::BD_SaveProject(char *pszSkinDir, char *pszSkinNam
 			return false;
 	}
 
+	m_pKernelZipFile->TestWriteUnZipFile("E:\\01.Work\\01.GoogleSvn\\wohomehhexxie\\02.UiFeature\\01.Src\\Bin\\TestSkin\\ok\\");
 	return m_pKernelZipFile->WriteZipEnd(true);
 }
 
