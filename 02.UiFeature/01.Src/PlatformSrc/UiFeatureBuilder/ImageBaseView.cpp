@@ -7,7 +7,7 @@
 #include "..\..\Inc\UiFeatureDefs.h"
 
 
-#define FRAME_ADD_SIZE					(10)
+#define FRAME_ADD_SIZE					(20)
 
 // CImageBaseView dialog
 

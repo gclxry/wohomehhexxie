@@ -155,6 +155,8 @@
 #define IDR_JJG                         1029
 #define IDC_COMBO1                      1030
 #define IDC_XIANSHIBILI_COMBO           1030
+#define IDB_DELETE_LOCAL_IMAGE2         1031
+#define IDB_TIHUAN_LOCAL_IMAGE          1031
 #define IDS_FRAME_1                     1032
 #define IDS_FRAME_2                     1033
 #define IDS_FRAME_3                     1034

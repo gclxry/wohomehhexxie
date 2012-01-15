@@ -77,6 +77,7 @@ BEGIN_MESSAGE_MAP(CImageBasePropEditDlg, CDialog)
 	ON_WM_SIZE()
 	ON_WM_GETMINMAXINFO()
 	ON_BN_CLICKED(IDB_ANMATION_IMAGE_SETTING, &CImageBasePropEditDlg::OnBnClickedAnmationImageSetting)
+	ON_BN_CLICKED(IDB_TIHUAN_LOCAL_IMAGE, &CImageBasePropEditDlg::OnBnClickedTihuanLocalImage)
 END_MESSAGE_MAP()
 
 
@@ -384,6 +385,8 @@ void CImageBasePropEditDlg::SetImageEditEnableStyle(bool bEnable)
 	this->GetDlgItem(IDR_PINGPU)->EnableWindow(bEnable);
 	this->GetDlgItem(IDR_QUANLASHEN)->EnableWindow(bEnable);
 	this->GetDlgItem(IDR_JJG)->EnableWindow(bEnable);
+	this->GetDlgItem(IDB_TIHUAN_LOCAL_IMAGE)->EnableWindow(bEnable);
+	this->GetDlgItem(IDB_ANMATION_IMAGE_SETTING)->EnableWindow(bEnable);
 }
 
 void CImageBasePropEditDlg::OnBnClickedOk()
@@ -531,5 +534,9 @@ void CImageBasePropEditDlg::OnBnClickedDeleteLocalImage()
 }
 
 void CImageBasePropEditDlg::OnBnClickedAnmationImageSetting()
+{
+}
+
+void CImageBasePropEditDlg::OnBnClickedTihuanLocalImage()
 {
 }
