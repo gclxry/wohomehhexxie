@@ -62,14 +62,11 @@ void CImageBaseView::OnSize_SetViewSize(int cx, int cy)
 	if (pImgMemDc == NULL || pImgMemDc->GetSafeHdc() == NULL)
 		return;
 
-	if (m_rcViewSize.Width() < pImgMemDc->GetDcSize().cx)
-		m_rcViewSize.right = pImgMemDc->GetDcSize().cx;
+	if (m_rcViewSize.Width() < pImgMemDc->GetDcSize().cx + FRAME_ADD_SIZE)
+		m_rcViewSize.right = pImgMemDc->GetDcSize().cx + FRAME_ADD_SIZE;
 
-	if (m_rcViewSize.Height() < pImgMemDc->GetDcSize().cy)
-		m_rcViewSize.bottom = pImgMemDc->GetDcSize().cy;
-
-	m_rcViewSize.right += FRAME_ADD_SIZE;
-	m_rcViewSize.bottom += FRAME_ADD_SIZE;
+	if (m_rcViewSize.Height() < pImgMemDc->GetDcSize().cy + FRAME_ADD_SIZE)
+		m_rcViewSize.bottom = pImgMemDc->GetDcSize().cy + FRAME_ADD_SIZE;
 }
 
 void CImageBaseView::OnDraw()

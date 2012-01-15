@@ -31,8 +31,8 @@
 <item objid="window1.Panel24.group44.image45" name="Image" imagebasename="a123"/>
 </image>
 <imagebase>
-<item objid="F615E326AC294A4EAEE1161D8054B995" name="a123" imageinzip="T3.jpg" showtype="0">
-<rectinimage left="0" top="0" right="0" bottom="0"/>
+<item objid="F615E326AC294A4EAEE1161D8054B995" name="a123" imageinzip="T2.jpg" showtype="0">
+<rectinimage left="4" top="3" right="3" bottom="4"/>
 <jgg left="0" top="0" right="0" bottom="0"/>
 </item>
 </imagebase>
