@@ -29,8 +29,6 @@ CDialogViewBase::CDialogViewBase(CWnd* pParent /*=NULL*/)
 	m_ptLBtnDown.x = m_ptLBtnDown.y = 0;
 	m_nVScrollPos = 0;
 	m_nHScrollPos = 0;
-	m_nCurHeight = 0;
-	m_nCurWidth = 0;
 
 	// modeless dialog - don't forget to force the
 	// WS_CHILD style in the resource template and remove
@@ -153,6 +151,7 @@ void CDialogViewBase::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 		if (m_nVScrollPos > 0)
 			nDelta = -min(max(nMaxPos/20,5),m_nVScrollPos);
 		break;
+
 	case SB_PAGEDOWN:
 		if (m_nVScrollPos < nMaxPos)
 			nDelta = min(max(nMaxPos/10,5),nMaxPos-m_nVScrollPos);
@@ -192,9 +191,6 @@ void CDialogViewBase::SetScrollBarSize(int cx, int cy)
 	m_rcDlgSize.SetRectEmpty();
 	m_rcDlgSize.right = cx;
 	m_rcDlgSize.bottom = cy;
-
-	m_nCurHeight = cy;
-	m_nCurWidth = cx;
 
 	OnSize_SetViewSize(cx, cy);
 

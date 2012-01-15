@@ -12,7 +12,7 @@ public:
 	~CLocalImageList(void);
 
 	void SetSelectImagePropBase(IPropertyImageBase* pImgBase);
-	void Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *pImgBaseDlg, CImageBaseNameList* pImgBaseLise, CImageBaseView* pImgBaseView, IPropertyImageBase* pSelImgBase);
+	void Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *pImgBaseDlg, CImageBaseNameList* pImgBaseLise, CImageBaseView* pImgBaseView);
 	bool OnLoadLocalImage(CString strFilePath, CString strFileName);
 
 protected:
@@ -26,4 +26,5 @@ private:
 	ZIP_FILE_MAP* m_ZipFileMap;
 	IPropertyImageBase* m_pSelImgBase;
 	CImageBaseView* m_pImgBaseView;
+	ZIP_FILE *m_pCurrentZipFile;
 };

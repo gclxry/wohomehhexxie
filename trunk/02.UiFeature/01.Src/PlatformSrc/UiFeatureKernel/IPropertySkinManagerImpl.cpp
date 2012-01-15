@@ -1176,7 +1176,7 @@ bool IPropertySkinManagerImpl::SetImageFileRelevancy()
 		if (pZipFile == NULL)
 			return false;
 
-		pImageBaseProp->SetZipFile(pZipFile);
+		pImageBaseProp->SetZipFile(pZipFile, false);
 	}
 
 	return true;

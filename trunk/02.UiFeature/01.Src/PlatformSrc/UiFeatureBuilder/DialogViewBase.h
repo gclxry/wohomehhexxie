@@ -29,16 +29,11 @@ protected:
 	int m_nVScrollPos;
 	int m_nHScrollPos;
 
-	// 真实的对话框高度、宽度
-	int m_nCurHeight;
-	int m_nCurWidth;
-
 	// dialog size as you see in the resource view (original size)
 	// 在View中看到的尺寸，包括看不见的部分，最小不小于对话框的尺寸
 	CRect m_rcViewSize;
 	// 实际对话框的大小
 	CRect m_rcDlgSize;
-
 
 protected:
 	CDrawingBoard m_MemDc;
