@@ -69,12 +69,11 @@ void CImageBaseNameList::LoadImageBaseProp()
 		{
 			if (lstrcmpiA(m_pParentImgProp->GetRelevancyPropName(), pImageProp->GetObjectName()) == 0)
 			{
-				if (m_pLocalImgList != NULL)
-					m_pLocalImgList->SetSelectImagePropBase(pImageProp);
-
 				bFind = true;
 				this->SetItemState(nNo, LVIS_SELECTED, LVIS_SELECTED);
-				m_pImgBaseDlg->SetImageEditEnableStyle(true);
+
+				m_nSelectItem = nNo;
+				OnSelectItem();
 			}
 		}
 	}
