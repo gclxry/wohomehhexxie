@@ -459,14 +459,6 @@
 						RelativePath=".\ImageBasePropEditDlg.h"
 						>
 					</File>
-					<File
-						RelativePath=".\ImageBaseView.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\ImageBaseView.h"
-						>
-					</File>
 					<Filter
 						Name="01.新建/修改属性名称对话框"
 						>
@@ -500,6 +492,26 @@
 						</File>
 						<File
 							RelativePath=".\LocalImageList.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="04.预览图片View"
+						>
+						<File
+							RelativePath=".\DialogViewBase.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\DialogViewBase.h"
+							>
+						</File>
+						<File
+							RelativePath=".\ImageBaseView.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\ImageBaseView.h"
 							>
 						</File>
 					</Filter>

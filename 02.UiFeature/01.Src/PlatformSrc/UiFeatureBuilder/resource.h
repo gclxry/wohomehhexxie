@@ -91,10 +91,12 @@
 #define IDD_UIFEATUREBUILDER_FORM       312
 #define IDR_DELETE_WND_OR_CTRL          313
 #define IDD_IMAGE_EDIT_DLG              314
+#define IDD_IMAGEBASEPREVIEW            315
 #define IDD_DIALOG2                     316
 #define IDD_IMAGEBASE_VIEW              316
 #define IDD_DIALOG3                     317
 #define IDD_IMAGE_BASE_EDIT_CRATE_DLG   317
+#define IDD_IMAGEBASEVIEW               318
 #define IDB_BROWER_BTN                  1000
 #define IDE_DIR                         1001
 #define IDC_EDIT2                       1002
@@ -174,6 +176,6 @@
 #define _APS_NEXT_RESOURCE_VALUE        318
 #define _APS_NEXT_COMMAND_VALUE         32777
 #define _APS_NEXT_CONTROL_VALUE         1037
-#define _APS_NEXT_SYMED_VALUE           310
+#define _APS_NEXT_SYMED_VALUE           319
 #endif
 #endif
