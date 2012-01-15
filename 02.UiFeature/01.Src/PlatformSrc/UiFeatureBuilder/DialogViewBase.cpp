@@ -131,12 +131,18 @@ void CDialogViewBase::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 		m_nHScrollPos = 0;
 
 	SetScrollPos(SB_HORZ, m_nHScrollPos, TRUE);
-	CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
+//	CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
 	this->RedrawWindow();
 }
 
 void CDialogViewBase::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar) 
 {
+	if (pScrollBar != NULL)
+	{
+		SCROLLBARINFO ScrollInfo;
+		pScrollBar->GetScrollBarInfo(&ScrollInfo);
+	}
+
 	int nDelta = 0;
 	int nMaxPos = m_rcViewSize.Height();
 
@@ -176,7 +182,7 @@ void CDialogViewBase::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 		m_nVScrollPos = 0;
 
 	SetScrollPos(SB_VERT, m_nVScrollPos, TRUE);
-	CDialog::OnVScroll(nSBCode, nPos, pScrollBar);
+//	CDialog::OnVScroll(nSBCode, nPos, pScrollBar);
 	this->RedrawWindow();
 }
 
@@ -194,10 +200,12 @@ void CDialogViewBase::SetScrollBarSize(int cx, int cy)
 
 	OnSize_SetViewSize(cx, cy);
 
+	m_nVScrollPos = m_nHScrollPos = 0;
+
 	SCROLLINFO si;
 	memset(&si, 0, sizeof(SCROLLINFO));
 	si.cbSize = sizeof(SCROLLINFO);
-	si.fMask = SIF_RANGE | SIF_PAGE;
+	si.fMask = SIF_ALL;
 	si.nMin = 0;
 	si.nMax = m_rcViewSize.Width();
 	si.nPage = cx;
@@ -206,7 +214,7 @@ void CDialogViewBase::SetScrollBarSize(int cx, int cy)
 
 	memset(&si, 0, sizeof(SCROLLINFO));
 	si.cbSize = sizeof(SCROLLINFO);
-	si.fMask = SIF_RANGE | SIF_PAGE;
+	si.fMask = SIF_ALL;
 	si.nMin = 0;
 	si.nMax = m_rcViewSize.Height();
 	si.nPage = cy;
