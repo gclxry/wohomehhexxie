@@ -13,6 +13,7 @@ CLocalImageList::CLocalImageList(void)
 	m_ZipFileMap = NULL;
 	m_pSelImgBase = NULL;
 	m_pImgBaseView = NULL;
+	m_pCurrentZipFile = NULL;
 }
 
 CLocalImageList::~CLocalImageList(void)
@@ -27,24 +28,25 @@ void CLocalImageList::OnSelectItem()
 	if (m_nSelectItem < 0)
 	{
 		// Ã»ÓÐÑ¡Ôñ
+		m_pCurrentZipFile = NULL;
 		if (m_pImgBaseView != NULL)
 			m_pImgBaseView->SetCurrentShowImage(m_pUiKernel, m_pSelImgBase, NULL);
 	}
 	else
 	{
-		ZIP_FILE *pZipFile = (ZIP_FILE*)this->GetItemData(m_nSelectItem);
-		if (pZipFile == NULL)
+		m_pCurrentZipFile = (ZIP_FILE*)this->GetItemData(m_nSelectItem);
+		if (m_pCurrentZipFile == NULL)
 			return;
 
 		if (m_pSelImgBase != NULL)
-			m_pSelImgBase->SetZipFile(pZipFile);
+			m_pSelImgBase->SetZipFile(m_pCurrentZipFile, true);
 
 		if (m_pImgBaseView != NULL)
-			m_pImgBaseView->SetCurrentShowImage(m_pUiKernel, m_pSelImgBase, pZipFile);
+			m_pImgBaseView->SetCurrentShowImage(m_pUiKernel, m_pSelImgBase, m_pCurrentZipFile);
 	}
 }
 
-void CLocalImageList::Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *pImgBaseDlg, CImageBaseNameList* pImgBaseLise, CImageBaseView* pImgBaseView, IPropertyImageBase* pSelImgBase)
+void CLocalImageList::Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *pImgBaseDlg, CImageBaseNameList* pImgBaseLise, CImageBaseView* pImgBaseView)
 {
 	if (pUiKernel == NULL || pImgBaseDlg == NULL || pImgBaseLise == NULL || pImgBaseView == NULL)
 		return;
@@ -53,7 +55,6 @@ void CLocalImageList::Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *p
 	m_pImgBaseDlg = pImgBaseDlg;
 	m_pUiKernel = pUiKernel;
 	m_pImgBaseLise = pImgBaseLise;
-	m_pSelImgBase = pSelImgBase;
 	m_ZipFileMap = m_pUiKernel->GetSkinManager()->BD_GetUnZipFileMap();
 
 	if (m_pSelImgBase == NULL)
@@ -88,7 +89,11 @@ void CLocalImageList::RefreshList(ZIP_FILE* pSelZipFile)
 			this->SetItemData(nNo, (DWORD_PTR)pZipFile);
 
 			if (pSelZipFile == pZipFile)
+			{
 				this->SetItemState(nNo, LVIS_SELECTED, LVIS_SELECTED);
+				if (m_pImgBaseView != NULL)
+					m_pImgBaseView->SetCurrentShowImage(m_pUiKernel, m_pSelImgBase, pZipFile);
+			}
 		}
 	}
 }
@@ -157,10 +162,11 @@ bool CLocalImageList::OnLoadLocalImage(CString strFilePath, CString strFileName)
 	m_ZipFileMap->insert(pair<string, ZIP_FILE*>(pFileItem->strFileName, pFileItem));
 	if (m_pSelImgBase != NULL)
 	{
-		m_pSelImgBase->SetZipFile(pFileItem);
+		m_pCurrentZipFile = pFileItem;
+		m_pSelImgBase->SetZipFile(pFileItem, true);
 	}
 
-	RefreshList(pFileItem);
+	RefreshList(m_pCurrentZipFile);
 	return true;
 }
 

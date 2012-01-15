@@ -55,7 +55,7 @@ public:
 	IMAGE_BASE_PROP* GetImageProp();
 
 	ZIP_FILE * GetZipFile();
-	void SetZipFile(ZIP_FILE *pZipFile, bool bCreateMemDc = false);
+	void SetZipFile(ZIP_FILE *pZipFile, bool bCreateMemDc);
 
 	bool DrawImage(CDrawingBoard &DstDc, RECT DstRct);
 
