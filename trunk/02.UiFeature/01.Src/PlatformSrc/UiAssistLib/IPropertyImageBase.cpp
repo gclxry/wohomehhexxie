@@ -31,6 +31,10 @@ ZIP_FILE* IPropertyImageBase::GetZipFile()
 void IPropertyImageBase::SetZipFile(ZIP_FILE *pZipFile)
 {
 	m_pZipFile = pZipFile;
+
+	m_ImageProp.bIsZipFile = true;
+	m_ImageProp.strFileName = pZipFile->strFileName;
+	m_DrawImg.Delete();
 }
 
 bool IPropertyImageBase::IsRightData()

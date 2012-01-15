@@ -69,6 +69,9 @@ void CImageBaseNameList::LoadImageBaseProp()
 		{
 			if (lstrcmpiA(m_pParentImgProp->GetRelevancyPropName(), pImageProp->GetObjectName()) == 0)
 			{
+				if (m_pLocalImgList != NULL)
+					m_pLocalImgList->SetSelectImagePropBase(pImageProp);
+
 				bFind = true;
 				this->SetItemState(nNo, LVIS_SELECTED, LVIS_SELECTED);
 				m_pImgBaseDlg->SetImageEditEnableStyle(true);
@@ -164,6 +167,9 @@ void CImageBaseNameList::OnSelectItem()
 
 	if (m_nSelectItem >= 1)
 		m_pSelectImgBaseProp = (IPropertyImageBase*)this->GetItemData(m_nSelectItem);
+
+	if (m_pLocalImgList != NULL)
+		m_pLocalImgList->SetSelectImagePropBase(m_pSelectImgBaseProp);
 
 	IMAGE_BASE_PROP* pImgProp = m_pSelectImgBaseProp->GetImageProp();
 	if (pImgProp == NULL)

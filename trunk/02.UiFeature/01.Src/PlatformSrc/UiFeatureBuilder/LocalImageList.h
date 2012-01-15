@@ -10,6 +10,7 @@ public:
 	CLocalImageList(void);
 	~CLocalImageList(void);
 
+	void SetSelectImagePropBase(IPropertyImageBase* pImgBase);
 	void Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *pImgBaseDlg, CImageBaseNameList* pImgBaseLise, IPropertyImageBase* pSelImgBase);
 	bool OnLoadLocalImage(CString strFilePath, CString strFileName);
 

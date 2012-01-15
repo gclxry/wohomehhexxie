@@ -28,6 +28,14 @@ void CLocalImageList::OnSelectItem()
 	}
 	else
 	{
+		if (m_pSelImgBase != NULL)
+		{
+			ZIP_FILE *pZipFile = (ZIP_FILE*)this->GetItemData(m_nSelectItem);
+			if (pZipFile == NULL)
+				return;
+
+			m_pSelImgBase->SetZipFile(pZipFile);
+		}
 	}
 }
 
@@ -141,6 +149,16 @@ bool CLocalImageList::OnLoadLocalImage(CString strFilePath, CString strFileName)
 	}
 
 	m_ZipFileMap->insert(pair<string, ZIP_FILE*>(pFileItem->strFileName, pFileItem));
+	if (m_pSelImgBase != NULL)
+	{
+		m_pSelImgBase->SetZipFile(pFileItem);
+	}
+
 	RefreshList(pFileItem);
 	return true;
+}
+
+void CLocalImageList::SetSelectImagePropBase(IPropertyImageBase* pImgBase)
+{
+	m_pSelImgBase = pImgBase;
 }
