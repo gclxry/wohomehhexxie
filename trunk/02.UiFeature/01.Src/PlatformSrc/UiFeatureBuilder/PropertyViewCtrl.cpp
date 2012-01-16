@@ -496,8 +496,66 @@ void CPropertyViewCtrl::RefreshImageProp(CMFCPropertyGridProperty* pProperty, IP
 
 void CPropertyViewCtrl::RefreshIntProp(CMFCPropertyGridProperty* pProperty, IPropertyInt *pIntProp)
 {
-	if (pProperty == NULL)
+	if (pProperty == NULL || pIntProp == NULL)
 		return;
+
+	if (m_pCtrlWidthProp == pProperty || m_pCtrlHeightProp == pProperty)
+	{
+		COleVariant NewVariant = pProperty->GetValue();
+		if (NewVariant.lVal < 0)
+		{
+			NewVariant.lVal = 0;
+			pProperty->SetValue(NewVariant);
+			pIntProp->SetValue(NewVariant.lVal);
+			return;
+		}
+
+		IFeatureObject * pOwnerObj = pIntProp->GetOwnerObject();
+		if (pOwnerObj == NULL)
+			return;
+
+		IControlBase *pCtrlBase = dynamic_cast<IControlBase*>(pOwnerObj);
+		if (pCtrlBase == NULL)
+			return;
+
+		SIZE ParentSize;
+		IControlBase* pParentCtrl = pCtrlBase->GetParentControl();
+		if (pParentCtrl == NULL)
+		{
+			IWindowBase *pWndBase = pCtrlBase->GetOwnerWindow();
+			if (pWndBase == NULL)
+				return;
+
+			ParentSize = pWndBase->PP_GetWindowPropSize();
+		}
+		else
+		{
+			RECT CtrlRct = pParentCtrl->GetWindowRect();
+			ParentSize.cx = RECT_WIDTH(CtrlRct);
+			ParentSize.cy = RECT_HEIGHT(CtrlRct);
+		}
+
+		if (m_pCtrlWidthProp == pProperty)
+		{
+			if (NewVariant.lVal > ParentSize.cx)
+			{
+				NewVariant.lVal = ParentSize.cx;
+				pProperty->SetValue(NewVariant);
+				pIntProp->SetValue(NewVariant.lVal);
+				return;
+			}
+		}
+		else if (m_pCtrlHeightProp == pProperty)
+		{
+			if (NewVariant.lVal > ParentSize.cy)
+			{
+				NewVariant.lVal = ParentSize.cy;
+				pProperty->SetValue(NewVariant);
+				pIntProp->SetValue(NewVariant.lVal);
+				return;
+			}
+		}
+	}
 
 	COleVariant NewVariant = pProperty->GetValue();
 	pIntProp->SetValue(NewVariant.lVal);

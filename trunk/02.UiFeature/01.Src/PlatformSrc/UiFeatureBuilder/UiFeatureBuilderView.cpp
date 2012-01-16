@@ -382,17 +382,17 @@ void CUiFeatureBuilderView::OnMouseMove(UINT nFlags, CPoint point)
 		return;
 	}
 
-	m_nMoveFangKuai8Type = OnMouseMove_FangKuai8(point, true);
-	m_bMoveInWndFangKuai8 = (m_nMoveFangKuai8Type != SCT_NONE);
-	if (m_bMoveInWndFangKuai8)
+	m_nMoveFangKuai8Type = OnMouseMove_FangKuai8(point, false);
+	m_bMoveInCtrlFangKuai8 = (m_nMoveFangKuai8Type != SCT_NONE);
+	if (m_bMoveInCtrlFangKuai8)
 	{
 		this->RedrawWindow();
 		return;
 	}
 
-	m_nMoveFangKuai8Type = OnMouseMove_FangKuai8(point, false);
-	m_bMoveInCtrlFangKuai8 = (m_nMoveFangKuai8Type != SCT_NONE);
-	if (m_bMoveInCtrlFangKuai8)
+	m_nMoveFangKuai8Type = OnMouseMove_FangKuai8(point, true);
+	m_bMoveInWndFangKuai8 = (m_nMoveFangKuai8Type != SCT_NONE);
+	if (m_bMoveInWndFangKuai8)
 	{
 		this->RedrawWindow();
 		return;
