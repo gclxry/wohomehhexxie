@@ -1,6 +1,6 @@
 <resource>
 <bool>
-<item objid="window1.Panel24.Panel98.group99.bool103" name="Lock" data="1"/>
+<item objid="window1.Panel24.Panel98.group99.bool103" name="Lock" data="0"/>
 <item objid="window1.Panel24.Panel98.group99.bool104" name="Visible" data="1"/>
 <item objid="window1.Panel24.Panel98.group99.bool105" name="Enable" data="1"/>
 <item objid="window1.Panel24.Panel98.group99.bool106" name="ReceiveMouseMessage" data="1"/>
@@ -48,12 +48,12 @@
 </item>
 </imagebase>
 <int>
-<item objid="window1.Panel24.Panel98.group99.group110.int111" name="@Width" data="138"/>
-<item objid="window1.Panel24.Panel98.group99.group110.int112" name="@Height" data="113"/>
-<item objid="window1.Panel24.Panel98.group99.group110.int114" name="@LeftSpace" data="189"/>
-<item objid="window1.Panel24.Panel98.group99.group110.int115" name="@RightSpace" data="177"/>
-<item objid="window1.Panel24.Panel98.group99.group110.int116" name="@TopSpace" data="191"/>
-<item objid="window1.Panel24.Panel98.group99.group110.int117" name="@BottomSpace" data="196"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int111" name="@Width" data="275"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int112" name="@Height" data="181"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int114" name="@LeftSpace" data="36"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int115" name="@RightSpace" data="193"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int116" name="@TopSpace" data="40"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int117" name="@BottomSpace" data="279"/>
 <item objid="window1.Panel24.Panel98.group99.int108" name="TabOrder" data="0"/>
 <item objid="window1.Panel24.group25.group36.int37" name="@Width" data="504"/>
 <item objid="window1.Panel24.group25.group36.int38" name="@Height" data="500"/>
