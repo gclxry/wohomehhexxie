@@ -27,6 +27,7 @@ CWindowsViewTree::CWindowsViewTree()
 	m_pWindowView = NULL;
 	m_bProjectInitOk = false;
 	m_hRBtnSelItem = NULL;
+	m_bFromViewSel = false;
 }
 
 CWindowsViewTree::~CWindowsViewTree()
@@ -155,6 +156,12 @@ void CWindowsViewTree::OnTvnSelchanged(NMHDR *pNMHDR, LRESULT *pResult)
 	if (!m_bProjectInitOk)
 		return;
 
+	if (m_bFromViewSel)
+	{
+		m_bFromViewSel = false;
+		return;
+	}
+
 	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
 
 	HTREEITEM hItem = this->GetSelectedItem();
@@ -197,14 +204,18 @@ void CWindowsViewTree::OnTvnSelchanged_SelectRoot()
 
 void CWindowsViewTree::OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase)
 {
-	OnTvnSelchanged_SelectRoot();
-
 	if (m_pWindowView == NULL || m_pPropCtrl == NULL || pWndBase == NULL)
+	{
+		OnTvnSelchanged_SelectRoot();
 		return;
+	}
 
 	IPropertyGroup* pPropGroup = pWndBase->PP_GetWindowPropetryGroup();
 	if (pPropGroup == NULL)
+	{
+		OnTvnSelchanged_SelectRoot();
 		return;
+	}
 
 	m_pPropCtrl->SetShowPropGroup(pPropGroup);
 	m_pWindowView->ResetShowWindow(pWndBase, NULL);
@@ -212,14 +223,18 @@ void CWindowsViewTree::OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase)
 
 void CWindowsViewTree::OnTvnSelchanged_SelectControl(IControlBase *pCtrlBase)
 {
-	OnTvnSelchanged_SelectRoot();
-
 	if (m_pWindowView == NULL || m_pPropCtrl == NULL || pCtrlBase == NULL)
+	{
+		OnTvnSelchanged_SelectRoot();
 		return;
+	}
 
 	IPropertyGroup* pPropGroup = pCtrlBase->PP_GetControlPropetryGroup();
 	if (pPropGroup == NULL)
+	{
+		OnTvnSelchanged_SelectRoot();
 		return;
+	}
 
 	m_pPropCtrl->SetShowPropGroup(pPropGroup);
 	m_pWindowView->ResetShowWindow(pCtrlBase->GetOwnerWindow(), pCtrlBase);
@@ -518,6 +533,7 @@ void CWindowsViewTree::SetNeedSave()
 
 void CWindowsViewTree::SetViewEditControl(IControlBase *pCtrl)
 {
+	m_bFromViewSel = true;
 	HTREEITEM hRootItem = this->GetRootItem();
 	SetViewEditControl_Child(hRootItem, pCtrl);
 }
