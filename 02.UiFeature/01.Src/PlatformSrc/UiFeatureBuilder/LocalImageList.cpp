@@ -144,8 +144,8 @@ bool CLocalImageList::OnLoadLocalImage(CString strFilePath, CString strFileName)
 
 		if (errno != 0)
 		{
-			SAFE_DELETE(pFileItem);
 			SAFE_DELETE_LIST(pFileItem->pFileData);
+			SAFE_DELETE(pFileItem);
 			fclose(pFile);
 			return false;
 		}
@@ -153,8 +153,8 @@ bool CLocalImageList::OnLoadLocalImage(CString strFilePath, CString strFileName)
 
 	if (nReadLen != (int)FileAttr.nFileSizeLow)
 	{
-		SAFE_DELETE(pFileItem);
 		SAFE_DELETE_LIST(pFileItem->pFileData);
+		SAFE_DELETE(pFileItem);
 		fclose(pFile);
 		return false;
 	}

@@ -588,7 +588,14 @@ SIZE_CTRL_TYPE CUiFeatureBuilderView::OnMouseMove_FangKuai8(CPoint point, bool b
 	else
 	{
 		if (m_pCurrentWnd != NULL && m_pCurrentWnd->BD_GetFocusControl() != NULL)
+		{
+			// 撑满全部的不允许修改大小
+			CONTROL_LAYOUT_INFO Layout = m_pCurrentWnd->BD_GetFocusControl()->GetLayout();
+			if (Layout.clType == CL_L_ALL)
+				return SCT_NONE;
+
 			pFk8 = m_pCurrentWnd->BD_GetFocusControl()->BD_GetFangKuai8Rect();
+		}
 	}
 
 	if (pFk8 == NULL)
@@ -717,7 +724,7 @@ void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 		IControlBase *pSelCtrl = GetSelectControl(point);
 		m_pCurrentWnd->BD_SetFocusControl(pSelCtrl);
 
-		if (m_pPropViewCtrl != NULL)
+		if (m_pPropViewCtrl != NULL && m_pCurrentWnd != NULL && m_pCurrentWnd->BD_GetFocusControl() != NULL)
 			m_pPropViewCtrl->SetShowPropGroup(m_pCurrentWnd->BD_GetFocusControl()->PP_GetControlPropetryGroup());
 	}
 	else

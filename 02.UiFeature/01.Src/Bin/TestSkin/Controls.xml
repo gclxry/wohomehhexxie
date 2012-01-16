@@ -25,56 +25,30 @@
 <image objid="window1.Panel24.group44.image45"/>
 </group>
 </Panel>
-<Panel objid="window1.Panel24.Panel48">
-<group objid="window1.Panel24.Panel48.group49">
-<string objid="window1.Panel24.Panel48.group49.string50"/>
-<string objid="window1.Panel24.Panel48.group49.string51"/>
-<string objid="window1.Panel24.Panel48.group49.string52"/>
-<bool objid="window1.Panel24.Panel48.group49.bool53"/>
-<bool objid="window1.Panel24.Panel48.group49.bool54"/>
-<bool objid="window1.Panel24.Panel48.group49.bool55"/>
-<bool objid="window1.Panel24.Panel48.group49.bool56"/>
-<bool objid="window1.Panel24.Panel48.group49.bool57"/>
-<int objid="window1.Panel24.Panel48.group49.int58"/>
-<bool objid="window1.Panel24.Panel48.group49.bool59"/>
-<group objid="window1.Panel24.Panel48.group49.group60">
-<int objid="window1.Panel24.Panel48.group49.group60.int61"/>
-<int objid="window1.Panel24.Panel48.group49.group60.int62"/>
-<combobox objid="window1.Panel24.Panel48.group49.group60.combobox63"/>
-<int objid="window1.Panel24.Panel48.group49.group60.int64"/>
-<int objid="window1.Panel24.Panel48.group49.group60.int65"/>
-<int objid="window1.Panel24.Panel48.group49.group60.int66"/>
-<int objid="window1.Panel24.Panel48.group49.group60.int67"/>
+<Panel objid="window1.Panel24.Panel98">
+<group objid="window1.Panel24.Panel98.group99">
+<string objid="window1.Panel24.Panel98.group99.string100"/>
+<string objid="window1.Panel24.Panel98.group99.string101"/>
+<string objid="window1.Panel24.Panel98.group99.string102"/>
+<bool objid="window1.Panel24.Panel98.group99.bool103"/>
+<bool objid="window1.Panel24.Panel98.group99.bool104"/>
+<bool objid="window1.Panel24.Panel98.group99.bool105"/>
+<bool objid="window1.Panel24.Panel98.group99.bool106"/>
+<bool objid="window1.Panel24.Panel98.group99.bool107"/>
+<int objid="window1.Panel24.Panel98.group99.int108"/>
+<bool objid="window1.Panel24.Panel98.group99.bool109"/>
+<group objid="window1.Panel24.Panel98.group99.group110">
+<int objid="window1.Panel24.Panel98.group99.group110.int111"/>
+<int objid="window1.Panel24.Panel98.group99.group110.int112"/>
+<combobox objid="window1.Panel24.Panel98.group99.group110.combobox113"/>
+<int objid="window1.Panel24.Panel98.group99.group110.int114"/>
+<int objid="window1.Panel24.Panel98.group99.group110.int115"/>
+<int objid="window1.Panel24.Panel98.group99.group110.int116"/>
+<int objid="window1.Panel24.Panel98.group99.group110.int117"/>
 </group>
 </group>
-<group objid="window1.Panel24.Panel48.group68">
-<image objid="window1.Panel24.Panel48.group68.image69"/>
-</group>
-</Panel>
-<Panel objid="window1.Panel70">
-<group objid="window1.Panel70.group71">
-<string objid="window1.Panel70.group71.string72"/>
-<string objid="window1.Panel70.group71.string73"/>
-<string objid="window1.Panel70.group71.string74"/>
-<bool objid="window1.Panel70.group71.bool75"/>
-<bool objid="window1.Panel70.group71.bool76"/>
-<bool objid="window1.Panel70.group71.bool77"/>
-<bool objid="window1.Panel70.group71.bool78"/>
-<bool objid="window1.Panel70.group71.bool79"/>
-<int objid="window1.Panel70.group71.int80"/>
-<bool objid="window1.Panel70.group71.bool81"/>
-<group objid="window1.Panel70.group71.group82">
-<int objid="window1.Panel70.group71.group82.int83"/>
-<int objid="window1.Panel70.group71.group82.int84"/>
-<combobox objid="window1.Panel70.group71.group82.combobox85"/>
-<int objid="window1.Panel70.group71.group82.int86"/>
-<int objid="window1.Panel70.group71.group82.int87"/>
-<int objid="window1.Panel70.group71.group82.int88"/>
-<int objid="window1.Panel70.group71.group82.int89"/>
-</group>
-</group>
-<group objid="window1.Panel70.group90">
-<image objid="window1.Panel70.group90.image91"/>
+<group objid="window1.Panel24.Panel98.group118">
+<image objid="window1.Panel24.Panel98.group118.image119"/>
 </group>
 </Panel>
 </controls>

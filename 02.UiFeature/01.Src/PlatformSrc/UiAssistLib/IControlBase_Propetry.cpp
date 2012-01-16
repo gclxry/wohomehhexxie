@@ -409,6 +409,15 @@ RECT IControlBase::GetWindowRect()
 	return m_RectInWindow;
 }
 
+RECT IControlBase::GetClientRect()
+{
+	RECT ClientRct;
+	INIT_RECT(ClientRct);
+	ClientRct.right = RECT_WIDTH(m_RectInWindow);
+	ClientRct.bottom = RECT_HEIGHT(m_RectInWindow);
+	return ClientRct;
+}
+
 // 2.从Builder中新创建一个控件，需要初始化属性的PropId
 bool IControlBase::InitObjectIdByBuilder(const char* pszBaseId)
 {

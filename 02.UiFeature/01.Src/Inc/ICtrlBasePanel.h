@@ -23,5 +23,5 @@ protected:
 	virtual void OnPaint(CDrawingBoard &DrawBoard);
 
 private:
-	IPropertyBase* m_pPropImage;
+	IPropertyImage* m_pPropImage;
 };
