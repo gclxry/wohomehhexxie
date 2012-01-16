@@ -17,9 +17,12 @@ void IControlBase::OnPaintControl(CDrawingBoard &WndMemDc, RECT ActiveDrawRct)
 	|| (m_RectInWindow.top >= ActiveDrawRct.bottom))
 		return;
 
-	m_CtrlMemDc.Create(RECT_WIDTH(m_RectInWindow), RECT_HEIGHT(m_RectInWindow), 0, false, m_bNeedRedraw);
+	bool bIsCreateNew = m_CtrlMemDc.Create(RECT_WIDTH(m_RectInWindow), RECT_HEIGHT(m_RectInWindow), 0, false, m_bNeedRedraw);
 	if (m_CtrlMemDc.GetBits() == NULL)
 		return;
+
+	if (bIsCreateNew)
+		m_bNeedRedraw = true;
 
 	// 重绘控件自身
 	if (m_bNeedRedraw)
@@ -32,9 +35,9 @@ void IControlBase::OnPaintControl(CDrawingBoard &WndMemDc, RECT ActiveDrawRct)
 	RECT DrawRct;
 	INIT_RECT(DrawRct);
 	DrawRct.left = (m_RectInWindow.left >= ActiveDrawRct.left) ? m_RectInWindow.left : ActiveDrawRct.left;
-	DrawRct.right = (m_RectInWindow.right >= ActiveDrawRct.right) ? ActiveDrawRct.right : ActiveDrawRct.left;
+	DrawRct.right = (m_RectInWindow.right >= ActiveDrawRct.right) ? ActiveDrawRct.right : m_RectInWindow.right;
 	DrawRct.top = (m_RectInWindow.top >= ActiveDrawRct.top) ? m_RectInWindow.top : ActiveDrawRct.top;
-	DrawRct.bottom = (m_RectInWindow.bottom >= ActiveDrawRct.bottom) ? ActiveDrawRct.bottom : ActiveDrawRct.bottom;
+	DrawRct.bottom = (m_RectInWindow.bottom >= ActiveDrawRct.bottom) ? ActiveDrawRct.bottom : m_RectInWindow.bottom;
 
 	// 绘制到窗口的DC上
 	int nWidth = RECT_WIDTH(DrawRct);

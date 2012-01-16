@@ -1,8 +1,7 @@
-<layout area="1" lastid="96">
+<layout area="1" lastid="121">
 <window objid="window1">
 <ctrl objid="window1.Panel24">
-<ctrl objid="window1.Panel24.Panel48"/>
+<ctrl objid="window1.Panel24.Panel98"/>
 </ctrl>
-<ctrl objid="window1.Panel70"/>
 </window>
 </layout>

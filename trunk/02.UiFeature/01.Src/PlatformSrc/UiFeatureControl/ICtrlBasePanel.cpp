@@ -18,7 +18,7 @@ ICtrlBasePanel::~ICtrlBasePanel(void)
 // 派生控件用于创建属于自己的控件属性
 bool ICtrlBasePanel::CreateControlPropetry(bool bNeedSetDftProp)
 {
-	m_pPropImage = CreatePropetry(OTID_IMAGE, "Image", "背景图片");
+	m_pPropImage = (IPropertyImage*)CreatePropetry(OTID_IMAGE, "Image", "背景图片");
 	return true;
 }
 
@@ -40,4 +40,6 @@ void ICtrlBasePanel::OnDestroy()
 // 绘制控件
 void ICtrlBasePanel::OnPaint(CDrawingBoard &DrawBoard)
 {
+	if (m_pPropImage != NULL)
+		m_pPropImage->DrawImage(DrawBoard, this->GetClientRect());
 }

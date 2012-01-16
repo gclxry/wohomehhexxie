@@ -35,13 +35,15 @@ BYTE* CDrawingBoard::GetBits()
 	return m_pBits;
 }
 
-void CDrawingBoard::Create(int nWidth, int nHeight, DWORD nDefaultColor, bool bReCreate, bool bNoCreateInit)
+bool CDrawingBoard::Create(int nWidth, int nHeight, DWORD nDefaultColor, bool bReCreate, bool bNoCreateInit)
 {
+	bool bIsCreateNew = false;
 	if ((nWidth <= 0) || (nHeight<= 0))
-		return;
+		return bIsCreateNew;
 
 	if (bReCreate || (nWidth != m_DcSize.cx) || (nHeight != m_DcSize.cy))
 	{
+		bIsCreateNew = true;
 		Delete();
 		
 		m_DcSize.cx = nWidth;
@@ -77,6 +79,8 @@ void CDrawingBoard::Create(int nWidth, int nHeight, DWORD nDefaultColor, bool bR
 		if (m_pBits != NULL && bNoCreateInit)
 			memset(m_pBits, nDefaultColor, m_DcSize.cx * m_DcSize.cy * 4);
 	}
+
+	return bIsCreateNew;
 }
 
 void CDrawingBoard::Delete()
