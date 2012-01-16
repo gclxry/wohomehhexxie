@@ -42,6 +42,8 @@ public:
 	// 重绘控件
 	virtual void RedrawControl(IControlBase* pCtrl, bool bDrawImmediately = true) = 0;
 
+	// 根据控件布局信息设置控件的位置
+	virtual void SetControlWindowPostion(IControlBase* pCtrl, RECT ParentRctInWnd) = 0;
 //////////////////////////////////////////////////////////////////////////
 	// 取得窗口控件指针
 	virtual IControlBase* GetControl(char *pszCtrlName) = 0;

@@ -207,21 +207,29 @@ void IControlBase::PropetyValueToMemberValue()
 	if (m_pOwnerWindowBase == NULL)
 		return;
 
-	if (m_pPropBase_Layout_Width == NULL || m_pPropBase_Layout_Height == NULL || m_pPropBase_Layout_Layout == NULL
-	 || m_pPropBase_Layout_LeftSpace == NULL || m_pPropBase_Layout_RightSpace == NULL || m_pPropBase_Layout_TopSpace == NULL || m_pPropBase_Layout_BottomSpace == NULL)
-		return;
-
 	RECT ParentRct;
 	INIT_RECT(ParentRct);
+	FANGKUAI_8* pFk8 = NULL;
 	if (m_pParentCtrl == NULL)
+	{
 		ParentRct = m_pOwnerWindowBase->GetClientRect();
+		pFk8 = m_pOwnerWindowBase->BD_GetFangKuai8Rect();
+	}
 	else
+	{
 		ParentRct = m_pParentCtrl->GetWindowRect();
+		pFk8 = m_pParentCtrl->BD_GetFangKuai8Rect();
+	}
 
-	m_RectInWindow.left = ParentRct.left + m_pPropBase_Layout_LeftSpace->GetValue();
-	m_RectInWindow.right = m_RectInWindow.left + m_pPropBase_Layout_Width->GetValue();
-	m_RectInWindow.top = ParentRct.top + m_pPropBase_Layout_TopSpace->GetValue();
-	m_RectInWindow.bottom = m_RectInWindow.top + m_pPropBase_Layout_Height->GetValue();
+	if (pFk8 == NULL)
+		return;
+
+	m_pOwnerWindowBase->SetControlWindowPostion(this, ParentRct);
+
+	m_BD_FangKuai8.EntityRct.left = pFk8->EntityRct.left + (m_RectInWindow.left - ParentRct.left);
+	m_BD_FangKuai8.EntityRct.right = m_BD_FangKuai8.EntityRct.left + RECT_WIDTH(m_RectInWindow);
+	m_BD_FangKuai8.EntityRct.top = pFk8->EntityRct.top + (m_RectInWindow.top - ParentRct.top);
+	m_BD_FangKuai8.EntityRct.bottom = m_BD_FangKuai8.EntityRct.top + RECT_HEIGHT(m_RectInWindow);
 
 	// 通知控件属性刷新了
 	this->OnBuilderRefreshProp();
@@ -329,11 +337,11 @@ CONTROL_LAYOUT_INFO IControlBase::GetLayout()
 
 	LayoutInfo.clType = (CONTROL_LAYOUT)m_pPropBase_Layout_Layout->GetSelect();
 	LayoutInfo.nBottomSpace = m_pPropBase_Layout_BottomSpace->GetValue();
-	LayoutInfo.nHeight = RECT_HEIGHT(m_RectInWindow);
+	LayoutInfo.nHeight = m_pPropBase_Layout_Height->GetValue();
 	LayoutInfo.nLeftSpace = m_pPropBase_Layout_LeftSpace->GetValue();
 	LayoutInfo.nRightSpace = m_pPropBase_Layout_RightSpace->GetValue();
 	LayoutInfo.nTopSpace = m_pPropBase_Layout_TopSpace->GetValue();
-	LayoutInfo.nWidth = RECT_WIDTH(m_RectInWindow);
+	LayoutInfo.nWidth = m_pPropBase_Layout_Width->GetValue();
 
 	return LayoutInfo;
 }

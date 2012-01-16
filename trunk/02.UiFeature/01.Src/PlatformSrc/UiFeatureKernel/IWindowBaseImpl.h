@@ -51,6 +51,8 @@ public:
 	// 重绘控件
 	virtual void RedrawControl(IControlBase* pCtrl, bool bDrawImmediately = true);
 
+	// 根据控件布局信息设置控件的位置
+	void SetControlWindowPostion(IControlBase* pCtrl, RECT ParentRctInWnd);
 //////////////////////////////////////////////////////////////////////////
 	// 取得窗口控件指针
 	virtual IControlBase* GetControl(char *pszCtrlName);
@@ -109,8 +111,6 @@ private:
 	bool CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt, IControlBase **ppControl);
 	// 设置窗口中所有控件的位置和大小
 	void SetControlPostion(CHILD_CTRLS_VEC *pCtrlVec, SIZE NewSize);
-	// 根据控件布局信息得到控件的位置
-	void SetControlWindowPostion(IControlBase* pCtrl, RECT ParentRctInWnd);
 	// 设置当前得到焦点的控件，如果参数为NULL，说明当前没有控件得到焦点，所有控件都失去焦点
 	void SetFocusCtrl(IControlBase *pControl);
 	// 通过递归查找指定名称的控件
