@@ -61,6 +61,8 @@ public:
 	virtual void SetActivePropetry(bool bIsActive);
 	virtual bool GetActivePropetry();
 
+	IFeatureObject* GetOwnerObject();
+	void SetOwnerObject(IFeatureObject* pOwnerObj);
 protected:
 	// 是否为有效属性，在Builder保存属性时判断使用。
 	bool m_bIsActiveProp;
@@ -70,4 +72,5 @@ private:
 	string m_strObjType;
 	string m_strObjName;
 	string m_strObjInfo;
+	IFeatureObject *m_pOwnerObj;
 };

@@ -33,7 +33,7 @@ IPropertyBase* IControlBase::CreateCtrlOnePropetry(IPropertyGroup* pGroup, OBJEC
 	if (pGroup == NULL)
 		pGroup = m_pXmlPropCtrl->GetControlPropGroup();
 
-	return CreateResourcePropetry(m_pSkinPropMgr, pGroup, propType, pszPropName, pszPropInfo);
+	return CreateResourcePropetry(this, m_pSkinPropMgr, pGroup, propType, pszPropName, pszPropInfo);
 }
 
 // 创建空的属性队列
@@ -110,12 +110,12 @@ void IControlBase::CreateCtrlAllPropetry(bool bNeedSetDftProp)
 		return;
 
 	// layout-width
-	m_pPropBase_Layout_Width = (IPropertyInt*)CreateCtrlOnePropetry(m_pPropBase_LayoutGroup, OTID_INT, "Width", "窗口宽度");
+	m_pPropBase_Layout_Width = (IPropertyInt*)CreateCtrlOnePropetry(m_pPropBase_LayoutGroup, OTID_INT, NAME_LAYOUT_WIDTH, "窗口宽度");
 	if (m_pPropBase_Layout_Width == NULL)
 		return;
 
 	// layout-height
-	m_pPropBase_Layout_Height = (IPropertyInt*)CreateCtrlOnePropetry(m_pPropBase_LayoutGroup, OTID_INT, "Height", "窗口高度");
+	m_pPropBase_Layout_Height = (IPropertyInt*)CreateCtrlOnePropetry(m_pPropBase_LayoutGroup, OTID_INT, NAME_LAYOUT_HEIGHT, "窗口高度");
 	if (m_pPropBase_Layout_Height == NULL)
 		return;
 
@@ -144,22 +144,22 @@ void IControlBase::CreateCtrlAllPropetry(bool bNeedSetDftProp)
 	}
 
 	// layout-leftspace
-	m_pPropBase_Layout_LeftSpace = (IPropertyInt*)CreateCtrlOnePropetry(m_pPropBase_LayoutGroup, OTID_INT, "LeftSpace", "距离父控件/窗口左侧距离");
+	m_pPropBase_Layout_LeftSpace = (IPropertyInt*)CreateCtrlOnePropetry(m_pPropBase_LayoutGroup, OTID_INT, NAME_LAYOUT_LEFTSPACE, "距离父控件/窗口左侧距离");
 	if (m_pPropBase_Layout_LeftSpace == NULL)
 		return;
 
 	// layout-rightspace
-	m_pPropBase_Layout_RightSpace = (IPropertyInt*)CreateCtrlOnePropetry(m_pPropBase_LayoutGroup, OTID_INT, "RightSpace", "距离父控件/窗口右侧距离");
+	m_pPropBase_Layout_RightSpace = (IPropertyInt*)CreateCtrlOnePropetry(m_pPropBase_LayoutGroup, OTID_INT, NAME_LAYOUT_RIGHTSPACE, "距离父控件/窗口右侧距离");
 	if (m_pPropBase_Layout_RightSpace == NULL)
 		return;
 
 	// layout-topspace
-	m_pPropBase_Layout_TopSpace = (IPropertyInt*)CreateCtrlOnePropetry(m_pPropBase_LayoutGroup, OTID_INT, "TopSpace", "距离父控件/窗口上方距离");
+	m_pPropBase_Layout_TopSpace = (IPropertyInt*)CreateCtrlOnePropetry(m_pPropBase_LayoutGroup, OTID_INT, NAME_LAYOUT_TOPSPACE, "距离父控件/窗口上方距离");
 	if (m_pPropBase_Layout_TopSpace == NULL)
 		return;
 
 	// layout-bottomspace
-	m_pPropBase_Layout_BottomSpace = (IPropertyInt*)CreateCtrlOnePropetry(m_pPropBase_LayoutGroup, OTID_INT, "BottomSpace", "距离父控件/窗口下方距离");
+	m_pPropBase_Layout_BottomSpace = (IPropertyInt*)CreateCtrlOnePropetry(m_pPropBase_LayoutGroup, OTID_INT, NAME_LAYOUT_BOTTOMSPACE, "距离父控件/窗口下方距离");
 	if (m_pPropBase_Layout_BottomSpace == NULL)
 		return;
 
@@ -197,7 +197,7 @@ IPropertyBase* IControlBase::CreatePropetry(OBJECT_TYPE_ID propType, const char*
 	if (m_pPropGroupCtrlDefs == NULL || m_pSkinPropMgr == NULL || m_pXmlPropCtrl == NULL || pszPropName == NULL || strlen(pszPropName) <= 0 || propType <= OTID_NONE || propType >= OTID_LAST)
 		return NULL;
 
-	return CreateResourcePropetry(m_pSkinPropMgr, m_pPropGroupCtrlDefs, propType, pszPropName, pszPropInfo);
+	return CreateResourcePropetry(this, m_pSkinPropMgr, m_pPropGroupCtrlDefs, propType, pszPropName, pszPropInfo);
 }
 
 

@@ -18,10 +18,23 @@ CPropertyViewCtrl::CPropertyViewCtrl(void)
 	m_pUiKernel = NULL;
 	m_pViewTree = NULL;
 	m_bProjectInitOk = false;
+
+	InitSetCtrlProp();
 }
 
 CPropertyViewCtrl::~CPropertyViewCtrl(void)
 {
+}
+
+void CPropertyViewCtrl::InitSetCtrlProp()
+{
+	m_pCtrlLayoutTypeProp = NULL;
+	m_pCtrlWidthProp = NULL;
+	m_pCtrlHeightProp = NULL;
+	m_pCtrlLeftSpaceProp = NULL;
+	m_pCtrlTopSpaceProp = NULL;
+	m_pCtrlRightSpaceProp = NULL;
+	m_pCtrlBottomSpaceProp = NULL;
 }
 
 void CPropertyViewCtrl::SetProjectInitState(bool bInitOk)
@@ -62,6 +75,7 @@ void CPropertyViewCtrl::SetShowPropGroup(IPropertyGroup *pPropGroup)
 
 	m_pCurrentPropGroup = pPropGroup;
 	AppendPropGroup(NULL, m_pCurrentPropGroup);
+	EnableLayoutState();
 	this->RedrawWindow();
 }
 
@@ -185,6 +199,7 @@ void CPropertyViewCtrl::AppendColorProp(CMFCPropertyGridProperty* pParentPropGro
 
 void CPropertyViewCtrl::ClearAll()
 {
+	InitSetCtrlProp();
 	m_pCurrentPropGroup = NULL;
 	this->RemoveAll();
 	this->RedrawWindow();
@@ -218,6 +233,9 @@ void CPropertyViewCtrl::AppendComboBoxProp(CMFCPropertyGridProperty* pParentProp
 
 	pNewProp->SetData((DWORD_PTR)pPropBase);
 	pParentPropGroup->AddSubItem(pNewProp);
+
+	if (strName.CompareNoCase(_T(NAME_LAYOUT_TYPE)) == 0)
+		m_pCtrlLayoutTypeProp = pNewProp;
 }
 
 void CPropertyViewCtrl::AppendCursorProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyCursor *pCursorProp)
@@ -276,6 +294,32 @@ void CPropertyViewCtrl::AppendIntProp(CMFCPropertyGridProperty* pParentPropGroup
 	pNewProp->EnableSpinControl(TRUE, -(0x7FFFFFFF), 0x7FFFFFFF);
 	pNewProp->SetData((DWORD_PTR)pPropBase);
 	pParentPropGroup->AddSubItem(pNewProp);
+
+	const char *pObjName = pPropBase->GetObjectName();
+	if (lstrcmpiA(pObjName, NAME_LAYOUT_WIDTH) == 0)
+	{
+		m_pCtrlWidthProp = pNewProp;
+	}
+	else if (lstrcmpiA(pObjName, NAME_LAYOUT_HEIGHT) == 0)
+	{
+		m_pCtrlHeightProp = pNewProp;
+	}
+	else if (lstrcmpiA(pObjName, NAME_LAYOUT_LEFTSPACE) == 0)
+	{
+		m_pCtrlLeftSpaceProp = pNewProp;
+	}
+	else if (lstrcmpiA(pObjName, NAME_LAYOUT_RIGHTSPACE) == 0)
+	{
+		m_pCtrlRightSpaceProp = pNewProp;
+	}
+	else if (lstrcmpiA(pObjName, NAME_LAYOUT_TOPSPACE) == 0)
+	{
+		m_pCtrlTopSpaceProp = pNewProp;
+	}
+	else if (lstrcmpiA(pObjName, NAME_LAYOUT_BOTTOMSPACE) == 0)
+	{
+		m_pCtrlBottomSpaceProp = pNewProp;
+	}
 }
 
 void CPropertyViewCtrl::AppendStringProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyString *pStringProp)
@@ -453,7 +497,157 @@ void CPropertyViewCtrl::RefreshStringProp(CMFCPropertyGridProperty* pProperty, I
 
 void CPropertyViewCtrl::RefreshComboBoxProp(CMFCPropertyGridProperty* pProperty, IPropertyComboBox *pComboboxProp)
 {
+	USES_CONVERSION;
+	if (pProperty == NULL || pComboboxProp == NULL)
+		return;
 
+	COleVariant NewVariant = pProperty->GetValue();
+	if (NewVariant.bstrVal == NULL)
+		return;
+
+	CString strValue(NewVariant.bstrVal);
+	::SysFreeString(NewVariant.bstrVal);
+
+	pComboboxProp->SetSelectString(W2A(strValue));
+
+	CString strName = pProperty->GetName();
+	if (strName.CompareNoCase(_T(NAME_LAYOUT_TYPE)) == 0)
+		EnableLayoutState();
+}
+
+void CPropertyViewCtrl::SetIntValueToPropView(int nValue, CMFCPropertyGridProperty* pGridProp)
+{
+	if (pGridProp == NULL)
+		return;
+
+	IPropertyBase *pPropBase = (IPropertyBase*)pGridProp->GetData();
+	if (pPropBase == NULL)
+		return;
+
+	IPropertyInt* pIntProp = dynamic_cast<IPropertyInt*>(pPropBase);
+	if (pIntProp == NULL)
+		return;
+
+	CString strInt(_T(""));
+	strInt.Format(_T("%d"), nValue);
+	COleVariant oleValue(strInt);
+	pGridProp->SetValue(oleValue);
+	pIntProp->SetValue(nValue);
+}
+
+void CPropertyViewCtrl::EnableLayoutState()
+{
+	if (m_pCtrlLayoutTypeProp == NULL)
+		return;
+
+	IPropertyBase *pPropBase = (IPropertyBase*)m_pCtrlLayoutTypeProp->GetData();
+	if (pPropBase == NULL)
+		return;
+
+	IPropertyComboBox* pComboProp = dynamic_cast<IPropertyComboBox*>(pPropBase);
+	if (pComboProp == NULL)
+		return;
+
+	IFeatureObject *pOwnerObj = pComboProp->GetOwnerObject();
+	if (pOwnerObj == NULL)
+		return;
+
+	COleVariant NewVariant;
+	int nSel = pComboProp->GetSelect();
+	if (m_pCtrlWidthProp != NULL && m_pCtrlHeightProp != NULL)
+	{
+		m_pCtrlWidthProp->Enable(TRUE);
+		m_pCtrlHeightProp->Enable(TRUE);
+
+		if (nSel == CL_L_ALL)
+		{
+			// 得到实际的大小
+			if (pOwnerObj->GetObjectTypeId() != OTID_WINDOW)
+			{
+				IControlBase *pCtrlBase = dynamic_cast<IControlBase*>(pOwnerObj);
+				if (pCtrlBase == NULL)
+					return;
+
+				IControlBase* pParentCtrl = pCtrlBase->GetParentControl();
+				if (pParentCtrl == NULL)
+				{
+					IWindowBase *pWndBase = pCtrlBase->GetOwnerWindow();
+					if (pWndBase == NULL)
+						return;
+
+					SIZE wndSize = pWndBase->PP_GetWindowPropSize();
+					SetIntValueToPropView(wndSize.cx, m_pCtrlWidthProp);
+					SetIntValueToPropView(wndSize.cy, m_pCtrlHeightProp);
+				}
+				else
+				{
+					RECT CtrlRct = pParentCtrl->GetWindowRect();
+					SetIntValueToPropView(RECT_WIDTH(CtrlRct), m_pCtrlWidthProp);
+					SetIntValueToPropView(RECT_HEIGHT(CtrlRct), m_pCtrlHeightProp);
+				}
+			}
+			m_pCtrlWidthProp->Enable(FALSE);
+			m_pCtrlHeightProp->Enable(FALSE);
+		}
+
+		if (nSel == CL_L_LEFT || nSel == CL_L_RIGHT)
+			m_pCtrlHeightProp->Enable(FALSE);
+
+		if (nSel == CL_L_TOP || nSel == CL_L_BOTTOM)
+			m_pCtrlWidthProp->Enable(FALSE);
+	}
+
+	if (m_pCtrlLeftSpaceProp != NULL)
+	{
+		m_pCtrlLeftSpaceProp->Enable(TRUE);
+		if (nSel == CL_L_ALL)
+		{
+			SetIntValueToPropView(0, m_pCtrlLeftSpaceProp);
+			m_pCtrlLeftSpaceProp->Enable(FALSE);
+		}
+
+		if (nSel == CL_G_RIGHT_TOP || nSel == CL_G_RIGHT_BOTTOM || nSel == CL_L_RIGHT)
+			m_pCtrlLeftSpaceProp->Enable(FALSE);
+	}
+
+	if (m_pCtrlRightSpaceProp != NULL)
+	{
+		m_pCtrlRightSpaceProp->Enable(TRUE);
+		if (nSel == CL_L_ALL)
+		{
+			SetIntValueToPropView(0, m_pCtrlRightSpaceProp);
+			m_pCtrlRightSpaceProp->Enable(FALSE);
+		}
+
+		if (nSel == CL_G_LEFT_TOP || nSel == CL_G_LEFT_BOTTOM || nSel == CL_L_LEFT)
+			m_pCtrlRightSpaceProp->Enable(FALSE);
+	}
+
+	if (m_pCtrlTopSpaceProp != NULL)
+	{
+		m_pCtrlTopSpaceProp->Enable(TRUE);
+		if (nSel == CL_L_ALL)
+		{
+			SetIntValueToPropView(0, m_pCtrlTopSpaceProp);
+			m_pCtrlTopSpaceProp->Enable(FALSE);
+		}
+
+		if (nSel == CL_G_LEFT_BOTTOM || nSel == CL_G_RIGHT_BOTTOM || nSel == CL_L_BOTTOM)
+			m_pCtrlTopSpaceProp->Enable(FALSE);
+	}
+
+	if (m_pCtrlBottomSpaceProp != NULL)
+	{
+		m_pCtrlBottomSpaceProp->Enable(TRUE);
+		if (nSel == CL_L_ALL)
+		{
+			SetIntValueToPropView(0, m_pCtrlBottomSpaceProp);
+			m_pCtrlBottomSpaceProp->Enable(FALSE);
+		}
+
+		if (nSel == CL_G_LEFT_TOP || nSel == CL_G_RIGHT_TOP || nSel == CL_L_TOP)
+			m_pCtrlBottomSpaceProp->Enable(FALSE);
+	}
 }
 
 void CPropertyViewCtrl::SetNeedSave()

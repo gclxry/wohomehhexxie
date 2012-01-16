@@ -186,7 +186,7 @@ public:
 private:
 	// 创建空的属性队列
 	void CreateWindowPropetry(bool bSetDftProp);
-	IPropertyBase* CreateCtrlOnePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
+	IPropertyBase* CreateWindowOnePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
 	// 释放子控件列表
 	void ReleaseChildVec(CHILD_CTRLS_VEC *pChildCtrlsVec);
 	// 绘制窗口和被选中的控件的边框的8个方块

@@ -121,3 +121,23 @@ int IPropertyComboBox::GetSelect()
 {
 	return m_ComboBoxPro.nSelect;
 }
+
+void IPropertyComboBox::SetSelectString(char *pszSelString)
+{
+	if (pszSelString == NULL || strlen(pszSelString) <= 0)
+		return;
+
+	int nNo = 0;
+	for (STRING_VEC::iterator pStringItem = m_ComboBoxPro.DataVec.begin(); pStringItem != m_ComboBoxPro.DataVec.end(); pStringItem++, nNo++)
+	{
+		string strString = *pStringItem;
+		if (strString.size() <= 0)
+			continue;
+
+		if (lstrcmpiA(pszSelString, strString.c_str()) == 0)
+		{
+			m_ComboBoxPro.nSelect = nNo;
+			return;
+		}
+	}
+}
