@@ -515,6 +515,16 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown_SizeCtrl(SIZE_CTRL_TYPE nFan
 		pFk8->EntityRct.bottom = point.y;
 	}
 
+	// Ô½½çÅÐ¶Ï
+	if (pFk8->EntityRct.bottom < pFk8->EntityRct.top)
+		pFk8->EntityRct.bottom = pFk8->EntityRct.top;
+	if (pFk8->EntityRct.right < pFk8->EntityRct.left)
+		pFk8->EntityRct.right = pFk8->EntityRct.left;
+	if (pFk8->EntityRct.top > pFk8->EntityRct.bottom)
+		pFk8->EntityRct.top = pFk8->EntityRct.bottom;
+	if (pFk8->EntityRct.left > pFk8->EntityRct.right)
+		pFk8->EntityRct.left = pFk8->EntityRct.right;
+
 	if (pFk8->EntityRct.left < pParentFk8->EntityRct.left)
 		pFk8->EntityRct.left = pParentFk8->EntityRct.left;
 
