@@ -400,8 +400,21 @@ void CPropertyViewCtrl::OnPropertyChanged(CMFCPropertyGridProperty* pProperty)
 		return;
 	}
 
-	// 刷新界面 TBD
+	IFeatureObject *pOwnerObj = pPropBase->GetOwnerObject();
+	if (pOwnerObj != NULL)
+	{
+		IControlBase *pCtrlBase = dynamic_cast<IControlBase*>(pOwnerObj);
+		if (pCtrlBase != NULL)
+		{
+			// 从属性更新数据到成员变量
+			pCtrlBase->PropetyValueToMemberValue();
+			pCtrlBase->RedrawControl(true);
+		}
+	}
 
+	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
+	if (pMain != NULL && pMain->GetView() != NULL)
+		pMain->GetView()->RedrawWindow();
 }
 
 void CPropertyViewCtrl::RefreshBoolProp(CMFCPropertyGridProperty* pProperty, IPropertyBool *pBoolProp)
@@ -651,9 +664,5 @@ void CPropertyViewCtrl::SetNeedSave()
 {
 	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
 	if (pMain != NULL)
-	{
 		pMain->SetPropetryChange();
-		if (pMain->GetView() != NULL)
-			pMain->GetView()->RedrawWindow();
-	}
 }

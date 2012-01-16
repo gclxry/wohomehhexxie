@@ -22,7 +22,7 @@ protected:
 	// 销毁控件
 	virtual void OnDestroy() = 0;
 	// 绘制控件
-	virtual void OnPaint() = 0;
+	virtual void OnPaint(CDrawingBoard &DrawBoard) = 0;
 	// 派生控件其他处理的消息
 	virtual void OnCtrlMessage(int nMsgId, WPARAM wParam, LPARAM lParam);
 	// Builder刷新属性，此函数中只要重新加载控件属性即可

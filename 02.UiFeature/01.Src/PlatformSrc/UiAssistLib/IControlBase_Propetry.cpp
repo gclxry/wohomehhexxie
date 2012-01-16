@@ -222,6 +222,9 @@ void IControlBase::PropetyValueToMemberValue()
 	m_RectInWindow.right = m_RectInWindow.left + m_pPropBase_Layout_Width->GetValue();
 	m_RectInWindow.top = ParentRct.top + m_pPropBase_Layout_TopSpace->GetValue();
 	m_RectInWindow.bottom = m_RectInWindow.top + m_pPropBase_Layout_Height->GetValue();
+
+	// 通知控件属性刷新了
+	this->OnBuilderRefreshProp();
 }
 
 //////////////////////////////////////////////////////////////////////////

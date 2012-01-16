@@ -13,6 +13,7 @@
 #include "IPropertyCursor.h"
 #include "IPropertyFont.h"
 #include "IPropertyImage.h"
+#include "CDrawingBoard.h"
 
 class IWindowBase;
 class IWindowBaseImpl;
@@ -236,6 +237,8 @@ public:
 	void SetActiveDrawRect(RECT ActiveDrawRect);
 	RECT GetActiveDrawRect();
 
+	// 从属性更新数据到成员变量
+	void PropetyValueToMemberValue();
 protected:
 	// 设置子控件都必须自绘
 	void SetChildCtrlToRedraw();
@@ -256,7 +259,7 @@ protected:
 	// 销毁控件
 	virtual void OnDestroy() = 0;
 	// 绘制控件
-	virtual void OnPaint() = 0;
+	virtual void OnPaint(CDrawingBoard &DrawBoard) = 0;
 	// 派生控件处理的消息
 	virtual void OnCtrlMessage(int nMsgId, WPARAM wParam, LPARAM lParam) = 0;
 	// Builder刷新属性
@@ -321,8 +324,6 @@ private:
 
 	// 从成员变量更新数据到属性
 	void MemberValueToPropetyValue();
-	// 从属性更新数据到成员变量
-	void PropetyValueToMemberValue();
 
 protected:
 	// 整个控件的内存DC
