@@ -28,7 +28,7 @@
 </bool>
 <combobox>
 <item objid="window1.Panel24.Panel48.group49.group60.combobox63" name="@Layout_Type" counts="10" select="2" data0="左上角定位" data1="左下角定位" data2="右上角定位" data3="右下角定位" data4="撑满左侧" data5="撑满右侧" data6="撑满上方" data7="撑满下方" data8="撑满全部" data9="居中"/>
-<item objid="window1.Panel24.group25.group36.combobox39" name="@Layout_Type" counts="10" select="0" data0="左上角定位" data1="左下角定位" data2="右上角定位" data3="右下角定位" data4="撑满左侧" data5="撑满右侧" data6="撑满上方" data7="撑满下方" data8="撑满全部" data9="居中"/>
+<item objid="window1.Panel24.group25.group36.combobox39" name="@Layout_Type" counts="10" select="8" data0="左上角定位" data1="左下角定位" data2="右上角定位" data3="右下角定位" data4="撑满左侧" data5="撑满右侧" data6="撑满上方" data7="撑满下方" data8="撑满全部" data9="居中"/>
 <item objid="window1.Panel70.group71.group82.combobox85" name="@Layout_Type" counts="10" select="0" data0="左上角定位" data1="左下角定位" data2="右上角定位" data3="右下角定位" data4="撑满左侧" data5="撑满右侧" data6="撑满上方" data7="撑满下方" data8="撑满全部" data9="居中"/>
 </combobox>
 <group>
@@ -55,24 +55,24 @@
 <int>
 <item objid="window1.Panel24.Panel48.group49.group60.int61" name="@Width" data="146"/>
 <item objid="window1.Panel24.Panel48.group49.group60.int62" name="@Height" data="106"/>
-<item objid="window1.Panel24.Panel48.group49.group60.int64" name="@LeftSpace" data="124"/>
+<item objid="window1.Panel24.Panel48.group49.group60.int64" name="@LeftSpace" data="254"/>
 <item objid="window1.Panel24.Panel48.group49.group60.int65" name="@RightSpace" data="0"/>
 <item objid="window1.Panel24.Panel48.group49.group60.int66" name="@TopSpace" data="90"/>
-<item objid="window1.Panel24.Panel48.group49.group60.int67" name="@BottomSpace" data="83"/>
+<item objid="window1.Panel24.Panel48.group49.group60.int67" name="@BottomSpace" data="82"/>
 <item objid="window1.Panel24.Panel48.group49.int58" name="TabOrder" data="0"/>
-<item objid="window1.Panel24.group25.group36.int37" name="@Width" data="400"/>
-<item objid="window1.Panel24.group25.group36.int38" name="@Height" data="278"/>
-<item objid="window1.Panel24.group25.group36.int40" name="@LeftSpace" data="56"/>
-<item objid="window1.Panel24.group25.group36.int41" name="@RightSpace" data="48"/>
-<item objid="window1.Panel24.group25.group36.int42" name="@TopSpace" data="148"/>
-<item objid="window1.Panel24.group25.group36.int43" name="@BottomSpace" data="74"/>
+<item objid="window1.Panel24.group25.group36.int37" name="@Width" data="504"/>
+<item objid="window1.Panel24.group25.group36.int38" name="@Height" data="500"/>
+<item objid="window1.Panel24.group25.group36.int40" name="@LeftSpace" data="0"/>
+<item objid="window1.Panel24.group25.group36.int41" name="@RightSpace" data="0"/>
+<item objid="window1.Panel24.group25.group36.int42" name="@TopSpace" data="0"/>
+<item objid="window1.Panel24.group25.group36.int43" name="@BottomSpace" data="0"/>
 <item objid="window1.Panel24.group25.int34" name="TabOrder" data="0"/>
 <item objid="window1.Panel70.group71.group82.int83" name="@Width" data="218"/>
 <item objid="window1.Panel70.group71.group82.int84" name="@Height" data="104"/>
-<item objid="window1.Panel70.group71.group82.int86" name="@LeftSpace" data="158"/>
-<item objid="window1.Panel70.group71.group82.int87" name="@RightSpace" data="128"/>
-<item objid="window1.Panel70.group71.group82.int88" name="@TopSpace" data="355"/>
-<item objid="window1.Panel70.group71.group82.int89" name="@BottomSpace" data="41"/>
+<item objid="window1.Panel70.group71.group82.int86" name="@LeftSpace" data="153"/>
+<item objid="window1.Panel70.group71.group82.int87" name="@RightSpace" data="133"/>
+<item objid="window1.Panel70.group71.group82.int88" name="@TopSpace" data="235"/>
+<item objid="window1.Panel70.group71.group82.int89" name="@BottomSpace" data="161"/>
 <item objid="window1.Panel70.group71.int80" name="TabOrder" data="0"/>
 <item objid="window1.group13.int14" name="Width" data="504"/>
 <item objid="window1.group13.int15" name="Height" data="500"/>

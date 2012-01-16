@@ -233,6 +233,28 @@ void IControlBase::PropetyValueToMemberValue()
 
 	// 通知控件属性刷新了
 	this->OnBuilderRefreshProp();
+
+	ResetChildPropetyValueToMemberValue(this);
+}
+
+// 重新计算子控件的位置和大小
+void IControlBase::ResetChildPropetyValueToMemberValue(IControlBase* pParentCtrl)
+{
+	if (pParentCtrl == NULL)
+		return;
+
+	CHILD_CTRLS_VEC *pChildCtrlsVec = pParentCtrl->GetChildControlsVec();
+	if (pChildCtrlsVec == NULL)
+		return;
+
+	for (CHILD_CTRLS_VEC::iterator pCtrlItem = pChildCtrlsVec->begin(); pCtrlItem != pChildCtrlsVec->end(); pCtrlItem++)
+	{
+		IControlBase* pCtrl = *pCtrlItem;
+		if (pCtrl == NULL || pCtrl->GetOwnerWindow() == NULL)
+			continue;
+
+		pCtrl->PropetyValueToMemberValue();
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -324,6 +324,8 @@ private:
 
 	// 从成员变量更新数据到属性
 	void MemberValueToPropetyValue();
+	// 重新计算子控件的位置和大小
+	void ResetChildPropetyValueToMemberValue(IControlBase* pParentCtrl);
 
 protected:
 	// 整个控件的内存DC
