@@ -26,6 +26,8 @@ public:
 	// 向树中插入一个新节点
 	void AddNewControlToWindowTreeNode(IWindowBase *pWindow, IControlBase* pParentCtrl, IControlBase *pControl);
 
+	void SetViewEditControl(IControlBase *pCtrl);
+
 // 重写
 protected:
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
@@ -43,6 +45,9 @@ private:
 	HTREEITEM InsertControlNodeToEnd(HTREEITEM hParentNode, IControlBase *pControl);
 	// 向树中插入一个新节点
 	void InsertCtrlVecByPropCtrlVec(HTREEITEM hParentItem, IWindowBase *pParentWnd, IControlBase *pParentCtrl, PROP_CONTROL_VEC* pPropCtrlVec, CHILD_CTRLS_VEC* pCtrlVec);
+	
+	void SetViewEditControl_Child(HTREEITEM hParentItem, IControlBase *pCtrl);
+
 private:
 	bool m_bProjectInitOk;
 	IPropertySkinManager *m_pSkinMgr;

@@ -515,3 +515,37 @@ void CWindowsViewTree::SetNeedSave()
 	if (pMain != NULL)
 		pMain->SetPropetryChange();
 }
+
+void CWindowsViewTree::SetViewEditControl(IControlBase *pCtrl)
+{
+	HTREEITEM hRootItem = this->GetRootItem();
+	SetViewEditControl_Child(hRootItem, pCtrl);
+}
+
+void CWindowsViewTree::SetViewEditControl_Child(HTREEITEM hParentItem, IControlBase *pCtrl)
+{
+	USES_CONVERSION;
+	if (hParentItem == NULL)
+		return;
+
+	HTREEITEM hChild = this->GetChildItem(hParentItem);
+	while (hChild != NULL)
+	{
+		IFeatureObject *pPropBase = (IFeatureObject*)this->GetItemData(hChild);
+		if (pPropBase != NULL && pPropBase->GetObjectTypeId() != OTID_WINDOW)
+		{
+			IControlBase* pComCtrl = dynamic_cast<IControlBase*>(pPropBase);
+			if (pComCtrl == pCtrl)
+			{
+				// 选中并打开根节点
+				this->SelectItem(hChild);
+				this->Expand(hChild, TVE_EXPAND);
+				return;
+			}
+		}
+
+		// 更新子控件的名称
+		SetViewEditControl_Child(hChild, pCtrl);
+		hChild = this->GetNextItem(hChild, TVGN_NEXT);
+	}
+}
