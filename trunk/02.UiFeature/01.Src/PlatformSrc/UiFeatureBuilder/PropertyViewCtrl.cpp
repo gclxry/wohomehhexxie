@@ -528,10 +528,7 @@ void CPropertyViewCtrl::SetIntValueToPropView(int nValue, CMFCPropertyGridProper
 	if (pIntProp == NULL)
 		return;
 
-	CString strInt(_T(""));
-	strInt.Format(_T("%d"), nValue);
-	COleVariant oleValue(strInt);
-	pGridProp->SetValue(oleValue);
+	pGridProp->SetValue((_variant_t)(nValue));
 	pIntProp->SetValue(nValue);
 }
 
@@ -654,5 +651,9 @@ void CPropertyViewCtrl::SetNeedSave()
 {
 	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
 	if (pMain != NULL)
+	{
 		pMain->SetPropetryChange();
+		if (pMain->GetView() != NULL)
+			pMain->GetView()->RedrawWindow();
+	}
 }

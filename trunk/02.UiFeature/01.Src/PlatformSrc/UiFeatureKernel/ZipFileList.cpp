@@ -347,12 +347,6 @@ bool CZipFileList::WriteZipEnd(bool bEntToClear)
 			int nNeedWrite = pZip->dwZipDatalen - nWriteLen;
 			int nWrite = fwrite(pWrite, 1, nNeedWrite, pFile);
 			nWriteLen += nWrite;
-
-			if (errno != 0)
-			{
-				fclose(pFile);
-				return false;
-			}
 		}
 
 		if (nWriteLen != (int)pZip->dwZipDatalen)
