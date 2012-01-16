@@ -37,6 +37,34 @@ void CPropertyViewCtrl::InitSetCtrlProp()
 	m_pCtrlBottomSpaceProp = NULL;
 }
 
+// 鼠标拖动控件，改变布局，刷新到属性列表界面
+void CPropertyViewCtrl::RefreshLayoutData()
+{
+	RefreshToPropViewIntProp(m_pCtrlWidthProp);
+	RefreshToPropViewIntProp(m_pCtrlHeightProp);
+	RefreshToPropViewIntProp(m_pCtrlLeftSpaceProp);
+	RefreshToPropViewIntProp(m_pCtrlTopSpaceProp);
+	RefreshToPropViewIntProp(m_pCtrlRightSpaceProp);
+	RefreshToPropViewIntProp(m_pCtrlBottomSpaceProp);
+	this->RedrawWindow();
+}
+
+void CPropertyViewCtrl::RefreshToPropViewIntProp(CMFCPropertyGridProperty* pProperty)
+{
+	if (pProperty == NULL)
+		return;
+
+	IPropertyBase *pPropBase = (IPropertyBase*)pProperty->GetData();
+	if (pPropBase == NULL)
+		return;
+
+	IPropertyInt *pIntProp = dynamic_cast<IPropertyInt*>(pPropBase);
+	if (pIntProp == NULL)
+		return;
+
+	pProperty->SetValue((_variant_t)(pIntProp->GetValue()));
+}
+
 void CPropertyViewCtrl::SetProjectInitState(bool bInitOk)
 {
 	m_bProjectInitOk = bInitOk;
@@ -468,7 +496,7 @@ void CPropertyViewCtrl::RefreshImageProp(CMFCPropertyGridProperty* pProperty, IP
 
 void CPropertyViewCtrl::RefreshIntProp(CMFCPropertyGridProperty* pProperty, IPropertyInt *pIntProp)
 {
-	if (pProperty == NULL || pIntProp == NULL)
+	if (pProperty == NULL)
 		return;
 
 	COleVariant NewVariant = pProperty->GetValue();
