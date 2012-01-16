@@ -46,6 +46,7 @@ private:
 public:
 	void SetViewCursor(int nCursor);
 	void SetView(CUiFeatureBuilderView *pView);
+	CUiFeatureBuilderView* GetView() { return m_pView; }
 	
 protected:  // 控件条嵌入成员
 	CMFCMenuBar       m_wndMenuBar;
