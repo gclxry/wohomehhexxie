@@ -38,6 +38,6 @@ void ICtrlBasePanel::OnDestroy()
 }
 
 // »æÖÆ¿Ø¼þ
-void ICtrlBasePanel::OnPaint()
+void ICtrlBasePanel::OnPaint(CDrawingBoard &DrawBoard)
 {
 }

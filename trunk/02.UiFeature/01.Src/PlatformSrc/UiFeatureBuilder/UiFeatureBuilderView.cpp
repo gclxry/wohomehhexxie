@@ -716,11 +716,16 @@ void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 	{
 		IControlBase *pSelCtrl = GetSelectControl(point);
 		m_pCurrentWnd->BD_SetFocusControl(pSelCtrl);
+
+		if (m_pPropViewCtrl != NULL)
+			m_pPropViewCtrl->SetShowPropGroup(m_pCurrentWnd->BD_GetFocusControl()->PP_GetControlPropetryGroup());
 	}
 	else
 	{
 		if (m_pCurrentWnd->BD_GetFocusControl() != NULL)
+		{
 			m_pDrawParentCtrl = m_pCurrentWnd->BD_GetFocusControl()->GetParentControl();
+		}
 	}
 
 	this->RedrawWindow();

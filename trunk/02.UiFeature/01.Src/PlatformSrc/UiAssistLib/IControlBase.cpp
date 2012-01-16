@@ -136,14 +136,14 @@ void IControlBase::RedrawControlInAnimationTimer()
 // 重绘控件
 void IControlBase::RedrawControl(bool bDrawImmediately)
 {
-	if (m_pOwnerWindowBase != NULL)
-	{
-		IControlBase *pCtrl = dynamic_cast<IControlBase*>(this);
-		m_pOwnerWindowBase->RedrawControl(pCtrl);
-	}
+	//if (m_pOwnerWindowBase != NULL)
+	//{
+	//	IControlBase *pCtrl = dynamic_cast<IControlBase*>(this);
+	//	m_pOwnerWindowBase->RedrawControl(pCtrl);
+	//}
 
 	m_bNeedRedraw = true;
-	SetChildCtrlToRedraw();
+//	SetChildCtrlToRedraw();
 }
 
 // 设置子控件都必须自绘
