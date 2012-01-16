@@ -173,4 +173,19 @@ bool CLocalImageList::OnLoadLocalImage(CString strFilePath, CString strFileName)
 void CLocalImageList::SetSelectImagePropBase(IPropertyImageBase* pImgBase)
 {
 	m_pSelImgBase = pImgBase;
+	ZIP_FILE* pImgPropZipFile = m_pSelImgBase->GetZipFile();
+	if (pImgPropZipFile == NULL)
+		return;
+
+	for (int i = 0; i < this->GetItemCount(); i++)
+	{
+		ZIP_FILE *pComZipFile = (ZIP_FILE *)this->GetItemData(i);
+		if (pComZipFile == pImgPropZipFile)
+		{
+			this->SetItemState(i, LVIS_SELECTED, LVIS_SELECTED);
+			m_nSelectItem = i;
+			OnSelectItem();
+			break;
+		}
+	}
 }
