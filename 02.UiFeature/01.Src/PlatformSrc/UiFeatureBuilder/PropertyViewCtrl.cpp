@@ -474,19 +474,7 @@ void CPropertyViewCtrl::RefreshHaveBasePropPropetry(CMFCPropertyGridProperty* pP
 	USES_CONVERSION;
 	if (pProperty == NULL || pBaseProp == NULL)
 		return;
-
-	pBaseProp->SetRelevancyProp(NULL);
-	COleVariant NewVariant = pProperty->GetValue();
-	if (NewVariant.bstrVal == NULL)
-	{
-		pBaseProp->SetRelevancyPropName(NULL);
-		return;
-	}
-
-	CString strValue(NewVariant.bstrVal);
-	::SysFreeString(NewVariant.bstrVal);
-
-	pBaseProp->SetRelevancyPropName(W2A(strValue));
+	// 不需要二次设置，已经在图片编辑对话框中设置完成
 }
 
 void CPropertyViewCtrl::RefreshImageProp(CMFCPropertyGridProperty* pProperty, IPropertyImage *pImageProp)

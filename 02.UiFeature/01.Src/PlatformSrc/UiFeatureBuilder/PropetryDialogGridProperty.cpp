@@ -63,6 +63,8 @@ void CPropetryDialogGridProperty::ImageBaseDialog()
 	}
 	else
 	{
+		pParentImgProp->SetImageBaseProp(pImgBase);
+		pParentImgProp->SetRelevancyPropName((char*)pImgBase->GetObjectName());
 		varValue = A2W(pParentImgProp->GetRelevancyPropName());
 	}
 
