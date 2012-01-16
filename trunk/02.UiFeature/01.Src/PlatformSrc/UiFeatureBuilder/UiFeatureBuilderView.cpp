@@ -482,58 +482,85 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown_SizeCtrl(SIZE_CTRL_TYPE nFan
 	{
 		pFk8->EntityRct.left = point.x;
 		pFk8->EntityRct.top = point.y;
+
+		// 越界判断
+		if (pFk8->EntityRct.left > pFk8->EntityRct.right)
+			pFk8->EntityRct.left = pFk8->EntityRct.right;
+		if (pFk8->EntityRct.top > pFk8->EntityRct.bottom)
+			pFk8->EntityRct.top = pFk8->EntityRct.bottom;
 	}
 	else if (nFangKuai8Type == SCT_LEFT_MID)
 	{
 		pFk8->EntityRct.left = point.x;
+
+		// 越界判断
+		if (pFk8->EntityRct.left > pFk8->EntityRct.right)
+			pFk8->EntityRct.left = pFk8->EntityRct.right;
 	}
 	else if (nFangKuai8Type == SCT_LEFT_BOTTOM)
 	{
 		pFk8->EntityRct.left = point.x;
 		pFk8->EntityRct.bottom = point.y;
+
+		// 越界判断
+		if (pFk8->EntityRct.left > pFk8->EntityRct.right)
+			pFk8->EntityRct.left = pFk8->EntityRct.right;
+		if (pFk8->EntityRct.bottom < pFk8->EntityRct.top)
+			pFk8->EntityRct.bottom = pFk8->EntityRct.top;
 	}
 	else if (nFangKuai8Type == SCT_MID_TOP)
 	{
 		pFk8->EntityRct.top = point.y;
+
+		// 越界判断
+		if (pFk8->EntityRct.top > pFk8->EntityRct.bottom)
+			pFk8->EntityRct.top = pFk8->EntityRct.bottom;
 	}
 	else if (nFangKuai8Type == SCT_MID_BOTTOM)
 	{
 		pFk8->EntityRct.bottom = point.y;
+
+		// 越界判断
+		if (pFk8->EntityRct.bottom < pFk8->EntityRct.top)
+			pFk8->EntityRct.bottom = pFk8->EntityRct.top;
 	}
 	else if (nFangKuai8Type == SCT_RIGHT_TOP)
 	{
 		pFk8->EntityRct.right = point.x;
 		pFk8->EntityRct.top = point.y;
+
+		// 越界判断
+		if (pFk8->EntityRct.right < pFk8->EntityRct.left)
+			pFk8->EntityRct.right = pFk8->EntityRct.left;
+		if (pFk8->EntityRct.top > pFk8->EntityRct.bottom)
+			pFk8->EntityRct.top = pFk8->EntityRct.bottom;
 	}
 	else if (nFangKuai8Type == SCT_RIGHT_MID)
 	{
 		pFk8->EntityRct.right = point.x;
+
+		// 越界判断
+		if (pFk8->EntityRct.right < pFk8->EntityRct.left)
+			pFk8->EntityRct.right = pFk8->EntityRct.left;
 	}
 	else if (nFangKuai8Type == SCT_RIGHT_BOTTOM)
 	{
 		pFk8->EntityRct.right = point.x;
 		pFk8->EntityRct.bottom = point.y;
-	}
 
-	// 越界判断
-	if (pFk8->EntityRct.bottom < pFk8->EntityRct.top)
-		pFk8->EntityRct.bottom = pFk8->EntityRct.top;
-	if (pFk8->EntityRct.right < pFk8->EntityRct.left)
-		pFk8->EntityRct.right = pFk8->EntityRct.left;
-	if (pFk8->EntityRct.top > pFk8->EntityRct.bottom)
-		pFk8->EntityRct.top = pFk8->EntityRct.bottom;
-	if (pFk8->EntityRct.left > pFk8->EntityRct.right)
-		pFk8->EntityRct.left = pFk8->EntityRct.right;
+		// 越界判断
+		if (pFk8->EntityRct.right < pFk8->EntityRct.left)
+			pFk8->EntityRct.right = pFk8->EntityRct.left;
+		if (pFk8->EntityRct.bottom < pFk8->EntityRct.top)
+			pFk8->EntityRct.bottom = pFk8->EntityRct.top;
+	}
 
 	if (pFk8->EntityRct.left < pParentFk8->EntityRct.left)
 		pFk8->EntityRct.left = pParentFk8->EntityRct.left;
-
 	if (pFk8->EntityRct.right > pParentFk8->EntityRct.right)
 		pFk8->EntityRct.right = pParentFk8->EntityRct.right;
-
 	if (pFk8->EntityRct.top < pParentFk8->EntityRct.top)
 		pFk8->EntityRct.top = pParentFk8->EntityRct.top;
-
 	if (pFk8->EntityRct.bottom > pParentFk8->EntityRct.bottom)
 		pFk8->EntityRct.bottom = pParentFk8->EntityRct.bottom;
 
