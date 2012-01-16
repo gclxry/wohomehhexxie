@@ -401,7 +401,7 @@ void CImageBasePropEditDlg::OnBnClickedOk()
 	IPropertyImageBase* pImgBase = GetSelectImageBase(nSelItem);
 	if (pImgBase == NULL)
 	{
-		OnCancel();
+		OnOK();
 		return;
 	}
 
