@@ -57,6 +57,8 @@ private:
 
 	HTREEITEM m_hRBtnSelItem;
 
+	bool m_bFromViewSel;
+
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
