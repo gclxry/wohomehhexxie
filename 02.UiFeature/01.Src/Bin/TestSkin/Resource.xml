@@ -48,12 +48,12 @@
 </item>
 </imagebase>
 <int>
-<item objid="window1.Panel24.Panel98.group99.group110.int111" name="@Width" data="261"/>
-<item objid="window1.Panel24.Panel98.group99.group110.int112" name="@Height" data="266"/>
-<item objid="window1.Panel24.Panel98.group99.group110.int114" name="@LeftSpace" data="147"/>
-<item objid="window1.Panel24.Panel98.group99.group110.int115" name="@RightSpace" data="96"/>
-<item objid="window1.Panel24.Panel98.group99.group110.int116" name="@TopSpace" data="111"/>
-<item objid="window1.Panel24.Panel98.group99.group110.int117" name="@BottomSpace" data="123"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int111" name="@Width" data="266"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int112" name="@Height" data="235"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int114" name="@LeftSpace" data="130"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int115" name="@RightSpace" data="108"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int116" name="@TopSpace" data="139"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int117" name="@BottomSpace" data="126"/>
 <item objid="window1.Panel24.Panel98.group99.int108" name="TabOrder" data="0"/>
 <item objid="window1.Panel24.group25.group36.int37" name="@Width" data="504"/>
 <item objid="window1.Panel24.group25.group36.int38" name="@Height" data="500"/>
