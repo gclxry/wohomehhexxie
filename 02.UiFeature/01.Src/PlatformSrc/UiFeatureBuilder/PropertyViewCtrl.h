@@ -21,8 +21,6 @@ public:
 
 	// 清空所有的属性
 	void ClearAll();
-	// 显示一组新的属性
-	void SetShowPropGroup(IPropertyGroup *pPropGroup);
 	// 属性发生改变的时候
 	void OnPropertyChanged(CMFCPropertyGridProperty* pProperty);
 	void Init(IUiFeatureKernel* pKernelWindow, CWindowsViewTree *pViewTree);
@@ -31,7 +29,11 @@ public:
 	// 刷新整个界面
 	void RefreshAllData();
 
-	// 从属性刷新到界面
+	// 显示一组新的属性
+	void SetShowPropGroup(IPropertyGroup *pPropGroup);
+
+	// 鼠标拖动控件，改变布局，刷新到属性列表界面
+	void RefreshLayoutData();
 
 private:
 	CMFCPropertyGridProperty* m_pCtrlLayoutTypeProp;
@@ -67,6 +69,7 @@ private:
 	void InitSetCtrlProp();
 	void EnableLayoutState();
 	void SetIntValueToPropView(int nValue, CMFCPropertyGridProperty* pGridProp);
+	void RefreshToPropViewIntProp(CMFCPropertyGridProperty* pProperty);
 private:
 	bool m_bProjectInitOk;
 	IPropertyGroup* m_pCurrentPropGroup;

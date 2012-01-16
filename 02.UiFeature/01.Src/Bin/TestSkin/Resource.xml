@@ -1,10 +1,10 @@
 <resource>
 <bool>
+<item objid="window1.Panel24.Panel98.group99.bool103" name="Lock" data="1"/>
 <item objid="window1.Panel24.Panel98.group99.bool104" name="Visible" data="1"/>
-<item objid="window1.Panel24.Panel98.group99.bool103" name="Lock" data="0"/>
+<item objid="window1.Panel24.Panel98.group99.bool105" name="Enable" data="1"/>
 <item objid="window1.Panel24.Panel98.group99.bool106" name="ReceiveMouseMessage" data="1"/>
 <item objid="window1.Panel24.Panel98.group99.bool107" name="DragInCtrl" data="0"/>
-<item objid="window1.Panel24.Panel98.group99.bool105" name="Enable" data="1"/>
 <item objid="window1.Panel24.Panel98.group99.bool109" name="DefaultEnterCtrl" data="0"/>
 <item objid="window1.Panel24.group25.bool29" name="Lock" data="0"/>
 <item objid="window1.Panel24.group25.bool30" name="Visible" data="1"/>
@@ -26,8 +26,8 @@
 </combobox>
 <group>
 <item objid="window1.Panel24.Panel98.group118" name="ControlPropetry"/>
-<item objid="window1.Panel24.Panel98.group99.group110" name="Layout"/>
 <item objid="window1.Panel24.Panel98.group99" name="ControlBase"/>
+<item objid="window1.Panel24.Panel98.group99.group110" name="Layout"/>
 <item objid="window1.Panel24.group25" name="ControlBase"/>
 <item objid="window1.Panel24.group25.group36" name="Layout"/>
 <item objid="window1.Panel24.group44" name="ControlPropetry"/>
@@ -48,13 +48,13 @@
 </item>
 </imagebase>
 <int>
-<item objid="window1.Panel24.Panel98.group99.group110.int112" name="@Height" data="113"/>
-<item objid="window1.Panel24.Panel98.group99.group110.int117" name="@BottomSpace" data="172"/>
-<item objid="window1.Panel24.Panel98.group99.int108" name="TabOrder" data="0"/>
-<item objid="window1.Panel24.Panel98.group99.group110.int115" name="@RightSpace" data="148"/>
 <item objid="window1.Panel24.Panel98.group99.group110.int111" name="@Width" data="138"/>
-<item objid="window1.Panel24.Panel98.group99.group110.int116" name="@TopSpace" data="215"/>
-<item objid="window1.Panel24.Panel98.group99.group110.int114" name="@LeftSpace" data="218"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int112" name="@Height" data="113"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int114" name="@LeftSpace" data="189"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int115" name="@RightSpace" data="177"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int116" name="@TopSpace" data="191"/>
+<item objid="window1.Panel24.Panel98.group99.group110.int117" name="@BottomSpace" data="196"/>
+<item objid="window1.Panel24.Panel98.group99.int108" name="TabOrder" data="0"/>
 <item objid="window1.Panel24.group25.group36.int37" name="@Width" data="504"/>
 <item objid="window1.Panel24.group25.group36.int38" name="@Height" data="500"/>
 <item objid="window1.Panel24.group25.group36.int40" name="@LeftSpace" data="0"/>
@@ -70,9 +70,9 @@
 <item objid="window1.group18.int23" name="BottomSpace" data="0"/>
 </int>
 <string>
-<item objid="window1.Panel24.Panel98.group99.string102" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建控件"/>
 <item objid="window1.Panel24.Panel98.group99.string100" name="@Object_Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
 <item objid="window1.Panel24.Panel98.group99.string101" name="@Object_Id" counts="1" defaultarea="1" area0="1" data0="window1.Panel24.Panel98"/>
+<item objid="window1.Panel24.Panel98.group99.string102" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建控件"/>
 <item objid="window1.Panel24.group25.string26" name="@Object_Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
 <item objid="window1.Panel24.group25.string27" name="@Object_Id" counts="1" defaultarea="1" area0="1" data0="window1.Panel24"/>
 <item objid="window1.Panel24.group25.string28" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建控件"/>

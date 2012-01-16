@@ -417,6 +417,18 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown(CPoint point)
 	{
 		// 拖动控件，改变控件大小
 		IControlBase* pLBtnDownCtrl = m_pCurrentWnd->BD_GetFocusControl();
+		if (pLBtnDownCtrl == NULL)
+			return;
+
+		// 控件是否被锁定
+		if (pLBtnDownCtrl->GetLockControl())
+			return;
+
+		// 撑满全部的不允许修改大小
+		CONTROL_LAYOUT_INFO Layout = pLBtnDownCtrl->GetLayout();
+		if (Layout.clType == CL_L_ALL)
+			return;
+
 		OnMouseMove_LButtonDown_SizeCtrl(m_nMoveFangKuai8Type, point, pLBtnDownCtrl);
 	}
 	else if (m_pCurrentWnd != NULL && m_pCurrentWnd->BD_GetFocusControl() != NULL)
@@ -424,7 +436,21 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown(CPoint point)
 		// 移动控件
 		m_bSizeMoveCtrl = true;
 		SetViewCursor(UF_IDC_SIZEALL);
+
+		// 拖动控件，改变控件大小
 		IControlBase* pLBtnDownCtrl = m_pCurrentWnd->BD_GetFocusControl();
+		if (pLBtnDownCtrl == NULL)
+			return;
+
+		// 控件是否被锁定
+		if (pLBtnDownCtrl->GetLockControl())
+			return;
+
+		// 撑满全部的不允许修改大小
+		CONTROL_LAYOUT_INFO Layout = pLBtnDownCtrl->GetLayout();
+		if (Layout.clType == CL_L_ALL)
+			return;
+
 		m_pDrawParentCtrl = pLBtnDownCtrl->GetParentControl();
 		OnMouseMove_LButtonDown_MoveCtrl(point, pLBtnDownCtrl);
 	}
@@ -517,7 +543,7 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown_SizeCtrl(SIZE_CTRL_TYPE nFan
 	m_pCurrentWnd->BD_SetControlRectInView(pLBtnDownCtrl->GetChildControlsVec());
 
 	// 刷新属性区域
-	m_pPropViewCtrl->SetShowPropGroup(pLBtnDownCtrl->PP_GetControlPropetryGroup());
+	m_pPropViewCtrl->RefreshLayoutData();
 }
 
 void CUiFeatureBuilderView::OnMouseMove_LButtonDown_MoveCtrl(CPoint point, IControlBase* pLBtnDownCtrl)
@@ -571,7 +597,7 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown_MoveCtrl(CPoint point, ICont
 	m_pCurrentWnd->BD_SetControlRectInView(pLBtnDownCtrl->GetChildControlsVec());
 
 	// 刷新属性区域
-	m_pPropViewCtrl->SetShowPropGroup(pLBtnDownCtrl->PP_GetControlPropetryGroup());
+	m_pPropViewCtrl->RefreshLayoutData();
 }
 
 SIZE_CTRL_TYPE CUiFeatureBuilderView::OnMouseMove_FangKuai8(CPoint point, bool bIsWnd)
@@ -589,11 +615,6 @@ SIZE_CTRL_TYPE CUiFeatureBuilderView::OnMouseMove_FangKuai8(CPoint point, bool b
 	{
 		if (m_pCurrentWnd != NULL && m_pCurrentWnd->BD_GetFocusControl() != NULL)
 		{
-			// 撑满全部的不允许修改大小
-			CONTROL_LAYOUT_INFO Layout = m_pCurrentWnd->BD_GetFocusControl()->GetLayout();
-			if (Layout.clType == CL_L_ALL)
-				return SCT_NONE;
-
 			pFk8 = m_pCurrentWnd->BD_GetFocusControl()->BD_GetFangKuai8Rect();
 		}
 	}
