@@ -785,12 +785,15 @@ void CUiFeatureBuilderView::OnLButtonDown(UINT nFlags, CPoint point)
 	else
 	{
 		IControlBase *pSelCtrl = GetSelectControl(point);
-		m_pCurrentWnd->BD_SetFocusControl(pSelCtrl);
-
-		if (m_pPropViewCtrl != NULL && m_pCurrentWnd != NULL && m_pCurrentWnd->BD_GetFocusControl() != NULL)
+		if (m_pCurrentWnd->BD_GetFocusControl() != pSelCtrl)
 		{
-			m_pPropViewCtrl->SetShowPropGroup(m_pCurrentWnd->BD_GetFocusControl()->PP_GetControlPropetryGroup());
-			m_pWindowViewTree->SetViewEditControl(m_pCurrentWnd->BD_GetFocusControl());
+			m_pCurrentWnd->BD_SetFocusControl(pSelCtrl);
+
+			if (m_pPropViewCtrl != NULL && m_pCurrentWnd->BD_GetFocusControl() != NULL)
+			{
+				m_pPropViewCtrl->SetShowPropGroup(m_pCurrentWnd->BD_GetFocusControl()->PP_GetControlPropetryGroup());
+				m_pWindowViewTree->SetViewEditControl(m_pCurrentWnd->BD_GetFocusControl());
+			}
 		}
 	}
 
