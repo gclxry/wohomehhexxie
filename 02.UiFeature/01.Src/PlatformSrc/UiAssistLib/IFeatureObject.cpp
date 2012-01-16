@@ -8,6 +8,7 @@ IFeatureObject::IFeatureObject()
 {
 	::CoInitialize(NULL);
 
+	m_pOwnerObj = NULL;
 	m_strObjId = "";
 	m_strObjType = "NO_OBJECT_TYPE_NAME";
 	m_strObjName = "";
@@ -28,6 +29,16 @@ IFeatureObject::IFeatureObject()
 IFeatureObject::~IFeatureObject()
 {
 
+}
+
+IFeatureObject* IFeatureObject::GetOwnerObject()
+{
+	return m_pOwnerObj;
+}
+
+void IFeatureObject::SetOwnerObject(IFeatureObject* pOwnerObj)
+{
+	m_pOwnerObj = pOwnerObj;
 }
 
 const char* IFeatureObject::GetObjectId()

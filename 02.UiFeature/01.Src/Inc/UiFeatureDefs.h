@@ -26,10 +26,16 @@ using namespace std;
 #define NAME_SKIN_PROJ_EX_NAME						".ufp"
 #define NAME_SKIN_FILE_EX_NAME						".ufd"
 
-#define NAME_SKIN_PROP_NAME_OBJ_ID					"ObjectId"
-#define NAME_SKIN_PROP_NAME_TYPE					"Type"
+#define NAME_SKIN_PROP_NAME_OBJ_ID					"@Object_Id"
+#define NAME_SKIN_PROP_NAME_TYPE					"@Object_Type"
 #define NAME_SKIN_PROP_NAME							"@Object_Name"
-#define NAME_LAYOUT_TYPE							"@LayoutType"
+#define NAME_LAYOUT_TYPE							"@Layout_Type"
+#define NAME_LAYOUT_WIDTH							"@Width"
+#define NAME_LAYOUT_HEIGHT							"@Height"
+#define NAME_LAYOUT_LEFTSPACE						"@LeftSpace"
+#define NAME_LAYOUT_RIGHTSPACE						"@RightSpace"
+#define NAME_LAYOUT_TOPSPACE						"@TopSpace"
+#define NAME_LAYOUT_BOTTOMSPACE						"@BottomSpace"
 
 // 属性资源xml文件
 // Window配置资源xml文件

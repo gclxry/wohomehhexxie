@@ -33,7 +33,14 @@ public:
 
 	// 从属性刷新到界面
 
-
+private:
+	CMFCPropertyGridProperty* m_pCtrlLayoutTypeProp;
+	CMFCPropertyGridProperty* m_pCtrlWidthProp;
+	CMFCPropertyGridProperty* m_pCtrlHeightProp;
+	CMFCPropertyGridProperty* m_pCtrlLeftSpaceProp;
+	CMFCPropertyGridProperty* m_pCtrlRightSpaceProp;
+	CMFCPropertyGridProperty* m_pCtrlTopSpaceProp;
+	CMFCPropertyGridProperty* m_pCtrlBottomSpaceProp;
 
 private:
 	void AppendPropGroup(CMFCPropertyGridProperty* pParentPropGroup, IPropertyGroup *pPropGroup);
@@ -57,6 +64,9 @@ private:
 	void RefreshHaveBasePropPropetry(CMFCPropertyGridProperty* pProperty, IPropertyBase *pBaseProp);
 
 	void SetNeedSave();
+	void InitSetCtrlProp();
+	void EnableLayoutState();
+	void SetIntValueToPropView(int nValue, CMFCPropertyGridProperty* pGridProp);
 private:
 	bool m_bProjectInitOk;
 	IPropertyGroup* m_pCurrentPropGroup;

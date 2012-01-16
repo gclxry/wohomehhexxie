@@ -177,7 +177,7 @@ void ResetObjectId(IFeatureObject *pSetObj, IPropertySkinManager* pSkinPropMgr, 
 }
 
 // 创建一个属性，如果这个属性在 group 中已经有了，就返回这个属性，如果没有
-IPropertyBase* CreateResourcePropetry(IPropertySkinManager* pSkinPropMgr, IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo)
+IPropertyBase* CreateResourcePropetry(IFeatureObject *pOwnerObj, IPropertySkinManager* pSkinPropMgr, IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo)
 {
 	if (pSkinPropMgr == NULL || pGroup == NULL || pszPropName == NULL || propType <= OTID_NONE || propType >= OTID_LAST || strlen(pszPropName) <= 0)
 		return NULL;
@@ -199,6 +199,7 @@ IPropertyBase* CreateResourcePropetry(IPropertySkinManager* pSkinPropMgr, IPrope
 			{
 				// 找到了已经设置的属性
 				pPropBase->SetObjectInfo(pszPropInfo);
+				pPropBase->SetOwnerObject(pOwnerObj);
 				return pPropBase;
 			}
 			else
@@ -214,6 +215,7 @@ IPropertyBase* CreateResourcePropetry(IPropertySkinManager* pSkinPropMgr, IPrope
 	if (pPropBase == NULL)
 		return NULL;
 
+	pPropBase->SetOwnerObject(pOwnerObj);
 	pPropBase->SetObjectName(pszPropName);
 	pPropBase->SetObjectInfo(pszPropInfo);
 	// 设置ObjectID
