@@ -160,13 +160,13 @@ bool CLocalImageList::OnLoadLocalImage(CString strFilePath, CString strFileName)
 	}
 
 	m_ZipFileMap->insert(pair<string, ZIP_FILE*>(pFileItem->strFileName, pFileItem));
-	if (m_pSelImgBase != NULL)
-	{
-		m_pCurrentZipFile = pFileItem;
-		m_pSelImgBase->SetZipFile(pFileItem, true);
-	}
 
-	RefreshList(m_pCurrentZipFile);
+	int nNo = this->GetItemCount();
+	CString strNo(_T(""));
+	strNo.Format(_T("%d"), nNo+1);
+	this->InsertItem(nNo, strNo);
+	this->SetItemText(nNo, 1, A2W(pFileItem->strFileName.c_str()));
+	this->SetItemData(nNo, (DWORD_PTR)pFileItem);
 	return true;
 }
 
