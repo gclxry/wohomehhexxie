@@ -152,8 +152,21 @@ bool IPropertyImageBase::DrawImage(CDrawingBoard &DstDc, RECT DstRct)
 		}
 	}
 
-	return GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left, DstRct.top, RECT_WIDTH(DstRct), RECT_HEIGHT(DstRct),
-		m_DrawImg, 0, 0, m_DrawImg.GetDcSize().cx, m_DrawImg.GetDcSize().cy);
+	if (IST_ALL_LASHEN == m_ImageProp.ImgShowType)
+	{
+		return GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left, DstRct.top, RECT_WIDTH(DstRct), RECT_HEIGHT(DstRct),
+			m_DrawImg, 0, 0, m_DrawImg.GetDcSize().cx, m_DrawImg.GetDcSize().cy);
+	}
+	else if (IST_PINGPU == m_ImageProp.ImgShowType)
+	{
+		return true;
+	}
+	else if (IST_JGG_LASHEN == m_ImageProp.ImgShowType)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 void IPropertyImageBase::SetActivePropetry(bool bIsActive)

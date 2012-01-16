@@ -1,31 +1,31 @@
 <windows>
-<window objid="window1">
-<group objid="window1.group2">
-<string objid="window1.group2.string3"/>
-<string objid="window1.group2.string4"/>
-<string objid="window1.group2.string5"/>
-<string objid="window1.group2.string6"/>
-<bool objid="window1.group2.bool7"/>
-<bool objid="window1.group2.bool8"/>
-<bool objid="window1.group2.bool9"/>
-<group objid="window1.group2.group10">
-<bool objid="window1.group2.group10.bool11"/>
-<bool objid="window1.group2.group10.bool12"/>
+<window objid="window265">
+<group objid="window265.group266">
+<string objid="window265.group266.string267"/>
+<string objid="window265.group266.string268"/>
+<string objid="window265.group266.string269"/>
+<string objid="window265.group266.string270"/>
+<bool objid="window265.group266.bool271"/>
+<bool objid="window265.group266.bool272"/>
+<bool objid="window265.group266.bool273"/>
+<group objid="window265.group266.group274">
+<bool objid="window265.group266.group274.bool275"/>
+<bool objid="window265.group266.group274.bool276"/>
 </group>
 </group>
-<group objid="window1.group13">
-<int objid="window1.group13.int14"/>
-<int objid="window1.group13.int15"/>
+<group objid="window265.group277">
+<int objid="window265.group277.int278"/>
+<int objid="window265.group277.int279"/>
 </group>
-<group objid="window1.group16">
-<bool objid="window1.group16.bool17"/>
+<group objid="window265.group280">
+<bool objid="window265.group280.bool281"/>
 </group>
-<group objid="window1.group18">
-<bool objid="window1.group18.bool19"/>
-<int objid="window1.group18.int20"/>
-<int objid="window1.group18.int21"/>
-<int objid="window1.group18.int22"/>
-<int objid="window1.group18.int23"/>
+<group objid="window265.group282">
+<bool objid="window265.group282.bool283"/>
+<int objid="window265.group282.int284"/>
+<int objid="window265.group282.int285"/>
+<int objid="window265.group282.int286"/>
+<int objid="window265.group282.int287"/>
 </group>
 </window>
 </windows>
