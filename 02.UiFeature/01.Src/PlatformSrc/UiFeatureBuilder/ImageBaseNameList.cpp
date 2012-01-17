@@ -179,8 +179,8 @@ void CImageBaseNameList::OnSelectItem()
 
 	if (m_pSelectImgBaseProp == NULL)
 	{
-//		m_pImgBaseDlg->m_nShowAreaLeft = 0;
-//		m_pImgBaseDlg->m_nShowAreaTop = 0;
+		m_pImgBaseDlg->m_nShowAreaLeft = 0;
+		m_pImgBaseDlg->m_nShowAreaTop = 0;
 		m_pImgBaseDlg->m_nShowAreaBottom = 0;
 		m_pImgBaseDlg->m_nShowAreaRight = 0;
 		m_pImgBaseDlg->m_nJggLeft = 0;
@@ -191,8 +191,8 @@ void CImageBaseNameList::OnSelectItem()
 	}
 	else
 	{
-//		m_pImgBaseDlg->m_nShowAreaLeft = pImgProp->RectInImage.left;
-//		m_pImgBaseDlg->m_nShowAreaTop = pImgProp->RectInImage.top;
+		m_pImgBaseDlg->m_nShowAreaLeft = pImgProp->RectInImage.left;
+		m_pImgBaseDlg->m_nShowAreaTop = pImgProp->RectInImage.top;
 		m_pImgBaseDlg->m_nShowAreaBottom = pImgProp->RectInImage.bottom;
 		m_pImgBaseDlg->m_nShowAreaRight = pImgProp->RectInImage.right;
 		m_pImgBaseDlg->m_nJggLeft = pImgProp->jggInfo.left;
