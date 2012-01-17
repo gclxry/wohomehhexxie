@@ -91,3 +91,32 @@ using namespace std;
 
 // 解决GDI+的Alpha融合中Alpha融合进位误差的问题，程序默认的Alpha的最大值为254，而非255
 #define MAX_ALPHA									(254)
+
+// 正常光标
+#define UF_IDC_ARROW           (32512)
+// 十字架光标
+#define UF_IDC_CROSS           (32515)
+// 双箭头指向西北和东南
+#define UF_IDC_SIZENWSE        (32642)
+// 双箭头指向东北和西南
+#define UF_IDC_SIZENESW        (32643)
+// 双箭头指向东西
+#define UF_IDC_SIZEWE          (32644)
+// 双箭头指向南北
+#define UF_IDC_SIZENS          (32645)
+// 四向箭头指向东、西、南、北
+#define UF_IDC_SIZEALL         (32646)
+
+// 改变控件、窗口大小的位置
+enum SIZE_CTRL_TYPE
+{
+	SCT_NONE		= 0,
+	SCT_LEFT_TOP,
+	SCT_LEFT_MID,
+	SCT_LEFT_BOTTOM,
+	SCT_MID_TOP,
+	SCT_MID_BOTTOM,
+	SCT_RIGHT_TOP,
+	SCT_RIGHT_MID,
+	SCT_RIGHT_BOTTOM,
+};

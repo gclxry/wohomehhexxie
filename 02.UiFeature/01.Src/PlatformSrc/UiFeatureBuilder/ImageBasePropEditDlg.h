@@ -55,9 +55,11 @@ protected:
 	IPropertyImage* m_pParentImgProp;
 
 private:
-	void SetNewDeltaposValue(int &nSetValue, int nDelta, LONG &nPropValue);
+	void SetNewDeltaposValue(int nPos, int &nSetValue, LONG &nPropValue);
 	void SetJjgEditCtrlStyle(bool bEnable);
 	bool FindNameInImageBaseNameList(CString &strName);
+
+	void RefreshImageBaseView();
 
 	DECLARE_MESSAGE_MAP()
 public:
@@ -83,4 +85,12 @@ public:
 	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 	afx_msg void OnBnClickedAnmationImageSetting();
 	afx_msg void OnBnClickedTihuanLocalImage();
+	afx_msg void OnEnChangeShowAreaTop();
+	afx_msg void OnEnChangeShowAreaLeft();
+	afx_msg void OnEnChangeShowAreaBottom();
+	afx_msg void OnEnChangeShowAreaRight();
+	afx_msg void OnEnChangeJjgTop();
+	afx_msg void OnEnChangeJjgLeft();
+	afx_msg void OnEnChangeJjgBottom();
+	afx_msg void OnEnChangeJjgRight();
 };
