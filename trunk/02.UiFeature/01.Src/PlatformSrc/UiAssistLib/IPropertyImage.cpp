@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "..\..\Inc\IPropertyImage.h"
 #include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\IControlBase.h"
 
 IPropertyImage::IPropertyImage()
 {
@@ -28,16 +29,30 @@ IPropertyImageBase* IPropertyImage::GetImageBaseProp()
 	return dynamic_cast<IPropertyImageBase*>(GetRelevancyProp());
 }
 
+void IPropertyImage::SetNeedRedraw()
+{
+	if (GetOwnerObject() == NULL)
+		return;
+
+	IControlBase *pCtrlBase = dynamic_cast<IControlBase*>(GetOwnerObject());
+	if (pCtrlBase == NULL)
+		return;
+
+	pCtrlBase->RedrawControl();
+}
+
 void IPropertyImage::SetImageBaseProp(IPropertyImageBase* pNewImgBase)
 {
 	if (pNewImgBase == NULL)
 	{
 		SetRelevancyProp(NULL);
+		SetNeedRedraw();
 		return;
 	}
 
 	IPropertyBase* pPropBase = dynamic_cast<IPropertyBase*>(pNewImgBase);
 	SetRelevancyProp(pPropBase);
+	SetNeedRedraw();
 }
 
 // 从XML节点读取属性值，并放入属性队列
