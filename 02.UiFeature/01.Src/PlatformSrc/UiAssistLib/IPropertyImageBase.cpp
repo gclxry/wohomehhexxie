@@ -123,52 +123,6 @@ bool IPropertyImageBase::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 	return true;
 }
 
-bool IPropertyImageBase::DrawImage(CDrawingBoard &DstDc, RECT DstRct)
-{
-	if (GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
-		return false;
-
-	if (!IS_SAFE_HANDLE(m_DrawImg.GetSafeHdc()))
-	{
-		if (m_pZipFile == NULL)
-		{
-			if (m_ImageProp.bIsZipFile)
-			{
-				BYTE *pBuffer = NULL;
-				int nLen = 0;
-				if (GetUiKernel() == NULL || !GetUiKernel()->FindUnZipFile(m_ImageProp.strFileName.c_str(), &pBuffer, &nLen))
-					return false;
-
-				m_DrawImg.CreateByMem(pBuffer, nLen);
-			}
-			else
-			{
-				m_DrawImg.CreateByFile(m_ImageProp.strFileName.c_str());
-			}
-		}
-		else
-		{
-			m_DrawImg.CreateByMem(m_pZipFile->pFileData, m_pZipFile->dwSrcFileLen);
-		}
-	}
-
-	if (IST_ALL_LASHEN == m_ImageProp.ImgShowType)
-	{
-		return GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left, DstRct.top, RECT_WIDTH(DstRct), RECT_HEIGHT(DstRct),
-			m_DrawImg, 0, 0, m_DrawImg.GetDcSize().cx, m_DrawImg.GetDcSize().cy);
-	}
-	else if (IST_PINGPU == m_ImageProp.ImgShowType)
-	{
-		return true;
-	}
-	else if (IST_JGG_LASHEN == m_ImageProp.ImgShowType)
-	{
-		return true;
-	}
-
-	return false;
-}
-
 void IPropertyImageBase::SetActivePropetry(bool bIsActive)
 {
 	if (bIsActive)
@@ -224,4 +178,76 @@ bool IPropertyImageBase::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode
 	AddIntAttrToNode(pNode_jgg, "bottom", m_ImageProp.jggInfo.bottom);
 
 	return true;
+}
+
+bool IPropertyImageBase::DrawImage(CDrawingBoard &DstDc, RECT DstRct)
+{
+	if (GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
+		return false;
+
+	if (!IS_SAFE_HANDLE(m_DrawImg.GetSafeHdc()))
+	{
+		if (m_pZipFile == NULL)
+		{
+			if (m_ImageProp.bIsZipFile)
+			{
+				BYTE *pBuffer = NULL;
+				int nLen = 0;
+				if (GetUiKernel() == NULL || !GetUiKernel()->FindUnZipFile(m_ImageProp.strFileName.c_str(), &pBuffer, &nLen))
+					return false;
+
+				m_DrawImg.CreateByMem(pBuffer, nLen);
+			}
+			else
+			{
+				m_DrawImg.CreateByFile(m_ImageProp.strFileName.c_str());
+			}
+		}
+		else
+		{
+			m_DrawImg.CreateByMem(m_pZipFile->pFileData, m_pZipFile->dwSrcFileLen);
+		}
+	}
+
+	if (IST_ALL_LASHEN == m_ImageProp.ImgShowType)
+	{
+		return DrawImage_AllLaShen(DstDc, DstRct);
+	}
+	else if (IST_PINGPU == m_ImageProp.ImgShowType)
+	{
+		return DrawImage_PingPu(DstDc, DstRct);
+	}
+	else if (IST_JGG_LASHEN == m_ImageProp.ImgShowType)
+	{
+		return DrawImage_JggLaShen(DstDc, DstRct);
+	}
+
+	return false;
+}
+
+bool IPropertyImageBase::DrawImage_AllLaShen(CDrawingBoard &DstDc, RECT DstRct)
+{
+	if (GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
+		return false;
+
+	return GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left, DstRct.top, RECT_WIDTH(DstRct), RECT_HEIGHT(DstRct),
+		m_DrawImg, 0, 0, m_DrawImg.GetDcSize().cx, m_DrawImg.GetDcSize().cy);
+}
+
+bool IPropertyImageBase::DrawImage_PingPu(CDrawingBoard &DstDc, RECT DstRct)
+{
+	if (GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
+		return false;
+
+	return GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left, DstRct.top, RECT_WIDTH(DstRct), RECT_HEIGHT(DstRct),
+		m_DrawImg, 0, 0, m_DrawImg.GetDcSize().cx, m_DrawImg.GetDcSize().cy);
+}
+
+bool IPropertyImageBase::DrawImage_JggLaShen(CDrawingBoard &DstDc, RECT DstRct)
+{
+	if (GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
+		return false;
+
+	return GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left, DstRct.top, RECT_WIDTH(DstRct), RECT_HEIGHT(DstRct),
+		m_DrawImg, 0, 0, m_DrawImg.GetDcSize().cx, m_DrawImg.GetDcSize().cy);
 }

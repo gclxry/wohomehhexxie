@@ -33,4 +33,6 @@ public:
 	const char * GetImageBaseName();
 
 	bool DrawImage(CDrawingBoard &DstDc, RECT DstRct);
+
+	void SetNeedRedraw();
 };

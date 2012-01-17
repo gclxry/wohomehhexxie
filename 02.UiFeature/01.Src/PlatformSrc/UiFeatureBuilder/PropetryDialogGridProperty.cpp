@@ -2,6 +2,8 @@
 #include "PropetryDialogGridProperty.h"
 #include "ImageBasePropEditDlg.h"
 #include "PropertyViewCtrl.h"
+#include "UiFeatureBuilderDoc.h"
+#include "UiFeatureBuilderView.h"
 #include "MainFrm.h"
 
 CPropetryDialogGridProperty::CPropetryDialogGridProperty(const CString& strName, const COleVariant& varValue, CString& strInfo) : CMFCPropertyGridProperty(strName, varValue, strInfo)
@@ -25,19 +27,27 @@ void CPropetryDialogGridProperty::InitDialogPropetry(CPropertyViewCtrl *pPropVie
 
 void CPropetryDialogGridProperty::OnClickButton(CPoint /*point*/)
 {
-	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
-	if (pMain != NULL)
-		pMain->SetPropetryChange();
-
 	if (m_ObjType == OTID_IMAGE_BASE)
 	{
 		ImageBaseDialog();
-		m_pPropViewList->RefreshAllData();
-		return;
+	}
+	else
+	{
+		SetValue(_T(""));
+		AfxMessageBox(_T("错误的属性类型"));
 	}
 
-	SetValue(_T(""));
-	AfxMessageBox(_T("错误的属性类型"));
+	//m_pPropViewList->RefreshAllData();
+	m_pPropViewList->RedrawWindow();
+
+	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
+	if (pMain != NULL)
+	{
+		pMain->SetPropetryChange();
+		CUiFeatureBuilderView* pView = pMain->GetView();
+		if (pView != NULL)
+			pView->RedrawWindow();
+	}
 }
 
 void CPropetryDialogGridProperty::ImageBaseDialog()
@@ -47,6 +57,8 @@ void CPropetryDialogGridProperty::ImageBaseDialog()
 	IPropertyImage* pParentImgProp = dynamic_cast<IPropertyImage*>(pPropBase);
 	if (pParentImgProp == NULL)
 		return;
+
+	pParentImgProp->SetNeedRedraw();
 
 	CImageBasePropEditDlg ImageBaseDlg;
 	ImageBaseDlg.InitImageBaseShow(m_pUiKernel, pParentImgProp);

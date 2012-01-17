@@ -62,6 +62,11 @@ public:
 	CDrawingImage* GetMemDc();
 
 private:
+	bool DrawImage_AllLaShen(CDrawingBoard &DstDc, RECT DstRct);
+	bool DrawImage_PingPu(CDrawingBoard &DstDc, RECT DstRct);
+	bool DrawImage_JggLaShen(CDrawingBoard &DstDc, RECT DstRct);
+
+private:
 	IMAGE_BASE_PROP m_ImageProp;
 	CDrawingImage m_DrawImg;
 	// 被使用的计数器
