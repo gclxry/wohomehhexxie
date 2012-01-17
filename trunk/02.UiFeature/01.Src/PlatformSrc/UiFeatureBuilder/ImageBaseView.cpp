@@ -217,6 +217,7 @@ void CImageBaseView::OnLButtonUp(UINT nFlags, CPoint point)
 	if (m_pCurShowImgBase == NULL)
 		return;
 	m_LBtnUpPos = point;
+	SetViewCursor(UF_IDC_ARROW);
 }
 
 void CImageBaseView::OnMouseMove(UINT nFlags, CPoint point)
