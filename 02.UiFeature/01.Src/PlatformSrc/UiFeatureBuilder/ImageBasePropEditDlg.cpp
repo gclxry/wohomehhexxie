@@ -379,7 +379,7 @@ void CImageBasePropEditDlg::OnDeltaposJjgRight(NMHDR *pNMHDR, LRESULT *pResult)
 void CImageBasePropEditDlg::OnBnClickedPingpu()
 {
 	this->UpdateData(TRUE);
-	SetJjgEditCtrlStyle(FALSE);
+	SetJggEditCtrlStyle(FALSE);
 
 	if (m_ImageBaseList.m_pSelectImgBaseProp != NULL && m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() != NULL)
 		m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp()->ImgShowType = (IMAGE_SHOW_TYPE)m_nSelelShowImgType;
@@ -388,7 +388,7 @@ void CImageBasePropEditDlg::OnBnClickedPingpu()
 void CImageBasePropEditDlg::OnBnClickedQuanlashen()
 {
 	this->UpdateData(TRUE);
-	SetJjgEditCtrlStyle(FALSE);
+	SetJggEditCtrlStyle(FALSE);
 
 	if (m_ImageBaseList.m_pSelectImgBaseProp != NULL && m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() != NULL)
 		m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp()->ImgShowType = (IMAGE_SHOW_TYPE)m_nSelelShowImgType;
@@ -397,13 +397,13 @@ void CImageBasePropEditDlg::OnBnClickedQuanlashen()
 void CImageBasePropEditDlg::OnBnClickedJjg()
 {
 	this->UpdateData(TRUE);
-	SetJjgEditCtrlStyle(TRUE);
+	SetJggEditCtrlStyle(TRUE);
 
 	if (m_ImageBaseList.m_pSelectImgBaseProp != NULL && m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() != NULL)
 		m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp()->ImgShowType = (IMAGE_SHOW_TYPE)m_nSelelShowImgType;
 }
 
-void CImageBasePropEditDlg::SetJjgEditCtrlStyle(bool bEnable)
+void CImageBasePropEditDlg::SetJggEditCtrlStyle(bool bEnable)
 {
 	if (!::IsWindow(m_hWnd))
 		return;
@@ -423,12 +423,12 @@ void CImageBasePropEditDlg::SetImageEditEnableStyle(bool bEnable)
 	if (bEnable)
 	{
 		// ¾Å¹¬¸ñ×´Ì¬
-		SetJjgEditCtrlStyle(m_nSelelShowImgType == IST_JGG_LASHEN);
+		SetJggEditCtrlStyle(m_nSelelShowImgType == IST_JGG_LASHEN);
 	}
 	else
 	{
 		// ¾Å¹¬¸ñ×´Ì¬
-		SetJjgEditCtrlStyle(false);
+		SetJggEditCtrlStyle(false);
 	}
 
 	this->GetDlgItem(IDB_EDIT_IMAGEBASE)->EnableWindow(bEnable);
@@ -673,6 +673,12 @@ void CImageBasePropEditDlg::OnEnKillfocusJjgLeft()
 	if (m_ImageBaseList.m_pSelectImgBaseProp == NULL || m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() == NULL)
 		return;
 
+	if (m_nJggLeft < 0)
+		m_nJggLeft = 0;
+	if (m_nJggLeft > ((m_nShowAreaRight - m_nShowAreaLeft) / 2 + 1))
+		m_nJggLeft = ((m_nShowAreaRight - m_nShowAreaLeft) / 2 + 1);
+	this->UpdateData(FALSE);
+
 	IMAGE_BASE_PROP* pSelImgProp = m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp();
 	pSelImgProp->jggInfo.left = m_nJggLeft;
 
@@ -685,6 +691,13 @@ void CImageBasePropEditDlg::OnEnKillfocusJjgRight()
 
 	if (m_ImageBaseList.m_pSelectImgBaseProp == NULL || m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() == NULL)
 		return;
+
+	if (m_nJggRight < 0)
+		m_nJggRight = 0;
+	if (m_nJggRight > ((m_nShowAreaRight - m_nShowAreaLeft) / 2 + 1))
+		m_nJggRight = ((m_nShowAreaRight - m_nShowAreaLeft) / 2 + 1);
+	this->UpdateData(FALSE);
+
 
 	IMAGE_BASE_PROP* pSelImgProp = m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp();
 	pSelImgProp->jggInfo.right = m_nJggRight;
@@ -699,6 +712,12 @@ void CImageBasePropEditDlg::OnEnKillfocusJjgTop()
 	if (m_ImageBaseList.m_pSelectImgBaseProp == NULL || m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() == NULL)
 		return;
 
+	if (m_nJggTop < 0)
+		m_nJggTop = 0;
+	if (m_nJggTop > ((m_nShowAreaBottom - m_nShowAreaTop) / 2 + 1))
+		m_nJggTop = ((m_nShowAreaBottom - m_nShowAreaTop) / 2 + 1);
+	this->UpdateData(FALSE);
+
 	IMAGE_BASE_PROP* pSelImgProp = m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp();
 	pSelImgProp->jggInfo.top = m_nJggTop;
 
@@ -712,10 +731,33 @@ void CImageBasePropEditDlg::OnEnKillfocusJjgBottom()
 	if (m_ImageBaseList.m_pSelectImgBaseProp == NULL || m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() == NULL)
 		return;
 
+	if (m_nJggBottom < 0)
+		m_nJggBottom = 0;
+	if (m_nJggBottom > ((m_nShowAreaBottom - m_nShowAreaTop) / 2 + 1))
+		m_nJggBottom = ((m_nShowAreaBottom - m_nShowAreaTop) / 2 + 1);
+	this->UpdateData(FALSE);
+
 	IMAGE_BASE_PROP* pSelImgProp = m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp();
 	pSelImgProp->jggInfo.bottom = m_nJggBottom;
 
 	RefreshImageBaseView();
+}
+
+void CImageBasePropEditDlg::RefreshJggPropToMember(IMAGE_BASE_PROP* pImgProp)
+{
+	if (pImgProp == NULL)
+		return;
+
+	m_nShowAreaLeft = pImgProp->RectInImage.left;
+	m_nShowAreaTop = pImgProp->RectInImage.top;
+	m_nShowAreaBottom = pImgProp->RectInImage.bottom;
+	m_nShowAreaRight = pImgProp->RectInImage.right;
+	m_nJggLeft = pImgProp->jggInfo.left;
+	m_nJggTop = pImgProp->jggInfo.top;
+	m_nJggRight = pImgProp->jggInfo.right;
+	m_nJggBottom = pImgProp->jggInfo.bottom;
+
+	this->UpdateData(FALSE);
 }
 
 void CImageBasePropEditDlg::OnBnClickedDeleteLocalImage()
