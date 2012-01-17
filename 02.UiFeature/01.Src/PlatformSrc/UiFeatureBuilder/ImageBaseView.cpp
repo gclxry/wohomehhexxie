@@ -168,6 +168,26 @@ void CImageBaseView::OnDraw()
 	DoGrap.DrawLine(&LinePen, m_FangKuai8.EntityRct.right, m_FangKuai8.EntityRct.top, m_FangKuai8.EntityRct.right, m_FangKuai8.EntityRct.bottom);
 	DoGrap.DrawLine(&LinePen, m_FangKuai8.EntityRct.right, m_FangKuai8.EntityRct.bottom, m_FangKuai8.EntityRct.left, m_FangKuai8.EntityRct.bottom);
 	DoGrap.DrawLine(&LinePen, m_FangKuai8.EntityRct.left, m_FangKuai8.EntityRct.bottom, m_FangKuai8.EntityRct.left, m_FangKuai8.EntityRct.top);
+
+	if (pImgProp->ImgShowType == IST_JGG_LASHEN)
+	{
+		Pen JggLine(Color(254, 255, 0, 0));
+		if (pImgProp->jggInfo.left > 0)
+			DoGrap.DrawLine(&JggLine, m_FangKuai8.EntityRct.left + pImgProp->jggInfo.left, m_FangKuai8.EntityRct.top,
+			m_FangKuai8.EntityRct.left + pImgProp->jggInfo.left, m_FangKuai8.EntityRct.bottom);
+
+		if (pImgProp->jggInfo.right > 0)
+			DoGrap.DrawLine(&JggLine, m_FangKuai8.EntityRct.right - pImgProp->jggInfo.right, m_FangKuai8.EntityRct.top,
+			m_FangKuai8.EntityRct.right - pImgProp->jggInfo.right, m_FangKuai8.EntityRct.bottom);
+
+		if (pImgProp->jggInfo.top > 0)
+			DoGrap.DrawLine(&JggLine, m_FangKuai8.EntityRct.left, m_FangKuai8.EntityRct.top + pImgProp->jggInfo.top,
+			m_FangKuai8.EntityRct.right, m_FangKuai8.EntityRct.top + pImgProp->jggInfo.top);
+
+		if (pImgProp->jggInfo.bottom > 0)
+			DoGrap.DrawLine(&JggLine, m_FangKuai8.EntityRct.left, m_FangKuai8.EntityRct.bottom - pImgProp->jggInfo.bottom,
+			m_FangKuai8.EntityRct.right, m_FangKuai8.EntityRct.bottom - pImgProp->jggInfo.bottom);
+	}
 }
 
 void CImageBaseView::OnSize_SetViewSize(int cx, int cy)
