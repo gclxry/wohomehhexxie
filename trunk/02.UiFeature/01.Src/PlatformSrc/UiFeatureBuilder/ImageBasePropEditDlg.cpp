@@ -383,6 +383,8 @@ void CImageBasePropEditDlg::OnBnClickedPingpu()
 
 	if (m_ImageBaseList.m_pSelectImgBaseProp != NULL && m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() != NULL)
 		m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp()->ImgShowType = (IMAGE_SHOW_TYPE)m_nSelelShowImgType;
+
+	RefreshImageBaseView();
 }
 
 void CImageBasePropEditDlg::OnBnClickedQuanlashen()
@@ -392,6 +394,8 @@ void CImageBasePropEditDlg::OnBnClickedQuanlashen()
 
 	if (m_ImageBaseList.m_pSelectImgBaseProp != NULL && m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() != NULL)
 		m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp()->ImgShowType = (IMAGE_SHOW_TYPE)m_nSelelShowImgType;
+
+	RefreshImageBaseView();
 }
 
 void CImageBasePropEditDlg::OnBnClickedJjg()
@@ -401,6 +405,8 @@ void CImageBasePropEditDlg::OnBnClickedJjg()
 
 	if (m_ImageBaseList.m_pSelectImgBaseProp != NULL && m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() != NULL)
 		m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp()->ImgShowType = (IMAGE_SHOW_TYPE)m_nSelelShowImgType;
+
+	RefreshImageBaseView();
 }
 
 void CImageBasePropEditDlg::SetJggEditCtrlStyle(bool bEnable)

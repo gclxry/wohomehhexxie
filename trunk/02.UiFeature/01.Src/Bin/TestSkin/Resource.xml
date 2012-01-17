@@ -39,9 +39,9 @@
 <rectinimage left="0" top="0" right="0" bottom="0"/>
 <jgg left="0" top="0" right="0" bottom="0"/>
 </item>
-<item objid="7B8000B8E49543178A029C1C5D0F9D1A" name="a123" imageinzip="T2.jpg" showtype="0">
-<rectinimage left="0" top="0" right="0" bottom="0"/>
-<jgg left="0" top="0" right="0" bottom="0"/>
+<item objid="7B8000B8E49543178A029C1C5D0F9D1A" name="a123" imageinzip="T2.jpg" showtype="2">
+<rectinimage left="137" top="138" right="316" bottom="295"/>
+<jgg left="9" top="9" right="9" bottom="9"/>
 </item>
 <item objid="96ADB91643444ACA97138E215565FFCC" name="1111" imageinzip="T3.jpg" showtype="0">
 <rectinimage left="0" top="0" right="0" bottom="0"/>
