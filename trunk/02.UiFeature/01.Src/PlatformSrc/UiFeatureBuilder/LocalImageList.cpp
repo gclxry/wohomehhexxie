@@ -30,7 +30,7 @@ void CLocalImageList::OnSelectItem()
 		// Ã»ÓÐÑ¡Ôñ
 		m_pCurrentZipFile = NULL;
 		if (m_pImgBaseView != NULL)
-			m_pImgBaseView->SetCurrentShowImage(m_pUiKernel, m_pSelImgBase, NULL);
+			m_pImgBaseView->SetCurrentShowImage(m_pImgBaseDlg, m_pUiKernel, m_pSelImgBase, NULL);
 	}
 	else
 	{
@@ -42,7 +42,7 @@ void CLocalImageList::OnSelectItem()
 			m_pSelImgBase->SetZipFile(m_pCurrentZipFile, true);
 
 		if (m_pImgBaseView != NULL)
-			m_pImgBaseView->SetCurrentShowImage(m_pUiKernel, m_pSelImgBase, m_pCurrentZipFile);
+			m_pImgBaseView->SetCurrentShowImage(m_pImgBaseDlg, m_pUiKernel, m_pSelImgBase, m_pCurrentZipFile);
 	}
 }
 
@@ -92,7 +92,7 @@ void CLocalImageList::RefreshList(ZIP_FILE* pSelZipFile)
 			{
 				this->SetItemState(nNo, LVIS_SELECTED, LVIS_SELECTED);
 				if (m_pImgBaseView != NULL)
-					m_pImgBaseView->SetCurrentShowImage(m_pUiKernel, m_pSelImgBase, pZipFile);
+					m_pImgBaseView->SetCurrentShowImage(m_pImgBaseDlg, m_pUiKernel, m_pSelImgBase, pZipFile);
 			}
 		}
 	}

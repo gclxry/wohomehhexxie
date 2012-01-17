@@ -4,13 +4,14 @@
 #include "stdafx.h"
 #include "UiFeatureBuilder.h"
 #include "ImageBaseView.h"
+#include "ImageBasePropEditDlg.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\ICommonFun.h"
 
 
 // 绘制窗口和被选中的控件的边框的8个方块的宽度
 #define FANGKUAI_SIZE							(6)
-#define FRAME_ADD_SIZE							(20)
+#define FRAME_SIZE_ADD							(20)
 
 // CImageBaseView dialog
 
@@ -31,6 +32,8 @@ CImageBaseView::CImageBaseView(CWnd* pParent) : CDialogViewBase(pParent)
 	m_nViewCursor = -1;
 	m_nMoveFangKuai8Type = SCT_NONE;
 	m_bMoveInCtrlFangKuai8 = false;
+	m_bCanMoveSel = false;
+	m_pEditDlg = NULL;
 }
 
 CImageBaseView::~CImageBaseView()
@@ -53,7 +56,7 @@ END_MESSAGE_MAP()
 
 // CImageBaseView message handlers
 
-void CImageBaseView::SetCurrentShowImage(IUiFeatureKernel *pUiKernel, IPropertyImageBase *pImgBase, ZIP_FILE *pZipFile)
+void CImageBaseView::SetCurrentShowImage(CImageBasePropEditDlg *pEditDlg, IUiFeatureKernel *pUiKernel, IPropertyImageBase *pImgBase, ZIP_FILE *pZipFile)
 {
 	if (m_DrawFangKuai.GetUiKernel() == NULL)
 	{
@@ -70,6 +73,7 @@ void CImageBaseView::SetCurrentShowImage(IUiFeatureKernel *pUiKernel, IPropertyI
 		m_DrawFangKuai.SetImageProp(&ImgBase);
 	}
 
+	m_pEditDlg = pEditDlg;
 	m_pUiKernel = pUiKernel;
 	m_ZipFileImgBase.SetUiKernel(m_pUiKernel);
 
@@ -176,26 +180,40 @@ void CImageBaseView::OnSize_SetViewSize(int cx, int cy)
 	if (pImgMemDc == NULL || pImgMemDc->GetSafeHdc() == NULL)
 		return;
 
-	if (m_rcViewSize.Width() < pImgMemDc->GetDcSize().cx + FRAME_ADD_SIZE)
-		m_rcViewSize.right = pImgMemDc->GetDcSize().cx + FRAME_ADD_SIZE;
+	if (m_rcViewSize.Width() < pImgMemDc->GetDcSize().cx + FRAME_SIZE_ADD)
+		m_rcViewSize.right = pImgMemDc->GetDcSize().cx + FRAME_SIZE_ADD;
 
-	if (m_rcViewSize.Height() < pImgMemDc->GetDcSize().cy + FRAME_ADD_SIZE)
-		m_rcViewSize.bottom = pImgMemDc->GetDcSize().cy + FRAME_ADD_SIZE;
+	if (m_rcViewSize.Height() < pImgMemDc->GetDcSize().cy + FRAME_SIZE_ADD)
+		m_rcViewSize.bottom = pImgMemDc->GetDcSize().cy + FRAME_SIZE_ADD;
 }
 
 void CImageBaseView::OnLButtonDown(UINT nFlags, CPoint point)
 {
+	::SetCapture(m_hWnd);
 	CDialogViewBase::OnLButtonDown(nFlags, point);
 //////////////////////////////////////////////////////////////////////////
 	if (m_pCurShowImgBase == NULL)
 		return;
 	m_LBtnDownPos = point;
+	m_bIsLButtonDown = true;
+
+	if (m_bCanMoveSel)
+	{
+		SetViewCursor(UF_IDC_SIZEALL);
+		this->RedrawWindow();
+		return;
+	}
 }
 
 void CImageBaseView::OnLButtonUp(UINT nFlags, CPoint point)
 {
+	::ReleaseCapture();
 	CDialogViewBase::OnLButtonUp(nFlags, point);
 //////////////////////////////////////////////////////////////////////////
+	m_bCanMoveSel = false;
+	m_bIsLButtonDown = false;
+	m_bMoveInCtrlFangKuai8 = false;
+
 	if (m_pCurShowImgBase == NULL)
 		return;
 	m_LBtnUpPos = point;
@@ -209,14 +227,29 @@ void CImageBaseView::OnMouseMove(UINT nFlags, CPoint point)
 		return;
 	m_MouseMovePos = point;
 
-	//if (m_bIsLButtonDown)
-	//{
-	//	SetNeedSave();
-	//	OnMouseMove_LButtonDown(point);
-	//	this->RedrawWindow();
-	//	return;
-	//}
+	if (m_bIsLButtonDown)
+	{
+		OnMouseMove_LButtonDown(point);
+		this->RedrawWindow();
+		return;
+	}
 
+	CPoint ptTemp = point;
+	ptTemp.x += m_nHScrollPos;
+	ptTemp.y += m_nVScrollPos;
+
+	// 可以移动选择区域
+	if (PtInRect(&(m_FangKuai8.EntityRct), ptTemp))
+	{
+		m_bCanMoveSel = true;
+		return;
+	}
+	else
+	{
+		m_bCanMoveSel = false;
+	}
+
+	// 选择拉伸区域
 	m_nMoveFangKuai8Type = OnMouseMove_FangKuai8(point, false);
 	m_bMoveInCtrlFangKuai8 = (m_nMoveFangKuai8Type != SCT_NONE);
 	if (m_bMoveInCtrlFangKuai8)
@@ -304,4 +337,48 @@ BOOL CImageBaseView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 	}
 
 	return CDialogViewBase::OnSetCursor(pWnd, nHitTest, message);
+}
+
+void CImageBaseView::OnMouseMove_LButtonDown(CPoint point)
+{
+	if (m_pCurShowImgBase == NULL)
+		return;
+
+	CDrawingImage* pImgMemDc = m_ZipFileImgBase.GetMemDc();
+	IMAGE_BASE_PROP* pImgProp = m_pCurShowImgBase->GetImageProp();
+	if (pImgProp == NULL || pImgMemDc == NULL)
+		return;
+
+	if (m_bCanMoveSel)
+	{
+		SetViewCursor(UF_IDC_SIZEALL);
+
+		RECT &SetRect = pImgProp->RectInImage;
+		RECT RectInImage;
+		INIT_RECT(RectInImage);
+		RectInImage.left = point.x - RECT_WIDTH(SetRect) / 2 + m_nHScrollPos;
+		if (RectInImage.left < 0)
+			RectInImage.left = 0;
+		if ((RectInImage.left + RECT_WIDTH(SetRect)) > pImgMemDc->GetDcSize().cx)
+			RectInImage.left = pImgMemDc->GetDcSize().cx - RECT_WIDTH(SetRect);
+
+		RectInImage.right = RectInImage.left + RECT_WIDTH(SetRect);
+
+		RectInImage.top = point.y - RECT_HEIGHT(SetRect) / 2 + m_nVScrollPos;
+		if (RectInImage.top < 0)
+			RectInImage.top = 0;
+		if ((RectInImage.top + RECT_HEIGHT(SetRect)) > pImgMemDc->GetDcSize().cy)
+			RectInImage.top = pImgMemDc->GetDcSize().cy - RECT_HEIGHT(SetRect);
+
+		RectInImage.bottom = RectInImage.top + RECT_HEIGHT(SetRect);
+
+		SetRect = RectInImage;
+	}
+	else
+	{
+		SetViewCursor(UF_IDC_ARROW);
+	}
+
+	if (m_pEditDlg != NULL)
+		m_pEditDlg->RefreshJggPropToMember(pImgProp);
 }

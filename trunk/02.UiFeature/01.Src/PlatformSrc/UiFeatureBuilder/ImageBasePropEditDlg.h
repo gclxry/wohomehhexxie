@@ -19,6 +19,7 @@ public:
 	void InitImageBaseShow(IUiFeatureKernel* pUiKernel, IPropertyImage* pParentImgProp);
 	void SetImageEditEnableStyle(bool bEnable);
 	IPropertyImageBase * GetSelectImageBase(int &nSeleItem);
+	void RefreshJggPropToMember(IMAGE_BASE_PROP* pImgProp);
 
 public:
 	int m_nShowAreaLeft;
@@ -56,7 +57,7 @@ protected:
 
 private:
 	void SetNewDeltaposValue(int nPos, int &nSetValue, LONG &nPropValue);
-	void SetJjgEditCtrlStyle(bool bEnable);
+	void SetJggEditCtrlStyle(bool bEnable);
 	bool FindNameInImageBaseNameList(CString &strName);
 
 	void RefreshImageBaseView();

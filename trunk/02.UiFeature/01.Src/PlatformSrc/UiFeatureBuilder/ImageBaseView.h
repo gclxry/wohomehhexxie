@@ -10,6 +10,7 @@
 
 // CImageBaseView dialog
 
+class CImageBasePropEditDlg;
 class CImageBaseView : public CDialogViewBase
 {
 	DECLARE_DYNAMIC(CImageBaseView)
@@ -18,13 +19,14 @@ public:
 	CImageBaseView(CWnd* pParent = NULL);   // standard constructor
 	virtual ~CImageBaseView();
 
-	void SetCurrentShowImage(IUiFeatureKernel *pUiKernel, IPropertyImageBase *pImgBase, ZIP_FILE *pZipFile);
+	void SetCurrentShowImage(CImageBasePropEditDlg *pEditDlg, IUiFeatureKernel *pUiKernel, IPropertyImageBase *pImgBase, ZIP_FILE *pZipFile);
 
 protected:
 	virtual void OnSize_SetViewSize(int cx, int cy);
 	virtual void OnDraw();
 
 private:
+	CImageBasePropEditDlg *m_pEditDlg;
 	IPropertyImageBase *m_pCurShowImgBase;
 	ZIP_FILE *m_pCurZipFile;
 
@@ -39,14 +41,18 @@ private:
 	CPoint m_LBtnUpPos;
 	CPoint m_MouseMovePos;
 
+	bool m_bCanMoveSel;
+
 	// 光标
 	int m_nViewCursor;
 	SIZE_CTRL_TYPE m_nMoveFangKuai8Type;
 	bool m_bMoveInCtrlFangKuai8;
+
 private:
 	// 设置光标
 	void SetViewCursor(int nCursor);
 	SIZE_CTRL_TYPE OnMouseMove_FangKuai8(CPoint point, bool bIsWnd);
+	void OnMouseMove_LButtonDown(CPoint point);
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
