@@ -60,6 +60,7 @@ private:
 	bool FindNameInImageBaseNameList(CString &strName);
 
 	void RefreshImageBaseView();
+	void ResetDeltaposRange();
 
 	DECLARE_MESSAGE_MAP()
 public:
