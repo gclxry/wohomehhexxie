@@ -53,6 +53,7 @@ private:
 	void SetViewCursor(int nCursor);
 	SIZE_CTRL_TYPE OnMouseMove_FangKuai8(CPoint point, bool bIsWnd);
 	void OnMouseMove_LButtonDown(CPoint point);
+	void OnMouseMove_LButtonDown_SizeCtrl(SIZE_CTRL_TYPE nFangKuai8Type, CPoint point);
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

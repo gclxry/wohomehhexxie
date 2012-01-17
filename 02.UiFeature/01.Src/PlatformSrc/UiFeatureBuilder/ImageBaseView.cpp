@@ -375,6 +375,10 @@ void CImageBaseView::OnMouseMove_LButtonDown(CPoint point)
 
 		SetRect = RectInImage;
 	}
+	else if (m_bMoveInCtrlFangKuai8)
+	{
+		OnMouseMove_LButtonDown_SizeCtrl(m_nMoveFangKuai8Type, point);
+	}
 	else
 	{
 		SetViewCursor(UF_IDC_ARROW);
@@ -382,4 +386,103 @@ void CImageBaseView::OnMouseMove_LButtonDown(CPoint point)
 
 	if (m_pEditDlg != NULL)
 		m_pEditDlg->RefreshJggPropToMember(pImgProp);
+}
+
+void CImageBaseView::OnMouseMove_LButtonDown_SizeCtrl(SIZE_CTRL_TYPE nFangKuai8Type, CPoint point)
+{
+	if (m_nMoveFangKuai8Type == SCT_NONE || m_pCurShowImgBase == NULL)
+		return;
+
+	CDrawingImage* pImgMemDc = m_ZipFileImgBase.GetMemDc();
+	IMAGE_BASE_PROP* pImgProp = m_pCurShowImgBase->GetImageProp();
+	if (pImgProp == NULL || pImgMemDc == NULL)
+		return;
+
+	RECT &SetRect = pImgProp->RectInImage;
+
+	if (nFangKuai8Type == SCT_LEFT_TOP)
+	{
+		SetRect.left = point.x;
+		SetRect.top = point.y;
+
+		// 越界判断
+		if (SetRect.left > SetRect.right)
+			SetRect.left = SetRect.right;
+		if (SetRect.top > SetRect.bottom)
+			SetRect.top = SetRect.bottom;
+	}
+	else if (nFangKuai8Type == SCT_LEFT_MID)
+	{
+		SetRect.left = point.x;
+
+		// 越界判断
+		if (SetRect.left > SetRect.right)
+			SetRect.left = SetRect.right;
+	}
+	else if (nFangKuai8Type == SCT_LEFT_BOTTOM)
+	{
+		SetRect.left = point.x;
+		SetRect.bottom = point.y;
+
+		// 越界判断
+		if (SetRect.left > SetRect.right)
+			SetRect.left = SetRect.right;
+		if (SetRect.bottom < SetRect.top)
+			SetRect.bottom = SetRect.top;
+	}
+	else if (nFangKuai8Type == SCT_MID_TOP)
+	{
+		SetRect.top = point.y;
+
+		// 越界判断
+		if (SetRect.top > SetRect.bottom)
+			SetRect.top = SetRect.bottom;
+	}
+	else if (nFangKuai8Type == SCT_MID_BOTTOM)
+	{
+		SetRect.bottom = point.y;
+
+		// 越界判断
+		if (SetRect.bottom < SetRect.top)
+			SetRect.bottom = SetRect.top;
+	}
+	else if (nFangKuai8Type == SCT_RIGHT_TOP)
+	{
+		SetRect.right = point.x;
+		SetRect.top = point.y;
+
+		// 越界判断
+		if (SetRect.right < SetRect.left)
+			SetRect.right = SetRect.left;
+		if (SetRect.top > SetRect.bottom)
+			SetRect.top = SetRect.bottom;
+	}
+	else if (nFangKuai8Type == SCT_RIGHT_MID)
+	{
+		SetRect.right = point.x;
+
+		// 越界判断
+		if (SetRect.right < SetRect.left)
+			SetRect.right = SetRect.left;
+	}
+	else if (nFangKuai8Type == SCT_RIGHT_BOTTOM)
+	{
+		SetRect.right = point.x;
+		SetRect.bottom = point.y;
+
+		// 越界判断
+		if (SetRect.right < SetRect.left)
+			SetRect.right = SetRect.left;
+		if (SetRect.bottom < SetRect.top)
+			SetRect.bottom = SetRect.top;
+	}
+
+	if (SetRect.left < 0)
+		SetRect.left = 0;
+	if (SetRect.right > pImgMemDc->GetDcSize().cx)
+		SetRect.right = pImgMemDc->GetDcSize().cx;
+	if (SetRect.top < 0)
+		SetRect.top = 0;
+	if (SetRect.bottom > pImgMemDc->GetDcSize().cy)
+		SetRect.bottom = pImgMemDc->GetDcSize().cy;
 }
