@@ -14,8 +14,8 @@
 class IPropertySkinManagerImpl : public IPropertySkinManager
 {
 public:
-	IPropertySkinManagerImpl(void);
-	virtual ~IPropertySkinManagerImpl(void);
+	IPropertySkinManagerImpl();
+	virtual ~IPropertySkinManagerImpl();
 
 	static IPropertySkinManager* GetInstance();
 

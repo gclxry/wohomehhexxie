@@ -16,6 +16,8 @@
 #include "..\..\Inc\IPropertyString.h"
 #include "..\..\Inc\IPropertyGroup.h"
 #include "IWindowBaseImpl.h"
+#include "CriSec.h"
+
 
 IPropertySkinManager *GetSkinManagerInterface()
 {
@@ -28,7 +30,7 @@ IPropertySkinManager* IPropertySkinManagerImpl::GetInstance()
 	return &_PropertySkinManagerInstance;
 }
 
-IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
+IPropertySkinManagerImpl::IPropertySkinManagerImpl()
 {
 	m_strSkinPath = "";
 	m_AllPropMap.clear();
@@ -51,7 +53,7 @@ IPropertySkinManagerImpl::IPropertySkinManagerImpl(void)
 	m_pKernelZipFile = ((IUiFeatureKernelImpl*)IUiFeatureKernelImpl::GetInstance())->GetZipFile();
 }
 
-IPropertySkinManagerImpl::~IPropertySkinManagerImpl(void)
+IPropertySkinManagerImpl::~IPropertySkinManagerImpl()
 {
 	ReleaseSkinManagerPropetry();
 }
@@ -1670,6 +1672,7 @@ void IPropertySkinManagerImpl::BD_SetGroupPropActiveMark(IPropertyGroup *pPropGr
 // 删除属性
 bool IPropertySkinManagerImpl::BD_DeletePropetry(IPropertyBase *pPropBase)
 {
+	KERNEL_CRI_SEC;
 	if (pPropBase == NULL)
 		return false;
 
@@ -1746,6 +1749,7 @@ ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::GetImagePropMap()
 // 修改属性名称
 bool IPropertySkinManagerImpl::BD_ModifyPropetryName(IPropertyBase *pPropBase, char *pszNewPropName)
 {
+	KERNEL_CRI_SEC;
 	if (pPropBase == NULL || pszNewPropName == NULL)
 		return false;
 
