@@ -21,3 +21,8 @@
 #include <map>
 #include <vector>
 using namespace std;
+
+#include <comdef.h> 
+#include <GdiPlus.h>
+#pragma comment(lib, "GdiPlus.lib")
+using namespace Gdiplus;

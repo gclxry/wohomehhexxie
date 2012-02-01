@@ -318,7 +318,7 @@ private:
 	IPropertyBase* CreateCtrlOnePropetry(IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
 
 	// 初始化在builder中的属性
-	bool BD_InitControlBase(IPropertyControl *pCtrlProp, bool bNeedSetDftProp);
+	bool InitControlPropetry(IPropertyControl *pCtrlProp, bool bNeedSetDftProp);
 	void SetPropertySkinManager(IPropertySkinManager *pMgr);
 	// 向队列未插入一个控件
 	void AppendChildContrl(IControlBase *pCtrl);

@@ -33,7 +33,7 @@ public:
 	// 创建一个Builder使用的空的控件
 	virtual IControlBase* BD_CreateControlEmptyPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, char *pszNewCtrlTypeName);
 	// 创建一个Builder使用的控件，并配置上属性
-	virtual IControlBase* BD_CreateControlByPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, IPropertyControl *pPropCtrl);
+	virtual IControlBase* CreateControlByPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, IPropertyControl *pPropCtrl);
 	// 保存皮肤包
 	virtual bool BD_SaveProject(char *pszSkinDir, char *pszSkinName);
 	// 关闭一个工程
@@ -60,6 +60,7 @@ private:
 	bool BD_DeleteControl_FromCtrlVec(CHILD_CTRLS_VEC* pCtrlVec, IControlBase *pCtrlBase);
 
 private:
+	ULONG_PTR m_gdiplusToken;
 	HMODULE m_hControlDll;
 	IControlManager *m_pControlMgr;
 

@@ -169,8 +169,17 @@ void IWindowBaseImpl::OnInitWindowBase()
 		::PostMessage(m_hWnd, UM_INIT_WINDOW_ERROR, -2, NULL);
 		return;
 	}
+
 	// 设置对话框属性
 	PP_SetWindowPropetry(pWndProp, false);
+
+	// 创建控件
+	if (!CreateChildCtrlVec(NULL, GetChildPropControlVec(), &m_ChildCtrlsVec))
+	{
+		// 向窗口发送通知：创建控件失败
+		::PostMessage(m_hWnd, UM_INIT_WINDOW_ERROR, -3, NULL);
+		return;
+	}
 
 //////////////////////////////////////////////////////////////////////////
 	// 当窗口的属性发生变化时需要通知窗口进行刷新
@@ -178,6 +187,33 @@ void IWindowBaseImpl::OnInitWindowBase()
 
 	// 向窗口发送通知：初始化皮肤完成
 	::PostMessage(m_hWnd, UM_INIT_WINDOW_SUCCESS, NULL, NULL);
+}
+
+// 创建控件
+bool IWindowBaseImpl::CreateChildCtrlVec(IControlBase *pParentCtrl, PROP_CONTROL_VEC* pPropCtrlVec, CHILD_CTRLS_VEC* pCtrlVec)
+{
+	if (pPropCtrlVec == NULL || pCtrlVec == NULL || IUiFeatureKernelImpl::GetInstance() == NULL)
+		return false;
+
+	IWindowBase* pBaseThis = dynamic_cast<IWindowBase*>(this);
+	if (pBaseThis == NULL)
+		return false;
+
+	for (PROP_CONTROL_VEC::iterator pCtrlItem = pPropCtrlVec->begin(); pCtrlItem != pPropCtrlVec->end(); pCtrlItem++)
+	{
+		IPropertyControl* pPropCtrl = *pCtrlItem;
+		if (pPropCtrl == NULL)
+			continue;
+
+		IControlBase *pNewCtrl = IUiFeatureKernelImpl::GetInstance()->CreateControlByPropetry(pBaseThis, pParentCtrl, pPropCtrl);
+		if (pNewCtrl == NULL)
+			return false;
+
+		if (!CreateChildCtrlVec(pNewCtrl, pPropCtrl->GetChildPropControlVec(), pNewCtrl->GetChildControlsVec()))
+			return false;
+	}
+
+	return true;
 }
 
 // 取得窗口控件指针
@@ -223,9 +259,9 @@ void IWindowBaseImpl::PG_InitWindowBase(HWND hWnd, char *pszSkinPath, char *pszW
 	m_hWnd = hWnd;
 	m_strSkinPath = pszSkinPath;
 	m_strWindowObjectName = pszWndName;
+
 //	// 发送初始化消息
 //	::PostMessage(hWnd, UM_INIT_WINDOW_BASE, NULL, NULL);
-
 	OnInitWindowBase();
 }
 
@@ -316,11 +352,11 @@ LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, b
 	case UM_INIT_WINDOW_ERROR:
 		break;
 
-		// 初始化窗口
-	case UM_INIT_WINDOW_BASE:
-		bPassOn = false;
-		OnInitWindowBase();
-		break;
+//		// 初始化窗口
+//	case UM_INIT_WINDOW_BASE:
+//		bPassOn = false;
+//		OnInitWindowBase();
+//		break;
 
 	case WM_MOUSEMOVE:
 		{
@@ -415,9 +451,9 @@ LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, b
 		{
 			bPassOn = false;
 			PAINTSTRUCT ps;
-			HDC hDc = BeginPaint(m_hWnd, &ps);
+			HDC hDc = ::BeginPaint(m_hWnd, &ps);
 			OnPaint(hDc);
-			EndPaint(m_hWnd, &ps);
+			::EndPaint(m_hWnd, &ps);
 			return TRUE;
 		}
 		break;
@@ -829,10 +865,11 @@ void IWindowBaseImpl::OnCreate()
 {
 }
 
-void IWindowBaseImpl::OnBuilderTimer(UINT nTimerId, HWND hView)
+void IWindowBaseImpl::BD_OnBuilderTimer(UINT nTimerId, HWND hView)
 {
 	// TBD 动画图片在播放的时候，删除控件、添加控件会导致崩溃，
 	// 时间原因，先不修正，暂时不支持在VIEW中播放动画
+	// 问题的结症在于，对于队列的操作
 	KERNEL_CRI_SEC;
 	m_hBuilderView = hView;
 //	OnTimer(nTimerId);

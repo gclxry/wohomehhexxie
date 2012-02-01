@@ -22,6 +22,9 @@ IUiFeatureKernel *GetKernelWindowInterface()
 
 IUiFeatureKernelImpl::IUiFeatureKernelImpl(void)
 {
+	GdiplusStartupInput gdiplusStartupInput;
+	GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
+
 	m_nBuilderHwnd = 1;
 	m_CtrlRegMap.clear();
 	m_pSkinMgr = (IPropertySkinManagerImpl *)GetSkinManager();
@@ -46,6 +49,8 @@ IUiFeatureKernelImpl::~IUiFeatureKernelImpl(void)
 {
 	SAFE_FREE_LIBRARY(m_hControlDll);
 	ReleaseKernelWindow();
+
+	GdiplusShutdown(m_gdiplusToken);
 }
 
 void IUiFeatureKernelImpl::ReleaseKernelWindow()
@@ -312,13 +317,13 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *p
 		pParentWnd->PP_GetWindowPropetry()->AppendChildCtrlProp(pPropCtrl);
 	}
 
-	pCtrlBase->BD_InitControlBase(pPropCtrl, true);
+	pCtrlBase->InitControlPropetry(pPropCtrl, true);
 	pCtrlBase->OnFinalCreate();
 	return pCtrlBase;
 }
 
 // 创建一个Builder使用的控件，并配置上属性
-IControlBase* IUiFeatureKernelImpl::BD_CreateControlByPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, IPropertyControl *pPropCtrl)
+IControlBase* IUiFeatureKernelImpl::CreateControlByPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, IPropertyControl *pPropCtrl)
 {
 	if (pParentWnd == NULL || pPropCtrl == NULL || m_pControlMgr == NULL || m_pSkinMgr == NULL)
 		return NULL;
@@ -347,7 +352,7 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlByPropetry(IWindowBase *pPar
 		pParentWnd->AppendChildContrl(pCtrlBase);
 
 	// 初始化属性
-	pCtrlBase->BD_InitControlBase(pPropCtrl, false);
+	pCtrlBase->InitControlPropetry(pPropCtrl, false);
 
 	// 设置ObjName
 	pCtrlBase->SetObjectName(pCtrlBase->PP_GetControlObjectName());

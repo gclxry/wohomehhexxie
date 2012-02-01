@@ -354,7 +354,7 @@ void CWindowsViewTree::InsertCtrlVecByPropCtrlVec(HTREEITEM hParentItem, IWindow
 		if (pPropCtrl == NULL)
 			continue;
 
-		IControlBase *pNewCtrl = m_pUiKernel->BD_CreateControlByPropetry(pParentWnd, pParentCtrl, pPropCtrl);
+		IControlBase *pNewCtrl = m_pUiKernel->CreateControlByPropetry(pParentWnd, pParentCtrl, pPropCtrl);
 		if (pNewCtrl == NULL)
 			return;
 

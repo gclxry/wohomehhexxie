@@ -509,7 +509,6 @@ IPropertyBase* IPropertySkinManagerImpl::FindBaseProperty(const char* pszPropTyp
 // 初始化皮肤包
 bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 {
-	// TBD，从Builder来和皮肤文件来是不一样的
 	if (pszSkinPath == NULL || strlen(pszSkinPath) <= 0 || m_pKernelZipFile == NULL)
 		return false;
 
@@ -1233,13 +1232,6 @@ bool IPropertySkinManagerImpl::BuilderCreateFileItem(char *pFilePath, ZIP_FILE &
 
 		int nRead = fread_s(pRead, nNeedRead, 1, nNeedRead, pFile);
 		nReadCtns += nRead;
-
-		if (errno != 0)
-		{
-			SAFE_DELETE_LIST(FileItem.pFileData);
-			fclose(pFile);
-			return false;
-		}
 	}
 
 	if (nReadCtns != (int)FileAttr.nFileSizeLow)

@@ -14,8 +14,8 @@ using namespace std;
 #define UM_INIT_WINDOW_SUCCESS						(UM_UI_BASE_DEF_MSG + 1)
 // 需要外部对话框接受的消息：使用皮肤初始化窗口异常
 #define UM_INIT_WINDOW_ERROR						(UM_UI_BASE_DEF_MSG + 2)
-// 初始化子类化Window
-#define UM_INIT_WINDOW_BASE							(UM_UI_BASE_DEF_MSG + 3)
+//// 初始化子类化Window
+//#define UM_INIT_WINDOW_BASE							(UM_UI_BASE_DEF_MSG + 3)
 // 自动化测试消息值
 #define UM_AUTO_TEST								(UM_UI_BASE_DEF_MSG + 4)
 // 用于绘制动画的固定定时器ID

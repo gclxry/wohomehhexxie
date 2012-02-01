@@ -71,7 +71,7 @@ protected:
 	virtual LRESULT WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, bool &bPassOn);
 
 	virtual void OnCreate();
-	virtual void OnBuilderTimer(UINT nTimerId, HWND hView);
+	virtual void BD_OnBuilderTimer(UINT nTimerId, HWND hView);
 	virtual void OnTimer(UINT nTimerId);
 	virtual void OnKeyDown(int nVirtKey, int nFlag);
 	// 系统消息，返回TRUE说明不需要返回给调用继续调用
@@ -99,6 +99,8 @@ private:
 	// 001.内部接受到初始化消息，开始初始化窗口，加载皮肤
 	void OnInitWindowBase();
 	bool IsInit();
+	// 创建控件
+	bool CreateChildCtrlVec(IControlBase *pParentCtrl, PROP_CONTROL_VEC* pPropCtrlVec, CHILD_CTRLS_VEC* pCtrlVec);
 
 	// 在Builder中绘制用的边框色块
 	void BD_NewFrameImage();
