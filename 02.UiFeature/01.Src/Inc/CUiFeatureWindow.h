@@ -116,6 +116,7 @@ public:
 	void SetSafeHandle(HWND hWnd);
 	void _BeginWindowThread();
 	void _PostEndThread();
+	void WaitWindowThreadEnd();
 
 protected:
 	// ´°¿Ú¾ä±ú

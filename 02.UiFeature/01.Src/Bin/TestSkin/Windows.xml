@@ -1,1 +1,31 @@
-<windows/>
+<windows>
+<window objid="window93">
+<group objid="window93.group94">
+<string objid="window93.group94.string95"/>
+<string objid="window93.group94.string96"/>
+<string objid="window93.group94.string97"/>
+<string objid="window93.group94.string98"/>
+<bool objid="window93.group94.bool99"/>
+<bool objid="window93.group94.bool100"/>
+<bool objid="window93.group94.bool101"/>
+<group objid="window93.group94.group102">
+<bool objid="window93.group94.group102.bool103"/>
+<bool objid="window93.group94.group102.bool104"/>
+</group>
+</group>
+<group objid="window93.group105">
+<int objid="window93.group105.int106"/>
+<int objid="window93.group105.int107"/>
+</group>
+<group objid="window93.group108">
+<bool objid="window93.group108.bool109"/>
+</group>
+<group objid="window93.group110">
+<bool objid="window93.group110.bool111"/>
+<int objid="window93.group110.int112"/>
+<int objid="window93.group110.int113"/>
+<int objid="window93.group110.int114"/>
+<int objid="window93.group110.int115"/>
+</group>
+</window>
+</windows>
