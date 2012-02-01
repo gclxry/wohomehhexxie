@@ -8,7 +8,7 @@
 
 
 // 初始化在builder中的属性
-bool IControlBase::BD_InitControlBase(IPropertyControl *pCtrlProp, bool bNeedSetDftProp)
+bool IControlBase::InitControlPropetry(IPropertyControl *pCtrlProp, bool bNeedSetDftProp)
 {
 	if (pCtrlProp == NULL)
 		return false;

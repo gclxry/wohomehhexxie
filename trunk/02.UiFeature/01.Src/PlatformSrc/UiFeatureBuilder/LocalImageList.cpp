@@ -141,14 +141,6 @@ bool CLocalImageList::OnLoadLocalImage(CString strFilePath, CString strFileName)
 
 		int nRead = fread_s(pRead, nNeedRead, 1, nNeedRead, pFile);
 		nReadLen += nRead;
-
-		if (errno != 0)
-		{
-			SAFE_DELETE_LIST(pFileItem->pFileData);
-			SAFE_DELETE(pFileItem);
-			fclose(pFile);
-			return false;
-		}
 	}
 
 	if (nReadLen != (int)FileAttr.nFileSizeLow)

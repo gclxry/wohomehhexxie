@@ -200,13 +200,6 @@ bool CZipFileList::WriteZipAppendFile(char *pFileName, ZIP_FILE_TYPE ZipType)
 
 		int nRead = fread_s(pRead, nNeedRead, 1, nNeedRead, pFile);
 		nReadCtns += nRead;
-
-		if (errno != 0)
-		{
-			SAFE_DELETE_LIST(pReadBuf);
-			fclose(pFile);
-			return false;
-		}
 	}
 
 	if (nReadCtns != (int)FileAttr.nFileSizeLow)
@@ -440,13 +433,6 @@ bool CZipFileList::ReadZipFile(const char *pZipFilePath)
 
 			int nRead = fread_s(pRead, nNeedRead, 1, nNeedRead, pFile);
 			nReadLen += nRead;
-
-			if (errno != 0)
-			{
-				SAFE_DELETE_LIST(pZipData);
-				fclose(pFile);
-				return false;
-			}
 		}
 
 		if (nReadLen != (int)dwZipDataLen)
@@ -553,9 +539,6 @@ void CZipFileList::TestWriteUnZipFile(char *pszOutDir)
 			int nNeedWrite = pZip->dwSrcFileLen - nWriteLen;
 			int nWrite = fwrite(pWrite, 1, nNeedWrite, pFile);
 			nWriteLen += nWrite;
-
-			if (errno != 0)
-				break;
 		}
 
 		fclose(pFile);

@@ -217,7 +217,7 @@ void CUiFeatureWindow::CenterWindow()
 
 		CenterRect.left = WorkArea.left + (RECT_WIDTH(WorkArea) - cx) / 2;
 		CenterRect.right = CenterRect.left + cx;
-		CenterRect.top = WorkArea.top + (RECT_WIDTH(WorkArea) - cy) / 2;
+		CenterRect.top = WorkArea.top + (RECT_HEIGHT(WorkArea) - cy) / 2;
 		CenterRect.bottom = CenterRect.top + cy;
 
 		this->MoveWindow(CenterRect, TRUE);
