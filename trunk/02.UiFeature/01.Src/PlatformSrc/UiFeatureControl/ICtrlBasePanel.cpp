@@ -18,7 +18,11 @@ ICtrlBasePanel::~ICtrlBasePanel(void)
 // 派生控件用于创建属于自己的控件属性
 bool ICtrlBasePanel::CreateControlPropetry(bool bNeedSetDftProp)
 {
-	m_pPropImage = (IPropertyImage*)CreatePropetry(OTID_IMAGE, "Image", "背景图片");
+	m_pPropImage = (IPropertyImage*)CreatePropetry(NULL, OTID_IMAGE, "Image", "背景图片");
+	IPropertyGroup* pPropGroup = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "BkGroup", "背景Group");
+//	CreatePropetry(pPropGroup, OTID_CURSOR, "BkCursor", "背景Cursor");
+//	CreatePropetry(pPropGroup, OTID_FONT, "BkFont", "背景font");
+//	CreatePropetry(pPropGroup, OTID_FONT, "BkFont1", "背景font1");
 	return true;
 }
 

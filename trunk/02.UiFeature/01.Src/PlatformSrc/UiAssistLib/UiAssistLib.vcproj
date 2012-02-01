@@ -268,6 +268,14 @@
 					RelativePath="..\..\Inc\IPropertyCursor.h"
 					>
 				</File>
+				<File
+					RelativePath=".\IPropertyCursorBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyCursorBase.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Font"
@@ -292,6 +300,14 @@
 			<Filter
 				Name="Image"
 				>
+				<File
+					RelativePath=".\CGifImage.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\CGifImage.h"
+					>
+				</File>
 				<File
 					RelativePath=".\IPropertyImage.cpp"
 					>
@@ -451,6 +467,18 @@
 			</File>
 			<File
 				RelativePath="..\..\Inc\ICommonFun.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="07.对话框基类"
+			>
+			<File
+				RelativePath=".\CUiFeatureWindow.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Inc\CUiFeatureWindow.h"
 				>
 			</File>
 		</Filter>

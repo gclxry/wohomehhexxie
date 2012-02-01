@@ -235,10 +235,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Inc\UiFeatureKernel.h"
-				>
-			</File>
-			<File
 				RelativePath=".\UiFeatureKernel.rc"
 				>
 			</File>
@@ -246,6 +242,10 @@
 		<Filter
 			Name="05.Common"
 			>
+			<File
+				RelativePath=".\CriSec.h"
+				>
+			</File>
 			<Filter
 				Name="02.管理所有的控件DLL"
 				>
@@ -341,6 +341,10 @@
 		</Filter>
 		<File
 			RelativePath="..\..\Inc\UiFeatureDefs.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Inc\UiFeatureKernel.h"
 			>
 		</File>
 	</Files>

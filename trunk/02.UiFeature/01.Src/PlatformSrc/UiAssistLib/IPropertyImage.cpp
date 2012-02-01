@@ -14,6 +14,14 @@ IPropertyImage::~IPropertyImage()
 
 }
 
+bool IPropertyImage::OnDrawAnimation()
+{
+	if (GetImageBaseProp() == NULL)
+		return false;
+
+	return GetImageBaseProp()->OnDrawAnimation();
+}
+
 const char * IPropertyImage::GetImageBaseName()
 {
 	return GetRelevancyPropName();

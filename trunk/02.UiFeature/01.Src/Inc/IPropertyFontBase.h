@@ -8,22 +8,22 @@
 enum FONT_SHOW_MODE
 {
 	// 单行显示，超过显示范围末尾不显示...
-	FSM_ONE_ROW_NO_POINT	= 1,
+	FSM_ONE_ROW_NO_POINT	= 0,
 	// 单行显示，超过显示范围显示...
-	FSM_ONE_ROW_POINT		= 2,
+	FSM_ONE_ROW_POINT		= 1,
 	// 折行显示
-	FSM_MULTI_ROW			= 3
+	FSM_MULTI_ROW			= 2
 };
 
 // 对齐模式
 enum FONT_ALIGNING
 {
 	// 水平靠左/垂直靠上
-	FAL_LEFT_TOP		= 1,
+	FAL_LEFT_TOP		= 0,
 	// 水平靠右/垂直靠下
-	FAL_RIGHT_BOTTOM	= 2,
+	FAL_RIGHT_BOTTOM	= 1,
 	// 水平居中/垂直居中
-	FAL_MIDDLE		= 3
+	FAL_MIDDLE		= 2
 };
 
 // 字体属性

@@ -1,6 +1,11 @@
 
 #pragma once
 
+#include <string>
+#include <map>
+#include <vector>
+using namespace std;
+
 // 属性类型
 enum OBJECT_TYPE_ID 
 {
@@ -61,6 +66,7 @@ public:
 	virtual void SetActivePropetry(bool bIsActive);
 	virtual bool GetActivePropetry();
 
+	// 父控件/父窗口
 	IFeatureObject* GetOwnerObject();
 	void SetOwnerObject(IFeatureObject* pOwnerObj);
 protected:

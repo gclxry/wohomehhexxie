@@ -180,6 +180,8 @@ void CUiFeatureBuilderView::OnActivateView(BOOL bActivate, CView* pActivateView,
 	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
 	if (pMain != NULL)
 		pMain->SetView(this);
+
+	this->SetTimer(UM_DFT_ANIMATION_TIMER, UM_DFT_ANIMATION_TIMER_100S, NULL);
 }
 
 void CUiFeatureBuilderView::OnDraw(CDC* pDC)
@@ -735,7 +737,7 @@ void CUiFeatureBuilderView::OnLButtonUp(UINT nFlags, CPoint point)
 		CreateNewControl();
 		m_pDrawParentCtrl = NULL;
 		m_bCreateNewCtrl = false;
-		this->RedrawWindow();
+		//this->RedrawWindow();
 		return;
 	}
 }
@@ -910,7 +912,8 @@ void CUiFeatureBuilderView::OnTimer(UINT_PTR nIDEvent)
 {
 	CFormView::OnTimer(nIDEvent);
 
-	if (!m_bInitOk)
+	if (!m_bInitOk || m_pCurrentWnd == NULL)
 		return;
 
+	m_pCurrentWnd->OnBuilderTimer(nIDEvent, m_hWnd);
 }

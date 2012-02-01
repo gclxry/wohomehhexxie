@@ -515,41 +515,7 @@ bool IPropertySkinManagerImpl::InitSkinPackage(const char *pszSkinPath)
 	if (m_AllWindowPropMap.size() > 0)
 		return true;
 
-//////////////////////////////////////////////////////////////////////////
-	//// TBD
-	//char szPath[MAX_PATH + 1];
-	//memset(szPath, 0, MAX_PATH + 1);
-	//::GetModuleFileNameA(NULL, szPath, MAX_PATH);
-	//while (strlen(szPath) > 0 && szPath[strlen(szPath) - 1] != '\\')
-	//	szPath[strlen(szPath) - 1] = '\0';
-
-	//string strDir = szPath;
-	//strDir += SKIN_DATA_DIR;
-
-	//string strUfd = szPath;
-	//strUfd += SKIN_DATA_DIR;
-	//strUfd += "skintest.ufd";
-
-	//m_pKernelZipFile->WriteZipInit((char*)strDir.c_str(), (char*)strUfd.c_str());
-	//m_pKernelZipFile->WriteZipAppendFile(WINDOWS_XML_NAME, ZFT_NORMAL);
-	//m_pKernelZipFile->WriteZipAppendFile(RESOURCE_XML_NAME);
-	//m_pKernelZipFile->WriteZipAppendFile(LAYOUT_XML_NAME);
-	//m_pKernelZipFile->WriteZipAppendFile(CONTROLS_XML_NAME);
-	//m_pKernelZipFile->WriteZipAppendFile("bk.PNG");
-	//m_pKernelZipFile->WriteZipAppendFile("V5.Dlg.Close.png");
-	//m_pKernelZipFile->WriteZipAppendFile("V5.Dlg.Mini.png");
-	//m_pKernelZipFile->WriteZipAppendFile("V5.Logon.ACDC.png");
-	//m_pKernelZipFile->WriteZipAppendFile("V5.Logon.Set.png");
-	//m_pKernelZipFile->WriteZipAppendFile("V5.LogonBiz.01.jpg");
-	//m_pKernelZipFile->WriteZipAppendFile("V5.LogonBiz.02.png");
-	//m_pKernelZipFile->WriteZipAppendFile("下拉2标注.png");
-	//m_pKernelZipFile->WriteZipAppendFile("下拉菜单效果图_MarkMan.png");
-	//m_pKernelZipFile->WriteZipAppendFile("切图副本.png");
-	//m_pKernelZipFile->WriteZipAppendFile("最新修改.png");
-	//m_pKernelZipFile->WriteZipEnd();
-//////////////////////////////////////////////////////////////////////////
-
-	// 从皮肤文件中初始化皮肤队列 TBD
+	// 从皮肤文件中初始化皮肤队列
 	m_strSkinPath = pszSkinPath;
 	if (!m_pKernelZipFile->ReadZipFile(pszSkinPath))
 		return false;
@@ -593,14 +559,22 @@ IPropertyWindow* IPropertySkinManagerImpl::PG_InitWindowSkin(const char *pszSkin
 	if (!InitSkinPackage(pszSkinPath))
 		return NULL;
 
-	// TBD
+	IPropertyWindow *pFindPropWnd = NULL;
 	string strWndName = pszWndName;
-	ONE_RESOURCE_PROP_MAP::iterator pWndPropItem = m_LayoutWindowMap.find(strWndName);
-	if (pWndPropItem == m_LayoutWindowMap.end())
-		return NULL;
+	for (ONE_RESOURCE_PROP_MAP::iterator pWndPropItem = m_LayoutWindowMap.begin(); pWndPropItem != m_LayoutWindowMap.end(); pWndPropItem++)
+	{
+		IPropertyWindow *pPropWnd = dynamic_cast<IPropertyWindow*>(pWndPropItem->second);
+		if (pPropWnd == NULL)
+			continue;
 
-	IPropertyWindow* pWndProp = dynamic_cast<IPropertyWindow*>(pWndPropItem->second);
-	return pWndProp;
+		if (lstrcmpiA(pszWndName, pPropWnd->GetObjectName()) == 0)
+		{
+			pFindPropWnd = pPropWnd;
+			break;
+		}
+	}
+
+	return pFindPropWnd;
 }
 
 void IPropertySkinManagerImpl::ResetBaseObjectId(int nObjectId)
@@ -1759,6 +1733,14 @@ ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::GetOneResourcePropMap(char *pPr
 		pPropGroupItem = pPropGroup->second;
 
 	return pPropGroupItem;
+}
+
+ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::GetImagePropMap()
+{
+	if (m_pImagePropMap == NULL)
+		m_pImagePropMap = GetOneResourcePropMap(PROP_TYPE_IMAGE_NAME);
+	
+	return m_pImagePropMap;
 }
 
 // 修改属性名称

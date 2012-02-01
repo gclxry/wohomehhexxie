@@ -34,6 +34,8 @@ CImageBaseView::CImageBaseView(CWnd* pParent) : CDialogViewBase(pParent)
 	m_bMoveInCtrlFangKuai8 = false;
 	m_bCanMoveSel = false;
 	m_pEditDlg = NULL;
+
+	IPropertyImageBase::InitPropImageBase(m_ZipFileImgBase.GetImageProp());
 }
 
 CImageBaseView::~CImageBaseView()
@@ -64,6 +66,8 @@ void CImageBaseView::SetCurrentShowImage(CImageBasePropEditDlg *pEditDlg, IUiFea
 		string strPath = PathHelper("ControlsRes\\BuilderWindowFrame.bmp");
 
 		IMAGE_BASE_PROP ImgBase;
+		IPropertyImageBase::InitPropImageBase(&ImgBase);
+
 		ImgBase.bIsZipFile = false;
 		ImgBase.strFileName = strPath;
 		ImgBase.ImgShowType = IST_ALL_LASHEN;
@@ -94,14 +98,13 @@ void CImageBaseView::OnDraw()
 		return;
 
 	// 先绘制图片
-	CDrawingImage* pImgMemDc = m_ZipFileImgBase.GetMemDc();
-	if (pImgMemDc == NULL)
-		return;
+	SIZE sizImg = m_ZipFileImgBase.GetImageSize();
 
 	RECT DstRct;
 	INIT_RECT(DstRct);
-	DstRct.right = pImgMemDc->GetDcSize().cx;
-	DstRct.bottom = pImgMemDc->GetDcSize().cy;
+	DstRct.right = sizImg.cx;
+	DstRct.bottom = sizImg.cy;
+
 	m_ZipFileImgBase.DrawImage(m_MemDc, DstRct);
 
 	// 再绘制选择方框
@@ -196,15 +199,12 @@ void CImageBaseView::OnSize_SetViewSize(int cx, int cy)
 	if (m_pCurZipFile == NULL)
 		return;
 
-	CDrawingImage* pImgMemDc = m_ZipFileImgBase.GetMemDc();
-	if (pImgMemDc == NULL || pImgMemDc->GetSafeHdc() == NULL)
-		return;
+	SIZE sizImg = m_ZipFileImgBase.GetImageSize();
+	if (m_rcViewSize.Width() < sizImg.cx + FRAME_SIZE_ADD)
+		m_rcViewSize.right = sizImg.cx + FRAME_SIZE_ADD;
 
-	if (m_rcViewSize.Width() < pImgMemDc->GetDcSize().cx + FRAME_SIZE_ADD)
-		m_rcViewSize.right = pImgMemDc->GetDcSize().cx + FRAME_SIZE_ADD;
-
-	if (m_rcViewSize.Height() < pImgMemDc->GetDcSize().cy + FRAME_SIZE_ADD)
-		m_rcViewSize.bottom = pImgMemDc->GetDcSize().cy + FRAME_SIZE_ADD;
+	if (m_rcViewSize.Height() < sizImg.cy + FRAME_SIZE_ADD)
+		m_rcViewSize.bottom = sizImg.cy + FRAME_SIZE_ADD;
 }
 
 void CImageBaseView::OnLButtonDown(UINT nFlags, CPoint point)
@@ -365,11 +365,11 @@ void CImageBaseView::OnMouseMove_LButtonDown(CPoint point)
 	if (m_pCurShowImgBase == NULL)
 		return;
 
-	CDrawingImage* pImgMemDc = m_ZipFileImgBase.GetMemDc();
 	IMAGE_BASE_PROP* pImgProp = m_pCurShowImgBase->GetImageProp();
-	if (pImgProp == NULL || pImgMemDc == NULL)
+	if (pImgProp == NULL)
 		return;
 
+	SIZE sizImg = m_ZipFileImgBase.GetImageSize();
 	if (m_bCanMoveSel)
 	{
 		SetViewCursor(UF_IDC_SIZEALL);
@@ -380,16 +380,16 @@ void CImageBaseView::OnMouseMove_LButtonDown(CPoint point)
 		RectInImage.left = point.x - RECT_WIDTH(SetRect) / 2 + m_nHScrollPos;
 		if (RectInImage.left < 0)
 			RectInImage.left = 0;
-		if ((RectInImage.left + RECT_WIDTH(SetRect)) > pImgMemDc->GetDcSize().cx)
-			RectInImage.left = pImgMemDc->GetDcSize().cx - RECT_WIDTH(SetRect);
+		if ((RectInImage.left + RECT_WIDTH(SetRect)) > sizImg.cx)
+			RectInImage.left = sizImg.cx - RECT_WIDTH(SetRect);
 
 		RectInImage.right = RectInImage.left + RECT_WIDTH(SetRect);
 
 		RectInImage.top = point.y - RECT_HEIGHT(SetRect) / 2 + m_nVScrollPos;
 		if (RectInImage.top < 0)
 			RectInImage.top = 0;
-		if ((RectInImage.top + RECT_HEIGHT(SetRect)) > pImgMemDc->GetDcSize().cy)
-			RectInImage.top = pImgMemDc->GetDcSize().cy - RECT_HEIGHT(SetRect);
+		if ((RectInImage.top + RECT_HEIGHT(SetRect)) > sizImg.cy)
+			RectInImage.top = sizImg.cy - RECT_HEIGHT(SetRect);
 
 		RectInImage.bottom = RectInImage.top + RECT_HEIGHT(SetRect);
 
@@ -413,11 +413,14 @@ void CImageBaseView::OnMouseMove_LButtonDown_SizeCtrl(SIZE_CTRL_TYPE nFangKuai8T
 	if (m_nMoveFangKuai8Type == SCT_NONE || m_pCurShowImgBase == NULL)
 		return;
 
-	CDrawingImage* pImgMemDc = m_ZipFileImgBase.GetMemDc();
+	point.x += m_nHScrollPos;
+	point.y += m_nVScrollPos;
+
 	IMAGE_BASE_PROP* pImgProp = m_pCurShowImgBase->GetImageProp();
-	if (pImgProp == NULL || pImgMemDc == NULL)
+	if (pImgProp == NULL)
 		return;
 
+	SIZE sizImg = m_ZipFileImgBase.GetImageSize();
 	RECT &SetRect = pImgProp->RectInImage;
 
 	if (nFangKuai8Type == SCT_LEFT_TOP)
@@ -499,10 +502,10 @@ void CImageBaseView::OnMouseMove_LButtonDown_SizeCtrl(SIZE_CTRL_TYPE nFangKuai8T
 
 	if (SetRect.left < 0)
 		SetRect.left = 0;
-	if (SetRect.right > pImgMemDc->GetDcSize().cx)
-		SetRect.right = pImgMemDc->GetDcSize().cx;
+	if (SetRect.right > sizImg.cx)
+		SetRect.right = sizImg.cx;
 	if (SetRect.top < 0)
 		SetRect.top = 0;
-	if (SetRect.bottom > pImgMemDc->GetDcSize().cy)
-		SetRect.bottom = pImgMemDc->GetDcSize().cy;
+	if (SetRect.bottom > sizImg.cy)
+		SetRect.bottom = sizImg.cy;
 }

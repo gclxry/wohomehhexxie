@@ -96,12 +96,18 @@
 #define IDD_IMAGEBASE_VIEW              316
 #define IDD_DIALOG3                     317
 #define IDD_IMAGE_BASE_EDIT_CRATE_DLG   317
+#define IDD_IMAGE_ANIMATION_SETTING_DLG 318
+#define IDD_FONT_EDIT_DLG               319
+#define IDD_DIALOG4                     320
+#define IDD_MOUSE_STYLE_EDIT_DLG        320
+#define IDR_RUN_TEST_TOOLBAR            322
 #define IDB_BROWER_BTN                  1000
 #define IDE_DIR                         1001
 #define IDC_EDIT2                       1002
 #define IDE_NAME                        1002
 #define IDC_LIST1                       1004
 #define IDL_IMAGEBASE_NAME_LIST         1004
+#define IDL_FONT_BASE_NAME_LIST         1004
 #define IDC_LIST2                       1005
 #define IDL_LOCAL_IMAGE_LIST            1005
 #define IDC_BUTTON1                     1006
@@ -126,8 +132,10 @@
 #define IDB_DELETE_LOCAL_IMAGE          1015
 #define IDC_RADIO1                      1016
 #define IDR_PINGPU                      1016
+#define IDR_IMG_ANIMATION_STATIC_IMG    1016
 #define IDC_RADIO2                      1017
 #define IDR_QUANLASHEN                  1017
+#define IDR_IMG_ANIMATION_GIF           1017
 #define IDC_EDIT3                       1018
 #define IDE_SHOW_AREA_TOP               1018
 #define IDC_EDIT4                       1019
@@ -153,30 +161,37 @@
 #define IDE_JJG_BOTTOM                  1028
 #define IDC_RADIO3                      1029
 #define IDR_JJG                         1029
+#define IDR_IMG_ANIMATION_XULIE         1029
 #define IDC_COMBO1                      1030
 #define IDC_XIANSHIBILI_COMBO           1030
+#define IDC_IMG_PLAY_SHUNXU             1030
 #define IDB_DELETE_LOCAL_IMAGE2         1031
 #define IDB_TIHUAN_LOCAL_IMAGE          1031
+#define IDC_COMBO3                      1031
 #define IDS_FRAME_1                     1032
 #define IDS_FRAME_2                     1033
 #define IDS_FRAME_3                     1034
 #define IDS_IMAGE_VIEW                  1035
 #define IDB_ANMATION                    1036
 #define IDB_ANMATION_IMAGE_SETTING      1036
+#define IDC_COMBO2                      1037
+#define IDC_IMG_XUNHUAN_CTNS            1037
 #define ID_32771                        32771
 #define ID_Menu                         32772
 #define ID_CREATE_WINDOW_PANEL          32773
 #define ID_32774                        32774
 #define ID_32775                        32775
 #define IDM_DELETE_WNDCTRL              32776
+#define ID_RUN_TOOL_BAR                 32777
+#define IDTB_RUN_TEST                   32777
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        318
-#define _APS_NEXT_COMMAND_VALUE         32777
-#define _APS_NEXT_CONTROL_VALUE         1037
+#define _APS_NEXT_RESOURCE_VALUE        324
+#define _APS_NEXT_COMMAND_VALUE         32778
+#define _APS_NEXT_CONTROL_VALUE         1038
 #define _APS_NEXT_SYMED_VALUE           319
 #endif
 #endif

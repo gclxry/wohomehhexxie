@@ -1,6 +1,8 @@
 #include "StdAfx.h"
 #include "PropetryDialogGridProperty.h"
 #include "ImageBasePropEditDlg.h"
+#include "ModifyMouseStyleDlg.h"
+#include "ModifyFontBaseDlg.h"
 #include "PropertyViewCtrl.h"
 #include "UiFeatureBuilderDoc.h"
 #include "UiFeatureBuilderView.h"
@@ -31,13 +33,20 @@ void CPropetryDialogGridProperty::OnClickButton(CPoint /*point*/)
 	{
 		ImageBaseDialog();
 	}
+	else if (m_ObjType == OTID_FONT_BASE)
+	{
+		FontBaseDialog();
+	}
+	else if (m_ObjType == OTID_CURSOR_BASE)
+	{
+		CursorBaseDialog();
+	}
 	else
 	{
 		SetValue(_T(""));
 		AfxMessageBox(_T("错误的属性类型"));
 	}
 
-	//m_pPropViewList->RefreshAllData();
 	m_pPropViewList->RedrawWindow();
 
 	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
@@ -62,8 +71,7 @@ void CPropetryDialogGridProperty::ImageBaseDialog()
 
 	CImageBasePropEditDlg ImageBaseDlg;
 	ImageBaseDlg.InitImageBaseShow(m_pUiKernel, pParentImgProp);
-	if (ImageBaseDlg.DoModal() != IDOK)
-		return;
+	ImageBaseDlg.DoModal();
 
 	COleVariant varValue(_T(""));
 	int nSelectItem = -1;
@@ -81,4 +89,18 @@ void CPropetryDialogGridProperty::ImageBaseDialog()
 	}
 
 	SetValue(varValue);
+}
+
+void CPropetryDialogGridProperty::CursorBaseDialog()
+{
+	CModifyMouseStyleDlg CursorBaseDlg;
+//	CursorBaseDlg.InitImageBaseShow(m_pUiKernel, pParentImgProp);
+	CursorBaseDlg.DoModal();
+}
+
+void CPropetryDialogGridProperty::FontBaseDialog()
+{
+	CModifyFontBaseDlg FontBaseDlg;
+//	FontBaseDlg.InitImageBaseShow(m_pUiKernel, pParentImgProp);
+	FontBaseDlg.DoModal();
 }

@@ -272,3 +272,39 @@ void DebugInfoOutput(char *pszFormat, ...)
 
 	SAFE_DELETE_LIST(pszOut);
 }
+
+IPropertyString* FindObjectNameProperty(IPropertyGroup *pGroupProp)
+{
+	if (pGroupProp == NULL)
+		return NULL;
+
+	GROUP_PROP_VEC* pPropVec = pGroupProp->GetPropVec();
+	if (pPropVec == NULL)
+		return NULL;
+
+	for (GROUP_PROP_VEC::iterator pPropItem = pPropVec->begin(); pPropItem != pPropVec->end(); pPropItem++)
+	{
+		IPropertyBase* pProp = *pPropItem;
+		if (pProp == NULL)
+			continue;
+
+		if (pProp->GetObjectTypeId() == OTID_STRING)
+		{
+			if (lstrcmpiA(pProp->GetObjectName(), NAME_SKIN_PROP_NAME) == 0)
+				return (dynamic_cast<IPropertyString*>(pProp));
+		}
+
+		if (pProp->GetObjectTypeId() == OTID_GROUP)
+		{
+			IPropertyGroup *pGroup = dynamic_cast<IPropertyGroup*>(pProp);
+			if (pGroup != NULL)
+			{
+				IPropertyString *pFind = FindObjectNameProperty(pGroup);
+				if (pFind != NULL)
+					return pFind;
+			}
+		}
+	}
+
+	return NULL;
+}

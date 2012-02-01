@@ -16,12 +16,16 @@ using namespace std;
 #define UM_INIT_WINDOW_ERROR						(UM_UI_BASE_DEF_MSG + 2)
 // 初始化子类化Window
 #define UM_INIT_WINDOW_BASE							(UM_UI_BASE_DEF_MSG + 3)
+// 自动化测试消息值
+#define UM_AUTO_TEST								(UM_UI_BASE_DEF_MSG + 4)
+// 用于绘制动画的固定定时器ID
+#define UM_DFT_ANIMATION_TIMER						(0x0000F001)
+#define UM_DFT_ANIMATION_TIMER_100S					(100)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define NAME_KERNEL_DLL								"UiFeatureKernel.dll"
-#define NAME_ENGINE_DLL								"UiFeatureEngine.dll"
 #define NAME_CONTROL_DLL							"UiFeatureControl.dll"
-#define NAME_ZIP_DLL								"UiFeatureZip.dll"
+#define NAME_FEATURE_RUN_TEST						"UiFeatureRun.exe"
 #define NAME_UFP_TEMPLATE							"ufp.template"
 #define NAME_SKIN_PROJ_EX_NAME						".ufp"
 #define NAME_SKIN_FILE_EX_NAME						".ufd"
@@ -80,14 +84,14 @@ using namespace std;
 #define RECT_WIDTH(GetRct)							((GetRct).right-(GetRct).left)
 // 得到矩形宽度
 #define RECT_HEIGHT(GetRct)							((GetRct).bottom-(GetRct).top)
-// 判断矩形是否不为空
-#define IS_RECT_NOT_EMPTY(CheckRect)				((((CheckRect).right-(CheckRect).left)>0)&&(((CheckRect).bottom-(CheckRect).top)>0))
-// 判断矩形是否为空
-#define IS_RECT_EMPTY(CheckRect)					((((CheckRect).right-(CheckRect).left)<=0)||(((CheckRect).bottom-(CheckRect).top)<=0))
 // 初始化矩形为空
 #define INIT_RECT(SetEmRect)						((SetEmRect).left=(SetEmRect).right=(SetEmRect).top=(SetEmRect).bottom=0)
 // 设置矩形
 #define SET_RECT(SetRct,nL,nT,nR,nB)				(SetRct.left=nL,SetRct.top=nT,SetRct.right=nR,SetRct.bottom=nB)
+// 判断矩形是否不为空
+#define IS_RECT_NOT_EMPTY(CheckRect)				((RECT_WIDTH(CheckRect)>0)&&((RECT_HEIGHT(CheckRect)>0))
+// 判断矩形是否为空
+#define IS_RECT_EMPTY(CheckRect)					((RECT_WIDTH(CheckRect)<=0)||(RECT_HEIGHT(CheckRect)<=0))
 
 // 解决GDI+的Alpha融合中Alpha融合进位误差的问题，程序默认的Alpha的最大值为254，而非255
 #define MAX_ALPHA									(254)

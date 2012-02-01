@@ -140,6 +140,45 @@ void CMainFrame::SetProjectInitState(bool bInitOk)
 		m_pView->SetProjectInitState(bInitOk);
 }
 
+void CMainFrame::SetRunTestToolbarState(bool bEnable)
+{
+	int nStyle = m_wndTestRunToolBar.GetButtonStyle(0);
+
+//	if (bEnable)
+//		nStyle |= 
+//	else
+
+	m_wndTestRunToolBar.EnableWindow(bEnable);
+	//m_wndTestRunToolBar.SetButtonStyle(0, )
+}
+
+void CMainFrame::OnRunTest()
+{
+	USES_CONVERSION;
+	if (m_pView == NULL)
+		return;
+
+	IWindowBase* pCurWnd = m_pView->GetCurrentWindow();
+	if (pCurWnd == NULL)
+		return;
+
+	string strSkinPath = W2A(m_strCurSkinDir);
+	strSkinPath += W2A(m_strCurSkinName);
+	strSkinPath += NAME_SKIN_FILE_EX_NAME;
+
+	string strWndName = pCurWnd->GetObjectName();
+
+	string strCmd = "\"";
+	strCmd += PathHelper(NAME_FEATURE_RUN_TEST);
+	strCmd += "\" \"";
+	strCmd += strSkinPath;
+	strCmd += "\" \"";
+	strCmd += strWndName;
+	strCmd += "\"";
+
+	WinExec(strCmd.c_str(), SW_SHOW);
+}
+
 void CMainFrame::OnAppExit()
 {
 	// 保存老工程

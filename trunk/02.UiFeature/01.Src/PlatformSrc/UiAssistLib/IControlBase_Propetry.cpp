@@ -192,14 +192,16 @@ void IControlBase::CreateCtrlAllPropetry(bool bNeedSetDftProp)
 	CreateControlPropetry(bNeedSetDftProp);
 }
 
-IPropertyBase* IControlBase::CreatePropetry(OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo)
+IPropertyBase* IControlBase::CreatePropetry(IPropertyGroup* pPropGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo)
 {
 	if (m_pPropGroupCtrlDefs == NULL || m_pSkinPropMgr == NULL || m_pXmlPropCtrl == NULL || pszPropName == NULL || strlen(pszPropName) <= 0 || propType <= OTID_NONE || propType >= OTID_LAST)
 		return NULL;
 
-	return CreateResourcePropetry(this, m_pSkinPropMgr, m_pPropGroupCtrlDefs, propType, pszPropName, pszPropInfo);
-}
+	if (pPropGroup == NULL)
+		pPropGroup = m_pPropGroupCtrlDefs;
 
+	return CreateResourcePropetry(this, m_pSkinPropMgr, pPropGroup, propType, pszPropName, pszPropInfo);
+}
 
 // 从属性更新数据到成员变量
 void IControlBase::PropetyValueToMemberValue()
@@ -418,29 +420,6 @@ RECT IControlBase::GetClientRect()
 	return ClientRct;
 }
 
-// 2.从Builder中新创建一个控件，需要初始化属性的PropId
-bool IControlBase::InitObjectIdByBuilder(const char* pszBaseId)
-{
-	if (pszBaseId == NULL || m_pSkinPropMgr == NULL || m_pOwnerWindowBase == NULL || m_pOwnerWindowBase->GetObjectType() == NULL)
-		return false;
-
-	string strCtrlType = m_pOwnerWindowBase->GetObjectType();
-	if (strCtrlType.size() <= 0)
-		return false;
-
-	// 设置控件自身的ObjectId
-	int nId = m_pSkinPropMgr->GetNewId();
-	char szId[1024];
-	memset(szId, 0, 1024);
-	sprintf_s(szId, 1023, "%s.%s%d", pszBaseId, strCtrlType.c_str(), nId);
-	SetObjectType(szId);
-
-	// 循环设置属性的ID
-//	InitControlPropObjectId(&m_ControlPropList);
-
-	return true;
-}
-
 void IControlBase::InitControlPropObjectId(GROUP_PROP_VEC *pPropList)
 {
 	if (pPropList == NULL || m_pSkinPropMgr == NULL || m_pOwnerWindowBase == NULL)
@@ -471,18 +450,6 @@ void IControlBase::InitControlPropObjectId(GROUP_PROP_VEC *pPropList)
 				InitControlPropObjectId(pGroup->GetPropVec());
 		}
 	}
-}
-
-// 2. 从xml文件填充控件属性
-bool IControlBase::ReadPropFromControlsXml(const char* pszControlId)
-{
-	return true;
-}
-
-// 3. 创建Builder显示用的属性
-bool IControlBase::CreateBuilderShowPropList()
-{
-	return true;
 }
 
 // 设置附属控件

@@ -44,26 +44,17 @@ void CDrawingImage::CreateByFile(const char *pszFilePath)
 
 		int nRead = fread_s(pRead, nNeedRead, 1, nNeedRead, pFile);
 		nReadCtns += nRead;
-
-		if (errno != 0)
-		{
-			SAFE_DELETE(pReadBuf);
-			fclose(pFile);
-			return;
-		}
 	}
 
+	fclose(pFile);
 	if (nReadCtns != (int)FileAttr.nFileSizeLow)
 	{
 		SAFE_DELETE(pReadBuf);
-		fclose(pFile);
 		return;
 	}
 
 	CreateByMem(pReadBuf, nReadCtns);
-
 	SAFE_DELETE(pReadBuf);
-	fclose(pFile);
 }
 
 // 从一段内存中创建
@@ -80,7 +71,10 @@ void CDrawingImage::CreateByMem(BYTE *pImgFileMem, int nLen)
 	ImgStream->Write(pImgFileMem, nLen, NULL);
 	Bitmap* pBitmap = Gdiplus::Bitmap::FromStream(ImgStream);
 	if (pBitmap == NULL)
+	{
+		ImgStream.Release();
 		return;
+	}
 
 	Create(pBitmap->GetWidth(), pBitmap->GetHeight(), 0, false, true);
 	if (IS_SAFE_HANDLE(m_hDC))

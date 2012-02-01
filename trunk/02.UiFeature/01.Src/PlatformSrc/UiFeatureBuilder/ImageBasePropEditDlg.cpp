@@ -5,6 +5,7 @@
 #include "UiFeatureBuilder.h"
 #include "ImageBasePropEditDlg.h"
 #include "..\..\Inc\UiFeatureDefs.h"
+#include "ImageAnimationSettingDlg.h"
 
 #define MAX_PIX					(50000)
 // CImageBasePropEditDlg dialog
@@ -39,7 +40,6 @@ void CImageBasePropEditDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDS_FRAME_1, m_Static_1);
 	DDX_Control(pDX, IDS_FRAME_2, m_Static_2);
 	DDX_Control(pDX, IDS_FRAME_3, m_Static_3);
-	DDX_Control(pDX, IDOK, m_OkBtn);
 	DDX_Control(pDX, IDL_IMAGEBASE_NAME_LIST, m_ImageBaseList);
 	DDX_Control(pDX, IDL_LOCAL_IMAGE_LIST, m_LocalImageList);
 	DDX_Text(pDX, IDE_SHOW_AREA_TOP, m_nShowAreaTop);
@@ -159,16 +159,6 @@ void CImageBasePropEditDlg::SetChildPos()
 		CtrlRct.bottom = WndRct.bottom - 33;
 		m_LocalImageList.MoveWindow(&CtrlRct);
 	}
-
-	if (::IsWindow(m_OkBtn.m_hWnd))
-	{
-		CtrlRct.SetRectEmpty();
-		CtrlRct.right = WndRct.right - 22;
-		CtrlRct.left = CtrlRct.right - 80;
-		CtrlRct.top = 22;
-		CtrlRct.bottom = CtrlRct.top + 22;
-		m_OkBtn.MoveWindow(&CtrlRct);
-	}
 }
 
 BOOL CImageBasePropEditDlg::OnInitDialog()
@@ -225,7 +215,7 @@ void CImageBasePropEditDlg::OnSize(UINT nType, int cx, int cy)
 
 void CImageBasePropEditDlg::OnBnClickedCancel()
 {
-	OnCancel();
+	OnBnClickedOk();
 }
 
 void CImageBasePropEditDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
@@ -451,13 +441,38 @@ void CImageBasePropEditDlg::SetImageEditEnableStyle(bool bEnable)
 	this->GetDlgItem(IDR_JJG)->EnableWindow(bEnable);
 	this->GetDlgItem(IDB_TIHUAN_LOCAL_IMAGE)->EnableWindow(bEnable);
 	this->GetDlgItem(IDB_ANMATION_IMAGE_SETTING)->EnableWindow(bEnable);
+
+	// 动画图片的时候，设置相关的显示
+	if (m_pParentImgProp != NULL && m_pParentImgProp->GetImageBaseProp() != NULL)
+	{
+		IMAGE_BASE_PROP *pImgProp = m_pParentImgProp->GetImageBaseProp()->GetImageProp();
+		if (pImgProp != NULL)
+		{
+			if (pImgProp->ImgPlayType == IPT_GIF || pImgProp->ImgPlayType == IPT_IMAGE_XULIE)
+			{
+				this->GetDlgItem(IDR_PINGPU)->EnableWindow(FALSE);
+				this->GetDlgItem(IDR_JJG)->EnableWindow(FALSE);
+				this->GetDlgItem(IDE_JJG_LEFT)->EnableWindow(FALSE);
+				this->GetDlgItem(IDS_JJG_LEFT)->EnableWindow(FALSE);
+				this->GetDlgItem(IDE_JJG_TOP)->EnableWindow(FALSE);
+				this->GetDlgItem(IDS_JJG_TOP)->EnableWindow(FALSE);
+				this->GetDlgItem(IDE_JJG_RIGHT)->EnableWindow(FALSE);
+				this->GetDlgItem(IDS_JJG_RIGHT)->EnableWindow(FALSE);
+				this->GetDlgItem(IDE_JJG_BOTTOM)->EnableWindow(FALSE);
+				this->GetDlgItem(IDS_JJG_BOTTOM)->EnableWindow(FALSE);
+				m_nSelelShowImgType = 1;
+				this->UpdateData(FALSE);
+				pImgProp->ImgShowType = IST_ALL_LASHEN;
+			}
+		}
+	}
 }
 
 void CImageBasePropEditDlg::OnBnClickedOk()
 {
 	if (m_pParentImgProp == NULL)
 	{
-		OnCancel();
+		OnOK();
 		return;
 	}
 
@@ -772,8 +787,27 @@ void CImageBasePropEditDlg::OnBnClickedDeleteLocalImage()
 
 void CImageBasePropEditDlg::OnBnClickedAnmationImageSetting()
 {
+	if (m_pParentImgProp == NULL || m_pParentImgProp->GetImageBaseProp() == NULL)
+		return;
+
+	CImageAnimationSettingDlg ImgAnimationDlg;
+	ImgAnimationDlg.SetImageBase(m_pParentImgProp->GetImageBaseProp());
+	ImgAnimationDlg.DoModal();
+	SetImageEditEnableStyle(true);
 }
 
 void CImageBasePropEditDlg::OnBnClickedTihuanLocalImage()
 {
+}
+
+void CImageBasePropEditDlg::SetSelectImageBaseFromListSelect(IPropertyImageBase* pSelectImgBaseProp)
+{
+	if (m_pParentImgProp != NULL)
+	{
+		m_pParentImgProp->SetImageBaseProp(pSelectImgBaseProp);
+		if (pSelectImgBaseProp != NULL)
+			m_pParentImgProp->SetRelevancyPropName((char*)pSelectImgBaseProp->GetObjectName());
+		else
+			m_pParentImgProp->SetRelevancyPropName(NULL);
+	}
 }
