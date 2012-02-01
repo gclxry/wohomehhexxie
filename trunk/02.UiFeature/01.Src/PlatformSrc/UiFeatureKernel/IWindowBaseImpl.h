@@ -131,9 +131,7 @@ protected:
 	FANGKUAI_8 m_BD_FangKuai8;
 
 	// 在Builder中绘制用的边框色块
-	IPropertyImage m_BuilderWndFrameImage;
 	IPropertyImageBase m_BuilderWndFrameImageBase;
-	IPropertyImage m_BuilderCtrlFrameImage;
 	IPropertyImageBase m_BuilderCtrlFrameImageBase;
 
 	BLENDFUNCTION m_Blend;
