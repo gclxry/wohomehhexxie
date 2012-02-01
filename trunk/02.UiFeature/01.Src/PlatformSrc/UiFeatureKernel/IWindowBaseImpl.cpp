@@ -6,6 +6,7 @@
 #include "..\..\Inc\ICommonFun.h"
 #include "IPropertySkinManagerImpl.h"
 #include "IUiFeatureKernelImpl.h"
+#include "CriSec.h"
 
 // 弹出任务栏菜单消息，XP以下适用
 #define WM_POPUPSYSTEMMENU						(0x0313)
@@ -830,8 +831,11 @@ void IWindowBaseImpl::OnCreate()
 
 void IWindowBaseImpl::OnBuilderTimer(UINT nTimerId, HWND hView)
 {
+	// TBD 动画图片在播放的时候，删除控件、添加控件会导致崩溃，
+	// 时间原因，先不修正，暂时不支持在VIEW中播放动画
+	KERNEL_CRI_SEC;
 	m_hBuilderView = hView;
-	OnTimer(nTimerId);
+//	OnTimer(nTimerId);
 }
 
 void IWindowBaseImpl::OnTimer(UINT nTimerId)
