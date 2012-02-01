@@ -20,8 +20,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		return -1;
 	}
 
+	DWORD dwMainThreadId = ::GetCurrentThreadId();
+
 	CFeatureRunWindow RunWindow;
-	if (!RunWindow.ShowFeatureRunWindow(W2A(lpCmdLine)))
+	if (!RunWindow.ShowFeatureRunWindow(W2A(lpCmdLine), dwMainThreadId))
 	{
 		MessageBox(NULL, _T("´´½¨Ô¤ÀÀ´°¿Ú´íÎó£¡"), _T("Ô¤ÀÀ´°¿Ú"), MB_OK | MB_ICONERROR);
 		return -1;
@@ -30,8 +32,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	MSG msg;
 	while (::GetMessage(&msg, NULL, 0, 0))
 	{
-		if (RunWindow.IsWindowThreadEnd())
-			break;
+		if (msg.message == WM_QUIT)
+			RunWindow.WaitWindowThreadEnd();
 
 		if (!::TranslateAccelerator(msg.hwnd, NULL, &msg))
 		{

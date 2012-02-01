@@ -597,6 +597,19 @@ void CUiFeatureWindow::CloseWindow()
 	m_dwUiThreadId = 0;
 }
 
+void CUiFeatureWindow::WaitWindowThreadEnd()
+{
+	if (m_hUiThread != NULL)
+	{
+		if (::WaitForSingleObject(m_hUiThread, 5 * 1000) == WAIT_TIMEOUT)
+		{
+			::TerminateThread(m_hUiThread, -1);
+			SAFE_CLOSE_HANDLE(m_hUiThread);
+			m_dwUiThreadId = 0;
+		}
+	}
+}
+
 // 取得窗口中指定名称的控件
 IControlBase* CUiFeatureWindow::GetCtrlObject(char* pstrCtrlName)
 {
