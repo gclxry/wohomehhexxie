@@ -20,6 +20,7 @@ public:
 	void SetImageEditEnableStyle(bool bEnable);
 	IPropertyImageBase * GetSelectImageBase(int &nSeleItem);
 	void RefreshJggPropToMember(IMAGE_BASE_PROP* pImgProp);
+	void SetSelectImageBaseFromListSelect(IPropertyImageBase* pSelectImgBaseProp);
 
 public:
 	int m_nShowAreaLeft;
@@ -42,7 +43,6 @@ protected:
 	CStatic m_Static_1;
 	CStatic m_Static_2;
 	CStatic m_Static_3;
-	CButton m_OkBtn;
 	CImageBaseNameList m_ImageBaseList;
 	CLocalImageList m_LocalImageList;
 

@@ -2,14 +2,21 @@
 #include "stdafx.h"
 #include "..\..\Inc\IPropertyFont.h"
 #include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\IControlBase.h"
 
 IPropertyFont::IPropertyFont()
 {
+	SetObjectType(PROP_TYPE_FONT_NAME);
 }
 
 IPropertyFont::~IPropertyFont()
 {
 
+}
+
+const char * IPropertyFont::GetFontBaseName()
+{
+	return GetRelevancyPropName();
 }
 
 bool IPropertyFont::IsRightData()
@@ -22,13 +29,30 @@ IPropertyFontBase* IPropertyFont::GetFontBaseProp()
 	return dynamic_cast<IPropertyFontBase*>(GetRelevancyProp());
 }
 
+void IPropertyFont::SetNeedRedraw()
+{
+	if (GetOwnerObject() == NULL)
+		return;
+
+	IControlBase *pCtrlBase = dynamic_cast<IControlBase*>(GetOwnerObject());
+	if (pCtrlBase == NULL)
+		return;
+
+	pCtrlBase->RedrawControl();
+}
+
 void IPropertyFont::SetFontBaseProp(IPropertyFontBase *pFontProp)
 {
 	if (pFontProp == NULL)
+	{
+		SetRelevancyProp(NULL);
+		SetNeedRedraw();
 		return;
+	}
 
-	IPropertyBase *pPropBase = dynamic_cast<IPropertyBase*>(pFontProp);
+	IPropertyBase* pPropBase = dynamic_cast<IPropertyBase*>(pFontProp);
 	SetRelevancyProp(pPropBase);
+	SetNeedRedraw();
 }
 
 bool IPropertyFont::ReadPropertyFromXmlNode(XmlNode* pXmlNode)

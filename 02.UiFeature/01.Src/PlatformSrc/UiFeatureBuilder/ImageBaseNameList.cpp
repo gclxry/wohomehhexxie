@@ -167,6 +167,8 @@ void CImageBaseNameList::OnSelectItem()
 	if (m_nSelectItem >= 1)
 		m_pSelectImgBaseProp = (IPropertyImageBase*)this->GetItemData(m_nSelectItem);
 
+	m_pImgBaseDlg->SetSelectImageBaseFromListSelect(m_pSelectImgBaseProp);
+
 	if (m_pLocalImgList != NULL)
 		m_pLocalImgList->SetSelectImagePropBase(m_pSelectImgBaseProp);
 

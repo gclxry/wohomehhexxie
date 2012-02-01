@@ -16,6 +16,8 @@ protected:
 	virtual BOOL HasButton() const { return TRUE; }
 	virtual void OnClickButton(CPoint point);
 	void ImageBaseDialog();
+	void CursorBaseDialog();
+	void FontBaseDialog();
 
 private:
 	IUiFeatureKernel* m_pUiKernel;

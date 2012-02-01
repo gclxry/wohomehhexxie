@@ -21,6 +21,13 @@ class IUiFeatureKernelImpl;
 class IPropertyControl;
 class IControlBase;
 
+// 控件发送消息接口
+class IControlMessage
+{
+public:
+	virtual LRESULT OnCtrlMessage(IControlBase* pCtrl, WPARAM wParam, LPARAM lParam) = 0;
+};
+
 // Builder 专用，显示控件的边框的8个方块
 struct FANGKUAI_8
 {
@@ -248,11 +255,16 @@ protected:
 
 protected:
 	// 派生控件用于创建一个属性
-	IPropertyBase* CreatePropetry(OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
+	IPropertyBase* CreatePropetry(IPropertyGroup* pPropGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo);
 	// 派生控件用于创建属于自己的控件属性
 	// bNeedSetDftProp：true时说明是Builder调用，新创建一个控件，需要初始化属性的各个默认值
 	// false：说明整个皮肤包已经初始化完毕，属性创建完毕的时候，从xml中读取的属性值已经赋值完毕了，不能再初始化，否则xml中的值会被冲掉
 	virtual bool CreateControlPropetry(bool bNeedSetDftProp) = 0;
+	// 绘制控件的动画，如果需要重新刷新界面，返回true，否则返回false
+	// 此函数由定时器触发，每100毫秒触发一次
+	virtual bool OnDrawAnimation() = 0;
+	// 定时器
+	virtual void OnTimer(UINT nTimerId) = 0;
 	// 初始化控件
 	virtual void OnCreate() = 0;
 	// 控件初始化完毕
@@ -400,19 +412,6 @@ private:
 	FANGKUAI_8 m_BD_FangKuai8;
 
 protected:
-
-	//////////////////////////////////////////////////////////////////////////
-	// 以下3个函数创建、显示属性用，执行顺序由上到下
-	// 1. 创建空的属性列表
-	// 2. 从xml文件中读取控件属性时，不需要初始化属性的PropId，PropId来源于xml文件
-	virtual bool ReadPropFromControlsXml(const char* pszControlId);
-	// 2.从Builder中新创建一个控件，需要初始化属性的PropId
-	virtual bool InitObjectIdByBuilder(const char* pszBaseId);
-	// 3. 创建Builder显示用的属性
-	virtual bool CreateBuilderShowPropList();
-
-protected:
 	// 2.从Builder中新创建一个控件，需要初始化属性的PropId
 	void InitControlPropObjectId(GROUP_PROP_VEC *pPropList);
-
 };

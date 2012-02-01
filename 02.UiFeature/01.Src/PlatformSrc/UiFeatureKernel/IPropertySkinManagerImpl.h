@@ -43,6 +43,7 @@ public:
 
 	// 取得指定组的属性
 	virtual ONE_RESOURCE_PROP_MAP* GetOneResourcePropMap(char *pPropGroupName);
+	virtual ONE_RESOURCE_PROP_MAP* GetImagePropMap();
 
 	// 设置可以保存的有效属性
 	virtual void BD_SetWindowPropetryActiveProp(IWindowBase *pWndBase, bool bActive);

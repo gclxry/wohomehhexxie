@@ -47,10 +47,12 @@ public:
 	void SetViewCursor(int nCursor);
 	void SetView(CUiFeatureBuilderView *pView);
 	CUiFeatureBuilderView* GetView() { return m_pView; }
+	void SetRunTestToolbarState(bool bEnable);
 	
 protected:  // 控件条嵌入成员
 	CMFCMenuBar       m_wndMenuBar;
 	CMFCToolBar       m_wndToolBar;
+	CMFCToolBar       m_wndTestRunToolBar;
 	CMFCStatusBar     m_wndStatusBar;
 	CMFCToolBarImages m_UserImages;
 //	CFileView         m_wndFileView;
@@ -114,6 +116,7 @@ public:
 	afx_msg void OnFileSave();
 	afx_msg void OnFileClose();
 	afx_msg void OnAppExit();
+	afx_msg void OnRunTest();
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnClose();
 };

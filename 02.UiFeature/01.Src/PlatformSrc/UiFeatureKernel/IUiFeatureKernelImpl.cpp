@@ -11,6 +11,9 @@
 #include "..\..\Inc\ICtrlInterface.h"
 #include "..\..\Inc\IPropertyControl.h"
 
+#include "CriSec.h"
+CCriSec g_KernelSec;
+
 // 内核对【对话框】的接口
 IUiFeatureKernel *GetKernelWindowInterface()
 {

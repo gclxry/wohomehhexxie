@@ -152,6 +152,15 @@ void CWindowsViewTree::OnCreateWindowPanel()
 
 void CWindowsViewTree::OnTvnSelchanged(NMHDR *pNMHDR, LRESULT *pResult)
 {
+	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
+	if (pMain != NULL)
+	{
+		if (this->GetSelectedItem() == NULL)
+			pMain->SetRunTestToolbarState(false);
+		else
+			pMain->SetRunTestToolbarState(this->GetRootItem() != this->GetSelectedItem());
+	}
+
 	*pResult = 0;
 	if (!m_bProjectInitOk)
 		return;
@@ -506,6 +515,10 @@ void CWindowsViewTree::OnDeleteWndctrl()
 		strInfo.Format(_T("È·¶¨É¾³ý¿Ø¼þ¡¾%s[%s]¡¿Âð£¿"), A2W(pCtrlBase->GetObjectName()), A2W(pCtrlBase->GetObjectType()));
 		if (AfxMessageBox(strInfo, MB_OKCANCEL | MB_ICONWARNING) != IDOK)
 			return;
+
+		IWindowBase *pWnd = pCtrlBase->GetOwnerWindow();
+		if (pWnd != NULL)
+			pWnd->BD_SetFocusControl(NULL);
 
 		m_pUiKernel->BD_DeleteControl(pCtrlBase);
 	}

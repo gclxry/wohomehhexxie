@@ -34,5 +34,7 @@ public:
 
 	bool DrawImage(CDrawingBoard &DstDc, RECT DstRct);
 
+	bool OnDrawAnimation();
+
 	void SetNeedRedraw();
 };

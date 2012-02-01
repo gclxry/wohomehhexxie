@@ -1,6 +1,8 @@
 
 #include "StdAfx.h"
 #include "..\..\Inc\IPropertyWindow.h"
+#include "..\..\Inc\IPropertyString.h"
+#include "..\..\Inc\ICommonFun.h"
 
 IPropertyWindow::IPropertyWindow(void)
 {
@@ -32,6 +34,11 @@ void IPropertyWindow::SetWindowPropGroup(IPropertyGroup *pWindowProp)
 		return;
 
 	m_pWindowProp = pWindowProp;
+	IPropertyString* pNameProp = FindObjectNameProperty(m_pWindowProp);
+	if (pNameProp == NULL)
+		return;
+
+	this->SetObjectName(pNameProp->GetString());
 }
 
 IPropertyGroup* IPropertyWindow::GetWindowPropGroup()

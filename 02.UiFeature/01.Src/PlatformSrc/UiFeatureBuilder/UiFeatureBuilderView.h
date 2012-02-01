@@ -51,6 +51,8 @@ public:
 	// 判断鼠标坐标是否落在了窗口内部
 	bool PtInWindow(CPoint point);
 
+	IWindowBase* GetCurrentWindow() { return m_pCurrentWnd; };
+
 private:
 	void SetNeedSave();
 	void DrawWindowView();

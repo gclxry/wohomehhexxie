@@ -19,6 +19,8 @@ void ResetWindowBaseInfo(IWindowBase *pWndBase);
 // 向一个xml节点插入一个int属性
 void AddIntAttrToNode(CUiXmlWriteNode* pNode, const char* pszAttrName, int nInt);
 void DebugInfoOutput(char *pszFormat, ...);
+// 从一个属性组中查找名为 "@Object_Name" 的属性
+IPropertyString* FindObjectNameProperty(IPropertyGroup *pGroupProp);
 
 #ifndef _DEBUG
 #define DEBUG_INFO

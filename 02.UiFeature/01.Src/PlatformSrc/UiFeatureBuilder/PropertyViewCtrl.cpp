@@ -268,15 +268,48 @@ void CPropertyViewCtrl::AppendComboBoxProp(CMFCPropertyGridProperty* pParentProp
 
 void CPropertyViewCtrl::AppendCursorProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyCursor *pCursorProp)
 {
+	USES_CONVERSION;
 	if (pParentPropGroup == NULL || pCursorProp == NULL)
 		return;
+
+	IPropertyBase *pPropBase = dynamic_cast<IPropertyBase*>(pCursorProp);
+	if (pPropBase == NULL)
+		return;
+
+	CString strName = A2W(pPropBase->GetObjectName());
+	CString strInfo = A2W(pPropBase->GetObjectInfo());
+	CString strData = A2W(pCursorProp->GetCursorBaseName());
+
+	CPropetryDialogGridProperty *pNewProp = new CPropetryDialogGridProperty(strName, (_variant_t)strData, strInfo);
+	if (pNewProp == NULL)
+		return;
+	pNewProp->InitDialogPropetry(this, m_pUiKernel, OTID_CURSOR_BASE);
+	pNewProp->AllowEdit(FALSE);
+	pNewProp->SetData((DWORD_PTR)pPropBase);
+	pParentPropGroup->AddSubItem(pNewProp);
 }
 
 void CPropertyViewCtrl::AppendFontProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyFont *pFontProp)
 {
+	USES_CONVERSION;
 	if (pParentPropGroup == NULL || pFontProp == NULL)
 		return;
 
+	IPropertyBase *pPropBase = dynamic_cast<IPropertyBase*>(pFontProp);
+	if (pPropBase == NULL)
+		return;
+
+	CString strName = A2W(pPropBase->GetObjectName());
+	CString strInfo = A2W(pPropBase->GetObjectInfo());
+	CString strData = A2W(pFontProp->GetFontBaseName());
+
+	CPropetryDialogGridProperty *pNewProp = new CPropetryDialogGridProperty(strName, (_variant_t)strData, strInfo);
+	if (pNewProp == NULL)
+		return;
+	pNewProp->InitDialogPropetry(this, m_pUiKernel, OTID_FONT_BASE);
+	pNewProp->AllowEdit(FALSE);
+	pNewProp->SetData((DWORD_PTR)pPropBase);
+	pParentPropGroup->AddSubItem(pNewProp);
 }
 
 void CPropertyViewCtrl::AppendImageProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyImage *pImageProp)

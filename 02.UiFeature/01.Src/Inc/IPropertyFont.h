@@ -18,7 +18,12 @@ public:
 	// 写入xml
 	virtual bool AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode);
 
+	const char * GetFontBaseName();
+
 	// 设置字体信息
 	void SetFontBaseProp(IPropertyFontBase *pFontProp);
 	IPropertyFontBase* GetFontBaseProp();
+
+private:
+	void SetNeedRedraw();
 };

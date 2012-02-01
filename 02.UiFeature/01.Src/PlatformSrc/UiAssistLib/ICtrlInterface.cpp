@@ -105,3 +105,14 @@ void ICtrlInterface::OnKeyUp(WPARAM wParam, LPARAM lParam)
 void ICtrlInterface::OnDefaultEnterCtrl()
 {
 }
+
+// 绘制控件的动画，如果需要重新刷新界面，返回true，否则返回false
+// 此函数由定时器触发，每100毫秒触发一次
+bool ICtrlInterface::OnDrawAnimation()
+{
+	return false;
+}
+// 定时器
+void ICtrlInterface::OnTimer(UINT nTimerId)
+{
+}

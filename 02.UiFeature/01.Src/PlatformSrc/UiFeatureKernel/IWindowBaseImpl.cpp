@@ -33,6 +33,7 @@ IWindowBaseImpl::IWindowBaseImpl()
 	m_pLButtonDownCtrl = NULL;
 	m_pMouseHoverCtrl = NULL;
 	m_pFocusCtrl = NULL;
+	m_hBuilderView = NULL;
 
 	memset(&m_BD_FangKuai8, 0, sizeof(FANGKUAI_8));
 
@@ -221,8 +222,10 @@ void IWindowBaseImpl::PG_InitWindowBase(HWND hWnd, char *pszSkinPath, char *pszW
 	m_hWnd = hWnd;
 	m_strSkinPath = pszSkinPath;
 	m_strWindowObjectName = pszWndName;
-	// 发送初始化消息
-	::PostMessage(hWnd, UM_INIT_WINDOW_BASE, NULL, NULL);
+//	// 发送初始化消息
+//	::PostMessage(hWnd, UM_INIT_WINDOW_BASE, NULL, NULL);
+
+	OnInitWindowBase();
 }
 
 // 取得窗口句柄
@@ -825,10 +828,113 @@ void IWindowBaseImpl::OnCreate()
 {
 }
 
+void IWindowBaseImpl::OnBuilderTimer(UINT nTimerId, HWND hView)
+{
+	m_hBuilderView = hView;
+	OnTimer(nTimerId);
+}
+
 void IWindowBaseImpl::OnTimer(UINT nTimerId)
 {
-	if (!IsInit())
+	if (!IsInit() || m_pSkinPropMgr == NULL)
 		return;
+
+	bool bNeedDraw = false;
+	if (nTimerId == UM_DFT_ANIMATION_TIMER)
+	{
+		ONE_RESOURCE_PROP_MAP* pImagePropMap = ((IPropertySkinManagerImpl*)m_pSkinPropMgr)->GetImagePropMap();
+		if (pImagePropMap == NULL)
+			return;
+
+		for (ONE_RESOURCE_PROP_MAP::iterator pImage = pImagePropMap->begin(); pImage != pImagePropMap->end(); pImage++)
+		{
+			IPropertyImage* pImageProp = dynamic_cast<IPropertyImage*>(pImage->second);
+			if (pImageProp == NULL)
+				continue;
+
+			IFeatureObject* pOwner = pImageProp->GetOwnerObject();
+			if (pOwner == NULL)
+				continue;
+
+			IControlBase* pCtrl = dynamic_cast<IControlBase*>(pOwner);
+			if (pCtrl != NULL)
+			{
+				// 非自身窗口控件，不进行动画绘制
+				IWindowBaseImpl* pWnd = dynamic_cast<IWindowBaseImpl*>(pCtrl->GetOwnerWindow());
+				if (pWnd == NULL || pWnd != this)
+					continue;
+
+				// 不可见，不刷新控件界面
+				if (!pCtrl->IsVisible())
+					continue;
+			}
+			else
+			{
+				// 非自身窗口控件，不进行动画绘制
+				IWindowBaseImpl* pWnd = dynamic_cast<IWindowBaseImpl*>(pOwner);
+				if (pWnd == NULL || pWnd != this)
+					continue;
+			}
+
+			if (pImageProp->OnDrawAnimation())
+			{
+				if (pCtrl == NULL)
+				{
+					this->InvalidateRect(NULL);
+				}
+				else
+				{
+					pCtrl->RedrawControl();
+					this->InvalidateRect(&(pCtrl->GetWindowRect()));
+				}
+
+				bNeedDraw = true;
+			}
+		}
+	}
+
+	for (CHILD_CTRLS_VEC::iterator pCtrlItem = m_ChildCtrlsVec.begin(); pCtrlItem != m_ChildCtrlsVec.end(); pCtrlItem++)
+	{
+		IControlBase* pCtrl = *pCtrlItem;
+		if (pCtrl != NULL)
+		{
+			if (nTimerId == UM_DFT_ANIMATION_TIMER && pCtrl->IsVisible())
+			{
+				bool bDraw = pCtrl->OnDrawAnimation();
+				if (bDraw)
+				{
+					bNeedDraw = true;
+					this->InvalidateRect(&(pCtrl->GetWindowRect()));
+				}
+			}
+			else
+			{
+				pCtrl->OnTimer(nTimerId);
+			}
+		}
+	}
+
+	if (bNeedDraw)
+		this->UpdateWindow();
+}
+
+void IWindowBaseImpl::InvalidateRect(RECT *lpRect)
+{
+	if (::IsWindow(m_hWnd))
+		::InvalidateRect(m_hWnd, lpRect, FALSE);
+}
+
+void IWindowBaseImpl::UpdateWindow()
+{
+	if (::IsWindow(m_hWnd))
+	{
+		::UpdateWindow(m_hWnd);
+	}
+	else
+	{
+		if (::IsWindow(m_hBuilderView))
+			::RedrawWindow(m_hBuilderView, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+	}
 }
 
 void IWindowBaseImpl::OnKeyDown(int nVirtKey, int nFlag)
@@ -960,6 +1066,7 @@ void IWindowBaseImpl::BD_NewFrameImageBase(IPropertyImageBase *pImgBase, string 
 		return;
 
 	IMAGE_BASE_PROP ImgBase;
+	IPropertyImageBase::InitPropImageBase(&ImgBase);
 
 	ImgBase.bIsZipFile = false;
 	ImgBase.strFileName = strImgPath;
@@ -1067,8 +1174,13 @@ void IWindowBaseImpl::BD_DrawSelectRect(CDrawingBoard &MemDc, FANGKUAI_8 &FangKu
 SIZE IWindowBaseImpl::PP_GetWindowPropSize()
 {
 	SIZE WndSize;
-	WndSize.cx = m_pPropSize_Width->GetValue();
-	WndSize.cy = m_pPropSize_Height->GetValue();
+	WndSize.cx = WndSize.cy = 0;
+	if (m_pPropSize_Width != NULL && m_pPropSize_Height != NULL)
+	{
+		WndSize.cx = m_pPropSize_Width->GetValue();
+		WndSize.cy = m_pPropSize_Height->GetValue();
+	}
+
 	return WndSize;
 }
 

@@ -33,6 +33,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_COMMAND(ID_FILE_SAVE, &CMainFrame::OnFileSave)
 	ON_COMMAND(ID_FILE_CLOSE, &CMainFrame::OnFileClose)
 	ON_COMMAND(ID_APP_EXIT, &CMainFrame::OnAppExit)
+	ON_COMMAND(IDTB_RUN_TEST, &CMainFrame::OnRunTest)
 	ON_WM_SETCURSOR()
 	ON_WM_CLOSE()
 END_MESSAGE_MAP()
@@ -150,6 +151,24 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	EnableDocking(CBRS_ALIGN_ANY);
 	DockPane(&m_wndMenuBar);
 	DockPane(&m_wndToolBar);
+
+//////////////////////////////////////////////////////////////////////////
+	if (!m_wndTestRunToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC, CRect(1, 1, 1, 1), ID_RUN_TOOL_BAR) ||
+		!m_wndTestRunToolBar.LoadToolBar(theApp.m_bHiColorIcons ? IDR_RUN_TEST_TOOLBAR : IDR_MAINFRAME))
+	{
+		TRACE0("未能创建测试工具栏\n");
+		return -1;
+	}
+
+	m_wndTestRunToolBar.SetWindowText(_T("运行窗口"));
+	m_wndTestRunToolBar.EnableDocking(CBRS_ALIGN_ANY);
+	DockPane(&m_wndTestRunToolBar);
+
+	SetRunTestToolbarState(false);
+	//int nStyle = m_wndTestRunToolBar.GetButtonStyle(0);
+	//nStyle &= (~TBBS_BUTTON);
+	//m_wndTestRunToolBar.SetButtonStyle(0, nStyle);
+//////////////////////////////////////////////////////////////////////////
 
 
 	// 启用 Visual Studio 2005 样式停靠窗口行为
