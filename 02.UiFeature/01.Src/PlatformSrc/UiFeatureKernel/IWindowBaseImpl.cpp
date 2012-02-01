@@ -678,6 +678,7 @@ void IWindowBaseImpl::OnLButtonDown(int nVirtKey, POINT pt)
 {
 	if (!IsInit())
 		return;
+	::SetCapture(m_hWnd);
 
 	// 取得当前鼠标按下的控件
 	IControlBase *pControl = NULL;
@@ -697,7 +698,6 @@ void IWindowBaseImpl::OnLButtonDown(int nVirtKey, POINT pt)
 		return;
 	}
 
-	::SetCapture(m_hWnd);
 	m_bIsLButtonDown = true;
 
 	// 派发鼠标消息到控件
@@ -710,10 +710,10 @@ void IWindowBaseImpl::OnLButtonUp(int nVirtKey, POINT pt)
 {
 	if (!IsInit())
 		return;
+	::ReleaseCapture();
 
 	if (m_pLButtonDownCtrl != NULL)
 	{
-		::ReleaseCapture();
 		m_bIsLButtonDown = false;
 		m_pLButtonDownCtrl->OnLButtonUp(pt);
 		m_pLButtonDownCtrl = NULL;
@@ -1085,15 +1085,10 @@ void IWindowBaseImpl::BD_NewFrameImage()
 	if (m_pSkinPropMgr == NULL)
 		return;
 
-	m_BuilderWndFrameImage.SetUiKernel(IUiFeatureKernelImpl::GetInstance());
-	m_BuilderCtrlFrameImage.SetUiKernel(IUiFeatureKernelImpl::GetInstance());
 	m_BuilderWndFrameImageBase.SetUiKernel(IUiFeatureKernelImpl::GetInstance());
 	m_BuilderCtrlFrameImageBase.SetUiKernel(IUiFeatureKernelImpl::GetInstance());
 
 	// 在Builder中绘制用的边框色块
-	m_BuilderWndFrameImage.SetRelevancyProp(&m_BuilderWndFrameImageBase);
-	m_BuilderCtrlFrameImage.SetRelevancyProp(&m_BuilderCtrlFrameImageBase);
-
 	string strPath = PathHelper("ControlsRes\\BuilderWindowFrame.bmp");
 	BD_NewFrameImageBase(&m_BuilderWndFrameImageBase, strPath);
 
@@ -1158,9 +1153,9 @@ void IWindowBaseImpl::BD_DrawWindowView(CDrawingBoard &ViewMemDc)
 // 绘制窗口和被选中的控件的边框的8个方块
 void IWindowBaseImpl::BD_DrawSelectRect(CDrawingBoard &MemDc, FANGKUAI_8 &FangKuai8, bool bIsWndFrame)
 {
-	IPropertyImage *pPropImg = &m_BuilderCtrlFrameImage;
+	IPropertyImageBase *pPropImg = &m_BuilderCtrlFrameImageBase;
 	if (bIsWndFrame)
-		pPropImg = &m_BuilderWndFrameImage;
+		pPropImg = &m_BuilderWndFrameImageBase;
 
 	FangKuai8.LeftTop.left = FangKuai8.EntityRct.left - FANGKUAI_SIZE;
 	FangKuai8.LeftTop.top = FangKuai8.EntityRct.top - FANGKUAI_SIZE;
