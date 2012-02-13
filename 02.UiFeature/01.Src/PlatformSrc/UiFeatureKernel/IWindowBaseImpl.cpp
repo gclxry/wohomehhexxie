@@ -346,8 +346,6 @@ LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, b
 	{
 		// 需要外部对话框接受的消息：使用皮肤初始化窗口正确结束
 	case UM_INIT_WINDOW_SUCCESS:
-		break;
-
 		// 需要外部对话框接受的消息：使用皮肤初始化窗口异常
 	case UM_INIT_WINDOW_ERROR:
 		break;
@@ -678,7 +676,6 @@ void IWindowBaseImpl::OnLButtonDown(int nVirtKey, POINT pt)
 {
 	if (!IsInit())
 		return;
-	::SetCapture(m_hWnd);
 
 	// 取得当前鼠标按下的控件
 	IControlBase *pControl = NULL;
@@ -698,6 +695,7 @@ void IWindowBaseImpl::OnLButtonDown(int nVirtKey, POINT pt)
 		return;
 	}
 
+	::SetCapture(m_hWnd);
 	m_bIsLButtonDown = true;
 
 	// 派发鼠标消息到控件
@@ -865,7 +863,7 @@ void IWindowBaseImpl::OnCreate()
 {
 }
 
-void IWindowBaseImpl::BD_OnBuilderTimer(UINT nTimerId, HWND hView)
+void IWindowBaseImpl::BD_OnTimer(UINT nTimerId, HWND hView)
 {
 	// TBD 动画图片在播放的时候，删除控件、添加控件会导致崩溃，
 	// 时间原因，先不修正，暂时不支持在VIEW中播放动画

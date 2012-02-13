@@ -915,5 +915,5 @@ void CUiFeatureBuilderView::OnTimer(UINT_PTR nIDEvent)
 	if (!m_bInitOk || m_pCurrentWnd == NULL)
 		return;
 
-	m_pCurrentWnd->BD_OnBuilderTimer(nIDEvent, m_hWnd);
+	m_pCurrentWnd->BD_OnTimer(nIDEvent, m_hWnd);
 }
