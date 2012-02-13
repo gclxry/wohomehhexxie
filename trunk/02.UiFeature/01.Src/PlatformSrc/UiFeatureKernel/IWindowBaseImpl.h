@@ -71,7 +71,7 @@ protected:
 	virtual LRESULT WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, bool &bPassOn);
 
 	virtual void OnCreate();
-	virtual void BD_OnBuilderTimer(UINT nTimerId, HWND hView);
+	virtual void BD_OnTimer(UINT nTimerId, HWND hView);
 	virtual void OnTimer(UINT nTimerId);
 	virtual void OnKeyDown(int nVirtKey, int nFlag);
 	// 系统消息，返回TRUE说明不需要返回给调用继续调用

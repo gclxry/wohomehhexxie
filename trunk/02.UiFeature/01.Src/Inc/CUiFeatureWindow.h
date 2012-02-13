@@ -76,10 +76,8 @@ public:
 	bool IsWindowEnd();
 	// 窗口线程是否被销毁
 	bool IsWindowThreadEnd();
-	// 初始化对话框错误
-	virtual void OnInitWindowError(int nErrorCode);
-	// 初始化对话框成功
-	virtual void OnInitWindowSuccess();
+	// 初始化对话框结束
+	virtual void OnInitWindowEnd(int nErrorCode);
 
 protected:
 	// 以下Windows消息函数的重载，都需要调用父类的原函数 /////////////////////////////////////////////////////

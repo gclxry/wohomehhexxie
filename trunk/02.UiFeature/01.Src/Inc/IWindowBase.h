@@ -27,7 +27,7 @@ public:
 	virtual void BD_SetAllCtrlRectInView() = 0;
 	// 设置指定控件在Builder中的显示位置
 	virtual void BD_SetControlRectInView(CHILD_CTRLS_VEC *pChildCtrlsVec) = 0;
-	virtual void BD_OnBuilderTimer(UINT nTimerId, HWND hView) = 0;
+	virtual void BD_OnTimer(UINT nTimerId, HWND hView) = 0;
 	// 重新计算子控件的位置和大小
 	virtual void ResetChildCtrlPostion(CHILD_CTRLS_VEC* pChildVec, bool bMemToProp = false) = 0;
 

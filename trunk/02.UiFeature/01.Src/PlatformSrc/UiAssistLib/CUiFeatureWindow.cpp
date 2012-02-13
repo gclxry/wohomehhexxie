@@ -73,11 +73,8 @@ void CUiFeatureWindow::_BeginWindowThread()
 	MSG msg;
 	while (::GetMessage(&msg, NULL, 0, 0))
 	{
-		if (msg.message == UM_AUTO_TEST)
-		{
-			// 执行自动化测试用例 TBD
-			continue;
-		}
+		if (msg.message == WM_QUIT)
+			break;
 
 		if (PreTranslateMessage(msg))
 			continue;
@@ -471,12 +468,12 @@ LRESULT CUiFeatureWindow::WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam)
 
 		// 初始化对话框错误
 	case UM_INIT_WINDOW_ERROR:
-		OnInitWindowError((int)wParam);
+		OnInitWindowEnd((int)wParam);
 		break;
 
 		// 初始化对话框成功
 	case UM_INIT_WINDOW_SUCCESS:
-		OnInitWindowSuccess();
+		OnInitWindowEnd(0);
 		break;
 
 	default:
@@ -486,19 +483,22 @@ LRESULT CUiFeatureWindow::WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam)
 	return ::DefWindowProc(m_hWnd, nMsgId, wParam, lParam);
 }
 
-// 初始化对话框成功
-void CUiFeatureWindow::OnInitWindowSuccess()
+// 初始化对话框结束
+void CUiFeatureWindow::OnInitWindowEnd(int nErrorCode)
 {
-	this->ShowWindow(m_nCreateShow);
-}
-
-// 初始化对话框错误
-void CUiFeatureWindow::OnInitWindowError(int nErrorCode)
-{
-	char szError[MAX_PATH];
-	memset(szError, 0, MAX_PATH);
-	sprintf_s(szError, MAX_PATH, "创建Feature窗口错误，错误码：%d", nErrorCode);
-	MessageBoxA(NULL, szError, "内核窗口", MB_OK | MB_ICONERROR);
+	if (nErrorCode == 0)
+	{
+		// 成功
+		this->ShowWindow(m_nCreateShow);
+	}
+	else
+	{
+		// 失败
+		char szError[MAX_PATH];
+		memset(szError, 0, MAX_PATH);
+		sprintf_s(szError, MAX_PATH, "创建Feature窗口错误，错误码：%d", nErrorCode);
+		MessageBoxA(NULL, szError, "内核窗口", MB_OK | MB_ICONERROR);
+	}
 }
 
 // WM_TIMER：定时器	
