@@ -8,11 +8,10 @@ public:
 	CWindowResize();
 	~CWindowResize();
 
-	static CWindowResize* GetResizeIns();
-	VOID InitResizeInfo(IWindowBaseImpl *pDui, UINT uNcHitTest, int nMaxWidth, int nMaxHeight, int nMinWidth, int nMinHeight);
+	VOID InitResizeInfo(IWindowBaseImpl *pWndBase, UINT uNcHitTest, int nMaxWidth, int nMaxHeight, int nMinWidth, int nMinHeight);
 	VOID UnInit();
-	BOOL MoveWindowToRect(RECT &MoveRect);
-	BOOL IsInResize();
+	bool MoveWindowToRect(RECT &MoveRect);
+	bool IsInResize();
 	UINT GetHitType();
 
 private:
@@ -21,7 +20,7 @@ private:
 	// 鼠标拉伸操作
 	UINT m_uNcHitTest;
 	// 被拉伸的窗口
-	IWindowBaseImpl *m_pDuiDlg;
+	IWindowBaseImpl *m_pWindowBase;
 	// 窗口最大值和最小值
 	int m_nMaxWidth;
 	int m_nMaxHeight;
