@@ -30,7 +30,8 @@ public:
 	virtual void BD_OnTimer(UINT nTimerId, HWND hView) = 0;
 	// 重新计算子控件的位置和大小
 	virtual void ResetChildCtrlPostion(CHILD_CTRLS_VEC* pChildVec, bool bMemToProp = false) = 0;
-
+	// 是否为设计模式
+	virtual bool IsDesignMode() = 0;
 //////////////////////////////////////////////////////////////////////////
 	// 窗口居中显示
 	virtual void CenterWindow() = 0;

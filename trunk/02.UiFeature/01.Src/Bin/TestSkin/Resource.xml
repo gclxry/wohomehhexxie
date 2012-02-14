@@ -13,7 +13,7 @@
 <item objid="window93.Panel116.group117.bool125" name="DragInCtrl" data="0"/>
 <item objid="window93.Panel116.group117.bool127" name="DefaultEnterCtrl" data="0"/>
 <item objid="window93.group108.bool109" name="Enable" data="1"/>
-<item objid="window93.group110.bool111" name="Enable" data="0"/>
+<item objid="window93.group110.bool111" name="Enable" data="1"/>
 <item objid="window93.group94.bool100" name="LayeredWindow" data="0"/>
 <item objid="window93.group94.bool101" name="TopMost" data="0"/>
 <item objid="window93.group94.bool99" name="Visible" data="1"/>
@@ -67,10 +67,10 @@
 <item objid="window93.Panel116.group117.int126" name="TabOrder" data="0"/>
 <item objid="window93.group105.int106" name="Width" data="500"/>
 <item objid="window93.group105.int107" name="Height" data="500"/>
-<item objid="window93.group110.int112" name="LeftSpace" data="0"/>
-<item objid="window93.group110.int113" name="RightSpace" data="0"/>
-<item objid="window93.group110.int114" name="TopSpace" data="0"/>
-<item objid="window93.group110.int115" name="BottomSpace" data="0"/>
+<item objid="window93.group110.int112" name="LeftSpace" data="5"/>
+<item objid="window93.group110.int113" name="RightSpace" data="5"/>
+<item objid="window93.group110.int114" name="TopSpace" data="5"/>
+<item objid="window93.group110.int115" name="BottomSpace" data="5"/>
 </int>
 <string>
 <item objid="window93.Panel116.Panel139.group140.string141" name="@Object_Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
