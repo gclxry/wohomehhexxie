@@ -1,19 +1,14 @@
 
 #include "stdafx.h"
 #include "WindowResize.h"
+#include "IWindowBaseImpl.h"
 
 // ÒÆ¶¯µÄÏñËØÖµ
 #define MOVE_PIX						(4)
 
-CWindowResize *CWindowResize::GetResizeIns()
-{
-	static CWindowResize NewResInc;
-	return &NewResInc;
-}
-
 CWindowResize::CWindowResize()
 {
-	m_pDuiDlg = NULL;
+	m_pWindowBase = NULL;
 	m_OldRect.left = m_OldRect.right = m_OldRect.bottom = m_OldRect.top = 0;
 	m_uNcHitTest = -1;
 
@@ -25,7 +20,7 @@ CWindowResize::CWindowResize()
 
 CWindowResize::~CWindowResize()
 {
-	m_pDuiDlg = NULL;
+	m_pWindowBase = NULL;
 	m_OldRect.left = m_OldRect.right = m_OldRect.bottom = m_OldRect.top = 0;
 	m_uNcHitTest = -1;
 }
@@ -35,19 +30,19 @@ UINT CWindowResize::GetHitType()
 	return m_uNcHitTest;
 }
 
-BOOL CWindowResize::IsInResize()
+bool CWindowResize::IsInResize()
 {
-	return (m_pDuiDlg != NULL);
+	return (m_pWindowBase != NULL);
 }
 
-VOID CWindowResize::InitResizeInfo(CDirectUI *pDui, UINT uNcHitTest, int nMaxWidth, int nMaxHeight, int nMinWidth, int nMinHeight)
+VOID CWindowResize::InitResizeInfo(IWindowBaseImpl *pWndBase, UINT uNcHitTest, int nMaxWidth, int nMaxHeight, int nMinWidth, int nMinHeight)
 {
-	if (m_pDuiDlg == NULL && pDui != NULL && pDui->GetSafeHwnd() != NULL && ::IsWindow(pDui->GetSafeHwnd()))
+	if (m_pWindowBase == NULL && pWndBase != NULL && pWndBase->GetSafeHwnd() != NULL && ::IsWindow(pWndBase->GetSafeHwnd()))
 	{
-		::SetCapture(pDui->GetSafeHwnd());
-		m_pDuiDlg = pDui;
+		::SetCapture(pWndBase->GetSafeHwnd());
+		m_pWindowBase = pWndBase;
 		m_uNcHitTest = uNcHitTest;
-		::GetWindowRect(pDui->GetSafeHwnd(), &m_OldRect);
+		::GetWindowRect(pWndBase->GetSafeHwnd(), &m_OldRect);
 
 		m_nMaxWidth = nMaxWidth;
 		m_nMaxHeight = nMaxHeight;
@@ -58,10 +53,10 @@ VOID CWindowResize::InitResizeInfo(CDirectUI *pDui, UINT uNcHitTest, int nMaxWid
 
 VOID CWindowResize::UnInit()
 {
-	if (m_pDuiDlg != NULL && m_pDuiDlg->GetSafeHwnd() != NULL && ::IsWindow(m_pDuiDlg->GetSafeHwnd()))
+	if (m_pWindowBase != NULL && m_pWindowBase->GetSafeHwnd() != NULL && ::IsWindow(m_pWindowBase->GetSafeHwnd()))
 	{
 		::ReleaseCapture();
-		m_pDuiDlg = NULL;
+		m_pWindowBase = NULL;
 		m_uNcHitTest = -1;
 		m_OldRect.left = m_OldRect.right = m_OldRect.bottom = m_OldRect.top = 0;
 
@@ -72,10 +67,10 @@ VOID CWindowResize::UnInit()
 	}
 }
 
-BOOL CWindowResize::MoveWindowToRect(RECT &MoveRect)
+bool CWindowResize::MoveWindowToRect(RECT &MoveRect)
 {
-	BOOL bRet = FALSE;
-	if (m_pDuiDlg != NULL && m_pDuiDlg->GetSafeHwnd() != NULL && ::IsWindow(m_pDuiDlg->GetSafeHwnd()))
+	bool bRet = false;
+	if (m_pWindowBase != NULL && m_pWindowBase->GetSafeHwnd() != NULL && ::IsWindow(m_pWindowBase->GetSafeHwnd()))
 	{
 		memcpy(&MoveRect, &m_OldRect, sizeof(RECT));
 
@@ -89,7 +84,7 @@ BOOL CWindowResize::MoveWindowToRect(RECT &MoveRect)
 			if ((OldPt.x - CurMousePos.x >= MOVE_PIX) || (CurMousePos.x - OldPt.x >= MOVE_PIX))
 			{
 				MoveRect.left = CurMousePos.x;
-				bRet = TRUE;
+				bRet = true;
 			}
 		}
 		else if (HTTOPLEFT == m_uNcHitTest)
@@ -101,9 +96,7 @@ BOOL CWindowResize::MoveWindowToRect(RECT &MoveRect)
 			{
 				MoveRect.left = CurMousePos.x;
 				MoveRect.top = CurMousePos.y;
-				bRet = TRUE;
-
-				DUI_TRACE(_T("left top move, left=%d, top=%d"), MoveRect.left, MoveRect.top);
+				bRet = true;
 			}
 		}
 		else if (HTRIGHT == m_uNcHitTest)
@@ -112,7 +105,7 @@ BOOL CWindowResize::MoveWindowToRect(RECT &MoveRect)
 			if ((OldPt.x - CurMousePos.x >= MOVE_PIX) || (CurMousePos.x - OldPt.x >= MOVE_PIX))
 			{
 				MoveRect.right = CurMousePos.x;
-				bRet = TRUE;
+				bRet = true;
 			}
 		}
 		else if (HTTOP == m_uNcHitTest)
@@ -121,7 +114,7 @@ BOOL CWindowResize::MoveWindowToRect(RECT &MoveRect)
 			if ((OldPt.y - CurMousePos.y >= MOVE_PIX) || (CurMousePos.y - OldPt.y >= MOVE_PIX))
 			{
 				MoveRect.top = CurMousePos.y;
-				bRet = TRUE;
+				bRet = true;
 			}
 		}
 		else if (HTBOTTOM == m_uNcHitTest)
@@ -130,7 +123,7 @@ BOOL CWindowResize::MoveWindowToRect(RECT &MoveRect)
 			if ((OldPt.y - CurMousePos.y >= MOVE_PIX) || (CurMousePos.y - OldPt.y >= MOVE_PIX))
 			{
 				MoveRect.bottom = CurMousePos.y;
-				bRet = TRUE;
+				bRet = true;
 			}
 		}
 		else if (HTBOTTOMLEFT == m_uNcHitTest)
@@ -142,7 +135,7 @@ BOOL CWindowResize::MoveWindowToRect(RECT &MoveRect)
 			{
 				MoveRect.left = CurMousePos.x;
 				MoveRect.bottom = CurMousePos.y;
-				bRet = TRUE;
+				bRet = true;
 			}
 		}
 		else if (HTTOPRIGHT == m_uNcHitTest)
@@ -154,7 +147,7 @@ BOOL CWindowResize::MoveWindowToRect(RECT &MoveRect)
 			{
 				MoveRect.right = CurMousePos.x;
 				MoveRect.top = CurMousePos.y;
-				bRet = TRUE;
+				bRet = true;
 			}
 		}
 		else if (HTBOTTOMRIGHT == m_uNcHitTest)
@@ -166,7 +159,7 @@ BOOL CWindowResize::MoveWindowToRect(RECT &MoveRect)
 			{
 				MoveRect.right = CurMousePos.x;
 				MoveRect.bottom = CurMousePos.y;
-				bRet = TRUE;
+				bRet = true;
 			}
 		}
 
@@ -216,7 +209,7 @@ BOOL CWindowResize::MoveWindowToRect(RECT &MoveRect)
 				m_OldRect.top == MoveRect.top &&
 				m_OldRect.bottom == MoveRect.bottom)
 			{
-				bRet = FALSE;
+				bRet = false;
 			}
 			else
 			{

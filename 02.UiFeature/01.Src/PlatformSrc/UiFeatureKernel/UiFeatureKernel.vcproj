@@ -322,6 +322,18 @@
 				RelativePath=".\IWindowBaseImpl_Propetry.cpp"
 				>
 			</File>
+			<Filter
+				Name="01.À­Éì´°¿Ú"
+				>
+				<File
+					RelativePath=".\WindowResize.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowResize.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="04.UiEngine"
