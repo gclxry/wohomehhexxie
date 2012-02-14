@@ -35,6 +35,8 @@ public:
 	virtual void BD_SetControlRectInView(CHILD_CTRLS_VEC *pChildCtrlsVec);
 	// 重新计算子控件的位置和大小，参数：bMemToProp 是否记录到属性中，Builder时为true
 	virtual void ResetChildCtrlPostion(CHILD_CTRLS_VEC* pChildVec, bool bMemToProp = false);
+	// 是否为设计模式
+	virtual bool IsDesignMode();
 
 //////////////////////////////////////////////////////////////////////////
 	// 导入皮肤包使用的函数初始化
@@ -88,6 +90,9 @@ protected:
 	virtual void OnPaint(HDC hWndDc);
 	// 对话框主菜单：任务栏右键菜单，左上角菜单的截获
 	virtual void OnPopupSystemMenu(POINT pt);
+	// 设置鼠标样式，返回true表示设置了自定义的鼠标手势，false为需要使用系统默认的手势
+	virtual bool OnSetCursor(HWND hWnd, int nHitTest, int nMsgId);
+	virtual LRESULT OnNcHitTest(int nX, int nY);
 
 	virtual void OnMouseMove(int nVirtKey, POINT pt);
 	virtual void OnLButtonDown(int nVirtKey, POINT pt);
@@ -121,8 +126,14 @@ private:
 	void SetFocusCtrl(IControlBase *pControl);
 	// 通过递归查找指定名称的控件
 	bool GetControlByName(CHILD_CTRLS_VEC *pCtrlVec, char *pszCtrlName, IControlBase **ppCtrl);
+	// 鼠标是否移动到了窗口可以进行拉伸操作的边缘
+	int MouseMoveInWindowFrame(POINT pt);
+	// 显示自定义光标
+	void SetWindowCursor(int nCursor);
 
 protected:
+	// 是否为设计模式
+	bool m_bIsDesignMode;
 	// 皮肤路径
 	string m_strSkinPath;
 	// 皮肤的object名称
@@ -203,6 +214,8 @@ private:
 	IPropertySkinManager* m_pSkinPropMgr;
 
 	bool m_bIsFullScreen;
+	// 当前鼠标样式宏
+	int m_nCurMouseStyle;
 
 	// 从xml中读入并需要写入xml中的属性窗口属性列表
 	IPropertyWindow *m_pXmlPropWindow;

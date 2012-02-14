@@ -30,11 +30,13 @@ IWindowBaseImpl::IWindowBaseImpl()
 	m_hWnd = NULL;
 	m_ChildCtrlsVec.clear();
 
+	m_bIsDesignMode = false;
 	m_bIsLButtonDown = false;
 	m_pLButtonDownCtrl = NULL;
 	m_pMouseHoverCtrl = NULL;
 	m_pFocusCtrl = NULL;
 	m_hBuilderView = NULL;
+	m_nCurMouseStyle = -1;
 
 	memset(&m_BD_FangKuai8, 0, sizeof(FANGKUAI_8));
 
@@ -425,6 +427,25 @@ LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, b
 		OnSetFocus(wParam, lParam);
 		break;
 
+	case WM_NCHITTEST:
+		{
+			POINT pt;
+			pt.x = LOWORD(lParam);
+			pt.y = HIWORD(lParam);
+			::ScreenToClient(m_hWnd, &pt);
+			LRESULT lResult = OnNcHitTest(pt.x, pt.y);
+			if (lResult != -1)
+			{
+				bPassOn = false;
+				return lResult;
+			}
+		}
+		break;
+
+	case WM_SETCURSOR:
+		bPassOn = !OnSetCursor((HWND)wParam, LOWORD(lParam), HIWORD(lParam));
+		break;
+
 	case WM_DESTROY:
 		OnDestroy();
 		break;
@@ -592,6 +613,12 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 	}
 	else
 	{
+		// 鼠标是否移动到了窗口可以进行拉伸操作的边缘
+		if (MouseMoveInWindowFrame(pt) != HTNOWHERE)
+			return;
+
+		SetWindowCursor(UF_IDC_ARROW);
+
 		// 取得当前MouseMove的控件
 		IControlBase *pControl = NULL;
 		CheckMouseInControl(&m_ChildCtrlsVec, pt, &pControl);
@@ -624,6 +651,151 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 			m_pMouseHoverCtrl->OnMouseEnter(pt);
 		}
 	}
+}
+
+// 鼠标是否移动到了窗口可以进行拉伸操作的边缘
+int IWindowBaseImpl::MouseMoveInWindowFrame(POINT pt)
+{
+	if (m_bIsDesignMode || m_pPropStretching_Enable == NULL || m_pPropStretching_LeftSpace == NULL
+		 || m_pPropStretching_RightSpace == NULL || m_pPropStretching_TopSpace == NULL || m_pPropStretching_BottomSpace == NULL)
+		return HTNOWHERE;
+
+	bool bStretching = m_pPropStretching_Enable->GetValue();
+	if (!bStretching)
+		return HTNOWHERE;
+
+	int nLeft = m_pPropStretching_LeftSpace->GetValue();
+	int nRight = m_pPropStretching_RightSpace->GetValue();
+	int nTop = m_pPropStretching_TopSpace->GetValue();
+	int nBottom = m_pPropStretching_BottomSpace->GetValue();
+	RECT wndRct = this->GetClientRect();
+
+	// 先判断四角
+	// 左上角
+	if (nLeft > 0 && nTop > 0)
+	{
+		if (pt.x <= nLeft && pt.y <= nTop)
+		{
+			// 双箭头指向西北和东南
+			SetWindowCursor(UF_IDC_SIZENWSE);
+			return HTTOPLEFT;
+		}
+	}
+
+	// 左下角
+	if (nLeft > 0 && nBottom > 0)
+	{
+		if (pt.x <= nLeft && pt.y >= (RECT_HEIGHT(wndRct) - nBottom))
+		{
+			// 双箭头指向东北和西南
+			SetWindowCursor(UF_IDC_SIZENESW);
+			return HTBOTTOMLEFT;
+		}
+	}
+
+	// 右上角
+	if (nRight > 0 && nTop > 0)
+	{
+		if (pt.x >= (RECT_WIDTH(wndRct) - nRight) && pt.y <= nTop)
+		{
+			// 双箭头指向东北和西南
+			SetWindowCursor(UF_IDC_SIZENESW);
+			return HTTOPRIGHT;
+		}
+	}
+
+	// 右下角
+	if (nRight > 0 && nBottom > 0)
+	{
+		if (pt.x >= (RECT_WIDTH(wndRct) - nRight) && pt.y >= (RECT_HEIGHT(wndRct) - nBottom))
+		{
+			// 双箭头指向西北和东南
+			SetWindowCursor(UF_IDC_SIZENWSE);
+			return HTBOTTOMRIGHT;
+		}
+	}
+
+	// 再判断四边
+	// 左边
+	if (nLeft > 0 && pt.x <= nLeft)
+	{
+		// 双箭头指向东西
+		SetWindowCursor(UF_IDC_SIZEWE);
+		return HTLEFT;
+	}
+
+	// 右边
+	if (nRight > 0 && pt.x >= (RECT_WIDTH(wndRct) - nRight))
+	{
+		// 双箭头指向东西
+		SetWindowCursor(UF_IDC_SIZEWE);
+		return HTRIGHT;
+	}
+
+	// 上边
+	if (nTop > 0 && pt.y <= nTop)
+	{
+		// 双箭头指向南北
+		SetWindowCursor(UF_IDC_SIZENS);
+		return HTTOP;
+	}
+
+	// 下边
+	if (nBottom > 0 && pt.y >= (RECT_HEIGHT(wndRct) - nBottom))
+	{
+		// 双箭头指向南北
+		SetWindowCursor(UF_IDC_SIZENS);
+		return HTBOTTOM;
+	}
+
+	return HTNOWHERE;
+}
+
+// 显示自定义光标
+void IWindowBaseImpl::SetWindowCursor(int nCursor)
+{
+	if (nCursor == m_nCurMouseStyle)
+	{
+		if (UF_IDC_ARROW == m_nCurMouseStyle)
+			m_nCurMouseStyle = -1;
+		return;
+	}
+
+	::ShowCursor(FALSE);
+	m_nCurMouseStyle = nCursor;
+	::ShowCursor(TRUE);
+	::PostMessage(this->m_hWnd, WM_SETCURSOR, NULL, NULL);
+}
+
+bool IWindowBaseImpl::OnSetCursor(HWND hWnd, int nHitTest, int nMsgId)
+{
+	if (m_nCurMouseStyle != -1)
+	{
+		HCURSOR hCursor = ::LoadCursor(NULL, MAKEINTRESOURCE(m_nCurMouseStyle));
+		if (hCursor != NULL)
+		{
+			HCURSOR hSetCur = ::SetCursor(hCursor);
+			if (hSetCur != NULL)
+			{
+				::DestroyCursor(hSetCur);
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+LRESULT IWindowBaseImpl::OnNcHitTest(int nX, int nY)
+{
+	POINT pt;
+	pt.x = nX;
+	pt.y = nY;
+	int nHit = MouseMoveInWindowFrame(pt);
+	if (nHit != HTNOWHERE)
+		return nHit;
+
+	return -1;
 }
 
 void IWindowBaseImpl::OnLButtonDbClick(int nVirtKey, POINT pt)
@@ -708,11 +880,12 @@ void IWindowBaseImpl::OnLButtonUp(int nVirtKey, POINT pt)
 {
 	if (!IsInit())
 		return;
+
 	::ReleaseCapture();
+	m_bIsLButtonDown = false;
 
 	if (m_pLButtonDownCtrl != NULL)
 	{
-		m_bIsLButtonDown = false;
 		m_pLButtonDownCtrl->OnLButtonUp(pt);
 		m_pLButtonDownCtrl = NULL;
 	}
@@ -1055,8 +1228,15 @@ void IWindowBaseImpl::RedrawWindow(RECT* pDrawRct)
 	::RedrawWindow(m_hWnd, pDrawRct, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 }
 
+// 是否为设计模式
+bool IWindowBaseImpl::IsDesignMode()
+{
+	return m_bIsDesignMode;
+}
+
 void IWindowBaseImpl::BD_InitWindowBase(IPropertyWindow *pWindowProp, bool bSetDftProp)
 {
+	m_bIsDesignMode = true;
 	if (pWindowProp == NULL)
 		return;
 
