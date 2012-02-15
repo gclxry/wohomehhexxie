@@ -27,5 +27,16 @@
 <int objid="window93.group110.int114"/>
 <int objid="window93.group110.int115"/>
 </group>
+<group objid="window93.group169">
+<int objid="window93.group169.int170"/>
+<int objid="window93.group169.int171"/>
+</group>
+<group objid="window93.group172">
+<bool objid="window93.group172.bool173"/>
+<int objid="window93.group172.int174"/>
+<int objid="window93.group172.int175"/>
+<int objid="window93.group172.int176"/>
+<int objid="window93.group172.int177"/>
+</group>
 </window>
 </windows>

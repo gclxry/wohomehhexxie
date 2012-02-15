@@ -120,7 +120,8 @@ void CPropertyViewCtrl::AppendPropGroup(CMFCPropertyGridProperty* pParentPropGro
 	for (GROUP_PROP_VEC::iterator pPropItem = pPropVec->begin(); pPropItem != pPropVec->end(); pPropItem++)
 	{
 		IPropertyBase* pProp = *pPropItem;
-		if (pProp == NULL)
+		// GetActivePropetry() 函数为了不显示刚刚修改属性名称的属性
+		if (pProp == NULL || !pProp->GetActivePropetry())
 			continue;
 
 		OBJECT_TYPE_ID ObjTypeId = pProp->GetObjectTypeId();

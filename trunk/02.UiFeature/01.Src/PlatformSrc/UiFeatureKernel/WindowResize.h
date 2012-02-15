@@ -1,5 +1,7 @@
 
 #pragma once
+#include "..\..\Inc\IPropertyBool.h"
+#include "..\..\Inc\IPropertyInt.h"
 
 class IWindowBaseImpl;
 class CWindowResize
@@ -8,11 +10,23 @@ public:
 	CWindowResize();
 	~CWindowResize();
 
-	VOID InitResizeInfo(IWindowBaseImpl *pWndBase, UINT uNcHitTest, int nMaxWidth, int nMaxHeight, int nMinWidth, int nMinHeight);
-	VOID UnInit();
+	void InitResizeInfo(IWindowBaseImpl *pWndBase, IPropertyBool *pPropBase_Layered,
+		IPropertyBool *pPropSize_Enable,
+		IPropertyInt *pPropSize_MaxWidth, IPropertyInt *pPropSize_MaxHeight,
+		IPropertyInt *pPropSize_MinWidth, IPropertyInt *pPropSize_MinHeight,
+		IPropertyBool *pPropStretching_Enable,
+		IPropertyInt *pPropStretching_LeftSpace, IPropertyInt *pPropStretching_RightSpace,
+		IPropertyInt *pPropStretching_TopSpace, IPropertyInt *pPropStretching_BottomSpace);
+
+	// 鼠标是否移动到了窗口可以进行拉伸操作的边缘
+	int MouseMoveInWindowFrame(POINT pt);
+
+
 	bool MoveWindowToRect(RECT &MoveRect);
 	bool IsInResize();
 	UINT GetHitType();
+
+
 
 private:
 	// 上一次拉伸后的窗口的大小和位置
@@ -21,7 +35,21 @@ private:
 	UINT m_uNcHitTest;
 	// 被拉伸的窗口
 	IWindowBaseImpl *m_pWindowBase;
-	// 窗口最大值和最小值
+	// 是否支持分层窗口
+	bool m_bSupLayered;
+
+	// stretching-enable
+	bool m_bStretching;
+	// stretching-leftspace
+	int m_nLeftSpace;
+	// stretching-rightspace
+	int m_nRightSpace;
+	// stretching-topspace
+	int m_nTopSpace;
+	// stretching-bottomspace
+	int m_nBottomSpace;
+
+	bool m_bUseSize;
 	int m_nMaxWidth;
 	int m_nMaxHeight;
 	int m_nMinWidth;

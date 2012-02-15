@@ -200,6 +200,8 @@ IPropertyBase* CreateResourcePropetry(IFeatureObject *pOwnerObj, IPropertySkinMa
 				// 找到了已经设置的属性
 				pPropBase->SetObjectInfo(pszPropInfo);
 				pPropBase->SetOwnerObject(pOwnerObj);
+				// SetActivePropetry(true) 的属性才是有效的属性，会被现实，会被保存
+				pPropBase->SetActivePropetry(true);
 				return pPropBase;
 			}
 			else
@@ -215,6 +217,8 @@ IPropertyBase* CreateResourcePropetry(IFeatureObject *pOwnerObj, IPropertySkinMa
 	if (pPropBase == NULL)
 		return NULL;
 
+	// SetActivePropetry(true) 的属性才是有效的属性，会被现实，会被保存
+	pPropBase->SetActivePropetry(true);
 	pPropBase->SetOwnerObject(pOwnerObj);
 	pPropBase->SetObjectName(pszPropName);
 	pPropBase->SetObjectInfo(pszPropInfo);
