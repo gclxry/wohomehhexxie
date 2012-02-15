@@ -204,11 +204,57 @@ void IWindowBaseImpl::OnInitWindowBase()
 		m_pPropSize_Enable, m_pPropSize_MaxWidth, m_pPropSize_MaxHeight, m_pPropSize_MinWidth, m_pPropSize_MinHeight,
 		m_pPropStretching_Enable, m_pPropStretching_LeftSpace, m_pPropStretching_RightSpace, m_pPropStretching_TopSpace, m_pPropStretching_BottomSpace);
 
-	// 当窗口的属性发生变化时需要通知窗口进行刷新
-	RefreshWindowStyle();
+	// 根据窗口基本属性，设置窗口基本样式
+	SetWindowStyleByProp();
 
 	// 向窗口发送通知：初始化皮肤完成
 	::PostMessage(m_hWnd, UM_INIT_WINDOW_SUCCESS, NULL, NULL);
+}
+
+// 根据窗口基本属性，设置窗口基本样式
+void IWindowBaseImpl::SetWindowStyleByProp()
+{
+	// 设置窗体的透明特性
+	if (m_pPropBase_Layered != NULL)
+		SetWindowTransparence(m_pPropBase_Layered->GetValue());
+
+	// 窗口标题
+	if (m_pPropBase_WindowText != NULL)
+		::SetWindowTextA(this->GetSafeHandle(), m_pPropBase_WindowText->GetString());
+
+	// 设置窗口置顶
+	if (m_pPropBase_TopMost != NULL)
+	{
+		SIZE wndSize = this->PP_GetWindowPropSize();
+		::SetWindowPos(this->GetSafeHandle(), (m_pPropBase_TopMost->GetValue() ? HWND_TOPMOST : HWND_NOTOPMOST), 0, 0, wndSize.cx, wndSize.cy, SWP_NOSIZE | SWP_NOMOVE);
+	}
+
+	// 当窗口的属性发生变化时需要通知窗口进行刷新
+	RefreshWindowStyle();
+}
+
+// 设置窗体的透明特性
+void IWindowBaseImpl::SetWindowTransparence(bool bIsTrans)
+{
+	DWORD dwExStyle = ::GetWindowLong(m_hWnd, GWL_EXSTYLE);
+	if (bIsTrans)
+	{
+		// 透明
+		if ((dwExStyle & WS_EX_LAYERED) != WS_EX_LAYERED)
+		{
+			dwExStyle |= WS_EX_LAYERED;
+			::SetWindowLong(m_hWnd, GWL_EXSTYLE, dwExStyle);
+		}
+	}
+	else
+	{
+		// 不透明
+		if ((dwExStyle & WS_EX_LAYERED) == WS_EX_LAYERED)
+		{
+			dwExStyle &= (~WS_EX_LAYERED);
+			::SetWindowLong(m_hWnd, GWL_EXSTYLE, dwExStyle);
+		}
+	}
 }
 
 // 创建控件
@@ -356,6 +402,54 @@ void IWindowBaseImpl::CenterWindow()
 	}
 }
 
+// 在分层窗口模式下，初始化窗口后，显示窗口
+void IWindowBaseImpl::CreateShowInLayeredWindow()
+{
+	if (m_pPropBase_Layered == NULL || !m_pPropBase_Layered->GetValue())
+		return;
+
+	SIZE WndSize = this->PP_GetWindowPropSize();
+
+	// 设置默认大小
+	RECT WorkArea, CenterRect;
+	INIT_RECT(WorkArea);
+	INIT_RECT(CenterRect);
+	::SystemParametersInfo(SPI_GETWORKAREA, 0, &WorkArea, 0);
+
+	CenterRect.left = (RECT_WIDTH(WorkArea) - WndSize.cx) / 2;
+	CenterRect.right = CenterRect.left + WndSize.cx;
+	CenterRect.top = (RECT_HEIGHT(WorkArea) - WndSize.cy) / 2;
+	CenterRect.bottom = CenterRect.top + WndSize.cy;
+
+	// 设置窗口置顶
+	if (m_pPropBase_TopMost != NULL)
+	{
+		SIZE wndSize = this->PP_GetWindowPropSize();
+		::SetWindowPos(m_hWnd, (m_pPropBase_TopMost->GetValue() ? HWND_TOPMOST : HWND_NOTOPMOST),
+			CenterRect.left, CenterRect.top, WndSize.cx, WndSize.cy, 0);
+
+		RedrawWindow();
+	}
+}
+
+// 立即重绘窗口
+void IWindowBaseImpl::RedrawWindow(RECT *pDrawRect)
+{
+	if (IS_SAFE_HANDLE(m_hWnd))
+	{
+		if (m_pPropBase_Layered != NULL && m_pPropBase_Layered->GetValue())
+		{
+			HDC hDc = ::GetDC(this->GetSafeHandle());
+			OnPaint(hDc);
+			::ReleaseDC(this->GetSafeHandle(), hDc);
+		}
+		else
+		{
+			::RedrawWindow(m_hWnd, pDrawRect, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
+		}
+	}
+}
+
 // 本窗口的消息处理函数，bPassOn参数为true是，消息会继续传递处理；false时，处理完毕，不再下传
 LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, bool &bPassOn)
 {
@@ -370,6 +464,7 @@ LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, b
 	case UM_INIT_WINDOW_SUCCESS:
 		// 需要外部对话框接受的消息：使用皮肤初始化窗口异常
 	case UM_INIT_WINDOW_ERROR:
+		CreateShowInLayeredWindow();
 		break;
 
 //		// 初始化窗口
@@ -588,10 +683,31 @@ bool IWindowBaseImpl::CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt, I
 	return false;
 }
 
+void IWindowBaseImpl::ResizeInLayeredWindow(RECT NewWndRect)
+{
+	if (m_pPropBase_TopMost == NULL || m_pPropBase_Layered == NULL || !m_pPropBase_Layered->GetValue())
+		return;
+
+	::SetWindowPos(m_hWnd, (m_pPropBase_TopMost->GetValue() ? HWND_TOPMOST : HWND_NOTOPMOST),
+		NewWndRect.left, NewWndRect.top, RECT_WIDTH(NewWndRect), RECT_HEIGHT(NewWndRect), SWP_NOREDRAW | SWP_NOACTIVATE);
+
+	OnSize(0, RECT_WIDTH(NewWndRect), RECT_HEIGHT(NewWndRect));
+
+	RedrawWindow();
+}
+
 void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 {
 	if (!IsInit())
 		return;
+
+	// 窗口的拉伸操作
+	RECT OutOldRect, OutNewRect;
+	if (m_WndResize.ResizeInLayeredWindow(OutOldRect, OutNewRect))
+	{
+		ResizeInLayeredWindow(OutNewRect);
+		return;
+	}
 
 	if (m_bIsLButtonDown)
 	{
@@ -710,12 +826,16 @@ bool IWindowBaseImpl::OnSetCursor(HWND hWnd, int nHitTest, int nMsgId)
 
 LRESULT IWindowBaseImpl::OnNcHitTest(int nX, int nY)
 {
-	POINT pt;
-	pt.x = nX;
-	pt.y = nY;
-	int nHit = m_WndResize.MouseMoveInWindowFrame(pt);
-	if (nHit != HTNOWHERE)
-		return nHit;
+	if (m_pPropBase_Layered == NULL || !m_pPropBase_Layered->GetValue())
+	{
+		// 非分层模式下才进行拉伸操作
+		POINT pt;
+		pt.x = nX;
+		pt.y = nY;
+		int nHit = m_WndResize.MouseMoveInWindowFrame(pt);
+		if (nHit != HTNOWHERE)
+			return nHit;
+	}
 
 	return -1;
 }
@@ -771,6 +891,10 @@ void IWindowBaseImpl::OnLButtonDown(int nVirtKey, POINT pt)
 	if (!IsInit())
 		return;
 
+	// 判断是否进入了拉伸窗口范围，进入则开始进行拉伸操作
+	if (m_WndResize.BeginResizeInLayeredWindow())
+		return;
+
 	// 取得当前鼠标按下的控件
 	IControlBase *pControl = NULL;
 	CheckMouseInControl(&m_ChildCtrlsVec, pt, &pControl);
@@ -802,6 +926,9 @@ void IWindowBaseImpl::OnLButtonUp(int nVirtKey, POINT pt)
 {
 	if (!IsInit())
 		return;
+
+	// 释放窗口拉伸操作
+	m_WndResize.EndResizeInLayeredWindow();
 
 	::ReleaseCapture();
 	m_bIsLButtonDown = false;
@@ -1143,11 +1270,6 @@ void IWindowBaseImpl::DrawControl()
 			pCtrl->OnPaintControl(m_WndMemDc, WndRct);
 		}
 	}
-}
-
-void IWindowBaseImpl::RedrawWindow(RECT* pDrawRct)
-{
-	::RedrawWindow(m_hWnd, pDrawRct, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 }
 
 // 是否为设计模式

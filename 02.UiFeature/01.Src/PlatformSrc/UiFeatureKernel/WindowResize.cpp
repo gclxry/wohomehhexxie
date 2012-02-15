@@ -11,7 +11,7 @@ CWindowResize::CWindowResize()
 {
 	m_pWindowBase = NULL;
 	INIT_RECT(m_OldRect);
-	m_uNcHitTest = 0;
+	m_nNcHitTest = HTNOWHERE;
 	m_bSupLayered = false;
 
 	m_bStretching = false;
@@ -31,14 +31,9 @@ CWindowResize::~CWindowResize()
 {
 }
 
-UINT CWindowResize::GetHitType()
-{
-	return m_uNcHitTest;
-}
-
 bool CWindowResize::IsInResize()
 {
-	return (m_pWindowBase != NULL);
+	return (m_nNcHitTest != HTNOWHERE);
 }
 
 void CWindowResize::InitResizeInfo(IWindowBaseImpl *pWndBase, IPropertyBool *pPropBase_Layered,
@@ -78,7 +73,7 @@ void CWindowResize::InitResizeInfo(IWindowBaseImpl *pWndBase, IPropertyBool *pPr
 // 鼠标是否移动到了窗口可以进行拉伸操作的边缘
 int CWindowResize::MouseMoveInWindowFrame(POINT pt)
 {
-	if (!m_bStretching || m_pWindowBase == NULL)
+	if (!m_bStretching || m_pWindowBase == NULL || !m_bStretching)
 		return HTNOWHERE;
 
 	RECT wndRct = m_pWindowBase->GetClientRect();
@@ -164,108 +159,118 @@ int CWindowResize::MouseMoveInWindowFrame(POINT pt)
 	return HTNOWHERE;
 }
 
-bool CWindowResize::MoveWindowToRect(RECT &MoveRect)
+bool CWindowResize::ResizeInLayeredWindow(RECT &OutOldRect, RECT &OutNewRect)
 {
+	INIT_RECT(OutOldRect);
+	INIT_RECT(OutNewRect);
+
+	if (m_pWindowBase == NULL || !m_bSupLayered || m_nNcHitTest == HTNOWHERE || !m_bStretching)
+		return false;
+
+	RECT MoveRect;
+	memcpy(&MoveRect, &m_OldRect, sizeof(RECT));
+	memcpy(&OutOldRect, &m_OldRect, sizeof(RECT));
+	memcpy(&OutNewRect, &m_OldRect, sizeof(RECT));
+
 	bool bRet = false;
-	if (m_pWindowBase != NULL && m_pWindowBase->GetSafeHandle() != NULL && ::IsWindow(m_pWindowBase->GetSafeHandle()))
+	POINT CurMousePos, OldPt;
+
+	CurMousePos.x = CurMousePos.y = OldPt.x = OldPt.y = 0;
+	::GetCursorPos(&CurMousePos);
+
+	if (HTLEFT == m_nNcHitTest)
 	{
-		memcpy(&MoveRect, &m_OldRect, sizeof(RECT));
+		OldPt.x = m_OldRect.left;
+		if ((OldPt.x - CurMousePos.x >= MOVE_PIX) || (CurMousePos.x - OldPt.x >= MOVE_PIX))
+		{
+			MoveRect.left = CurMousePos.x;
+			bRet = true;
+		}
+	}
+	else if (HTTOPLEFT == m_nNcHitTest)
+	{
+		OldPt.x = m_OldRect.left;
+		OldPt.y = m_OldRect.top;
+		if ((OldPt.x - CurMousePos.x >= MOVE_PIX) || (CurMousePos.x - OldPt.x >= MOVE_PIX) ||
+			(OldPt.y - CurMousePos.y >= MOVE_PIX) || (CurMousePos.y - OldPt.y >= MOVE_PIX))
+		{
+			MoveRect.left = CurMousePos.x;
+			MoveRect.top = CurMousePos.y;
+			bRet = true;
+		}
+	}
+	else if (HTRIGHT == m_nNcHitTest)
+	{
+		OldPt.x = m_OldRect.right;
+		if ((OldPt.x - CurMousePos.x >= MOVE_PIX) || (CurMousePos.x - OldPt.x >= MOVE_PIX))
+		{
+			MoveRect.right = CurMousePos.x;
+			bRet = true;
+		}
+	}
+	else if (HTTOP == m_nNcHitTest)
+	{
+		OldPt.y = m_OldRect.top;
+		if ((OldPt.y - CurMousePos.y >= MOVE_PIX) || (CurMousePos.y - OldPt.y >= MOVE_PIX))
+		{
+			MoveRect.top = CurMousePos.y;
+			bRet = true;
+		}
+	}
+	else if (HTBOTTOM == m_nNcHitTest)
+	{
+		OldPt.y = m_OldRect.bottom;
+		if ((OldPt.y - CurMousePos.y >= MOVE_PIX) || (CurMousePos.y - OldPt.y >= MOVE_PIX))
+		{
+			MoveRect.bottom = CurMousePos.y;
+			bRet = true;
+		}
+	}
+	else if (HTBOTTOMLEFT == m_nNcHitTest)
+	{
+		OldPt.x = m_OldRect.left;
+		OldPt.y = m_OldRect.bottom;
+		if ((OldPt.x - CurMousePos.x >= MOVE_PIX) || (CurMousePos.x - OldPt.x >= MOVE_PIX) ||
+			(OldPt.y - CurMousePos.y >= MOVE_PIX) || (CurMousePos.y - OldPt.y >= MOVE_PIX))
+		{
+			MoveRect.left = CurMousePos.x;
+			MoveRect.bottom = CurMousePos.y;
+			bRet = true;
+		}
+	}
+	else if (HTTOPRIGHT == m_nNcHitTest)
+	{
+		OldPt.x = m_OldRect.right;
+		OldPt.y = m_OldRect.top;
+		if ((OldPt.x - CurMousePos.x >= MOVE_PIX) || (CurMousePos.x - OldPt.x >= MOVE_PIX) ||
+			(OldPt.y - CurMousePos.y >= MOVE_PIX) || (CurMousePos.y - OldPt.y >= MOVE_PIX))
+		{
+			MoveRect.right = CurMousePos.x;
+			MoveRect.top = CurMousePos.y;
+			bRet = true;
+		}
+	}
+	else if (HTBOTTOMRIGHT == m_nNcHitTest)
+	{
+		OldPt.x = m_OldRect.right;
+		OldPt.y = m_OldRect.bottom;
+		if ((OldPt.x - CurMousePos.x >= MOVE_PIX) || (CurMousePos.x - OldPt.x >= MOVE_PIX) ||
+			(OldPt.y - CurMousePos.y >= MOVE_PIX) || (CurMousePos.y - OldPt.y >= MOVE_PIX))
+		{
+			MoveRect.right = CurMousePos.x;
+			MoveRect.bottom = CurMousePos.y;
+			bRet = true;
+		}
+	}
 
-		POINT CurMousePos;
-		::GetCursorPos(&CurMousePos);
-
-		POINT OldPt;
-		if (HTLEFT == m_uNcHitTest)
-		{
-			OldPt.x = m_OldRect.left;
-			if ((OldPt.x - CurMousePos.x >= MOVE_PIX) || (CurMousePos.x - OldPt.x >= MOVE_PIX))
-			{
-				MoveRect.left = CurMousePos.x;
-				bRet = true;
-			}
-		}
-		else if (HTTOPLEFT == m_uNcHitTest)
-		{
-			OldPt.x = m_OldRect.left;
-			OldPt.y = m_OldRect.top;
-			if ((OldPt.x - CurMousePos.x >= MOVE_PIX) || (CurMousePos.x - OldPt.x >= MOVE_PIX) ||
-				(OldPt.y - CurMousePos.y >= MOVE_PIX) || (CurMousePos.y - OldPt.y >= MOVE_PIX))
-			{
-				MoveRect.left = CurMousePos.x;
-				MoveRect.top = CurMousePos.y;
-				bRet = true;
-			}
-		}
-		else if (HTRIGHT == m_uNcHitTest)
-		{
-			OldPt.x = m_OldRect.right;
-			if ((OldPt.x - CurMousePos.x >= MOVE_PIX) || (CurMousePos.x - OldPt.x >= MOVE_PIX))
-			{
-				MoveRect.right = CurMousePos.x;
-				bRet = true;
-			}
-		}
-		else if (HTTOP == m_uNcHitTest)
-		{
-			OldPt.y = m_OldRect.top;
-			if ((OldPt.y - CurMousePos.y >= MOVE_PIX) || (CurMousePos.y - OldPt.y >= MOVE_PIX))
-			{
-				MoveRect.top = CurMousePos.y;
-				bRet = true;
-			}
-		}
-		else if (HTBOTTOM == m_uNcHitTest)
-		{
-			OldPt.y = m_OldRect.bottom;
-			if ((OldPt.y - CurMousePos.y >= MOVE_PIX) || (CurMousePos.y - OldPt.y >= MOVE_PIX))
-			{
-				MoveRect.bottom = CurMousePos.y;
-				bRet = true;
-			}
-		}
-		else if (HTBOTTOMLEFT == m_uNcHitTest)
-		{
-			OldPt.x = m_OldRect.left;
-			OldPt.y = m_OldRect.bottom;
-			if ((OldPt.x - CurMousePos.x >= MOVE_PIX) || (CurMousePos.x - OldPt.x >= MOVE_PIX) ||
-				(OldPt.y - CurMousePos.y >= MOVE_PIX) || (CurMousePos.y - OldPt.y >= MOVE_PIX))
-			{
-				MoveRect.left = CurMousePos.x;
-				MoveRect.bottom = CurMousePos.y;
-				bRet = true;
-			}
-		}
-		else if (HTTOPRIGHT == m_uNcHitTest)
-		{
-			OldPt.x = m_OldRect.right;
-			OldPt.y = m_OldRect.top;
-			if ((OldPt.x - CurMousePos.x >= MOVE_PIX) || (CurMousePos.x - OldPt.x >= MOVE_PIX) ||
-				(OldPt.y - CurMousePos.y >= MOVE_PIX) || (CurMousePos.y - OldPt.y >= MOVE_PIX))
-			{
-				MoveRect.right = CurMousePos.x;
-				MoveRect.top = CurMousePos.y;
-				bRet = true;
-			}
-		}
-		else if (HTBOTTOMRIGHT == m_uNcHitTest)
-		{
-			OldPt.x = m_OldRect.right;
-			OldPt.y = m_OldRect.bottom;
-			if ((OldPt.x - CurMousePos.x >= MOVE_PIX) || (CurMousePos.x - OldPt.x >= MOVE_PIX) ||
-				(OldPt.y - CurMousePos.y >= MOVE_PIX) || (CurMousePos.y - OldPt.y >= MOVE_PIX))
-			{
-				MoveRect.right = CurMousePos.x;
-				MoveRect.bottom = CurMousePos.y;
-				bRet = true;
-			}
-		}
-
-		if (bRet)
+	if (bRet)
+	{
+		if (m_bUseSize)
 		{
 			int nWidth = MoveRect.right - MoveRect.left;
 			int nHeight = MoveRect.bottom - MoveRect.top;
 			// 边界判断
-			if (HTLEFT == m_uNcHitTest || HTTOPLEFT == m_uNcHitTest || HTBOTTOMLEFT == m_uNcHitTest)
+			if (HTLEFT == m_nNcHitTest || HTTOPLEFT == m_nNcHitTest || HTBOTTOMLEFT == m_nNcHitTest)
 			{
 				if (m_nMaxWidth != -1 && nWidth > m_nMaxWidth)
 					MoveRect.left = MoveRect.right - m_nMaxWidth;
@@ -274,7 +279,7 @@ bool CWindowResize::MoveWindowToRect(RECT &MoveRect)
 					MoveRect.left = MoveRect.right - m_nMinWidth;
 			}
 
-			if (HTRIGHT == m_uNcHitTest || HTTOPRIGHT == m_uNcHitTest || HTBOTTOMRIGHT == m_uNcHitTest)
+			if (HTRIGHT == m_nNcHitTest || HTTOPRIGHT == m_nNcHitTest || HTBOTTOMRIGHT == m_nNcHitTest)
 			{
 				if (m_nMaxWidth != -1 && nWidth > m_nMaxWidth)
 					MoveRect.right = MoveRect.left + m_nMaxWidth;
@@ -283,7 +288,7 @@ bool CWindowResize::MoveWindowToRect(RECT &MoveRect)
 					MoveRect.right = MoveRect.left + m_nMinWidth;
 			}
 
-			if (HTTOP == m_uNcHitTest || HTTOPLEFT == m_uNcHitTest || HTTOPRIGHT == m_uNcHitTest)
+			if (HTTOP == m_nNcHitTest || HTTOPLEFT == m_nNcHitTest || HTTOPRIGHT == m_nNcHitTest)
 			{
 				if (m_nMaxHeight != -1 && nHeight > m_nMaxHeight)
 					MoveRect.top = MoveRect.bottom - m_nMaxHeight;
@@ -292,7 +297,7 @@ bool CWindowResize::MoveWindowToRect(RECT &MoveRect)
 					MoveRect.top = MoveRect.bottom - m_nMinHeight;
 			}
 
-			if (HTBOTTOM == m_uNcHitTest || HTBOTTOMLEFT == m_uNcHitTest || HTBOTTOMRIGHT == m_uNcHitTest)
+			if (HTBOTTOM == m_nNcHitTest || HTBOTTOMLEFT == m_nNcHitTest || HTBOTTOMRIGHT == m_nNcHitTest)
 			{
 				if (m_nMaxHeight != -1 && nHeight > m_nMaxHeight)
 					MoveRect.bottom = MoveRect.top + m_nMaxHeight;
@@ -311,8 +316,44 @@ bool CWindowResize::MoveWindowToRect(RECT &MoveRect)
 			else
 			{
 				m_OldRect = MoveRect;
+				memcpy(&OutNewRect, &m_OldRect, sizeof(RECT));
 			}
 		}
+		else
+		{
+			m_OldRect = MoveRect;
+			memcpy(&OutNewRect, &m_OldRect, sizeof(RECT));
+		}
 	}
+
 	return bRet;
+}
+
+bool CWindowResize::BeginResizeInLayeredWindow()
+{
+	if (m_pWindowBase == NULL || !m_bSupLayered || !m_bStretching)
+		return false;
+
+	POINT pt;
+	pt.x = pt.y = 0;
+	::ScreenToClient(m_pWindowBase->GetSafeHandle(), &pt);
+
+	m_nNcHitTest = MouseMoveInWindowFrame(pt);
+	if (m_nNcHitTest == HTNOWHERE)
+		return false;
+
+	::SetCapture(m_pWindowBase->GetSafeHandle());
+	::GetWindowRect(m_pWindowBase->GetSafeHandle(), &m_OldRect);
+	return true;
+}
+
+void CWindowResize::EndResizeInLayeredWindow()
+{
+	if (m_pWindowBase == NULL || !m_bSupLayered || m_nNcHitTest != HTNOWHERE || !m_bStretching)
+		return;
+
+	::ReleaseCapture();
+	INIT_RECT(m_OldRect);
+	m_nNcHitTest = HTNOWHERE;
+	m_pWindowBase->SetWindowCursor(UF_IDC_ARROW);
 }

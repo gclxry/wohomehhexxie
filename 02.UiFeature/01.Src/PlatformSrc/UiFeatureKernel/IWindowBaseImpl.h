@@ -66,8 +66,11 @@ public:
 	// 取得子控件的属性列表：Layout.xml 中的布局
 	virtual PROP_CONTROL_VEC* GetChildPropControlVec();
 
-	virtual void InvalidateRect(RECT *lpRect);
-	virtual void UpdateWindow();
+
+	void InvalidateRect(RECT *lpRect);
+	void UpdateWindow();
+	// 立即重绘窗口
+	void RedrawWindow(RECT *pDrawRect = NULL);
 
 	// 显示自定义光标
 	void SetWindowCursor(int nCursor);
@@ -119,7 +122,6 @@ private:
 private:
 	// 循环遍历每个控件的绘制
 	void DrawControl();
-	void RedrawWindow(RECT* pDrawRct = NULL);
 	// 当窗口的属性发生变化时需要通知窗口进行刷新时调用
 	void RefreshWindowStyle();
 	// 取得当前鼠标坐标落在了哪个控件上
@@ -130,6 +132,14 @@ private:
 	void SetFocusCtrl(IControlBase *pControl);
 	// 通过递归查找指定名称的控件
 	bool GetControlByName(CHILD_CTRLS_VEC *pCtrlVec, char *pszCtrlName, IControlBase **ppCtrl);
+	// 在分层窗口模式下拉伸窗口大小
+	void ResizeInLayeredWindow(RECT NewWndRect);
+	// 根据窗口基本属性，设置窗口基本样式
+	void SetWindowStyleByProp();
+	// 设置窗口支持透明模式
+	void SetWindowTransparence(bool bIsTrans);
+	// 在分层窗口模式下，初始化窗口后，显示窗口
+	void CreateShowInLayeredWindow();
 
 protected:
 	// 是否为设计模式
