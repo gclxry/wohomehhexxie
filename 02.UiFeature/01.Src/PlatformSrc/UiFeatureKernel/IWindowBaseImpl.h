@@ -8,6 +8,7 @@
 #include "..\..\Inc\IPropertyInt.h"
 #include "..\..\Inc\IPropertyImage.h"
 #include "..\..\Inc\IPropertySkinManager.h"
+#include "WindowResize.h"
 
 class IWindowBaseImpl : public IWindowBase
 {
@@ -68,6 +69,9 @@ public:
 	virtual void InvalidateRect(RECT *lpRect);
 	virtual void UpdateWindow();
 
+	// 显示自定义光标
+	void SetWindowCursor(int nCursor);
+
 protected:
 	// 本窗口的消息处理函数，bPassOn参数为true是，消息会继续传递处理；false时，处理完毕，不再下传
 	virtual LRESULT WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, bool &bPassOn);
@@ -76,7 +80,7 @@ protected:
 	virtual void BD_OnTimer(UINT nTimerId, HWND hView);
 	virtual void OnTimer(UINT nTimerId);
 	virtual void OnKeyDown(int nVirtKey, int nFlag);
-	// 系统消息，返回TRUE说明不需要返回给调用继续调用
+	// 系统消息，返回true说明不需要返回给调用继续调用
 	virtual bool OnSysCommand(int nSysCommand, int xPos, int yPos);
 	virtual void OnKillFocus(WPARAM wParam, LPARAM lParam);
 	virtual void OnSetFocus(WPARAM wParam, LPARAM lParam);
@@ -126,10 +130,6 @@ private:
 	void SetFocusCtrl(IControlBase *pControl);
 	// 通过递归查找指定名称的控件
 	bool GetControlByName(CHILD_CTRLS_VEC *pCtrlVec, char *pszCtrlName, IControlBase **ppCtrl);
-	// 鼠标是否移动到了窗口可以进行拉伸操作的边缘
-	int MouseMoveInWindowFrame(POINT pt);
-	// 显示自定义光标
-	void SetWindowCursor(int nCursor);
 
 protected:
 	// 是否为设计模式
@@ -212,6 +212,8 @@ private:
 private:
 	IUiEngine *m_pUiEngine;
 	IPropertySkinManager* m_pSkinPropMgr;
+	// 控制拉伸窗口操作的类
+	CWindowResize m_WndResize;
 
 	bool m_bIsFullScreen;
 	// 当前鼠标样式宏
@@ -242,18 +244,32 @@ private:
 	IPropertyBool *m_pPropSysBase_CanFullScreen;
 	// base-sysbase-最小化
 	IPropertyBool *m_pPropSysBase_CanMiniSize;
-	// base-sysbase-最小尺寸
-	// base-sysbase-最大尺寸
+
 	// Group-size
-	IPropertyGroup* m_pPropGroupSize;
+	IPropertyGroup* m_pPropGroupWindowSize;
 	// size-width
-	IPropertyInt *m_pPropSize_Width;
+	IPropertyInt *m_pPropSize_WindowWidth;
 	// size-height
-	IPropertyInt *m_pPropSize_Height;
+	IPropertyInt *m_pPropSize_WindowHeight;
+
 	// Group-drag(拖拽窗口)
 	IPropertyGroup* m_pPropGroupDrag;
 	// drag-enable
 	IPropertyBool *m_pPropDrag_Enable;
+
+	// Group-Size(窗口的大小)
+	IPropertyGroup* m_pPropGroupSize;
+	// Size-enable
+	IPropertyBool *m_pPropSize_Enable;
+	// Size-MaxWidth
+	IPropertyInt *m_pPropSize_MaxWidth;
+	// Size-MaxHeight
+	IPropertyInt *m_pPropSize_MaxHeight;
+	// Size-MinWidth
+	IPropertyInt *m_pPropSize_MinWidth;
+	// Size-MinHeight
+	IPropertyInt *m_pPropSize_MinHeight;
+
 	// Group-stretching(拉伸窗口)
 	IPropertyGroup* m_pPropGroupStretching;
 	// stretching-enable

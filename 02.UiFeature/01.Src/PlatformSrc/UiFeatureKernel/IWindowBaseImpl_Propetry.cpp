@@ -192,22 +192,19 @@ void IWindowBaseImpl::CreateWindowPropetry(bool bSetDftProp)
 	if (m_pPropSysBase_CanMiniSize == NULL)
 		return;
 
-	// base-sysbase-最小尺寸
-	// base-sysbase-最大尺寸
-
-	// Group-size
-	m_pPropGroupSize = (IPropertyGroup*)CreateWindowOnePropetry(NULL, OTID_GROUP, "Size", "窗口/面板大小");
-	if (m_pPropGroupSize == NULL)
+	// Group-WindowSize
+	m_pPropGroupWindowSize = (IPropertyGroup*)CreateWindowOnePropetry(NULL, OTID_GROUP, "WindowSize", "窗口/面板大小");
+	if (m_pPropGroupWindowSize == NULL)
 		return;
 
 	// size-width
-	m_pPropSize_Width = (IPropertyInt*)CreateWindowOnePropetry(m_pPropGroupSize, OTID_INT, "Width", "窗口宽度");
-	if (m_pPropSize_Width == NULL)
+	m_pPropSize_WindowWidth = (IPropertyInt*)CreateWindowOnePropetry(m_pPropGroupWindowSize, OTID_INT, "Width", "窗口宽度");
+	if (m_pPropSize_WindowWidth == NULL)
 		return;
 
 	// size-height
-	m_pPropSize_Height = (IPropertyInt*)CreateWindowOnePropetry(m_pPropGroupSize, OTID_INT, "Height", "窗口高度");
-	if (m_pPropSize_Height == NULL)
+	m_pPropSize_WindowHeight = (IPropertyInt*)CreateWindowOnePropetry(m_pPropGroupWindowSize, OTID_INT, "Height", "窗口高度");
+	if (m_pPropSize_WindowHeight == NULL)
 		return;
 
 	// Group-drag(拖拽窗口)
@@ -218,6 +215,36 @@ void IWindowBaseImpl::CreateWindowPropetry(bool bSetDftProp)
 	// drag-enable
 	m_pPropDrag_Enable = (IPropertyBool*)CreateWindowOnePropetry(m_pPropGroupDrag, OTID_BOOL, "Enable", "是否可以拖动窗口，随处移动");
 	if (m_pPropDrag_Enable == NULL)
+		return;
+
+	// Group-Size(窗口的变化大小)
+	m_pPropGroupSize = (IPropertyGroup*)CreateWindowOnePropetry(NULL, OTID_GROUP, "WindowMaxMinSize", "窗口变化的尺寸");
+	if (m_pPropGroupSize == NULL)
+		return;
+
+	// Size-enable
+	m_pPropSize_Enable = (IPropertyBool*)CreateWindowOnePropetry(m_pPropGroupSize, OTID_BOOL, "Enable", "是否设置窗口的最大尺寸和最小尺寸");
+	if (m_pPropSize_Enable == NULL)
+		return;
+
+	// Size-MaxWidth
+	m_pPropSize_MaxWidth = (IPropertyInt*)CreateWindowOnePropetry(m_pPropGroupSize, OTID_INT, "MaxWidth", "窗口最大宽度，单位：像素");
+	if (m_pPropSize_MaxWidth == NULL)
+		return;
+
+	// Size-MaxHeight
+	m_pPropSize_MaxHeight = (IPropertyInt*)CreateWindowOnePropetry(m_pPropGroupSize, OTID_INT, "MaxHeight", "窗口最大高度，单位：像素");
+	if (m_pPropSize_MaxHeight == NULL)
+		return;
+
+	// Size-MinWidth
+	m_pPropSize_MinWidth = (IPropertyInt*)CreateWindowOnePropetry(m_pPropGroupSize, OTID_INT, "MinWidth", "窗口最小宽度，单位：像素");
+	if (m_pPropSize_MinWidth == NULL)
+		return;
+
+	// Size-MinHeight
+	m_pPropSize_MinHeight = (IPropertyInt*)CreateWindowOnePropetry(m_pPropGroupSize, OTID_INT, "MinHeight", "窗口最小高度，单位：像素");
+	if (m_pPropSize_MinHeight == NULL)
 		return;
 
 	// Group-stretching(拉伸窗口)
@@ -264,14 +291,23 @@ void IWindowBaseImpl::CreateWindowPropetry(bool bSetDftProp)
 		m_pPropBase_TopMost->SetValue(false);
 		m_pPropSysBase_CanFullScreen->SetValue(false);
 		m_pPropSysBase_CanMiniSize->SetValue(false);
-		m_pPropSize_Width->SetValue(500);
-		m_pPropSize_Height->SetValue(500);
+
+		m_pPropSize_WindowWidth->SetValue(500);
+		m_pPropSize_WindowHeight->SetValue(500);
+
 		m_pPropDrag_Enable->SetValue(false);
+
 		m_pPropStretching_Enable->SetValue(false);
 		m_pPropStretching_LeftSpace->SetValue(0);
 		m_pPropStretching_RightSpace->SetValue(0);
 		m_pPropStretching_TopSpace->SetValue(0);
 		m_pPropStretching_BottomSpace->SetValue(0);
+
+		m_pPropSize_Enable->SetValue(false);
+		m_pPropSize_MaxWidth->SetValue(0);
+		m_pPropSize_MaxHeight->SetValue(0);
+		m_pPropSize_MinWidth->SetValue(0);
+		m_pPropSize_MinHeight->SetValue(0);
 	}
 }
 

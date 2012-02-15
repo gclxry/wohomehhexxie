@@ -14,6 +14,7 @@
 <item objid="window93.Panel116.group117.bool127" name="DefaultEnterCtrl" data="0"/>
 <item objid="window93.group108.bool109" name="Enable" data="1"/>
 <item objid="window93.group110.bool111" name="Enable" data="1"/>
+<item objid="window93.group172.bool173" name="Enable" data="0"/>
 <item objid="window93.group94.bool100" name="LayeredWindow" data="0"/>
 <item objid="window93.group94.bool101" name="TopMost" data="0"/>
 <item objid="window93.group94.bool99" name="Visible" data="1"/>
@@ -36,6 +37,8 @@
 <item objid="window93.group105" name="Size"/>
 <item objid="window93.group108" name="Drag"/>
 <item objid="window93.group110" name="Stretching"/>
+<item objid="window93.group169" name="WindowSize"/>
+<item objid="window93.group172" name="WindowMaxMinSize"/>
 <item objid="window93.group94" name="WindowBase"/>
 <item objid="window93.group94.group102" name="SysBase"/>
 </group>
@@ -53,10 +56,10 @@
 <int>
 <item objid="window93.Panel116.Panel139.group140.group151.int152" name="@Width" data="173"/>
 <item objid="window93.Panel116.Panel139.group140.group151.int153" name="@Height" data="162"/>
-<item objid="window93.Panel116.Panel139.group140.group151.int155" name="@LeftSpace" data="241"/>
-<item objid="window93.Panel116.Panel139.group140.group151.int156" name="@RightSpace" data="86"/>
-<item objid="window93.Panel116.Panel139.group140.group151.int157" name="@TopSpace" data="111"/>
-<item objid="window93.Panel116.Panel139.group140.group151.int158" name="@BottomSpace" data="227"/>
+<item objid="window93.Panel116.Panel139.group140.group151.int155" name="@LeftSpace" data="198"/>
+<item objid="window93.Panel116.Panel139.group140.group151.int156" name="@RightSpace" data="129"/>
+<item objid="window93.Panel116.Panel139.group140.group151.int157" name="@TopSpace" data="149"/>
+<item objid="window93.Panel116.Panel139.group140.group151.int158" name="@BottomSpace" data="189"/>
 <item objid="window93.Panel116.Panel139.group140.int149" name="TabOrder" data="0"/>
 <item objid="window93.Panel116.group117.group128.int129" name="@Width" data="500"/>
 <item objid="window93.Panel116.group117.group128.int130" name="@Height" data="500"/>
@@ -71,6 +74,12 @@
 <item objid="window93.group110.int113" name="RightSpace" data="5"/>
 <item objid="window93.group110.int114" name="TopSpace" data="5"/>
 <item objid="window93.group110.int115" name="BottomSpace" data="5"/>
+<item objid="window93.group169.int170" name="Width" data="500"/>
+<item objid="window93.group169.int171" name="Height" data="500"/>
+<item objid="window93.group172.int174" name="MaxWidth" data="0"/>
+<item objid="window93.group172.int175" name="MaxHeight" data="0"/>
+<item objid="window93.group172.int176" name="MinWidth" data="0"/>
+<item objid="window93.group172.int177" name="MinHeight" data="0"/>
 </int>
 <string>
 <item objid="window93.Panel116.Panel139.group140.string141" name="@Object_Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>

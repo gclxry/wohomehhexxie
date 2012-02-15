@@ -71,16 +71,31 @@ IWindowBaseImpl::IWindowBaseImpl()
 	m_pPropSysBase_CanFullScreen = NULL;
 	// base-sysbase-最小化
 	m_pPropSysBase_CanMiniSize = NULL;
+
 	// Group-size
-	m_pPropGroupSize = NULL;
+	m_pPropGroupWindowSize = NULL;
 	// size-width
-	m_pPropSize_Width = NULL;
+	m_pPropSize_WindowWidth = NULL;
 	// size-height
-	m_pPropSize_Height = NULL;
+	m_pPropSize_WindowHeight = NULL;
+
 	// Group-drag(拖拽窗口)
 	m_pPropGroupDrag = NULL;
 	// drag-enable
 	m_pPropDrag_Enable = NULL;
+
+	// Group-Size(窗口的大小)
+	m_pPropGroupSize = NULL;
+	m_pPropSize_Enable = NULL;
+	// Size-leftspace
+	m_pPropSize_MaxWidth = NULL;
+	// Size-rightspace
+	m_pPropSize_MaxHeight = NULL;
+	// Size-topspace
+	m_pPropSize_MinWidth = NULL;
+	// Size-bottomspace
+	m_pPropSize_MinHeight = NULL;
+
 	// Group-stretching(拉伸窗口)
 	m_pPropGroupStretching = NULL;
 	// stretching-enable
@@ -184,6 +199,11 @@ void IWindowBaseImpl::OnInitWindowBase()
 	}
 
 //////////////////////////////////////////////////////////////////////////
+	// 初始化拉伸窗口操作
+	m_WndResize.InitResizeInfo(this, m_pPropBase_Layered,
+		m_pPropSize_Enable, m_pPropSize_MaxWidth, m_pPropSize_MaxHeight, m_pPropSize_MinWidth, m_pPropSize_MinHeight,
+		m_pPropStretching_Enable, m_pPropStretching_LeftSpace, m_pPropStretching_RightSpace, m_pPropStretching_TopSpace, m_pPropStretching_BottomSpace);
+
 	// 当窗口的属性发生变化时需要通知窗口进行刷新
 	RefreshWindowStyle();
 
@@ -614,7 +634,7 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 	else
 	{
 		// 鼠标是否移动到了窗口可以进行拉伸操作的边缘
-		if (MouseMoveInWindowFrame(pt) != HTNOWHERE)
+		if (m_WndResize.MouseMoveInWindowFrame(pt) != HTNOWHERE)
 			return;
 
 		SetWindowCursor(UF_IDC_ARROW);
@@ -651,104 +671,6 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 			m_pMouseHoverCtrl->OnMouseEnter(pt);
 		}
 	}
-}
-
-// 鼠标是否移动到了窗口可以进行拉伸操作的边缘
-int IWindowBaseImpl::MouseMoveInWindowFrame(POINT pt)
-{
-	if (m_bIsDesignMode || m_pPropStretching_Enable == NULL || m_pPropStretching_LeftSpace == NULL
-		 || m_pPropStretching_RightSpace == NULL || m_pPropStretching_TopSpace == NULL || m_pPropStretching_BottomSpace == NULL)
-		return HTNOWHERE;
-
-	bool bStretching = m_pPropStretching_Enable->GetValue();
-	if (!bStretching)
-		return HTNOWHERE;
-
-	int nLeft = m_pPropStretching_LeftSpace->GetValue();
-	int nRight = m_pPropStretching_RightSpace->GetValue();
-	int nTop = m_pPropStretching_TopSpace->GetValue();
-	int nBottom = m_pPropStretching_BottomSpace->GetValue();
-	RECT wndRct = this->GetClientRect();
-
-	// 先判断四角
-	// 左上角
-	if (nLeft > 0 && nTop > 0)
-	{
-		if (pt.x <= nLeft && pt.y <= nTop)
-		{
-			// 双箭头指向西北和东南
-			SetWindowCursor(UF_IDC_SIZENWSE);
-			return HTTOPLEFT;
-		}
-	}
-
-	// 左下角
-	if (nLeft > 0 && nBottom > 0)
-	{
-		if (pt.x <= nLeft && pt.y >= (RECT_HEIGHT(wndRct) - nBottom))
-		{
-			// 双箭头指向东北和西南
-			SetWindowCursor(UF_IDC_SIZENESW);
-			return HTBOTTOMLEFT;
-		}
-	}
-
-	// 右上角
-	if (nRight > 0 && nTop > 0)
-	{
-		if (pt.x >= (RECT_WIDTH(wndRct) - nRight) && pt.y <= nTop)
-		{
-			// 双箭头指向东北和西南
-			SetWindowCursor(UF_IDC_SIZENESW);
-			return HTTOPRIGHT;
-		}
-	}
-
-	// 右下角
-	if (nRight > 0 && nBottom > 0)
-	{
-		if (pt.x >= (RECT_WIDTH(wndRct) - nRight) && pt.y >= (RECT_HEIGHT(wndRct) - nBottom))
-		{
-			// 双箭头指向西北和东南
-			SetWindowCursor(UF_IDC_SIZENWSE);
-			return HTBOTTOMRIGHT;
-		}
-	}
-
-	// 再判断四边
-	// 左边
-	if (nLeft > 0 && pt.x <= nLeft)
-	{
-		// 双箭头指向东西
-		SetWindowCursor(UF_IDC_SIZEWE);
-		return HTLEFT;
-	}
-
-	// 右边
-	if (nRight > 0 && pt.x >= (RECT_WIDTH(wndRct) - nRight))
-	{
-		// 双箭头指向东西
-		SetWindowCursor(UF_IDC_SIZEWE);
-		return HTRIGHT;
-	}
-
-	// 上边
-	if (nTop > 0 && pt.y <= nTop)
-	{
-		// 双箭头指向南北
-		SetWindowCursor(UF_IDC_SIZENS);
-		return HTTOP;
-	}
-
-	// 下边
-	if (nBottom > 0 && pt.y >= (RECT_HEIGHT(wndRct) - nBottom))
-	{
-		// 双箭头指向南北
-		SetWindowCursor(UF_IDC_SIZENS);
-		return HTBOTTOM;
-	}
-
-	return HTNOWHERE;
 }
 
 // 显示自定义光标
@@ -791,7 +713,7 @@ LRESULT IWindowBaseImpl::OnNcHitTest(int nX, int nY)
 	POINT pt;
 	pt.x = nX;
 	pt.y = nY;
-	int nHit = MouseMoveInWindowFrame(pt);
+	int nHit = m_WndResize.MouseMoveInWindowFrame(pt);
 	if (nHit != HTNOWHERE)
 		return nHit;
 
@@ -1299,11 +1221,11 @@ bool IWindowBaseImpl::IsInit()
 
 void IWindowBaseImpl::BD_DrawWindowView(CDrawingBoard &ViewMemDc)
 {
-	if (ViewMemDc.GetSafeHdc() == NULL || m_pUiEngine == NULL || m_pPropSize_Width == NULL || m_pPropSize_Height == NULL)
+	if (ViewMemDc.GetSafeHdc() == NULL || m_pUiEngine == NULL || m_pPropSize_WindowWidth == NULL || m_pPropSize_WindowHeight == NULL)
 		return;
 
-	int nWidth = m_pPropSize_Width->GetValue();
-	int nHeight = m_pPropSize_Height->GetValue();
+	int nWidth = m_pPropSize_WindowWidth->GetValue();
+	int nHeight = m_pPropSize_WindowHeight->GetValue();
 	
 	// 创建内存dc
 	m_WndMemDc.Create(nWidth, nHeight, 0, false, true);
@@ -1389,10 +1311,10 @@ SIZE IWindowBaseImpl::PP_GetWindowPropSize()
 {
 	SIZE WndSize;
 	WndSize.cx = WndSize.cy = 0;
-	if (m_pPropSize_Width != NULL && m_pPropSize_Height != NULL)
+	if (m_pPropSize_WindowWidth != NULL && m_pPropSize_WindowHeight != NULL)
 	{
-		WndSize.cx = m_pPropSize_Width->GetValue();
-		WndSize.cy = m_pPropSize_Height->GetValue();
+		WndSize.cx = m_pPropSize_WindowWidth->GetValue();
+		WndSize.cy = m_pPropSize_WindowHeight->GetValue();
 	}
 
 	return WndSize;
