@@ -349,7 +349,7 @@ bool CWindowResize::BeginResizeInLayeredWindow()
 
 void CWindowResize::EndResizeInLayeredWindow()
 {
-	if (m_pWindowBase == NULL || !m_bSupLayered || m_nNcHitTest != HTNOWHERE || !m_bStretching)
+	if (m_pWindowBase == NULL || !m_bSupLayered || m_nNcHitTest == HTNOWHERE || !m_bStretching)
 		return;
 
 	::ReleaseCapture();
