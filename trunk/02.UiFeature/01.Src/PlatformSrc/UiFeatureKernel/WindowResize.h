@@ -21,18 +21,18 @@ public:
 	// 鼠标是否移动到了窗口可以进行拉伸操作的边缘
 	int MouseMoveInWindowFrame(POINT pt);
 
-
-	bool MoveWindowToRect(RECT &MoveRect);
 	bool IsInResize();
-	UINT GetHitType();
 
-
+	// 分层窗口模式下，拉伸窗口操作
+	bool BeginResizeInLayeredWindow();
+	bool ResizeInLayeredWindow(RECT &OutOldRect, RECT &OutNewRect);
+	void EndResizeInLayeredWindow();
 
 private:
 	// 上一次拉伸后的窗口的大小和位置
 	RECT m_OldRect;
 	// 鼠标拉伸操作
-	UINT m_uNcHitTest;
+	int m_nNcHitTest;
 	// 被拉伸的窗口
 	IWindowBaseImpl *m_pWindowBase;
 	// 是否支持分层窗口
