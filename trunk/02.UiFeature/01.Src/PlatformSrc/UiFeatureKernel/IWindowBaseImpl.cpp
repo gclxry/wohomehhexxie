@@ -402,33 +402,31 @@ void IWindowBaseImpl::CenterWindow()
 	}
 }
 
-// 在分层窗口模式下，初始化窗口后，显示窗口
-void IWindowBaseImpl::CreateShowInLayeredWindow()
+// 初始化对话框、加载窗口皮肤完成，在分层窗口模式下，初始化窗口后，显示窗口
+void IWindowBaseImpl::OnInitWindowBaseEnd()
 {
-	if (m_pPropBase_Layered == NULL || !m_pPropBase_Layered->GetValue())
-		return;
-
-	SIZE WndSize = this->PP_GetWindowPropSize();
-
-	// 设置默认大小
-	RECT WorkArea, CenterRect;
-	INIT_RECT(WorkArea);
-	INIT_RECT(CenterRect);
-	::SystemParametersInfo(SPI_GETWORKAREA, 0, &WorkArea, 0);
-
-	CenterRect.left = (RECT_WIDTH(WorkArea) - WndSize.cx) / 2;
-	CenterRect.right = CenterRect.left + WndSize.cx;
-	CenterRect.top = (RECT_HEIGHT(WorkArea) - WndSize.cy) / 2;
-	CenterRect.bottom = CenterRect.top + WndSize.cy;
-
-	// 设置窗口置顶
-	if (m_pPropBase_TopMost != NULL)
+	if (m_pPropBase_Layered != NULL && m_pPropBase_Layered->GetValue() && m_pPropBase_TopMost != NULL)
 	{
+		// 在分层窗口模式下，初始化窗口后，显示窗口
+		SIZE WndSize = this->PP_GetWindowPropSize();
+
+		// 设置默认大小
+		RECT WorkArea, CenterRect;
+		INIT_RECT(WorkArea);
+		INIT_RECT(CenterRect);
+		::SystemParametersInfo(SPI_GETWORKAREA, 0, &WorkArea, 0);
+
+		CenterRect.left = (RECT_WIDTH(WorkArea) - WndSize.cx) / 2;
+		CenterRect.right = CenterRect.left + WndSize.cx;
+		CenterRect.top = (RECT_HEIGHT(WorkArea) - WndSize.cy) / 2;
+		CenterRect.bottom = CenterRect.top + WndSize.cy;
+
+		// 设置窗口置顶样式
 		::SetWindowPos(m_hWnd, (m_pPropBase_TopMost->GetValue() ? HWND_TOPMOST : HWND_NOTOPMOST),
 			0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-	}
 
-	RedrawWindow(&CenterRect);
+		RedrawWindow(&CenterRect);
+	}
 }
 
 // 立即重绘窗口
@@ -438,9 +436,9 @@ void IWindowBaseImpl::RedrawWindow(RECT *pDrawRect)
 	{
 		if (m_pPropBase_Layered != NULL && m_pPropBase_Layered->GetValue())
 		{
-			HDC hDc = ::GetDC(this->GetSafeHandle());
+			HDC hDc = ::GetDC(m_hWnd);
 			OnPaint(hDc, pDrawRect);
-			::ReleaseDC(this->GetSafeHandle(), hDc);
+			::ReleaseDC(m_hWnd, hDc);
 		}
 		else
 		{
@@ -463,7 +461,7 @@ LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, b
 	case UM_INIT_WINDOW_SUCCESS:
 		// 需要外部对话框接受的消息：使用皮肤初始化窗口异常
 	case UM_INIT_WINDOW_ERROR:
-		CreateShowInLayeredWindow();
+		OnInitWindowBaseEnd();
 		break;
 
 //		// 初始化窗口
@@ -471,6 +469,11 @@ LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, b
 //		bPassOn = false;
 //		OnInitWindowBase();
 //		break;
+
+
+	case WM_GETMINMAXINFO:
+		bPassOn = !OnGetMinMaxInfo((MINMAXINFO*)lParam);
+		break;
 
 	case WM_MOUSEMOVE:
 		{
@@ -622,6 +625,33 @@ LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, b
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// 消息处理 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool IWindowBaseImpl::OnGetMinMaxInfo(MINMAXINFO *pMinMaxInfo)
+{
+	if (pMinMaxInfo == NULL || m_pPropSize_Enable == NULL || !m_pPropSize_Enable->GetValue())
+		return false;
+
+	bool bRet = false;
+	if (m_pPropSize_MaxWidth != NULL && m_pPropSize_MaxWidth->GetValue() > 0
+		&& m_pPropSize_MaxHeight != NULL && m_pPropSize_MaxHeight->GetValue() > 0)
+	{
+		pMinMaxInfo->ptMaxTrackSize.x = m_pPropSize_MaxWidth->GetValue();
+		pMinMaxInfo->ptMaxTrackSize.y = m_pPropSize_MaxHeight->GetValue();
+		bRet = true;
+	}
+
+	if (m_pPropSize_MinWidth != NULL && m_pPropSize_MinWidth->GetValue() > 0
+		&& m_pPropSize_MaxWidth->GetValue() > m_pPropSize_MinWidth->GetValue()
+		&& m_pPropSize_MinHeight != NULL && m_pPropSize_MinHeight->GetValue() > 0
+		&& m_pPropSize_MaxHeight->GetValue() > m_pPropSize_MinHeight->GetValue())
+	{
+		pMinMaxInfo->ptMinTrackSize.x = m_pPropSize_MinWidth->GetValue();
+		pMinMaxInfo->ptMinTrackSize.y = m_pPropSize_MinHeight->GetValue();
+		bRet = true;
+	}
+
+	return bRet;
+}
+
 void IWindowBaseImpl::OnPaint(HDC hWndDc, RECT *pLayeredRect)
 {
 	if (!IS_SAFE_HANDLE(hWndDc) && !IsInit())

@@ -100,6 +100,8 @@ protected:
 	// 设置鼠标样式，返回true表示设置了自定义的鼠标手势，false为需要使用系统默认的手势
 	virtual bool OnSetCursor(HWND hWnd, int nHitTest, int nMsgId);
 	virtual LRESULT OnNcHitTest(int nX, int nY);
+	// 窗口尺寸最大值最小值设置
+	virtual bool OnGetMinMaxInfo(MINMAXINFO *pMinMaxInfo);
 
 	virtual void OnMouseMove(int nVirtKey, POINT pt);
 	virtual void OnLButtonDown(int nVirtKey, POINT pt);
@@ -108,8 +110,10 @@ protected:
 	virtual void OnRButtonDown(int nVirtKey, POINT pt);
 
 private:
-	// 001.内部接受到初始化消息，开始初始化窗口，加载皮肤
+	// 内部接受到初始化消息，开始初始化窗口，加载皮肤
 	void OnInitWindowBase();
+	// 初始化对话框、加载窗口皮肤完成，在分层窗口模式下，初始化窗口后，显示窗口
+	void OnInitWindowBaseEnd();
 	bool IsInit();
 	// 创建控件
 	bool CreateChildCtrlVec(IControlBase *pParentCtrl, PROP_CONTROL_VEC* pPropCtrlVec, CHILD_CTRLS_VEC* pCtrlVec);
@@ -138,8 +142,6 @@ private:
 	void SetWindowStyleByProp();
 	// 设置窗口支持透明模式
 	void SetWindowTransparence(bool bIsTrans);
-	// 在分层窗口模式下，初始化窗口后，显示窗口
-	void CreateShowInLayeredWindow();
 
 protected:
 	// 是否为设计模式
