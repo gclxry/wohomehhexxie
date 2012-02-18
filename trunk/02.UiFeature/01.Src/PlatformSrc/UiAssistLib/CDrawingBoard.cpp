@@ -95,7 +95,6 @@ void CDrawingBoard::Delete()
 		::DeleteObject(m_hBmp);
 		m_hBmp = NULL;
 	}
-	m_hBmp = NULL;
 
 	if (m_hDC != NULL)
 	{

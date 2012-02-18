@@ -644,15 +644,11 @@ void IWindowBaseImpl::OnPaint(HDC hWndDc, RECT *pLayeredRect)
 		
 		if (pLayeredRect != NULL)
 		{
+			// 设置目标渲染窗口位置
 			ptWinPos.x = pLayeredRect->left;
 			ptWinPos.y = pLayeredRect->top;
 			sizeWindow.cx = RECT_WIDTH(*pLayeredRect);
 			sizeWindow.cy = RECT_HEIGHT(*pLayeredRect);
-
-			HDC hScreenDc = ::GetDC(NULL);
-			::UpdateLayeredWindow(m_hWnd, hScreenDc, &ptWinPos, &sizeWindow, m_WndMemDc.GetSafeHdc(), &ptSrc, 0, &m_Blend, ULW_ALPHA);
-			::ReleaseDC(NULL, hScreenDc);
-			return;
 		}
 
 		::UpdateLayeredWindow(m_hWnd, hWndDc, &ptWinPos, &sizeWindow, m_WndMemDc.GetSafeHdc(), &ptSrc, 0, &m_Blend, ULW_ALPHA);
@@ -702,10 +698,9 @@ void IWindowBaseImpl::ResizeInLayeredWindow(RECT NewWndRect)
 	if (m_pPropBase_TopMost == NULL || m_pPropBase_Layered == NULL || !m_pPropBase_Layered->GetValue())
 		return;
 
-//	::SetWindowPos(m_hWnd, (m_pPropBase_TopMost->GetValue() ? HWND_TOPMOST : HWND_NOTOPMOST),
-//		NewWndRect.left, NewWndRect.top, RECT_WIDTH(NewWndRect), RECT_HEIGHT(NewWndRect), SWP_NOREDRAW);
-
-//	::MoveWindow(m_hWnd, NewWndRect.left, NewWndRect.top, RECT_WIDTH(NewWndRect), RECT_HEIGHT(NewWndRect), FALSE);
+	// 分层窗口不能直接渲染，必须先要设置窗口大小才可以
+	::SetWindowPos(m_hWnd, (m_pPropBase_TopMost->GetValue() ? HWND_TOPMOST : HWND_NOTOPMOST),
+		0, 0, RECT_WIDTH(NewWndRect), RECT_HEIGHT(NewWndRect), SWP_NOMOVE);
 
 	OnSize(0, RECT_WIDTH(NewWndRect), RECT_HEIGHT(NewWndRect));
 
