@@ -476,8 +476,9 @@ LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, b
 	case WM_MOUSEMOVE:
 		{
 			POINT pt;
-			pt.x = LOWORD(lParam);
-			pt.y = HIWORD(lParam);
+			pt.x = pt.y = 0;
+			::GetCursorPos(&pt);
+			::ScreenToClient(m_hWnd, &pt);
 			OnMouseMove((int)wParam, pt);
 		}
 		break;

@@ -3,6 +3,7 @@
 #include "WindowResize.h"
 #include "IWindowBaseImpl.h"
 #include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\ICommonFun.h"
 
 // ÒÆ¶¯µÄÏñËØÖµ
 #define MOVE_PIX							(4)
@@ -336,6 +337,7 @@ bool CWindowResize::BeginResizeInLayeredWindow()
 
 	POINT pt;
 	pt.x = pt.y = 0;
+	::GetCursorPos(&pt);
 	::ScreenToClient(m_pWindowBase->GetSafeHandle(), &pt);
 
 	m_nNcHitTest = MouseMoveInWindowFrame(pt);

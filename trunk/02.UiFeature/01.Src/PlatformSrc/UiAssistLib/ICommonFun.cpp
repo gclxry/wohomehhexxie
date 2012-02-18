@@ -3,6 +3,7 @@
 #include "..\..\Inc\ICommonFun.h"
 #include "..\..\Inc\IPropertyGroup.h"
 #include "..\..\Inc\UiFeatureDefs.h"
+#include <stdarg.h>
 
 string PathHelper(char *pszFileName)
 {
@@ -266,13 +267,22 @@ void AddIntAttrToNode(CUiXmlWriteNode* pNode, const char* pszAttrName, int nInt)
 
 void DebugInfoOutput(char *pszFormat, ...)
 {
+	if (pszFormat == NULL || strlen(pszFormat) <= 0)
+		return;
+
 	char *pszOut = NULL;
 	pszOut = new char[4096];
 	if (pszOut == NULL)
 		return;
 	memset(pszOut, 0, 4096);
 
+	va_list argPtr;
+	va_start(argPtr, pszFormat);
+	int nPrint = vsprintf_s(pszOut, 4095, pszFormat, argPtr);
+	va_end(argPtr);
 
+	::OutputDebugStringA(pszOut);
+	::OutputDebugStringA("\n");
 
 	SAFE_DELETE_LIST(pszOut);
 }
