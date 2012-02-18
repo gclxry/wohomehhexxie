@@ -424,23 +424,22 @@ void IWindowBaseImpl::CreateShowInLayeredWindow()
 	// 设置窗口置顶
 	if (m_pPropBase_TopMost != NULL)
 	{
-		SIZE wndSize = this->PP_GetWindowPropSize();
 		::SetWindowPos(m_hWnd, (m_pPropBase_TopMost->GetValue() ? HWND_TOPMOST : HWND_NOTOPMOST),
-			CenterRect.left, CenterRect.top, WndSize.cx, WndSize.cy, 0);
-
-		RedrawWindow();
+			0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 	}
+
+	RedrawWindow(&CenterRect);
 }
 
 // 立即重绘窗口
 void IWindowBaseImpl::RedrawWindow(RECT *pDrawRect)
 {
-	if (IS_SAFE_HANDLE(m_hWnd))
+	if (IS_SAFE_HANDLE(m_hWnd) && m_pPropBase_Visible != NULL &&  m_pPropBase_Visible->GetValue())
 	{
 		if (m_pPropBase_Layered != NULL && m_pPropBase_Layered->GetValue())
 		{
 			HDC hDc = ::GetDC(this->GetSafeHandle());
-			OnPaint(hDc);
+			OnPaint(hDc, pDrawRect);
 			::ReleaseDC(this->GetSafeHandle(), hDc);
 		}
 		else
@@ -623,7 +622,7 @@ LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, b
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// 消息处理 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void IWindowBaseImpl::OnPaint(HDC hWndDc)
+void IWindowBaseImpl::OnPaint(HDC hWndDc, RECT *pLayeredRect)
 {
 	if (!IS_SAFE_HANDLE(hWndDc) && !IsInit())
 		return;
@@ -642,6 +641,20 @@ void IWindowBaseImpl::OnPaint(HDC hWndDc)
 		POINT ptWinPos = {WndRect.left, WndRect.top};
 		POINT ptSrc = {0, 0};
 		SIZE sizeWindow = {RECT_WIDTH(WndRect), RECT_HEIGHT(WndRect)};
+		
+		if (pLayeredRect != NULL)
+		{
+			ptWinPos.x = pLayeredRect->left;
+			ptWinPos.y = pLayeredRect->top;
+			sizeWindow.cx = RECT_WIDTH(*pLayeredRect);
+			sizeWindow.cy = RECT_HEIGHT(*pLayeredRect);
+
+			HDC hScreenDc = ::GetDC(NULL);
+			::UpdateLayeredWindow(m_hWnd, hScreenDc, &ptWinPos, &sizeWindow, m_WndMemDc.GetSafeHdc(), &ptSrc, 0, &m_Blend, ULW_ALPHA);
+			::ReleaseDC(NULL, hScreenDc);
+			return;
+		}
+
 		::UpdateLayeredWindow(m_hWnd, hWndDc, &ptWinPos, &sizeWindow, m_WndMemDc.GetSafeHdc(), &ptSrc, 0, &m_Blend, ULW_ALPHA);
 	}
 	else
@@ -689,12 +702,14 @@ void IWindowBaseImpl::ResizeInLayeredWindow(RECT NewWndRect)
 	if (m_pPropBase_TopMost == NULL || m_pPropBase_Layered == NULL || !m_pPropBase_Layered->GetValue())
 		return;
 
-	::SetWindowPos(m_hWnd, (m_pPropBase_TopMost->GetValue() ? HWND_TOPMOST : HWND_NOTOPMOST),
-		NewWndRect.left, NewWndRect.top, RECT_WIDTH(NewWndRect), RECT_HEIGHT(NewWndRect), SWP_NOREDRAW | SWP_NOACTIVATE);
+//	::SetWindowPos(m_hWnd, (m_pPropBase_TopMost->GetValue() ? HWND_TOPMOST : HWND_NOTOPMOST),
+//		NewWndRect.left, NewWndRect.top, RECT_WIDTH(NewWndRect), RECT_HEIGHT(NewWndRect), SWP_NOREDRAW);
+
+//	::MoveWindow(m_hWnd, NewWndRect.left, NewWndRect.top, RECT_WIDTH(NewWndRect), RECT_HEIGHT(NewWndRect), FALSE);
 
 	OnSize(0, RECT_WIDTH(NewWndRect), RECT_HEIGHT(NewWndRect));
 
-	RedrawWindow();
+	RedrawWindow(&NewWndRect);
 }
 
 void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
@@ -1519,7 +1534,7 @@ void IWindowBaseImpl::BD_SetControlRect(IControlBase* pControl, RECT RctInView)
 	InWindowRect.top = RctInView.top - m_BD_FangKuai8.EntityRct.top;
 	InWindowRect.bottom = InWindowRect.top + RECT_HEIGHT(RctInView);
 
-	pControl->MoveWindowRect(InWindowRect);
+	pControl->ResetWindowRect(InWindowRect);
 }
 
 // 初始化所有控件在Builder中的显示位置
@@ -1581,7 +1596,7 @@ void IWindowBaseImpl::ResetChildCtrlPostion(CHILD_CTRLS_VEC* pChildVec, bool bMe
 		SetControlWindowPostion(pCtrl, ParentRct);
 
 		if (bMemToProp)
-			pCtrl->MoveWindowRect(pCtrl->GetWindowRect());
+			pCtrl->ResetWindowRect(pCtrl->GetWindowRect());
 
 		ResetChildCtrlPostion(pCtrl->GetChildControlsVec(), bMemToProp);
 	}

@@ -1,11 +1,5 @@
 <resource>
 <bool>
-<item objid="window93.Panel116.Panel139.group140.bool144" name="Lock" data="0"/>
-<item objid="window93.Panel116.Panel139.group140.bool145" name="Visible" data="1"/>
-<item objid="window93.Panel116.Panel139.group140.bool146" name="Enable" data="1"/>
-<item objid="window93.Panel116.Panel139.group140.bool147" name="ReceiveMouseMessage" data="1"/>
-<item objid="window93.Panel116.Panel139.group140.bool148" name="DragInCtrl" data="0"/>
-<item objid="window93.Panel116.Panel139.group140.bool150" name="DefaultEnterCtrl" data="0"/>
 <item objid="window93.Panel116.group117.bool121" name="Lock" data="0"/>
 <item objid="window93.Panel116.group117.bool122" name="Visible" data="1"/>
 <item objid="window93.Panel116.group117.bool123" name="Enable" data="1"/>
@@ -22,14 +16,9 @@
 <item objid="window93.group94.group102.bool104" name="CanMiniSize" data="0"/>
 </bool>
 <combobox>
-<item objid="window93.Panel116.Panel139.group140.group151.combobox154" name="@Layout_Type" counts="10" select="0" data0="左上角定位" data1="左下角定位" data2="右上角定位" data3="右下角定位" data4="撑满左侧" data5="撑满右侧" data6="撑满上方" data7="撑满下方" data8="撑满全部" data9="居中"/>
 <item objid="window93.Panel116.group117.group128.combobox131" name="@Layout_Type" counts="10" select="8" data0="左上角定位" data1="左下角定位" data2="右上角定位" data3="右下角定位" data4="撑满左侧" data5="撑满右侧" data6="撑满上方" data7="撑满下方" data8="撑满全部" data9="居中"/>
 </combobox>
 <group>
-<item objid="window93.Panel116.Panel139.group140" name="ControlBase"/>
-<item objid="window93.Panel116.Panel139.group140.group151" name="Layout"/>
-<item objid="window93.Panel116.Panel139.group159" name="ControlPropetry"/>
-<item objid="window93.Panel116.Panel139.group159.group161" name="BkGroup"/>
 <item objid="window93.Panel116.group117" name="ControlBase"/>
 <item objid="window93.Panel116.group117.group128" name="Layout"/>
 <item objid="window93.Panel116.group136" name="ControlPropetry"/>
@@ -43,7 +32,6 @@
 <item objid="window93.group94.group102" name="SysBase"/>
 </group>
 <image>
-<item objid="window93.Panel116.Panel139.group159.image160" name="Image" imagebasename=""/>
 <item objid="window93.Panel116.group136.image137" name="Image" imagebasename="bk.123"/>
 </image>
 <imagebase>
@@ -54,13 +42,6 @@
 </item>
 </imagebase>
 <int>
-<item objid="window93.Panel116.Panel139.group140.group151.int152" name="@Width" data="173"/>
-<item objid="window93.Panel116.Panel139.group140.group151.int153" name="@Height" data="162"/>
-<item objid="window93.Panel116.Panel139.group140.group151.int155" name="@LeftSpace" data="198"/>
-<item objid="window93.Panel116.Panel139.group140.group151.int156" name="@RightSpace" data="129"/>
-<item objid="window93.Panel116.Panel139.group140.group151.int157" name="@TopSpace" data="149"/>
-<item objid="window93.Panel116.Panel139.group140.group151.int158" name="@BottomSpace" data="189"/>
-<item objid="window93.Panel116.Panel139.group140.int149" name="TabOrder" data="0"/>
 <item objid="window93.Panel116.group117.group128.int129" name="@Width" data="500"/>
 <item objid="window93.Panel116.group117.group128.int130" name="@Height" data="500"/>
 <item objid="window93.Panel116.group117.group128.int132" name="@LeftSpace" data="0"/>
@@ -82,9 +63,6 @@
 <item objid="window93.group172.int177" name="MinHeight" data="0"/>
 </int>
 <string>
-<item objid="window93.Panel116.Panel139.group140.string141" name="@Object_Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
-<item objid="window93.Panel116.Panel139.group140.string142" name="@Object_Id" counts="1" defaultarea="1" area0="1" data0="window93.Panel116.Panel139"/>
-<item objid="window93.Panel116.Panel139.group140.string143" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建控件"/>
 <item objid="window93.Panel116.group117.string118" name="@Object_Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
 <item objid="window93.Panel116.group117.string119" name="@Object_Id" counts="1" defaultarea="1" area0="1" data0="window93.Panel116"/>
 <item objid="window93.Panel116.group117.string120" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建控件"/>

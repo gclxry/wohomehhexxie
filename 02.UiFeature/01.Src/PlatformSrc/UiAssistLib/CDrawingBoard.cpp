@@ -5,7 +5,8 @@
 CDrawingBoard::CDrawingBoard(void)
 {
     m_pBits = NULL;
-    m_hBmp = NULL;
+	m_hBmp = NULL;
+	m_hOldBmp = NULL;
 	m_hDC = NULL;
 	m_DcSize.cx = m_DcSize.cy = 0;
 }
@@ -65,7 +66,7 @@ bool CDrawingBoard::Create(int nWidth, int nHeight, DWORD nDefaultColor, bool bR
 				DIB_RGB_COLORS, (void**)(&m_pBits), NULL, 0);
 
 			if (m_hBmp != NULL && m_pBits != NULL)
-				::SelectObject(m_hDC, m_hBmp);
+				m_hOldBmp = (HBITMAP)::SelectObject(m_hDC, m_hBmp);
 			else
 				Delete();
 		}
@@ -85,11 +86,15 @@ bool CDrawingBoard::Create(int nWidth, int nHeight, DWORD nDefaultColor, bool bR
 
 void CDrawingBoard::Delete()
 {
-	//if (m_hBmp != NULL)
-	//{
-	//	::DeleteObject(m_hBmp);
-	//	m_hBmp = NULL;
-	//}
+	if (m_hDC != NULL && m_hOldBmp != NULL)
+		::SelectObject(m_hDC, m_hOldBmp);
+	m_hOldBmp = NULL;
+
+	if (m_hBmp != NULL)
+	{
+		::DeleteObject(m_hBmp);
+		m_hBmp = NULL;
+	}
 	m_hBmp = NULL;
 
 	if (m_hDC != NULL)

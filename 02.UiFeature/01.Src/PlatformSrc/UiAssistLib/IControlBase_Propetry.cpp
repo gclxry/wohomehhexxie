@@ -371,7 +371,7 @@ CONTROL_LAYOUT_INFO IControlBase::GetLayout()
 }
 
 // 移动控件，会改变布局信息，参数：CtrlInWndRct控件位于窗口的位置
-void IControlBase::MoveWindowRect(RECT CtrlInWndRct)
+void IControlBase::ResetWindowRect(RECT CtrlInWndRct)
 {
 	if (m_pOwnerWindowBase == NULL)
 		return;
@@ -398,12 +398,16 @@ void IControlBase::MoveWindowRect(RECT CtrlInWndRct)
 	m_pPropBase_Layout_TopSpace->SetValue(m_RectInWindow.top - ParentRct.top);
 	m_pPropBase_Layout_RightSpace->SetValue(ParentRct.right - m_RectInWindow.right);
 	m_pPropBase_Layout_BottomSpace->SetValue(ParentRct.bottom - m_RectInWindow.bottom);
+
+	SetWindowRect(m_RectInWindow);
 }
 
 // 控件显示位置和大小，这个位置是相对于附着的窗口的
 void IControlBase::SetWindowRect(RECT CtrlInWndRct)
 {
 	m_RectInWindow = CtrlInWndRct;
+	m_CtrlMemDc.Delete();
+	OnSize();
 }
 
 RECT IControlBase::GetWindowRect()
