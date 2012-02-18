@@ -1509,6 +1509,8 @@ bool IPropertySkinManagerImpl::SaveXml_GroupProp(CUiXmlWrite &XmlStrObj, CUiXmlW
 		if (pPropNode == NULL)
 			return false;
 		pPropNode->AddAttribute(SKIN_OBJECT_ID, pProp->GetObjectId());
+		// 写上属性名称，便于查看
+		pPropNode->AddAttribute("name", pProp->GetObjectName());
 
 		if (pProp->GetObjectTypeId() == OTID_GROUP)
 		{
@@ -1611,8 +1613,9 @@ void IPropertySkinManagerImpl::BD_SetWindowPropetryActiveProp(IWindowBase *pWndB
 	if (pWndBase->PP_GetWindowPropetryGroup() != NULL)
 		pWndBase->PP_GetWindowPropetryGroup()->SetActivePropetry(bActive);
 
-	// 设置窗口自身的属性
-	BD_SetGroupPropActiveMark(pWndBase->PP_GetWindowPropetryGroup(), bActive);
+	// 不再需要设置自身的子属性的Active标志，在创建并加载属性的时候已经设置了此标志。
+//	// 设置窗口自身的属性
+//	BD_SetGroupPropActiveMark(pWndBase->PP_GetWindowPropetryGroup(), bActive);
 
 	// 设置子窗口
 	BD_SetChildVecActiveMark(pWndBase->GetChildControlsVec(), bActive);
@@ -1636,7 +1639,8 @@ void IPropertySkinManagerImpl::BD_SetChildVecActiveMark(CHILD_CTRLS_VEC* pChildC
 			pCtrl->PP_GetControlPropetryGroup()->SetActivePropetry(bActive);
 
 		pCtrl->SetActivePropetry(bActive);
-		BD_SetGroupPropActiveMark(pCtrl->PP_GetControlPropetryGroup(), bActive);
+		// 不再需要设置自身的子属性的Active标志，在创建并加载属性的时候已经设置了此标志。
+//		BD_SetGroupPropActiveMark(pCtrl->PP_GetControlPropetryGroup(), bActive);
 		BD_SetChildVecActiveMark(pCtrl->GetChildControlsVec(), bActive);
 	}
 }

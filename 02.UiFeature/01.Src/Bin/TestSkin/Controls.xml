@@ -1,29 +1,29 @@
 <controls>
 <Panel objid="window93.Panel116">
-<group objid="window93.Panel116.group117">
-<string objid="window93.Panel116.group117.string118"/>
-<string objid="window93.Panel116.group117.string119"/>
-<string objid="window93.Panel116.group117.string120"/>
-<bool objid="window93.Panel116.group117.bool121"/>
-<bool objid="window93.Panel116.group117.bool122"/>
-<bool objid="window93.Panel116.group117.bool123"/>
-<bool objid="window93.Panel116.group117.bool124"/>
-<bool objid="window93.Panel116.group117.bool125"/>
-<int objid="window93.Panel116.group117.int126"/>
-<bool objid="window93.Panel116.group117.bool127"/>
-<group objid="window93.Panel116.group117.group128">
-<int objid="window93.Panel116.group117.group128.int129"/>
-<int objid="window93.Panel116.group117.group128.int130"/>
-<combobox objid="window93.Panel116.group117.group128.combobox131"/>
-<int objid="window93.Panel116.group117.group128.int132"/>
-<int objid="window93.Panel116.group117.group128.int133"/>
-<int objid="window93.Panel116.group117.group128.int134"/>
-<int objid="window93.Panel116.group117.group128.int135"/>
+<group objid="window93.Panel116.group117" name="ControlBase">
+<string objid="window93.Panel116.group117.string118" name="@Object_Type"/>
+<string objid="window93.Panel116.group117.string119" name="@Object_Id"/>
+<string objid="window93.Panel116.group117.string120" name="@Object_Name"/>
+<bool objid="window93.Panel116.group117.bool121" name="Lock"/>
+<bool objid="window93.Panel116.group117.bool122" name="Visible"/>
+<bool objid="window93.Panel116.group117.bool123" name="Enable"/>
+<bool objid="window93.Panel116.group117.bool124" name="ReceiveMouseMessage"/>
+<bool objid="window93.Panel116.group117.bool125" name="DragInCtrl"/>
+<int objid="window93.Panel116.group117.int126" name="TabOrder"/>
+<bool objid="window93.Panel116.group117.bool127" name="DefaultEnterCtrl"/>
+<group objid="window93.Panel116.group117.group128" name="Layout">
+<int objid="window93.Panel116.group117.group128.int129" name="@Width"/>
+<int objid="window93.Panel116.group117.group128.int130" name="@Height"/>
+<combobox objid="window93.Panel116.group117.group128.combobox131" name="@Layout_Type"/>
+<int objid="window93.Panel116.group117.group128.int132" name="@LeftSpace"/>
+<int objid="window93.Panel116.group117.group128.int133" name="@RightSpace"/>
+<int objid="window93.Panel116.group117.group128.int134" name="@TopSpace"/>
+<int objid="window93.Panel116.group117.group128.int135" name="@BottomSpace"/>
 </group>
 </group>
-<group objid="window93.Panel116.group136">
-<image objid="window93.Panel116.group136.image137"/>
-<group objid="window93.Panel116.group136.group138"/>
+<group objid="window93.Panel116.group136" name="ControlPropetry">
+<image objid="window93.Panel116.group136.image137" name="Image"/>
+<group objid="window93.Panel116.group136.group138" name="BkGroup"/>
 </group>
 </Panel>
 </controls>
