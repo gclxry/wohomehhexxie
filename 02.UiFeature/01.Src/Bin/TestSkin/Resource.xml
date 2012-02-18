@@ -8,7 +8,7 @@
 <item objid="window93.Panel116.group117.bool127" name="DefaultEnterCtrl" data="0"/>
 <item objid="window93.group108.bool109" name="Enable" data="1"/>
 <item objid="window93.group110.bool111" name="Enable" data="1"/>
-<item objid="window93.group172.bool173" name="Enable" data="0"/>
+<item objid="window93.group172.bool173" name="Enable" data="1"/>
 <item objid="window93.group94.bool100" name="LayeredWindow" data="1"/>
 <item objid="window93.group94.bool101" name="TopMost" data="0"/>
 <item objid="window93.group94.bool99" name="Visible" data="1"/>
@@ -57,10 +57,10 @@
 <item objid="window93.group110.int115" name="BottomSpace" data="5"/>
 <item objid="window93.group169.int170" name="Width" data="500"/>
 <item objid="window93.group169.int171" name="Height" data="500"/>
-<item objid="window93.group172.int174" name="MaxWidth" data="0"/>
-<item objid="window93.group172.int175" name="MaxHeight" data="0"/>
-<item objid="window93.group172.int176" name="MinWidth" data="0"/>
-<item objid="window93.group172.int177" name="MinHeight" data="0"/>
+<item objid="window93.group172.int174" name="MaxWidth" data="600"/>
+<item objid="window93.group172.int175" name="MaxHeight" data="500"/>
+<item objid="window93.group172.int176" name="MinWidth" data="40"/>
+<item objid="window93.group172.int177" name="MinHeight" data="30"/>
 </int>
 <string>
 <item objid="window93.Panel116.group117.string118" name="@Object_Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
@@ -69,6 +69,6 @@
 <item objid="window93.group94.string95" name="@Object_Type" counts="1" defaultarea="1" area0="1" data0="window"/>
 <item objid="window93.group94.string96" name="@Object_Id" counts="1" defaultarea="1" area0="1" data0="window93"/>
 <item objid="window93.group94.string97" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建窗口/面板"/>
-<item objid="window93.group94.string98" name="WindowText" counts="1" defaultarea="1" area0="1" data0="窗口标题"/>
+<item objid="window93.group94.string98" name="WindowText" counts="1" defaultarea="1" area0="1" data0="测试窗口"/>
 </string>
 </resource>
