@@ -1,4 +1,6 @@
 #pragma once
+#include "afxcmn.h"
+#include "MouseStyleList.h"
 
 
 // CModifyMouseStyleDlg dialog
@@ -21,4 +23,6 @@ protected:
 public:
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnBnClickedCancel();
+	CMouseStyleList m_MouseStyleList;
+	virtual BOOL OnInitDialog();
 };

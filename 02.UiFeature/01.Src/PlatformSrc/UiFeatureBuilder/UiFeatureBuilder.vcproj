@@ -559,6 +559,14 @@
 						RelativePath=".\ModifyMouseStyleDlg.h"
 						>
 					</File>
+					<File
+						RelativePath=".\MouseStyleList.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\MouseStyleList.h"
+						>
+					</File>
 				</Filter>
 			</Filter>
 			<Filter

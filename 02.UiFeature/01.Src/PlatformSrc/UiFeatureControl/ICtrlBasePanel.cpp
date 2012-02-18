@@ -20,7 +20,7 @@ bool ICtrlBasePanel::CreateControlPropetry(bool bNeedSetDftProp)
 {
 	m_pPropImage = (IPropertyImage*)CreatePropetry(NULL, OTID_IMAGE, "Image", "±³¾°Í¼Æ¬");
 	IPropertyGroup* pPropGroup = (IPropertyGroup*)CreatePropetry(NULL, OTID_GROUP, "BkGroup", "±³¾°Group");
-//	CreatePropetry(pPropGroup, OTID_CURSOR, "BkCursor", "±³¾°Cursor");
+	CreatePropetry(pPropGroup, OTID_CURSOR, "BkCursor", "±³¾°Cursor");
 //	CreatePropetry(pPropGroup, OTID_FONT, "BkFont", "±³¾°font");
 //	CreatePropetry(pPropGroup, OTID_FONT, "BkFont1", "±³¾°font1");
 	return true;

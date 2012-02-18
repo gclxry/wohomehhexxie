@@ -23,6 +23,7 @@ CModifyMouseStyleDlg::~CModifyMouseStyleDlg()
 void CModifyMouseStyleDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDL_MOUSE_SYTLE_LIST, m_MouseStyleList);
 }
 
 
@@ -44,4 +45,16 @@ void CModifyMouseStyleDlg::OnBnClickedCancel()
 {
 	// TODO: Add your control notification handler code here
 	OnCancel();
+}
+
+BOOL CModifyMouseStyleDlg::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+
+	// TODO:  Add extra initialization here
+
+	m_MouseStyleList.InitMouseStyleList();
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+	// EXCEPTION: OCX Property Pages should return FALSE
 }

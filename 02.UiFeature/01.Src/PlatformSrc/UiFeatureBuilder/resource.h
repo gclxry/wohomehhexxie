@@ -108,6 +108,7 @@
 #define IDC_LIST1                       1004
 #define IDL_IMAGEBASE_NAME_LIST         1004
 #define IDL_FONT_BASE_NAME_LIST         1004
+#define IDL_MOUSE_SYTLE_LIST            1004
 #define IDC_LIST2                       1005
 #define IDL_LOCAL_IMAGE_LIST            1005
 #define IDC_BUTTON1                     1006
