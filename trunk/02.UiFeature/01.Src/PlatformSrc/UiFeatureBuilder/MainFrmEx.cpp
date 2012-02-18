@@ -142,14 +142,9 @@ void CMainFrame::SetProjectInitState(bool bInitOk)
 
 void CMainFrame::SetRunTestToolbarState(bool bEnable)
 {
-	int nStyle = m_wndTestRunToolBar.GetButtonStyle(0);
-
-//	if (bEnable)
-//		nStyle |= 
-//	else
-
-	m_wndTestRunToolBar.EnableWindow(bEnable);
-	//m_wndTestRunToolBar.SetButtonStyle(0, )
+	CMFCToolBarButton* pButton = m_wndTestRunToolBar.GetButton(0);
+	if (pButton != NULL)
+		pButton->EnableWindow(bEnable ? TRUE : FALSE);
 }
 
 void CMainFrame::OnRunTest()
