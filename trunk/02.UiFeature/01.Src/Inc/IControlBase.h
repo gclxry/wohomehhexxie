@@ -207,9 +207,6 @@ public:
 	// 重绘控件，这个重绘动画定时器中调用
 	void RedrawControlInAnimationTimer();
 
-
-	// 移动控件，会改变布局信息，参数：CtrlInWndRct控件位于窗口的位置
-	void MoveWindowRect(RECT CtrlInWndRct);
 	// 控件显示位置和大小，这个位置是相对于附着的窗口的，不会改变布局信息
 	void SetWindowRect(RECT CtrlInWndRct);
 	RECT GetWindowRect();
@@ -247,6 +244,11 @@ public:
 
 	// 从属性更新数据到成员变量
 	void PropetyValueToMemberValue();
+
+//////////////////////////////////////////////////////////////////////////
+	// 下列函数，在制作控件、窗口业务时，原则上不允许调用
+	// 移动控件，会改变布局信息，参数：CtrlInWndRct控件位于窗口的位置
+	void ResetWindowRect(RECT CtrlInWndRct);
 protected:
 	// 设置子控件都必须自绘
 	void SetChildCtrlToRedraw();

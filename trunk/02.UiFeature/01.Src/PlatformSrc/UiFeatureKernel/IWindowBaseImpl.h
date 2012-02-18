@@ -94,7 +94,7 @@ protected:
 	virtual void OnEnterSizeMove();
 	// WM_EXITSIZEMOVE：退出移动、拉伸窗口操作
 	virtual void OnExitSizeMove();
-	virtual void OnPaint(HDC hWndDc);
+	virtual void OnPaint(HDC hWndDc, RECT *pLayeredRect = NULL);
 	// 对话框主菜单：任务栏右键菜单，左上角菜单的截获
 	virtual void OnPopupSystemMenu(POINT pt);
 	// 设置鼠标样式，返回true表示设置了自定义的鼠标手势，false为需要使用系统默认的手势

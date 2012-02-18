@@ -575,7 +575,7 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown_SizeCtrl(SIZE_CTRL_TYPE nFan
 	CtrlInWndRct.right = CtrlInWndRct.left + RECT_WIDTH(pFk8->EntityRct);
 	CtrlInWndRct.top = pFk8->EntityRct.top - pWndFk8->EntityRct.top;
 	CtrlInWndRct.bottom = CtrlInWndRct.top + RECT_HEIGHT(pFk8->EntityRct);
-	pLBtnDownCtrl->MoveWindowRect(CtrlInWndRct);
+	pLBtnDownCtrl->ResetWindowRect(CtrlInWndRct);
 
 	// 重新计算子控件的位置和大小
 	m_pCurrentWnd->ResetChildCtrlPostion(pLBtnDownCtrl->GetChildControlsVec(), true);
@@ -629,7 +629,7 @@ void CUiFeatureBuilderView::OnMouseMove_LButtonDown_MoveCtrl(CPoint point, ICont
 	CtrlInWndRct.right = CtrlInWndRct.left + RECT_WIDTH(pFk8->EntityRct);
 	CtrlInWndRct.top = pFk8->EntityRct.top - pWndFk8->EntityRct.top;
 	CtrlInWndRct.bottom = CtrlInWndRct.top + RECT_HEIGHT(pFk8->EntityRct);
-	pLBtnDownCtrl->MoveWindowRect(CtrlInWndRct);
+	pLBtnDownCtrl->ResetWindowRect(CtrlInWndRct);
 
 	// 重新计算子控件的位置和大小
 	m_pCurrentWnd->ResetChildCtrlPostion(pLBtnDownCtrl->GetChildControlsVec(), true);

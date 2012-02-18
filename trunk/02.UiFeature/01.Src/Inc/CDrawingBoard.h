@@ -19,6 +19,7 @@ public:
 
 protected:
 	HBITMAP m_hBmp;
+	HBITMAP m_hOldBmp;
 	HDC m_hDC;
 	BYTE* m_pBits;
 	SIZE m_DcSize;
