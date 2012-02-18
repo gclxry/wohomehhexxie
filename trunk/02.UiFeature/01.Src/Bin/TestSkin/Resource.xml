@@ -23,7 +23,6 @@
 <item objid="window93.Panel116.group117.group128" name="Layout"/>
 <item objid="window93.Panel116.group136" name="ControlPropetry"/>
 <item objid="window93.Panel116.group136.group138" name="BkGroup"/>
-<item objid="window93.group105" name="Size"/>
 <item objid="window93.group108" name="Drag"/>
 <item objid="window93.group110" name="Stretching"/>
 <item objid="window93.group169" name="WindowSize"/>
@@ -49,8 +48,6 @@
 <item objid="window93.Panel116.group117.group128.int134" name="@TopSpace" data="0"/>
 <item objid="window93.Panel116.group117.group128.int135" name="@BottomSpace" data="0"/>
 <item objid="window93.Panel116.group117.int126" name="TabOrder" data="0"/>
-<item objid="window93.group105.int106" name="Width" data="500"/>
-<item objid="window93.group105.int107" name="Height" data="500"/>
 <item objid="window93.group110.int112" name="LeftSpace" data="5"/>
 <item objid="window93.group110.int113" name="RightSpace" data="5"/>
 <item objid="window93.group110.int114" name="TopSpace" data="5"/>
