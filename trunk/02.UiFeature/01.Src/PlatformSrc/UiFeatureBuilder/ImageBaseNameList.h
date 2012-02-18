@@ -11,7 +11,7 @@ class CImageBaseNameList : public CFeatureBaseList
 {
 public:
 	CImageBaseNameList(void);
-	~CImageBaseNameList(void);
+	virtual ~CImageBaseNameList(void);
 
 	void OnDeleteImageBaseProp();
 	bool OnModifyImageBaseProp(CString strName);

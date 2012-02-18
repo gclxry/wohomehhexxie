@@ -9,7 +9,7 @@ class CLocalImageList : public CFeatureBaseList
 {
 public:
 	CLocalImageList(void);
-	~CLocalImageList(void);
+	virtual ~CLocalImageList(void);
 
 	void SetSelectImagePropBase(IPropertyImageBase* pImgBase);
 	void Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *pImgBaseDlg, CImageBaseNameList* pImgBaseLise, CImageBaseView* pImgBaseView);
