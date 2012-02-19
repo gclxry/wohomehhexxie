@@ -1,7 +1,10 @@
 
 #include "StdAfx.h"
 #include "MouseStyleList.h"
+#include "resource.h"
+#include "UiFeatureBuilder.h"
 
+extern CUiFeatureBuilderApp theApp;
 
 CMouseStyleList::CMouseStyleList()
 {
@@ -27,6 +30,16 @@ void CMouseStyleList::InitMouseStyleList()
 	this->InsertColumn(2, _T("样式"), LVCFMT_LEFT, 80);
 	this->InsertColumn(3, _T("说明"), LVCFMT_LEFT, 160);
 
-	CImageList
-	this->SetImageList();
+	CBitmap bmp;
+	if (bmp.LoadBitmap(IDB_CURSOR_BITMAP))
+	{
+		BITMAP bmpObj;
+		bmp.GetBitmap(&bmpObj);
+
+		UINT nFlags = (ILC_MASK | ((theApp.m_bHiColorIcons) ? ILC_COLOR24 : ILC_COLOR4));
+		m_CursorImageList.Create(16, bmpObj.bmHeight, nFlags, 0, 0);
+		m_CursorImageList.Add(&bmp, RGB(255, 0, 0));
+
+		this->SetImageList(&m_CursorImageList, TVSIL_NORMAL);
+	}
 }

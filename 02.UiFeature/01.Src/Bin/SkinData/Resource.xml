@@ -26,8 +26,11 @@
 		</item>
 	</imagebase>
 	<cursor>
-		<item objid="5" name=""/>
+		<item objid="1987" name="cursor123" cursorbasename="cursor123.base"/>
 	</cursor>
+	<cursorbase>
+		<item objid="21346879" name="cursor123.base" issyscursor="1" cursorid="32456"/>
+	</cursorbase>
 	<color>
 		<item objid="6" name=""/>
 	</color>

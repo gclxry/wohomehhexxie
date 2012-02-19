@@ -18,4 +18,7 @@ public:
 
 protected:
 	virtual void OnSelectItem();
+
+private:
+	CImageList m_CursorImageList;
 };
