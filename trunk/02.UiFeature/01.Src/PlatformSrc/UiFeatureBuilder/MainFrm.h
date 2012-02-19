@@ -48,6 +48,8 @@ public:
 	void SetView(CUiFeatureBuilderView *pView);
 	CUiFeatureBuilderView* GetView() { return m_pView; }
 	void SetRunTestToolbarState(bool bEnable);
+	IPropertySkinManager* GetPropertySkinMgr() { return m_pSkinMgr; }
+
 	
 protected:  // 控件条嵌入成员
 	CMFCMenuBar       m_wndMenuBar;

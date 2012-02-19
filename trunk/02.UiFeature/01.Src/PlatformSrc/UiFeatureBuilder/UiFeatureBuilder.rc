@@ -104,6 +104,7 @@ IDB_MENU_IMAGES_24      BITMAP                  "res\\menuimages_hc.bmp"
 IDR_PROPERTIES          BITMAP                  "res\\properties.bmp"
 IDB_PROPERTIES_HC       BITMAP                  "res\\properties_hc.bmp"
 IDR_RUN_TEST_TOOLBAR    BITMAP                  "res\\Run_Toolbar256.bmp"
+IDB_CURSOR_BITMAP       BITMAP                  "res\\DefaultCursor256.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

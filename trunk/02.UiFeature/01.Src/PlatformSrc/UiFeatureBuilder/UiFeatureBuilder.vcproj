@@ -242,6 +242,10 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\res\bitmap1.bmp"
+				>
+			</File>
+			<File
 				RelativePath=".\res\class_view.ico"
 				>
 			</File>
@@ -255,6 +259,10 @@
 			</File>
 			<File
 				RelativePath=".\res\classview_hc.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\DefaultCursor256.bmp"
 				>
 			</File>
 			<File

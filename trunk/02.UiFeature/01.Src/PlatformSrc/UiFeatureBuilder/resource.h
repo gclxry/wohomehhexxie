@@ -101,6 +101,8 @@
 #define IDD_DIALOG4                     320
 #define IDD_MOUSE_STYLE_EDIT_DLG        320
 #define IDR_RUN_TEST_TOOLBAR            322
+#define IDB_BITMAP1                     325
+#define IDB_CURSOR_BITMAP               325
 #define IDB_BROWER_BTN                  1000
 #define IDE_DIR                         1001
 #define IDC_EDIT2                       1002
@@ -190,7 +192,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        324
+#define _APS_NEXT_RESOURCE_VALUE        326
 #define _APS_NEXT_COMMAND_VALUE         32778
 #define _APS_NEXT_CONTROL_VALUE         1038
 #define _APS_NEXT_SYMED_VALUE           319
