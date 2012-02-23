@@ -105,3 +105,9 @@ void CDrawingBoard::Delete()
 	m_pBits = NULL;
 	m_DcSize.cx = m_DcSize.cy = 0;
 }
+
+// 绘制到另外一个内存DC上
+bool CDrawingBoard::DrawTo(CDrawingBoard& ToBoard, RECT ToRct)
+{
+	return false;
+}
