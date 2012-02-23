@@ -10,6 +10,6 @@ public:
 
 	// 从一段内存中创建
 	void CreateByMem(BYTE *pImgFileMem, int nLen);
-	// 从文件内存中创建
+	// 从文件中创建
 	void CreateByFile(const char *pszFilePath);
 };
