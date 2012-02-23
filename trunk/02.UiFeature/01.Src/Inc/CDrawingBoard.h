@@ -16,6 +16,8 @@ public:
 	HDC& GetSafeHdc();
 	BYTE* GetBits();
 	SIZE GetDcSize();
+	// 绘制到另外一个内存DC上
+	bool DrawTo(CDrawingBoard& ToBoard, RECT ToRct);
 
 protected:
 	HBITMAP m_hBmp;
