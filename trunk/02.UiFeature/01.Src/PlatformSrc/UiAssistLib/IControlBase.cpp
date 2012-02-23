@@ -17,6 +17,7 @@ IControlBase::IControlBase()
 
 	m_bNeedRedraw = true;
 	m_bMouseHover = false;
+	ResetControlAlpha();
 
 	memset(&m_BD_FangKuai8, 0, sizeof(FANGKUAI_8));
 	// 皮肤包管理类
@@ -173,4 +174,36 @@ void IControlBase::SetMouseHover(bool bHover)
 bool IControlBase::IsMousehover()
 {
 	return m_bMouseHover;
+}
+
+// 整个控件绘制完成后，再绘制到父控件上的alpha值
+void IControlBase::SetControlAlpha(int nCtrlAlpha)
+{
+	m_nCtrlAlpha = nCtrlAlpha;
+	
+	if (m_nCtrlAlpha > 255)
+		m_nCtrlAlpha = 255;
+
+	if (m_nCtrlAlpha < 0)
+		m_nCtrlAlpha = 0;
+
+	m_bNeedRedraw = true;
+}
+
+// 整个控件绘制完成后，再绘制到父控件上的alpha值，设为默认255
+void IControlBase::ResetControlAlpha()
+{
+	m_nCtrlAlpha = 255;
+	m_bNeedRedraw = true;
+}
+
+int IControlBase::GetControlAlpha()
+{
+	return m_nCtrlAlpha;
+}
+
+// 取得绘制控件的内存DC
+CDrawingBoard* IControlBase::GetMemoryDc()
+{
+	return &m_CtrlMemDc;
 }

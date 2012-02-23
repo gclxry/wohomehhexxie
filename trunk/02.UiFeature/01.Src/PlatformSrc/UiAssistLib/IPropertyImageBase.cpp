@@ -265,7 +265,7 @@ bool IPropertyImageBase::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode
 	return true;
 }
 
-bool IPropertyImageBase::DrawImage(CDrawingBoard &DstDc, RECT DstRct)
+bool IPropertyImageBase::DrawImage(CDrawingBoard &DstDc, RECT DstRct, int nAlpha)
 {
 	if (GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
 		return false;

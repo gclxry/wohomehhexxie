@@ -5,6 +5,7 @@
 #include "IPropertyBase.h"
 #include "IPropertyWindow.h"
 #include "IZipFile.h"
+#include "IPropertyImageBase.h"
 
 class IPropertySkinManager
 {
@@ -30,6 +31,11 @@ public:
 	virtual bool BD_DeletePropetry(IPropertyBase *pPropBase) = 0;
 	// 修改属性名称
 	virtual bool BD_ModifyPropetryName(IPropertyBase *pPropBase, char *pszNewPropName) = 0;
+	// 初始化鼠标手势属性
+	virtual bool InitCursorBasePropetry() = 0;
+
+	// 加载本地图片
+	virtual IPropertyImageBase* LoadLocalImage(char *pszLocalImgPath) = 0;
 
 //////////////////////////////////////////////////////////////////////////
 	// 初始化Window皮肤

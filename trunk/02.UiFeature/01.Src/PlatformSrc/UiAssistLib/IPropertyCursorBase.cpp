@@ -85,3 +85,9 @@ void IPropertyCursorBase::SetCursorId(int nId)
 {
 	m_nCursorId = nId;
 }
+
+// 得到光标id
+int IPropertyCursorBase::GetCursorId()
+{
+	return m_nCursorId;
+}

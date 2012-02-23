@@ -25,7 +25,7 @@ class IControlBase;
 class IControlMessage
 {
 public:
-	virtual LRESULT OnCtrlMessage(IControlBase* pCtrl, WPARAM wParam, LPARAM lParam) = 0;
+	virtual LRESULT OnCtrlMessage(IControlBase* pCtrl, int nMsgId, WPARAM wParam, LPARAM lParam) = 0;
 };
 
 // Builder 专用，显示控件的边框的8个方块
@@ -244,6 +244,14 @@ public:
 
 	// 从属性更新数据到成员变量
 	void PropetyValueToMemberValue();
+	// 整个控件绘制完成后，再绘制到父控件上的alpha值
+	void SetControlAlpha(int nCtrlAlpha);
+	// 整个控件绘制完成后，再绘制到父控件上的alpha值，设为默认255
+	void ResetControlAlpha();
+	int GetControlAlpha();
+
+	// 取得绘制控件的内存DC
+	CDrawingBoard* GetMemoryDc();
 
 //////////////////////////////////////////////////////////////////////////
 	// 下列函数，在制作控件、窗口业务时，原则上不允许调用
@@ -275,8 +283,8 @@ protected:
 	virtual void OnDestroy() = 0;
 	// 绘制控件
 	virtual void OnPaint(CDrawingBoard &DrawBoard) = 0;
-	// 派生控件处理的消息
-	virtual void OnCtrlMessage(int nMsgId, WPARAM wParam, LPARAM lParam) = 0;
+	// 控件需要处理的一些自定义的消息，消息基本上会由对话框或者其他控件传入
+	virtual void OnCtrlNotify(int nMsgId, WPARAM wParam, LPARAM lParam) = 0;
 	// Builder刷新属性
 	virtual void OnBuilderRefreshProp() = 0;
 	// 鼠标进入
@@ -353,6 +361,8 @@ protected:
 	IUiEngine *m_pUiEngine;
 	// 子控件列表
 	CHILD_CTRLS_VEC m_ChildCtrlsVec;
+	// 整个控件绘制完成后，再绘制到父控件上的alpha值
+	int m_nCtrlAlpha;
 
 	// 是否需重绘控件
 	bool m_bNeedRedraw;

@@ -41,6 +41,11 @@ public:
 	virtual bool BD_ModifyPropetryName(IPropertyBase *pPropBase, char *pszNewPropName);
 	virtual ZIP_FILE_MAP* BD_GetUnZipFileMap();
 
+	// 初始化鼠标手势属性
+	virtual bool InitCursorBasePropetry();
+	// 加载本地图片
+	virtual IPropertyImageBase* LoadLocalImage(char *pszLocalImgPath);
+
 	// 取得指定组的属性
 	virtual ONE_RESOURCE_PROP_MAP* GetOneResourcePropMap(char *pPropGroupName);
 	virtual ONE_RESOURCE_PROP_MAP* GetImagePropMap();
@@ -81,6 +86,11 @@ private:
 	// 初始化皮肤包
 	bool InitSkinPackage(const char *pszSkinPath);
 	void ResetBaseObjectId(int nObjectId);
+
+	// 查找光标
+	IPropertyCursorBase* FindCursorBasePropetry(int nCursorId);
+	// 增加一个鼠标收拾
+	bool AddCursorBasePropetry(bool bSysCursor, int nCursorId);
 
 //////////////////////////////////////////////////////////////////////////
 	// Resource.xml相关
@@ -126,9 +136,9 @@ private:
 
 	void SaveToFile(char *pszFilePath, BYTE *pData, int nDataLen);
 
-
 	bool DeleteImageBaseProp(IPropertyImageBase *pImgBaseProp);
 	bool ModifyImageBaseProp(IPropertyImageBase *pImgBaseProp, char *pszNewPropName);
+
 private:
 	// 皮肤路径
 	string m_strSkinPath;

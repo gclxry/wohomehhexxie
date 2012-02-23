@@ -11,8 +11,8 @@ ICtrlInterface::~ICtrlInterface()
 {
 }
 
-// 派生控件处理的消息
-void ICtrlInterface::OnCtrlMessage(int nMsgId, WPARAM wParam, LPARAM lParam)
+// 控件需要处理的一些自定义的消息，消息基本上会由对话框或者其他控件传入
+void ICtrlInterface::OnCtrlNotify(int nMsgId, WPARAM wParam, LPARAM lParam)
 {
 }
 

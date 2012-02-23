@@ -23,7 +23,7 @@ public:
 	bool CreateFeatureWindow(char* pszKernelDllPath, char* pszSkinPath, char *pszSkinWndName, HWND hParent, RECT WndRect, int nShow, LPARAM lParam);
 
 	// 控件发送给窗口的消息接口
-	virtual LRESULT OnCtrlMessage(IControlBase* pCtrl, WPARAM wParam, LPARAM lParam);
+	virtual LRESULT OnCtrlMessage(IControlBase* pCtrl, int nMsgId, WPARAM wParam, LPARAM lParam);
 	// 本窗口的消息处理函数
 	virtual LRESULT WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam);
 

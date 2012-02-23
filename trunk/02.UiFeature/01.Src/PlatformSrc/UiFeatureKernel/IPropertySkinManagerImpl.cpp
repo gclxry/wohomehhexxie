@@ -321,6 +321,18 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 		}
 		break;
 
+	case OTID_CURSOR_BASE:
+		{
+			IPropertyCursorBase* pProp = new IPropertyCursorBase;
+			if (pProp != NULL)
+			{
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+					SAFE_DELETE(pProp);
+			}
+		}
+		break;
+
 	case OTID_FONT:
 		{
 			IPropertyFont* pProp = new IPropertyFont;
@@ -1810,4 +1822,128 @@ bool IPropertySkinManagerImpl::ModifyImageBaseProp(IPropertyImageBase *pImgBaseP
 ZIP_FILE_MAP* IPropertySkinManagerImpl::BD_GetUnZipFileMap()
 {
 	return m_BD_SkinUnZipImageFile.GetUnZipFileMap();
+}
+
+// 初始化鼠标手势属性
+bool IPropertySkinManagerImpl::InitCursorBasePropetry()
+{
+	if (m_pCursorBasePropMap == NULL)
+		m_pCursorBasePropMap = GetOneResourcePropMap(PROP_TYPE_CURSOR_BASE_NAME);
+
+	if (m_pCursorBasePropMap == NULL)
+	{
+		// 创建属性组
+		m_pCursorBasePropMap = new ONE_RESOURCE_PROP_MAP;
+		if (m_pCursorBasePropMap == NULL)
+			return false;
+
+		m_pCursorBasePropMap->clear();
+		m_AllPropMap.insert(pair<string, ONE_RESOURCE_PROP_MAP*>(PROP_TYPE_CURSOR_BASE_NAME, m_pCursorBasePropMap));
+	}
+
+	if (m_pCursorBasePropMap == NULL)
+		return false;
+
+	// 正常光标 标准的箭头
+//	if (FindCursorBasePropetry(UF_IDC_ARROW) == NULL)
+//		AddCursorBasePropetry(true, UF_IDC_ARROW);
+
+	// 十字架光标
+	if (FindCursorBasePropetry(UF_IDC_CROSS) == NULL)
+		AddCursorBasePropetry(true, UF_IDC_CROSS);
+
+	// 双箭头指向西北和东南
+	if (FindCursorBasePropetry(UF_IDC_SIZENWSE) == NULL)
+		AddCursorBasePropetry(true, UF_IDC_SIZENWSE);
+
+	// 双箭头指向东北和西南
+	if (FindCursorBasePropetry(UF_IDC_SIZENESW) == NULL)
+		AddCursorBasePropetry(true, UF_IDC_SIZENESW);
+
+	// 双箭头指向东西
+	if (FindCursorBasePropetry(UF_IDC_SIZEWE) == NULL)
+		AddCursorBasePropetry(true, UF_IDC_SIZEWE);
+
+	// 双箭头指向南北
+	if (FindCursorBasePropetry(UF_IDC_SIZENS) == NULL)
+		AddCursorBasePropetry(true, UF_IDC_SIZENS);
+
+	// 四向箭头指向东、西、南、北
+	if (FindCursorBasePropetry(UF_IDC_SIZEALL) == NULL)
+		AddCursorBasePropetry(true, UF_IDC_SIZEALL);
+
+	// 标准的箭头和小沙漏
+	if (FindCursorBasePropetry(UF_IDC_APPSTARTING) == NULL)
+		AddCursorBasePropetry(true, UF_IDC_APPSTARTING);
+
+	// 标准的箭头和问号
+	if (FindCursorBasePropetry(UF_IDC_HELP) == NULL)
+		AddCursorBasePropetry(true, UF_IDC_HELP);
+
+	// 工字光标
+	if (FindCursorBasePropetry(UF_IDC_IBEAM) == NULL)
+		AddCursorBasePropetry(true, UF_IDC_IBEAM);
+
+	// 禁止圈
+	if (FindCursorBasePropetry(UF_IDC_NO) == NULL)
+		AddCursorBasePropetry(true, UF_IDC_NO);
+
+	// 垂直箭头
+	if (FindCursorBasePropetry(UF_IDC_UPARROW) == NULL)
+		AddCursorBasePropetry(true, UF_IDC_UPARROW);
+
+	// 沙漏
+	if (FindCursorBasePropetry(UF_IDC_WAIT) == NULL)
+		AddCursorBasePropetry(true, UF_IDC_WAIT);
+
+	return true;
+}
+
+IPropertyCursorBase* IPropertySkinManagerImpl::FindCursorBasePropetry(int nCursorId)
+{
+	if (m_pCursorBasePropMap == NULL)
+		return NULL;
+
+	IPropertyCursorBase* pFind = NULL;
+	for (ONE_RESOURCE_PROP_MAP::iterator pCurItem = m_pCursorBasePropMap->begin(); pCurItem != m_pCursorBasePropMap->end(); pCurItem++)
+	{
+		IPropertyBase* pPropBase = pCurItem->second;
+		if (pPropBase == NULL)
+			continue;
+
+		IPropertyCursorBase* pFindCom = dynamic_cast<IPropertyCursorBase*>(pPropBase);
+		if (pFindCom == NULL)
+			continue;
+
+		if (pFindCom->GetCursorId() == nCursorId)
+		{
+			pFind = pFindCom;
+			break;
+		}
+	}
+
+	return pFind;
+}
+
+// 增加一个鼠标手势
+bool IPropertySkinManagerImpl::AddCursorBasePropetry(bool bSysCursor, int nCursorId)
+{
+	if (m_pCursorBasePropMap == NULL || nCursorId <= 0)
+		return false;
+
+	IPropertyCursorBase *pCursorBase = dynamic_cast<IPropertyCursorBase*>(CreateEmptyBaseProp(OTID_CURSOR_BASE));
+	if (pCursorBase == NULL)
+		return false;
+
+	pCursorBase->SetCursorId(nCursorId);
+	pCursorBase->SetSystemCursor(bSysCursor);
+
+	m_pCursorBasePropMap->insert(pair<string, IPropertyBase*>(pCursorBase->GetObjectId(), pCursorBase));
+	return true;
+}
+
+// 加载本地图片
+IPropertyImageBase* IPropertySkinManagerImpl::LoadLocalImage(char *pszLocalImgPath)
+{
+	return NULL;
 }

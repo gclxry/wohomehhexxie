@@ -96,20 +96,32 @@ using namespace std;
 // 解决GDI+的Alpha融合中Alpha融合进位误差的问题，程序默认的Alpha的最大值为254，而非255
 #define MAX_ALPHA									(254)
 
-// 正常光标
-#define UF_IDC_ARROW           (32512)
+// 正常光标 标准的箭头
+#define UF_IDC_ARROW			(32512)
 // 十字架光标
-#define UF_IDC_CROSS           (32515)
+#define UF_IDC_CROSS			(32515)
 // 双箭头指向西北和东南
-#define UF_IDC_SIZENWSE        (32642)
+#define UF_IDC_SIZENWSE			(32642)
 // 双箭头指向东北和西南
-#define UF_IDC_SIZENESW        (32643)
+#define UF_IDC_SIZENESW			(32643)
 // 双箭头指向东西
-#define UF_IDC_SIZEWE          (32644)
+#define UF_IDC_SIZEWE			(32644)
 // 双箭头指向南北
-#define UF_IDC_SIZENS          (32645)
+#define UF_IDC_SIZENS			(32645)
 // 四向箭头指向东、西、南、北
-#define UF_IDC_SIZEALL         (32646)
+#define UF_IDC_SIZEALL			(32646)
+// 标准的箭头和小沙漏
+#define UF_IDC_APPSTARTING		(32650)
+// 标准的箭头和问号
+#define UF_IDC_HELP				(32651)
+// 工字光标
+#define UF_IDC_IBEAM			(32513)
+// 禁止圈
+#define UF_IDC_NO				(32648)
+// 垂直箭头
+#define UF_IDC_UPARROW			(32516)
+// 沙漏
+#define UF_IDC_WAIT				(32514)
 
 // 改变控件、窗口大小的位置
 enum SIZE_CTRL_TYPE
