@@ -180,30 +180,10 @@
 	</References>
 	<Files>
 		<Filter
-			Name="01.DLL接口"
-			>
-			<File
-				RelativePath="..\..\Inc\IControlManager.h"
-				>
-			</File>
-			<File
-				RelativePath=".\IControlManagerImpl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\IControlManagerImpl.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Inc\UiFeatureControl.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="02.控件"
 			>
 			<Filter
-				Name="01.BasePanel"
+				Name="02.BasePanel"
 				>
 				<File
 					RelativePath=".\ICtrlBasePanel.cpp"
@@ -214,9 +194,25 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="01.特效动画控件"
+				>
+				<Filter
+					Name="01.上下展开动画控件"
+					>
+					<File
+						RelativePath=".\ICtrlAnimatenExpand.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Inc\ICtrlAnimatenExpand.h"
+						>
+					</File>
+				</Filter>
+			</Filter>
 		</Filter>
 		<Filter
-			Name="其他"
+			Name="03.其他"
 			>
 			<File
 				RelativePath=".\resource.h"
@@ -258,6 +254,146 @@
 				RelativePath=".\UiFeatureControl.rc"
 				>
 			</File>
+			<Filter
+				Name="01.DLL接口"
+				>
+				<File
+					RelativePath="..\..\Inc\IControlManager.h"
+					>
+				</File>
+				<File
+					RelativePath=".\IControlManagerImpl.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\IControlManagerImpl.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\UiFeatureControl.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="01.UI内核文件"
+			>
+			<Filter
+				Name="03.控件属性"
+				>
+				<File
+					RelativePath="..\..\Inc\IPropertyBase.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyBool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyColor.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyComboBox.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyControl.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyCursor.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyCursorBase.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyFont.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyFontBase.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyGroup.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyImage.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyImageBase.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyInt.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertySkinManager.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IPropertyString.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="04.内存DC"
+				>
+				<File
+					RelativePath="..\..\Inc\CDrawingBoard.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\CDrawingImage.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="05.XML"
+				>
+				<File
+					RelativePath="..\..\Inc\CUiXmlParser.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\CUiXmlWrite.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="06.共有函数"
+				>
+				<File
+					RelativePath="..\..\Inc\ICommonFun.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="01.控件父窗口"
+				>
+				<File
+					RelativePath="..\..\Inc\IPropertyWindow.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Inc\IWindowBase.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="02.控件基类"
+				>
+				<File
+					RelativePath="..\..\Inc\IControlBase.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath="..\..\Inc\ICtrlInterface.h"
