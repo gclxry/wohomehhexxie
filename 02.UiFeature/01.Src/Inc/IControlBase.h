@@ -204,8 +204,6 @@ public:
 
 	// 重绘控件
 	void RedrawControl(bool bDrawImmediately = true);
-	// 重绘控件，这个重绘动画定时器中调用
-	void RedrawControlInAnimationTimer();
 
 	// 控件显示位置和大小，这个位置是相对于附着的窗口的，不会改变布局信息
 	void SetWindowRect(RECT CtrlInWndRct);

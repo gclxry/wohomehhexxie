@@ -128,12 +128,6 @@ void IControlBase::SetNeedRedraw(bool bNeedRedraw)
 	m_bNeedRedraw = bNeedRedraw;
 }
 
-// 重绘控件，这个重绘动画定时器中调用
-void IControlBase::RedrawControlInAnimationTimer()
-{
-
-}
-
 // 重绘控件
 void IControlBase::RedrawControl(bool bDrawImmediately)
 {
