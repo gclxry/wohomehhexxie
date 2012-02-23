@@ -117,7 +117,7 @@ CUiFeatureWindow::~CUiFeatureWindow()
 }
 
 // 控件发送消息接口
-LRESULT CUiFeatureWindow::OnCtrlMessage(IControlBase* pCtrl, WPARAM wParam, LPARAM lParam)
+LRESULT CUiFeatureWindow::OnCtrlMessage(IControlBase* pCtrl, int nMsgId, WPARAM wParam, LPARAM lParam)
 {
 	return 0;
 }

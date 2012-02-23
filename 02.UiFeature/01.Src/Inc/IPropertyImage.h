@@ -32,7 +32,8 @@ public:
 
 	const char * GetImageBaseName();
 
-	bool DrawImage(CDrawingBoard &DstDc, RECT DstRct);
+	// 绘制图片，如果alpha不是255，则根据这个alpha值来绘制
+	bool DrawImage(CDrawingBoard &DstDc, RECT DstRct, int nAlpha = 255);
 
 	bool OnDrawAnimation();
 

@@ -1,5 +1,11 @@
 <resource>
 <bool>
+<item objid="window93.Panel116.Panel191.group192.bool196" name="Lock" data="0"/>
+<item objid="window93.Panel116.Panel191.group192.bool197" name="Visible" data="1"/>
+<item objid="window93.Panel116.Panel191.group192.bool198" name="Enable" data="1"/>
+<item objid="window93.Panel116.Panel191.group192.bool199" name="ReceiveMouseMessage" data="1"/>
+<item objid="window93.Panel116.Panel191.group192.bool200" name="DragInCtrl" data="0"/>
+<item objid="window93.Panel116.Panel191.group192.bool202" name="DefaultEnterCtrl" data="0"/>
 <item objid="window93.Panel116.group117.bool121" name="Lock" data="0"/>
 <item objid="window93.Panel116.group117.bool122" name="Visible" data="1"/>
 <item objid="window93.Panel116.group117.bool123" name="Enable" data="1"/>
@@ -16,9 +22,32 @@
 <item objid="window93.group94.group102.bool104" name="CanMiniSize" data="0"/>
 </bool>
 <combobox>
+<item objid="window93.Panel116.Panel191.group192.group203.combobox206" name="@Layout_Type" counts="10" select="0" data0="左上角定位" data1="左下角定位" data2="右上角定位" data3="右下角定位" data4="撑满左侧" data5="撑满右侧" data6="撑满上方" data7="撑满下方" data8="撑满全部" data9="居中"/>
 <item objid="window93.Panel116.group117.group128.combobox131" name="@Layout_Type" counts="10" select="8" data0="左上角定位" data1="左下角定位" data2="右上角定位" data3="右下角定位" data4="撑满左侧" data5="撑满右侧" data6="撑满上方" data7="撑满下方" data8="撑满全部" data9="居中"/>
 </combobox>
+<cursor>
+<item objid="window93.Panel116.Panel191.group211.group213.cursor214" name="BkCursor" cursorbasename=""/>
+<item objid="window93.Panel116.group136.group138.cursor190" name="BkCursor" cursorbasename=""/>
+</cursor>
+<cursorbase>
+<item objid="15B06E29F76143CDB3F285AEE7D790BA" name="" issyscursor="1" cursorid="32513"/>
+<item objid="3523D41310E94A9D98F63094D4CF6D85" name="" issyscursor="1" cursorid="32516"/>
+<item objid="3599CD75C3AA48B5B411DF9A8C3A4439" name="" issyscursor="1" cursorid="32643"/>
+<item objid="4B0DCF10A0134B3FA0DACE91A2D0E104" name="" issyscursor="1" cursorid="32644"/>
+<item objid="4E28E5702FD54BC7BA03F2F21DB5AAA9" name="" issyscursor="1" cursorid="32650"/>
+<item objid="908BCFE9BBE04A05A0BF37EFB2ACD464" name="" issyscursor="1" cursorid="32651"/>
+<item objid="9BCF016CBF58421486E425755001ABE8" name="" issyscursor="1" cursorid="32646"/>
+<item objid="B7BF0A35A81B42E99544E375A0A8ADF5" name="" issyscursor="1" cursorid="32645"/>
+<item objid="B8F30A92572B416DAEB8C4F0A946F152" name="" issyscursor="1" cursorid="32642"/>
+<item objid="C7B4A7843E274BF2BFAA122E1D433E98" name="" issyscursor="1" cursorid="32514"/>
+<item objid="CCD0282E43904046955168250936D28D" name="" issyscursor="1" cursorid="32515"/>
+<item objid="DE4F4D84CBAA4A5E85F62F8F4B314051" name="" issyscursor="1" cursorid="32648"/>
+</cursorbase>
 <group>
+<item objid="window93.Panel116.Panel191.group192" name="ControlBase"/>
+<item objid="window93.Panel116.Panel191.group192.group203" name="Layout"/>
+<item objid="window93.Panel116.Panel191.group211" name="ControlPropetry"/>
+<item objid="window93.Panel116.Panel191.group211.group213" name="BkGroup"/>
 <item objid="window93.Panel116.group117" name="ControlBase"/>
 <item objid="window93.Panel116.group117.group128" name="Layout"/>
 <item objid="window93.Panel116.group136" name="ControlPropetry"/>
@@ -31,6 +60,7 @@
 <item objid="window93.group94.group102" name="SysBase"/>
 </group>
 <image>
+<item objid="window93.Panel116.Panel191.group211.image212" name="Image" imagebasename="bk.123"/>
 <item objid="window93.Panel116.group136.image137" name="Image" imagebasename="bk.123"/>
 </image>
 <imagebase>
@@ -41,6 +71,13 @@
 </item>
 </imagebase>
 <int>
+<item objid="window93.Panel116.Panel191.group192.group203.int204" name="@Width" data="252"/>
+<item objid="window93.Panel116.Panel191.group192.group203.int205" name="@Height" data="196"/>
+<item objid="window93.Panel116.Panel191.group192.group203.int207" name="@LeftSpace" data="135"/>
+<item objid="window93.Panel116.Panel191.group192.group203.int208" name="@RightSpace" data="113"/>
+<item objid="window93.Panel116.Panel191.group192.group203.int209" name="@TopSpace" data="96"/>
+<item objid="window93.Panel116.Panel191.group192.group203.int210" name="@BottomSpace" data="208"/>
+<item objid="window93.Panel116.Panel191.group192.int201" name="TabOrder" data="0"/>
 <item objid="window93.Panel116.group117.group128.int129" name="@Width" data="500"/>
 <item objid="window93.Panel116.group117.group128.int130" name="@Height" data="500"/>
 <item objid="window93.Panel116.group117.group128.int132" name="@LeftSpace" data="0"/>
@@ -60,6 +97,9 @@
 <item objid="window93.group172.int177" name="MinHeight" data="30"/>
 </int>
 <string>
+<item objid="window93.Panel116.Panel191.group192.string193" name="@Object_Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
+<item objid="window93.Panel116.Panel191.group192.string194" name="@Object_Id" counts="1" defaultarea="1" area0="1" data0="window93.Panel116.Panel191"/>
+<item objid="window93.Panel116.Panel191.group192.string195" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建控件"/>
 <item objid="window93.Panel116.group117.string118" name="@Object_Type" counts="1" defaultarea="1" area0="1" data0="Panel"/>
 <item objid="window93.Panel116.group117.string119" name="@Object_Id" counts="1" defaultarea="1" area0="1" data0="window93.Panel116"/>
 <item objid="window93.Panel116.group117.string120" name="@Object_Name" counts="1" defaultarea="1" area0="1" data0="新建控件"/>

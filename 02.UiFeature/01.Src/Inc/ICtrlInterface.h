@@ -23,8 +23,8 @@ protected:
 	virtual void OnDestroy() = 0;
 	// 绘制控件
 	virtual void OnPaint(CDrawingBoard &DrawBoard) = 0;
-	// 派生控件其他处理的消息
-	virtual void OnCtrlMessage(int nMsgId, WPARAM wParam, LPARAM lParam);
+	// 控件需要处理的一些自定义的消息，消息基本上会由对话框或者其他控件传入
+	virtual void OnCtrlNotify(int nMsgId, WPARAM wParam, LPARAM lParam);
 	// Builder刷新属性，此函数中只要重新加载控件属性即可
 	virtual void OnBuilderRefreshProp();
 	// 绘制控件的动画，如果需要重新刷新界面，返回true，否则返回false

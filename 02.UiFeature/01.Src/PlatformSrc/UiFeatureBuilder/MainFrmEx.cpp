@@ -253,6 +253,7 @@ bool CMainFrame::OpenSkinProject(bool bIsNew, CString strSkinDir, CString strSki
 			return false;
 		}
 
+		m_pSkinMgr->InitCursorBasePropetry();
 		SetProjectInitState(true);
 		m_wndWindowView.InitShowNewProject();
 	}

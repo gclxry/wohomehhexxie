@@ -17,12 +17,15 @@ public:
 	// 写入xml
 	virtual bool AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode);
 
-	// 是否为系统光标
-	bool IsSystemCursor();
 	// 设置系统光标
 	void SetSystemCursor(bool bIsSysCursor);
+	// 是否为系统光标
+	bool IsSystemCursor();
+
 	// 设置光标ID
 	void SetCursorId(int nId);
+	// 得到光标id
+	int GetCursorId();
 
 private:
 	// 是否是系统默认光标
