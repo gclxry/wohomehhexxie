@@ -186,11 +186,15 @@
 				Name="01.BasePanel"
 				>
 				<File
-					RelativePath=".\ICtrlPanel.cpp"
+					RelativePath="..\..\Inc\Control\ICtrlPanel.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\Inc\Control\ICtrlPanel.h"
+					RelativePath=".\ICtrlPanelImpl.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ICtrlPanelImpl.h"
 					>
 				</File>
 			</Filter>
