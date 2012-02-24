@@ -5,6 +5,7 @@
 #include "IPropertySkinManagerImpl.h"
 #include "ZipFileList.h"
 #include "..\..\Inc\IControlManager.h"
+#include "ControlImpl.h"
 
 class IWindowBaseImpl;
 typedef map<HWND, IWindowBaseImpl*>		WINDOW_IMPL_MAP;
@@ -61,8 +62,7 @@ private:
 
 private:
 	ULONG_PTR m_gdiplusToken;
-	HMODULE m_hControlDll;
-	IControlManager *m_pControlMgr;
+	CControlImpl* m_pCtrlDllMgr;
 
 	CZipFileList m_KernelZipFile;
 	IUiEngineImpl *m_pUiEngine;
