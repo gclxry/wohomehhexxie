@@ -62,52 +62,58 @@ bool CControlImpl::LoadControlDll()
 		return false;
 	}
 
+	bool bRet = true;
 	XmlState xmlState = { 0 };
 	JabberXmlInitState(&xmlState);
 	int bytesParsed = JabberXmlParse(&xmlState, pszData, strlen(pszData));
-	XmlNode *pPData  = JabberXmlGetChild(&xmlState.root, "uifeature\\controldll");
+	XmlNode *pPData  = JabberXmlGetChild(&xmlState.root, "uifeature");
 	if (pPData != NULL)
 	{
-		int nItemCount = pPData->numChild;
-		for (int i = 0; i < nItemCount; i++)
+		XmlNode *p_controldll  = JabberXmlGetChild(pPData, "controldll");
+		if (p_controldll != NULL)
 		{
-			XmlNode* pItem = JabberXmlGetNthChildWithoutTag(pPData, i);
-			if (pItem)
+			int nItemCount = p_controldll->numChild;
+			for (int i = 0; i < nItemCount; i++)
 			{
-				char* psz_path = JabberXmlGetAttrValue(pItem, "path");
-				if (psz_path != NULL)
+				XmlNode* pItem = JabberXmlGetNthChildWithoutTag(p_controldll, i);
+				if (pItem)
 				{
-					CONTRL_DLL_INFO DllInfo;
-					DllInfo.strPath = PathHelper(psz_path);
-					DllInfo.hDll = ::LoadLibraryA(strPath.c_str());
-					if (DllInfo.hDll == NULL)
-						continue;
+					char* psz_path = JabberXmlGetAttrValue(pItem, "path");
+					if (psz_path != NULL)
+					{
+						CONTRL_DLL_INFO DllInfo;
+						DllInfo.strPath = PathHelper(psz_path);
+						DllInfo.hDll = ::LoadLibraryA(DllInfo.strPath.c_str());
+						if (DllInfo.hDll == NULL)
+							continue;
 
-					GETCONTROLMANAGER GetControl = (GETCONTROLMANAGER)::GetProcAddress(DllInfo.hDll, "GetControlManager");
-					if (GetControl == NULL)
-						continue;
+						GETCONTROLMANAGER GetControl = (GETCONTROLMANAGER)::GetProcAddress(DllInfo.hDll, "GetControlManager");
+						if (GetControl == NULL)
+							continue;
 
-					DllInfo.pCtrlMgr = GetControl();
-					if (DllInfo.pCtrlMgr == NULL)
-						continue;
+						DllInfo.pCtrlMgr = GetControl();
+						if (DllInfo.pCtrlMgr == NULL)
+							continue;
 
-					m_CtrlDllVec.push_back(DllInfo);
+						m_CtrlDllVec.push_back(DllInfo);
+					}
 				}
 			}
+		}
+		else
+		{
+			bRet = false;
 		}
 	}
 	else
 	{
-		JabberXmlDestroyState(&xmlState);
-		::CloseHandle(hFile);
-		SAFE_FREE(pszData);
-		return false;
+		bRet = false;
 	}
 
 	JabberXmlDestroyState(&xmlState);
 	::CloseHandle(hFile);
 	SAFE_FREE(pszData);
-	return true;
+	return bRet;
 }
 
 void CControlImpl::SetRegControlMap(CONTROL_REG_MAP *pCtrlMap)
