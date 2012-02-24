@@ -1,12 +1,12 @@
 
 #pragma once
-#include "ICtrlInterface.h"
+#include "..\ICtrlInterface.h"
 
-class ICtrlAnimatenExpand : public ICtrlInterface
+class ICtrlAnimationExpand : public ICtrlInterface
 {
 public:
-	ICtrlAnimatenExpand();
-	virtual ~ICtrlAnimatenExpand();
+	ICtrlAnimationExpand();
+	virtual ~ICtrlAnimationExpand();
 
 	// ¿ªÊ¼¶¯»­
 	void BeginAnimation();

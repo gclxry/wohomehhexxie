@@ -1,9 +1,9 @@
 
 #include "StdAfx.h"
-#include "..\..\Inc\ICtrlAnimatenExpand.h"
+#include "..\..\Inc\Control\ICtrlAnimationExpand.h"
 #include "..\..\Inc\IControlManager.h"
 
-ICtrlAnimatenExpand::ICtrlAnimatenExpand(void)
+ICtrlAnimationExpand::ICtrlAnimationExpand(void)
 {
 	// 添加控件，步骤3：向内核系统注册控件
 	SetObjectType(CTRL_NAME_ANIMATION_EXPAND);
@@ -26,12 +26,12 @@ ICtrlAnimatenExpand::ICtrlAnimatenExpand(void)
 	m_pPropFrameMidImg = NULL;
 }
 
-ICtrlAnimatenExpand::~ICtrlAnimatenExpand(void)
+ICtrlAnimationExpand::~ICtrlAnimationExpand(void)
 {
 }
 
 // 派生控件用于创建属于自己的控件属性
-bool ICtrlAnimatenExpand::CreateControlPropetry(bool bNeedSetDftProp)
+bool ICtrlAnimationExpand::CreateControlPropetry(bool bNeedSetDftProp)
 {
 	m_pPropPanelName = (IPropertyString*)CreatePropetry(NULL, OTID_STRING, "PanelName", "动画控件中包含的Panel控件的名字，Panel控件为一个容器");
 	m_pPropIsShowPanel = (IPropertyBool*)CreatePropetry(NULL, OTID_BOOL, "ShowPanelInAnmation", "在动画的过程中，是否显示容器中控件的图像");
@@ -47,34 +47,34 @@ bool ICtrlAnimatenExpand::CreateControlPropetry(bool bNeedSetDftProp)
 }
 
 // 开始动画
-void ICtrlAnimatenExpand::BeginAnimation()
+void ICtrlAnimationExpand::BeginAnimation()
 {
 
 }
 
 // 取得用于绘制背景的图片DC
-CDrawingBoard* ICtrlAnimatenExpand::GetAnimationBackgroudMemDc()
+CDrawingBoard* ICtrlAnimationExpand::GetAnimationBackgroudMemDc()
 {
 	return &m_BkImageDc;
 }
 
 // 初始化控件
-void ICtrlAnimatenExpand::OnCreate()
+void ICtrlAnimationExpand::OnCreate()
 {
 }
 
 // 控件初始化完毕
-void ICtrlAnimatenExpand::OnFinalCreate()
+void ICtrlAnimationExpand::OnFinalCreate()
 {
 }
 
 // 销毁控件
-void ICtrlAnimatenExpand::OnDestroy()
+void ICtrlAnimationExpand::OnDestroy()
 {
 }
 
 // 绘制控件
-void ICtrlAnimatenExpand::OnPaint(CDrawingBoard &DrawBoard)
+void ICtrlAnimationExpand::OnPaint(CDrawingBoard &DrawBoard)
 {
 //	if (m_pPropImage != NULL)
 //		m_pPropImage->DrawImage(DrawBoard, this->GetClientRect());
