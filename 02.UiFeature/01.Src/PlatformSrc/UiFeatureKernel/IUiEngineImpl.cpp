@@ -63,3 +63,22 @@ bool IUiEngineImpl::AlphaBlend(CDrawingBoard &DestMemDc, int nXOriginDest, int n
 	return (AlphaBlendImpl(DestMemDc.GetSafeHdc(), nXOriginDest, nYOriginDest, nWidthDest, nHeightDest,
 		SrcMemDc.GetSafeHdc(), nXOriginSrc, nYOriginSrc, nWidthSrc, nHeightSrc, Blend) == TRUE);
 }
+
+bool IUiEngineImpl::AlphaBlend(CDrawingBoard &DestMemDc, int nXOriginDest, int nYOriginDest, int nWidthDest, int nHeightDest,
+						CDrawingBoard &SrcMemDc, int nXOriginSrc, int nYOriginSrc, int nWidthSrc, int nHeightSrc, int nAlpha)
+{
+	if (AlphaBlendImpl == NULL || !IS_SAFE_HANDLE(DestMemDc.GetSafeHdc()) || !IS_SAFE_HANDLE(SrcMemDc.GetSafeHdc()))
+		return false;
+
+	if (nAlpha < 0)
+		nAlpha = 0;
+
+	if (nAlpha > 255)
+		nAlpha = 255;
+
+	BLENDFUNCTION Blend = m_Blend;
+	Blend.SourceConstantAlpha = nAlpha;
+
+	return (AlphaBlendImpl(DestMemDc.GetSafeHdc(), nXOriginDest, nYOriginDest, nWidthDest, nHeightDest,
+		SrcMemDc.GetSafeHdc(), nXOriginSrc, nYOriginSrc, nWidthSrc, nHeightSrc, Blend) == TRUE);
+}

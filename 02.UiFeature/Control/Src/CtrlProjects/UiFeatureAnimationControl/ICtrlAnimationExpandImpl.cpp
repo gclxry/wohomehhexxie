@@ -2,6 +2,7 @@
 #include "StdAfx.h"
 #include "ICtrlAnimationExpandImpl.h"
 #include "..\..\Inc\IControlManager.h"
+#include "..\..\Inc\UiFeatureDefs.h"
 
 ICtrlAnimationExpandImpl::ICtrlAnimationExpandImpl(void)
 {
@@ -53,7 +54,7 @@ void ICtrlAnimationExpandImpl::BeginAnimation()
 }
 
 // 取得用于绘制背景的图片DC
-CDrawingBoard* ICtrlAnimationExpandImpl::GetAnimationBackgroudMemDc()
+CDrawingImage* ICtrlAnimationExpandImpl::GetAnimationBackgroudMemDc()
 {
 	return &m_BkImageDc;
 }
@@ -76,6 +77,11 @@ void ICtrlAnimationExpandImpl::OnDestroy()
 // 绘制控件
 void ICtrlAnimationExpandImpl::OnPaint(CDrawingBoard &DrawBoard)
 {
-//	if (m_pPropImage != NULL)
-//		m_pPropImage->DrawImage(DrawBoard, this->GetClientRect());
+	if (!IS_SAFE_HANDLE(m_BkImageDc.GetBmpHandle()))
+		return;
+
+	RECT ctrlRct = this->GetClientRect();
+	RECT FromRct = ctrlRct;
+	FromRct.bottom -= 100;
+	m_BkImageDc.BitBltTo(DrawBoard, ctrlRct, FromRct);
 }

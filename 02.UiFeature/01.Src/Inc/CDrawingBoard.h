@@ -2,6 +2,7 @@
 #pragma once
 #include <Windows.h>
 
+class IUiFeatureKernel;
 class CDrawingBoard
 {
 public:
@@ -17,7 +18,9 @@ public:
 	BYTE* GetBits();
 	SIZE GetDcSize();
 	// 绘制到另外一个内存DC上
-	bool DrawTo(CDrawingBoard& ToBoard, RECT ToRct);
+	bool BitBltTo(CDrawingBoard& ToBoard, RECT ToRct, RECT FromRct);
+	// 绘制到另外一个内存DC上
+	bool AlphaBlendTo(CDrawingBoard& ToBoard, RECT ToRct, RECT FromRct, IUiFeatureKernel* pUiKernel, int nAlpha = 255);
 
 protected:
 	HBITMAP m_hBmp;

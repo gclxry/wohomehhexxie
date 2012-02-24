@@ -1,6 +1,9 @@
 
 #include "stdafx.h"
 #include "..\..\Inc\CDrawingBoard.h"
+#include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\IUiFeatureKernel.h"
+#include "..\..\Inc\IUiEngine.h"
 
 CDrawingBoard::CDrawingBoard(void)
 {
@@ -107,7 +110,22 @@ void CDrawingBoard::Delete()
 }
 
 // 绘制到另外一个内存DC上
-bool CDrawingBoard::DrawTo(CDrawingBoard& ToBoard, RECT ToRct)
+bool CDrawingBoard::BitBltTo(CDrawingBoard& ToBoard, RECT ToRct, RECT FromRct)
 {
-	return false;
+	if (!IS_SAFE_HANDLE(m_hDC) || !IS_SAFE_HANDLE(ToBoard.GetSafeHdc()))
+		return false;
+
+	::BitBlt(ToBoard.GetSafeHdc(), ToRct.left, ToRct.top, RECT_WIDTH(ToRct), RECT_HEIGHT(ToRct),
+		m_hDC, FromRct.left, FromRct.top, SRCCOPY);
+	return true;
+}
+
+// 绘制到另外一个内存DC上
+bool CDrawingBoard::AlphaBlendTo(CDrawingBoard& ToBoard, RECT ToRct, RECT FromRct, IUiFeatureKernel* pUiKernel, int nAlpha)
+{
+	if (!IS_SAFE_HANDLE(m_hDC) || !IS_SAFE_HANDLE(ToBoard.GetSafeHdc()) || pUiKernel == NULL || pUiKernel->GetUiEngine() == NULL)
+		return false;
+
+	return pUiKernel->GetUiEngine()->AlphaBlend(ToBoard, ToRct.left, ToRct.top, RECT_WIDTH(ToRct), RECT_HEIGHT(ToRct),
+		*this, FromRct.left, FromRct.top, RECT_WIDTH(FromRct), RECT_HEIGHT(FromRct), nAlpha);
 }
