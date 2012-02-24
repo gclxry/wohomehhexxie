@@ -1,5 +1,6 @@
 #pragma once
 #include "..\..\Inc\CUiFeatureWindow.h"
+#include "..\..\Inc\Control\ICtrlAnimationExpand.h"
 
 class CWin32TestWindow : public CUiFeatureWindow
 {
@@ -21,4 +22,5 @@ protected:
 
 private:
 	DWORD m_dwMainThreadId;
+	ICtrlAnimationExpand* m_pAnimationExpandCtrl;
 };

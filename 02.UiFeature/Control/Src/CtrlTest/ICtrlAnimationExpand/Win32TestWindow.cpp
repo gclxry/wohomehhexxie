@@ -1,11 +1,13 @@
 #include "StdAfx.h"
 #include "Win32TestWindow.h"
+#include <assert.h>
 #include "..\..\Inc\ICommonFun.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 
 CWin32TestWindow::CWin32TestWindow()
 {
 	m_dwMainThreadId = 0;
+	m_pAnimationExpandCtrl = NULL;
 }
 
 CWin32TestWindow::~CWin32TestWindow()
@@ -47,5 +49,11 @@ LRESULT CWin32TestWindow::WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam)
 // WM_CREATE：对话框初始化	
 void CWin32TestWindow::OnCreate()
 {
+	m_pAnimationExpandCtrl = dynamic_cast<ICtrlAnimationExpand*>(m_pWindowBase->GetControl("TestAniExpand"));
+	if (m_pAnimationExpandCtrl == NULL)
+	{
+		assert(false);
+		return;
+	}
 
 }
