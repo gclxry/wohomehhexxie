@@ -87,8 +87,6 @@ protected:
 	virtual bool OnSysCommand(WPARAM wParam, LPARAM lParam);
 	// WM_CREATE：对话框初始化	
 	virtual void OnCreate();
-	// 对话框初始化完毕调用
-	virtual void OnCreateEnd();
 	// WM_TIMER：定时器	
 	virtual void OnTimer(UINT nTimerId);
 	// WM_DESTROY：销毁窗口

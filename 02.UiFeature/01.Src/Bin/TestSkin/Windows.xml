@@ -1,38 +1,38 @@
 <windows>
-<window objid="window93">
-<group objid="window93.group94" name="WindowBase">
-<string objid="window93.group94.string95" name="@Object_Type"/>
-<string objid="window93.group94.string96" name="@Object_Id"/>
-<string objid="window93.group94.string97" name="@Object_Name"/>
-<string objid="window93.group94.string98" name="WindowText"/>
-<bool objid="window93.group94.bool99" name="Visible"/>
-<bool objid="window93.group94.bool100" name="LayeredWindow"/>
-<bool objid="window93.group94.bool101" name="TopMost"/>
-<group objid="window93.group94.group102" name="SysBase">
-<bool objid="window93.group94.group102.bool103" name="CanFullScreen"/>
-<bool objid="window93.group94.group102.bool104" name="CanMiniSize"/>
+<window objid="window1">
+<group objid="window1.group2" name="WindowBase">
+<string objid="window1.group2.string3" name="@Object_Type"/>
+<string objid="window1.group2.string4" name="@Object_Id"/>
+<string objid="window1.group2.string5" name="@Object_Name"/>
+<string objid="window1.group2.string6" name="WindowText"/>
+<bool objid="window1.group2.bool7" name="Visible"/>
+<bool objid="window1.group2.bool8" name="LayeredWindow"/>
+<bool objid="window1.group2.bool9" name="TopMost"/>
+<group objid="window1.group2.group10" name="SysBase">
+<bool objid="window1.group2.group10.bool11" name="CanFullScreen"/>
+<bool objid="window1.group2.group10.bool12" name="CanMiniSize"/>
 </group>
 </group>
-<group objid="window93.group108" name="Drag">
-<bool objid="window93.group108.bool109" name="Enable"/>
+<group objid="window1.group13" name="WindowSize">
+<int objid="window1.group13.int14" name="Width"/>
+<int objid="window1.group13.int15" name="Height"/>
 </group>
-<group objid="window93.group110" name="Stretching">
-<bool objid="window93.group110.bool111" name="Enable"/>
-<int objid="window93.group110.int112" name="LeftSpace"/>
-<int objid="window93.group110.int113" name="RightSpace"/>
-<int objid="window93.group110.int114" name="TopSpace"/>
-<int objid="window93.group110.int115" name="BottomSpace"/>
+<group objid="window1.group16" name="Drag">
+<bool objid="window1.group16.bool17" name="Enable"/>
 </group>
-<group objid="window93.group169" name="WindowSize">
-<int objid="window93.group169.int170" name="Width"/>
-<int objid="window93.group169.int171" name="Height"/>
+<group objid="window1.group18" name="WindowMaxMinSize">
+<bool objid="window1.group18.bool19" name="Enable"/>
+<int objid="window1.group18.int20" name="MaxWidth"/>
+<int objid="window1.group18.int21" name="MaxHeight"/>
+<int objid="window1.group18.int22" name="MinWidth"/>
+<int objid="window1.group18.int23" name="MinHeight"/>
 </group>
-<group objid="window93.group172" name="WindowMaxMinSize">
-<bool objid="window93.group172.bool173" name="Enable"/>
-<int objid="window93.group172.int174" name="MaxWidth"/>
-<int objid="window93.group172.int175" name="MaxHeight"/>
-<int objid="window93.group172.int176" name="MinWidth"/>
-<int objid="window93.group172.int177" name="MinHeight"/>
+<group objid="window1.group24" name="Stretching">
+<bool objid="window1.group24.bool25" name="Enable"/>
+<int objid="window1.group24.int26" name="LeftSpace"/>
+<int objid="window1.group24.int27" name="RightSpace"/>
+<int objid="window1.group24.int28" name="TopSpace"/>
+<int objid="window1.group24.int29" name="BottomSpace"/>
 </group>
 </window>
 </windows>
