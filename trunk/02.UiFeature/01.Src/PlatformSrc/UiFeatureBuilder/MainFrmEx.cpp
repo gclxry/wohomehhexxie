@@ -253,7 +253,6 @@ bool CMainFrame::OpenSkinProject(bool bIsNew, CString strSkinDir, CString strSki
 			return false;
 		}
 
-		m_pSkinMgr->InitCursorBasePropetry();
 		SetProjectInitState(true);
 		m_wndWindowView.InitShowNewProject();
 	}
@@ -261,6 +260,7 @@ bool CMainFrame::OpenSkinProject(bool bIsNew, CString strSkinDir, CString strSki
 	{
 		SetProjectInitState(true);
 	}
+	m_pSkinMgr->InitCursorBasePropetry();
 
 	m_strCurUfpPath = m_strNewUfpPath;
 	m_strCurSkinName = m_strNewSkinName;

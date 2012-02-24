@@ -1,60 +1,37 @@
 <controls>
-<Panel objid="window93.Panel116">
-<group objid="window93.Panel116.group117" name="ControlBase">
-<string objid="window93.Panel116.group117.string118" name="@Object_Type"/>
-<string objid="window93.Panel116.group117.string119" name="@Object_Id"/>
-<string objid="window93.Panel116.group117.string120" name="@Object_Name"/>
-<bool objid="window93.Panel116.group117.bool121" name="Lock"/>
-<bool objid="window93.Panel116.group117.bool122" name="Visible"/>
-<bool objid="window93.Panel116.group117.bool123" name="Enable"/>
-<bool objid="window93.Panel116.group117.bool124" name="ReceiveMouseMessage"/>
-<bool objid="window93.Panel116.group117.bool125" name="DragInCtrl"/>
-<int objid="window93.Panel116.group117.int126" name="TabOrder"/>
-<bool objid="window93.Panel116.group117.bool127" name="DefaultEnterCtrl"/>
-<group objid="window93.Panel116.group117.group128" name="Layout">
-<int objid="window93.Panel116.group117.group128.int129" name="@Width"/>
-<int objid="window93.Panel116.group117.group128.int130" name="@Height"/>
-<combobox objid="window93.Panel116.group117.group128.combobox131" name="@Layout_Type"/>
-<int objid="window93.Panel116.group117.group128.int132" name="@LeftSpace"/>
-<int objid="window93.Panel116.group117.group128.int133" name="@RightSpace"/>
-<int objid="window93.Panel116.group117.group128.int134" name="@TopSpace"/>
-<int objid="window93.Panel116.group117.group128.int135" name="@BottomSpace"/>
+<AnimationExpand objid="window1.AnimationExpand30">
+<group objid="window1.AnimationExpand30.group31" name="ControlBase">
+<string objid="window1.AnimationExpand30.group31.string32" name="@Object_Type"/>
+<string objid="window1.AnimationExpand30.group31.string33" name="@Object_Id"/>
+<string objid="window1.AnimationExpand30.group31.string34" name="@Object_Name"/>
+<bool objid="window1.AnimationExpand30.group31.bool35" name="Lock"/>
+<bool objid="window1.AnimationExpand30.group31.bool36" name="Visible"/>
+<bool objid="window1.AnimationExpand30.group31.bool37" name="Enable"/>
+<bool objid="window1.AnimationExpand30.group31.bool38" name="ReceiveMouseMessage"/>
+<bool objid="window1.AnimationExpand30.group31.bool39" name="DragInCtrl"/>
+<int objid="window1.AnimationExpand30.group31.int40" name="TabOrder"/>
+<bool objid="window1.AnimationExpand30.group31.bool41" name="DefaultEnterCtrl"/>
+<group objid="window1.AnimationExpand30.group31.group42" name="Layout">
+<int objid="window1.AnimationExpand30.group31.group42.int43" name="@Width"/>
+<int objid="window1.AnimationExpand30.group31.group42.int44" name="@Height"/>
+<combobox objid="window1.AnimationExpand30.group31.group42.combobox45" name="@Layout_Type"/>
+<int objid="window1.AnimationExpand30.group31.group42.int46" name="@LeftSpace"/>
+<int objid="window1.AnimationExpand30.group31.group42.int47" name="@RightSpace"/>
+<int objid="window1.AnimationExpand30.group31.group42.int48" name="@TopSpace"/>
+<int objid="window1.AnimationExpand30.group31.group42.int49" name="@BottomSpace"/>
 </group>
 </group>
-<group objid="window93.Panel116.group136" name="ControlPropetry">
-<image objid="window93.Panel116.group136.image137" name="Image"/>
-<group objid="window93.Panel116.group136.group138" name="BkGroup">
-<cursor objid="window93.Panel116.group136.group138.cursor190" name="BkCursor"/>
+<group objid="window1.AnimationExpand30.group50" name="ControlPropetry">
+<string objid="window1.AnimationExpand30.group50.string51" name="PanelName"/>
+<bool objid="window1.AnimationExpand30.group50.bool52" name="ShowPanelInAnmation"/>
+<group objid="window1.AnimationExpand30.group50.group53" name="SjGroup">
+<image objid="window1.AnimationExpand30.group50.group53.image54" name="UpSjImage"/>
+<image objid="window1.AnimationExpand30.group50.group53.image55" name="UpSjMarkImage"/>
+<image objid="window1.AnimationExpand30.group50.group53.image56" name="DownSjImage"/>
+<image objid="window1.AnimationExpand30.group50.group53.image57" name="DownSjMarkImage"/>
 </group>
+<image objid="window1.AnimationExpand30.group50.image58" name="ExpandFrame"/>
+<image objid="window1.AnimationExpand30.group50.image59" name="ExpandMidImage"/>
 </group>
-</Panel>
-<Panel objid="window93.Panel116.Panel191">
-<group objid="window93.Panel116.Panel191.group192" name="ControlBase">
-<string objid="window93.Panel116.Panel191.group192.string193" name="@Object_Type"/>
-<string objid="window93.Panel116.Panel191.group192.string194" name="@Object_Id"/>
-<string objid="window93.Panel116.Panel191.group192.string195" name="@Object_Name"/>
-<bool objid="window93.Panel116.Panel191.group192.bool196" name="Lock"/>
-<bool objid="window93.Panel116.Panel191.group192.bool197" name="Visible"/>
-<bool objid="window93.Panel116.Panel191.group192.bool198" name="Enable"/>
-<bool objid="window93.Panel116.Panel191.group192.bool199" name="ReceiveMouseMessage"/>
-<bool objid="window93.Panel116.Panel191.group192.bool200" name="DragInCtrl"/>
-<int objid="window93.Panel116.Panel191.group192.int201" name="TabOrder"/>
-<bool objid="window93.Panel116.Panel191.group192.bool202" name="DefaultEnterCtrl"/>
-<group objid="window93.Panel116.Panel191.group192.group203" name="Layout">
-<int objid="window93.Panel116.Panel191.group192.group203.int204" name="@Width"/>
-<int objid="window93.Panel116.Panel191.group192.group203.int205" name="@Height"/>
-<combobox objid="window93.Panel116.Panel191.group192.group203.combobox206" name="@Layout_Type"/>
-<int objid="window93.Panel116.Panel191.group192.group203.int207" name="@LeftSpace"/>
-<int objid="window93.Panel116.Panel191.group192.group203.int208" name="@RightSpace"/>
-<int objid="window93.Panel116.Panel191.group192.group203.int209" name="@TopSpace"/>
-<int objid="window93.Panel116.Panel191.group192.group203.int210" name="@BottomSpace"/>
-</group>
-</group>
-<group objid="window93.Panel116.Panel191.group211" name="ControlPropetry">
-<image objid="window93.Panel116.Panel191.group211.image212" name="Image"/>
-<group objid="window93.Panel116.Panel191.group211.group213" name="BkGroup">
-<cursor objid="window93.Panel116.Panel191.group211.group213.cursor214" name="BkCursor"/>
-</group>
-</group>
-</Panel>
+</AnimationExpand>
 </controls>

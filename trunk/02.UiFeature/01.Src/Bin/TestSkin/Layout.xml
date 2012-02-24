@@ -1,7 +1,5 @@
-<layout area="1" lastid="219">
-<window objid="window93">
-<ctrl objid="window93.Panel116">
-<ctrl objid="window93.Panel116.Panel191"/>
-</ctrl>
+<layout area="1" lastid="61">
+<window objid="window1">
+<ctrl objid="window1.AnimationExpand30"/>
 </window>
 </layout>

@@ -381,7 +381,6 @@ bool CUiFeatureWindow::InitInstance()
 		}
 
 		OnCreate();
-		OnCreateEnd();
 		this->ShowWindow(SW_HIDE);
 	}
 
@@ -508,11 +507,6 @@ void CUiFeatureWindow::OnTimer(UINT nTimerId)
 
 // WM_CREATE：对话框初始化	
 void CUiFeatureWindow::OnCreate()
-{
-}
-
-// 对话框初始化完毕调用
-void CUiFeatureWindow::OnCreateEnd()
 {
 }
 
