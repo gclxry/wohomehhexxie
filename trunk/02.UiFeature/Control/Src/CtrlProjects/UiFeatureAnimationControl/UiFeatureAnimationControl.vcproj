@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="UiFeatureAnimationControl"
-	ProjectGUID="{1EAFE2F7-FE3A-4270-A2E9-BAA23648AA26}"
+	ProjectGUID="{1EAFE2F7-FE3A-4270-A2E9-BAA23648CC26}"
 	RootNamespace="UiFeatureAnimationControl"
 	TargetFrameworkVersion="0"
 	>
@@ -17,7 +17,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\Bin"
+			OutputDirectory="..\..\..\Bin"
 			IntermediateDirectory="..\..\Temp\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfATL="0"
@@ -95,7 +95,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\Bin"
+			OutputDirectory="..\..\..\Bin"
 			IntermediateDirectory="..\..\Temp\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfATL="0"
@@ -182,15 +182,19 @@
 		<Filter
 			Name="02.控件"
 			>
+			<File
+				RelativePath="..\..\Inc\Control\ICtrlAnimationControl.h"
+				>
+			</File>
 			<Filter
 				Name="01.上下展开动画控件"
 				>
 				<File
-					RelativePath=".\ICtrlAnimatenExpand.cpp"
+					RelativePath=".\ICtrlAnimationExpand.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\Inc\Control\ICtrlAnimatenExpand.h"
+					RelativePath="..\..\Inc\Control\ICtrlAnimationExpand.h"
 					>
 				</File>
 			</Filter>

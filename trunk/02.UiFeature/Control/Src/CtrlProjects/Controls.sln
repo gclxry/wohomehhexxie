@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UiFeatureAnimationControl", "UiFeatureAnimationControl\UiFeatureAnimationControl.vcproj", "{1EAFE2F7-FE3A-4270-A2E9-BAA23648AA26}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UiFeatureAnimationControl", "UiFeatureAnimationControl\UiFeatureAnimationControl.vcproj", "{1EAFE2F7-FE3A-4270-A2E9-BAA23648CC26}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UiFeatureControl", "UiFeatureControl\UiFeatureControl.vcproj", "{1EAFE2F7-FE3A-4270-A2E9-BAA23648AA25}"
 EndProject
@@ -11,10 +11,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1EAFE2F7-FE3A-4270-A2E9-BAA23648AA26}.Debug|Win32.ActiveCfg = Debug|Win32
-		{1EAFE2F7-FE3A-4270-A2E9-BAA23648AA26}.Debug|Win32.Build.0 = Debug|Win32
-		{1EAFE2F7-FE3A-4270-A2E9-BAA23648AA26}.Release|Win32.ActiveCfg = Release|Win32
-		{1EAFE2F7-FE3A-4270-A2E9-BAA23648AA26}.Release|Win32.Build.0 = Release|Win32
+		{1EAFE2F7-FE3A-4270-A2E9-BAA23648CC26}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1EAFE2F7-FE3A-4270-A2E9-BAA23648CC26}.Debug|Win32.Build.0 = Debug|Win32
+		{1EAFE2F7-FE3A-4270-A2E9-BAA23648CC26}.Release|Win32.ActiveCfg = Release|Win32
+		{1EAFE2F7-FE3A-4270-A2E9-BAA23648CC26}.Release|Win32.Build.0 = Release|Win32
 		{1EAFE2F7-FE3A-4270-A2E9-BAA23648AA25}.Debug|Win32.ActiveCfg = Debug|Win32
 		{1EAFE2F7-FE3A-4270-A2E9-BAA23648AA25}.Debug|Win32.Build.0 = Debug|Win32
 		{1EAFE2F7-FE3A-4270-A2E9-BAA23648AA25}.Release|Win32.ActiveCfg = Release|Win32

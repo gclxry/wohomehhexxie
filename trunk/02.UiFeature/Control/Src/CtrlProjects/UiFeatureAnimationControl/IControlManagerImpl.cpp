@@ -3,7 +3,7 @@
 #include "IControlManagerImpl.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IControlManager.h"
-#include "..\..\Inc\ICtrlPanel.h"
+#include "..\..\Inc\Control\ICtrlAnimationExpand.h"
 
 // 创建一个控件的宏
 #define CREATE_CONTROL(ctrl_name, ctrl_class_type)				{if (lstrcmpiA(pCtrlType, ctrl_name) == 0)\
@@ -79,8 +79,7 @@ void IControlManagerImpl::SetRegControlMap(CONTROL_REG_MAP *pCtrlMap)
 	pCtrlMap->clear();
 
 	// 添加控件，步骤2：向Builder工具注册控件
-	SetRegControl(pCtrlMap, "基本控件组", CTRL_NAME_BASE_PANEL, "BasePanel.png", "对话框背景、面板控件");
-	SetRegControl(pCtrlMap, "动画控件组", CTRL_NAME_ANIMATION_EXPAND, "AnimatenExpand.png", "上下展开动画控件");
+	SetRegControl(pCtrlMap, "动画控件组", CTRL_NAME_ANIMATION_EXPAND, "AnimationExpand.png", "上下展开动画控件");
 }
 
 // 创建一个控件，参数为步骤1的宏
@@ -94,8 +93,7 @@ ICtrlInterface* IControlManagerImpl::CreateCtrl(char *pCtrlType, char *pszObject
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// 添加控件，步骤4：创建一个控件
-	CREATE_CONTROL(CTRL_NAME_BASE_PANEL, ICtrlPanel);
-	CREATE_CONTROL(CTRL_NAME_ANIMATION_EXPAND, ICtrlAnimatenExpand);
+	CREATE_CONTROL(CTRL_NAME_ANIMATION_EXPAND, ICtrlAnimationExpand);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if (pRetCtrl == NULL)
@@ -121,8 +119,7 @@ bool IControlManagerImpl::ReleaseCtrl(ICtrlInterface **ppCtrl)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// 添加控件，步骤5：销毁一个控件
-	DELETE_CONTROL(CTRL_NAME_BASE_PANEL, ICtrlPanel);
-	DELETE_CONTROL(CTRL_NAME_ANIMATION_EXPAND, ICtrlAnimatenExpand);
+	DELETE_CONTROL(CTRL_NAME_ANIMATION_EXPAND, ICtrlAnimationExpand);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	SAFE_DELETE(*ppCtrl);

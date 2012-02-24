@@ -182,6 +182,10 @@
 		<Filter
 			Name="02.¿Ø¼þ"
 			>
+			<File
+				RelativePath="..\..\Inc\Control\ICtrlBaseControl.h"
+				>
+			</File>
 			<Filter
 				Name="01.BasePanel"
 				>

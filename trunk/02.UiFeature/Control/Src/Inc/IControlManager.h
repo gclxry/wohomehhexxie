@@ -4,10 +4,8 @@
 #pragma once
 #include "IControlBase.h"
 #include "ICtrlInterface.h"
-
-// 添加控件，步骤1：编写一个控件名称宏。注意，控件名称不能相同
-#define CTRL_NAME_BASE_PANEL						("Panel")
-#define CTRL_NAME_ANIMATION_EXPAND					("AnimationExpand")
+#include "Control\ICtrlBaseControl.h"
+#include "Control\ICtrlAnimationControl.h"
 
 class IControlManager
 {
