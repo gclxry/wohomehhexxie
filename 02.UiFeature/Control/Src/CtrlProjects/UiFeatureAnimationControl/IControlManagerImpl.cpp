@@ -3,7 +3,7 @@
 #include "IControlManagerImpl.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IControlManager.h"
-#include "..\..\Inc\Control\ICtrlAnimationExpand.h"
+#include "ICtrlAnimationExpandImpl.h"
 
 // 创建一个控件的宏
 #define CREATE_CONTROL(ctrl_name, ctrl_class_type)				{if (lstrcmpiA(pCtrlType, ctrl_name) == 0)\
@@ -96,7 +96,7 @@ ICtrlInterface* IControlManagerImpl::CreateCtrl(char *pCtrlType, char *pszObject
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// 添加控件，步骤4：创建一个控件
-	CREATE_CONTROL(CTRL_NAME_ANIMATION_EXPAND, ICtrlAnimationExpand);
+	CREATE_CONTROL(CTRL_NAME_ANIMATION_EXPAND, ICtrlAnimationExpandImpl);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if (pRetCtrl == NULL)

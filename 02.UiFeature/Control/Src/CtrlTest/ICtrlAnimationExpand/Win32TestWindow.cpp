@@ -3,6 +3,7 @@
 #include <assert.h>
 #include "..\..\Inc\ICommonFun.h"
 #include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\CDrawingBoard.h"
 
 CWin32TestWindow::CWin32TestWindow()
 {
@@ -51,6 +52,13 @@ void CWin32TestWindow::OnCreate()
 {
 	m_pAnimationExpandCtrl = dynamic_cast<ICtrlAnimationExpand*>(m_pWindowBase->GetControl("TestAniExpand"));
 	if (m_pAnimationExpandCtrl == NULL)
+	{
+		assert(false);
+		return;
+	}
+
+	CDrawingBoard* pDrawBoard = m_pAnimationExpandCtrl->GetAnimationBackgroudMemDc();
+	if (pDrawBoard == NULL)
 	{
 		assert(false);
 		return;

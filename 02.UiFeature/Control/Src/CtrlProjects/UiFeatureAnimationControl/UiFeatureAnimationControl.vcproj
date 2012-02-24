@@ -186,11 +186,15 @@
 				Name="01.上下展开动画控件"
 				>
 				<File
-					RelativePath=".\ICtrlAnimationExpand.cpp"
+					RelativePath="..\..\Inc\Control\ICtrlAnimationExpand.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\Inc\Control\ICtrlAnimationExpand.h"
+					RelativePath=".\ICtrlAnimationExpandImpl.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ICtrlAnimationExpandImpl.h"
 					>
 				</File>
 			</Filter>
