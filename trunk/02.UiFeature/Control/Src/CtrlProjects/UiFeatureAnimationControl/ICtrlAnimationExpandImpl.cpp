@@ -82,6 +82,6 @@ void ICtrlAnimationExpandImpl::OnPaint(CDrawingBoard &DrawBoard)
 
 	RECT ctrlRct = this->GetClientRect();
 	RECT FromRct = ctrlRct;
-	FromRct.bottom -= 100;
+	ctrlRct.bottom -= 100;
 	m_BkImageDc.BitBltTo(DrawBoard, ctrlRct, FromRct);
 }

@@ -50,6 +50,11 @@ LRESULT CWin32TestWindow::WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam)
 // WM_CREATE：对话框初始化	
 void CWin32TestWindow::OnCreate()
 {
+	RECT WorkArea;
+	INIT_RECT(WorkArea);
+	::SystemParametersInfo(SPI_GETWORKAREA, 0, &WorkArea, 0);
+	::MoveWindow(m_hWnd, 0, 0, RECT_WIDTH(WorkArea), RECT_HEIGHT(WorkArea), FALSE);
+
 	m_pAnimationExpandCtrl = dynamic_cast<ICtrlAnimationExpand*>(m_pWindowBase->GetControl("TestAniExpand"));
 	if (m_pAnimationExpandCtrl == NULL)
 	{
