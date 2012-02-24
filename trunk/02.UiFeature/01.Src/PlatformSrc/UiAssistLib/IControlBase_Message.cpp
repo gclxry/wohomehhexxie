@@ -42,15 +42,8 @@ void IControlBase::OnPaintControl(CDrawingBoard &WndMemDc, RECT ActiveDrawRct)
 	// 绘制到窗口的DC上
 	int nWidth = RECT_WIDTH(DrawRct);
 	int nHeight = RECT_HEIGHT(DrawRct);
-	if (GetControlAlpha() == 255)
-	{
-		m_pUiEngine->AlphaBlend(WndMemDc, DrawRct.left, DrawRct.top, nWidth, nHeight,
-			m_CtrlMemDc, DrawRct.left - m_RectInWindow.left, DrawRct.top - m_RectInWindow.top, nWidth, nHeight);
-	}
-	else
-	{
-		// 需要半透明显示控件 TBD
-	}
+	m_pUiEngine->AlphaBlend(WndMemDc, DrawRct.left, DrawRct.top, nWidth, nHeight,
+		m_CtrlMemDc, DrawRct.left - m_RectInWindow.left, DrawRct.top - m_RectInWindow.top, nWidth, nHeight, GetControlAlpha());
 
 	// 绘制子控件
 	for (CHILD_CTRLS_VEC::iterator pCtrlItem = m_ChildCtrlsVec.begin(); pCtrlItem != m_ChildCtrlsVec.end(); pCtrlItem++)

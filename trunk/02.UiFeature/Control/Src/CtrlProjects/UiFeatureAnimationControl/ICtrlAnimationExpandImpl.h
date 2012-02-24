@@ -11,7 +11,7 @@ public:
 	// 开始动画
 	virtual void BeginAnimation();
 	// 取得用于绘制背景的图片DC
-	virtual CDrawingBoard* GetAnimationBackgroudMemDc();
+	virtual CDrawingImage* GetAnimationBackgroudMemDc();
 
 protected:
 	// 派生控件用于创建属于自己的控件属性
@@ -29,7 +29,7 @@ protected:
 
 private:
 	// 背景图的内存DC
-	CDrawingBoard m_BkImageDc;
+	CDrawingImage m_BkImageDc;
 	// 容器名称
 	IPropertyString* m_pPropPanelName;
 	// 是否在动画过程中显示容器中的内容

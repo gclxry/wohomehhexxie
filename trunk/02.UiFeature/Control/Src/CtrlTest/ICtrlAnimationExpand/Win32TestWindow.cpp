@@ -3,7 +3,7 @@
 #include <assert.h>
 #include "..\..\Inc\ICommonFun.h"
 #include "..\..\Inc\UiFeatureDefs.h"
-#include "..\..\Inc\CDrawingBoard.h"
+#include "..\..\Inc\CDrawingImage.h"
 
 CWin32TestWindow::CWin32TestWindow()
 {
@@ -57,11 +57,13 @@ void CWin32TestWindow::OnCreate()
 		return;
 	}
 
-	CDrawingBoard* pDrawBoard = m_pAnimationExpandCtrl->GetAnimationBackgroudMemDc();
+	CDrawingImage* pDrawBoard = m_pAnimationExpandCtrl->GetAnimationBackgroudMemDc();
 	if (pDrawBoard == NULL)
 	{
 		assert(false);
 		return;
 	}
+
+	pDrawBoard->CreateByFile("F:\\04.My\\01.MyWorkSvn\\wohomehhexxie\\02.UiFeature\\Control\\Bin\\TestSkin\\zhuomian.bmp");
 
 }
