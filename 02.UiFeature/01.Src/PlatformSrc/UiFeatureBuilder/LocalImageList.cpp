@@ -20,6 +20,11 @@ CLocalImageList::~CLocalImageList(void)
 {
 }
 
+COLORREF CLocalImageList::OnGetCellBkColor(int nRow, int nColum)
+{
+	return(nRow % 2) == 0 ? RGB(255, 255, 255) : RGB(255, 255, 255);
+}
+
 void CLocalImageList::OnSelectItem()
 {
 	if (m_pImgBaseDlg == NULL)

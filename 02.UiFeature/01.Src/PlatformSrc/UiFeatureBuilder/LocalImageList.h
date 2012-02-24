@@ -16,6 +16,7 @@ public:
 	bool OnLoadLocalImage(CString strFilePath, CString strFileName);
 
 protected:
+	virtual COLORREF OnGetCellBkColor(int nRow, int nColum);
 	virtual void OnSelectItem();
 	void RefreshList(ZIP_FILE* pSelZipFile);
 

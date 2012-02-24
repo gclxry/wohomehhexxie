@@ -482,6 +482,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="08.高精度定时器"
+			>
+			<File
+				RelativePath=".\CHighAccuracyTimer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Inc\CHighAccuracyTimer.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\Inc\UiFeatureDefs.h"
 			>

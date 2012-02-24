@@ -44,4 +44,6 @@ public:
 
 	// 创建一个Builder使用的控件，并配置上属性
 	virtual IControlBase* CreateControlByPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, IPropertyControl *pPropCtrl) = 0;
+	// 取得全局唯一定时器号
+	virtual int GetTimerId() = 0;
 };

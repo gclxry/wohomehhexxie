@@ -131,14 +131,13 @@ void IControlBase::SetNeedRedraw(bool bNeedRedraw)
 // 重绘控件
 void IControlBase::RedrawControl(bool bDrawImmediately)
 {
-	//if (m_pOwnerWindowBase != NULL)
-	//{
-	//	IControlBase *pCtrl = dynamic_cast<IControlBase*>(this);
-	//	m_pOwnerWindowBase->RedrawControl(pCtrl);
-	//}
-
 	m_bNeedRedraw = true;
-//	SetChildCtrlToRedraw();
+
+	if (bDrawImmediately && m_pOwnerWindowBase != NULL)
+	{
+		RECT WndRct = this->GetWindowRect();
+		m_pOwnerWindowBase->RedrawWindow(&WndRct);
+	}
 }
 
 // 设置子控件都必须自绘
@@ -200,4 +199,13 @@ int IControlBase::GetControlAlpha()
 CDrawingBoard* IControlBase::GetMemoryDc()
 {
 	return &m_CtrlMemDc;
+}
+
+// 取得父窗口的句柄
+HWND IControlBase::GetOwnerWindowHwnd()
+{
+	if (m_pOwnerWindowBase == NULL)
+		return NULL;
+
+	return m_pOwnerWindowBase->GetSafeHandle();
 }

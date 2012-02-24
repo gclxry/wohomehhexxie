@@ -13,4 +13,8 @@ public:
 	virtual void BeginAnimation() = 0;
 	// 取得用于绘制背景的图片DC
 	virtual CDrawingImage* GetAnimationBackgroudMemDc() = 0;
+	// 设置需要操作的图片的位置
+	virtual void SetIconPostion(RECT iconRct) = 0;
+	// 设置箭头方向，true：向上
+	virtual void SetUpMode(bool bIsUpMode) = 0;
 };

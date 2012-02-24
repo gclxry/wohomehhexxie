@@ -1,6 +1,7 @@
 
 #pragma once
 #include "..\..\Inc\Control\ICtrlAnimationExpand.h"
+#include "..\..\Inc\CHighAccuracyTimer.h"
 
 class ICtrlAnimationExpandImpl : public ICtrlAnimationExpand
 {
@@ -12,6 +13,10 @@ public:
 	virtual void BeginAnimation();
 	// 取得用于绘制背景的图片DC
 	virtual CDrawingImage* GetAnimationBackgroudMemDc();
+	// 设置需要操作的图片的位置
+	virtual void SetIconPostion(RECT iconRct);
+	// 设置箭头方向，true：向上，false：向下
+	virtual void SetUpMode(bool bIsUpMode);
 
 protected:
 	// 派生控件用于创建属于自己的控件属性
@@ -26,8 +31,19 @@ protected:
 	virtual void OnDestroy();
 	// 绘制控件
 	virtual void OnPaint(CDrawingBoard &DrawBoard);
+	// 定时器
+	virtual void OnTimer(UINT nTimerId);
 
 private:
+	int m_nAnimationTime;
+	RECT m_DstExpandRct;
+	RECT m_NowExpandRct;
+	CHighAccuracyTimer m_HTimer;
+	int m_nHighTimerId;
+	// 设置需要操作的图片的位置
+	RECT m_IconRect;
+	// 设置箭头方向，true：向上，false：向下
+	bool m_bIsUpMode;
 	// 背景图的内存DC
 	CDrawingImage m_BkImageDc;
 	// 容器名称
@@ -35,6 +51,10 @@ private:
 	// 是否在动画过程中显示容器中的内容
 	IPropertyBool* m_pPropIsShowPanel;
 	IPropertyGroup* m_pPropSjGroup;
+	// 三角形箭头：宽
+	IPropertyInt* m_pPropSjWidth;
+	// 三角形箭头：高
+	IPropertyInt* m_pPropSjHeight;
 	// 三角形箭头：上
 	IPropertyImage* m_pPropUpSjImg;
 	// 三角形箭头Mark：上
@@ -47,4 +67,9 @@ private:
 	IPropertyImage* m_pPropFrameImg;
 	// 展开的内容
 	IPropertyImage* m_pPropFrameMidImg;
+	// 动画上边界
+	IPropertyInt* m_pPropAnimationTopBound;
+	// 动画下边界
+	IPropertyInt* m_pPropAnimationBottomBound;
+
 };

@@ -43,6 +43,7 @@ IWindowBaseImpl::IWindowBaseImpl()
 	m_strSkinPath = "";
 	m_strWindowObjectName = "";
 
+	m_pUiKernel = IUiFeatureKernelImpl::GetInstance();
 	m_pSkinPropMgr = IPropertySkinManagerImpl::GetInstance();
 	m_pUiEngine = IUiFeatureKernelImpl::GetInstance()->GetUiEngine();
 
@@ -135,18 +136,6 @@ void IWindowBaseImpl::ReleaseChildVec(CHILD_CTRLS_VEC *pChildCtrlsVec)
 		SAFE_DELETE(pCtrl);
 	}
 	pChildCtrlsVec->clear();
-}
-
-// 重绘控件
-void IWindowBaseImpl::RedrawControl(IControlBase* pCtrl, bool bDrawImmediately)
-{
-	if (pCtrl == NULL)
-		return;
-
-//	pCtrl->
-//	if (this->RedrawWindow())
-//	{
-//	}
 }
 
 // 当窗口的属性发生变化时需要通知窗口进行刷新时调用
@@ -1625,4 +1614,9 @@ void IWindowBaseImpl::ResetChildCtrlPostion(CHILD_CTRLS_VEC* pChildVec, bool bMe
 
 		ResetChildCtrlPostion(pCtrl->GetChildControlsVec(), bMemToProp);
 	}
+}
+
+IUiFeatureKernel* IWindowBaseImpl::GetUiKernel()
+{
+	return m_pUiKernel;
 }
