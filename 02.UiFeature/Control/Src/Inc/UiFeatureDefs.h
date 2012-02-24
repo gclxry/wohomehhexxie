@@ -23,8 +23,8 @@ using namespace std;
 #define UM_DFT_ANIMATION_TIMER_100S					(100)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#define NAME_UIFEATURE_XML							"UiFeature.xml"
 #define NAME_KERNEL_DLL								"UiFeatureKernel.dll"
-#define NAME_CONTROL_DLL							"UiFeatureControl.dll"
 #define NAME_FEATURE_RUN_TEST						"UiFeatureRun.exe"
 #define NAME_UFP_TEMPLATE							"ufp.template"
 #define NAME_SKIN_PROJ_EX_NAME						".ufp"

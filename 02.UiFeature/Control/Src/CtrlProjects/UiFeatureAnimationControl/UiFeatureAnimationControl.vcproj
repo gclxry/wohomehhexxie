@@ -182,10 +182,6 @@
 		<Filter
 			Name="02.控件"
 			>
-			<File
-				RelativePath="..\..\Inc\Control\ICtrlAnimationControl.h"
-				>
-			</File>
 			<Filter
 				Name="01.上下展开动画控件"
 				>
@@ -246,7 +242,7 @@
 				Name="01.DLL接口"
 				>
 				<File
-					RelativePath="..\..\Inc\IControlManager.h"
+					RelativePath="..\..\Inc\Control\IControlManager.h"
 					>
 				</File>
 				<File

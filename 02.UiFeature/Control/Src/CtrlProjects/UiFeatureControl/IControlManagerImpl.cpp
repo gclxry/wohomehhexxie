@@ -76,10 +76,13 @@ void IControlManagerImpl::SetRegControlMap(CONTROL_REG_MAP *pCtrlMap)
 {
 	if (pCtrlMap == NULL)
 		return;
-	pCtrlMap->clear();
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// 添加控件，步骤2：向Builder工具注册控件
 	SetRegControl(pCtrlMap, "基本控件组", CTRL_NAME_BASE_PANEL, "BasePanel.png", "对话框背景、面板控件");
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 // 创建一个控件，参数为步骤1的宏
@@ -113,6 +116,7 @@ bool IControlManagerImpl::ReleaseCtrl(ICtrlInterface **ppCtrl)
 	if (pszObjType == NULL || strlen(pszObjType) <= 0)
 	{
 		SAFE_DELETE(*ppCtrl);
+		*ppCtrl = NULL;
 		return true;
 	}
 

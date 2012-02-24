@@ -6,12 +6,18 @@
 
 CControlImpl::CControlImpl(void)
 {
-	m_hControlDll = NULL;
+	m_CtrlDllVec.clear();
+	LoadControlDll();
 }
 
 CControlImpl::~CControlImpl(void)
 {
-	SAFE_FREE_LIBRARY(m_hControlDll);
+	for (CONTROL_DLL_VEC::iterator pCtrlItem = m_CtrlDllVec.begin(); pCtrlItem != m_CtrlDllVec.end(); pCtrlItem++)
+	{
+		CONTRL_DLL_INFO &CtrlDllInfo = *pCtrlItem;
+		SAFE_FREE_LIBRARY(CtrlDllInfo.hDll);
+	}
+	m_CtrlDllVec.clear();
 }
 
 CControlImpl* CControlImpl::GetInstance()
@@ -20,35 +26,134 @@ CControlImpl* CControlImpl::GetInstance()
 	return &_ControlImplInstance;
 }
 
-bool CControlImpl::LoadDll()
+bool CControlImpl::LoadControlDll()
 {
-	if (m_hControlDll != NULL)
+	if (m_CtrlDllVec.size() > 0)
 		return true;
 
-	string strPath = PathHelper(NAME_CONTROL_DLL);
+	string strPath = PathHelper(NAME_UIFEATURE_XML);
 	if (strPath.size() <= 0)
 		return false;
 
-	m_hControlDll = ::LoadLibraryA(strPath.c_str());
-	return (m_hControlDll != NULL);
-}
+	HANDLE hFile = ::CreateFileA(strPath.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	if (hFile == INVALID_HANDLE_VALUE)
+		return false;
 
-IControlManager* CControlImpl::GetControlManager()
-{
-	if (!LoadDll())
-		return NULL;
+	DWORD dwSize = ::GetFileSize(hFile, NULL);
+	if (dwSize == INVALID_FILE_SIZE)
+	{
+		::CloseHandle(hFile);
+		return false;
+	}
 
-	GETCONTROLMANAGER GetControl = (GETCONTROLMANAGER)::GetProcAddress(m_hControlDll, "GetControlManager");
-	if (GetControl == NULL)
-		return NULL;
+	char *pszData = (char*)malloc(dwSize + 32);
+	if (pszData == NULL)
+	{
+		::CloseHandle(hFile);
+		return false;
+	}
+	memset(pszData, 0, dwSize + 32);
 
-	IControlManager * pMgr = GetControl();
-	return pMgr;
+	DWORD dwRead = 0;
+	if (!::ReadFile(hFile, pszData, dwSize, &dwRead, NULL))
+	{
+		::CloseHandle(hFile);
+		SAFE_FREE(pszData);
+		return false;
+	}
+
+	XmlState xmlState = { 0 };
+	JabberXmlInitState(&xmlState);
+	int bytesParsed = JabberXmlParse(&xmlState, pszData, strlen(pszData));
+	XmlNode *pPData  = JabberXmlGetChild(&xmlState.root, "uifeature\\controldll");
+	if (pPData != NULL)
+	{
+		int nItemCount = pPData->numChild;
+		for (int i = 0; i < nItemCount; i++)
+		{
+			XmlNode* pItem = JabberXmlGetNthChildWithoutTag(pPData, i);
+			if (pItem)
+			{
+				char* psz_path = JabberXmlGetAttrValue(pItem, "path");
+				if (psz_path != NULL)
+				{
+					CONTRL_DLL_INFO DllInfo;
+					DllInfo.strPath = PathHelper(psz_path);
+					DllInfo.hDll = ::LoadLibraryA(strPath.c_str());
+					if (DllInfo.hDll == NULL)
+						continue;
+
+					GETCONTROLMANAGER GetControl = (GETCONTROLMANAGER)::GetProcAddress(DllInfo.hDll, "GetControlManager");
+					if (GetControl == NULL)
+						continue;
+
+					DllInfo.pCtrlMgr = GetControl();
+					if (DllInfo.pCtrlMgr == NULL)
+						continue;
+
+					m_CtrlDllVec.push_back(DllInfo);
+				}
+			}
+		}
+	}
+	else
+	{
+		JabberXmlDestroyState(&xmlState);
+		::CloseHandle(hFile);
+		SAFE_FREE(pszData);
+		return false;
+	}
+
+	JabberXmlDestroyState(&xmlState);
+	::CloseHandle(hFile);
+	SAFE_FREE(pszData);
+	return true;
 }
 
 void CControlImpl::SetRegControlMap(CONTROL_REG_MAP *pCtrlMap)
 {
-	IControlManager * pMgr = CControlImpl::GetInstance()->GetControlManager();
-	if (pMgr != NULL)
-		pMgr->SetRegControlMap(pCtrlMap);
+	if (pCtrlMap == NULL)
+		return;
+	pCtrlMap->clear();
+
+	for (CONTROL_DLL_VEC::iterator pCtrlItem = m_CtrlDllVec.begin(); pCtrlItem != m_CtrlDllVec.end(); pCtrlItem++)
+	{
+		CONTRL_DLL_INFO &CtrlDllInfo = *pCtrlItem;
+		if (CtrlDllInfo.pCtrlMgr != NULL)
+			CtrlDllInfo.pCtrlMgr->SetRegControlMap(pCtrlMap);
+	}
+}
+
+// 创建一个控件，参数为步骤1的宏
+ICtrlInterface* CControlImpl::CreateCtrl(char *pCtrlType, char *pszObjectId)
+{
+	ICtrlInterface* pNewCtrl = NULL;
+	for (CONTROL_DLL_VEC::iterator pCtrlItem = m_CtrlDllVec.begin(); pCtrlItem != m_CtrlDllVec.end(); pCtrlItem++)
+	{
+		CONTRL_DLL_INFO &CtrlDllInfo = *pCtrlItem;
+		if (CtrlDllInfo.pCtrlMgr != NULL)
+		{
+			pNewCtrl = CtrlDllInfo.pCtrlMgr->CreateCtrl(pCtrlType, pszObjectId);
+			if (pNewCtrl != NULL)
+				return pNewCtrl;
+		}
+	}
+	return pNewCtrl;
+}
+
+// 销毁一个控件
+bool CControlImpl::ReleaseCtrl(ICtrlInterface **ppCtrl)
+{
+	if (ppCtrl == NULL || *ppCtrl == NULL)
+		return false;
+
+	for (CONTROL_DLL_VEC::iterator pCtrlItem = m_CtrlDllVec.begin(); pCtrlItem != m_CtrlDllVec.end(); pCtrlItem++)
+	{
+		CONTRL_DLL_INFO &CtrlDllInfo = *pCtrlItem;
+		if (CtrlDllInfo.pCtrlMgr != NULL && CtrlDllInfo.pCtrlMgr->ReleaseCtrl(ppCtrl))
+			return true;
+	}
+
+	SAFE_DELETE(*ppCtrl);
+	return true;
 }

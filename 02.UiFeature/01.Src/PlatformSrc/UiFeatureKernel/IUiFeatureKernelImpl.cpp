@@ -29,27 +29,12 @@ IUiFeatureKernelImpl::IUiFeatureKernelImpl(void)
 	m_CtrlRegMap.clear();
 	m_pSkinMgr = (IPropertySkinManagerImpl *)GetSkinManager();
 	m_pUiEngine = (IUiEngineImpl *)GetSkinManager();
-
-	m_pControlMgr = NULL;
-	m_hControlDll = NULL;
-	string strPath = PathHelper(NAME_CONTROL_DLL);
-	if (strPath.size() > 0)
-	{
-		m_hControlDll = ::LoadLibraryA(strPath.c_str());
-		if (m_hControlDll != NULL)
-		{
-			GETCONTROLMANAGER GetControl = (GETCONTROLMANAGER)::GetProcAddress(m_hControlDll, "GetControlManager");
-			if (GetControl != NULL)
-				m_pControlMgr = GetControl();
-		}
-	}
+	m_pCtrlDllMgr = CControlImpl::GetInstance();
 }
 
 IUiFeatureKernelImpl::~IUiFeatureKernelImpl(void)
 {
-	SAFE_FREE_LIBRARY(m_hControlDll);
 	ReleaseKernelWindow();
-
 	GdiplusShutdown(m_gdiplusToken);
 }
 
@@ -252,7 +237,7 @@ bool IUiFeatureKernelImpl::BD_OpenProject(char *pszSkinDir, char *pszSkinName)
 // 创建一个Builder使用的空的控件
 IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, char *pszNewCtrlTypeName)
 {
-	if (pParentWnd == NULL || pParentWnd->PP_GetWindowPropetry() == NULL || m_pControlMgr == NULL || m_pSkinMgr == NULL || pszNewCtrlTypeName == NULL || strlen(pszNewCtrlTypeName) <= 0)
+	if (pParentWnd == NULL || pParentWnd->PP_GetWindowPropetry() == NULL || m_pCtrlDllMgr == NULL || m_pSkinMgr == NULL || pszNewCtrlTypeName == NULL || strlen(pszNewCtrlTypeName) <= 0)
 		return NULL;
 
 	// 设置新控件的ObjectID
@@ -267,14 +252,14 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *p
 	sprintf_s(szId, 1023, "%s.%s%d", strObjId.c_str(), pszNewCtrlTypeName, m_pSkinMgr->GetNewId());
 
 	// 创建新控件
-	ICtrlInterface* pCtrlIfc = m_pControlMgr->CreateCtrl(pszNewCtrlTypeName, szId);
+	ICtrlInterface* pCtrlIfc = m_pCtrlDllMgr->CreateCtrl(pszNewCtrlTypeName, szId);
 	if (pCtrlIfc == NULL)
 		return NULL;
 
 	IControlBase *pCtrlBase = dynamic_cast<IControlBase*>(pCtrlIfc);
 	if (pCtrlBase == NULL)
 	{
-		m_pControlMgr->ReleaseCtrl(&pCtrlIfc);
+		m_pCtrlDllMgr->ReleaseCtrl(&pCtrlIfc);
 		return NULL;
 	}
 	pCtrlBase->SetPropertySkinManager(m_pSkinMgr);
@@ -282,7 +267,7 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *p
 	IPropertyControl *pPropCtrl = dynamic_cast<IPropertyControl*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_CONTROL, szId));
 	if (pPropCtrl == NULL)
 	{
-		m_pControlMgr->ReleaseCtrl(&pCtrlIfc);
+		m_pCtrlDllMgr->ReleaseCtrl(&pCtrlIfc);
 		return NULL;
 	}
 
@@ -291,7 +276,7 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *p
 	if (pCtrlPropGroup == NULL)
 	{
 		m_pSkinMgr->ReleaseBaseProp((IPropertyBase*)pPropCtrl);
-		m_pControlMgr->ReleaseCtrl(&pCtrlIfc);
+		m_pCtrlDllMgr->ReleaseCtrl(&pCtrlIfc);
 		return NULL;
 	}
 	pPropCtrl->SetCtrlGroupProp(pCtrlPropGroup);
@@ -325,18 +310,18 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *p
 // 创建一个Builder使用的控件，并配置上属性
 IControlBase* IUiFeatureKernelImpl::CreateControlByPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, IPropertyControl *pPropCtrl)
 {
-	if (pParentWnd == NULL || pPropCtrl == NULL || m_pControlMgr == NULL || m_pSkinMgr == NULL)
+	if (pParentWnd == NULL || pPropCtrl == NULL || m_pCtrlDllMgr == NULL || m_pSkinMgr == NULL)
 		return NULL;
 
 	// 创建新控件
-	ICtrlInterface* pCtrlIfc = m_pControlMgr->CreateCtrl((char*)pPropCtrl->GetControlType(), (char*)pPropCtrl->GetObjectId());
+	ICtrlInterface* pCtrlIfc = m_pCtrlDllMgr->CreateCtrl((char*)pPropCtrl->GetControlType(), (char*)pPropCtrl->GetObjectId());
 	if (pCtrlIfc == NULL)
 		return NULL;
 
 	IControlBase *pCtrlBase = dynamic_cast<IControlBase*>(pCtrlIfc);
 	if (pCtrlBase == NULL)
 	{
-		m_pControlMgr->ReleaseCtrl(&pCtrlIfc);
+		m_pCtrlDllMgr->ReleaseCtrl(&pCtrlIfc);
 		return NULL;
 	}
 	pCtrlBase->SetPropertySkinManager(m_pSkinMgr);
