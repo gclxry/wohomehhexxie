@@ -4,8 +4,6 @@
 #pragma once
 #include "IControlBase.h"
 #include "ICtrlInterface.h"
-#include "Control\ICtrlPanel.h"
-#include "Control\ICtrlAnimationControl.h"
 
 class IControlManager
 {
