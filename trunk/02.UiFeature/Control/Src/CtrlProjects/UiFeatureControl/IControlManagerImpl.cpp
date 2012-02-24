@@ -62,7 +62,7 @@ void IControlManagerImpl::SetRegControl(CONTROL_REG_MAP *pCtrlMap, string strCtr
 	RegInfo.strControlImg = strControlImg;
 	RegInfo.strCtrlGroupName = strCtrlGroupName;
 	RegInfo.strCtrlName = strCtrlName;
-	RegInfo.strDllName = NAME_CONTROL_DLL;
+	RegInfo.strDllName = "UiFeatureControl.dll";
 	RegInfo.strControlInfo = strControlInfo;
 
 	pCtrlMap->insert(pair<string, CONTROL_REG>(RegInfo.strCtrlName, RegInfo));
