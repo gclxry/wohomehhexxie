@@ -203,12 +203,14 @@ public:
 	PROP_CONTROL_VEC* GetChildPropControlVec();
 
 	// 重绘控件
-	void RedrawControl(bool bDrawImmediately = true);
+	void RedrawControl(bool bDrawImmediately = false);
 
 	// 控件显示位置和大小，这个位置是相对于附着的窗口的，不会改变布局信息
 	void SetWindowRect(RECT CtrlInWndRct);
 	RECT GetWindowRect();
 	RECT GetClientRect();
+	// 取得父窗口的句柄
+	HWND GetOwnerWindowHwnd();
 
 	const char * PP_GetControlObjectName();
 

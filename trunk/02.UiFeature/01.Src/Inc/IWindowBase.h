@@ -5,7 +5,7 @@
 #include "IPropertyWindow.h"
 
 
-
+class IUiFeatureKernel;
 class IWindowBase : public IFeatureObject
 {
 public:
@@ -41,8 +41,6 @@ public:
 	virtual RECT GetWindowRect() = 0;
 	// 得到客户端坐标，[0,0]坐标系
 	virtual RECT GetClientRect() = 0;
-	// 重绘控件
-	virtual void RedrawControl(IControlBase* pCtrl, bool bDrawImmediately = true) = 0;
 
 	// 根据控件布局信息设置控件的位置
 	virtual void SetControlWindowPostion(IControlBase* pCtrl, RECT ParentRctInWnd) = 0;
@@ -58,6 +56,9 @@ public:
 
 	virtual void InvalidateRect(RECT *lpRect) = 0;
 	virtual void UpdateWindow() = 0;
+	// 立即重绘窗口
+	virtual void RedrawWindow(RECT *pDrawRect = NULL) = 0;
+
 public:
 ////// 以下函数非外部窗口调用 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +66,6 @@ public:
 	virtual void PG_InitWindowBase(HWND hWnd, char *pszSkinPath, char *pszWndName) = 0;
 	// 非外部窗口调用：本窗口的消息处理函数，bPassOn参数为true是，消息会继续传递处理；false时，处理完毕，不再下传
 	virtual LRESULT WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, bool &bPassOn) = 0;
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,4 +95,5 @@ public:
 	// 取得窗口中设置属性的窗口大小
 	virtual SIZE PP_GetWindowPropSize() = 0;
 
+	virtual IUiFeatureKernel* GetUiKernel() = 0;
 };

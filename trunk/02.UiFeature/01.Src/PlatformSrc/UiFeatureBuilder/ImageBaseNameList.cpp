@@ -17,6 +17,11 @@ CImageBaseNameList::~CImageBaseNameList(void)
 {
 }
 
+COLORREF CImageBaseNameList::OnGetCellBkColor(int nRow, int nColum)
+{
+	return(nRow % 2) == 0 ? RGB(255, 255, 255) : RGB(255, 255, 255);
+}
+
 void CImageBaseNameList::Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *pImgBaseDlg, CLocalImageList* pLocalImg, IPropertyImage* pParentImgProp)
 {
 	if (pImgBaseDlg == NULL || pLocalImg == NULL || pUiKernel == NULL || pUiKernel->GetSkinManager() == NULL)

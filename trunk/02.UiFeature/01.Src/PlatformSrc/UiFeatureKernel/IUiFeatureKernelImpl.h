@@ -51,6 +51,8 @@ public:
 	virtual IWindowBase* PG_InitFeatureSkin(HWND hWnd, char *pszSkinPath, char *pszWndName);
 	// 一个对话框释放皮肤资源，这个Kernel内核会调用，外部对话框不需要调用
 	virtual void PG_ReleaseFeatureSkin(HWND hWnd);
+	// 取得全局唯一定时器号
+	virtual int GetTimerId();
 
 	// 从zip文件中找到指定文件
 	virtual bool FindUnZipFile(const char *pFileName, BYTE **ppOutBuffer, int *pnFileLen);
@@ -73,4 +75,6 @@ private:
 	CONTROL_REG_MAP m_CtrlRegMap;
 	// Builder中使用的hwnd的索引值
 	int m_nBuilderHwnd;
+	// 全局唯一定时器号
+	int m_nTimerId;
 };

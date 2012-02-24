@@ -22,6 +22,7 @@ IUiFeatureKernel *GetKernelWindowInterface()
 
 IUiFeatureKernelImpl::IUiFeatureKernelImpl(void)
 {
+	m_nTimerId = 1;
 	GdiplusStartupInput gdiplusStartupInput;
 	GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
 
@@ -445,4 +446,10 @@ bool IUiFeatureKernelImpl::BD_DeleteControl_FromCtrlVec(CHILD_CTRLS_VEC* pCtrlVe
 CZipFileList* IUiFeatureKernelImpl::GetZipFile()
 {
 	return &m_KernelZipFile;
+}
+
+// 取得全局唯一定时器号
+int IUiFeatureKernelImpl::GetTimerId()
+{
+	return m_nTimerId++;
 }

@@ -23,6 +23,7 @@ public:
 	IPropertyImageBase* m_pSelectImgBaseProp;
 
 protected:
+	virtual COLORREF OnGetCellBkColor(int nRow, int nColum);
 	virtual void OnSelectItem();
 	void LoadImageBaseProp();
 

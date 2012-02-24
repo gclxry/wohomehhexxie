@@ -42,6 +42,7 @@ public:
 //////////////////////////////////////////////////////////////////////////
 	// 导入皮肤包使用的函数初始化
 	virtual void PG_InitWindowBase(HWND hWnd, char *pszSkinPath, char *pszWndName);
+	virtual IUiFeatureKernel* GetUiKernel();
 
 	// 窗口居中显示
 	virtual void CenterWindow();
@@ -51,8 +52,6 @@ public:
 	virtual RECT GetWindowRect();
 	// 得到客户端坐标，[0,0]坐标系
 	virtual RECT GetClientRect();
-	// 重绘控件
-	virtual void RedrawControl(IControlBase* pCtrl, bool bDrawImmediately = true);
 
 	// 根据控件布局信息设置控件的位置
 	void SetControlWindowPostion(IControlBase* pCtrl, RECT ParentRctInWnd);
@@ -70,7 +69,7 @@ public:
 	void InvalidateRect(RECT *lpRect);
 	void UpdateWindow();
 	// 立即重绘窗口
-	void RedrawWindow(RECT *pDrawRect = NULL);
+	virtual void RedrawWindow(RECT *pDrawRect = NULL);
 
 	// 显示自定义光标
 	void SetWindowCursor(int nCursor);
@@ -222,6 +221,7 @@ private:
 	void BD_DrawSelectRect(CDrawingBoard &MemDc, FANGKUAI_8 &FangKuai8, bool bIsWndFrame);
 
 private:
+	IUiFeatureKernel *m_pUiKernel;
 	IUiEngine *m_pUiEngine;
 	IPropertySkinManager* m_pSkinPropMgr;
 	// 控制拉伸窗口操作的类

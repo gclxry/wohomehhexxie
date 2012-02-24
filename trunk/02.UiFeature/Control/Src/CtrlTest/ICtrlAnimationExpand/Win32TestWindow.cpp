@@ -69,6 +69,13 @@ void CWin32TestWindow::OnCreate()
 		return;
 	}
 
-	pDrawBoard->CreateByFile("F:\\04.My\\01.MyWorkSvn\\wohomehhexxie\\02.UiFeature\\Control\\Bin\\TestSkin\\zhuomian.bmp");
+	pDrawBoard->CreateByFile("F:\\03.360\\03.Infomation\\²âÊÔÍ¼Æ¬\\zhuomian.bmp");
 
+	RECT rct;
+	rct.left = rct.top = 500;
+	rct.right = rct.left + 60;
+	rct.bottom = rct.top + 60;
+	m_pAnimationExpandCtrl->SetIconPostion(rct);
+	m_pAnimationExpandCtrl->SetUpMode(true);
+	m_pAnimationExpandCtrl->BeginAnimation();
 }
