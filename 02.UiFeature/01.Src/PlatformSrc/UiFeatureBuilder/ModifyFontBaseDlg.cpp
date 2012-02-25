@@ -13,7 +13,8 @@ IMPLEMENT_DYNAMIC(CModifyFontBaseDlg, CDialog)
 CModifyFontBaseDlg::CModifyFontBaseDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CModifyFontBaseDlg::IDD, pParent)
 {
-
+	m_pParentFontProp = NULL;
+	m_pFontBaseMap = NULL;
 }
 
 CModifyFontBaseDlg::~CModifyFontBaseDlg()
@@ -47,6 +48,28 @@ void CModifyFontBaseDlg::OnBnClickedCancel()
 void CModifyFontBaseDlg::OnBnClickedOk()
 {
 	OnOK();
+}
+
+void CModifyFontBaseDlg::InitFontBaseShow(IUiFeatureKernel* pUiKernel, IPropertyFont* pParentFontProp)
+{
+	m_pParentFontProp = pParentFontProp;
+	if (pUiKernel == NULL || pUiKernel->GetSkinManager() == NULL)
+		return;
+
+	m_pFontBaseMap = pUiKernel->GetSkinManager()->GetOneResourcePropMap(PROP_TYPE_FONT_BASE_NAME);
+	if (m_pFontBaseMap == NULL)
+		return;	
+}
+
+BOOL CModifyFontBaseDlg::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+
+	// TODO:  Add extra initialization here
+	m_FontBaseNameList.InitFontBaseNameList(m_pParentFontProp, m_pFontBaseMap);
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+	// EXCEPTION: OCX Property Pages should return FALSE
 }
 
 void CModifyFontBaseDlg::OnBnClickedSelectFont()

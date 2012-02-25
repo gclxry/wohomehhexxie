@@ -2,11 +2,12 @@
 #include "stdafx.h"
 #include "..\..\Inc\IPropertyFontBase.h"
 #include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\ICommonFun.h"
 
 IPropertyFontBase::IPropertyFontBase()
 {
 	SetObjectType(PROP_TYPE_FONT_BASE_NAME);
-	SetObjectName("default_font[宋体12]");
+	SetObjectName("默认字体：宋体，12");
 
 	m_FontProp.FontColor = 0;
 	memset(&m_FontProp.Font, 0, sizeof(LOGFONTA));
@@ -29,6 +30,7 @@ IPropertyFontBase::IPropertyFontBase()
 	m_FontProp.HAligning = FAL_LEFT_TOP;
 	m_FontProp.VAligning = FAL_MIDDLE;
 	m_FontProp.ShowMode = FSM_ONE_ROW_NO_POINT;
+	m_FontProp.FontEffect = FE_NONE;
 }
 
 IPropertyFontBase::~IPropertyFontBase()
@@ -90,11 +92,12 @@ bool IPropertyFontBase::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 	char* psz_VAligning = JabberXmlGetAttrValue(pMode, "VAligning");
 	char* psz_HAligning = JabberXmlGetAttrValue(pMode, "HAligning");
 	char* psz_ShowMode = JabberXmlGetAttrValue(pMode, "ShowMode");
+	char* psz_Effect = JabberXmlGetAttrValue(pMode, "Effect");
 
 	if (psz_lfPitchAndFamily == NULL || psz_color == NULL || psz_lfFaceName == NULL || psz_lfHeight == NULL || psz_lfWidth == NULL || 
 		psz_lfEscapement == NULL || psz_lfOrientation == NULL || psz_lfWeight == NULL || psz_lfItalic == NULL || psz_lfUnderline == NULL || 
 		psz_lfStrikeOut == NULL || psz_lfCharSet == NULL || psz_lfOutPrecision == NULL || psz_lfClipPrecision == NULL || psz_lfQuality == NULL ||
-		psz_VAligning == NULL || psz_HAligning == NULL || psz_ShowMode == NULL)
+		psz_VAligning == NULL || psz_HAligning == NULL || psz_ShowMode == NULL || psz_Effect == NULL)
 		return false;
 
 	SetObjectId((const char *)psz_id);
@@ -121,6 +124,56 @@ bool IPropertyFontBase::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 	m_FontProp.HAligning = (FONT_ALIGNING)atoi(psz_HAligning);
 	m_FontProp.VAligning = (FONT_ALIGNING)atoi(psz_VAligning);
 	m_FontProp.ShowMode = (FONT_SHOW_MODE)atoi(psz_ShowMode);
+	m_FontProp.FontEffect = atoi(psz_Effect);
+
+	return true;
+}
+
+// 写入xml
+bool IPropertyFontBase::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode)
+{
+	// 如果是无效属性，不写入XML
+	if (!GetActivePropetry())
+		return true;
+
+	if (pParentXmlNode == NULL)
+		return false;
+
+	CUiXmlWriteNode* pPropNode = XmlStrObj.CreateNode(pParentXmlNode, "item");
+	if (pPropNode == NULL)
+		return false;
+
+	pPropNode->AddAttribute(SKIN_OBJECT_ID, GetObjectId());
+	pPropNode->AddAttribute("name", GetObjectName());
+
+	CUiXmlWriteNode* pNode_logfont = XmlStrObj.CreateNode(pPropNode, "logfont");
+	if (pNode_logfont == NULL)
+		return false;
+
+	pNode_logfont->AddAttribute("lfFaceName", m_FontProp.Font.lfFaceName);
+	AddIntAttrToNode(pNode_logfont, "lfHeight", m_FontProp.Font.lfHeight);
+	AddIntAttrToNode(pNode_logfont, "lfWidth", m_FontProp.Font.lfWidth);
+	AddIntAttrToNode(pNode_logfont, "lfEscapement", m_FontProp.Font.lfEscapement);
+	AddIntAttrToNode(pNode_logfont, "lfOrientation", m_FontProp.Font.lfOrientation);
+	AddIntAttrToNode(pNode_logfont, "lfWeight", m_FontProp.Font.lfWeight);
+	AddIntAttrToNode(pNode_logfont, "lfItalic", m_FontProp.Font.lfItalic);
+	AddIntAttrToNode(pNode_logfont, "lfUnderline", m_FontProp.Font.lfUnderline);
+	AddIntAttrToNode(pNode_logfont, "lfStrikeOut", m_FontProp.Font.lfStrikeOut);
+	AddIntAttrToNode(pNode_logfont, "lfCharSet", m_FontProp.Font.lfCharSet);
+	AddIntAttrToNode(pNode_logfont, "lfOutPrecision", m_FontProp.Font.lfOutPrecision);
+	AddIntAttrToNode(pNode_logfont, "lfClipPrecision", m_FontProp.Font.lfClipPrecision);
+	AddIntAttrToNode(pNode_logfont, "lfQuality", m_FontProp.Font.lfQuality);
+	AddIntAttrToNode(pNode_logfont, "lfPitchAndFamily", m_FontProp.Font.lfPitchAndFamily);
+
+	CUiXmlWriteNode* pNode_mode = XmlStrObj.CreateNode(pPropNode, "mode");
+	if (pNode_mode == NULL)
+		return false;
+
+	AddIntAttrToNode(pNode_mode, "color", m_FontProp.FontColor);
+	AddIntAttrToNode(pNode_mode, "VAligning", m_FontProp.VAligning);
+	AddIntAttrToNode(pNode_mode, "HAligning", m_FontProp.HAligning);
+	AddIntAttrToNode(pNode_mode, "ShowMode", m_FontProp.ShowMode);
+	AddIntAttrToNode(pNode_mode, "Effect", m_FontProp.FontEffect);
 
 	return true;
 }

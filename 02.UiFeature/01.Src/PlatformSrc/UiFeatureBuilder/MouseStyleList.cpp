@@ -27,7 +27,7 @@ void CMouseStyleList::OnSelectItem()
 	if (m_pParentCursorProp == NULL)
 		return;
 
-	if (m_nSelectItem < 0)
+	if (m_nSelectItem <= 0)
 	{
 		// 没有选择
 		m_pParentCursorProp->SetCursorBaseProp(NULL);
@@ -58,6 +58,13 @@ void CMouseStyleList::InitMouseStyleList(IPropertyCursor* pParentCursorProp, ONE
 	this->InsertColumn(2, _T("系统"), LVCFMT_LEFT, 35);
 	this->InsertColumn(3, _T("说明"), LVCFMT_LEFT, 170);
 
+	this->InsertItem(0, _T("-"), -1);
+	this->SetItemText(0, 1, _T("-"));
+	this->SetItemText(0, 2, _T("-"));
+	this->SetItemText(0, 3, _T("点我设置CURSOR属性为空哦"));
+	this->SetItemData(0, NULL);
+
+	CBitmap bmp;
 	if (bmp.LoadBitmap(IDB_CURSOR_BITMAP) && m_pCursorBaseMap != NULL)
 	{
 		BITMAP bmpObj;
@@ -69,7 +76,7 @@ void CMouseStyleList::InitMouseStyleList(IPropertyCursor* pParentCursorProp, ONE
 
 		this->SetImageList(&m_CursorImageList, LVSIL_SMALL);
 
-		int nNo = 0;
+		int nNo = 1;
 		for (ONE_RESOURCE_PROP_MAP::iterator pCursorBaseItem = m_pCursorBaseMap->begin();
 			pCursorBaseItem != m_pCursorBaseMap->end(); pCursorBaseItem++)
 		{
@@ -84,7 +91,7 @@ void CMouseStyleList::InitMouseStyleList(IPropertyCursor* pParentCursorProp, ONE
 
 	if (m_pCursorBaseMap != NULL && m_pParentCursorProp != NULL && m_pParentCursorProp->GetCursorBaseProp() != NULL)
 	{
-		int nNo = 0;
+		int nNo = 1;
 		for (ONE_RESOURCE_PROP_MAP::iterator pCursorBaseItem = m_pCursorBaseMap->begin();
 			pCursorBaseItem != m_pCursorBaseMap->end(); pCursorBaseItem++, nNo++)
 		{

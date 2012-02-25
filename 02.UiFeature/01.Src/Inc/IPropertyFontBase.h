@@ -26,6 +26,16 @@ enum FONT_ALIGNING
 	FAL_MIDDLE		= 2
 };
 
+// 文字特效
+enum FONT_EFFECT
+{
+	FE_NONE			= 0x00000000,
+	// 阴影文字
+	FE_SHADOW		= 0x00000001,
+	// 模糊文字
+	FE_OBSCURE		= 0x00000002
+};
+
 // 字体属性
 struct FONT_PROP
 {
@@ -39,6 +49,8 @@ struct FONT_PROP
 	FONT_ALIGNING HAligning;
 	// 显示方式
 	FONT_SHOW_MODE ShowMode;
+	// 文字特效
+	UINT FontEffect;
 };
 
 class IPropertyFontBase : public IPropertyBase
@@ -51,6 +63,8 @@ public:
 	virtual bool IsRightData();
 	// 从XML节点读取属性值，并放入属性队列
 	virtual bool ReadPropertyFromXmlNode(XmlNode* pXmlNode);
+	// 写入xml
+	virtual bool AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode);
 
 	// 设置字体信息
 	void SetFontProp(FONT_PROP *pFontProp);

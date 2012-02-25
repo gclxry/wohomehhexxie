@@ -453,7 +453,7 @@
 					>
 				</File>
 				<Filter
-					Name="属性中包含窗口"
+					Name="05.属性中包含子窗口的属性"
 					>
 					<File
 						RelativePath=".\PropetryDialogGridProperty.cpp"
@@ -475,18 +475,6 @@
 						RelativePath=".\ImageBasePropEditDlg.h"
 						>
 					</File>
-					<Filter
-						Name="01.新建/修改属性名称对话框"
-						>
-						<File
-							RelativePath=".\ModifyPropBaseNameDlg.cpp"
-							>
-						</File>
-						<File
-							RelativePath=".\ModifyPropBaseNameDlg.h"
-							>
-						</File>
-					</Filter>
 					<Filter
 						Name="02.图片属性名称列表"
 						>
@@ -532,7 +520,7 @@
 						</File>
 					</Filter>
 					<Filter
-						Name="05.动画图片设置"
+						Name="01.动画图片设置"
 						>
 						<File
 							RelativePath=".\ImageAnimationSettingDlg.cpp"
@@ -547,6 +535,14 @@
 				<Filter
 					Name="02.字体属性编辑"
 					>
+					<File
+						RelativePath=".\FontBaseNameList.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\FontBaseNameList.h"
+						>
+					</File>
 					<File
 						RelativePath=".\ModifyFontBaseDlg.cpp"
 						>
@@ -573,6 +569,18 @@
 					</File>
 					<File
 						RelativePath=".\MouseStyleList.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="04.新建/修改属性名称对话框"
+					>
+					<File
+						RelativePath=".\ModifyPropBaseNameDlg.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\ModifyPropBaseNameDlg.h"
 						>
 					</File>
 				</Filter>

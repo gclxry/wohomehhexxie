@@ -5,11 +5,6 @@
 #include "..\..\Inc\IPropertyCursor.h"
 #include "..\..\Inc\IPropertyCursorBase.h"
 
-struct CURSOR_SHOW_INFO 
-{
-	bool bSysDefaule;
-	int nCursorId;
-};
 
 class CMouseStyleList : public CFeatureBaseList
 {
@@ -28,5 +23,4 @@ private:
 	IPropertyCursor* m_pParentCursorProp;
 	CImageList m_CursorImageList;
 	ONE_RESOURCE_PROP_MAP* m_pCursorBaseMap;
-	CBitmap bmp;
 };
