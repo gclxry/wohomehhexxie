@@ -141,9 +141,11 @@
 #define IDC_RADIO1                      1016
 #define IDR_PINGPU                      1016
 #define IDR_IMG_ANIMATION_STATIC_IMG    1016
+#define IDR_DANHANG_BU_POINT            1016
 #define IDC_RADIO2                      1017
 #define IDR_QUANLASHEN                  1017
 #define IDR_IMG_ANIMATION_GIF           1017
+#define IDR_DANHANG_XIANSHI_POINT       1017
 #define IDC_EDIT3                       1018
 #define IDE_SHOW_AREA_TOP               1018
 #define IDC_EDIT4                       1019
@@ -170,12 +172,15 @@
 #define IDC_RADIO3                      1029
 #define IDR_JJG                         1029
 #define IDR_IMG_ANIMATION_XULIE         1029
+#define IDR_ZHEHANG_XIANSHI             1029
 #define IDC_COMBO1                      1030
 #define IDC_XIANSHIBILI_COMBO           1030
 #define IDC_IMG_PLAY_SHUNXU             1030
+#define IDC_VAligning_COM               1030
 #define IDB_DELETE_LOCAL_IMAGE2         1031
 #define IDB_TIHUAN_LOCAL_IMAGE          1031
 #define IDC_COMBO3                      1031
+#define IDC_HAligning_COMBO             1031
 #define IDS_FRAME_1                     1032
 #define IDS_FRAME_2                     1033
 #define IDS_FRAME_3                     1034
@@ -184,8 +189,10 @@
 #define IDB_ANMATION_IMAGE_SETTING      1036
 #define IDC_COMBO2                      1037
 #define IDC_IMG_XUNHUAN_CTNS            1037
-#define IDC_CHECK1                      1038
-#define IDC_CHECK2                      1039
+#define IDC_SHADOW_EFFECT               1038
+#define IDC_OBSCURE_EFFECT              1039
+#define IDE_FONT_INFO_EDIT              1040
+#define IDS_FONT_PROVIEW_STRTIC         1041
 #define ID_32771                        32771
 #define ID_Menu                         32772
 #define ID_CREATE_WINDOW_PANEL          32773
@@ -201,7 +208,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        326
 #define _APS_NEXT_COMMAND_VALUE         32778
-#define _APS_NEXT_CONTROL_VALUE         1040
+#define _APS_NEXT_CONTROL_VALUE         1042
 #define _APS_NEXT_SYMED_VALUE           319
 #endif
 #endif

@@ -34,14 +34,14 @@ void CFontBaseNameList::OnSelectItem()
 		// Ã»ÓÐÑ¡Ôñ
 		m_pParentFontProp->SetFontBaseProp(NULL);
 		m_pParentFontProp->SetRelevancyPropName(NULL);
-		m_pOwnerDlg->SetCurrentFontBaseProp(NULL);
+		m_pOwnerDlg->UpdateCurrentFontBaseProp(NULL);
 	}
 	else
 	{
 		IPropertyFontBase* pFontBaseProp = (IPropertyFontBase*)(this->GetItemData(m_nSelectItem));
 		m_pParentFontProp->SetFontBaseProp(pFontBaseProp);
 		m_pParentFontProp->SetRelevancyPropName((char*)pFontBaseProp->GetObjectName());
-		m_pOwnerDlg->SetCurrentFontBaseProp(pFontBaseProp);
+		m_pOwnerDlg->UpdateCurrentFontBaseProp(pFontBaseProp);
 	}
 }
 
@@ -106,5 +106,5 @@ void CFontBaseNameList::NewFontBase(CString strName)
 	this->SetItemText(nCtns, 1, strName);
 	this->SetItemData(nCtns, (DWORD_PTR)pNewFontBase);
 	this->SetItemState(nCtns, LVIS_SELECTED, LVIS_SELECTED);
-	m_pOwnerDlg->SetCurrentFontBaseProp(pNewFontBase);
+	m_pOwnerDlg->UpdateCurrentFontBaseProp(pNewFontBase);
 }

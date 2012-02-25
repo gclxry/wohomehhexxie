@@ -544,6 +544,14 @@
 						>
 					</File>
 					<File
+						RelativePath=".\FontProViewStatic.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\FontProViewStatic.h"
+						>
+					</File>
+					<File
 						RelativePath=".\ModifyFontBaseDlg.cpp"
 						>
 					</File>

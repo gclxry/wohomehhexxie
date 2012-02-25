@@ -177,3 +177,18 @@ bool IPropertyFontBase::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode*
 
 	return true;
 }
+
+// 是否含有指定特效
+bool IPropertyFontBase::GetEffectState(FONT_EFFECT FontEffect)
+{
+	UINT nSet = (m_FontProp.FontEffect & FontEffect);
+	return (nSet != 0);
+}
+
+void IPropertyFontBase::SetEffect(FONT_EFFECT FontEffect, bool bSet)
+{
+	if (bSet)
+		m_FontProp.FontEffect |= FontEffect;
+	else
+		m_FontProp.FontEffect &= (~FontEffect);
+}
