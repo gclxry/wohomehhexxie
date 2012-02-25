@@ -479,11 +479,11 @@
 						Name="01.新建/修改属性名称对话框"
 						>
 						<File
-							RelativePath=".\ModifyImageBaseDlg.cpp"
+							RelativePath=".\ModifyPropBaseNameDlg.cpp"
 							>
 						</File>
 						<File
-							RelativePath=".\ModifyImageBaseDlg.h"
+							RelativePath=".\ModifyPropBaseNameDlg.h"
 							>
 						</File>
 					</Filter>

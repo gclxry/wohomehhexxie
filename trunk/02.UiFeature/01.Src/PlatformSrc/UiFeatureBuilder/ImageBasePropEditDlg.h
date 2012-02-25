@@ -2,7 +2,7 @@
 #include "afxwin.h"
 #include "afxcmn.h"
 #include "ImageBaseView.h"
-#include "ModifyImageBaseDlg.h"
+#include "ModifyPropBaseNameDlg.h"
 #include "ImageBaseNameList.h"
 #include "LocalImageList.h"
 
@@ -50,7 +50,7 @@ protected:
 
 	CComboBox m_ShowBiLi_Combo;
 
-	CModifyImageBaseDlg m_ModifyImgDlg;
+	CModifyPropBaseNameDlg m_ModifyImgDlg;
 
 	IUiFeatureKernel* m_pUiKernel;
 	IPropertyImage* m_pParentImgProp;

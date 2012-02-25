@@ -115,10 +115,13 @@
 #define IDL_LOCAL_IMAGE_LIST            1005
 #define IDC_BUTTON1                     1006
 #define IDB_NEW_IMAGEBASE               1006
+#define IDB_SELECT_FONT                 1006
 #define IDC_BUTTON2                     1007
 #define IDB_DELETE_IMAGEBASE            1007
+#define IDB_SELECT_TEXT_COLOR           1007
 #define IDC_BUTTON3                     1008
 #define IDB_EDIT_IMAGEBASE              1008
+#define IDB_NEW_FONT_BASE               1008
 #define IDC_SPIN1                       1009
 #define IDS_SHOW_AREA_LEFT              1009
 #define IDC_SPIN2                       1010
@@ -131,8 +134,10 @@
 #define IDE_SHOW_AREA_LEFT              1013
 #define IDC_BUTTON4                     1014
 #define IDB_GET_LOCAL_IMAGE             1014
+#define IDB_DELETE_FONT_BASE            1014
 #define IDC_BUTTON5                     1015
 #define IDB_DELETE_LOCAL_IMAGE          1015
+#define IDB_EDIT_FONT_BASE              1015
 #define IDC_RADIO1                      1016
 #define IDR_PINGPU                      1016
 #define IDR_IMG_ANIMATION_STATIC_IMG    1016
@@ -179,6 +184,8 @@
 #define IDB_ANMATION_IMAGE_SETTING      1036
 #define IDC_COMBO2                      1037
 #define IDC_IMG_XUNHUAN_CTNS            1037
+#define IDC_CHECK1                      1038
+#define IDC_CHECK2                      1039
 #define ID_32771                        32771
 #define ID_Menu                         32772
 #define ID_CREATE_WINDOW_PANEL          32773
@@ -194,7 +201,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        326
 #define _APS_NEXT_COMMAND_VALUE         32778
-#define _APS_NEXT_CONTROL_VALUE         1038
+#define _APS_NEXT_CONTROL_VALUE         1040
 #define _APS_NEXT_SYMED_VALUE           319
 #endif
 #endif
