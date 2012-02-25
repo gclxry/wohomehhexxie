@@ -104,14 +104,25 @@ void CPropetryDialogGridProperty::CursorBaseDialog()
 	CursorBaseDlg.DoModal();
 
 	COleVariant varValue(_T(""));
-	if (pParentCursorProp->GetRelevancyPropName() != NULL)
+	if (pParentCursorProp->GetRelevancyProp() != NULL)
 		varValue = A2W(pParentCursorProp->GetRelevancyPropName());
 	SetValue(varValue);
 }
 
 void CPropetryDialogGridProperty::FontBaseDialog()
 {
+	USES_CONVERSION;
+	IPropertyBase *pPropBase = (IPropertyBase*)this->GetData();
+	IPropertyFont* pParentFontProp = dynamic_cast<IPropertyFont*>(pPropBase);
+	if (pParentFontProp == NULL)
+		return;
+
 	CModifyFontBaseDlg FontBaseDlg;
-//	FontBaseDlg.InitImageBaseShow(m_pUiKernel, pParentImgProp);
+	FontBaseDlg.InitFontBaseShow(m_pUiKernel, pParentFontProp);
 	FontBaseDlg.DoModal();
+
+	COleVariant varValue(_T(""));
+	if (pParentFontProp->GetRelevancyProp() != NULL)
+		varValue = A2W(pParentFontProp->GetRelevancyPropName());
+	SetValue(varValue);
 }
