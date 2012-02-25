@@ -91,6 +91,8 @@ private:
 	IPropertyCursorBase* FindCursorBasePropetry(int nCursorId);
 	// 增加一个鼠标收拾
 	bool AddCursorBasePropetry(bool bSysCursor, int nCursorId);
+	// 设置光标属性的名称
+	void SetCursorObjectName(IPropertyCursorBase *pCursorBase);
 
 //////////////////////////////////////////////////////////////////////////
 	// Resource.xml相关
