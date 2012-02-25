@@ -233,12 +233,78 @@ void CModifyFontBaseDlg::OnBnClickedObscureEffect()
 
 void CModifyFontBaseDlg::OnBnClickedSelectFont()
 {
-	if (m_pFontBaseMap == NULL || m_pCurFontBaseProp == NULL)
+	USES_CONVERSION;
+	if (m_pFontBaseMap == NULL || m_pCurFontBaseProp == NULL || m_pCurFontBaseProp->GetFontProp() == NULL)
 		return;
+
+	FONT_PROP* pFontProp = m_pCurFontBaseProp->GetFontProp();
+
+	LOGFONTW wFont;
+	LOGFONT_W_A(wFont, pFontProp->Font, false);
+
+	CFontDialog FontDlg(&wFont);
+	if (FontDlg.DoModal() == IDOK)
+	{
+		FontDlg.GetCurrentFont(&wFont);
+		LOGFONT_W_A(wFont, pFontProp->Font, true);
+
+		CString strFontInfo(_T(""));
+		strFontInfo.Format(_T("%s£¬%d"), A2W(pFontProp->Font.lfFaceName), pFontProp->Font.lfHeight);
+		this->GetDlgItem(IDE_FONT_INFO_EDIT)->SetWindowText(strFontInfo);
+
+		m_FontProViewStatic.RedrawView(m_pCurFontBaseProp);
+	}
+}
+
+void CModifyFontBaseDlg::LOGFONT_W_A(LOGFONTW& wFont, LOGFONTA &aFont, bool bW2A)
+{
+	USES_CONVERSION;
+	if (bW2A)
+	{
+		aFont.lfCharSet = wFont.lfCharSet;
+		aFont.lfClipPrecision = wFont.lfClipPrecision;
+		aFont.lfEscapement = wFont.lfEscapement;
+		strcpy_s(aFont.lfFaceName, 32, W2A(wFont.lfFaceName));
+		aFont.lfHeight = wFont.lfHeight;
+		aFont.lfItalic = wFont.lfItalic;
+		aFont.lfOrientation = wFont.lfOrientation;
+		aFont.lfOutPrecision = wFont.lfOutPrecision;
+		aFont.lfPitchAndFamily = wFont.lfPitchAndFamily;
+		aFont.lfQuality = wFont.lfQuality;
+		aFont.lfStrikeOut = wFont.lfStrikeOut;
+		aFont.lfUnderline = wFont.lfUnderline;
+		aFont.lfWeight = wFont.lfWeight;
+		aFont.lfWidth = wFont.lfWidth;		
+	}
+	else
+	{
+		wFont.lfCharSet = aFont.lfCharSet;
+		wFont.lfClipPrecision = aFont.lfClipPrecision;
+		wFont.lfEscapement = aFont.lfEscapement;
+		wcscpy_s(wFont.lfFaceName, 32, A2W(aFont.lfFaceName));
+		wFont.lfHeight = aFont.lfHeight;
+		wFont.lfItalic = aFont.lfItalic;
+		wFont.lfOrientation = aFont.lfOrientation;
+		wFont.lfOutPrecision = aFont.lfOutPrecision;
+		wFont.lfPitchAndFamily = aFont.lfPitchAndFamily;
+		wFont.lfQuality = aFont.lfQuality;
+		wFont.lfStrikeOut = aFont.lfStrikeOut;
+		wFont.lfUnderline = aFont.lfUnderline;
+		wFont.lfWeight = aFont.lfWeight;
+		wFont.lfWidth = aFont.lfWidth;	
+	}
 }
 
 void CModifyFontBaseDlg::OnBnClickedSelectTextColor()
 {
-	if (m_pFontBaseMap == NULL || m_pCurFontBaseProp == NULL)
+	if (m_pFontBaseMap == NULL || m_pCurFontBaseProp == NULL || m_pCurFontBaseProp->GetFontProp() == NULL)
 		return;
+
+	FONT_PROP* pFontProp = m_pCurFontBaseProp->GetFontProp();
+	CMFCColorDialog ColorDlg(pFontProp->FontColor, 0, this);
+	if (ColorDlg.DoModal() == IDOK)
+	{
+		pFontProp->FontColor = ColorDlg.GetColor();
+		m_FontProViewStatic.RedrawView(m_pCurFontBaseProp);
+	}
 }

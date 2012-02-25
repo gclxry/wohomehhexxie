@@ -37,6 +37,7 @@ protected:
 	IPropertyFontBase* m_pCurFontBaseProp;
 	ONE_RESOURCE_PROP_MAP* m_pFontBaseMap;
 
+	void LOGFONT_W_A(LOGFONTW& wFont, LOGFONTA &aFont, bool bW2A);
 
 	DECLARE_MESSAGE_MAP()
 public:
@@ -49,6 +50,11 @@ public:
 	afx_msg void OnBnClickedEditFontBase();
 	afx_msg void OnCbnSelchangeValigningCombo();
 	afx_msg void OnCbnSelchangeHaligningCombo();
+	afx_msg void OnBnClickedDanhangBuPoint();
+	afx_msg void OnBnClickedDanhangXianshiPoint();
+	afx_msg void OnBnClickedZhehangXianshi();
+	afx_msg void OnBnClickedShadowEffect();
+	afx_msg void OnBnClickedObscureEffect();
 	virtual BOOL OnInitDialog();
 
 protected:
@@ -58,10 +64,4 @@ protected:
 	CButton m_EffectShadow;
 	CButton m_EffectObscure;
 	CFontProViewStatic m_FontProViewStatic;
-public:
-	afx_msg void OnBnClickedDanhangBuPoint();
-	afx_msg void OnBnClickedDanhangXianshiPoint();
-	afx_msg void OnBnClickedZhehangXianshi();
-	afx_msg void OnBnClickedShadowEffect();
-	afx_msg void OnBnClickedObscureEffect();
 };
