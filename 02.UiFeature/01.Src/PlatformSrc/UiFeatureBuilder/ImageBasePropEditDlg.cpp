@@ -512,12 +512,12 @@ IPropertyImageBase* CImageBasePropEditDlg::GetSelectImageBase(int &nSeleItem)
 
 void CImageBasePropEditDlg::OnBnClickedNewImagebase()
 {
-	m_ModifyImgDlg.IsCreateImageBase(true);
+	m_ModifyImgDlg.IsCreate(true);
 	if (m_ModifyImgDlg.DoModal() != IDOK)
 		return;
 
 	CString strName;
-	m_ModifyImgDlg.GetImageBaseName(strName);
+	m_ModifyImgDlg.GetPropBaseName(strName);
 	if (strName.GetLength() <= 0 || FindNameInImageBaseNameList(strName))
 		return;
 
@@ -556,12 +556,12 @@ void CImageBasePropEditDlg::OnBnClickedEditImagebase()
 		return;
 	}
 
-	m_ModifyImgDlg.IsCreateImageBase(false);
+	m_ModifyImgDlg.IsCreate(false);
 	if (m_ModifyImgDlg.DoModal() != IDOK)
 		return;
 
 	CString strName;
-	m_ModifyImgDlg.GetImageBaseName(strName);
+	m_ModifyImgDlg.GetPropBaseName(strName);
 	if (strName.GetLength() <= 0 || FindNameInImageBaseNameList(strName))
 		return;
 

@@ -1,18 +1,18 @@
 #pragma once
 
 
-// CModifyImageBaseDlg dialog
+// CModifyPropBaseNameDlg dialog
 
-class CModifyImageBaseDlg : public CDialog
+class CModifyPropBaseNameDlg : public CDialog
 {
-	DECLARE_DYNAMIC(CModifyImageBaseDlg)
+	DECLARE_DYNAMIC(CModifyPropBaseNameDlg)
 
-	void IsCreateImageBase(bool bIsCreate);
-	void GetImageBaseName(CString &strName);
+	void IsCreate(bool bIsCreate);
+	void GetPropBaseName(CString &strName);
 
 public:
-	CModifyImageBaseDlg(CWnd* pParent = NULL);   // standard constructor
-	virtual ~CModifyImageBaseDlg();
+	CModifyPropBaseNameDlg(CWnd* pParent = NULL);   // standard constructor
+	virtual ~CModifyPropBaseNameDlg();
 
 // Dialog Data
 	enum { IDD = IDD_IMAGE_BASE_EDIT_CRATE_DLG };

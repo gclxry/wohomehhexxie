@@ -29,6 +29,11 @@ void CModifyFontBaseDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CModifyFontBaseDlg, CDialog)
 	ON_BN_CLICKED(IDOK, &CModifyFontBaseDlg::OnBnClickedOk)
 	ON_BN_CLICKED(IDCANCEL, &CModifyFontBaseDlg::OnBnClickedCancel)
+	ON_BN_CLICKED(IDB_SELECT_FONT, &CModifyFontBaseDlg::OnBnClickedSelectFont)
+	ON_BN_CLICKED(IDB_SELECT_TEXT_COLOR, &CModifyFontBaseDlg::OnBnClickedSelectTextColor)
+	ON_BN_CLICKED(IDB_NEW_FONT_BASE, &CModifyFontBaseDlg::OnBnClickedNewFontBase)
+	ON_BN_CLICKED(IDB_DELETE_FONT_BASE, &CModifyFontBaseDlg::OnBnClickedDeleteFontBase)
+	ON_BN_CLICKED(IDB_EDIT_FONT_BASE, &CModifyFontBaseDlg::OnBnClickedEditFontBase)
 END_MESSAGE_MAP()
 
 
@@ -42,4 +47,29 @@ void CModifyFontBaseDlg::OnBnClickedCancel()
 void CModifyFontBaseDlg::OnBnClickedOk()
 {
 	OnOK();
+}
+
+void CModifyFontBaseDlg::OnBnClickedSelectFont()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CModifyFontBaseDlg::OnBnClickedSelectTextColor()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CModifyFontBaseDlg::OnBnClickedNewFontBase()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CModifyFontBaseDlg::OnBnClickedDeleteFontBase()
+{
+	// TODO: Add your control notification handler code here
+}
+
+void CModifyFontBaseDlg::OnBnClickedEditFontBase()
+{
+	// TODO: Add your control notification handler code here
 }
