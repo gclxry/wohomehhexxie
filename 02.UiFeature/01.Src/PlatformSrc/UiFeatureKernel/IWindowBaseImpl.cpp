@@ -1133,7 +1133,7 @@ void IWindowBaseImpl::OnTimer(UINT nTimerId)
 	bool bNeedDraw = false;
 	if (nTimerId == UM_DFT_ANIMATION_TIMER)
 	{
-		ONE_RESOURCE_PROP_MAP* pImagePropMap = ((IPropertySkinManagerImpl*)m_pSkinPropMgr)->GetImagePropMap();
+		ONE_RESOURCE_PROP_MAP* pImagePropMap = ((IPropertySkinManagerImpl*)m_pSkinPropMgr)->GetOneResourcePropMap(PROP_TYPE_IMAGE_NAME);
 		if (pImagePropMap == NULL)
 			return;
 

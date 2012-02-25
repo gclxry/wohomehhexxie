@@ -52,12 +52,8 @@ BOOL CModifyMouseStyleDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// TODO:  Add extra initialization here
-
 	m_MouseStyleList.InitMouseStyleList(m_pParentCursorProp, m_pCursorBaseMap);
-
-	return TRUE;  // return TRUE unless you set the focus to a control
-	// EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;
 }
 
 void CModifyMouseStyleDlg::InitCursorBaseShow(IUiFeatureKernel* pUiKernel, IPropertyCursor* pParentCursorProp)
@@ -66,7 +62,7 @@ void CModifyMouseStyleDlg::InitCursorBaseShow(IUiFeatureKernel* pUiKernel, IProp
 	if (pUiKernel == NULL || pUiKernel->GetSkinManager() == NULL)
 		return;
 
-	m_pCursorBaseMap = pUiKernel->GetSkinManager()->GetOneResourcePropMap(PROP_TYPE_CURSOR_BASE_NAME);
+	m_pCursorBaseMap = pUiKernel->GetSkinManager()->GetOneResourcePropMap(PROP_TYPE_CURSOR_BASE_NAME, true);
 	if (m_pCursorBaseMap == NULL)
 		return;	
 }

@@ -7,7 +7,7 @@ class CModifyPropBaseNameDlg : public CDialog
 {
 	DECLARE_DYNAMIC(CModifyPropBaseNameDlg)
 
-	void IsCreate(bool bIsCreate);
+	void SetWindowInfomation(CString strWndText);
 	void GetPropBaseName(CString &strName);
 
 public:
@@ -23,6 +23,7 @@ protected:
 private:
 	bool m_bIsCreate;
 	CString m_strImageBaseName;
+	CString m_strWndText;
 
 	DECLARE_MESSAGE_MAP()
 public:

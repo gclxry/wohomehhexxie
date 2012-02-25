@@ -4,6 +4,7 @@
 #include "..\..\inc\IPropertyBase.h"
 #include "..\..\inc\IUiFeatureKernel.h"
 #include "..\..\inc\IPropertyFont.h"
+#include "..\..\inc\IPropertyFontBase.h"
 #include "FontBaseNameList.h"
 
 
@@ -21,6 +22,7 @@ public:
 	enum { IDD = IDD_FONT_EDIT_DLG };
 
 	void InitFontBaseShow(IUiFeatureKernel* pUiKernel, IPropertyFont* pParentFontProp);
+	void SetCurrentFontBaseProp(IPropertyFontBase* pCurFontBaseProp);
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -28,7 +30,9 @@ protected:
 	CFontBaseNameList m_FontBaseNameList;
 	CModifyPropBaseNameDlg m_ModifyFontDlg;
 
+	IUiFeatureKernel* m_pUiKernel;
 	IPropertyFont* m_pParentFontProp;
+	IPropertyFontBase* m_pCurFontBaseProp;
 	ONE_RESOURCE_PROP_MAP* m_pFontBaseMap;
 
 

@@ -172,9 +172,31 @@ void IPropertySkinManagerImpl::ReleaseBaseProp(IPropertyBase *pCtrlProp)
 		}
 		break;
 
+	case OTID_CURSOR_BASE:
+		{
+			IPropertyCursorBase* pProp = dynamic_cast<IPropertyCursorBase*>(pCtrlProp);
+			if (pProp != NULL)
+			{
+				SAFE_DELETE(pProp);
+				return;
+			}
+		}
+		break;
+
 	case OTID_FONT:
 		{
 			IPropertyFont* pProp = dynamic_cast<IPropertyFont*>(pCtrlProp);
+			if (pProp != NULL)
+			{
+				SAFE_DELETE(pProp);
+				return;
+			}
+		}
+		break;
+
+	case OTID_FONT_BASE:
+		{
+			IPropertyFontBase* pProp = dynamic_cast<IPropertyFontBase*>(pCtrlProp);
 			if (pProp != NULL)
 			{
 				SAFE_DELETE(pProp);
@@ -336,6 +358,18 @@ IPropertyBase* IPropertySkinManagerImpl::CreateEmptyBaseProp(OBJECT_TYPE_ID prop
 	case OTID_FONT:
 		{
 			IPropertyFont* pProp = new IPropertyFont;
+			if (pProp != NULL)
+			{
+				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
+				if (pBaseProp == NULL)
+					SAFE_DELETE(pProp);
+			}
+		}
+		break;
+
+	case OTID_FONT_BASE:
+		{
+			IPropertyFontBase* pProp = new IPropertyFontBase;
 			if (pProp != NULL)
 			{
 				pBaseProp = dynamic_cast<IPropertyBase*>(pProp);
@@ -1732,7 +1766,7 @@ bool IPropertySkinManagerImpl::DeleteImageBaseProp(IPropertyImageBase *pImgBaseP
 }
 
 // 取得指定组的属性
-ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::GetOneResourcePropMap(char *pPropGroupName)
+ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::GetOneResourcePropMap(char *pPropGroupName, bool bIsCreate)
 {
 	if (pPropGroupName == NULL)
 		return NULL;
@@ -1743,15 +1777,49 @@ ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::GetOneResourcePropMap(char *pPr
 	if (pPropGroup != m_AllPropMap.end())
 		pPropGroupItem = pPropGroup->second;
 
-	return pPropGroupItem;
-}
+	if (pPropGroupItem == NULL && bIsCreate)
+	{
+		pPropGroupItem = new ONE_RESOURCE_PROP_MAP;
+		if (pPropGroupItem != NULL)
+		{
+			if (lstrcmpiA(strPropGroup.c_str(), PROP_TYPE_IMAGE_BASE_NAME) == 0)
+			{
+				m_pImageBasePropMap = pPropGroupItem;
+			}
+			else if (lstrcmpiA(strPropGroup.c_str(), PROP_TYPE_COLOR_BASE_NAME) == 0)
+			{
+				m_pColorBasePropMap = pPropGroupItem;
+			}
+			else if (lstrcmpiA(strPropGroup.c_str(), PROP_TYPE_CURSOR_BASE_NAME) == 0)
+			{
+				m_pCursorBasePropMap = pPropGroupItem;
+			}
+			else if (lstrcmpiA(strPropGroup.c_str(), PROP_TYPE_FONT_BASE_NAME) == 0)
+			{
+				m_pFontBasePropMap = pPropGroupItem;
+			}
+			else if (lstrcmpiA(strPropGroup.c_str(), PROP_TYPE_COLOR_NAME) == 0)
+			{
+				m_pColorPropMap = pPropGroupItem;
+			}
+			else if (lstrcmpiA(strPropGroup.c_str(), PROP_TYPE_CURSOR_NAME) == 0)
+			{
+				m_pCursorPropMap = pPropGroupItem;
+			}
+			else if (lstrcmpiA(strPropGroup.c_str(), PROP_TYPE_FONT_NAME) == 0)
+			{
+				m_pFontPropMap = pPropGroupItem;
+			}
+			else if (lstrcmpiA(strPropGroup.c_str(), PROP_TYPE_IMAGE_NAME) == 0)
+			{
+				m_pImagePropMap = pPropGroupItem;
+			}
 
-ONE_RESOURCE_PROP_MAP* IPropertySkinManagerImpl::GetImagePropMap()
-{
-	if (m_pImagePropMap == NULL)
-		m_pImagePropMap = GetOneResourcePropMap(PROP_TYPE_IMAGE_NAME);
-	
-	return m_pImagePropMap;
+			m_AllPropMap.insert(pair<string, ONE_RESOURCE_PROP_MAP*>(strPropGroup, pPropGroupItem));
+		}
+	}
+
+	return pPropGroupItem;
 }
 
 // 修改属性名称

@@ -3,12 +3,16 @@
 #include "FontBaseNameList.h"
 #include "resource.h"
 #include "UiFeatureBuilder.h"
+#include "ModifyFontBaseDlg.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 
 CFontBaseNameList::CFontBaseNameList()
 {
 	m_pFontBaseMap = NULL;
 	m_pParentFontProp = NULL;
+	m_pOwnerDlg = NULL;
+	m_pSkinMgr = NULL;
+	m_pUiKernel = NULL;
 }
 
 CFontBaseNameList::~CFontBaseNameList()
@@ -22,7 +26,7 @@ COLORREF CFontBaseNameList::OnGetCellBkColor(int nRow, int nColum)
 
 void CFontBaseNameList::OnSelectItem()
 {
-	if (m_pParentFontProp == NULL)
+	if (m_pParentFontProp == NULL || m_pOwnerDlg == NULL)
 		return;
 
 	if (m_nSelectItem <= 0)
@@ -30,20 +34,26 @@ void CFontBaseNameList::OnSelectItem()
 		// Ã»ÓÐÑ¡Ôñ
 		m_pParentFontProp->SetFontBaseProp(NULL);
 		m_pParentFontProp->SetRelevancyPropName(NULL);
+		m_pOwnerDlg->SetCurrentFontBaseProp(NULL);
 	}
 	else
 	{
 		IPropertyFontBase* pFontBaseProp = (IPropertyFontBase*)(this->GetItemData(m_nSelectItem));
 		m_pParentFontProp->SetFontBaseProp(pFontBaseProp);
 		m_pParentFontProp->SetRelevancyPropName((char*)pFontBaseProp->GetObjectName());
+		m_pOwnerDlg->SetCurrentFontBaseProp(pFontBaseProp);
 	}
 }
 
-void CFontBaseNameList::InitFontBaseNameList(IPropertyFont* pParentCursorProp, ONE_RESOURCE_PROP_MAP* pFontBaseMap)
+void CFontBaseNameList::InitFontBaseNameList(CModifyFontBaseDlg* pDlg, IUiFeatureKernel* pUiKernel, IPropertyFont* pParentCursorProp, ONE_RESOURCE_PROP_MAP* pFontBaseMap)
 {
-	m_pParentFontProp = pParentCursorProp;
-	if (pFontBaseMap == NULL)
+	if (pFontBaseMap == NULL || pDlg == NULL || pUiKernel == NULL)
 		return;
+
+	m_pUiKernel = pUiKernel;
+	m_pSkinMgr = m_pUiKernel->GetSkinManager();
+	m_pOwnerDlg = pDlg;
+	m_pParentFontProp = pParentCursorProp;
 
 	USES_CONVERSION;
 	this->DeleteAllItems();
@@ -77,4 +87,24 @@ void CFontBaseNameList::InitFontBaseNameList(IPropertyFont* pParentCursorProp, O
 
 		nNo++;
 	}
+}
+
+void CFontBaseNameList::NewFontBase(CString strName)
+{
+	if (strName.GetLength() <= 0 || m_pUiKernel == NULL || m_pSkinMgr == NULL)
+		return;
+
+	IPropertyFontBase* pNewFontBase = dynamic_cast<IPropertyFontBase*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_FONT_BASE));
+	if (pNewFontBase == NULL)
+		return;
+
+	int nCtns = this->GetItemCount();
+	CString strNo(_T(""));
+	strNo.Format(_T("%d"), nCtns);
+
+	this->InsertItem(nCtns, strNo);
+	this->SetItemText(nCtns, 1, strName);
+	this->SetItemData(nCtns, (DWORD_PTR)pNewFontBase);
+	this->SetItemState(nCtns, LVIS_SELECTED, LVIS_SELECTED);
+	m_pOwnerDlg->SetCurrentFontBaseProp(pNewFontBase);
 }

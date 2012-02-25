@@ -512,7 +512,7 @@ IPropertyImageBase* CImageBasePropEditDlg::GetSelectImageBase(int &nSeleItem)
 
 void CImageBasePropEditDlg::OnBnClickedNewImagebase()
 {
-	m_ModifyImgDlg.IsCreate(true);
+	m_ModifyImgDlg.SetWindowInfomation(_T("新建图片属性名称"));
 	if (m_ModifyImgDlg.DoModal() != IDOK)
 		return;
 
@@ -556,7 +556,7 @@ void CImageBasePropEditDlg::OnBnClickedEditImagebase()
 		return;
 	}
 
-	m_ModifyImgDlg.IsCreate(false);
+	m_ModifyImgDlg.SetWindowInfomation(_T("修改图片属性名称"));
 	if (m_ModifyImgDlg.DoModal() != IDOK)
 		return;
 
