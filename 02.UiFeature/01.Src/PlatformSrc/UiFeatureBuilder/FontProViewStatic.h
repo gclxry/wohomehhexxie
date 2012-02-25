@@ -12,13 +12,18 @@ class CFontProViewStatic : public CStatic
 
 private:
 	IPropertyFontBase* m_pFontBaseProp;
+	CDrawingBoard m_MemDc;
 
 public:
 	CFontProViewStatic();
 	virtual ~CFontProViewStatic();
 
+	string m_strText;
+
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	virtual void DrawItem(LPDRAWITEMSTRUCT /*lpDrawItemStruct*/);
 };
 
 

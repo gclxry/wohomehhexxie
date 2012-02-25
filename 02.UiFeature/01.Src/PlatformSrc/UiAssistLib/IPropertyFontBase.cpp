@@ -3,6 +3,9 @@
 #include "..\..\Inc\IPropertyFontBase.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\ICommonFun.h"
+#include <atlconv.h>
+using namespace ATL;
+
 
 IPropertyFontBase::IPropertyFontBase()
 {
@@ -191,4 +194,53 @@ void IPropertyFontBase::SetEffect(FONT_EFFECT FontEffect, bool bSet)
 		m_FontProp.FontEffect |= FontEffect;
 	else
 		m_FontProp.FontEffect &= (~FontEffect);
+}
+
+// 绘制文字
+bool IPropertyFontBase::DrawText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct)
+{
+	USES_CONVERSION;
+	if (pszOutText == NULL || strlen(pszOutText) <= 0 || IS_RECT_EMPTY(DstRct) || DstDc.GetSafeHdc() == NULL)
+		return false;
+
+	if (m_FontProp.FontEffect == FE_NONE)
+	{
+		// 无特效
+		Graphics DoGrap(DstDc.GetSafeHdc());
+
+		//Font TextFont(m_FontProp.Font);
+
+		StringFormat stringFormat;
+		// 水平对齐
+		stringFormat.SetAlignment(StringAlignmentNear);
+		// 垂直对齐
+		stringFormat.SetFormatFlags(StringFormatFlagsLineLimit);
+		// 单行？多行？
+		// 是否在末尾显示...
+		// 文字输出 & 变成下划线问题
+		stringFormat.SetHotkeyPrefix(HotkeyPrefixNone);
+
+
+		stringFormat.SetLineAlignment(StringAlignmentCenter);
+		stringFormat.SetAlignment(StringAlignmentCenter);
+
+		RectF OutFct;
+		OutFct.X = DstRct.left;
+		OutFct.Y = DstRct.top;
+		OutFct.Width = RECT_WIDTH(DstRct);
+		OutFct.Height = RECT_HEIGHT(DstRct);
+
+		int nLength = strlen(pszOutText);
+
+		m_FontProp.FontColor;
+		// 文字颜色
+		SolidBrush solidBrush(Color::Blue);
+		DoGrap.DrawString(A2W(pszOutText), nLength, &TextFont, OutFct, &stringFormat, &brushWhite);
+	}
+	else
+	{
+		// 有特效
+	}
+
+	return true;
 }

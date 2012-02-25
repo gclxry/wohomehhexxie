@@ -3,6 +3,7 @@
 
 #pragma once
 #include "IPropertyBase.h"
+#include "CDrawingBoard.h"
 
 // 文字显示样式
 enum FONT_SHOW_MODE
@@ -73,6 +74,9 @@ public:
 	// 是否含有指定特效
 	bool GetEffectState(FONT_EFFECT FontEffect);
 	void SetEffect(FONT_EFFECT FontEffect, bool bSet);
+
+	// 绘制文字
+	bool DrawText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct);
 
 private:
 	FONT_PROP m_FontProp;
