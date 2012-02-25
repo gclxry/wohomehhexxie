@@ -1845,8 +1845,8 @@ bool IPropertySkinManagerImpl::InitCursorBasePropetry()
 		return false;
 
 	// 正常光标 标准的箭头
-//	if (FindCursorBasePropetry(UF_IDC_ARROW) == NULL)
-//		AddCursorBasePropetry(true, UF_IDC_ARROW);
+	if (FindCursorBasePropetry(UF_IDC_ARROW) == NULL)
+		AddCursorBasePropetry(true, UF_IDC_ARROW);
 
 	// 十字架光标
 	if (FindCursorBasePropetry(UF_IDC_CROSS) == NULL)
@@ -1896,6 +1896,10 @@ bool IPropertySkinManagerImpl::InitCursorBasePropetry()
 	if (FindCursorBasePropetry(UF_IDC_WAIT) == NULL)
 		AddCursorBasePropetry(true, UF_IDC_WAIT);
 
+	// 手势点击
+	if (FindCursorBasePropetry(UF_IDC_HAND) == NULL)
+		AddCursorBasePropetry(true, UF_IDC_HAND);
+
 	return true;
 }
 
@@ -1915,6 +1919,7 @@ IPropertyCursorBase* IPropertySkinManagerImpl::FindCursorBasePropetry(int nCurso
 		if (pFindCom == NULL)
 			continue;
 
+		SetCursorObjectName(pFindCom);
 		if (pFindCom->GetCursorId() == nCursorId)
 		{
 			pFind = pFindCom;
@@ -1923,6 +1928,89 @@ IPropertyCursorBase* IPropertySkinManagerImpl::FindCursorBasePropetry(int nCurso
 	}
 
 	return pFind;
+}
+
+// 设置光标属性的名称
+void IPropertySkinManagerImpl::SetCursorObjectName(IPropertyCursorBase *pCursorBase)
+{
+	if (pCursorBase == NULL || pCursorBase->GetObjectName() == NULL || strlen(pCursorBase->GetObjectName()) > 0)
+		return;
+
+	switch (pCursorBase->GetCursorId())
+	{
+		// 正常光标 标准的箭头
+	case UF_IDC_ARROW:
+		pCursorBase->SetObjectName("ARROW");
+		break;
+
+		// 双箭头指向东北和西南
+	case UF_IDC_SIZENESW:
+		pCursorBase->SetObjectName("SIZENESW");
+		break;
+
+		// 工字光标
+	case UF_IDC_IBEAM:
+		pCursorBase->SetObjectName("IBEAM");
+		break;
+
+		// 十字架光标
+	case UF_IDC_CROSS:
+		pCursorBase->SetObjectName("CROSS");
+		break;
+
+		// 四向箭头指向东、西、南、北
+	case UF_IDC_SIZEALL:
+		pCursorBase->SetObjectName("SIZEALL");
+		break;
+
+		// 垂直箭头
+	case UF_IDC_UPARROW:
+		pCursorBase->SetObjectName("UPARROW");
+		break;
+
+		// 双箭头指向东西
+	case UF_IDC_SIZEWE:
+		pCursorBase->SetObjectName("SIZEWE");
+		break;
+
+		// 双箭头指向南北
+	case UF_IDC_SIZENS:
+		pCursorBase->SetObjectName("SIZENS");
+		break;
+
+		// 双箭头指向西北和东南
+	case UF_IDC_SIZENWSE:
+		pCursorBase->SetObjectName("SIZENWSE");
+		break;
+
+		// 手势
+	case UF_IDC_HAND:
+		pCursorBase->SetObjectName("HAND");
+		break;
+
+		// 标准的箭头和小沙漏
+	case UF_IDC_APPSTARTING:
+		pCursorBase->SetObjectName("APPSTARTING");
+		break;
+
+		// 沙漏
+	case UF_IDC_WAIT:
+		pCursorBase->SetObjectName("WAIT");
+		break;
+
+		// 标准的箭头和问号
+	case UF_IDC_HELP:
+		pCursorBase->SetObjectName("HELP");
+		break;
+
+		// 禁止圈
+	case UF_IDC_NO:
+		pCursorBase->SetObjectName("NO");
+		break;
+
+	default:
+		break;
+	}
 }
 
 // 增加一个鼠标手势
@@ -1937,6 +2025,7 @@ bool IPropertySkinManagerImpl::AddCursorBasePropetry(bool bSysCursor, int nCurso
 
 	pCursorBase->SetCursorId(nCursorId);
 	pCursorBase->SetSystemCursor(bSysCursor);
+	SetCursorObjectName(pCursorBase);
 
 	m_pCursorBasePropMap->insert(pair<string, IPropertyBase*>(pCursorBase->GetObjectId(), pCursorBase));
 	return true;

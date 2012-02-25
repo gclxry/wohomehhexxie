@@ -122,6 +122,8 @@ using namespace std;
 #define UF_IDC_UPARROW			(32516)
 // 沙漏
 #define UF_IDC_WAIT				(32514)
+// 手势点击
+#define UF_IDC_HAND				(32649)
 
 // 改变控件、窗口大小的位置
 enum SIZE_CTRL_TYPE

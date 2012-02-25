@@ -93,9 +93,20 @@ void CPropetryDialogGridProperty::ImageBaseDialog()
 
 void CPropetryDialogGridProperty::CursorBaseDialog()
 {
+	USES_CONVERSION;
+	IPropertyBase *pPropBase = (IPropertyBase*)this->GetData();
+	IPropertyCursor* pParentCursorProp = dynamic_cast<IPropertyCursor*>(pPropBase);
+	if (pParentCursorProp == NULL)
+		return;
+
 	CModifyMouseStyleDlg CursorBaseDlg;
-//	CursorBaseDlg.InitImageBaseShow(m_pUiKernel, pParentImgProp);
+	CursorBaseDlg.InitCursorBaseShow(m_pUiKernel, pParentCursorProp);
 	CursorBaseDlg.DoModal();
+
+	COleVariant varValue(_T(""));
+	if (pParentCursorProp->GetRelevancyPropName() != NULL)
+		varValue = A2W(pParentCursorProp->GetRelevancyPropName());
+	SetValue(varValue);
 }
 
 void CPropetryDialogGridProperty::FontBaseDialog()

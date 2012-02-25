@@ -13,7 +13,8 @@ IMPLEMENT_DYNAMIC(CModifyMouseStyleDlg, CDialog)
 CModifyMouseStyleDlg::CModifyMouseStyleDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CModifyMouseStyleDlg::IDD, pParent)
 {
-
+	m_pParentCursorProp = NULL;
+	m_pCursorBaseMap = NULL;
 }
 
 CModifyMouseStyleDlg::~CModifyMouseStyleDlg()
@@ -53,8 +54,19 @@ BOOL CModifyMouseStyleDlg::OnInitDialog()
 
 	// TODO:  Add extra initialization here
 
-	m_MouseStyleList.InitMouseStyleList();
+	m_MouseStyleList.InitMouseStyleList(m_pParentCursorProp, m_pCursorBaseMap);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX Property Pages should return FALSE
+}
+
+void CModifyMouseStyleDlg::InitCursorBaseShow(IUiFeatureKernel* pUiKernel, IPropertyCursor* pParentCursorProp)
+{
+	m_pParentCursorProp = pParentCursorProp;
+	if (pUiKernel == NULL || pUiKernel->GetSkinManager() == NULL)
+		return;
+
+	m_pCursorBaseMap = pUiKernel->GetSkinManager()->GetOneResourcePropMap(PROP_TYPE_CURSOR_BASE_NAME);
+	if (m_pCursorBaseMap == NULL)
+		return;	
 }
