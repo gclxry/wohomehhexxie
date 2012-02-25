@@ -6,6 +6,8 @@
 #include "..\..\inc\IPropertyFont.h"
 #include "..\..\inc\IPropertyFontBase.h"
 #include "FontBaseNameList.h"
+#include "FontProViewStatic.h"
+#include "afxwin.h"
 
 
 // CModifyFontBaseDlg dialog
@@ -22,7 +24,7 @@ public:
 	enum { IDD = IDD_FONT_EDIT_DLG };
 
 	void InitFontBaseShow(IUiFeatureKernel* pUiKernel, IPropertyFont* pParentFontProp);
-	void SetCurrentFontBaseProp(IPropertyFontBase* pCurFontBaseProp);
+	void UpdateCurrentFontBaseProp(IPropertyFontBase* pCurFontBaseProp);
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -45,5 +47,21 @@ public:
 	afx_msg void OnBnClickedNewFontBase();
 	afx_msg void OnBnClickedDeleteFontBase();
 	afx_msg void OnBnClickedEditFontBase();
+	afx_msg void OnCbnSelchangeValigningCombo();
+	afx_msg void OnCbnSelchangeHaligningCombo();
 	virtual BOOL OnInitDialog();
+
+protected:
+	CComboBox m_VAligningCombo;
+	CComboBox m_HAligningCombo;
+	int m_nXianshiMode;
+	CButton m_EffectShadow;
+	CButton m_EffectObscure;
+	CFontProViewStatic m_FontProViewStatic;
+public:
+	afx_msg void OnBnClickedDanhangBuPoint();
+	afx_msg void OnBnClickedDanhangXianshiPoint();
+	afx_msg void OnBnClickedZhehangXianshi();
+	afx_msg void OnBnClickedShadowEffect();
+	afx_msg void OnBnClickedObscureEffect();
 };

@@ -20,10 +20,10 @@ enum FONT_ALIGNING
 {
 	// 水平靠左/垂直靠上
 	FAL_LEFT_TOP		= 0,
-	// 水平靠右/垂直靠下
-	FAL_RIGHT_BOTTOM	= 1,
 	// 水平居中/垂直居中
-	FAL_MIDDLE		= 2
+	FAL_MIDDLE			= 1,
+	// 水平靠右/垂直靠下
+	FAL_RIGHT_BOTTOM	= 2
 };
 
 // 文字特效
@@ -69,6 +69,10 @@ public:
 	// 设置字体信息
 	void SetFontProp(FONT_PROP *pFontProp);
 	FONT_PROP* GetFontProp();
+
+	// 是否含有指定特效
+	bool GetEffectState(FONT_EFFECT FontEffect);
+	void SetEffect(FONT_EFFECT FontEffect, bool bSet);
 
 private:
 	FONT_PROP m_FontProp;
