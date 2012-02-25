@@ -15,6 +15,7 @@ CModifyPropBaseNameDlg::CModifyPropBaseNameDlg(CWnd* pParent /*=NULL*/)
 	, m_strImageBaseName(_T(""))
 {
 	m_bIsCreate = true;
+	m_strWndText = _T("属性名称");
 }
 
 CModifyPropBaseNameDlg::~CModifyPropBaseNameDlg()
@@ -41,9 +42,9 @@ void CModifyPropBaseNameDlg::OnBnClickedCancel()
 	OnCancel();
 }
 
-void CModifyPropBaseNameDlg::IsCreate(bool bIsCreate)
+void CModifyPropBaseNameDlg::SetWindowInfomation(CString strWndText)
 {
-	m_bIsCreate = bIsCreate;
+	m_strWndText = strWndText;
 }
 
 BOOL CModifyPropBaseNameDlg::OnInitDialog()
@@ -59,6 +60,8 @@ BOOL CModifyPropBaseNameDlg::OnInitDialog()
 	{
 		this->SetWindowText(_T("修改图片属性名称"));
 	}
+
+	this->SetWindowText(m_strWndText);
 
 	return TRUE;
 }

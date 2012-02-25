@@ -25,7 +25,7 @@ public:
 	// 清空4个xml文件的属性队列
 	virtual void ReleaseSkinManagerPropetry() = 0;
 	// 取得指定组的属性
-	virtual ONE_RESOURCE_PROP_MAP* GetOneResourcePropMap(char *pPropGroupName) = 0;
+	virtual ONE_RESOURCE_PROP_MAP* GetOneResourcePropMap(char *pPropGroupName, bool bIsCreate = false) = 0;
 
 	// 删除属性
 	virtual bool BD_DeletePropetry(IPropertyBase *pPropBase) = 0;

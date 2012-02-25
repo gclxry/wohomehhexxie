@@ -15,6 +15,8 @@ CModifyFontBaseDlg::CModifyFontBaseDlg(CWnd* pParent /*=NULL*/)
 {
 	m_pParentFontProp = NULL;
 	m_pFontBaseMap = NULL;
+	m_pCurFontBaseProp = NULL;
+	m_pUiKernel = NULL;
 }
 
 CModifyFontBaseDlg::~CModifyFontBaseDlg()
@@ -52,47 +54,69 @@ void CModifyFontBaseDlg::OnBnClickedOk()
 
 void CModifyFontBaseDlg::InitFontBaseShow(IUiFeatureKernel* pUiKernel, IPropertyFont* pParentFontProp)
 {
+	if (pUiKernel == NULL)
+		return;
+
+	m_pUiKernel = pUiKernel;
 	m_pParentFontProp = pParentFontProp;
 	if (pUiKernel == NULL || pUiKernel->GetSkinManager() == NULL)
 		return;
 
-	m_pFontBaseMap = pUiKernel->GetSkinManager()->GetOneResourcePropMap(PROP_TYPE_FONT_BASE_NAME);
+	m_pFontBaseMap = pUiKernel->GetSkinManager()->GetOneResourcePropMap(PROP_TYPE_FONT_BASE_NAME, true);
 	if (m_pFontBaseMap == NULL)
-		return;	
+		return;
 }
 
 BOOL CModifyFontBaseDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// TODO:  Add extra initialization here
-	m_FontBaseNameList.InitFontBaseNameList(m_pParentFontProp, m_pFontBaseMap);
+	m_FontBaseNameList.InitFontBaseNameList(this, m_pUiKernel, m_pParentFontProp, m_pFontBaseMap);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	// EXCEPTION: OCX Property Pages should return FALSE
+	if (m_pParentFontProp != NULL)
+		SetCurrentFontBaseProp(m_pParentFontProp->GetFontBaseProp());
+
+	return TRUE;
 }
 
-void CModifyFontBaseDlg::OnBnClickedSelectFont()
+void CModifyFontBaseDlg::SetCurrentFontBaseProp(IPropertyFontBase* pCurFontBaseProp)
 {
-	// TODO: Add your control notification handler code here
-}
-
-void CModifyFontBaseDlg::OnBnClickedSelectTextColor()
-{
-	// TODO: Add your control notification handler code here
+	m_pCurFontBaseProp = pCurFontBaseProp;
 }
 
 void CModifyFontBaseDlg::OnBnClickedNewFontBase()
 {
-	// TODO: Add your control notification handler code here
+	if (m_pFontBaseMap == NULL)
+		return;
+
+	m_ModifyFontDlg.SetWindowInfomation(_T("新建字体属性名称"));
+	m_ModifyFontDlg.DoModal();
+
+	CString strName(_T(""));
+	m_ModifyFontDlg.GetPropBaseName(strName);
+	m_FontBaseNameList.NewFontBase(strName);
 }
 
 void CModifyFontBaseDlg::OnBnClickedDeleteFontBase()
 {
-	// TODO: Add your control notification handler code here
+	if (m_pFontBaseMap == NULL || m_pCurFontBaseProp == NULL)
+		return;
 }
 
 void CModifyFontBaseDlg::OnBnClickedEditFontBase()
 {
-	// TODO: Add your control notification handler code here
+	if (m_pFontBaseMap == NULL || m_pCurFontBaseProp == NULL)
+		return;
+}
+
+void CModifyFontBaseDlg::OnBnClickedSelectFont()
+{
+	if (m_pFontBaseMap == NULL || m_pCurFontBaseProp == NULL)
+		return;
+}
+
+void CModifyFontBaseDlg::OnBnClickedSelectTextColor()
+{
+	if (m_pFontBaseMap == NULL || m_pCurFontBaseProp == NULL)
+		return;
 }
