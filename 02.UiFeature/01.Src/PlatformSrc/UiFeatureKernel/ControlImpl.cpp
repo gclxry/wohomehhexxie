@@ -131,7 +131,7 @@ void CControlImpl::SetRegControlMap(CONTROL_REG_MAP *pCtrlMap)
 }
 
 // 创建一个控件，参数为步骤1的宏
-ICtrlInterface* CControlImpl::CreateCtrl(char *pCtrlType, char *pszObjectId)
+ICtrlInterface* CControlImpl::CreateCtrl(char *pCtrlType)
 {
 	ICtrlInterface* pNewCtrl = NULL;
 	for (CONTROL_DLL_VEC::iterator pCtrlItem = m_CtrlDllVec.begin(); pCtrlItem != m_CtrlDllVec.end(); pCtrlItem++)
@@ -139,7 +139,7 @@ ICtrlInterface* CControlImpl::CreateCtrl(char *pCtrlType, char *pszObjectId)
 		CONTRL_DLL_INFO &CtrlDllInfo = *pCtrlItem;
 		if (CtrlDllInfo.pCtrlMgr != NULL)
 		{
-			pNewCtrl = CtrlDllInfo.pCtrlMgr->CreateCtrl(pCtrlType, pszObjectId);
+			pNewCtrl = CtrlDllInfo.pCtrlMgr->CreateCtrl(pCtrlType);
 			if (pNewCtrl != NULL)
 				return pNewCtrl;
 		}

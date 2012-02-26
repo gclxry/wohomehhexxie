@@ -25,7 +25,7 @@ public:
 	// 清空4个xml文件的属性队列
 	virtual void ReleaseSkinManagerPropetry() = 0;
 	// 取得指定组的属性
-	virtual ONE_RESOURCE_PROP_MAP* GetOneResourcePropMap(char *pPropGroupName) = 0;
+	virtual ONE_RESOURCE_PROP_MAP* GetOneResourcePropMap(char *pPropGroupName, bool bIsCreate = false) = 0;
 
 	// 删除属性
 	virtual bool BD_DeletePropetry(IPropertyBase *pPropBase) = 0;
@@ -47,6 +47,4 @@ public:
 	virtual void SetArea(AREA_TYPE areaType) = 0;
 	// 创建一个属性，并将次属性放入队列
 	virtual IPropertyBase* CreateEmptyBaseProp(OBJECT_TYPE_ID propType, char *pszObjectId = NULL) = 0;
-	// 取得ID号
-	virtual int GetNewId() = 0;
 };

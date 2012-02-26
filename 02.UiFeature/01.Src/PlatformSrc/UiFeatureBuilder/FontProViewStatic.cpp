@@ -37,19 +37,19 @@ void CFontProViewStatic::RedrawView(IPropertyFontBase* pFontBaseProp)
 
 void CFontProViewStatic::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 {
-	if (lpDrawItemStruct == NULL)
-		return;
-
-//	if (m_pFontBaseProp == NULL)
-	{
-		CStatic::DrawItem(lpDrawItemStruct);
-		return;
-	}
-
-	CRect CtrlRct(0, 0, 0, 0);
-	this->GetClientRect(&CtrlRct);
-	m_MemDc.Create(CtrlRct.Width, CtrlRct.Height(), 0, false, true)
-
-	m_pFontBaseProp->DrawText()
+//	if (lpDrawItemStruct == NULL)
+//		return;
+//
+////	if (m_pFontBaseProp == NULL)
+//	{
+//		CStatic::DrawItem(lpDrawItemStruct);
+//		return;
+//	}
+//
+//	CRect CtrlRct(0, 0, 0, 0);
+//	this->GetClientRect(&CtrlRct);
+//	m_MemDc.Create(CtrlRct.Width(), CtrlRct.Height(), 0, false, true)
+//
+//	m_pFontBaseProp->DrawText()
 
 }

@@ -3,6 +3,7 @@
 
 #pragma once
 #include "IPropertyBase.h"
+#include "CDrawingBoard.h"
 
 // 文字显示样式
 enum FONT_SHOW_MODE
@@ -20,10 +21,20 @@ enum FONT_ALIGNING
 {
 	// 水平靠左/垂直靠上
 	FAL_LEFT_TOP		= 0,
-	// 水平靠右/垂直靠下
-	FAL_RIGHT_BOTTOM	= 1,
 	// 水平居中/垂直居中
-	FAL_MIDDLE		= 2
+	FAL_MIDDLE			= 1,
+	// 水平靠右/垂直靠下
+	FAL_RIGHT_BOTTOM	= 2
+};
+
+// 文字特效
+enum FONT_EFFECT
+{
+	FE_NONE			= 0x00000000,
+	// 阴影文字
+	FE_SHADOW		= 0x00000001,
+	// 模糊文字
+	FE_OBSCURE		= 0x00000002
 };
 
 // 字体属性
@@ -39,6 +50,8 @@ struct FONT_PROP
 	FONT_ALIGNING HAligning;
 	// 显示方式
 	FONT_SHOW_MODE ShowMode;
+	// 文字特效
+	UINT FontEffect;
 };
 
 class IPropertyFontBase : public IPropertyBase
@@ -51,10 +64,19 @@ public:
 	virtual bool IsRightData();
 	// 从XML节点读取属性值，并放入属性队列
 	virtual bool ReadPropertyFromXmlNode(XmlNode* pXmlNode);
+	// 写入xml
+	virtual bool AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode);
 
 	// 设置字体信息
 	void SetFontProp(FONT_PROP *pFontProp);
 	FONT_PROP* GetFontProp();
+
+	// 是否含有指定特效
+	bool GetEffectState(FONT_EFFECT FontEffect);
+	void SetEffect(FONT_EFFECT FontEffect, bool bSet);
+
+	// 绘制文字
+	bool DrawText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct);
 
 private:
 	FONT_PROP m_FontProp;

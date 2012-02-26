@@ -424,38 +424,6 @@ RECT IControlBase::GetClientRect()
 	return ClientRct;
 }
 
-void IControlBase::InitControlPropObjectId(GROUP_PROP_VEC *pPropList)
-{
-	if (pPropList == NULL || m_pSkinPropMgr == NULL || m_pOwnerWindowBase == NULL)
-		return;
-
-	string strCtrlType = m_pOwnerWindowBase->GetObjectType();
-	if (strCtrlType.size() <= 0)
-		return;
-
-	char szId[1024];
-	for (GROUP_PROP_VEC::iterator pPropItem = pPropList->begin(); pPropItem != pPropList->end(); pPropItem++)
-	{
-		IPropertyBase* pProp = *pPropItem;
-		if (pProp == NULL)
-			continue;
-
-		string strTypeName = pProp->GetObjectType();
-
-		memset(szId, 0, 1024);
-		int nId = m_pSkinPropMgr->GetNewId();
-		sprintf_s(szId, 1023, "%s.%s%d", strCtrlType.c_str(), strTypeName.c_str(), nId);
-		pProp->SetObjectType(szId);
-
-		if (pProp->GetObjectTypeId() == OTID_GROUP)
-		{
-			IPropertyGroup *pGroup = dynamic_cast<IPropertyGroup*>(pProp);
-			if (pGroup != NULL)
-				InitControlPropObjectId(pGroup->GetPropVec());
-		}
-	}
-}
-
 // ÉèÖÃ¸½Êô¿Ø¼þ
 void IControlBase::SetPropertySkinManager(IPropertySkinManager *pMgr)
 {

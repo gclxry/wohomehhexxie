@@ -33,12 +33,14 @@ void IPropertyWindow::SetWindowPropGroup(IPropertyGroup *pWindowProp)
 	if (pWindowProp == NULL)
 		return;
 
+	SetObjectId(pWindowProp->GetObjectId());
+
 	m_pWindowProp = pWindowProp;
 	IPropertyString* pNameProp = FindObjectNameProperty(m_pWindowProp);
 	if (pNameProp == NULL)
 		return;
 
-	this->SetObjectName(pNameProp->GetString());
+	SetObjectName(pNameProp->GetString());
 }
 
 IPropertyGroup* IPropertyWindow::GetWindowPropGroup()

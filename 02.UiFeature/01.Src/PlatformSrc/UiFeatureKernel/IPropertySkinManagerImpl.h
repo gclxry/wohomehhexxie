@@ -67,8 +67,6 @@ public:
 	virtual void SetArea(AREA_TYPE areaType);
 	// 创建一个属性，并将次属性放入队列
 	virtual IPropertyBase* CreateEmptyBaseProp(OBJECT_TYPE_ID propType, char *pszObjectId = NULL);
-	// 取得ID号
-	virtual int GetNewId();
 
 //////////////////////////////////////////////////////////////////////////
 	ONE_RESOURCE_PROP_MAP * GetAllWindowPropMap();
@@ -84,7 +82,6 @@ private:
 //////////////////////////////////////////////////////////////////////////
 	// 初始化皮肤包
 	bool InitSkinPackage(const char *pszSkinPath);
-	void ResetBaseObjectId(int nObjectId);
 
 	// 查找光标
 	IPropertyCursorBase* FindCursorBasePropetry(int nCursorId);
@@ -173,7 +170,4 @@ private:
 	CZipFileList m_BD_SkinUnZipImageFile;
 
 	AREA_TYPE m_AreaType;
-
-	// 整个资源ObjectId
-	int m_nObjectIdInRes;
 };

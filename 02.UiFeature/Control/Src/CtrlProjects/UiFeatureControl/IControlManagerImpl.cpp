@@ -86,9 +86,9 @@ void IControlManagerImpl::SetRegControlMap(CONTROL_REG_MAP *pCtrlMap)
 }
 
 // 创建一个控件，参数为步骤1的宏
-ICtrlInterface* IControlManagerImpl::CreateCtrl(char *pCtrlType, char *pszObjectId)
+ICtrlInterface* IControlManagerImpl::CreateCtrl(char *pCtrlType)
 {
-	if (pCtrlType == NULL || pszObjectId == NULL)
+	if (pCtrlType == NULL)
 		return NULL;
 
 	ICtrlInterface *pRetCtrl = NULL;
@@ -102,7 +102,6 @@ ICtrlInterface* IControlManagerImpl::CreateCtrl(char *pCtrlType, char *pszObject
 	if (pRetCtrl == NULL)
 		return NULL;
 
-	pRetCtrl->SetObjectId(pszObjectId);
 	return pRetCtrl;
 }
 

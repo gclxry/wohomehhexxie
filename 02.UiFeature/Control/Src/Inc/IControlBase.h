@@ -422,8 +422,4 @@ protected:
 private:
 	// Builder 专用，显示控件的边框的8个方块
 	FANGKUAI_8 m_BD_FangKuai8;
-
-protected:
-	// 2.从Builder中新创建一个控件，需要初始化属性的PropId
-	void InitControlPropObjectId(GROUP_PROP_VEC *pPropList);
 };

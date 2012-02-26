@@ -22,7 +22,7 @@ public:
 	// 取得所有支持的控件
 	void SetRegControlMap(CONTROL_REG_MAP *pCtrlMap);
 	// 创建一个控件，参数为步骤1的宏
-	ICtrlInterface* CreateCtrl(char *pCtrlType, char *pszObjectId);
+	ICtrlInterface* CreateCtrl(char *pCtrlType);
 	// 销毁一个控件
 	bool ReleaseCtrl(ICtrlInterface **ppCtrl);
 
