@@ -34,6 +34,7 @@ void CModifyFontBaseDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_OBSCURE_EFFECT, m_EffectObscure);
 	DDX_Control(pDX, IDS_FONT_PROVIEW_STRTIC, m_FontProViewStatic);
 	DDX_Control(pDX, IDC_PICTURE_TEXT, m_PictureTextCheckBox);
+	DDX_Control(pDX, IDL_FONT_BASE_NAME_LIST, m_FontBaseNameList);
 }
 
 
@@ -125,8 +126,10 @@ void CModifyFontBaseDlg::OnBnClickedNewFontBase()
 
 void CModifyFontBaseDlg::OnBnClickedDeleteFontBase()
 {
-	if (m_pFontBaseMap == NULL || m_pCurFontBaseProp == NULL)
+	if (m_pFontBaseMap == NULL || m_pCurFontBaseProp == NULL || m_pUiKernel == NULL || m_pUiKernel->GetSkinManager() == NULL)
 		return;
+
+	m_FontBaseNameList.DeleteCurrentFontBase();
 }
 
 void CModifyFontBaseDlg::OnBnClickedEditFontBase()

@@ -15,6 +15,7 @@ public:
 
 	void InitFontBaseNameList(CModifyFontBaseDlg* pDlg, IUiFeatureKernel* pUiKernel, IPropertyFont* pParentCursorProp, ONE_RESOURCE_PROP_MAP* pFontBaseMap);
 	void NewFontBase(CString strName);
+	void DeleteCurrentFontBase();
 
 protected:
 	virtual COLORREF OnGetCellBkColor(int nRow, int nColum);

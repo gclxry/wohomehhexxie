@@ -83,7 +83,10 @@ void CFontBaseNameList::InitFontBaseNameList(CModifyFontBaseDlg* pDlg, IUiFeatur
 		this->SetItemData(nNo, (DWORD_PTR)pFontBaseProp);
 
 		if (pFontBaseProp == m_pParentFontProp->GetFontBaseProp())
+		{
+			m_nSelectItem = nNo;
 			this->SetItemState(nNo, LVIS_SELECTED, LVIS_SELECTED);
+		}
 
 		nNo++;
 	}
@@ -91,12 +94,15 @@ void CFontBaseNameList::InitFontBaseNameList(CModifyFontBaseDlg* pDlg, IUiFeatur
 
 void CFontBaseNameList::NewFontBase(CString strName)
 {
+	USES_CONVERSION;
 	if (strName.GetLength() <= 0 || m_pUiKernel == NULL || m_pSkinMgr == NULL)
 		return;
 
 	IPropertyFontBase* pNewFontBase = dynamic_cast<IPropertyFontBase*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_FONT_BASE));
 	if (pNewFontBase == NULL)
 		return;
+
+	pNewFontBase->SetObjectName(W2A(strName));
 
 	int nCtns = this->GetItemCount();
 	CString strNo(_T(""));
@@ -107,4 +113,23 @@ void CFontBaseNameList::NewFontBase(CString strName)
 	this->SetItemData(nCtns, (DWORD_PTR)pNewFontBase);
 	this->SetItemState(nCtns, LVIS_SELECTED, LVIS_SELECTED);
 	m_pOwnerDlg->UpdateCurrentFontBaseProp(pNewFontBase);
+}
+
+void CFontBaseNameList::DeleteCurrentFontBase()
+{
+	if (m_pSkinMgr == NULL || m_pOwnerDlg == NULL)
+		return;
+
+	if (m_nSelectItem <= 0)
+		return;
+
+	IPropertyFontBase* pFontBaseProp = (IPropertyFontBase*)(this->GetItemData(m_nSelectItem));
+	if (pFontBaseProp == NULL)
+		return;
+
+	m_pUiKernel->GetSkinManager()->BD_DeletePropetry(pFontBaseProp);
+	m_pOwnerDlg->UpdateCurrentFontBaseProp(NULL);
+
+	this->DeleteItem(m_nSelectItem);
+	m_nSelectItem = -1;
 }

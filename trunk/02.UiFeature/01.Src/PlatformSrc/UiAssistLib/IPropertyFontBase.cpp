@@ -13,6 +13,8 @@ IPropertyFontBase::IPropertyFontBase()
 	SetObjectType(PROP_TYPE_FONT_BASE_NAME);
 	SetObjectName("Ä¬ÈÏ×ÖÌå£ºËÎÌå£¬12");
 
+	m_bIsActiveProp = true;
+
 	m_FontProp.bIsPicText = false;
 	m_FontProp.FontColor = 0;
 
@@ -286,7 +288,7 @@ bool IPropertyFontBase::DrawToBoard(CDrawingBoard &DstDc, char *pszOutText, RECT
 	OutFct.Y = DstRct.top;
 	OutFct.Width = RECT_WIDTH(DstRct);
 	OutFct.Height = RECT_HEIGHT(DstRct);
-	int nLen = strlen(pszOutText);
-	DoGrap.DrawString(A2W(pszOutText), nLen, &TextFont, OutFct, &strFormat, &textBrush);
+	WCHAR *wpOutStr = A2W(pszOutText);
+	DoGrap.DrawString(wpOutStr, wcslen(wpOutStr), &TextFont, OutFct, &strFormat, &textBrush);
 	return true;
 }
