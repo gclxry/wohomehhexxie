@@ -89,6 +89,17 @@ void CTestMfcDlg::OnPaint()
 
 	DoGrap.FillRectangle(&BkSBrush, ToRctF);
 
+	TestDrawText();
+
+	::BitBlt(dc.m_hDC, 0, 0, RECT_WIDTH(ClientRct), RECT_HEIGHT(ClientRct), DstDc.GetSafeHdc(), 0, 0, SRCCOPY);
+}
+
+void CTestMfcDlg::TestDrawText()
+{
+	USES_CONVERSION;
+
+	Graphics DoGrap(DstDc.GetSafeHdc());
+
 	RectF OutFct;
 	OutFct.X = 30;
 	OutFct.Y = 30;
@@ -100,34 +111,83 @@ void CTestMfcDlg::OnPaint()
 	Pen framePen(&frameSBrush);
 	DoGrap.DrawRectangle(&framePen, OutFct);
 
+	FONT_PROP* pFont = m_FontPropBase.GetFontProp();
+	FONT_PROP m_FontProp = *pFont;
+
+//	m_strText = "ABCDEFGHIGKABCDEFGHIGKABCDEFGHIGKABCDEFGHIGKABCDEFGHIGKABCDEFGHIGKABCDEFGHIGKABCDEFGHIGK";
+//	m_FontProp.ShowMode = FSM_ONE_ROW_POINT;
+
 //////////////////////////////////////////////////////////////////////////
 
-	FONT_PROP* pFont = m_FontProp.GetFontProp();
-
-
-	Gdiplus::Font TextFont(DstDc.GetSafeHdc(), &(pFont->Font));
+	// 字体
+	Gdiplus::Font TextFont(DstDc.GetSafeHdc(), &(m_FontProp.Font));
+	// 文字颜色
+	SolidBrush textBrush(Color(MAX_ALPHA, GetRValue(m_FontProp.FontColor), GetGValue(m_FontProp.FontColor), GetBValue(m_FontProp.FontColor)));
 
 	Gdiplus::StringFormat strFormat;
-	// 水平对齐
-	strFormat.SetAlignment(StringAlignmentNear);
-	// 垂直对齐
-	strFormat.SetFormatFlags(StringFormatFlagsLineLimit);
-	// 单行？多行？
-
-	// 是否在末尾显示...
-
 	// 文字输出 & 变成下划线问题
 	strFormat.SetHotkeyPrefix(HotkeyPrefixNone);
+	// 文字显示效果：在文字显示范围内，最底下的一行如果只出现了上半部分，这一行将不会被显示
+	strFormat.SetFormatFlags(StringFormatFlagsLineLimit);
 
+	// 设置垂直对齐模式
+	if (m_FontProp.VAligning == FAL_RIGHT_BOTTOM)
+	{
+		// 垂直靠下
+		strFormat.SetLineAlignment(StringAlignmentFar);
+	}
+	else if (m_FontProp.VAligning == FAL_MIDDLE)
+	{
+		// 垂直居中
+		strFormat.SetLineAlignment(StringAlignmentCenter);
+	}
+	else
+	{
+		// 垂直靠上
+		strFormat.SetLineAlignment(StringAlignmentNear);
+	}
 
-	strFormat.SetLineAlignment(StringAlignmentCenter);
-	strFormat.SetAlignment(StringAlignmentCenter);
+	// 设置水平对齐
+	if (m_FontProp.HAligning == FAL_RIGHT_BOTTOM)
+	{
+		// 水平靠右
+		strFormat.SetAlignment(StringAlignmentFar);
+	}
+	else if (m_FontProp.HAligning == FAL_MIDDLE)
+	{
+		// 水平居中
+		strFormat.SetAlignment(StringAlignmentCenter);
+	}
+	else
+	{
+		// 水平靠左
+		strFormat.SetAlignment(StringAlignmentNear);
+	}
 
-	// 文字颜色
-	SolidBrush textBrush(Color(MAX_ALPHA, GetRValue(pFont->FontColor), GetGValue(pFont->FontColor), GetBValue(pFont->FontColor)));
+	// GDI+默认折行显示，末尾不带...
+	if (m_FontProp.ShowMode != FSM_MULTI_ROW)
+	{
+		// 不折行显示
+		strFormat.SetFormatFlags(StringFormatFlagsNoWrap);
+		// 不折行显示，默认末尾不带...
+		if (m_FontProp.ShowMode == FSM_ONE_ROW_POINT)
+		{
+			// 单行显示，超过显示范围显示...
+			strFormat.SetTrimming(StringTrimmingEllipsisCharacter);
+		}
+	}
+
+	if (m_FontPropBase.GetEffectState(FE_SHADOW))
+	{
+		// 阴影文字
+	}
+
+	if (m_FontPropBase.GetEffectState(FE_OBSCURE))
+	{
+		// 模糊文字
+	}
+
 	DoGrap.DrawString(A2W(m_strText.c_str()), m_strText.size(), &TextFont, OutFct, &strFormat, &textBrush);
-
-	::BitBlt(dc.m_hDC, 0, 0, RECT_WIDTH(ClientRct), RECT_HEIGHT(ClientRct), DstDc.GetSafeHdc(), 0, 0, SRCCOPY);
 }
 
 //当用户拖动最小化窗口时系统调用此函数取得光标

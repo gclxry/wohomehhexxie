@@ -40,6 +40,8 @@ enum FONT_EFFECT
 // 字体属性
 struct FONT_PROP
 {
+	// 是否为图片文字
+	bool bIsPicText;
 	// 字体信息
 	LOGFONTA Font;
 	// 字体颜色
@@ -76,7 +78,11 @@ public:
 	void SetEffect(FONT_EFFECT FontEffect, bool bSet);
 
 	// 绘制文字
-	bool DrawText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct);
+	bool DrawFontText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct);
+
+private:
+	// 绘制到指定内存DC上
+	bool DrawToBoard(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct);
 
 private:
 	FONT_PROP m_FontProp;

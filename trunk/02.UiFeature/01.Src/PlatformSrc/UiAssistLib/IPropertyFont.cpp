@@ -94,11 +94,11 @@ bool IPropertyFont::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pPa
 }
 
 // »æÖÆÎÄ×Ö
-bool IPropertyFont::DrawText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct)
+bool IPropertyFont::DrawFontText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct)
 {
 	IPropertyFontBase* pPropBase = dynamic_cast<IPropertyFontBase*>(this->GetRelevancyProp());
 	if (pPropBase == NULL)
 		return false;
 
-	return pPropBase->DrawText(DstDc, pszOutText, DstRct);
+	return pPropBase->DrawFontText(DstDc, pszOutText, DstRct);
 }

@@ -33,6 +33,7 @@ void CModifyFontBaseDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_SHADOW_EFFECT, m_EffectShadow);
 	DDX_Control(pDX, IDC_OBSCURE_EFFECT, m_EffectObscure);
 	DDX_Control(pDX, IDS_FONT_PROVIEW_STRTIC, m_FontProViewStatic);
+	DDX_Control(pDX, IDC_PICTURE_TEXT, m_PictureTextCheckBox);
 }
 
 
@@ -51,6 +52,7 @@ BEGIN_MESSAGE_MAP(CModifyFontBaseDlg, CDialog)
 	ON_BN_CLICKED(IDR_ZHEHANG_XIANSHI, &CModifyFontBaseDlg::OnBnClickedZhehangXianshi)
 	ON_BN_CLICKED(IDC_SHADOW_EFFECT, &CModifyFontBaseDlg::OnBnClickedShadowEffect)
 	ON_BN_CLICKED(IDC_OBSCURE_EFFECT, &CModifyFontBaseDlg::OnBnClickedObscureEffect)
+	ON_BN_CLICKED(IDC_PICTURE_TEXT, &CModifyFontBaseDlg::OnBnClickedPictureText)
 END_MESSAGE_MAP()
 
 
@@ -153,6 +155,8 @@ void CModifyFontBaseDlg::UpdateCurrentFontBaseProp(IPropertyFontBase* pCurFontBa
 
 		bSet = m_pCurFontBaseProp->GetEffectState(FE_OBSCURE);
 		m_EffectObscure.SetCheck(bSet ? 1 : 0);
+
+		m_PictureTextCheckBox.SetCheck(pFontProp->bIsPicText ? 1 : 0);
 	}
 	else
 	{
@@ -162,6 +166,7 @@ void CModifyFontBaseDlg::UpdateCurrentFontBaseProp(IPropertyFontBase* pCurFontBa
 		m_nXianshiMode = (int)FSM_ONE_ROW_NO_POINT;
 		m_EffectShadow.SetCheck(0);
 		m_EffectObscure.SetCheck(0);
+		m_PictureTextCheckBox.SetCheck(0);
 	}
 
 	this->UpdateData(FALSE);
@@ -215,7 +220,6 @@ void CModifyFontBaseDlg::OnBnClickedShadowEffect()
 		return;
 
 	int nCheck = m_EffectShadow.GetCheck();
-	FONT_PROP* pFontProp = m_pCurFontBaseProp->GetFontProp();
 	m_pCurFontBaseProp->SetEffect(FE_SHADOW, (nCheck == 1));
 	m_FontProViewStatic.RedrawView(m_pCurFontBaseProp);
 }
@@ -226,7 +230,6 @@ void CModifyFontBaseDlg::OnBnClickedObscureEffect()
 		return;
 
 	int nCheck = m_EffectShadow.GetCheck();
-	FONT_PROP* pFontProp = m_pCurFontBaseProp->GetFontProp();
 	m_pCurFontBaseProp->SetEffect(FE_OBSCURE, (nCheck == 1));
 	m_FontProViewStatic.RedrawView(m_pCurFontBaseProp);
 }
@@ -307,4 +310,15 @@ void CModifyFontBaseDlg::OnBnClickedSelectTextColor()
 		pFontProp->FontColor = ColorDlg.GetColor();
 		m_FontProViewStatic.RedrawView(m_pCurFontBaseProp);
 	}
+}
+
+void CModifyFontBaseDlg::OnBnClickedPictureText()
+{
+	if (m_pCurFontBaseProp == NULL || m_pCurFontBaseProp->GetFontProp() == NULL)
+		return;
+
+	int nCheck = m_PictureTextCheckBox.GetCheck();
+	FONT_PROP* pFontProp = m_pCurFontBaseProp->GetFontProp();
+	pFontProp->bIsPicText = (nCheck == 1);
+	m_FontProViewStatic.RedrawView(m_pCurFontBaseProp);
 }

@@ -6,15 +6,17 @@
 #include <atlconv.h>
 using namespace ATL;
 
+#pragma warning(disable:4244)
 
 IPropertyFontBase::IPropertyFontBase()
 {
 	SetObjectType(PROP_TYPE_FONT_BASE_NAME);
 	SetObjectName("默认字体：宋体，12");
 
+	m_FontProp.bIsPicText = false;
 	m_FontProp.FontColor = 0;
-	memset(&m_FontProp.Font, 0, sizeof(LOGFONTA));
 
+	memset(&m_FontProp.Font, 0, sizeof(LOGFONTA));
 	m_FontProp.Font.lfHeight = 12;
 	m_FontProp.Font.lfWidth = 0;
 	m_FontProp.Font.lfEscapement = 0;
@@ -197,50 +199,94 @@ void IPropertyFontBase::SetEffect(FONT_EFFECT FontEffect, bool bSet)
 }
 
 // 绘制文字
-bool IPropertyFontBase::DrawText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct)
+bool IPropertyFontBase::DrawFontText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct)
+{
+	return DrawToBoard(DstDc, pszOutText, DstRct);
+}
+
+// 绘制到指定内存DC上
+bool IPropertyFontBase::DrawToBoard(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct)
 {
 	USES_CONVERSION;
 	if (pszOutText == NULL || strlen(pszOutText) <= 0 || IS_RECT_EMPTY(DstRct) || DstDc.GetSafeHdc() == NULL)
 		return false;
 
-	if (m_FontProp.FontEffect == FE_NONE)
+	Graphics DoGrap(DstDc.GetSafeHdc());
+
+	// 字体
+	Gdiplus::Font TextFont(DstDc.GetSafeHdc(), &(m_FontProp.Font));
+	// 文字颜色
+	SolidBrush textBrush(Color(MAX_ALPHA, GetRValue(m_FontProp.FontColor), GetGValue(m_FontProp.FontColor), GetBValue(m_FontProp.FontColor)));
+
+	Gdiplus::StringFormat strFormat;
+	// 文字输出 & 变成下划线问题
+	strFormat.SetHotkeyPrefix(HotkeyPrefixNone);
+	// 文字显示效果：在文字显示范围内，最底下的一行如果只出现了上半部分，这一行将不会被显示
+	strFormat.SetFormatFlags(StringFormatFlagsLineLimit);
+
+	// 设置垂直对齐模式
+	if (m_FontProp.VAligning == FAL_RIGHT_BOTTOM)
 	{
-		//// 无特效
-		//Graphics DoGrap(DstDc.GetSafeHdc());
-
-		////Font TextFont(m_FontProp.Font);
-
-		//StringFormat stringFormat;
-		//// 水平对齐
-		//stringFormat.SetAlignment(StringAlignmentNear);
-		//// 垂直对齐
-		//stringFormat.SetFormatFlags(StringFormatFlagsLineLimit);
-		//// 单行？多行？
-		//// 是否在末尾显示...
-		//// 文字输出 & 变成下划线问题
-		//stringFormat.SetHotkeyPrefix(HotkeyPrefixNone);
-
-
-		//stringFormat.SetLineAlignment(StringAlignmentCenter);
-		//stringFormat.SetAlignment(StringAlignmentCenter);
-
-		//RectF OutFct;
-		//OutFct.X = DstRct.left;
-		//OutFct.Y = DstRct.top;
-		//OutFct.Width = RECT_WIDTH(DstRct);
-		//OutFct.Height = RECT_HEIGHT(DstRct);
-
-		//int nLength = strlen(pszOutText);
-
-		//m_FontProp.FontColor;
-		//// 文字颜色
-		//SolidBrush brushBlue(Color(GetRValue(m_FontProp.FontColor), GetGValue(m_FontProp.FontColor), GetBValue(m_FontProp.FontColor)));
-		//DoGrap.DrawString(A2W(pszOutText), nLength, &TextFont, OutFct, &stringFormat, &brushWhite);
+		// 垂直靠下
+		strFormat.SetLineAlignment(StringAlignmentFar);
+	}
+	else if (m_FontProp.VAligning == FAL_MIDDLE)
+	{
+		// 垂直居中
+		strFormat.SetLineAlignment(StringAlignmentCenter);
 	}
 	else
 	{
-		// 有特效
+		// 垂直靠上
+		strFormat.SetLineAlignment(StringAlignmentNear);
 	}
 
+	// 设置水平对齐
+	if (m_FontProp.HAligning == FAL_RIGHT_BOTTOM)
+	{
+		// 水平靠右
+		strFormat.SetAlignment(StringAlignmentFar);
+	}
+	else if (m_FontProp.HAligning == FAL_MIDDLE)
+	{
+		// 水平居中
+		strFormat.SetAlignment(StringAlignmentCenter);
+	}
+	else
+	{
+		// 水平靠左
+		strFormat.SetAlignment(StringAlignmentNear);
+	}
+
+	// GDI+默认折行显示，末尾不带...
+	if (m_FontProp.ShowMode != FSM_MULTI_ROW)
+	{
+		// 不折行显示
+		strFormat.SetFormatFlags(StringFormatFlagsNoWrap);
+		// 不折行显示，默认末尾不带...
+		if (m_FontProp.ShowMode == FSM_ONE_ROW_POINT)
+		{
+			// 单行显示，超过显示范围显示...
+			strFormat.SetTrimming(StringTrimmingEllipsisCharacter);
+		}
+	}
+
+	if (GetEffectState(FE_SHADOW))
+	{
+		// 阴影文字
+	}
+
+	if (GetEffectState(FE_OBSCURE))
+	{
+		// 模糊文字
+	}
+
+	RectF OutFct;
+	OutFct.X = DstRct.left;
+	OutFct.Y = DstRct.top;
+	OutFct.Width = RECT_WIDTH(DstRct);
+	OutFct.Height = RECT_HEIGHT(DstRct);
+	int nLen = strlen(pszOutText);
+	DoGrap.DrawString(A2W(pszOutText), nLen, &TextFont, OutFct, &strFormat, &textBrush);
 	return true;
 }
