@@ -55,6 +55,7 @@ public:
 	afx_msg void OnBnClickedZhehangXianshi();
 	afx_msg void OnBnClickedShadowEffect();
 	afx_msg void OnBnClickedObscureEffect();
+	afx_msg void OnBnClickedPictureText();
 	virtual BOOL OnInitDialog();
 
 protected:
@@ -64,4 +65,5 @@ protected:
 	CButton m_EffectShadow;
 	CButton m_EffectObscure;
 	CFontProViewStatic m_FontProViewStatic;
+	CButton m_PictureTextCheckBox;
 };

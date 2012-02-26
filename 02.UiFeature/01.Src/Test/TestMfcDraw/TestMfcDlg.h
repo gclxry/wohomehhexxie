@@ -23,9 +23,10 @@ public:
 private:
 	ULONG_PTR m_gdiplusToken;
 	CDrawingBoard DstDc;
-	IPropertyFontBase m_FontProp;
+	IPropertyFontBase m_FontPropBase;
 	string m_strText;
 
+	void TestDrawText();
 // й╣ож
 protected:
 	HICON m_hIcon;

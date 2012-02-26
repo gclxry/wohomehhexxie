@@ -33,23 +33,25 @@ END_MESSAGE_MAP()
 void CFontProViewStatic::RedrawView(IPropertyFontBase* pFontBaseProp)
 {
 	m_pFontBaseProp = pFontBaseProp;
+	this->RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 }
 
 void CFontProViewStatic::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 {
-//	if (lpDrawItemStruct == NULL)
-//		return;
-//
-////	if (m_pFontBaseProp == NULL)
-//	{
-//		CStatic::DrawItem(lpDrawItemStruct);
-//		return;
-//	}
-//
-//	CRect CtrlRct(0, 0, 0, 0);
-//	this->GetClientRect(&CtrlRct);
-//	m_MemDc.Create(CtrlRct.Width(), CtrlRct.Height(), 0, false, true)
-//
-//	m_pFontBaseProp->DrawText()
+	if (lpDrawItemStruct == NULL)
+		return;
 
+	if (m_pFontBaseProp == NULL)
+	{
+		CStatic::DrawItem(lpDrawItemStruct);
+		return;
+	}
+
+	CRect CtrlRct(0, 0, 0, 0);
+	this->GetClientRect(&CtrlRct);
+	m_MemDc.Create(CtrlRct.Width(), CtrlRct.Height(), 0, false, true);
+
+	m_pFontBaseProp->DrawFontText(m_MemDc, (char*)m_strText.c_str(), CtrlRct);
+
+	::BitBlt(lpDrawItemStruct->hDC, 0, 0, CtrlRct.Width(), CtrlRct.Height(), m_MemDc.GetSafeHdc(), 0, 0, SRCCOPY);
 }

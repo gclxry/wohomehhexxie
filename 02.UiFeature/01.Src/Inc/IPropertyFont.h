@@ -25,7 +25,7 @@ public:
 	IPropertyFontBase* GetFontBaseProp();
 
 	// »æÖÆÎÄ×Ö
-	bool DrawText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct);
+	bool DrawFontText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct);
 
 private:
 	void SetNeedRedraw();

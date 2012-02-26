@@ -5,8 +5,6 @@
 #include "..\..\Inc\UiFeatureDefs.h"
 #include <stdarg.h>
 
-#pragma warning(disable:4244)
-
 string PathHelper(char *pszFileName)
 {
 	string strPath = "";
