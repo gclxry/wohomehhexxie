@@ -8,6 +8,7 @@
 #include "FontBaseNameList.h"
 #include "FontProViewStatic.h"
 #include "afxwin.h"
+#include "afxcmn.h"
 
 
 // CModifyFontBaseDlg dialog

@@ -1711,7 +1711,51 @@ bool IPropertySkinManagerImpl::BD_DeletePropetry(IPropertyBase *pPropBase)
 		return DeleteImageBaseProp(pImgBaseProp);
 	}
 
+	if (pPropBase->GetObjectTypeId() == OTID_FONT_BASE)
+	{
+		IPropertyFontBase *pFontBaseProp = dynamic_cast<IPropertyFontBase*>(pPropBase);
+		if (pFontBaseProp == NULL)
+			return false;
+
+		return DeleteFontBaseProp(pFontBaseProp);
+	}
+
 	return false;
+}
+
+bool IPropertySkinManagerImpl::DeleteFontBaseProp(IPropertyFontBase *pFontBaseProp)
+{
+	if (pFontBaseProp == false)
+		return false;
+
+	if (m_pFontPropMap != NULL)
+	{
+		for (ONE_RESOURCE_PROP_MAP::iterator pFont = m_pFontPropMap->begin(); pFont != m_pFontPropMap->end(); pFont++)
+		{
+			IPropertyBase* pPropBase = pFont->second;
+			IPropertyFont* pFontProp = dynamic_cast<IPropertyFont*>(pPropBase);
+			if (pFontProp == NULL)
+				continue;
+
+			IPropertyFontBase *pComFontBase = dynamic_cast<IPropertyFontBase*>(pFontProp->GetRelevancyProp());
+			if (lstrcmpiA(pFontProp->GetRelevancyPropName(), pFontBaseProp->GetObjectName()) == 0 || pComFontBase == pFontBaseProp)
+			{
+				pFontProp->SetRelevancyProp(NULL);
+				pFontProp->SetRelevancyPropName(NULL);
+			}
+		}
+	}
+
+	if (m_pFontBasePropMap != NULL)
+	{
+		string strObjId(pFontBaseProp->GetObjectId());
+		ONE_RESOURCE_PROP_MAP::iterator pFindFontBase = m_pFontBasePropMap->find(strObjId);
+		if (pFindFontBase != m_pFontBasePropMap->end())
+			m_pFontBasePropMap->erase(pFindFontBase);
+	}
+
+	ReleaseBaseProp(dynamic_cast<IPropertyBase*>(pFontBaseProp));
+	return true;
 }
 
 bool IPropertySkinManagerImpl::DeleteImageBaseProp(IPropertyImageBase *pImgBaseProp)

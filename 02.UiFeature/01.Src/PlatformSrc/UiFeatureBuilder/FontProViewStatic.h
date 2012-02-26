@@ -17,13 +17,13 @@ private:
 public:
 	CFontProViewStatic();
 	virtual ~CFontProViewStatic();
-
 	string m_strText;
 
 protected:
 	DECLARE_MESSAGE_MAP()
+
 public:
-	virtual void DrawItem(LPDRAWITEMSTRUCT /*lpDrawItemStruct*/);
+	afx_msg void OnPaint();
 };
 
 

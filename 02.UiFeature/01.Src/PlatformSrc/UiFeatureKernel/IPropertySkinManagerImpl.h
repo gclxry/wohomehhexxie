@@ -137,6 +137,7 @@ private:
 	bool DeleteImageBaseProp(IPropertyImageBase *pImgBaseProp);
 	bool ModifyImageBaseProp(IPropertyImageBase *pImgBaseProp, char *pszNewPropName);
 
+	bool DeleteFontBaseProp(IPropertyFontBase *pFontBaseProp);
 private:
 	// Æ¤·ôÂ·¾¶
 	string m_strSkinPath;
