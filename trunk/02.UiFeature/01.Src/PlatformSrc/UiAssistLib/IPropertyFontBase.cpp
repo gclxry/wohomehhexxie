@@ -205,37 +205,37 @@ bool IPropertyFontBase::DrawText(CDrawingBoard &DstDc, char *pszOutText, RECT Ds
 
 	if (m_FontProp.FontEffect == FE_NONE)
 	{
-		// 无特效
-		Graphics DoGrap(DstDc.GetSafeHdc());
+		//// 无特效
+		//Graphics DoGrap(DstDc.GetSafeHdc());
 
-		//Font TextFont(m_FontProp.Font);
+		////Font TextFont(m_FontProp.Font);
 
-		StringFormat stringFormat;
-		// 水平对齐
-		stringFormat.SetAlignment(StringAlignmentNear);
-		// 垂直对齐
-		stringFormat.SetFormatFlags(StringFormatFlagsLineLimit);
-		// 单行？多行？
-		// 是否在末尾显示...
-		// 文字输出 & 变成下划线问题
-		stringFormat.SetHotkeyPrefix(HotkeyPrefixNone);
+		//StringFormat stringFormat;
+		//// 水平对齐
+		//stringFormat.SetAlignment(StringAlignmentNear);
+		//// 垂直对齐
+		//stringFormat.SetFormatFlags(StringFormatFlagsLineLimit);
+		//// 单行？多行？
+		//// 是否在末尾显示...
+		//// 文字输出 & 变成下划线问题
+		//stringFormat.SetHotkeyPrefix(HotkeyPrefixNone);
 
 
-		stringFormat.SetLineAlignment(StringAlignmentCenter);
-		stringFormat.SetAlignment(StringAlignmentCenter);
+		//stringFormat.SetLineAlignment(StringAlignmentCenter);
+		//stringFormat.SetAlignment(StringAlignmentCenter);
 
-		RectF OutFct;
-		OutFct.X = DstRct.left;
-		OutFct.Y = DstRct.top;
-		OutFct.Width = RECT_WIDTH(DstRct);
-		OutFct.Height = RECT_HEIGHT(DstRct);
+		//RectF OutFct;
+		//OutFct.X = DstRct.left;
+		//OutFct.Y = DstRct.top;
+		//OutFct.Width = RECT_WIDTH(DstRct);
+		//OutFct.Height = RECT_HEIGHT(DstRct);
 
-		int nLength = strlen(pszOutText);
+		//int nLength = strlen(pszOutText);
 
-		m_FontProp.FontColor;
-		// 文字颜色
-		SolidBrush solidBrush(Color::Blue);
-		DoGrap.DrawString(A2W(pszOutText), nLength, &TextFont, OutFct, &stringFormat, &brushWhite);
+		//m_FontProp.FontColor;
+		//// 文字颜色
+		//SolidBrush brushBlue(Color(GetRValue(m_FontProp.FontColor), GetGValue(m_FontProp.FontColor), GetBValue(m_FontProp.FontColor)));
+		//DoGrap.DrawString(A2W(pszOutText), nLength, &TextFont, OutFct, &stringFormat, &brushWhite);
 	}
 	else
 	{

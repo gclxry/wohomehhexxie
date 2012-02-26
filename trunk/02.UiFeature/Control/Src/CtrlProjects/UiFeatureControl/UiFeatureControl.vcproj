@@ -246,7 +246,7 @@
 				Name="01.DLL½Ó¿Ú"
 				>
 				<File
-					RelativePath="..\..\Inc\Control\IControlManager.h"
+					RelativePath="..\..\Inc\IControlManager.h"
 					>
 				</File>
 				<File

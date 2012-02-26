@@ -5,6 +5,8 @@
 #include "..\..\Inc\UiFeatureDefs.h"
 #include <stdarg.h>
 
+#pragma warning(disable:4244)
+
 string PathHelper(char *pszFileName)
 {
 	string strPath = "";
@@ -161,23 +163,7 @@ string PropTypeToString(OBJECT_TYPE_ID propType)
 	return strType;
 }
 
-void ResetObjectId(IFeatureObject *pSetObj, IPropertySkinManager* pSkinPropMgr, char *pszBase)
-{
-	if (pSetObj == NULL || pSkinPropMgr == NULL)
-		return;
-
-	char szId[1024];
-	memset(szId, 0, 1024);
-
-	if (pszBase != NULL)
-		sprintf_s(szId, 1023, "%s.%s%d", pszBase, pSetObj->GetObjectType(), pSkinPropMgr->GetNewId());
-	else
-		sprintf_s(szId, 1023, "%s%d", pSetObj->GetObjectType(), pSkinPropMgr->GetNewId());
-
-	pSetObj->SetObjectId(szId);
-}
-
-// 创建一个属性，如果这个属性在 group 中已经有了，就返回这个属性，如果没有
+// 创建一个属性，如果这个属性在 group 中已经有了，就返回这个属性，如果没有就新建一个属性
 IPropertyBase* CreateResourcePropetry(IFeatureObject *pOwnerObj, IPropertySkinManager* pSkinPropMgr, IPropertyGroup* pGroup, OBJECT_TYPE_ID propType, const char* pszPropName, const char *pszPropInfo)
 {
 	if (pSkinPropMgr == NULL || pGroup == NULL || pszPropName == NULL || propType <= OTID_NONE || propType >= OTID_LAST || strlen(pszPropName) <= 0)
@@ -201,7 +187,7 @@ IPropertyBase* CreateResourcePropetry(IFeatureObject *pOwnerObj, IPropertySkinMa
 				// 找到了已经设置的属性
 				pPropBase->SetObjectInfo(pszPropInfo);
 				pPropBase->SetOwnerObject(pOwnerObj);
-				// SetActivePropetry(true) 的属性才是有效的属性，会被现实，会被保存
+				// SetActivePropetry(true) 的属性才是有效的属性，会被显示，会被保存
 				pPropBase->SetActivePropetry(true);
 				return pPropBase;
 			}
@@ -218,13 +204,11 @@ IPropertyBase* CreateResourcePropetry(IFeatureObject *pOwnerObj, IPropertySkinMa
 	if (pPropBase == NULL)
 		return NULL;
 
-	// SetActivePropetry(true) 的属性才是有效的属性，会被现实，会被保存
+	// SetActivePropetry(true) 的属性才是有效的属性，会被显示，会被保存
 	pPropBase->SetActivePropetry(true);
 	pPropBase->SetOwnerObject(pOwnerObj);
 	pPropBase->SetObjectName(pszPropName);
 	pPropBase->SetObjectInfo(pszPropInfo);
-	// 设置ObjectID
-	ResetObjectId(dynamic_cast<IFeatureObject*>(pPropBase), pSkinPropMgr, (char*)pGroup->GetObjectId());
 
 	pGroup->AppendProperty(pPropBase);
 	return pPropBase;
@@ -240,18 +224,6 @@ bool FileExists(const char *pszFilePath)
 		return false;
 
 	return true;
-}
-
-void ResetWindowBaseInfo(IWindowBase *pWndBase)
-{
-	if (pWndBase == NULL)
-		return;
-
-	IPropertyGroup *pWnpPropGroup = pWndBase->PP_GetWindowPropetryGroup();
-	if (pWnpPropGroup != NULL)
-	{
-		pWndBase->SetObjectId(pWnpPropGroup->GetObjectId());
-	}
 }
 
 void AddIntAttrToNode(CUiXmlWriteNode* pNode, const char* pszAttrName, int nInt)

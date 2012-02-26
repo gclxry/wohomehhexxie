@@ -154,13 +154,6 @@ IWindowBase* IUiFeatureKernelImpl::BD_CreateWindowEmptyPropetry()
 
 	pPropWindow->SetWindowPropGroup(pWindowPropGroup);
 
-	// 设置objecid
-	char szId[MAX_PATH];
-	memset(szId, 0, MAX_PATH);
-	sprintf_s(szId, MAX_PATH-1, "%s%d", PROP_TYPE_WINDOW_NAME, m_pSkinMgr->GetNewId());
-	pWindowPropGroup->SetObjectId(szId);
-	pPropWindow->SetObjectId(szId);
-
 	IWindowBaseImpl *pWndBaseImpl = new IWindowBaseImpl;
 	if (pWndBaseImpl == NULL)
 		return NULL;
@@ -248,15 +241,12 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *p
 		strObjId = pParentCtrl->GetObjectId();
 	}
 
-	char szId[1024];
-	memset(szId, 0, 1024);
-	sprintf_s(szId, 1023, "%s.%s%d", strObjId.c_str(), pszNewCtrlTypeName, m_pSkinMgr->GetNewId());
-
 	// 创建新控件
-	ICtrlInterface* pCtrlIfc = m_pCtrlDllMgr->CreateCtrl(pszNewCtrlTypeName, szId);
+	ICtrlInterface* pCtrlIfc = m_pCtrlDllMgr->CreateCtrl(pszNewCtrlTypeName);
 	if (pCtrlIfc == NULL)
 		return NULL;
 
+	string strCtrlObjId = pCtrlIfc->GetObjectId();
 	IControlBase *pCtrlBase = dynamic_cast<IControlBase*>(pCtrlIfc);
 	if (pCtrlBase == NULL)
 	{
@@ -265,7 +255,7 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *p
 	}
 	pCtrlBase->SetPropertySkinManager(m_pSkinMgr);
 
-	IPropertyControl *pPropCtrl = dynamic_cast<IPropertyControl*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_CONTROL, szId));
+	IPropertyControl *pPropCtrl = dynamic_cast<IPropertyControl*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_CONTROL, (char *)strCtrlObjId.c_str()));
 	if (pPropCtrl == NULL)
 	{
 		m_pCtrlDllMgr->ReleaseCtrl(&pCtrlIfc);
@@ -273,7 +263,7 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *p
 	}
 
 	// 设置新控件的属性
-	IPropertyGroup *pCtrlPropGroup = dynamic_cast<IPropertyGroup*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_GROUP, szId));
+	IPropertyGroup *pCtrlPropGroup = dynamic_cast<IPropertyGroup*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_GROUP, (char *)strCtrlObjId.c_str()));
 	if (pCtrlPropGroup == NULL)
 	{
 		m_pSkinMgr->ReleaseBaseProp((IPropertyBase*)pPropCtrl);
@@ -315,10 +305,11 @@ IControlBase* IUiFeatureKernelImpl::CreateControlByPropetry(IWindowBase *pParent
 		return NULL;
 
 	// 创建新控件
-	ICtrlInterface* pCtrlIfc = m_pCtrlDllMgr->CreateCtrl((char*)pPropCtrl->GetControlType(), (char*)pPropCtrl->GetObjectId());
+	ICtrlInterface* pCtrlIfc = m_pCtrlDllMgr->CreateCtrl((char*)pPropCtrl->GetControlType());
 	if (pCtrlIfc == NULL)
 		return NULL;
 
+	pCtrlIfc->SetObjectId((char*)pPropCtrl->GetObjectId());
 	IControlBase *pCtrlBase = dynamic_cast<IControlBase*>(pCtrlIfc);
 	if (pCtrlBase == NULL)
 	{

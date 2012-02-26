@@ -47,7 +47,6 @@ IPropertySkinManagerImpl::IPropertySkinManagerImpl()
 	m_pCursorPropMap = NULL;
 	m_pColorPropMap = NULL;
 
-	m_nObjectIdInRes = 1;
 	m_AreaType = AT_CN;
 
 	m_pKernelZipFile = ((IUiFeatureKernelImpl*)IUiFeatureKernelImpl::GetInstance())->GetZipFile();
@@ -624,18 +623,6 @@ IPropertyWindow* IPropertySkinManagerImpl::PG_InitWindowSkin(const char *pszSkin
 	return pFindPropWnd;
 }
 
-void IPropertySkinManagerImpl::ResetBaseObjectId(int nObjectId)
-{
-	if (nObjectId >= m_nObjectIdInRes)
-		m_nObjectIdInRes = nObjectId + 1;
-}
-
-// 取得ID号
-int IPropertySkinManagerImpl::GetNewId()
-{
-	return m_nObjectIdInRes++;
-}
-
 // 设置显示的语言种类
 void IPropertySkinManagerImpl::SetArea(AREA_TYPE areaType)
 {
@@ -1023,13 +1010,11 @@ bool IPropertySkinManagerImpl::TranslateLayoutXml(ZIP_FILE *pLayoutXml)
 	if (pLayoutRoot != NULL)
 	{
 		char* psz_area = JabberXmlGetAttrValue(pLayoutRoot, "area");
-		char* psz_lastid = JabberXmlGetAttrValue(pLayoutRoot, "lastid");
-		if (psz_area == NULL || psz_lastid == NULL)
+		if (psz_area == NULL)
 			return false;
 
 		AREA_TYPE areaType = (AREA_TYPE)atoi(psz_area);
 		SetArea(areaType);
-		m_nObjectIdInRes = atoi(psz_lastid);
 
 		int nItemCount = pLayoutRoot->numChild;
 		for (int i = 0; i < nItemCount; i++)
@@ -1387,7 +1372,6 @@ bool IPropertySkinManagerImpl::SaveLayoutXml(const char *pszSavePath, string &st
 		return false;
 
 	AddIntAttrToNode(pRootNode, "area", m_AreaType);
-	AddIntAttrToNode(pRootNode, "lastid", m_nObjectIdInRes+1);
 
 	for (ONE_RESOURCE_PROP_MAP::iterator pWndPropItem = m_LayoutWindowMap.begin(); pWndPropItem != m_LayoutWindowMap.end(); pWndPropItem++)
 	{
