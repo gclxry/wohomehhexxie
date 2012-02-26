@@ -5,6 +5,7 @@
 #include "..\..\Inc\IPropertyFont.h"
 #include "..\..\Inc\IPropertyFontBase.h"
 #include "..\..\Inc\IUiFeatureKernel.h"
+#include "ModifyPropBaseNameDlg.h"
 
 class CModifyFontBaseDlg;
 class CFontBaseNameList : public CFeatureBaseList
@@ -16,12 +17,15 @@ public:
 	void InitFontBaseNameList(CModifyFontBaseDlg* pDlg, IUiFeatureKernel* pUiKernel, IPropertyFont* pParentCursorProp, ONE_RESOURCE_PROP_MAP* pFontBaseMap);
 	void NewFontBase(CString strName);
 	void DeleteCurrentFontBase();
+	void ModifyCurrentFontBase();
 
 protected:
 	virtual COLORREF OnGetCellBkColor(int nRow, int nColum);
 	virtual void OnSelectItem();
+	bool FindNameInFontBaseNameList(CString &strName);
 
 private:
+	CModifyPropBaseNameDlg m_ModifyFontDlg;
 	IPropertySkinManager* m_pSkinMgr;
 	IUiFeatureKernel* m_pUiKernel;
 	CModifyFontBaseDlg* m_pOwnerDlg;

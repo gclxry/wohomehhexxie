@@ -1866,7 +1866,62 @@ bool IPropertySkinManagerImpl::BD_ModifyPropetryName(IPropertyBase *pPropBase, c
 		return ModifyImageBaseProp(pImgBaseProp, pszNewPropName);
 	}
 
+	if (pPropBase->GetObjectTypeId() == OTID_FONT_BASE)
+	{
+		IPropertyFontBase *pFontBaseProp = dynamic_cast<IPropertyFontBase*>(pPropBase);
+		if (pFontBaseProp == NULL)
+			return false;
+
+		return ModifyFontBaseProp(pFontBaseProp, pszNewPropName);
+	}
+
 	return false;
+}
+
+bool IPropertySkinManagerImpl::ModifyFontBaseProp(IPropertyFontBase *pFontBaseProp, char *pszNewPropName)
+{
+	if (pFontBaseProp == NULL || pszNewPropName == NULL)
+		return false;
+
+	string strOldName = "";
+	if (m_pFontBasePropMap != NULL)
+	{
+		string strObjId(pFontBaseProp->GetObjectId());
+		ONE_RESOURCE_PROP_MAP::iterator pFindFontBase = m_pFontBasePropMap->find(strObjId);
+		if (pFindFontBase != m_pFontBasePropMap->end())
+		{
+			IPropertyBase* pFind = pFindFontBase->second;
+			if (pFind == NULL)
+				return false;
+
+			IPropertyFontBase *pFindFontBaseProp = dynamic_cast<IPropertyFontBase*>(pFind);
+			if (pFindFontBaseProp == NULL)
+				return false;
+
+			strOldName = pFindFontBaseProp->GetObjectName();
+			pFindFontBaseProp->SetObjectName(pszNewPropName);
+		}
+	}
+
+	if (m_pFontPropMap != NULL)
+	{
+		for (ONE_RESOURCE_PROP_MAP::iterator pFont = m_pFontPropMap->begin(); pFont != m_pFontPropMap->end(); pFont++)
+		{
+			IPropertyBase* pPropBase = pFont->second;
+			IPropertyFont* pFontProp = dynamic_cast<IPropertyFont*>(pPropBase);
+			if (pFontProp == NULL)
+				continue;
+
+			IPropertyFontBase *pComFontBase = dynamic_cast<IPropertyFontBase*>(pFontProp->GetRelevancyProp());
+			if (lstrcmpiA(pFontProp->GetRelevancyPropName(), strOldName.c_str()) == 0 || pComFontBase == pFontBaseProp)
+			{
+				pFontProp->SetRelevancyPropName(pszNewPropName);
+				pFontProp->SetRelevancyProp(pFontBaseProp);
+			}
+		}
+	}
+
+	return true;
 }
 
 bool IPropertySkinManagerImpl::ModifyImageBaseProp(IPropertyImageBase *pImgBaseProp, char *pszNewPropName)

@@ -113,6 +113,7 @@ void CFontBaseNameList::NewFontBase(CString strName)
 	this->SetItemData(nCtns, (DWORD_PTR)pNewFontBase);
 	this->SetItemState(nCtns, LVIS_SELECTED, LVIS_SELECTED);
 	m_pOwnerDlg->UpdateCurrentFontBaseProp(pNewFontBase);
+	m_nSelectItem = nCtns;
 }
 
 void CFontBaseNameList::DeleteCurrentFontBase()
@@ -132,4 +133,53 @@ void CFontBaseNameList::DeleteCurrentFontBase()
 
 	this->DeleteItem(m_nSelectItem);
 	m_nSelectItem = -1;
+}
+
+void CFontBaseNameList::ModifyCurrentFontBase()
+{
+	USES_CONVERSION;
+	if (m_pSkinMgr == NULL || m_pOwnerDlg == NULL)
+		return;
+
+	if (m_nSelectItem <= 0)
+	{
+		AfxMessageBox(_T("请选择需要改名的FONT属性！"), MB_OK | MB_ICONERROR);
+		return;
+	}
+
+	IPropertyFontBase* pFontBaseProp = (IPropertyFontBase*)(this->GetItemData(m_nSelectItem));
+	if (pFontBaseProp == NULL)
+		return;
+
+	m_ModifyFontDlg.SetWindowInfomation(_T("修改字体属性名称"));
+	if (m_ModifyFontDlg.DoModal() != IDOK)
+		return;
+
+	CString strName;
+	m_ModifyFontDlg.GetPropBaseName(strName);
+	if (strName.GetLength() <= 0 || FindNameInFontBaseNameList(strName))
+		return;
+
+	if (!m_pUiKernel->GetSkinManager()->BD_ModifyPropetryName(dynamic_cast<IPropertyBase*>(pFontBaseProp), W2A(strName)))
+		return;
+
+	this->SetItemText(m_nSelectItem, 1, strName);
+}
+
+bool CFontBaseNameList::FindNameInFontBaseNameList(CString &strName)
+{
+	for (int i = 1; i < this->GetItemCount(); i++)
+	{
+		CString strComName = this->GetItemText(i, 1);
+		if (strComName.CompareNoCase(strName) == 0)
+		{
+			this->SetItemState(i, LVIS_SELECTED, LVIS_SELECTED);
+			CString strInfo(_T(""));
+			strInfo.Format(_T("已经存在名为【%s】的字体属性！"), strComName);
+			AfxMessageBox(strInfo, MB_OK | MB_ICONERROR);
+			return true;
+		}
+	}
+
+	return false;
 }

@@ -134,8 +134,10 @@ void CModifyFontBaseDlg::OnBnClickedDeleteFontBase()
 
 void CModifyFontBaseDlg::OnBnClickedEditFontBase()
 {
-	if (m_pFontBaseMap == NULL || m_pCurFontBaseProp == NULL)
+	if (m_pFontBaseMap == NULL || m_pCurFontBaseProp == NULL || m_pUiKernel == NULL || m_pUiKernel->GetSkinManager() == NULL)
 		return;
+
+	m_FontBaseNameList.ModifyCurrentFontBase();
 }
 
 void CModifyFontBaseDlg::UpdateCurrentFontBaseProp(IPropertyFontBase* pCurFontBaseProp)
