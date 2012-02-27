@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 #include "IWindowBaseImpl.h"
+#include <shobjidl.h>
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IPropertyControl.h"
 #include "..\..\Inc\ICommonFun.h"
@@ -62,6 +63,8 @@ IWindowBaseImpl::IWindowBaseImpl()
 	m_pPropBase_WindowText = NULL;
 	// base-visible
 	m_pPropBase_Visible = NULL;
+	// base-在任务栏显示按钮
+	m_pPropBase_ShowInTaskbar = NULL;
 	// base-支持分层窗口
 	m_pPropBase_Layered = NULL;
 	// base-topmost
@@ -217,6 +220,10 @@ void IWindowBaseImpl::SetWindowStyleByProp()
 		SIZE wndSize = this->PP_GetWindowPropSize();
 		::SetWindowPos(this->GetSafeHandle(), (m_pPropBase_TopMost->GetValue() ? HWND_TOPMOST : HWND_NOTOPMOST), 0, 0, wndSize.cx, wndSize.cy, SWP_NOSIZE | SWP_NOMOVE);
 	}
+
+	// 设置窗口在任务栏是否显示按钮
+	if (m_pPropBase_ShowInTaskbar != NULL && !m_pPropBase_ShowInTaskbar->GetValue())
+		HideInTaskbar();
 
 	// 当窗口的属性发生变化时需要通知窗口进行刷新
 	RefreshWindowStyle();
@@ -1619,4 +1626,31 @@ void IWindowBaseImpl::ResetChildCtrlPostion(CHILD_CTRLS_VEC* pChildVec, bool bMe
 IUiFeatureKernel* IWindowBaseImpl::GetUiKernel()
 {
 	return m_pUiKernel;
+}
+
+// 在任务栏上隐藏主窗口按钮
+void IWindowBaseImpl::HideInTaskbar()
+{
+	HRESULT hr = NULL;
+	ITaskbarList* pTaskbarList = NULL;
+
+	hr = ::CoCreateInstance(CLSID_TaskbarList, NULL, CLSCTX_INPROC_SERVER, IID_ITaskbarList, (void**)&pTaskbarList);
+	if (hr == S_OK && pTaskbarList != NULL)
+	{
+		pTaskbarList->HrInit();
+
+		::SetWindowTextA(this->GetSafeHandle(), "");
+
+		DWORD dwLong = ::GetWindowLong(this->GetSafeHandle(), GWL_STYLE);
+		dwLong &= (~WS_CAPTION);
+		::SetWindowLong(this->GetSafeHandle(), GWL_STYLE, dwLong);
+
+		dwLong = ::GetWindowLong(this->GetSafeHandle(), GWL_EXSTYLE);
+		dwLong &= (~WS_EX_APPWINDOW);
+		dwLong |= WS_EX_TOOLWINDOW;
+		::SetWindowLong(this->GetSafeHandle(), GWL_EXSTYLE, dwLong);
+
+		pTaskbarList->DeleteTab(this->GetSafeHandle());
+		pTaskbarList->Release();
+	}
 }

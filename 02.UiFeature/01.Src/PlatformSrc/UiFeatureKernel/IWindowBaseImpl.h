@@ -141,6 +141,8 @@ private:
 	void SetWindowStyleByProp();
 	// 设置窗口支持透明模式
 	void SetWindowTransparence(bool bIsTrans);
+	// 在任务栏上隐藏主窗口按钮
+	void HideInTaskbar();
 
 protected:
 	// 是否为设计模式
@@ -246,6 +248,8 @@ private:
 	IPropertyString *m_pPropBase_WindowText;
 	// base-visible
 	IPropertyBool *m_pPropBase_Visible;
+	// base-在任务栏显示按钮
+	IPropertyBool *m_pPropBase_ShowInTaskbar;
 	// base-支持分层窗口
 	IPropertyBool *m_pPropBase_Layered;
 	// base-topmost
