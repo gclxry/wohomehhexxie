@@ -81,6 +81,7 @@ void IControlManagerImpl::SetRegControlMap(CONTROL_REG_MAP *pCtrlMap)
 
 	// 添加控件，步骤2：向Builder工具注册控件
 	SetRegControl(pCtrlMap, "基本控件组", CTRL_NAME_BASE_PANEL, "BasePanel.png", "对话框背景、面板控件");
+	SetRegControl(pCtrlMap, "基本控件组", CTRL_NAME_BASE_PANEL, "Button.png", "对话框背景、面板控件");
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
@@ -125,6 +126,5 @@ bool IControlManagerImpl::ReleaseCtrl(ICtrlInterface **ppCtrl)
 	DELETE_CONTROL(CTRL_NAME_BASE_PANEL, ICtrlPanel);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	SAFE_DELETE(*ppCtrl);
-	return true;
+	return false;
 }
