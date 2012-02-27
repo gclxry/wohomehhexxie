@@ -141,8 +141,6 @@ bool IPropertyString::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* p
 	{
 		AREA_TYPE areaType = pStringItem->first;
 		string strString = pStringItem->second;
-		if (strString.size() <= 0)
-			continue;
 
 		char pszDataName[MAX_PATH + 1], pszAreaName[MAX_PATH + 1];
 		memset(pszDataName, 0, MAX_PATH + 1);

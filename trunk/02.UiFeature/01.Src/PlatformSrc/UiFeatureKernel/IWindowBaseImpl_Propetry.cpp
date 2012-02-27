@@ -167,6 +167,11 @@ void IWindowBaseImpl::CreateWindowPropetry(bool bSetDftProp)
 	if (m_pPropBase_Visible == NULL)
 		return;
 
+	// base-在任务栏显示按钮
+	m_pPropBase_ShowInTaskbar = (IPropertyBool*)CreateWindowOnePropetry(m_pPropGroupBase, OTID_BOOL, "ShowInTaskbar", "是否在任务栏显示按钮");
+	if (m_pPropBase_ShowInTaskbar == NULL)
+		return;
+
 	// base-支持分层窗口
 	m_pPropBase_Layered = (IPropertyBool*)CreateWindowOnePropetry(m_pPropGroupBase, OTID_BOOL, "LayeredWindow", "是否支持分层窗口");
 	if (m_pPropBase_Layered == NULL)
@@ -287,6 +292,7 @@ void IWindowBaseImpl::CreateWindowPropetry(bool bSetDftProp)
 		// 设置默认值
 		m_pPropBase_WindowText->SetString("窗口标题");
 		m_pPropBase_Visible->SetValue(true);
+		m_pPropBase_ShowInTaskbar->SetValue(true);
 		m_pPropBase_Layered->SetValue(false);
 		m_pPropBase_TopMost->SetValue(false);
 		m_pPropSysBase_CanFullScreen->SetValue(false);
