@@ -115,9 +115,8 @@ bool CDrawingBoard::BitBltTo(CDrawingBoard& ToBoard, RECT ToRct, RECT FromRct)
 	if (!IS_SAFE_HANDLE(m_hDC) || !IS_SAFE_HANDLE(ToBoard.GetSafeHdc()))
 		return false;
 
-	::BitBlt(ToBoard.GetSafeHdc(), ToRct.left, ToRct.top, RECT_WIDTH(ToRct), RECT_HEIGHT(ToRct),
-		m_hDC, FromRct.left, FromRct.top, SRCCOPY);
-	return true;
+	return (::BitBlt(ToBoard.GetSafeHdc(), ToRct.left, ToRct.top, RECT_WIDTH(ToRct), RECT_HEIGHT(ToRct),
+		m_hDC, FromRct.left, FromRct.top, SRCCOPY) == TRUE);
 }
 
 // 绘制到另外一个内存DC上
@@ -128,4 +127,24 @@ bool CDrawingBoard::AlphaBlendTo(CDrawingBoard& ToBoard, RECT ToRct, RECT FromRc
 
 	return pUiKernel->GetUiEngine()->AlphaBlend(ToBoard, ToRct.left, ToRct.top, RECT_WIDTH(ToRct), RECT_HEIGHT(ToRct),
 		*this, FromRct.left, FromRct.top, RECT_WIDTH(FromRct), RECT_HEIGHT(FromRct), nAlpha);
+}
+
+// 从一个DC进行复制
+bool CDrawingBoard::BitBltFrom(HDC hDc, RECT FromRct, RECT ToRct)
+{
+	if (!IS_SAFE_HANDLE(hDc) || !IS_SAFE_HANDLE(m_hDC) || IS_RECT_EMPTY(ToRct) || IS_RECT_EMPTY(FromRct))
+		return false;
+
+	return (::BitBlt(m_hDC, ToRct.left, ToRct.top, RECT_WIDTH(ToRct), RECT_HEIGHT(ToRct),
+		hDc, FromRct.left, FromRct.top, SRCCOPY) == TRUE);
+}
+
+// 从一个DC进行复制
+bool CDrawingBoard::StretchBltFrom(HDC hDc, RECT FromRct, RECT ToRct)
+{
+	if (!IS_SAFE_HANDLE(hDc) || !IS_SAFE_HANDLE(m_hDC) || IS_RECT_EMPTY(ToRct) || IS_RECT_EMPTY(FromRct))
+		return false;
+
+	return (::StretchBlt(m_hDC, ToRct.left, ToRct.top, RECT_WIDTH(ToRct), RECT_HEIGHT(ToRct),
+		hDc, FromRct.left, FromRct.top, RECT_WIDTH(FromRct), RECT_HEIGHT(FromRct), SRCCOPY) == TRUE);
 }
