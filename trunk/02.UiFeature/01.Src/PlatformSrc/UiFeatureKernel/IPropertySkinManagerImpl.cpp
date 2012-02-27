@@ -2185,5 +2185,37 @@ bool IPropertySkinManagerImpl::AddCursorBasePropetry(bool bSysCursor, int nCurso
 // ¼ÓÔØ±¾µØÍ¼Æ¬
 IPropertyImageBase* IPropertySkinManagerImpl::LoadLocalImage(char *pszLocalImgPath)
 {
-	return NULL;
+	if (!FileExists(pszLocalImgPath))
+		return NULL;
+
+	IPropertyImageBase* pNewImgBase = (IPropertyImageBase*)this->CreateEmptyBaseProp(OTID_IMAGE_BASE);
+	if (pNewImgBase == NULL)
+		return NULL;
+	pNewImgBase->SetObjectName(pNewImgBase->GetObjectId());
+
+	CDrawingImage* pDrawingImg = pNewImgBase->GetDrawingImage();
+	if (pDrawingImg == NULL)
+	{
+		this->DeleteImageBaseProp(pNewImgBase);
+		return NULL;
+	}
+
+	pDrawingImg->CreateByFile((const char *)pszLocalImgPath);
+	if (pDrawingImg->GetSafeHdc() == NULL)
+	{
+		this->DeleteImageBaseProp(pNewImgBase);
+		return NULL;
+	}
+
+	IMAGE_BASE_PROP LocalImgProp;
+	IPropertyImageBase::InitPropImageBase(&LocalImgProp);
+	LocalImgProp.bIsZipFile = false;
+	LocalImgProp.strFileName = pszLocalImgPath;
+	LocalImgProp.ImgShowType = IST_ALL_LASHEN;
+	LocalImgProp.RectInImage.left = LocalImgProp.RectInImage.top = 0;
+	LocalImgProp.RectInImage.right = pDrawingImg->GetDcSize().cx;
+	LocalImgProp.RectInImage.bottom = pDrawingImg->GetDcSize().cy;
+	pNewImgBase->SetImageProp(&LocalImgProp);
+
+	return pNewImgBase;
 }

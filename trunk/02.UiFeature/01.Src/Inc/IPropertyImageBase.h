@@ -100,6 +100,8 @@ public:
 
 	SIZE GetImageSize();
 
+	// 得到图片的内存DC
+	CDrawingImage* GetDrawingImage();
 private:
 	bool DrawImage_AllLaShen(CDrawingBoard &DstDc, RECT DstRct);
 	bool DrawImage_PingPu(CDrawingBoard &DstDc, RECT DstRct);

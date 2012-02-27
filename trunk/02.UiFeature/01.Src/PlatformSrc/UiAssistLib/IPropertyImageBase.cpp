@@ -677,3 +677,9 @@ void IPropertyImageBase::InitGifImage()
 		m_nGifCurFrameTime = m_pGifImg->SetCurrentPlayFrame(m_pGifImg->GetFrameCounts() - 1);
 	}
 }
+
+// 得到图片的内存DC
+CDrawingImage* IPropertyImageBase::GetDrawingImage()
+{
+	return &m_DrawImg;
+}
