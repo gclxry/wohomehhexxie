@@ -115,6 +115,8 @@ void ICtrlAnimationExpandImpl::OnPaint(CDrawingBoard &DrawBoard)
 
 	m_BkImageDc.BitBltTo(DrawBoard, UpRct, ctrlRct);
 	m_BkImageDc.BitBltTo(DrawBoard, DownRct, m_NowExpandRct);
+
+	m_pPropUpSjImg->DrawImage(DrawBoard, ctrlRct);
 }
 
 // 设置需要操作的图片的位置
