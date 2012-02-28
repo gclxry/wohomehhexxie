@@ -164,6 +164,7 @@ bool IPropertyImageBase::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 	char* psz_jgg_top = JabberXmlGetAttrValue(pJgg, "top");
 	char* psz_jgg_right = JabberXmlGetAttrValue(pJgg, "right");
 	char* psz_jgg_bottom = JabberXmlGetAttrValue(pJgg, "bottom");
+	char* psz_drawmid = JabberXmlGetAttrValue(pJgg, "drawmid");
 
 	if (psz_left == NULL || psz_top == NULL || psz_right == NULL || psz_bottom == NULL || 
 		psz_jgg_left == NULL || psz_jgg_top == NULL || psz_jgg_right == NULL || psz_jgg_bottom == NULL)
@@ -184,6 +185,12 @@ bool IPropertyImageBase::ReadPropertyFromXmlNode(XmlNode* pXmlNode)
 	m_ImageProp.jggInfo.top = atoi(psz_jgg_top);
 	m_ImageProp.jggInfo.right = atoi(psz_jgg_right);
 	m_ImageProp.jggInfo.bottom = atoi(psz_jgg_bottom);
+
+	// 为了兼容以前测试皮肤
+	if (psz_drawmid == NULL)
+		m_ImageProp.bIsDrawJggMid = false;
+	else
+		m_ImageProp.bIsDrawJggMid = (psz_drawmid[0] == '1');
 
 	if (pAnimation != NULL)
 	{
@@ -254,6 +261,7 @@ bool IPropertyImageBase::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode
 	AddIntAttrToNode(pNode_jgg, "top", m_ImageProp.jggInfo.top);
 	AddIntAttrToNode(pNode_jgg, "right", m_ImageProp.jggInfo.right);
 	AddIntAttrToNode(pNode_jgg, "bottom", m_ImageProp.jggInfo.bottom);
+	pNode_jgg->AddAttribute("drawmid", (m_ImageProp.bIsDrawJggMid ? "1" : "0"));
 
 	CUiXmlWriteNode* pNode_animation = XmlStrObj.CreateNode(pPropNode, "animation");
 	if (pNode_animation == NULL)
