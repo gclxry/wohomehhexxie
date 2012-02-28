@@ -59,6 +59,9 @@ void CLocalImageList::OnSelectItem()
 		if (m_pImgBaseView != NULL)
 			m_pImgBaseView->SetCurrentShowImage(m_pImgBaseDlg, m_pUiKernel, m_pSelImgBase, m_pCurrentZipFile);
 	}
+
+	if (m_pImgBaseLise != NULL)
+		m_pImgBaseLise->RefreshImageBaseShow();
 }
 
 void CLocalImageList::Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *pImgBaseDlg, CImageBaseNameList* pImgBaseLise, CImageBaseView* pImgBaseView)
