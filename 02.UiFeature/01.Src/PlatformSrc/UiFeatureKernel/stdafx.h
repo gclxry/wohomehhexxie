@@ -15,8 +15,6 @@
 
 // TODO: reference additional headers your program requires here
 
-#pragma comment(lib, "../../lib/UiAssistLib.lib")
-
 #include <string>
 #include <map>
 #include <vector>

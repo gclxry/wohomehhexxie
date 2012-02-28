@@ -18,7 +18,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\..\Bin"
+			OutputDirectory="..\..\Bin\$(ConfigurationName)"
 			IntermediateDirectory="..\..\Temp\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			UseOfMFC="2"
@@ -69,9 +69,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="UiAssistLib.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\..\Lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="..\..\Pdb\$(ProjectName).pdb"
+				ProgramDatabaseFile="$(IntDir)\$(ProjectName).pdb"
 				SubSystem="2"
 				TargetMachine="1"
 			/>
@@ -95,11 +97,12 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="del /f &quot;..\..\Bin\UiFeatureBuilder.exe&quot;&#x0D;&#x0A;copy &quot;..\..\Bin\Debug\UiFeatureBuilder.exe&quot; &quot;..\..\Bin\UiFeatureBuilder.exe&quot;&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\..\Bin"
+			OutputDirectory="..\..\Bin\$(ConfigurationName)"
 			IntermediateDirectory="..\..\Temp\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			UseOfMFC="2"
@@ -152,7 +155,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="UiAssistLib.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\..\Lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="..\..\Pdb\$(ProjectName).pdb"
 				SubSystem="2"

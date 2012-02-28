@@ -20,8 +20,6 @@
 
 // TODO: reference additional headers your program requires here
 
-#pragma comment(lib, "../../lib/UiAssistLib.lib")
-
 #include <atlconv.h>
 #include <atlstr.h>
 #include <atltypes.h>
