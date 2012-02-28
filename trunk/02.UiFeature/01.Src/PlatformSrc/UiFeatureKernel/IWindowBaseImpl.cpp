@@ -1686,3 +1686,39 @@ void IWindowBaseImpl::HideInTaskbar()
 		pTaskbarList->Release();
 	}
 }
+
+// 设置普通定时器
+int IWindowBaseImpl::SetTimer(DWORD uElapse)
+{
+	if (m_pUiKernel == NULL || !::IsWindow(m_hWnd) || uElapse <= 0)
+		return -1;
+
+	int nId = m_pUiKernel->GetTimerId();
+	::SetTimer(m_hWnd, nId, uElapse, NULL);
+	return nId;
+}
+
+void IWindowBaseImpl::KillTimer(int nId)
+{
+	::KillTimer(m_hWnd, nId);
+}
+
+// 设置轻量级通用动画定时器
+void IWindowBaseImpl::SetAnimationTimer()
+{
+	if (m_pUiKernel == NULL || !::IsWindow(m_hWnd))
+		return;
+
+	::SetTimer(m_hWnd, UM_DFT_ANIMATION_TIMER, UM_DFT_ANIMATION_TIMER_100S, NULL);
+}
+
+// 设置高精度定时器
+int IWindowBaseImpl::SetHighAccuracyTimer(DWORD uElapse)
+{
+	return m_HighTimer.SetTimer(this, uElapse);
+}
+
+void IWindowBaseImpl::KillHighAccuracyTimer(int nId)
+{
+	m_HighTimer.KillTimer();
+}
