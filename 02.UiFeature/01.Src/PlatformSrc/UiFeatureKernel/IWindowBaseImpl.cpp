@@ -758,20 +758,25 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 			}
 		}
 
-		// 鼠标按下是，需要锁定一个控件进行鼠标移动处理
+		// 鼠标按下时，需要锁定一个控件进行鼠标移动处理
 		if (m_pMouseHoverCtrl != NULL)
 		{
 			RECT CtrlRct = m_pMouseHoverCtrl->GetWindowRect();
 			if (::PtInRect(&CtrlRct, pt))
 			{
+				POINT CtrlMousePt = pt;
+				RECT CtlRct = m_pMouseHoverCtrl->GetWindowRect();
+				CtrlMousePt.x -= CtlRct.left;
+				CtrlMousePt.y -= CtlRct.top;
+
 				if (m_pMouseHoverCtrl->IsMousehover())
 				{
-					m_pMouseHoverCtrl->OnMouseMove(pt);
+					m_pMouseHoverCtrl->OnMouseMove(CtrlMousePt);
 				}
 				else
 				{
 					m_pMouseHoverCtrl->SetMouseHover(true);
-					m_pMouseHoverCtrl->OnMouseEnter(pt);
+					m_pMouseHoverCtrl->OnMouseEnter(CtrlMousePt);
 				}
 			}
 			else
@@ -809,7 +814,11 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 		// 派发鼠标消息到控件
 		if (m_pMouseHoverCtrl == pControl)
 		{
-			m_pMouseHoverCtrl->OnMouseMove(pt);
+			POINT CtrlMousePt = pt;
+			RECT CtlRct = m_pMouseHoverCtrl->GetWindowRect();
+			CtrlMousePt.x -= CtlRct.left;
+			CtrlMousePt.y -= CtlRct.top;
+			m_pMouseHoverCtrl->OnMouseMove(CtrlMousePt);
 		}
 		else
 		{
@@ -821,7 +830,12 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 
 			m_pMouseHoverCtrl = pControl;
 			m_pMouseHoverCtrl->SetMouseHover(true);
-			m_pMouseHoverCtrl->OnMouseEnter(pt);
+
+			POINT CtrlMousePt = pt;
+			RECT CtlRct = m_pMouseHoverCtrl->GetWindowRect();
+			CtrlMousePt.x -= CtlRct.left;
+			CtrlMousePt.y -= CtlRct.top;
+			m_pMouseHoverCtrl->OnMouseEnter(CtrlMousePt);
 		}
 	}
 }
