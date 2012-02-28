@@ -902,7 +902,11 @@ void IWindowBaseImpl::OnLButtonDbClick(int nVirtKey, POINT pt)
 	if (pControl == NULL)
 		return;
 
-	pControl->OnLButtonDbClick(pt);
+	POINT CtrlMousePt = pt;
+	RECT CtlRct = pControl->GetWindowRect();
+	CtrlMousePt.x -= CtlRct.left;
+	CtrlMousePt.y -= CtlRct.top;
+	pControl->OnLButtonDbClick(CtrlMousePt);
 	SetFocusCtrl(pControl);
 }
 
@@ -917,7 +921,11 @@ void IWindowBaseImpl::OnRButtonDown(int nVirtKey, POINT pt)
 	if (pControl == NULL)
 		return;
 
-	pControl->OnRButtonDown(pt);
+	POINT CtrlMousePt = pt;
+	RECT CtlRct = pControl->GetWindowRect();
+	CtrlMousePt.x -= CtlRct.left;
+	CtrlMousePt.y -= CtlRct.top;
+	pControl->OnRButtonDown(CtrlMousePt);
 	SetFocusCtrl(pControl);
 }
 
@@ -969,7 +977,13 @@ void IWindowBaseImpl::OnLButtonDown(int nVirtKey, POINT pt)
 
 	// 派发鼠标消息到控件
 	m_pLButtonDownCtrl = pControl;
-	m_pLButtonDownCtrl->OnLButtonDown(pt);
+
+	POINT CtrlMousePt = pt;
+	RECT CtlRct = m_pLButtonDownCtrl->GetWindowRect();
+	CtrlMousePt.x -= CtlRct.left;
+	CtrlMousePt.y -= CtlRct.top;
+	m_pLButtonDownCtrl->OnLButtonDown(CtrlMousePt);
+
 	SetFocusCtrl(m_pLButtonDownCtrl);
 }
 
@@ -986,7 +1000,11 @@ void IWindowBaseImpl::OnLButtonUp(int nVirtKey, POINT pt)
 
 	if (m_pLButtonDownCtrl != NULL)
 	{
-		m_pLButtonDownCtrl->OnLButtonUp(pt);
+		POINT CtrlMousePt = pt;
+		RECT CtlRct = m_pLButtonDownCtrl->GetWindowRect();
+		CtrlMousePt.x -= CtlRct.left;
+		CtrlMousePt.y -= CtlRct.top;
+		m_pLButtonDownCtrl->OnLButtonUp(CtrlMousePt);
 		m_pLButtonDownCtrl = NULL;
 	}
 }

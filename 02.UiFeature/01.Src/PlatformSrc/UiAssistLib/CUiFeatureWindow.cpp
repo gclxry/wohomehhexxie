@@ -1,5 +1,6 @@
 
 #include "stdafx.h"
+#include <assert.h>
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\CUiFeatureWindow.h"
 #include "..\..\Inc\UiFeatureKernel.h"
