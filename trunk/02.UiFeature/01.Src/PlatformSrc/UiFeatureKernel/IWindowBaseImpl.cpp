@@ -293,10 +293,10 @@ bool IWindowBaseImpl::GetControlByName(CHILD_CTRLS_VEC *pCtrlVec, char *pszCtrlN
 	if (pCtrlVec == NULL || pszCtrlName == NULL || ppCtrl == NULL)
 		return NULL;
 
-	int nCtns = m_ChildCtrlsVec.size();
+	int nCtns = pCtrlVec->size();
 	for (int i = 0; i < nCtns; i++)
 	{
-		IControlBase *pCtrl = m_ChildCtrlsVec[i];
+		IControlBase *pCtrl = (*pCtrlVec)[i];
 		if (pCtrl != NULL)
 		{
 			string strCtrlName = pCtrl->GetObjectName();
