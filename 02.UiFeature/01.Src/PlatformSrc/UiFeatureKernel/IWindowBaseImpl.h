@@ -8,6 +8,7 @@
 #include "..\..\Inc\IPropertyInt.h"
 #include "..\..\Inc\IPropertyImage.h"
 #include "..\..\Inc\IPropertySkinManager.h"
+#include "..\..\Inc\CHighAccuracyTimer.h"
 #include "WindowResize.h"
 
 class IWindowBaseImpl : public IWindowBase
@@ -65,6 +66,14 @@ public:
 	// 取得子控件的属性列表：Layout.xml 中的布局
 	virtual PROP_CONTROL_VEC* GetChildPropControlVec();
 
+	// 设置轻量级通用动画定时器
+	virtual void SetAnimationTimer();
+	// 设置普通定时器
+	virtual int SetTimer(DWORD uElapse);
+	virtual void KillTimer(int nId);
+	// 设置高精度定时器
+	virtual int SetHighAccuracyTimer(DWORD uElapse);
+	virtual void KillHighAccuracyTimer(int nId);
 
 	void InvalidateRect(RECT *lpRect);
 	void UpdateWindow();
@@ -145,6 +154,8 @@ private:
 	void HideInTaskbar();
 
 protected:
+	// 高进度定时器
+	CHighAccuracyTimer m_HighTimer;
 	// 是否为设计模式
 	bool m_bIsDesignMode;
 	// 皮肤路径

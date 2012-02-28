@@ -8,7 +8,7 @@ IControlBase::IControlBase()
 {
 	SetObjectType("ControlBase");
 	m_pUiEngine = NULL;
-	m_pOwnerWindowBase = NULL;
+	m_pWindowBase = NULL;
 	m_pParentCtrl = NULL;
 	m_ChildCtrlsVec.clear();
 
@@ -96,12 +96,12 @@ void IControlBase::AppendChildContrl(IControlBase *pCtrl)
 
 void IControlBase::SetOwnerWindow(IWindowBase* pWindowsBase)
 {
-	m_pOwnerWindowBase = pWindowsBase;
+	m_pWindowBase = pWindowsBase;
 }
 
 IWindowBase* IControlBase::GetOwnerWindow()
 {
-	return m_pOwnerWindowBase;
+	return m_pWindowBase;
 }
 
 // 设置父控件
@@ -133,10 +133,10 @@ void IControlBase::RedrawControl(bool bDrawImmediately)
 {
 	m_bNeedRedraw = true;
 
-	if (bDrawImmediately && m_pOwnerWindowBase != NULL)
+	if (bDrawImmediately && m_pWindowBase != NULL)
 	{
 		RECT WndRct = this->GetWindowRect();
-		m_pOwnerWindowBase->RedrawWindow(&WndRct);
+		m_pWindowBase->RedrawWindow(&WndRct);
 	}
 }
 
@@ -204,8 +204,8 @@ CDrawingBoard* IControlBase::GetMemoryDc()
 // 取得父窗口的句柄
 HWND IControlBase::GetOwnerWindowHwnd()
 {
-	if (m_pOwnerWindowBase == NULL)
+	if (m_pWindowBase == NULL)
 		return NULL;
 
-	return m_pOwnerWindowBase->GetSafeHandle();
+	return m_pWindowBase->GetSafeHandle();
 }

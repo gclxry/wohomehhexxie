@@ -206,7 +206,7 @@ IPropertyBase* IControlBase::CreatePropetry(IPropertyGroup* pPropGroup, OBJECT_T
 // 从属性更新数据到成员变量
 void IControlBase::PropetyValueToMemberValue()
 {
-	if (m_pOwnerWindowBase == NULL)
+	if (m_pWindowBase == NULL)
 		return;
 
 	RECT ParentRct;
@@ -214,8 +214,8 @@ void IControlBase::PropetyValueToMemberValue()
 	FANGKUAI_8* pFk8 = NULL;
 	if (m_pParentCtrl == NULL)
 	{
-		ParentRct = m_pOwnerWindowBase->GetClientRect();
-		pFk8 = m_pOwnerWindowBase->BD_GetFangKuai8Rect();
+		ParentRct = m_pWindowBase->GetClientRect();
+		pFk8 = m_pWindowBase->BD_GetFangKuai8Rect();
 	}
 	else
 	{
@@ -226,7 +226,7 @@ void IControlBase::PropetyValueToMemberValue()
 	if (pFk8 == NULL)
 		return;
 
-	m_pOwnerWindowBase->SetControlWindowPostion(this, ParentRct);
+	m_pWindowBase->SetControlWindowPostion(this, ParentRct);
 
 	m_BD_FangKuai8.EntityRct.left = pFk8->EntityRct.left + (m_RectInWindow.left - ParentRct.left);
 	m_BD_FangKuai8.EntityRct.right = m_BD_FangKuai8.EntityRct.left + RECT_WIDTH(m_RectInWindow);
@@ -373,7 +373,7 @@ CONTROL_LAYOUT_INFO IControlBase::GetLayout()
 // 移动控件，会改变布局信息，参数：CtrlInWndRct控件位于窗口的位置
 void IControlBase::ResetWindowRect(RECT CtrlInWndRct)
 {
-	if (m_pOwnerWindowBase == NULL)
+	if (m_pWindowBase == NULL)
 		return;
 
 	if (m_pPropBase_Layout_Width == NULL || m_pPropBase_Layout_Height == NULL || m_pPropBase_Layout_Layout == NULL

@@ -58,6 +58,14 @@ public:
 	virtual void UpdateWindow() = 0;
 	// 立即重绘窗口
 	virtual void RedrawWindow(RECT *pDrawRect = NULL) = 0;
+	// 设置轻量级通用动画定时器
+	virtual void SetAnimationTimer() = 0;
+	// 设置普通定时器
+	virtual int SetTimer(DWORD uElapse) = 0;
+	virtual void KillTimer(int nId) = 0;
+	// 设置高精度定时器
+	virtual int SetHighAccuracyTimer(DWORD uElapse) = 0;
+	virtual void KillHighAccuracyTimer(int nId) = 0;
 
 public:
 ////// 以下函数非外部窗口调用 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

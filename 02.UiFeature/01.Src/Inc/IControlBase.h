@@ -352,7 +352,7 @@ protected:
 	// 整个控件的内存DC
 	CDrawingBoard m_CtrlMemDc;
 	// 附着的窗口
-	IWindowBase* m_pOwnerWindowBase;
+	IWindowBase* m_pWindowBase;
 	// 父控件
 	IControlBase* m_pParentCtrl;
 	// 绘图引擎

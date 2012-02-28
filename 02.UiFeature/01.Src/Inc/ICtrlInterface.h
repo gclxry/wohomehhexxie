@@ -3,6 +3,7 @@
 
 #pragma once
 #include "IControlBase.h"
+#include "IWindowBase.h"
 
 class ICtrlInterface : public IControlBase
 {
