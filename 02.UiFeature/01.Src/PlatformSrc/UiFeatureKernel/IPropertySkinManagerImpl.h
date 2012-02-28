@@ -134,7 +134,7 @@ private:
 	bool SaveLayoutXml(const char *pszSavePath, string &strXmlData);
 	bool SaveLayoutXml_ChildCtrl(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pNode, PROP_CONTROL_VEC* pWndChildVec);
 
-	void SaveToFile(char *pszFilePath, BYTE *pData, int nDataLen);
+	void SaveXmlConfigFile(char *pszFilePath, BYTE *pData, int nDataLen);
 
 	bool DeleteImageBaseProp(IPropertyImageBase *pImgBaseProp);
 	bool ModifyImageBaseProp(IPropertyImageBase *pImgBaseProp, char *pszNewPropName);

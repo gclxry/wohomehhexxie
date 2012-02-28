@@ -18,14 +18,15 @@ public:
 	bool OnCreateImageBaseProp(CString strName);
 	IPropertyImageBase * GetSelectImageBase(int &nSeleItem);
 	void Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *pImgBaseDlg, CLocalImageList* pLocalImg, IPropertyImage* pParentImgProp);
+	void RefreshImageBaseShow();
 
 public:
 	IPropertyImageBase* m_pSelectImgBaseProp;
 
 protected:
 	virtual COLORREF OnGetCellBkColor(int nRow, int nColum);
-	virtual void OnSelectItem();
 	void LoadImageBaseProp();
+	virtual void OnSelectItem();
 
 private:
 	IUiFeatureKernel* m_pUiKernel;

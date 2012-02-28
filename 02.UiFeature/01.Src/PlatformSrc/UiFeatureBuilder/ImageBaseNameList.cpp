@@ -177,6 +177,11 @@ void CImageBaseNameList::OnSelectItem()
 	if (m_pLocalImgList != NULL)
 		m_pLocalImgList->SetSelectImagePropBase(m_pSelectImgBaseProp);
 
+	RefreshImageBaseShow();
+}
+
+void CImageBaseNameList::RefreshImageBaseShow()
+{
 	IMAGE_BASE_PROP* pImgProp = m_pSelectImgBaseProp->GetImageProp();
 	if (pImgProp == NULL)
 	{

@@ -1394,7 +1394,7 @@ bool IPropertySkinManagerImpl::SaveLayoutXml(const char *pszSavePath, string &st
 	}
 	strXmlData = XmlStrObj.ToXmlString();
 
-	SaveToFile((char*)pszSavePath, (BYTE*)strXmlData.c_str(), strXmlData.size());
+	SaveXmlConfigFile((char*)pszSavePath, (BYTE*)strXmlData.c_str(), strXmlData.size());
 	return true;
 }
 
@@ -1425,8 +1425,10 @@ bool IPropertySkinManagerImpl::SaveLayoutXml_ChildCtrl(CUiXmlWrite &XmlStrObj, C
 	return true;
 }
 
-void IPropertySkinManagerImpl::SaveToFile(char *pszFilePath, BYTE *pData, int nDataLen)
+void IPropertySkinManagerImpl::SaveXmlConfigFile(char *pszFilePath, BYTE *pData, int nDataLen)
 {
+	// TBD 不再输出xml文件
+	return;
 	if (pszFilePath == NULL || pData == NULL || nDataLen <= 0)
 		return;
 
@@ -1473,7 +1475,7 @@ bool IPropertySkinManagerImpl::SaveResourceXml(const char *pszSavePath, string &
 	}
 	strXmlData = XmlStrObj.ToXmlString();
 
-	SaveToFile((char*)pszSavePath, (BYTE*)strXmlData.c_str(), strXmlData.size());
+	SaveXmlConfigFile((char*)pszSavePath, (BYTE*)strXmlData.c_str(), strXmlData.size());
 	return true;
 }
 
@@ -1513,7 +1515,7 @@ bool IPropertySkinManagerImpl::SaveControlsXml(const char *pszSavePath, string &
 	}
 	strXmlData = XmlStrObj.ToXmlString();
 
-	SaveToFile((char*)pszSavePath, (BYTE*)strXmlData.c_str(), strXmlData.size());
+	SaveXmlConfigFile((char*)pszSavePath, (BYTE*)strXmlData.c_str(), strXmlData.size());
 	return true;
 }
 
@@ -1583,7 +1585,7 @@ bool IPropertySkinManagerImpl::SaveWindowsXml(const char *pszSavePath, string &s
 	}
 	strXmlData = XmlStrObj.ToXmlString();
 
-	SaveToFile((char*)pszSavePath, (BYTE*)strXmlData.c_str(), strXmlData.size());
+	SaveXmlConfigFile((char*)pszSavePath, (BYTE*)strXmlData.c_str(), strXmlData.size());
 	return true;
 }
 
