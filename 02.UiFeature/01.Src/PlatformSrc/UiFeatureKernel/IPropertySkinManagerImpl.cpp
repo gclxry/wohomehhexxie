@@ -2219,3 +2219,26 @@ IPropertyImageBase* IPropertySkinManagerImpl::LoadLocalImage(char *pszLocalImgPa
 
 	return pNewImgBase;
 }
+
+// É¾³ýÒ»ÕÅÍ¼Æ¬
+bool IPropertySkinManagerImpl::BD_DeleteZipImage(ZIP_FILE* pZipImage)
+{
+	if (pZipImage == NULL)
+		return false;
+
+	ONE_RESOURCE_PROP_MAP* pImageBasePropMap = GetOneResourcePropMap(PROP_TYPE_IMAGE_BASE_NAME);
+	if (pImageBasePropMap == NULL)
+		return true;
+
+	for (ONE_RESOURCE_PROP_MAP::iterator pImageBaseItem = pImageBasePropMap->begin(); pImageBaseItem != pImageBasePropMap->end(); pImageBaseItem++)
+	{
+		IPropertyBase* pPropBase = pImageBaseItem->second;
+		IPropertyImageBase* pImageBaseProp = dynamic_cast<IPropertyImageBase*>(pPropBase);
+		if (pImageBaseProp == NULL)
+			continue;
+
+		if (pImageBaseProp->GetZipFile() == pZipImage)
+			pImageBaseProp->SetZipFile(NULL, false);
+	}
+	return true;
+}

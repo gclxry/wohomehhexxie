@@ -38,6 +38,7 @@ void IPropertyImageBase::InitPropImageBase(IMAGE_BASE_PROP *pImgBaseProp)
 	pImgBaseProp->ImgShowType = IST_PINGPU;
 	pImgBaseProp->ImgLoopType = ILT_LOOP_1;
 	pImgBaseProp->ImgBoFangType = IBFT_ZHENGXIANG;
+	pImgBaseProp->bIsDrawJggMid = false;
 	INIT_RECT(pImgBaseProp->RectInImage);
 	INIT_RECT(pImgBaseProp->jggInfo);
 }
@@ -54,8 +55,7 @@ void IPropertyImageBase::SetZipFile(ZIP_FILE *pZipFile, bool bCreateMemDc)
 
 	if (m_pZipFile == NULL)
 	{
-		m_ImageProp.bIsZipFile = true;
-		m_ImageProp.strFileName = "";
+		InitPropImageBase(&m_ImageProp);
 		return;
 	}
 
@@ -485,13 +485,18 @@ bool IPropertyImageBase::DrawImage_JggLaShen(CDrawingBoard &DstDc, RECT DstRct)
 			return false;
 	}
 
-	// 中间
-	return GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left + m_ImageProp.jggInfo.left, DstRct.top + m_ImageProp.jggInfo.top,
-		RECT_WIDTH(DstRct) - m_ImageProp.jggInfo.left - m_ImageProp.jggInfo.right,
-		RECT_HEIGHT(DstRct) - m_ImageProp.jggInfo.top - m_ImageProp.jggInfo.bottom,
-		m_DrawImg, m_ImageProp.RectInImage.left + m_ImageProp.jggInfo.left, m_ImageProp.RectInImage.top + m_ImageProp.jggInfo.top,
-		RECT_WIDTH(m_ImageProp.RectInImage) - m_ImageProp.jggInfo.left - m_ImageProp.jggInfo.right,
-		RECT_HEIGHT(m_ImageProp.RectInImage) - m_ImageProp.jggInfo.top - m_ImageProp.jggInfo.bottom);
+	if (m_ImageProp.bIsDrawJggMid)
+	{
+		// 中间
+		return GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left + m_ImageProp.jggInfo.left, DstRct.top + m_ImageProp.jggInfo.top,
+			RECT_WIDTH(DstRct) - m_ImageProp.jggInfo.left - m_ImageProp.jggInfo.right,
+			RECT_HEIGHT(DstRct) - m_ImageProp.jggInfo.top - m_ImageProp.jggInfo.bottom,
+			m_DrawImg, m_ImageProp.RectInImage.left + m_ImageProp.jggInfo.left, m_ImageProp.RectInImage.top + m_ImageProp.jggInfo.top,
+			RECT_WIDTH(m_ImageProp.RectInImage) - m_ImageProp.jggInfo.left - m_ImageProp.jggInfo.right,
+			RECT_HEIGHT(m_ImageProp.RectInImage) - m_ImageProp.jggInfo.top - m_ImageProp.jggInfo.bottom);
+	}
+
+	return true;
 }
 
 bool IPropertyImageBase::SetXuLieDrawInTimer()

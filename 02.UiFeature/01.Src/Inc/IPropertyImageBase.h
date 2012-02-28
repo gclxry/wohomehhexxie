@@ -61,6 +61,8 @@ struct IMAGE_BASE_PROP
 	RECT RectInImage;
 	// 九宫格数据
 	RECT jggInfo;
+	// 是否绘制九宫格中间区域
+	bool bIsDrawJggMid;
 };
 
 class CGifImage;

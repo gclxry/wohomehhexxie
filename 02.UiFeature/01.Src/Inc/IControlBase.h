@@ -120,8 +120,6 @@ struct CONTROL_REG
 	string	strCtrlGroupName;
 	// 控件名称
 	string	strCtrlName;
-	// 控件在Builder显示的图片或者icon文件，这些文件存放在ControlsRes目录下，为空则使用Builder中的默认的图标
-	string	strControlImg;
 	// 控件说明
 	string strControlInfo;
 };

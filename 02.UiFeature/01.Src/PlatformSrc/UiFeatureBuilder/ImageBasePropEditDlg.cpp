@@ -52,6 +52,7 @@ void CImageBasePropEditDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDE_JJG_BOTTOM, m_nJggBottom);
 	DDX_Control(pDX, IDC_XIANSHIBILI_COMBO, m_ShowBiLi_Combo);
 	DDX_Radio(pDX, IDR_PINGPU, m_nSelelShowImgType);
+	DDX_Control(pDX, IDC_DRAW_MID_AREA_CHECKBOX, m_Jgg_MidDrawCheckBox);
 }
 
 
@@ -86,6 +87,7 @@ BEGIN_MESSAGE_MAP(CImageBasePropEditDlg, CDialog)
 	ON_EN_KILLFOCUS(IDE_JJG_TOP, &CImageBasePropEditDlg::OnEnKillfocusJjgTop)
 	ON_EN_KILLFOCUS(IDE_JJG_BOTTOM, &CImageBasePropEditDlg::OnEnKillfocusJjgBottom)
 	ON_EN_KILLFOCUS(IDE_JJG_RIGHT, &CImageBasePropEditDlg::OnEnKillfocusJjgRight)
+	ON_BN_CLICKED(IDC_DRAW_MID_AREA_CHECKBOX, &CImageBasePropEditDlg::OnBnClickedDrawMidAreaCheckbox)
 END_MESSAGE_MAP()
 
 
@@ -196,6 +198,7 @@ BOOL CImageBasePropEditDlg::OnInitDialog()
 	m_ImageBaseList.Init(m_pUiKernel, this, &m_LocalImageList, m_pParentImgProp);
 	m_LocalImageList.Init(m_pUiKernel, this, &m_ImageBaseList, m_pImageView);
 
+	m_Jgg_MidDrawCheckBox.SetCheck(0);
 	m_ImageBaseList.SetFocus();
 	this->UpdateData(FALSE);
 	return TRUE;
@@ -404,6 +407,7 @@ void CImageBasePropEditDlg::SetJggEditCtrlStyle(bool bEnable)
 	if (!::IsWindow(m_hWnd))
 		return;
 
+	this->GetDlgItem(IDC_DRAW_MID_AREA_CHECKBOX)->EnableWindow(bEnable);
 	this->GetDlgItem(IDE_JJG_LEFT)->EnableWindow(bEnable);
 	this->GetDlgItem(IDS_JJG_LEFT)->EnableWindow(bEnable);
 	this->GetDlgItem(IDE_JJG_TOP)->EnableWindow(bEnable);
@@ -452,6 +456,7 @@ void CImageBasePropEditDlg::SetImageEditEnableStyle(bool bEnable)
 			{
 				this->GetDlgItem(IDR_PINGPU)->EnableWindow(FALSE);
 				this->GetDlgItem(IDR_JJG)->EnableWindow(FALSE);
+				this->GetDlgItem(IDC_DRAW_MID_AREA_CHECKBOX)->EnableWindow(FALSE);
 				this->GetDlgItem(IDE_JJG_LEFT)->EnableWindow(FALSE);
 				this->GetDlgItem(IDS_JJG_LEFT)->EnableWindow(FALSE);
 				this->GetDlgItem(IDE_JJG_TOP)->EnableWindow(FALSE);
@@ -777,12 +782,9 @@ void CImageBasePropEditDlg::RefreshJggPropToMember(IMAGE_BASE_PROP* pImgProp)
 	m_nJggTop = pImgProp->jggInfo.top;
 	m_nJggRight = pImgProp->jggInfo.right;
 	m_nJggBottom = pImgProp->jggInfo.bottom;
+	m_Jgg_MidDrawCheckBox.SetCheck(pImgProp->bIsDrawJggMid ? 1 : 0);
 
 	this->UpdateData(FALSE);
-}
-
-void CImageBasePropEditDlg::OnBnClickedDeleteLocalImage()
-{
 }
 
 void CImageBasePropEditDlg::OnBnClickedAnmationImageSetting()
@@ -810,4 +812,21 @@ void CImageBasePropEditDlg::SetSelectImageBaseFromListSelect(IPropertyImageBase*
 		else
 			m_pParentImgProp->SetRelevancyPropName(NULL);
 	}
+}
+
+void CImageBasePropEditDlg::OnBnClickedDrawMidAreaCheckbox()
+{
+	if (m_pParentImgProp == NULL)
+		return;
+
+	if (m_ImageBaseList.m_pSelectImgBaseProp == NULL || m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp() == NULL)
+		return;
+
+	IMAGE_BASE_PROP* pSelImgProp = m_ImageBaseList.m_pSelectImgBaseProp->GetImageProp();
+	pSelImgProp->bIsDrawJggMid = (m_Jgg_MidDrawCheckBox.GetCheck() == 1);
+}
+
+void CImageBasePropEditDlg::OnBnClickedDeleteLocalImage()
+{
+	m_LocalImageList.OnDeleteLocalImage();
 }

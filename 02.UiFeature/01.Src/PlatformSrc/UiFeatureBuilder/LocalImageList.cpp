@@ -10,7 +10,7 @@ CLocalImageList::CLocalImageList(void)
 	m_pImgBaseDlg = NULL;
 	m_pUiKernel = NULL;
 	m_pImgBaseLise = NULL;
-	m_ZipFileMap = NULL;
+	m_pZipFileMap = NULL;
 	m_pSelImgBase = NULL;
 	m_pImgBaseView = NULL;
 	m_pCurrentZipFile = NULL;
@@ -46,6 +46,16 @@ void CLocalImageList::OnSelectItem()
 		if (m_pSelImgBase != NULL)
 			m_pSelImgBase->SetZipFile(m_pCurrentZipFile, true);
 
+		if (m_pSelImgBase != NULL && m_pSelImgBase->GetImageProp() != NULL && m_pSelImgBase->GetDrawingImage() != NULL)
+		{
+			IMAGE_BASE_PROP* pImgProp = m_pSelImgBase->GetImageProp();
+			CDrawingImage* pDrawImg = m_pSelImgBase->GetDrawingImage();
+
+			INIT_RECT(pImgProp->RectInImage);
+			pImgProp->RectInImage.right = pDrawImg->GetDcSize().cx;
+			pImgProp->RectInImage.bottom = pDrawImg->GetDcSize().cy;
+		}
+
 		if (m_pImgBaseView != NULL)
 			m_pImgBaseView->SetCurrentShowImage(m_pImgBaseDlg, m_pUiKernel, m_pSelImgBase, m_pCurrentZipFile);
 	}
@@ -60,7 +70,7 @@ void CLocalImageList::Init(IUiFeatureKernel* pUiKernel, CImageBasePropEditDlg *p
 	m_pImgBaseDlg = pImgBaseDlg;
 	m_pUiKernel = pUiKernel;
 	m_pImgBaseLise = pImgBaseLise;
-	m_ZipFileMap = m_pUiKernel->GetSkinManager()->BD_GetUnZipFileMap();
+	m_pZipFileMap = m_pUiKernel->GetSkinManager()->BD_GetUnZipFileMap();
 
 	if (m_pSelImgBase == NULL)
 		RefreshList(NULL);
@@ -78,10 +88,10 @@ void CLocalImageList::RefreshList(ZIP_FILE* pSelZipFile)
 	this->InsertColumn(0, _T("#"), LVCFMT_LEFT, 50);
 	this->InsertColumn(1, _T("±¾µØÍ¼Æ¬Ãû³Æ"), LVCFMT_LEFT, 160);
 
-	if (m_ZipFileMap != NULL)
+	if (m_pZipFileMap != NULL)
 	{
 		int nNo = 0;
-		for (ZIP_FILE_MAP::iterator pZipItem = m_ZipFileMap->begin(); pZipItem != m_ZipFileMap->end(); pZipItem++, nNo++)
+		for (ZIP_FILE_MAP::iterator pZipItem = m_pZipFileMap->begin(); pZipItem != m_pZipFileMap->end(); pZipItem++, nNo++)
 		{
 			ZIP_FILE *pZipFile = pZipItem->second;
 			if (pZipFile == NULL)
@@ -106,7 +116,7 @@ void CLocalImageList::RefreshList(ZIP_FILE* pSelZipFile)
 bool CLocalImageList::OnLoadLocalImage(CString strFilePath, CString strFileName)
 {
 	USES_CONVERSION;
-	if (m_pUiKernel == NULL || strFileName.GetLength() <= 0 || strFilePath.GetLength() <= 0 || m_ZipFileMap == NULL)
+	if (m_pUiKernel == NULL || strFileName.GetLength() <= 0 || strFilePath.GetLength() <= 0 || m_pZipFileMap == NULL)
 		return false;
 
 	WIN32_FILE_ATTRIBUTE_DATA FileAttr;
@@ -156,7 +166,7 @@ bool CLocalImageList::OnLoadLocalImage(CString strFilePath, CString strFileName)
 		return false;
 	}
 
-	m_ZipFileMap->insert(pair<string, ZIP_FILE*>(pFileItem->strFileName, pFileItem));
+	m_pZipFileMap->insert(pair<string, ZIP_FILE*>(pFileItem->strFileName, pFileItem));
 
 	int nNo = this->GetItemCount();
 	CString strNo(_T(""));
@@ -188,4 +198,37 @@ void CLocalImageList::SetSelectImagePropBase(IPropertyImageBase* pImgBase)
 			break;
 		}
 	}
+}
+
+bool CLocalImageList::OnDeleteLocalImage()
+{
+	if (m_nSelectItem < 0 || m_pUiKernel == NULL || m_pZipFileMap == NULL)
+		return false;
+
+	ZIP_FILE *pZipFile = (ZIP_FILE*)this->GetItemData(m_nSelectItem);
+	if (pZipFile == NULL)
+		return false;
+
+	if (!m_pUiKernel->BD_DeleteZipImage(pZipFile))
+	{
+		AfxMessageBox(_T("É¾³ýÍ¼Æ¬·¢Éú´íÎó£¡"), MB_OK | MB_ICONERROR);
+		return false;
+	}
+
+	for (ZIP_FILE_MAP::iterator pZipItem = m_pZipFileMap->begin(); pZipItem != m_pZipFileMap->end(); pZipItem++)
+	{
+		ZIP_FILE* pZip = pZipItem->second;
+		if (pZip == pZipFile)
+		{
+			SAFE_DELETE_LIST(pZip->pFileData);
+			SAFE_DELETE(pZip);
+			m_pZipFileMap->erase(pZipItem);
+			break;
+		}
+	}
+
+	this->DeleteItem(m_nSelectItem);
+	m_nSelectItem = -1;
+	OnSelectItem();
+	return true;
 }

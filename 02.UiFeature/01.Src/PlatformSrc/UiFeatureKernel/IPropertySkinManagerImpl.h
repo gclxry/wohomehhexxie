@@ -40,6 +40,8 @@ public:
 	// 修改属性名称
 	virtual bool BD_ModifyPropetryName(IPropertyBase *pPropBase, char *pszNewPropName);
 	virtual ZIP_FILE_MAP* BD_GetUnZipFileMap();
+	// 删除一张图片
+	virtual bool BD_DeleteZipImage(ZIP_FILE* pZipImage);
 
 	// 初始化鼠标手势属性
 	virtual bool InitCursorBasePropetry();
