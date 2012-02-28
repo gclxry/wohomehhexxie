@@ -123,3 +123,14 @@ bool IPropertyImage::GetActivePropetry()
 {
 	return m_bIsActiveProp;
 }
+
+SIZE IPropertyImage::GetImageSize()
+{
+	SIZE sizeImg;
+	sizeImg.cx = sizeImg.cy = 0;
+
+	if (GetImageBaseProp() != NULL)
+		sizeImg = GetImageBaseProp()->GetImageSize();
+
+	return sizeImg;
+}
