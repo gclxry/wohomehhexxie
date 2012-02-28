@@ -32,6 +32,7 @@ public:
 	int m_nJggRight;
 	int m_nJggBottom;
 	int m_nSelelShowImgType;
+	CButton m_Jgg_MidDrawCheckBox;
 
 protected:
 	enum { IDD = IDD_IMAGE_EDIT_DLG };
@@ -95,4 +96,5 @@ public:
 	afx_msg void OnEnKillfocusJjgTop();
 	afx_msg void OnEnKillfocusJjgBottom();
 	afx_msg void OnEnKillfocusJjgRight();
+	afx_msg void OnBnClickedDrawMidAreaCheckbox();
 };

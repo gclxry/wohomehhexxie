@@ -444,3 +444,14 @@ int IUiFeatureKernelImpl::GetTimerId()
 {
 	return m_nTimerId++;
 }
+
+// É¾³ýÒ»ÕÅÍ¼Æ¬
+bool IUiFeatureKernelImpl::BD_DeleteZipImage(ZIP_FILE* pZipImage)
+{
+	if (pZipImage == NULL || m_pSkinMgr == NULL)
+		return false;
+
+	m_pSkinMgr->BD_DeleteZipImage(pZipImage);
+	m_KernelZipFile.RemoveFile(pZipImage);
+	return true;
+}

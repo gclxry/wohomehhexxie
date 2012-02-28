@@ -45,6 +45,8 @@ public:
 	virtual bool BD_DeleteWindow(IWindowBase *pWndBase);
 	// 删除一个control
 	virtual bool BD_DeleteControl(IControlBase *pCtrlBase);
+	// 删除一张图片
+	virtual bool BD_DeleteZipImage(ZIP_FILE* pZipImage);
 
 //////////////////////////////////////////////////////////////////////////
 	// 一个对话框从一个皮肤包里使用指定的对话框皮肤资源初始化自己

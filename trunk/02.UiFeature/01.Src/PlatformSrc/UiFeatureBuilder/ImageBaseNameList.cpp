@@ -195,6 +195,7 @@ void CImageBaseNameList::OnSelectItem()
 		m_pImgBaseDlg->m_nJggRight = 0;
 		m_pImgBaseDlg->m_nJggBottom = 0;
 		m_pImgBaseDlg->m_nSelelShowImgType = 0;
+		m_pImgBaseDlg->m_Jgg_MidDrawCheckBox.SetCheck(0);
 	}
 	else
 	{
@@ -207,6 +208,7 @@ void CImageBaseNameList::OnSelectItem()
 		m_pImgBaseDlg->m_nJggRight = pImgProp->jggInfo.right;
 		m_pImgBaseDlg->m_nJggBottom = pImgProp->jggInfo.bottom;
 		m_pImgBaseDlg->m_nSelelShowImgType = pImgProp->ImgShowType;
+		m_pImgBaseDlg->m_Jgg_MidDrawCheckBox.SetCheck(pImgProp->bIsDrawJggMid ? 1 : 0);
 	}
 
 	m_pImgBaseDlg->UpdateData(FALSE);
