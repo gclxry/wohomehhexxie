@@ -21,7 +21,7 @@
 	<imagebase>
 		<item objid="4-01" name="V5.Default.Menu.Bk.png_001" imageinzip="V5.Default.Menu.Bk.png" showtype="0">
 			<rectinimage left="0" top="10" right="100" bottom="200"/>
-			<jgg left="3" top="2" right="4" bottom="1"/>
+			<jgg left="3" top="2" right="4" bottom="1" drawmid="1"/>
 			<animation playtype="0" looptype="0" bofangtype="0"/>
 		</item>
 	</imagebase>
