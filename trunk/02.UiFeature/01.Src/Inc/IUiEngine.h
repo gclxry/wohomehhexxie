@@ -1,6 +1,6 @@
 
 #pragma once
-#include "..\..\Inc\CDrawingBoard.h"
+#include "CDrawingBoard.h"
 
 class IUiEngine
 {
