@@ -733,6 +733,20 @@ void IWindowBaseImpl::ResizeInLayeredWindow(RECT NewWndRect)
 	RedrawWindow(&NewWndRect);
 }
 
+// 从相对窗口的鼠标相对坐标得到相对控件的鼠标坐标
+POINT IWindowBaseImpl::GetCtrlMouseOffset(POINT WndPt, IControlBase* pCtrl)
+{
+	if (pCtrl == NULL)
+		return WndPt;
+
+	POINT CtrlMousePt = WndPt;
+	RECT CtlRct = pCtrl->GetWindowRect();
+	CtrlMousePt.x -= CtlRct.left;
+	CtrlMousePt.y -= CtlRct.top;
+
+	return CtrlMousePt;
+}
+
 void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 {
 	if (!IsInit())
@@ -753,7 +767,7 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 			// 如果允许在控件内部进行自由拖动
 			if (m_pLButtonDownCtrl->GetDragInControl())
 			{
-				m_pLButtonDownCtrl->OnMouseDragInCtrl(pt);
+				m_pLButtonDownCtrl->OnMouseDragInCtrl(GetCtrlMouseOffset(pt, m_pLButtonDownCtrl));
 				return;
 			}
 		}
@@ -764,19 +778,14 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 			RECT CtrlRct = m_pMouseHoverCtrl->GetWindowRect();
 			if (::PtInRect(&CtrlRct, pt))
 			{
-				POINT CtrlMousePt = pt;
-				RECT CtlRct = m_pMouseHoverCtrl->GetWindowRect();
-				CtrlMousePt.x -= CtlRct.left;
-				CtrlMousePt.y -= CtlRct.top;
-
 				if (m_pMouseHoverCtrl->IsMousehover())
 				{
-					m_pMouseHoverCtrl->OnMouseMove(CtrlMousePt);
+					m_pMouseHoverCtrl->OnMouseMove(GetCtrlMouseOffset(pt, m_pMouseHoverCtrl));
 				}
 				else
 				{
 					m_pMouseHoverCtrl->SetMouseHover(true);
-					m_pMouseHoverCtrl->OnMouseEnter(CtrlMousePt);
+					m_pMouseHoverCtrl->OnMouseEnter(GetCtrlMouseOffset(pt, m_pMouseHoverCtrl));
 				}
 			}
 			else
@@ -814,11 +823,7 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 		// 派发鼠标消息到控件
 		if (m_pMouseHoverCtrl == pControl)
 		{
-			POINT CtrlMousePt = pt;
-			RECT CtlRct = m_pMouseHoverCtrl->GetWindowRect();
-			CtrlMousePt.x -= CtlRct.left;
-			CtrlMousePt.y -= CtlRct.top;
-			m_pMouseHoverCtrl->OnMouseMove(CtrlMousePt);
+			m_pMouseHoverCtrl->OnMouseMove(GetCtrlMouseOffset(pt, m_pMouseHoverCtrl));
 		}
 		else
 		{
@@ -830,12 +835,7 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 
 			m_pMouseHoverCtrl = pControl;
 			m_pMouseHoverCtrl->SetMouseHover(true);
-
-			POINT CtrlMousePt = pt;
-			RECT CtlRct = m_pMouseHoverCtrl->GetWindowRect();
-			CtrlMousePt.x -= CtlRct.left;
-			CtrlMousePt.y -= CtlRct.top;
-			m_pMouseHoverCtrl->OnMouseEnter(CtrlMousePt);
+			m_pMouseHoverCtrl->OnMouseEnter(GetCtrlMouseOffset(pt, m_pMouseHoverCtrl));
 		}
 	}
 }
@@ -902,11 +902,7 @@ void IWindowBaseImpl::OnLButtonDbClick(int nVirtKey, POINT pt)
 	if (pControl == NULL)
 		return;
 
-	POINT CtrlMousePt = pt;
-	RECT CtlRct = pControl->GetWindowRect();
-	CtrlMousePt.x -= CtlRct.left;
-	CtrlMousePt.y -= CtlRct.top;
-	pControl->OnLButtonDbClick(CtrlMousePt);
+	pControl->OnLButtonDbClick(GetCtrlMouseOffset(pt, pControl));
 	SetFocusCtrl(pControl);
 }
 
@@ -921,11 +917,7 @@ void IWindowBaseImpl::OnRButtonDown(int nVirtKey, POINT pt)
 	if (pControl == NULL)
 		return;
 
-	POINT CtrlMousePt = pt;
-	RECT CtlRct = pControl->GetWindowRect();
-	CtrlMousePt.x -= CtlRct.left;
-	CtrlMousePt.y -= CtlRct.top;
-	pControl->OnRButtonDown(CtrlMousePt);
+	pControl->OnRButtonDown(GetCtrlMouseOffset(pt, pControl));
 	SetFocusCtrl(pControl);
 }
 
@@ -977,12 +969,7 @@ void IWindowBaseImpl::OnLButtonDown(int nVirtKey, POINT pt)
 
 	// 派发鼠标消息到控件
 	m_pLButtonDownCtrl = pControl;
-
-	POINT CtrlMousePt = pt;
-	RECT CtlRct = m_pLButtonDownCtrl->GetWindowRect();
-	CtrlMousePt.x -= CtlRct.left;
-	CtrlMousePt.y -= CtlRct.top;
-	m_pLButtonDownCtrl->OnLButtonDown(CtrlMousePt);
+	m_pLButtonDownCtrl->OnLButtonDown(GetCtrlMouseOffset(pt, m_pLButtonDownCtrl));
 
 	SetFocusCtrl(m_pLButtonDownCtrl);
 }
@@ -1000,11 +987,7 @@ void IWindowBaseImpl::OnLButtonUp(int nVirtKey, POINT pt)
 
 	if (m_pLButtonDownCtrl != NULL)
 	{
-		POINT CtrlMousePt = pt;
-		RECT CtlRct = m_pLButtonDownCtrl->GetWindowRect();
-		CtrlMousePt.x -= CtlRct.left;
-		CtrlMousePt.y -= CtlRct.top;
-		m_pLButtonDownCtrl->OnLButtonUp(CtrlMousePt);
+		m_pLButtonDownCtrl->OnLButtonUp(GetCtrlMouseOffset(pt, m_pLButtonDownCtrl));
 		m_pLButtonDownCtrl = NULL;
 	}
 }
