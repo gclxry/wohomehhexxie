@@ -131,6 +131,8 @@ private:
 	void BD_NewFrameImageBase(IPropertyImageBase *pImgBase, string strImgPath);
 	bool BD_CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt, IControlBase** ppControl);
 
+	// 从相对窗口的鼠标相对坐标得到相对控件的鼠标坐标
+	POINT GetCtrlMouseOffset(POINT WndPt, IControlBase* pCtrl);
 private:
 	// 循环遍历每个控件的绘制
 	void DrawControl();
