@@ -112,10 +112,14 @@ SIZE IPropertyImageBase::GetImageSize()
 	if (m_ImageProp.ImgPlayType == IPT_GIF)
 	{
 		if (m_pGifImg != NULL)
+		{
+			InitGifImage();
 			sizImg = m_pGifImg->GetImageSize();
+		}
 	}
 	else
 	{
+		InitStaticImage();
 		sizImg = m_DrawImg.GetDcSize();
 	}
 	return sizImg;
@@ -273,6 +277,36 @@ bool IPropertyImageBase::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode
 	return true;
 }
 
+bool IPropertyImageBase::InitStaticImage()
+{
+	if (!IS_SAFE_HANDLE(m_DrawImg.GetSafeHdc()))
+	{
+		// ÆÕÍ¨Í¼Æ¬
+		if (m_pZipFile == NULL)
+		{
+			if (m_ImageProp.bIsZipFile)
+			{
+				BYTE *pBuffer = NULL;
+				int nLen = 0;
+				if (GetUiKernel() == NULL || !GetUiKernel()->FindUnZipFile(m_ImageProp.strFileName.c_str(), &pBuffer, &nLen))
+					return false;
+
+				m_DrawImg.CreateByMem(pBuffer, nLen);
+			}
+			else
+			{
+				m_DrawImg.CreateByFile(m_ImageProp.strFileName.c_str());
+			}
+		}
+		else
+		{
+			m_DrawImg.CreateByMem(m_pZipFile->pFileData, m_pZipFile->dwSrcFileLen);
+		}
+	}
+
+	return IS_SAFE_HANDLE(m_DrawImg.GetSafeHdc());
+}
+
 bool IPropertyImageBase::DrawImage(CDrawingBoard &DstDc, RECT DstRct, int nAlpha)
 {
 	if (GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
@@ -288,32 +322,7 @@ bool IPropertyImageBase::DrawImage(CDrawingBoard &DstDc, RECT DstRct, int nAlpha
 	}
 	else
 	{
-		if (!IS_SAFE_HANDLE(m_DrawImg.GetSafeHdc()))
-		{
-			// ÆÕÍ¨Í¼Æ¬
-			if (m_pZipFile == NULL)
-			{
-				if (m_ImageProp.bIsZipFile)
-				{
-					BYTE *pBuffer = NULL;
-					int nLen = 0;
-					if (GetUiKernel() == NULL || !GetUiKernel()->FindUnZipFile(m_ImageProp.strFileName.c_str(), &pBuffer, &nLen))
-						return false;
-
-					m_DrawImg.CreateByMem(pBuffer, nLen);
-				}
-				else
-				{
-					m_DrawImg.CreateByFile(m_ImageProp.strFileName.c_str());
-				}
-			}
-			else
-			{
-				m_DrawImg.CreateByMem(m_pZipFile->pFileData, m_pZipFile->dwSrcFileLen);
-			}
-		}
-
-		if (!IS_SAFE_HANDLE(m_DrawImg.GetSafeHdc()))
+		if (!InitStaticImage())
 			return false;
 	}
 
