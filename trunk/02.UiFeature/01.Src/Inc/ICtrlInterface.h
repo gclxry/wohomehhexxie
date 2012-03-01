@@ -59,6 +59,8 @@ protected:
 	virtual void OnSetFocus();
 	// 控件失去焦点
 	virtual void OnKillFocus();
+	// 鼠标滚轮消息
+	virtual void OnMouseWheel(WPARAM wParam, LPARAM lParam);
 	// 接受到默认回车键，执行控件操作
 	virtual void OnDefaultEnterCtrl();
 	// 控件取得键盘输入消息

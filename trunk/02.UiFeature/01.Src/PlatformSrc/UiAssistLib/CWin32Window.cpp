@@ -209,6 +209,16 @@ LRESULT CWin32Window::WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam)
 		OnSize((UINT)wParam, LOWORD(lParam), HIWORD(lParam));
 		break;
 
+	case WM_NCCALCSIZE:
+		return 0;
+
+	case WM_ERASEBKGND:
+	case WM_NCPAINT:
+	case WM_NCACTIVATE:
+	case 0x00AE:	// WM_NCUAHDRAWCAPTION
+	case 0x00AF:	// WM_NCUAHDRAWFRAME
+		return WM_PAINT;
+
 	default:
 		break;
 	}

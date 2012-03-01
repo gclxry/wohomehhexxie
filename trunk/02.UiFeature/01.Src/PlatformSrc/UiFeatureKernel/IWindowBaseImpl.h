@@ -131,6 +131,7 @@ protected:
 	// 窗口尺寸最大值最小值设置
 	virtual bool OnGetMinMaxInfo(MINMAXINFO *pMinMaxInfo);
 
+	virtual void OnMouseWheel(WPARAM wParam, LPARAM lParam);
 	virtual void OnMouseMove(int nVirtKey, POINT pt);
 	virtual void OnLButtonDown(int nVirtKey, POINT pt);
 	virtual void OnLButtonUp(int nVirtKey, POINT pt);
