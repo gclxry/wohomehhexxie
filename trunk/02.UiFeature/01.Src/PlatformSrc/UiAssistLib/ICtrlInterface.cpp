@@ -112,7 +112,17 @@ bool ICtrlInterface::OnDrawAnimation()
 {
 	return false;
 }
+
 // 定时器
 void ICtrlInterface::OnTimer(UINT nTimerId)
+{
+}
+
+// 滚动条消息
+void ICtrlInterface::OnVScroll(UINT nSBCode, UINT nPos, IControlBase* pScrollBar)
+{
+}
+
+void ICtrlInterface::OnHScroll(UINT nSBCode, UINT nPos, IControlBase* pScrollBar)
 {
 }

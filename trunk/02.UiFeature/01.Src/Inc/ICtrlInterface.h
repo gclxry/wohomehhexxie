@@ -66,4 +66,7 @@ protected:
 	// 按键按下
 	virtual void OnKeyDown(WPARAM wParam, LPARAM lParam);
 	virtual void OnKeyUp(WPARAM wParam, LPARAM lParam);
+	// 滚动条消息
+	virtual void OnVScroll(UINT nSBCode, UINT nPos, IControlBase* pScrollBar);
+	virtual void OnHScroll(UINT nSBCode, UINT nPos, IControlBase* pScrollBar);
 };

@@ -139,6 +139,7 @@ void IControlBase::CreateCtrlAllPropetry(bool bNeedSetDftProp)
 			pComboBox->DataVec.push_back(TN_CL_L_BOTTOM);
 			pComboBox->DataVec.push_back(TN_CL_L_ALL);
 			pComboBox->DataVec.push_back(TN_CL_L_MIDDLE);
+			pComboBox->DataVec.push_back(TN_CL_L_USER_DEF);
 			pComboBox->nSelect = CL_G_LEFT_TOP;
 		}
 	}

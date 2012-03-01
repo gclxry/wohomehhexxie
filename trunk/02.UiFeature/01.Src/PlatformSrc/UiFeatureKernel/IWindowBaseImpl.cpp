@@ -1047,6 +1047,10 @@ void IWindowBaseImpl::SetControlWindowPostion(IControlBase* pCtrl, RECT ParentRc
 	RECT RctInWnd;
 	INIT_RECT(RctInWnd);
 	CONTROL_LAYOUT_INFO CtrlLayout = pCtrl->GetLayout();
+
+	if (CtrlLayout.clType == CL_L_USER_DEF)
+		return;
+
 	if (CtrlLayout.clType == CL_G_LEFT_TOP)
 	{
 		// 固定大小：左上角定位

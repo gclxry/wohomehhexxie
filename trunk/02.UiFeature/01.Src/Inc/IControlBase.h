@@ -66,6 +66,8 @@ struct FANGKUAI_8
 #define TN_CL_L_ALL						"撑满全部"
 // 拉伸变动大小：居中
 #define TN_CL_L_MIDDLE					"居中"
+// 拉伸变动大小：用户自定义位置
+#define TN_CL_L_USER_DEF				"用户自定义位置"
 
 enum CONTROL_LAYOUT
 {
@@ -89,6 +91,8 @@ enum CONTROL_LAYOUT
 	CL_L_ALL			= 8,
 	// 拉伸变动大小：居中
 	CL_L_MIDDLE			= 9,
+	// 拉伸变动大小：用户自定义位置
+	CL_L_USER_DEF		= 10,
 };
 // 当前控件相对于父控件的布局信息
 struct CONTROL_LAYOUT_INFO
@@ -255,6 +259,11 @@ public:
 	// 下列函数，在制作控件、窗口业务时，原则上不允许调用
 	// 移动控件，会改变布局信息，参数：CtrlInWndRct控件位于窗口的位置
 	void ResetWindowRect(RECT CtrlInWndRct);
+
+	// 滚动条消息
+	virtual void OnVScroll(UINT nSBCode, UINT nPos, IControlBase* pScrollBar) = 0;
+	virtual void OnHScroll(UINT nSBCode, UINT nPos, IControlBase* pScrollBar) = 0;
+
 protected:
 	// 设置子控件都必须自绘
 	void SetChildCtrlToRedraw();

@@ -68,8 +68,6 @@ private:
 	bool BD_DeleteControl_FromCtrlVec(CHILD_CTRLS_VEC* pCtrlVec, IControlBase *pCtrlBase);
 
 private:
-	// 取得整个程序默认的字体信息
-	IPropertyFontBase* m_pDefaultFontBase;
 	ULONG_PTR m_gdiplusToken;
 	CControlImpl* m_pCtrlDllMgr;
 

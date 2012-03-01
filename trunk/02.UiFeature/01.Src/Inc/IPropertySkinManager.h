@@ -5,6 +5,7 @@
 #include "IPropertyBase.h"
 #include "IPropertyWindow.h"
 #include "IZipFile.h"
+#include "IPropertyFontBase.h"
 #include "IPropertyImageBase.h"
 
 class IPropertySkinManager
@@ -47,4 +48,6 @@ public:
 	virtual void SetArea(AREA_TYPE areaType) = 0;
 	// 创建一个属性，并将次属性放入队列
 	virtual IPropertyBase* CreateEmptyBaseProp(OBJECT_TYPE_ID propType, char *pszObjectId = NULL) = 0;
+	// 取得整个程序默认的字体信息
+	virtual IPropertyFontBase* GetDefaultFontBase() = 0;
 };
