@@ -17,7 +17,8 @@ public:
 	// char *pszWndText：窗口标题
 	// int nShow：显示模式，如：SW_SHOW、SW_HIDE
 	// LPARAM lParam：创建窗口时传入的参数，可以通过 GetCreateWindowParam 函数取得
-	virtual bool CreateWin32Window(HWND hParent, RECT WndRect, char *pszWndText, int nShow, LPARAM lParam);
+	virtual bool CreateWindowWithNewThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, LPARAM lParam);
+	virtual bool CreateWindowWithoutThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, LPARAM lParam);
 
 	// 本窗口的消息处理函数
 	virtual LRESULT WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam);
@@ -103,6 +104,7 @@ public:
 	void WaitWindowThreadEnd();
 
 protected:
+	bool m_bIsCreateWithThread;
 	// 窗口句柄
 	HWND m_hWnd;
 	// 窗口标题文字
