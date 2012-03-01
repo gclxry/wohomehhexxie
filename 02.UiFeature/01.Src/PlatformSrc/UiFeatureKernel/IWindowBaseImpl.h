@@ -83,6 +83,8 @@ public:
 	// 显示自定义光标
 	void SetWindowCursor(int nCursor);
 
+	// 取得整个程序默认的字体信息
+	virtual IPropertyFontBase* GetDefaultFontBase();
 protected:
 	// 本窗口的消息处理函数，bPassOn参数为true是，消息会继续传递处理；false时，处理完毕，不再下传
 	virtual LRESULT WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, bool &bPassOn);

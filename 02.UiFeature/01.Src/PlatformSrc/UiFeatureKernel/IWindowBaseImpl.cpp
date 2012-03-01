@@ -1705,3 +1705,12 @@ void IWindowBaseImpl::KillHighAccuracyTimer(int nId)
 {
 	m_HighTimer.KillTimer();
 }
+
+// 取得整个程序默认的字体信息
+IPropertyFontBase* IWindowBaseImpl::GetDefaultFontBase()
+{
+	if (m_pUiKernel == NULL)
+		return NULL;
+
+	return m_pUiKernel->GetDefaultFontBase();
+}

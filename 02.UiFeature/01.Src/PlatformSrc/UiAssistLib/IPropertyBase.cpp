@@ -52,6 +52,7 @@ void IPropertyBase::SetRelevancyPropName(char *pszPropName)
 	if (pszPropName == NULL)
 	{
 		m_strRelevancyPropName = "";
+		m_pRelevancyProp = NULL;
 		return;
 	}
 
@@ -66,6 +67,11 @@ IPropertyBase* IPropertyBase::GetRelevancyProp()
 void IPropertyBase::SetRelevancyProp(IPropertyBase *pszProp)
 {
 	m_pRelevancyProp = pszProp;
+
+	if (m_pRelevancyProp == NULL)
+		m_strRelevancyPropName = "";
+	else
+		m_strRelevancyPropName = pszProp->GetObjectName();
 }
 
 bool IPropertyBase::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pParentXmlNode)

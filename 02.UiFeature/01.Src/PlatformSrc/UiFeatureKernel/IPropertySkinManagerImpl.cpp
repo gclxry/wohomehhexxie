@@ -1428,7 +1428,7 @@ bool IPropertySkinManagerImpl::SaveLayoutXml_ChildCtrl(CUiXmlWrite &XmlStrObj, C
 void IPropertySkinManagerImpl::SaveXmlConfigFile(char *pszFilePath, BYTE *pData, int nDataLen)
 {
 	// TBD 不再输出xml文件
-	return;
+	//return;
 	if (pszFilePath == NULL || pData == NULL || nDataLen <= 0)
 		return;
 

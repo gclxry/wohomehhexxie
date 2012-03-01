@@ -2,6 +2,7 @@
 #pragma once
 #include "IWindowBase.h"
 #include "IControlBase.h"
+#include "IPropertyFontBase.h"
 #include "IUiEngine.h"
 
 class IUiFeatureKernel
@@ -48,4 +49,6 @@ public:
 	virtual IControlBase* CreateControlByPropetry(IWindowBase *pParentWnd, IControlBase *pParentCtrl, IPropertyControl *pPropCtrl) = 0;
 	// 取得全局唯一定时器号
 	virtual int GetTimerId() = 0;
+	// 取得整个程序默认的字体信息
+	virtual IPropertyFontBase* GetDefaultFontBase() = 0;
 };
