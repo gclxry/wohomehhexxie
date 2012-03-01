@@ -61,6 +61,13 @@ bool CUiFeatureWindow::InitInstance()
 	// 对话框初始化
 	if (IS_SAFE_HANDLE(m_hWnd))
 	{
+		IControlMessage *pCtrlMsg = dynamic_cast<IControlMessage*>(this);
+		if (pCtrlMsg == NULL)
+		{
+			assert(false);
+			return false;
+		}
+
 		m_pWindowBase = m_pUiFeatureKernel->PG_InitFeatureSkin(m_hWnd, (char*)m_strSkinPath.c_str(), (char*)m_strSkinWndName.c_str());
 		if (m_pWindowBase == NULL)
 		{
@@ -68,6 +75,8 @@ bool CUiFeatureWindow::InitInstance()
 			return false;
 		}
 
+		// 设置控件回调
+		m_pWindowBase->SetCtrlMsgCallBack(pCtrlMsg);
 		if (IS_RECT_EMPTY(m_rctCreate))
 		{
 			SIZE WndSize = m_pWindowBase->PP_GetWindowPropSize();
