@@ -48,6 +48,8 @@ IPropertySkinManagerImpl::IPropertySkinManagerImpl()
 	m_pColorPropMap = NULL;
 
 	m_AreaType = AT_CN;
+	// 取得整个程序默认的字体信息
+	m_pDefaultFontBase = NULL;
 
 	m_pKernelZipFile = ((IUiFeatureKernelImpl*)IUiFeatureKernelImpl::GetInstance())->GetZipFile();
 }
@@ -2243,4 +2245,17 @@ bool IPropertySkinManagerImpl::BD_DeleteZipImage(ZIP_FILE* pZipImage)
 			pImageBaseProp->SetZipFile(NULL, false);
 	}
 	return true;
+}
+
+// 取得整个程序默认的字体信息
+IPropertyFontBase* IPropertySkinManagerImpl::GetDefaultFontBase()
+{
+	if (m_pDefaultFontBase == NULL)
+	{
+		m_pDefaultFontBase = dynamic_cast<IPropertyFontBase*>(CreateEmptyBaseProp(OTID_FONT_BASE));
+		if (m_pDefaultFontBase != NULL)
+			m_pDefaultFontBase->SetObjectName("系统默认字体");
+	}
+
+	return m_pDefaultFontBase;
 }

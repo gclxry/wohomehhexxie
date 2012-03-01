@@ -31,8 +31,6 @@ IUiFeatureKernelImpl::IUiFeatureKernelImpl(void)
 	m_pSkinMgr = (IPropertySkinManagerImpl *)GetSkinManager();
 	m_pUiEngine = (IUiEngineImpl *)GetSkinManager();
 	m_pCtrlDllMgr = CControlImpl::GetInstance();
-	// 取得整个程序默认的字体信息
-	m_pDefaultFontBase = NULL;
 }
 
 IUiFeatureKernelImpl::~IUiFeatureKernelImpl(void)
@@ -461,8 +459,8 @@ bool IUiFeatureKernelImpl::BD_DeleteZipImage(ZIP_FILE* pZipImage)
 // 取得整个程序默认的字体信息
 IPropertyFontBase* IUiFeatureKernelImpl::GetDefaultFontBase()
 {
-	if (m_pDefaultFontBase == NULL && m_pSkinMgr != NULL)
-		m_pDefaultFontBase = dynamic_cast<IPropertyFontBase*>(m_pSkinMgr->CreateEmptyBaseProp(OTID_FONT_BASE));
+	if (m_pSkinMgr == NULL)
+		return NULL;
 
-	return m_pDefaultFontBase;
+	return m_pSkinMgr->GetDefaultFontBase();
 }

@@ -75,6 +75,8 @@ public:
 
 	void ReleaseBaseProp(IPropertyBase *pCtrlProp);
 
+	// 取得整个程序默认的字体信息
+	virtual IPropertyFontBase* GetDefaultFontBase();
 private:
 //////////////////////////////////////////////////////////////////////////
 	// Builder使用函数
@@ -141,7 +143,10 @@ private:
 
 	bool DeleteFontBaseProp(IPropertyFontBase *pFontBaseProp);
 	bool ModifyFontBaseProp(IPropertyFontBase *pFontBaseProp, char *pszNewPropName);
+
 private:
+	// 取得整个程序默认的字体信息
+	IPropertyFontBase* m_pDefaultFontBase;
 	// 皮肤路径
 	string m_strSkinPath;
 
