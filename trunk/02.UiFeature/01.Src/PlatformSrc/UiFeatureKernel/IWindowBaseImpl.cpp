@@ -27,6 +27,7 @@ IWindowBaseImpl::IWindowBaseImpl()
 	m_Blend.AlphaFormat = AC_SRC_ALPHA;
 	m_Blend.SourceConstantAlpha = 255;
 
+	m_pCtrlMsgCallBack = NULL;
 	m_hParent = NULL;
 	m_hWnd = NULL;
 	m_ChildCtrlsVec.clear();
@@ -1717,4 +1718,19 @@ IPropertyFontBase* IWindowBaseImpl::GetDefaultFontBase()
 		return NULL;
 
 	return m_pUiKernel->GetDefaultFontBase();
+}
+
+// 设置控件回调函数
+void IWindowBaseImpl::SetCtrlMsgCallBack(IControlMessage* pCtrlMsg)
+{
+	m_pCtrlMsgCallBack = pCtrlMsg;
+}
+
+// 控件消息回调函数
+LRESULT IWindowBaseImpl::OnCtrlMessage(IControlBase* pCtrl, int nMsgId, WPARAM wParam, LPARAM lParam)
+{
+	if (m_pCtrlMsgCallBack == NULL)
+		return -1;
+
+	return m_pCtrlMsgCallBack->OnCtrlMessage(pCtrl, nMsgId, wParam, lParam);
 }

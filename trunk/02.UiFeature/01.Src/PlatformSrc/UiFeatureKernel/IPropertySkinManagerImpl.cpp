@@ -1721,6 +1721,10 @@ bool IPropertySkinManagerImpl::BD_DeletePropetry(IPropertyBase *pPropBase)
 		if (pFontBaseProp == NULL)
 			return false;
 
+		// É¾³ýÄ¬ÈÏ×ÖÌå
+		if (pFontBaseProp == m_pDefaultFontBase)
+			m_pDefaultFontBase = NULL;
+
 		return DeleteFontBaseProp(pFontBaseProp);
 	}
 
