@@ -104,6 +104,7 @@ public:
 
 	// 得到图片的内存DC
 	CDrawingImage* GetDrawingImage();
+
 private:
 	bool DrawImage_AllLaShen(CDrawingBoard &DstDc, RECT DstRct);
 	bool DrawImage_PingPu(CDrawingBoard &DstDc, RECT DstRct);
@@ -113,6 +114,8 @@ private:
 
 	bool SetGifDrawInTimer();
 	void InitGifImage();
+
+	bool InitStaticImage();
 
 private:
 	IMAGE_BASE_PROP m_ImageProp;
