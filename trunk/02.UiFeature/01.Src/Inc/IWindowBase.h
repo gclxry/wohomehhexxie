@@ -73,6 +73,16 @@ public:
 	virtual void SetCtrlMsgCallBack(IControlMessage* pCtrlMsg) = 0;
 	// 控件消息回调函数
 	virtual LRESULT OnCtrlMessage(IControlBase* pCtrl, int nMsgId, WPARAM wParam, LPARAM lParam) = 0;
+
+	// 向内核注册一个想要取到的消息
+	virtual void RegisterControlMessage(IControlBase* pCtrl, int nMsgId) = 0;
+	virtual void UnRegisterControlMessage(IControlBase* pCtrl, int nMsgId) = 0;
+
+	// 发送消息:Send方式
+	virtual LRESULT SendMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam) = 0;
+	// 发送消息:Post方式
+	virtual bool PostMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam) = 0;
+
 public:
 ////// 以下函数非外部窗口调用 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
