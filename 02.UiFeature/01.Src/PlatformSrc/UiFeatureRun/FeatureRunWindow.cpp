@@ -37,7 +37,7 @@ void CFeatureRunWindow::OnKeyDown(int nVirtKey, int nFlag)
 {
 	if (nVirtKey == VK_ESCAPE)
 	{
-		this->CloseSelf();
+		this->CloseWindow(false);
 		::PostThreadMessage(m_dwMainThreadId, WM_QUIT, 0, 0);
 	}
 }

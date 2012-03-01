@@ -85,6 +85,12 @@ public:
 
 	// 取得整个程序默认的字体信息
 	virtual IPropertyFontBase* GetDefaultFontBase();
+
+	// 设置控件回调函数
+	virtual void SetCtrlMsgCallBack(IControlMessage* pCtrlMsg);
+	// 控件消息回调函数
+	virtual LRESULT OnCtrlMessage(IControlBase* pCtrl, int nMsgId, WPARAM wParam, LPARAM lParam);
+
 protected:
 	// 本窗口的消息处理函数，bPassOn参数为true是，消息会继续传递处理；false时，处理完毕，不再下传
 	virtual LRESULT WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, bool &bPassOn);
@@ -135,6 +141,7 @@ private:
 
 	// 从相对窗口的鼠标相对坐标得到相对控件的鼠标坐标
 	POINT GetCtrlMouseOffset(POINT WndPt, IControlBase* pCtrl);
+
 private:
 	// 循环遍历每个控件的绘制
 	void DrawControl();
@@ -158,6 +165,7 @@ private:
 	void HideInTaskbar();
 
 protected:
+	IControlMessage* m_pCtrlMsgCallBack;
 	// 高进度定时器
 	CHighAccuracyTimer m_HighTimer;
 	// 是否为设计模式
