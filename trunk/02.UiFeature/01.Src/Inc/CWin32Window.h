@@ -72,7 +72,6 @@ protected:
 	virtual void OnKeyDown(int nVirtKey, int nFlag);
 	// 系统消息，返回true说明不需要返回给系统继续调用，直接返回
 	virtual bool OnSysCommand(WPARAM wParam, LPARAM lParam);
-	// WM_CREATE：对话框初始化	
 	virtual void OnCreate();
 	// WM_TIMER：定时器	
 	virtual void OnTimer(UINT nTimerId);
@@ -80,6 +79,7 @@ protected:
 	virtual void OnDestroy();
 	virtual void OnKillFocus();
 	virtual void OnSetFocus();
+	virtual void OnSize(UINT nType, int cx, int cy);
 	// 类似MFC的PreTranslateMessage，如果返回的是true，不再继续往下派发消息
 	virtual bool PreTranslateMessage(MSG msg);
 

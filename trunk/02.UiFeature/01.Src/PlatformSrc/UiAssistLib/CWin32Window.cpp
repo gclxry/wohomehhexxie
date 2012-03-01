@@ -187,11 +187,19 @@ LRESULT CWin32Window::WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam)
 		OnDestroy();
 		break;
 
+	case WM_SIZE:
+		OnSize((UINT)wParam, LOWORD(lParam), HIWORD(lParam));
+		break;
+
 	default:
 		break;
 	}
 
 	return ::DefWindowProc(m_hWnd, nMsgId, wParam, lParam);
+}
+
+void CWin32Window::OnSize(UINT nType, int cx, int cy)
+{
 }
 
 // È¡µÃ´°¿Ú¾ä±ú
