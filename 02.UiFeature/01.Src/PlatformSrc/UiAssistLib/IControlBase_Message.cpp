@@ -3,6 +3,7 @@
 #include "..\..\Inc\IControlBase.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\IControlBase.h"
+#include "..\..\Inc\IWindowBase.h"
 
 // 绘制当前控件，参数为父窗口/父控件的内存DC
 void IControlBase::OnPaintControl(CDrawingBoard &WndMemDc, RECT ActiveDrawRct)
@@ -54,8 +55,37 @@ void IControlBase::OnPaintControl(CDrawingBoard &WndMemDc, RECT ActiveDrawRct)
 	}
 }
 
-// 设置有效的绘制区域
-void IControlBase::SetActiveDrawRect(RECT ActiveDrawRect)
+// 向内核注册一个想要取到的消息
+void IControlBase::RegisterControlMessage(int nMsgId)
 {
+	if (m_pWindowBase == NULL)
+		return;
 
+	m_pWindowBase->RegisterControlMessage(this, nMsgId);
+}
+
+void IControlBase::UnRegisterControlMessage(int nMsgId)
+{
+	if (m_pWindowBase == NULL)
+		return;
+
+	m_pWindowBase->UnRegisterControlMessage(this, nMsgId);
+}
+
+// 发送消息:Send方式
+LRESULT IControlBase::SendMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam)
+{
+	if (m_pWindowBase == NULL)
+		return -1;
+
+	return m_pWindowBase->SendMessage(nMsgId, wParam, lParam);
+}
+
+// 发送消息:Post方式
+bool IControlBase::PostMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam)
+{
+	if (m_pWindowBase == NULL)
+		return false;
+
+	return m_pWindowBase->PostMessage(nMsgId, wParam, lParam);
 }

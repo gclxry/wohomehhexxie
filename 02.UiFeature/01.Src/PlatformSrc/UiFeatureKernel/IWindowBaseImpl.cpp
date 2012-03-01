@@ -32,6 +32,7 @@ IWindowBaseImpl::IWindowBaseImpl()
 	m_hWnd = NULL;
 	m_ChildCtrlsVec.clear();
 
+	m_CtrlRegMsgMap.clear();
 	m_bIsDesignMode = false;
 	m_bIsLButtonDown = false;
 	m_pLButtonDownCtrl = NULL;
@@ -452,6 +453,23 @@ LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, b
 	if (!::IsWindow(m_hWnd))
 		return 0;
 
+	// 控件注册要取得的消息
+	if (UM_REG_CTRL_MSG == nMsgId)
+	{
+		DoRegisterControlMessage((IControlBase*)wParam, (int)lParam);
+		return 0;
+	}
+
+	// 控件注销要取得的消息
+	if (UM_UNREG_CTRL_MSG == nMsgId)
+	{
+		DoUnRegisterControlMessage((IControlBase*)wParam, (int)lParam);
+		return 0;
+	}
+
+	// 先将消息派发给已经注册了的子控件
+	DispatchRegisterMessage(nMsgId, wParam, lParam);
+
 	switch (nMsgId)
 	{
 		// 需要外部对话框接受的消息：使用皮肤初始化窗口正确结束
@@ -460,13 +478,6 @@ LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, b
 	case UM_INIT_WINDOW_ERROR:
 		OnInitWindowBaseEnd();
 		break;
-
-//		// 初始化窗口
-//	case UM_INIT_WINDOW_BASE:
-//		bPassOn = false;
-//		OnInitWindowBase();
-//		break;
-
 
 	case WM_GETMINMAXINFO:
 		bPassOn = !OnGetMinMaxInfo((MINMAXINFO*)lParam);
@@ -1733,4 +1744,107 @@ LRESULT IWindowBaseImpl::OnCtrlMessage(IControlBase* pCtrl, int nMsgId, WPARAM w
 		return -1;
 
 	return m_pCtrlMsgCallBack->OnCtrlMessage(pCtrl, nMsgId, wParam, lParam);
+}
+
+// 向内核注册一个想要取到的消息
+void IWindowBaseImpl::RegisterControlMessage(IControlBase* pCtrl, int nMsgId)
+{
+	::PostMessage(m_hWnd, UM_REG_CTRL_MSG, (WPARAM)pCtrl, (LPARAM)nMsgId);
+}
+
+void IWindowBaseImpl::DoRegisterControlMessage(IControlBase* pCtrl, int nMsgId)
+{
+	if (pCtrl == NULL || nMsgId < 0)
+		return;
+
+	REG_MSG_MAP::iterator pMsgItem = m_CtrlRegMsgMap.find(nMsgId);
+	if (pMsgItem == m_CtrlRegMsgMap.end())
+	{
+		REG_CTRL_VEC CtrlRegMap;
+		CtrlRegMap.clear();
+		m_CtrlRegMsgMap.insert(pair<int, REG_CTRL_VEC>(nMsgId, CtrlRegMap));
+	}
+
+	pMsgItem = m_CtrlRegMsgMap.find(nMsgId);
+	if (pMsgItem == m_CtrlRegMsgMap.end())
+		return;
+
+	REG_CTRL_VEC& CtrlMap = pMsgItem->second;
+	for (REG_CTRL_VEC::iterator pCtrlItem = CtrlMap.begin(); pCtrlItem != CtrlMap.end(); pCtrlItem++)
+	{
+		IControlBase* pComCtrl = *pCtrlItem;
+		if (pComCtrl == pCtrl)
+			return;
+	}
+
+	CtrlMap.push_back(pCtrl);
+}
+
+void IWindowBaseImpl::UnRegisterControlMessage(IControlBase* pCtrl, int nMsgId)
+{
+	::PostMessage(m_hWnd, UM_UNREG_CTRL_MSG, (WPARAM)pCtrl, (LPARAM)nMsgId);
+}
+
+void IWindowBaseImpl::DoUnRegisterControlMessage(IControlBase* pCtrl, int nMsgId)
+{
+	if (pCtrl == NULL || nMsgId < 0)
+		return;
+
+	REG_MSG_MAP::iterator pMsgItem = m_CtrlRegMsgMap.find(nMsgId);
+	if (pMsgItem == m_CtrlRegMsgMap.end())
+		return;
+
+	REG_CTRL_VEC& CtrlMap = pMsgItem->second;
+	for (REG_CTRL_VEC::iterator pCtrlItem = CtrlMap.begin(); pCtrlItem != CtrlMap.end(); pCtrlItem++)
+	{
+		IControlBase* pComCtrl = *pCtrlItem;
+		if (pComCtrl == pCtrl)
+		{
+			CtrlMap.erase(pCtrlItem);
+			break;
+		}
+	}
+
+	if (CtrlMap.size() <= 0)
+		m_CtrlRegMsgMap.erase(pMsgItem);
+}
+
+void IWindowBaseImpl::DispatchRegisterMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam)
+{
+	if (m_CtrlRegMsgMap.size() <= 0)
+		return;
+
+	REG_MSG_MAP::iterator pMsgItem = m_CtrlRegMsgMap.find(nMsgId);
+	if (pMsgItem == m_CtrlRegMsgMap.end())
+		return;
+
+	REG_CTRL_VEC& CtrlMap = pMsgItem->second;
+	for (REG_CTRL_VEC::iterator pCtrlItem = CtrlMap.begin(); pCtrlItem != CtrlMap.end(); pCtrlItem++)
+	{
+		IControlBase* pCtrl = *pCtrlItem;
+		if (pCtrl == NULL)
+			continue;
+
+		pCtrl->OnCtrlNotify(nMsgId, wParam, lParam);
+	}
+}
+
+// 发送消息:Send方式
+LRESULT IWindowBaseImpl::SendMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam)
+{
+	LRESULT lpRes = -1;
+	if (IS_SAFE_HANDLE(m_hWnd))
+		lpRes = ::SendMessage(m_hWnd, nMsgId, wParam, lParam);
+
+	return lpRes;
+}
+
+// 发送消息:Post方式
+bool IWindowBaseImpl::PostMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam)
+{
+	bool bRet = false;
+	if (IS_SAFE_HANDLE(m_hWnd))
+		bRet = (::PostMessage(m_hWnd, nMsgId, wParam, lParam) == TRUE);
+
+	return bRet;
 }

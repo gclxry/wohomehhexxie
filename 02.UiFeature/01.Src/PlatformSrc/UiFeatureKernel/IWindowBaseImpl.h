@@ -11,6 +11,10 @@
 #include "..\..\Inc\CHighAccuracyTimer.h"
 #include "WindowResize.h"
 
+// 控件注册需要取得的消息
+typedef vector<IControlBase*>	REG_CTRL_VEC;
+typedef map<int, REG_CTRL_VEC>	REG_MSG_MAP;
+
 class IWindowBaseImpl : public IWindowBase
 {
 public:
@@ -91,6 +95,14 @@ public:
 	// 控件消息回调函数
 	virtual LRESULT OnCtrlMessage(IControlBase* pCtrl, int nMsgId, WPARAM wParam, LPARAM lParam);
 
+	// 向内核注册一个想要取到的消息
+	virtual void RegisterControlMessage(IControlBase* pCtrl, int nMsgId);
+	virtual void UnRegisterControlMessage(IControlBase* pCtrl, int nMsgId);
+
+	// 发送消息:Send方式
+	virtual LRESULT SendMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam);
+	// 发送消息:Post方式
+	virtual bool PostMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam);
 protected:
 	// 本窗口的消息处理函数，bPassOn参数为true是，消息会继续传递处理；false时，处理完毕，不再下传
 	virtual LRESULT WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, bool &bPassOn);
@@ -163,8 +175,16 @@ private:
 	void SetWindowTransparence(bool bIsTrans);
 	// 在任务栏上隐藏主窗口按钮
 	void HideInTaskbar();
+	// 向内核注册一个想要取到的消息
+	void DoRegisterControlMessage(IControlBase* pCtrl, int nMsgId);
+	void DoUnRegisterControlMessage(IControlBase* pCtrl, int nMsgId);
+	// 派发控件注册的消息
+	void DispatchRegisterMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam);
 
 protected:
+	// 控件注册需要取得的消息
+	REG_MSG_MAP m_CtrlRegMsgMap;
+	// 控件的消息回调接口
 	IControlMessage* m_pCtrlMsgCallBack;
 	// 高进度定时器
 	CHighAccuracyTimer m_HighTimer;

@@ -240,10 +240,6 @@ public:
 	IPropertyGroup* PP_GetControlPropetryGroup();
 	IPropertyControl *PP_GetControlPropetry();
 
-	// 设置有效的绘制区域
-	void SetActiveDrawRect(RECT ActiveDrawRect);
-	RECT GetActiveDrawRect();
-
 	// 从属性更新数据到成员变量
 	void PropetyValueToMemberValue();
 	// 整个控件绘制完成后，再绘制到父控件上的alpha值
@@ -263,6 +259,9 @@ public:
 	// 滚动条消息
 	virtual void OnVScroll(UINT nSBCode, UINT nPos, IControlBase* pScrollBar) = 0;
 	virtual void OnHScroll(UINT nSBCode, UINT nPos, IControlBase* pScrollBar) = 0;
+
+	// 控件需要处理的一些自定义的消息，消息基本上会由对话框或者其他控件传入
+	virtual void OnCtrlNotify(int nMsgId, WPARAM wParam, LPARAM lParam) = 0;
 
 protected:
 	// 设置子控件都必须自绘
@@ -290,8 +289,6 @@ protected:
 	virtual void OnDestroy() = 0;
 	// 绘制控件
 	virtual void OnPaint(CDrawingBoard &DrawBoard) = 0;
-	// 控件需要处理的一些自定义的消息，消息基本上会由对话框或者其他控件传入
-	virtual void OnCtrlNotify(int nMsgId, WPARAM wParam, LPARAM lParam) = 0;
 	// Builder刷新属性
 	virtual void OnBuilderRefreshProp() = 0;
 	// 鼠标进入
@@ -328,6 +325,13 @@ protected:
 	virtual void OnKeyDown(WPARAM wParam, LPARAM lParam) = 0;
 	virtual void OnKeyUp(WPARAM wParam, LPARAM lParam) = 0;
 
+	// 向内核注册一个想要取到的消息
+	void RegisterControlMessage(int nMsgId);
+	void UnRegisterControlMessage(int nMsgId);
+	// 发送消息:Send方式
+	LRESULT SendMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam);
+	// 发送消息:Post方式
+	bool PostMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam);
 
 private:
 	// 创建控件属性

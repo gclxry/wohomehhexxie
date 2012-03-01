@@ -14,10 +14,13 @@ using namespace std;
 #define UM_INIT_WINDOW_SUCCESS						(UM_UI_BASE_DEF_MSG + 1)
 // 需要外部对话框接受的消息：使用皮肤初始化窗口异常
 #define UM_INIT_WINDOW_ERROR						(UM_UI_BASE_DEF_MSG + 2)
-//// 初始化子类化Window
-//#define UM_INIT_WINDOW_BASE							(UM_UI_BASE_DEF_MSG + 3)
 // 自动化测试消息值
-#define UM_AUTO_TEST								(UM_UI_BASE_DEF_MSG + 4)
+#define UM_AUTO_TEST								(UM_UI_BASE_DEF_MSG + 3)
+// 控件注册要取得的消息
+#define UM_REG_CTRL_MSG								(UM_UI_BASE_DEF_MSG + 4)
+// 控件注销要取得的消息
+#define UM_UNREG_CTRL_MSG							(UM_UI_BASE_DEF_MSG + 5)
+
 // 用于绘制动画的固定定时器ID
 #define UM_DFT_ANIMATION_TIMER						(0x0000F001)
 #define UM_DFT_ANIMATION_TIMER_100S					(100)
