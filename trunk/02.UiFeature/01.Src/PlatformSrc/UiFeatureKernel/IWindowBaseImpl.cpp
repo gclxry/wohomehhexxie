@@ -1222,30 +1222,42 @@ void IWindowBaseImpl::OnTimer(UINT nTimerId)
 		}
 	}
 
-	for (CHILD_CTRLS_VEC::iterator pCtrlItem = m_ChildCtrlsVec.begin(); pCtrlItem != m_ChildCtrlsVec.end(); pCtrlItem++)
-	{
-		IControlBase* pCtrl = *pCtrlItem;
-		if (pCtrl != NULL)
-		{
-			if (nTimerId == UM_DFT_ANIMATION_TIMER && pCtrl->IsVisible())
-			{
-				bool bDraw = pCtrl->OnDrawAnimation();
-				if (bDraw)
-				{
-					bNeedDraw = true;
-					this->InvalidateRect(&(pCtrl->GetWindowRect()));
-				}
-			}
-			else
-			{
-				pCtrl->OnTimer(nTimerId);
-			}
-		}
-	}
+	bNeedDraw = OnTimerToChild(m_ChildCtrlsVec, nTimerId);
 
 	if (bNeedDraw)
 		this->UpdateWindow();
 }
+
+bool IWindowBaseImpl::OnTimerToChild(CHILD_CTRLS_VEC &ChildCtrlsVec, UINT nTimerId)
+{
+	bool bNeedDraw = false;
+	for (CHILD_CTRLS_VEC::iterator pCtrlItem = ChildCtrlsVec.begin(); pCtrlItem != ChildCtrlsVec.end(); pCtrlItem++)
+	{
+		IControlBase* pCtrl = *pCtrlItem;
+		if (pCtrl == NULL)
+			continue;
+
+		if (nTimerId == UM_DFT_ANIMATION_TIMER && pCtrl->IsVisible())
+		{
+			bool bDraw = pCtrl->OnDrawAnimation();
+			if (bDraw)
+			{
+				bNeedDraw = true;
+				this->InvalidateRect(&(pCtrl->GetWindowRect()));
+			}
+		}
+		else
+		{
+			pCtrl->OnTimer(nTimerId);
+		}
+
+		if (OnTimerToChild((*(pCtrl->GetChildControlsVec())), nTimerId))
+			bNeedDraw = true;
+	}
+
+	return bNeedDraw;
+}
+
 
 void IWindowBaseImpl::InvalidateRect(RECT *lpRect)
 {

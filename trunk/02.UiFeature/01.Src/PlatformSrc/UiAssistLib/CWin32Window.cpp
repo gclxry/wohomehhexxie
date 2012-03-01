@@ -100,6 +100,7 @@ CWin32Window::CWin32Window()
 	m_hCreateWaitEvent = NULL;
 	m_hUiThread = NULL;
 	m_dwUiThreadId = 0;
+	m_bIsCreateWithThread = false;
 }
 
 CWin32Window::~CWin32Window()
@@ -110,8 +111,25 @@ CWin32Window::~CWin32Window()
 }
 
 // 创建窗口
-bool CWin32Window::CreateWin32Window(HWND hParent, RECT WndRect, char *pszWndText, int nShow, LPARAM lParam)
+bool CWin32Window::CreateWindowWithoutThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, LPARAM lParam)
 {
+	m_bIsCreateWithThread = false;
+	m_hParentWnd = hParent;
+	m_rctCreate = WndRect;
+	m_nCreateShow = nShow;
+	m_lParam = lParam;
+
+	if (pszWndText != NULL)
+		m_strWndText = pszWndText;
+
+	RegisterClass();
+	return InitInstance();
+}
+
+// 创建窗口
+bool CWin32Window::CreateWindowWithNewThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, LPARAM lParam)
+{
+	m_bIsCreateWithThread = true;
 	m_hParentWnd = hParent;
 	m_rctCreate = WndRect;
 	m_nCreateShow = nShow;
@@ -501,7 +519,7 @@ void CWin32Window::SetWindowText(char* pstrWndText)
 void CWin32Window::CloseWindow(bool bIsWaitEnd)
 {
 	this->PostMessage(WM_CLOSE, NULL, NULL);
-	if (bIsWaitEnd)
+	if (m_bIsCreateWithThread && bIsWaitEnd)
 		WaitWindowThreadEnd();
 }
 
@@ -518,7 +536,7 @@ void CWin32Window::WaitWindowThreadEnd()
 
 void CWin32Window::_PostEndThread()
 {
-	if (m_hUiThread != NULL && m_dwUiThreadId != 0)
+	if (m_bIsCreateWithThread && m_hUiThread != NULL && m_dwUiThreadId != 0)
 		::PostThreadMessage(m_dwUiThreadId, WM_QUIT, 0, 0);
 }
 

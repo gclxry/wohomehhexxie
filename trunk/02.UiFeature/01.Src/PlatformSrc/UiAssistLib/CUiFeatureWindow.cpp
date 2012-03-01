@@ -34,7 +34,7 @@ CUiFeatureWindow::~CUiFeatureWindow()
 	m_dwUiThreadId = 0;
 }
 
-bool CUiFeatureWindow::CreateWin32Window(HWND hParent, RECT WndRect, char *pszWndText, int nShow, LPARAM lParam)
+bool CUiFeatureWindow::CreateWindowWithNewThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, LPARAM lParam)
 {
 	return false;
 }
@@ -168,5 +168,5 @@ bool CUiFeatureWindow::CreateFeatureWindow(char* pszKernelDllPath, char* pszSkin
 		return false;
 	}
 
-	return CWin32Window::CreateWin32Window(hParent, WndRect, "Welcome UiFeature", nShow, lParam);
+	return CWin32Window::CreateWindowWithNewThread(hParent, WndRect, "Welcome UiFeature", nShow, lParam);
 }

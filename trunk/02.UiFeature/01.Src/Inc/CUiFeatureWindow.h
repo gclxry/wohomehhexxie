@@ -22,7 +22,7 @@ public:
 	// int nShow：显示模式，如：SW_SHOW、SW_HIDE
 	// LPARAM lParam：创建窗口时传入的参数，可以通过 GetCreateWindowParam 函数取得
 	bool CreateFeatureWindow(char* pszKernelDllPath, char* pszSkinPath, char *pszSkinWndName, HWND hParent, RECT WndRect, int nShow, LPARAM lParam);
-	virtual bool CreateWin32Window(HWND hParent, RECT WndRect, char *pszWndText, int nShow, LPARAM lParam);
+	virtual bool CreateWindowWithNewThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, LPARAM lParam);
 	// 本窗口的消息处理函数
 	virtual LRESULT WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam);
 	// 取得

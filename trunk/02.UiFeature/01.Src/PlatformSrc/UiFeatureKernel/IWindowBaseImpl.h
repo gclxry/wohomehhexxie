@@ -181,6 +181,7 @@ private:
 	// 派发控件注册的消息
 	void DispatchRegisterMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam);
 
+	bool OnTimerToChild(CHILD_CTRLS_VEC &ChildCtrlsVec, UINT nTimerId);
 protected:
 	// 控件注册需要取得的消息
 	REG_MSG_MAP m_CtrlRegMsgMap;
