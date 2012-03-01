@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 #include <assert.h>
+#include <shobjidl.h>
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\CWin32Window.h"
 
@@ -511,4 +512,31 @@ void CWin32Window::_PostEndThread()
 {
 	if (m_hUiThread != NULL && m_dwUiThreadId != 0)
 		::PostThreadMessage(m_dwUiThreadId, WM_QUIT, 0, 0);
+}
+
+// 在任务栏上隐藏主窗口按钮
+void CWin32Window::HideInTaskbar()
+{
+	HRESULT hr = NULL;
+	ITaskbarList* pTaskbarList = NULL;
+
+	hr = ::CoCreateInstance(CLSID_TaskbarList, NULL, CLSCTX_INPROC_SERVER, IID_ITaskbarList, (void**)&pTaskbarList);
+	if (hr == S_OK && pTaskbarList != NULL)
+	{
+		pTaskbarList->HrInit();
+
+		::SetWindowTextA(this->GetSafeHandle(), "");
+
+		DWORD dwLong = ::GetWindowLong(this->GetSafeHandle(), GWL_STYLE);
+		dwLong &= (~WS_CAPTION);
+		::SetWindowLong(this->GetSafeHandle(), GWL_STYLE, dwLong);
+
+		dwLong = ::GetWindowLong(this->GetSafeHandle(), GWL_EXSTYLE);
+		dwLong &= (~WS_EX_APPWINDOW);
+		dwLong |= WS_EX_TOOLWINDOW;
+		::SetWindowLong(this->GetSafeHandle(), GWL_EXSTYLE, dwLong);
+
+		pTaskbarList->DeleteTab(this->GetSafeHandle());
+		pTaskbarList->Release();
+	}
 }

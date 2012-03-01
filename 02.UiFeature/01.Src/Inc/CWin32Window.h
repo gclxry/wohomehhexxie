@@ -90,6 +90,8 @@ protected:
 	ATOM RegisterClass();
 	virtual bool InitInstance();
 
+	// 在任务栏上隐藏主窗口按钮
+	void HideInTaskbar();
 //////////////////////////////////////////////////////////////////////////
 	// 以下函数原则上不允许外部程序调用，只提供给内部使用
 
