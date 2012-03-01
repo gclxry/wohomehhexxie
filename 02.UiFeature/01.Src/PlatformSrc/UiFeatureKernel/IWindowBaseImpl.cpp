@@ -529,6 +529,10 @@ LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, b
 		}
 		break;
 
+	case WM_MOUSEWHEEL:
+		OnMouseWheel(wParam, lParam);
+		break;
+
 	case WM_KEYDOWN:
 		OnKeyDown((int)wParam, (int)lParam);
 		break;
@@ -757,6 +761,12 @@ POINT IWindowBaseImpl::GetCtrlMouseOffset(POINT WndPt, IControlBase* pCtrl)
 	CtrlMousePt.y -= CtlRct.top;
 
 	return CtrlMousePt;
+}
+
+void IWindowBaseImpl::OnMouseWheel(WPARAM wParam, LPARAM lParam)
+{
+	if (m_pMouseHoverCtrl != NULL)
+		m_pMouseHoverCtrl->OnMouseWheel(wParam, lParam);
 }
 
 void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)

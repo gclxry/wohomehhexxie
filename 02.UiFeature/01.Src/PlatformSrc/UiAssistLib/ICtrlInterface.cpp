@@ -126,3 +126,8 @@ void ICtrlInterface::OnVScroll(UINT nSBCode, UINT nPos, IControlBase* pScrollBar
 void ICtrlInterface::OnHScroll(UINT nSBCode, UINT nPos, IControlBase* pScrollBar)
 {
 }
+
+//  Û±Íπˆ¬÷œ˚œ¢
+void ICtrlInterface::OnMouseWheel(WPARAM wParam, LPARAM lParam)
+{
+}

@@ -324,6 +324,8 @@ protected:
 	// 按键按下
 	virtual void OnKeyDown(WPARAM wParam, LPARAM lParam) = 0;
 	virtual void OnKeyUp(WPARAM wParam, LPARAM lParam) = 0;
+	// 鼠标滚轮消息
+	virtual void OnMouseWheel(WPARAM wParam, LPARAM lParam) = 0;
 
 	// 向内核注册一个想要取到的消息
 	void RegisterControlMessage(int nMsgId);
