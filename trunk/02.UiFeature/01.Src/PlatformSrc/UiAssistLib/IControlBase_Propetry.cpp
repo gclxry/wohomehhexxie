@@ -86,11 +86,6 @@ void IControlBase::CreateCtrlAllPropetry(bool bNeedSetDftProp)
 	if (m_pPropBase_RcvMouseMsg == NULL)
 		return;
 
-	// base-DragInCtrl
-	m_pPropBase_DragInCtrl = (IPropertyBool*)CreateCtrlOnePropetry(m_pPropGroupBase, OTID_BOOL, "DragInCtrl", "控件内部是否接受鼠标拖拽消息");
-	if (m_pPropBase_DragInCtrl == NULL)
-		return;
-
 	// tab 键顺序
 	// base-taborder
 	m_pPropBase_TabOrder = (IPropertyInt*)CreateCtrlOnePropetry(m_pPropGroupBase, OTID_INT, "TabOrder", "tab键的跳转序号，0为不接受tab键");
@@ -175,7 +170,6 @@ void IControlBase::CreateCtrlAllPropetry(bool bNeedSetDftProp)
 		m_pPropBase_Visible->SetValue(true);
 		m_pPropBase_RcvMouseMsg->SetValue(true);
 		m_pPropBase_Enable->SetValue(true);
-		m_pPropBase_DragInCtrl->SetValue(false);
 		m_pPropBase_TabOrder->SetValue(0);
 		m_pPropBase_DefaultEnterCtrl->SetValue(false);
 		m_pPropBase_Layout_Width->SetValue(20);
@@ -337,18 +331,6 @@ void IControlBase::SetReceiveMouseMessage(bool bIsReceive)
 bool IControlBase::GetReceiveMouseMessage()
 {
 	return m_pPropBase_RcvMouseMsg->GetValue();
-}
-
-// 拖动控件属性
-void IControlBase::SetDragInControl(bool bDrag)
-{
-	if (m_pPropBase_DragInCtrl != NULL)
-		m_pPropBase_DragInCtrl->SetValue(bDrag);
-}
-
-bool IControlBase::GetDragInControl()
-{
-	return m_pPropBase_DragInCtrl->GetValue();
 }
 
 CONTROL_LAYOUT_INFO IControlBase::GetLayout()

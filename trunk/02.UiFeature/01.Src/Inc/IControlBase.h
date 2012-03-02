@@ -224,10 +224,6 @@ public:
 	void SetVisible(bool bVisible, bool bSetChild = true);
 	bool IsVisible();
 
-	// 拖动控件属性
-	void SetDragInControl(bool bDrag);
-	bool GetDragInControl();
-
 	// 可用属性
 	void SetEnable(bool bEnable, bool bSetChild = true);
 	bool IsEnable();
@@ -303,8 +299,8 @@ protected:
 	virtual void OnLButtonUp(POINT pt) = 0;
 	// 鼠标左键双击
 	virtual void OnLButtonDbClick(POINT pt) = 0;
-	// 鼠标拖动控件
-	virtual void OnMouseDragInCtrl(POINT pt) = 0;
+	// 鼠标在控件内部拖动控件
+	virtual void OnMouseDragging(POINT pt) = 0;
 	// 鼠标右键点击
 	virtual void OnRButtonDown(POINT pt) = 0;
 	// 移动、设置控件位置
@@ -405,8 +401,6 @@ protected:
 	IPropertyBool *m_pPropBase_RcvMouseMsg;
 	// base-enable
 	IPropertyBool *m_pPropBase_Enable;
-	// base-dragInCtrl
-	IPropertyBool *m_pPropBase_DragInCtrl;
 	// base-taborder
 	IPropertyInt *m_pPropBase_TabOrder;
 	// base-defaultenterctrl

@@ -40,8 +40,6 @@ IControlBase::IControlBase()
 	m_pPropBase_RcvMouseMsg = NULL;
 	// base-enable
 	m_pPropBase_Enable = NULL;
-	// base-dragInCtrl
-	m_pPropBase_DragInCtrl = NULL;
 	// base-taborder
 	m_pPropBase_TabOrder = NULL;
 	// base-defaultenterctrl
