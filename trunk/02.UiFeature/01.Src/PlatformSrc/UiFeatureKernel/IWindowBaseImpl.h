@@ -154,6 +154,8 @@ private:
 
 	// 从相对窗口的鼠标相对坐标得到相对控件的鼠标坐标
 	POINT GetCtrlMouseOffset(POINT WndPt, IControlBase* pCtrl);
+	// 取得桌面工作区域大小
+	RECT GetWorkAreaRect();
 
 private:
 	// 循环遍历每个控件的绘制

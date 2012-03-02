@@ -386,10 +386,9 @@ void IWindowBaseImpl::CenterWindow()
 	if (IS_SAFE_HANDLE(m_hWnd) && cx > 0 && cy > 0)
 	{
 		// 设置默认大小
-		RECT WorkArea, CenterRect;
-		INIT_RECT(WorkArea);
+		RECT WorkArea = GetWorkAreaRect();
+		RECT CenterRect;
 		INIT_RECT(CenterRect);
-		::SystemParametersInfo(SPI_GETWORKAREA, 0, &WorkArea, 0);
 
 		CenterRect.left = (RECT_WIDTH(WorkArea) - cx) / 2;
 		CenterRect.right = CenterRect.left + cx;
@@ -409,10 +408,9 @@ void IWindowBaseImpl::OnInitWindowBaseEnd()
 		SIZE WndSize = this->PP_GetWindowPropSize();
 
 		// 设置默认大小
-		RECT WorkArea, CenterRect;
-		INIT_RECT(WorkArea);
+		RECT WorkArea = GetWorkAreaRect();
+		RECT CenterRect;
 		INIT_RECT(CenterRect);
-		::SystemParametersInfo(SPI_GETWORKAREA, 0, &WorkArea, 0);
 
 		CenterRect.left = (RECT_WIDTH(WorkArea) - WndSize.cx) / 2;
 		CenterRect.right = CenterRect.left + WndSize.cx;
@@ -637,31 +635,45 @@ LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, b
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///// 消息处理 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 取得桌面工作区域大小
+RECT IWindowBaseImpl::GetWorkAreaRect()
+{
+	RECT WorkArea;
+	INIT_RECT(WorkArea);
+	::SystemParametersInfo(SPI_GETWORKAREA, 0, &WorkArea, 0);
+	return WorkArea;
+}
+
 bool IWindowBaseImpl::OnGetMinMaxInfo(MINMAXINFO *pMinMaxInfo)
 {
 	if (pMinMaxInfo == NULL || m_pPropSize_Enable == NULL || !m_pPropSize_Enable->GetValue())
 		return false;
 
-	bool bRet = false;
-	if (m_pPropSize_MaxWidth != NULL && m_pPropSize_MaxWidth->GetValue() > 0
-		&& m_pPropSize_MaxHeight != NULL && m_pPropSize_MaxHeight->GetValue() > 0)
-	{
-		pMinMaxInfo->ptMaxTrackSize.x = m_pPropSize_MaxWidth->GetValue();
-		pMinMaxInfo->ptMaxTrackSize.y = m_pPropSize_MaxHeight->GetValue();
-		bRet = true;
-	}
+	if (m_pPropSize_MaxWidth == NULL || m_pPropSize_MaxHeight == NULL ||
+		m_pPropSize_MinWidth == NULL || m_pPropSize_MinHeight == NULL)
+		return false;
 
-	if (m_pPropSize_MinWidth != NULL && m_pPropSize_MinWidth->GetValue() > 0
-		&& m_pPropSize_MaxWidth->GetValue() > m_pPropSize_MinWidth->GetValue()
-		&& m_pPropSize_MinHeight != NULL && m_pPropSize_MinHeight->GetValue() > 0
-		&& m_pPropSize_MaxHeight->GetValue() > m_pPropSize_MinHeight->GetValue())
-	{
-		pMinMaxInfo->ptMinTrackSize.x = m_pPropSize_MinWidth->GetValue();
-		pMinMaxInfo->ptMinTrackSize.y = m_pPropSize_MinHeight->GetValue();
-		bRet = true;
-	}
+	int nWidth = ::GetSystemMetrics(SM_CXSCREEN);
+	int nHeight = ::GetSystemMetrics(SM_CYSCREEN);
 
-	return bRet;
+	if (m_pPropSize_MaxWidth->GetValue() <= 0)
+		m_pPropSize_MaxWidth->SetValue(nWidth);
+
+	if (m_pPropSize_MaxHeight->GetValue() <= 0)
+		m_pPropSize_MaxHeight->SetValue(nHeight);
+
+	if (m_pPropSize_MinWidth->GetValue() <= 0)
+		m_pPropSize_MinWidth->SetValue(100);
+
+	if (m_pPropSize_MinHeight->GetValue() <= 0)
+		m_pPropSize_MinHeight->SetValue(25);
+
+	pMinMaxInfo->ptMaxTrackSize.x = m_pPropSize_MaxWidth->GetValue();
+	pMinMaxInfo->ptMaxTrackSize.y = m_pPropSize_MaxHeight->GetValue();
+	pMinMaxInfo->ptMinTrackSize.x = m_pPropSize_MinWidth->GetValue();
+	pMinMaxInfo->ptMinTrackSize.y = m_pPropSize_MinHeight->GetValue();
+
+	return true;
 }
 
 void IWindowBaseImpl::OnPaint(HDC hWndDc, RECT *pLayeredRect)
