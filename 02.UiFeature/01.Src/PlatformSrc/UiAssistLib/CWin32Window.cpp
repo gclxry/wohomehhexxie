@@ -251,7 +251,9 @@ LRESULT CWin32Window::WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam)
 		return FALSE;
 
 	case WM_ERASEBKGND:
-		return TRUE;
+		if (OnEraseBkgnd((HDC)wParam))
+			return TRUE;
+		break;
 
 	case WM_NCPAINT:
 	case WM_NCACTIVATE:
@@ -264,6 +266,11 @@ LRESULT CWin32Window::WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam)
 	}
 
 	return ::DefWindowProc(m_hWnd, nMsgId, wParam, lParam);
+}
+
+bool CWin32Window::OnEraseBkgnd(HDC hDc)
+{
+	return true;
 }
 
 void CWin32Window::OnPaint(HDC hDc)
