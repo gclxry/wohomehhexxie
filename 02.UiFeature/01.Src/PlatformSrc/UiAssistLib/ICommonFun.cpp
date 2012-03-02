@@ -292,3 +292,37 @@ IPropertyString* FindObjectNameProperty(IPropertyGroup *pGroupProp)
 
 	return NULL;
 }
+
+void RectScreenToClient(HWND hWnd, RECT& rct)
+{
+	if (!::IsWindow(hWnd))
+		return;
+
+	POINT pt = {rct.left, rct.top};
+	::ScreenToClient(hWnd, &pt);
+
+	int nW = RECT_WIDTH(rct);
+	int nH = RECT_HEIGHT(rct);
+
+	rct.left = pt.x;
+	rct.right = rct.left + nW;
+	rct.top = pt.y;
+	rct.bottom = rct.top + nH;
+}
+
+void RectClientToScreen(HWND hWnd, RECT& rct)
+{
+	if (!::IsWindow(hWnd))
+		return;
+
+	POINT pt = {rct.left, rct.top};
+	::ClientToScreen(hWnd, &pt);
+
+	int nW = RECT_WIDTH(rct);
+	int nH = RECT_HEIGHT(rct);
+
+	rct.left = pt.x;
+	rct.right = rct.left + nW;
+	rct.top = pt.y;
+	rct.bottom = rct.top + nH;
+}
