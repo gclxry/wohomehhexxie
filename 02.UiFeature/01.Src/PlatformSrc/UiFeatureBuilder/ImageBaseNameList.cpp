@@ -140,7 +140,7 @@ void CImageBaseNameList::OnDeleteImageBaseProp()
 			bDelete = true;
 			// Ñ¡ÖÐ£¬É¾³ý
 			IPropertyImageBase *pImgBaseProp = (IPropertyImageBase *)this->GetItemData(i);
-			m_pUiKernel->GetSkinManager()->BD_DeletePropetry(dynamic_cast<IPropertyBase*>(pImgBaseProp));
+			m_pUiKernel->GetSkinManager()->DeletePropetryBaseProp(dynamic_cast<IPropertyBase*>(pImgBaseProp));
 
 			this->DeleteItem(i);
 			nCtns = this->GetItemCount();

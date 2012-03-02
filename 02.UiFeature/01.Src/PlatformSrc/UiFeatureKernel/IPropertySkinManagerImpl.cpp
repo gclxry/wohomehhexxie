@@ -1699,8 +1699,21 @@ void IPropertySkinManagerImpl::BD_SetGroupPropActiveMark(IPropertyGroup *pPropGr
 	}
 }
 
+// É¾³ýÍ¼Æ¬
+bool IPropertySkinManagerImpl::DeleteImageBase(IPropertyImageBase *pPropImgBase)
+{
+	if (pPropImgBase == NULL)
+		return false;
+
+	IPropertyBase *pPropBase = dynamic_cast<IPropertyBase*>(pPropImgBase);
+	if (pPropBase == NULL)
+		return false;
+
+	return DeletePropetryBaseProp(pPropBase);
+}
+
 // É¾³ýÊôÐÔ
-bool IPropertySkinManagerImpl::BD_DeletePropetry(IPropertyBase *pPropBase)
+bool IPropertySkinManagerImpl::DeletePropetryBaseProp(IPropertyBase *pPropBase)
 {
 	KERNEL_CRI_SEC;
 	if (pPropBase == NULL)

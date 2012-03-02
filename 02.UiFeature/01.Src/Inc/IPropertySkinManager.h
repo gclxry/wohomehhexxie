@@ -29,7 +29,7 @@ public:
 	virtual ONE_RESOURCE_PROP_MAP* GetOneResourcePropMap(char *pPropGroupName, bool bIsCreate = false) = 0;
 
 	// 删除属性
-	virtual bool BD_DeletePropetry(IPropertyBase *pPropBase) = 0;
+	virtual bool DeletePropetryBaseProp(IPropertyBase *pPropBase) = 0;
 	// 修改属性名称
 	virtual bool BD_ModifyPropetryName(IPropertyBase *pPropBase, char *pszNewPropName) = 0;
 	// 初始化鼠标手势属性
@@ -37,7 +37,8 @@ public:
 
 	// 加载本地图片
 	virtual IPropertyImageBase* LoadLocalImage(char *pszLocalImgPath) = 0;
-
+	// 删除图片
+	virtual bool DeleteImageBase(IPropertyImageBase *pPropImgBase) = 0;
 //////////////////////////////////////////////////////////////////////////
 	// 初始化Window皮肤
 	virtual IPropertyWindow* PG_InitWindowSkin(const char *pszSkinPath, const char *pszWndName) = 0;

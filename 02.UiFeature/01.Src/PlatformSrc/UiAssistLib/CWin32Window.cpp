@@ -274,6 +274,15 @@ bool CWin32Window::IsWindow()
 	return (::IsWindow(m_hWnd) == TRUE);
 }
 
+// 取得桌面工作区域大小
+RECT CWin32Window::GetWorkAreaRect()
+{
+	RECT WorkArea;
+	INIT_RECT(WorkArea);
+	::SystemParametersInfo(SPI_GETWORKAREA, 0, &WorkArea, 0);
+	return WorkArea;
+}
+
 // 将窗口移到屏幕中央
 void CWin32Window::CenterWindow()
 {
@@ -284,10 +293,9 @@ void CWin32Window::CenterWindow()
 	if (IS_SAFE_HANDLE(m_hWnd) && cx > 0 && cy > 0)
 	{
 		// 设置默认大小
-		RECT WorkArea, CenterRect;
-		INIT_RECT(WorkArea);
+		RECT WorkArea = GetWorkAreaRect();
+		RECT CenterRect;
 		INIT_RECT(CenterRect);
-		::SystemParametersInfo(SPI_GETWORKAREA, 0, &WorkArea, 0);
 
 		CenterRect.left = WorkArea.left + (RECT_WIDTH(WorkArea) - cx) / 2;
 		CenterRect.right = CenterRect.left + cx;

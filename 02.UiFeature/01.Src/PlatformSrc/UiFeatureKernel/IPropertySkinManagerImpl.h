@@ -35,8 +35,6 @@ public:
 	virtual bool BD_AppendControlToVec(char *pszCtrlType, IPropertyGroup* pCtrlPropGroup);
 	// 保存皮肤包
 	virtual bool BD_SaveProject(char *pszSkinDir, char *pszSkinName);
-	// 删除属性
-	virtual bool BD_DeletePropetry(IPropertyBase *pPropBase);
 	// 修改属性名称
 	virtual bool BD_ModifyPropetryName(IPropertyBase *pPropBase, char *pszNewPropName);
 	virtual ZIP_FILE_MAP* BD_GetUnZipFileMap();
@@ -58,6 +56,8 @@ public:
 
 	// 清空属性队列
 	virtual void ReleaseSkinManagerPropetry();
+	// 删除属性
+	virtual bool DeletePropetryBaseProp(IPropertyBase *pPropBase);
 
 //////////////////////////////////////////////////////////////////////////
 	// 初始化Window皮肤
@@ -77,6 +77,8 @@ public:
 
 	// 取得整个程序默认的字体信息
 	virtual IPropertyFontBase* GetDefaultFontBase();
+	// 删除图片
+	virtual bool DeleteImageBase(IPropertyImageBase *pPropImgBase);
 private:
 //////////////////////////////////////////////////////////////////////////
 	// Builder使用函数
