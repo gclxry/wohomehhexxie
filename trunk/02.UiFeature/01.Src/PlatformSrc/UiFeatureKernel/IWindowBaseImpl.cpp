@@ -616,9 +616,11 @@ LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, b
 
 	case WM_NCCALCSIZE:
 		bPassOn = false;
-		return 0;
+		return FALSE;
 
 	case WM_ERASEBKGND:
+		return TRUE;
+
 	case WM_NCPAINT:
 	case WM_NCACTIVATE:
 	case 0x00AE:	// WM_NCUAHDRAWCAPTION

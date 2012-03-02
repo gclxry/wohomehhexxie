@@ -102,15 +102,6 @@ bool IPropertyImage::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pP
 	return true;
 }
 
-bool IPropertyImage::DrawImage(CDrawingBoard &DstDc, RECT DstRct, int nAlpha)
-{
-	IPropertyImageBase *pImgBase = (IPropertyImageBase*)GetRelevancyProp();
-	if (pImgBase == NULL)
-		return false;
-
-	return pImgBase->DrawImage(DstDc, DstRct, nAlpha);
-}
-
 void IPropertyImage::SetActivePropetry(bool bIsActive)
 {
 	m_bIsActiveProp = bIsActive;
@@ -142,4 +133,22 @@ void IPropertyImage::InitImage()
 		return;
 
 	GetImageBaseProp()->InitImage();
+}
+
+bool IPropertyImage::DrawImage(CDrawingBoard &DstDc, RECT DstRct, int nAlpha)
+{
+	IPropertyImageBase *pImgBase = (IPropertyImageBase*)GetRelevancyProp();
+	if (pImgBase == NULL)
+		return false;
+
+	return pImgBase->DrawImage(DstDc, DstRct, nAlpha);
+}
+
+bool IPropertyImage::DrawImage(HDC hDc, RECT DstRct, int nAlpha)
+{
+	IPropertyImageBase *pImgBase = (IPropertyImageBase*)GetRelevancyProp();
+	if (pImgBase == NULL)
+		return false;
+
+	return pImgBase->DrawImage(hDc, DstRct, nAlpha);
 }
