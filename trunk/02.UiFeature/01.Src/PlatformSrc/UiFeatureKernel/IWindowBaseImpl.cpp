@@ -1064,6 +1064,7 @@ void IWindowBaseImpl::SetControlPostion(CHILD_CTRLS_VEC *pCtrlVec, SIZE NewSize)
 
 			// 计算当前控件的位置
 			SetControlWindowPostion(pCtrl, ParentRctInWnd);
+			pCtrl->RedrawControl();
 
 			// 设置子控件的位置
 			SetControlPostion(pCtrl->GetChildControlsVec(), NewSize);

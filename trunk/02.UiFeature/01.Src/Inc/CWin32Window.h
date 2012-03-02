@@ -88,6 +88,7 @@ protected:
 	virtual void OnEnterSizeMove();
 	// WM_EXITSIZEMOVE：退出移动、拉伸窗口操作
 	virtual void OnExitSizeMove();
+	virtual bool OnEraseBkgnd(HDC hDc);
 	virtual void OnPaint(HDC hDc);
 	// 类似MFC的PreTranslateMessage，如果返回的是true，不再继续往下派发消息
 	virtual bool PreTranslateMessage(MSG msg);
