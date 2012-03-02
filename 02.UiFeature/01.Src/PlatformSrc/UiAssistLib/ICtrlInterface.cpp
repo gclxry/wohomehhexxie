@@ -51,8 +51,8 @@ void ICtrlInterface::OnLButtonDbClick(POINT pt)
 {
 }
 
-// 鼠标在控件内部点击按下并移动鼠标
-void ICtrlInterface::OnMouseDragInCtrl(POINT pt)
+// 鼠标在控件内部拖动控件
+void ICtrlInterface::OnMouseDragging(POINT pt)
 {
 }
 

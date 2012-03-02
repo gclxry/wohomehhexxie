@@ -45,8 +45,8 @@ protected:
 	virtual void OnLButtonUp(POINT pt);
 	// 鼠标左键双击
 	virtual void OnLButtonDbClick(POINT pt);
-	// 鼠标在控件内部点击按下并移动鼠标
-	virtual void OnMouseDragInCtrl(POINT pt);
+	// 鼠标在控件内部拖动控件
+	virtual void OnMouseDragging(POINT pt);
 	// 鼠标右键点击
 	virtual void OnRButtonDown(POINT pt);
 	// 移动、设置控件位置

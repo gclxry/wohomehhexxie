@@ -798,12 +798,9 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 	{
 		if (m_pLButtonDownCtrl != NULL)
 		{
-			// 如果允许在控件内部进行自由拖动
-			if (m_pLButtonDownCtrl->GetDragInControl())
-			{
-				m_pLButtonDownCtrl->OnMouseDragInCtrl(GetCtrlMouseOffset(pt, m_pLButtonDownCtrl));
-				return;
-			}
+			// 鼠标在控件内部拖动控件
+			m_pLButtonDownCtrl->OnMouseDragging(GetCtrlMouseOffset(pt, m_pLButtonDownCtrl));
+			return;
 		}
 
 		// 鼠标按下时，需要锁定一个控件进行鼠标移动处理
