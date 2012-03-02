@@ -27,3 +27,6 @@ bool FileExists(const char *pszFilePath);
 void AddIntAttrToNode(CUiXmlWriteNode* pNode, const char* pszAttrName, int nInt);
 // 从一个属性组中查找名为 "@Object_Name" 的属性
 IPropertyString* FindObjectNameProperty(IPropertyGroup *pGroupProp);
+
+void RectScreenToClient(HWND hWnd, RECT& rct);
+void RectClientToScreen(HWND hWnd, RECT& rct);
