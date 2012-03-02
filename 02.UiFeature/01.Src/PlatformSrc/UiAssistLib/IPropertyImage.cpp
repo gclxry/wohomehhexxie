@@ -134,3 +134,12 @@ SIZE IPropertyImage::GetImageSize()
 
 	return sizeImg;
 }
+
+// 初始化Image，将Image加载到内存，程序默认是没有加载图片数据的
+void IPropertyImage::InitImage()
+{
+	if (GetImageBaseProp() == NULL)
+		return;
+
+	GetImageBaseProp()->InitImage();
+}

@@ -111,9 +111,10 @@ CWin32Window::~CWin32Window()
 }
 
 // 创建窗口
-bool CWin32Window::CreateWindowWithoutThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, LPARAM lParam)
+bool CWin32Window::CreateWindowWithoutThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, int nStyle, LPARAM lParam)
 {
 	m_bIsCreateWithThread = false;
+	m_nCreateStyle = nStyle;
 	m_hParentWnd = hParent;
 	m_rctCreate = WndRect;
 	m_nCreateShow = nShow;
@@ -127,9 +128,10 @@ bool CWin32Window::CreateWindowWithoutThread(HWND hParent, RECT WndRect, char *p
 }
 
 // 创建窗口
-bool CWin32Window::CreateWindowWithNewThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, LPARAM lParam)
+bool CWin32Window::CreateWindowWithNewThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, int nStyle, LPARAM lParam)
 {
 	m_bIsCreateWithThread = true;
+	m_nCreateStyle = nStyle;
 	m_hParentWnd = hParent;
 	m_rctCreate = WndRect;
 	m_nCreateShow = nShow;
@@ -178,8 +180,18 @@ LRESULT CWin32Window::WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam)
 
 	switch (nMsgId)
 	{
+	case WM_SYSKEYDOWN:
 	case WM_KEYDOWN:
 		OnKeyDown((int)wParam, (int)lParam);
+		break;
+
+		// 销毁窗口后，将m_hWnd设置为NULL
+	case WM_CLOSE:
+		{
+			LRESULT lRes = ::DefWindowProc(m_hWnd, nMsgId, wParam, lParam);
+			m_hWnd = NULL;
+			return lRes;
+		}
 		break;
 
 	case WM_SYSCOMMAND:
@@ -193,7 +205,11 @@ LRESULT CWin32Window::WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_KILLFOCUS:
-		OnKillFocus();
+		{
+			LRESULT lRes = ::DefWindowProc(m_hWnd, nMsgId, wParam, lParam);
+			OnKillFocus();
+			return lRes;
+		}
 		break;
 
 	case WM_SETFOCUS:
@@ -206,13 +222,37 @@ LRESULT CWin32Window::WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_SIZE:
-		OnSize((UINT)wParam, LOWORD(lParam), HIWORD(lParam));
+		{
+			LRESULT lRes = ::DefWindowProc(m_hWnd, nMsgId, wParam, lParam);
+			OnSize((UINT)wParam, LOWORD(lParam), HIWORD(lParam));
+			return lRes;
+		}
+		break;
+
+	case WM_ENTERSIZEMOVE:
+		OnEnterSizeMove();
+		break;
+
+	case WM_EXITSIZEMOVE:
+		OnExitSizeMove();
+		break;
+
+	case WM_PAINT:
+		{
+			PAINTSTRUCT ps;
+			HDC hDc = ::BeginPaint(m_hWnd, &ps);
+			OnPaint(hDc);
+			::EndPaint(m_hWnd, &ps);
+			return TRUE;
+		}
 		break;
 
 	case WM_NCCALCSIZE:
 		return 0;
 
 	case WM_ERASEBKGND:
+		return TRUE;
+
 	case WM_NCPAINT:
 	case WM_NCACTIVATE:
 	case 0x00AE:	// WM_NCUAHDRAWCAPTION
@@ -226,8 +266,28 @@ LRESULT CWin32Window::WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam)
 	return ::DefWindowProc(m_hWnd, nMsgId, wParam, lParam);
 }
 
+void CWin32Window::OnPaint(HDC hDc)
+{
+}
+
+// WM_ENTERSIZEMOVE：进入移动、拉伸窗口操作
+void CWin32Window::OnEnterSizeMove()
+{
+}
+
+// WM_EXITSIZEMOVE：退出移动、拉伸窗口操作
+void CWin32Window::OnExitSizeMove()
+{
+}
+
 void CWin32Window::OnSize(UINT nType, int cx, int cy)
 {
+	//HRGN hRgn = ::CreateRectRgn(0, 0, cx, cy);
+	//if (IS_SAFE_HANDLE(hRgn))
+	//{
+	//	::SetWindowRgn(m_hWnd, hRgn, TRUE);
+	//	::DeleteObject(hRgn);
+	//}
 }
 
 // 取得窗口句柄
@@ -443,8 +503,8 @@ ATOM CWin32Window::RegisterClass()
 		wcex.cbWndExtra		= 0;
 		wcex.hInstance		= ::GetModuleHandle(NULL);
 		wcex.hIcon			= NULL;
-		wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
-		wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW + 1);
+		wcex.hCursor		= ::LoadCursor(NULL, IDC_ARROW);
+		wcex.hbrBackground	= (HBRUSH)GetStockObject(WHITE_BRUSH);
 		wcex.lpszMenuName	= NULL;
 		wcex.lpszClassName	= FEATURE_CLASS_NAME;
 		wcex.hIconSm		= NULL;
@@ -457,7 +517,7 @@ ATOM CWin32Window::RegisterClass()
 
 bool CWin32Window::InitInstance()
 {
-	m_hWnd = ::CreateWindowExA(0, FEATURE_CLASS_NAME, m_strWndText.c_str(), WS_OVERLAPPED | WS_THICKFRAME,
+	m_hWnd = ::CreateWindowExA(0, FEATURE_CLASS_NAME, m_strWndText.c_str(), m_nCreateStyle,
 		m_rctCreate.left, m_rctCreate.top, RECT_WIDTH(m_rctCreate), RECT_HEIGHT(m_rctCreate), m_hParentWnd, NULL, ::GetModuleHandle(NULL), this);
 
 	// 设置创建对话框参数
