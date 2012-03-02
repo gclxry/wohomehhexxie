@@ -34,7 +34,7 @@ CUiFeatureWindow::~CUiFeatureWindow()
 	m_dwUiThreadId = 0;
 }
 
-bool CUiFeatureWindow::CreateWindowWithNewThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, LPARAM lParam)
+bool CUiFeatureWindow::CreateWindowWithNewThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, int nStyle, LPARAM lParam)
 {
 	return false;
 }
@@ -52,7 +52,7 @@ IWindowBase* CUiFeatureWindow::GetUiFeatureWindow()
 
 bool CUiFeatureWindow::InitInstance()
 {
-	m_hWnd = ::CreateWindowExA(0, FEATURE_CLASS_NAME, m_strWndText.c_str(), WS_OVERLAPPED | WS_THICKFRAME,
+	m_hWnd = ::CreateWindowExA(0, FEATURE_CLASS_NAME, m_strWndText.c_str(), m_nCreateStyle,
 		m_rctCreate.left, m_rctCreate.top, RECT_WIDTH(m_rctCreate), RECT_HEIGHT(m_rctCreate), m_hParentWnd, NULL, ::GetModuleHandle(NULL), this);
 
 	// 设置创建对话框参数
@@ -141,7 +141,7 @@ void CUiFeatureWindow::OnInitWindowEnd(int nErrorCode)
 // RECT WndRect：窗口显示位置，坐标为屏幕位置
 // int nShow：显示模式，如：SW_SHOW、SW_HIDE
 // LPARAM lParam：创建窗口时传入的参数，可以通过 GetCreateWindowParam 函数取得
-bool CUiFeatureWindow::CreateFeatureWindow(char* pszKernelDllPath, char* pszSkinPath, char *pszSkinWndName, HWND hParent, RECT WndRect, int nShow, LPARAM lParam)
+bool CUiFeatureWindow::CreateFeatureWindow(char* pszKernelDllPath, char* pszSkinPath, char *pszSkinWndName, HWND hParent, RECT WndRect, int nShow, int nStyle, LPARAM lParam)
 {
 	if (pszKernelDllPath == NULL || pszSkinPath == NULL || pszSkinWndName == NULL)
 		return false;
@@ -168,5 +168,5 @@ bool CUiFeatureWindow::CreateFeatureWindow(char* pszKernelDllPath, char* pszSkin
 		return false;
 	}
 
-	return CWin32Window::CreateWindowWithNewThread(hParent, WndRect, "Welcome UiFeature", nShow, lParam);
+	return CWin32Window::CreateWindowWithNewThread(hParent, WndRect, "Welcome UiFeature", nShow, nStyle, lParam);
 }

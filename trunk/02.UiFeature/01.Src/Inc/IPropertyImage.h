@@ -36,8 +36,8 @@ public:
 
 	// 绘制图片，如果alpha不是255，则根据这个alpha值来绘制
 	bool DrawImage(CDrawingBoard &DstDc, RECT DstRct, int nAlpha = 255);
-
 	bool OnDrawAnimation();
-
 	void SetNeedRedraw();
+	// 初始化Image，将Image加载到内存，程序默认是没有加载图片数据的
+	void InitImage();
 };

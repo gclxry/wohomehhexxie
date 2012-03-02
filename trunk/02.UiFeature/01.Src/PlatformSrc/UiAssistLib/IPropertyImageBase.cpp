@@ -105,21 +105,30 @@ bool IPropertyImageBase::IsRightData()
 	return (m_ImageProp.strFileName.c_str() > 0 && RECT_WIDTH(m_ImageProp.RectInImage) > 0 && RECT_HEIGHT(m_ImageProp.RectInImage) > 0);
 }
 
+// 初始化Image，将Image加载到内存，程序默认是没有加载图片数据的
+void IPropertyImageBase::InitImage()
+{
+	if (m_ImageProp.ImgPlayType == IPT_GIF)
+		InitGifImage();
+	else
+		InitStaticImage();
+}
+
 SIZE IPropertyImageBase::GetImageSize()
 {
+	InitImage();
+
 	SIZE sizImg;
 	sizImg.cx = sizImg.cy = 0;
 	if (m_ImageProp.ImgPlayType == IPT_GIF)
 	{
 		if (m_pGifImg != NULL)
 		{
-			InitGifImage();
 			sizImg = m_pGifImg->GetImageSize();
 		}
 	}
 	else
 	{
-		InitStaticImage();
 		sizImg = m_DrawImg.GetDcSize();
 	}
 	return sizImg;
@@ -312,17 +321,16 @@ bool IPropertyImageBase::DrawImage(CDrawingBoard &DstDc, RECT DstRct, int nAlpha
 	if (GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
 		return false;
 
+	InitImage();
+
 	if (m_ImageProp.ImgPlayType == IPT_GIF)
 	{
-		// GIF图片
-		InitGifImage();
-
 		if (m_pGifImg == NULL || m_pGifImg->GetImage() == NULL)
 			return false;
 	}
 	else
 	{
-		if (!InitStaticImage())
+		if (!IS_SAFE_HANDLE(m_DrawImg.GetSafeHdc()))
 			return false;
 	}
 

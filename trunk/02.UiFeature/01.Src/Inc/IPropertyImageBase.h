@@ -105,6 +105,8 @@ public:
 	// 得到图片的内存DC
 	CDrawingImage* GetDrawingImage();
 
+	// 初始化Image，将Image加载到内存，程序默认是没有加载图片数据的
+	void InitImage();
 private:
 	bool DrawImage_AllLaShen(CDrawingBoard &DstDc, RECT DstRct);
 	bool DrawImage_PingPu(CDrawingBoard &DstDc, RECT DstRct);

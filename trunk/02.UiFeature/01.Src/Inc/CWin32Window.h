@@ -3,7 +3,7 @@
 #pragma once
 #include <Windows.h>
 
-#define FEATURE_CLASS_NAME						"Win32Window"
+#define FEATURE_CLASS_NAME						"UiFeatureWindow"
 
 class CWin32Window
 {
@@ -17,8 +17,8 @@ public:
 	// char *pszWndText：窗口标题
 	// int nShow：显示模式，如：SW_SHOW、SW_HIDE
 	// LPARAM lParam：创建窗口时传入的参数，可以通过 GetCreateWindowParam 函数取得
-	virtual bool CreateWindowWithNewThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, LPARAM lParam);
-	virtual bool CreateWindowWithoutThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, LPARAM lParam);
+	virtual bool CreateWindowWithNewThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, int nStyle = WS_OVERLAPPED | WS_THICKFRAME, LPARAM lParam = NULL);
+	virtual bool CreateWindowWithoutThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, int nStyle = WS_OVERLAPPED | WS_THICKFRAME, LPARAM lParam = NULL);
 
 	// 本窗口的消息处理函数
 	virtual LRESULT WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam);
@@ -84,6 +84,11 @@ protected:
 	virtual void OnKillFocus();
 	virtual void OnSetFocus();
 	virtual void OnSize(UINT nType, int cx, int cy);
+	// WM_ENTERSIZEMOVE：进入移动、拉伸窗口操作
+	virtual void OnEnterSizeMove();
+	// WM_EXITSIZEMOVE：退出移动、拉伸窗口操作
+	virtual void OnExitSizeMove();
+	virtual void OnPaint(HDC hDc);
 	// 类似MFC的PreTranslateMessage，如果返回的是true，不再继续往下派发消息
 	virtual bool PreTranslateMessage(MSG msg);
 
@@ -116,6 +121,7 @@ protected:
 	HWND m_hParentWnd;
 	// 创建对话框的参数，程序可以通过创建函数传入
 	LPARAM m_lParam;
+	int m_nCreateStyle;
 
 	HANDLE m_hCreateWaitEvent;
 	HANDLE m_hUiThread;
