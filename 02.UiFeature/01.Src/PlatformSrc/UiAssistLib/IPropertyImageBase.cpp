@@ -318,6 +318,11 @@ bool IPropertyImageBase::InitStaticImage()
 
 bool IPropertyImageBase::DrawImage(CDrawingBoard &DstDc, RECT DstRct, int nAlpha)
 {
+	return DrawImage(DstDc.GetSafeHdc(), DstRct, nAlpha);
+}
+
+bool IPropertyImageBase::DrawImage(HDC hDc, RECT DstRct, int nAlpha)
+{
 	if (GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
 		return false;
 
@@ -340,20 +345,20 @@ bool IPropertyImageBase::DrawImage(CDrawingBoard &DstDc, RECT DstRct, int nAlpha
 		// 静态图片
 		if (IST_ALL_LASHEN == m_ImageProp.ImgShowType)
 		{
-			return DrawImage_AllLaShen(DstDc, DstRct);
+			return DrawImage_AllLaShen(hDc, DstRct, nAlpha);
 		}
 		else if (IST_PINGPU == m_ImageProp.ImgShowType)
 		{
-			return DrawImage_PingPu(DstDc, DstRct);
+			return DrawImage_PingPu(hDc, DstRct, nAlpha);
 		}
 		else if (IST_JGG_LASHEN == m_ImageProp.ImgShowType)
 		{
-			return DrawImage_JggLaShen(DstDc, DstRct);
+			return DrawImage_JggLaShen(hDc, DstRct, nAlpha);
 		}
 	}
 	else if (m_ImageProp.ImgPlayType == IPT_GIF)
 	{
-		Graphics DoGrap(DstDc.GetSafeHdc());
+		Graphics DoGrap(hDc);
 		Rect DstRect1 = Rect(DstRct.left, DstRct.top, RECT_WIDTH(DstRct), RECT_HEIGHT(DstRct));
 		DoGrap.DrawImage(m_pGifImg->GetImage(), DstRect1, 0, 0, m_pGifImg->GetImageSize().cx, m_pGifImg->GetImageSize().cy, UnitPixel);
 	}
@@ -369,16 +374,21 @@ bool IPropertyImageBase::DrawImage(CDrawingBoard &DstDc, RECT DstRct, int nAlpha
 		if (nDstHeight <= 0 || nDstWidth <= 0 || nSrcWidth <= 0 || nSrcHeight <= 0)
 			return true;
 
-		return GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left, DstRct.top, nDstWidth, nDstHeight,
-			m_DrawImg, m_rctXuLieDraw.left, m_rctXuLieDraw.top, nSrcWidth, nSrcHeight);
+		return GetUiKernel()->GetUiEngine()->AlphaBlend(hDc, DstRct.left, DstRct.top, nDstWidth, nDstHeight,
+			m_DrawImg, m_rctXuLieDraw.left, m_rctXuLieDraw.top, nSrcWidth, nSrcHeight, nAlpha);
 	}
 
 	return false;
 }
 
-bool IPropertyImageBase::DrawImage_AllLaShen(CDrawingBoard &DstDc, RECT DstRct)
+bool IPropertyImageBase::DrawImage_AllLaShen(CDrawingBoard &DstDc, RECT DstRct, int nAlpha)
 {
-	if (GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
+	return DrawImage_AllLaShen(DstDc.GetSafeHdc(), DstRct, nAlpha);
+}
+
+bool IPropertyImageBase::DrawImage_AllLaShen(HDC hDstDc, RECT DstRct, int nAlpha)
+{
+	if (hDstDc == NULL || GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
 		return false;
 
 	int nDstWidth = RECT_WIDTH(DstRct);
@@ -388,13 +398,18 @@ bool IPropertyImageBase::DrawImage_AllLaShen(CDrawingBoard &DstDc, RECT DstRct)
 	if (nDstHeight <= 0 || nDstWidth <= 0 || nSrcWidth <= 0 || nSrcHeight <= 0)
 		return true;
 
-	return GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left, DstRct.top, nDstWidth, nDstHeight,
-		m_DrawImg, m_ImageProp.RectInImage.left, m_ImageProp.RectInImage.top, nSrcWidth, nSrcHeight);
+	return GetUiKernel()->GetUiEngine()->AlphaBlend(hDstDc, DstRct.left, DstRct.top, nDstWidth, nDstHeight,
+		m_DrawImg, m_ImageProp.RectInImage.left, m_ImageProp.RectInImage.top, nSrcWidth, nSrcHeight, nAlpha);
 }
 
-bool IPropertyImageBase::DrawImage_PingPu(CDrawingBoard &DstDc, RECT DstRct)
+bool IPropertyImageBase::DrawImage_PingPu(CDrawingBoard &DstDc, RECT DstRct, int nAlpha)
 {
-	if (GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
+	return DrawImage_PingPu(DstDc.GetSafeHdc(), DstRct, nAlpha);
+}
+
+bool IPropertyImageBase::DrawImage_PingPu(HDC hDstDc, RECT DstRct, int nAlpha)
+{
+	if (hDstDc == NULL || GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
 		return false;
 
 	int nDstWidth = RECT_WIDTH(DstRct);
@@ -409,8 +424,8 @@ bool IPropertyImageBase::DrawImage_PingPu(CDrawingBoard &DstDc, RECT DstRct)
 		for (int nHeng = 0; nHeng < nDstWidth; nHeng += nSrcWidth)
 		{
 			// 横向绘制
-			if (!GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left + nHeng, DstRct.top + nZong, nSrcWidth, nSrcHeight,
-				m_DrawImg, m_ImageProp.RectInImage.left, m_ImageProp.RectInImage.top, nSrcWidth, nSrcHeight))
+			if (!GetUiKernel()->GetUiEngine()->AlphaBlend(hDstDc, DstRct.left + nHeng, DstRct.top + nZong, nSrcWidth, nSrcHeight,
+				m_DrawImg, m_ImageProp.RectInImage.left, m_ImageProp.RectInImage.top, nSrcWidth, nSrcHeight, nAlpha))
 				return false;
 		}
 	}
@@ -418,9 +433,14 @@ bool IPropertyImageBase::DrawImage_PingPu(CDrawingBoard &DstDc, RECT DstRct)
 	return true;
 }
 
-bool IPropertyImageBase::DrawImage_JggLaShen(CDrawingBoard &DstDc, RECT DstRct)
+bool IPropertyImageBase::DrawImage_JggLaShen(CDrawingBoard &DstDc, RECT DstRct, int nAlpha)
 {
-	if (GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
+	return DrawImage_JggLaShen(DstDc.GetSafeHdc(), DstRct, nAlpha);
+}
+
+bool IPropertyImageBase::DrawImage_JggLaShen(HDC hDstDc, RECT DstRct, int nAlpha)
+{
+	if (hDstDc == NULL || GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
 		return false;
 
 	int nDstWidth = RECT_WIDTH(DstRct);
@@ -435,28 +455,28 @@ bool IPropertyImageBase::DrawImage_JggLaShen(CDrawingBoard &DstDc, RECT DstRct)
 		// 左上角
 		if (m_ImageProp.jggInfo.top > 0)
 		{
-			if (!GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left, DstRct.top,
+			if (!GetUiKernel()->GetUiEngine()->AlphaBlend(hDstDc, DstRct.left, DstRct.top,
 				m_ImageProp.jggInfo.left, m_ImageProp.jggInfo.top,
 				m_DrawImg, m_ImageProp.RectInImage.left, m_ImageProp.RectInImage.top,
-				m_ImageProp.jggInfo.left, m_ImageProp.jggInfo.top))
+				m_ImageProp.jggInfo.left, m_ImageProp.jggInfo.top, nAlpha))
 				return false;
 		}
 
 		// 左下角
 		if (m_ImageProp.jggInfo.bottom > 0)
 		{
-			if (!GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left, DstRct.bottom - m_ImageProp.jggInfo.bottom,
+			if (!GetUiKernel()->GetUiEngine()->AlphaBlend(hDstDc, DstRct.left, DstRct.bottom - m_ImageProp.jggInfo.bottom,
 				m_ImageProp.jggInfo.left, m_ImageProp.jggInfo.bottom,
 				m_DrawImg, m_ImageProp.RectInImage.left, m_ImageProp.RectInImage.bottom - m_ImageProp.jggInfo.bottom,
-				m_ImageProp.jggInfo.left, m_ImageProp.jggInfo.bottom))
+				m_ImageProp.jggInfo.left, m_ImageProp.jggInfo.bottom, nAlpha))
 				return false;
 		}
 
 		// 左侧
-		if (!GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left, DstRct.top + m_ImageProp.jggInfo.top,
+		if (!GetUiKernel()->GetUiEngine()->AlphaBlend(hDstDc, DstRct.left, DstRct.top + m_ImageProp.jggInfo.top,
 			m_ImageProp.jggInfo.left, RECT_HEIGHT(DstRct) - m_ImageProp.jggInfo.top - m_ImageProp.jggInfo.bottom,
 			m_DrawImg, m_ImageProp.RectInImage.left, m_ImageProp.RectInImage.top + m_ImageProp.jggInfo.top,
-			m_ImageProp.jggInfo.left, RECT_HEIGHT(m_ImageProp.RectInImage) - m_ImageProp.jggInfo.top - m_ImageProp.jggInfo.bottom))
+			m_ImageProp.jggInfo.left, RECT_HEIGHT(m_ImageProp.RectInImage) - m_ImageProp.jggInfo.top - m_ImageProp.jggInfo.bottom, nAlpha))
 			return false;
 	}
 
@@ -465,60 +485,60 @@ bool IPropertyImageBase::DrawImage_JggLaShen(CDrawingBoard &DstDc, RECT DstRct)
 		// 右上角
 		if (m_ImageProp.jggInfo.top > 0)
 		{
-			if (!GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.right - m_ImageProp.jggInfo.right, DstRct.top,
+			if (!GetUiKernel()->GetUiEngine()->AlphaBlend(hDstDc, DstRct.right - m_ImageProp.jggInfo.right, DstRct.top,
 				m_ImageProp.jggInfo.right, m_ImageProp.jggInfo.top,
 				m_DrawImg, m_ImageProp.RectInImage.right - m_ImageProp.jggInfo.right, m_ImageProp.RectInImage.top,
-				m_ImageProp.jggInfo.right, m_ImageProp.jggInfo.top))
+				m_ImageProp.jggInfo.right, m_ImageProp.jggInfo.top, nAlpha))
 				return false;
 		}
 
 		// 右下角
 		if (m_ImageProp.jggInfo.bottom > 0)
 		{
-			if (!GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.right - m_ImageProp.jggInfo.right, DstRct.bottom - m_ImageProp.jggInfo.bottom,
+			if (!GetUiKernel()->GetUiEngine()->AlphaBlend(hDstDc, DstRct.right - m_ImageProp.jggInfo.right, DstRct.bottom - m_ImageProp.jggInfo.bottom,
 				m_ImageProp.jggInfo.right, m_ImageProp.jggInfo.bottom,
 				m_DrawImg, m_ImageProp.RectInImage.right - m_ImageProp.jggInfo.right, m_ImageProp.RectInImage.bottom - m_ImageProp.jggInfo.bottom,
-				m_ImageProp.jggInfo.right, m_ImageProp.jggInfo.bottom))
+				m_ImageProp.jggInfo.right, m_ImageProp.jggInfo.bottom, nAlpha))
 				return false;
 		}
 
 		// 右侧
-		if (!GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.right - m_ImageProp.jggInfo.right, DstRct.top + m_ImageProp.jggInfo.top,
+		if (!GetUiKernel()->GetUiEngine()->AlphaBlend(hDstDc, DstRct.right - m_ImageProp.jggInfo.right, DstRct.top + m_ImageProp.jggInfo.top,
 			m_ImageProp.jggInfo.right, RECT_HEIGHT(DstRct) - m_ImageProp.jggInfo.top - m_ImageProp.jggInfo.bottom,
 			m_DrawImg, m_ImageProp.RectInImage.right - m_ImageProp.jggInfo.right, m_ImageProp.RectInImage.top + m_ImageProp.jggInfo.top,
-			m_ImageProp.jggInfo.right, RECT_HEIGHT(m_ImageProp.RectInImage) - m_ImageProp.jggInfo.top - m_ImageProp.jggInfo.bottom))
+			m_ImageProp.jggInfo.right, RECT_HEIGHT(m_ImageProp.RectInImage) - m_ImageProp.jggInfo.top - m_ImageProp.jggInfo.bottom, nAlpha))
 			return false;
 	}
 
 	// 上方
 	if (m_ImageProp.jggInfo.top > 0)
 	{
-		if (!GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left + m_ImageProp.jggInfo.left, DstRct.top,
+		if (!GetUiKernel()->GetUiEngine()->AlphaBlend(hDstDc, DstRct.left + m_ImageProp.jggInfo.left, DstRct.top,
 			RECT_WIDTH(DstRct) - m_ImageProp.jggInfo.left - m_ImageProp.jggInfo.right, m_ImageProp.jggInfo.top,
 			m_DrawImg, m_ImageProp.RectInImage.left + m_ImageProp.jggInfo.left, m_ImageProp.RectInImage.top,
-			RECT_WIDTH(m_ImageProp.RectInImage) - m_ImageProp.jggInfo.left - m_ImageProp.jggInfo.right, m_ImageProp.jggInfo.top))
+			RECT_WIDTH(m_ImageProp.RectInImage) - m_ImageProp.jggInfo.left - m_ImageProp.jggInfo.right, m_ImageProp.jggInfo.top, nAlpha))
 			return false;
 	}
 
 	// 下方
 	if (m_ImageProp.jggInfo.bottom > 0)
 	{
-		if (!GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left + m_ImageProp.jggInfo.left, DstRct.bottom - m_ImageProp.jggInfo.bottom,
+		if (!GetUiKernel()->GetUiEngine()->AlphaBlend(hDstDc, DstRct.left + m_ImageProp.jggInfo.left, DstRct.bottom - m_ImageProp.jggInfo.bottom,
 			RECT_WIDTH(DstRct) - m_ImageProp.jggInfo.left - m_ImageProp.jggInfo.right, m_ImageProp.jggInfo.bottom,
 			m_DrawImg, m_ImageProp.RectInImage.left + m_ImageProp.jggInfo.left, m_ImageProp.RectInImage.bottom - m_ImageProp.jggInfo.bottom,
-			RECT_WIDTH(m_ImageProp.RectInImage) - m_ImageProp.jggInfo.left - m_ImageProp.jggInfo.right, m_ImageProp.jggInfo.bottom))
+			RECT_WIDTH(m_ImageProp.RectInImage) - m_ImageProp.jggInfo.left - m_ImageProp.jggInfo.right, m_ImageProp.jggInfo.bottom, nAlpha))
 			return false;
 	}
 
 	if (m_ImageProp.bIsDrawJggMid)
 	{
 		// 中间
-		return GetUiKernel()->GetUiEngine()->AlphaBlend(DstDc, DstRct.left + m_ImageProp.jggInfo.left, DstRct.top + m_ImageProp.jggInfo.top,
+		return GetUiKernel()->GetUiEngine()->AlphaBlend(hDstDc, DstRct.left + m_ImageProp.jggInfo.left, DstRct.top + m_ImageProp.jggInfo.top,
 			RECT_WIDTH(DstRct) - m_ImageProp.jggInfo.left - m_ImageProp.jggInfo.right,
 			RECT_HEIGHT(DstRct) - m_ImageProp.jggInfo.top - m_ImageProp.jggInfo.bottom,
 			m_DrawImg, m_ImageProp.RectInImage.left + m_ImageProp.jggInfo.left, m_ImageProp.RectInImage.top + m_ImageProp.jggInfo.top,
 			RECT_WIDTH(m_ImageProp.RectInImage) - m_ImageProp.jggInfo.left - m_ImageProp.jggInfo.right,
-			RECT_HEIGHT(m_ImageProp.RectInImage) - m_ImageProp.jggInfo.top - m_ImageProp.jggInfo.bottom);
+			RECT_HEIGHT(m_ImageProp.RectInImage) - m_ImageProp.jggInfo.top - m_ImageProp.jggInfo.bottom, nAlpha);
 	}
 
 	return true;

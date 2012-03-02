@@ -248,7 +248,7 @@ LRESULT CWin32Window::WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_NCCALCSIZE:
-		return 0;
+		return FALSE;
 
 	case WM_ERASEBKGND:
 		return TRUE;

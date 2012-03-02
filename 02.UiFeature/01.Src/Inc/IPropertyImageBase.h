@@ -91,26 +91,29 @@ public:
 	// 运行时态使用函数
 	void SetImageProp(IMAGE_BASE_PROP* pImgProp);
 	IMAGE_BASE_PROP* GetImageProp();
-
 	ZIP_FILE * GetZipFile();
 	void SetZipFile(ZIP_FILE *pZipFile, bool bCreateMemDc);
+	SIZE GetImageSize();
+	// 得到图片的内存DC
+	CDrawingImage* GetDrawingImage();
+	// 初始化Image，将Image加载到内存，程序默认是没有加载图片数据的
+	void InitImage();
+	// 轻量级动画定时器绘制动画
+	bool OnDrawAnimation();
 
 	// 绘制图片，如果alpha不是255，则根据这个alpha值来绘制
 	bool DrawImage(CDrawingBoard &DstDc, RECT DstRct, int nAlpha = 255);
+	bool DrawImage(HDC hDc, RECT DstRct, int nAlpha = 255);
 
-	bool OnDrawAnimation();
-
-	SIZE GetImageSize();
-
-	// 得到图片的内存DC
-	CDrawingImage* GetDrawingImage();
-
-	// 初始化Image，将Image加载到内存，程序默认是没有加载图片数据的
-	void InitImage();
 private:
-	bool DrawImage_AllLaShen(CDrawingBoard &DstDc, RECT DstRct);
-	bool DrawImage_PingPu(CDrawingBoard &DstDc, RECT DstRct);
-	bool DrawImage_JggLaShen(CDrawingBoard &DstDc, RECT DstRct);
+	bool DrawImage_AllLaShen(CDrawingBoard &DstDc, RECT DstRct, int nAlpha);
+	bool DrawImage_PingPu(CDrawingBoard &DstDc, RECT DstRct, int nAlpha);
+	bool DrawImage_JggLaShen(CDrawingBoard &DstDc, RECT DstRct, int nAlpha);
+
+	bool DrawImage_AllLaShen(HDC hDstDc, RECT DstRct, int nAlpha);
+	bool DrawImage_PingPu(HDC hDstDc, RECT DstRct, int nAlpha);
+	bool DrawImage_JggLaShen(HDC hDstDc, RECT DstRct, int nAlpha);
+
 	bool SetXuLieDrawInTimer();
 	bool InitDrawXuLieRect();
 
