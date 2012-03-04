@@ -418,13 +418,13 @@ bool IPropertyFontBase::DrawShadowText(CDrawingBoard &DstDc, char *pszOutText, R
 	::SelectObject(DstDc.GetSafeHdc(), hOldFont);
 	::DeleteObject(hNewFont);
 
-	if (bRet)
-	{
-		// 设置GDI的aplha值
-		CMmxBase Mmx;
-		RECT SetRct = {0, 0, DstDc.GetDcSize().cx, DstDc.GetDcSize().cy};
-		Mmx.BGRA32_CoverAlpha(DstDc.GetBits(), DstDc.GetDcSize(), SetRct, 0, 255);
-	}
+//	if (bRet)
+//	{
+//		// 设置GDI的aplha值
+//		CMmxBase Mmx;
+//		RECT SetRct = {0, 0, DstDc.GetDcSize().cx, DstDc.GetDcSize().cy};
+//		Mmx.BGRA32_CoverAlpha(DstDc.GetBits(), DstDc.GetDcSize(), SetRct, 0, 255);
+//	}
 
 	return bRet;
 }
