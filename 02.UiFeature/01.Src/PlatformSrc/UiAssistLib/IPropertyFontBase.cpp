@@ -3,6 +3,8 @@
 #include "..\..\Inc\IPropertyFontBase.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\ICommonFun.h"
+#include "..\..\Inc\IUiFeatureKernel.h"
+#include "..\..\Inc\IUiEngine.h"
 #include <atlconv.h>
 using namespace ATL;
 
@@ -15,6 +17,7 @@ IPropertyFontBase::IPropertyFontBase()
 
 	m_bIsActiveProp = true;
 
+	m_bRecreatePicText = true;
 	m_FontProp.bIsPicText = false;
 	m_FontProp.FontColor = 0;
 
@@ -203,7 +206,57 @@ void IPropertyFontBase::SetEffect(FONT_EFFECT FontEffect, bool bSet)
 // 绘制文字
 bool IPropertyFontBase::DrawFontText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct)
 {
-	return DrawToBoard(DstDc, pszOutText, DstRct);
+	if (m_FontProp.bIsPicText)
+	{
+		return DrawPictureText(DstDc, pszOutText, DstRct);
+	}
+	else
+	{
+		if (GetEffectState(FE_SHADOW))
+		{
+			// 阴影文字
+			return DrawShadowText(DstDc, pszOutText, DstRct);
+		}
+		else
+		{
+			return DrawToBoard(DstDc, pszOutText, DstRct);
+		}
+	}
+}
+
+// 绘制图片文字
+bool IPropertyFontBase::DrawPictureText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct)
+{
+	if (RECT_WIDTH(DstRct) <= 0 || RECT_HEIGHT(DstRct) <= 0 || pszOutText == NULL || strlen(pszOutText) <= 0 || this->GetUiKernel() == NULL)
+		return false;
+
+	RECT PicTextRct = {0, 0, RECT_WIDTH(DstRct), RECT_HEIGHT(DstRct)};
+
+	if (m_bRecreatePicText)
+		m_PicTextBorad.Delete();
+
+	if (m_PicTextBorad.Create(RECT_WIDTH(PicTextRct), RECT_HEIGHT(PicTextRct), 0, false, false))
+	{
+		bool bRet = false;
+		if (GetEffectState(FE_SHADOW))
+		{
+			// 阴影文字
+			bRet = DrawShadowText(m_PicTextBorad, pszOutText, PicTextRct);
+		}
+		else
+		{
+			bRet = DrawToBoard(m_PicTextBorad, pszOutText, PicTextRct);
+		}
+
+		if (!bRet)
+			return false;
+	}
+
+	if (m_PicTextBorad.GetSafeHdc() == NULL)
+		return false;
+
+	m_bRecreatePicText = false;
+	return m_PicTextBorad.AlphaBlendTo(DstDc, DstRct, PicTextRct, this->GetUiKernel());
 }
 
 // 绘制到指定内存DC上
@@ -273,16 +326,6 @@ bool IPropertyFontBase::DrawToBoard(CDrawingBoard &DstDc, char *pszOutText, RECT
 		}
 	}
 
-	if (GetEffectState(FE_SHADOW))
-	{
-		// 阴影文字
-	}
-
-	if (GetEffectState(FE_OBSCURE))
-	{
-		// 模糊文字
-	}
-
 	RectF OutFct;
 	OutFct.X = DstRct.left;
 	OutFct.Y = DstRct.top;
@@ -290,5 +333,94 @@ bool IPropertyFontBase::DrawToBoard(CDrawingBoard &DstDc, char *pszOutText, RECT
 	OutFct.Height = RECT_HEIGHT(DstRct);
 	WCHAR *wpOutStr = A2W(pszOutText);
 	DoGrap.DrawString(wpOutStr, wcslen(wpOutStr), &TextFont, OutFct, &strFormat, &textBrush);
+
+	if (GetEffectState(FE_OBSCURE))
+	{
+		// 模糊文字
+	}
+
 	return true;
+}
+
+// 绘制阴影文字到指定内存DC上
+bool IPropertyFontBase::DrawShadowText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct)
+{
+	USES_CONVERSION;
+	if (!GetEffectState(FE_SHADOW) || DstDc.GetSafeHdc() == NULL || pszOutText == NULL || strlen(pszOutText) <= 0 ||
+		GetUiKernel() == NULL || GetUiKernel()->GetUiEngine() == NULL)
+		return false;
+
+	DWORD dwFlags = 0;
+
+	// 设置垂直对齐模式
+	if (m_FontProp.VAligning == FAL_RIGHT_BOTTOM)
+	{
+		// 垂直靠下
+		dwFlags |= DT_BOTTOM;
+	}
+	else if (m_FontProp.VAligning == FAL_MIDDLE)
+	{
+		// 垂直居中
+		dwFlags |= DT_VCENTER;
+	}
+	else
+	{
+		// 垂直靠上
+		dwFlags |= DT_TOP;
+	}
+
+	// 设置水平对齐
+	if (m_FontProp.HAligning == FAL_RIGHT_BOTTOM)
+	{
+		// 水平靠右
+		dwFlags |= DT_RIGHT;
+	}
+	else if (m_FontProp.HAligning == FAL_MIDDLE)
+	{
+		// 水平居中
+		dwFlags |= DT_CENTER;
+	}
+	else
+	{
+		// 水平靠左
+		dwFlags |= DT_LEFT;
+	}
+
+	// GDI+默认折行显示，末尾不带...
+	if (m_FontProp.ShowMode != FSM_MULTI_ROW)
+	{
+		// 不折行显示
+		dwFlags |= DT_SINGLELINE;
+		// 不折行显示，默认末尾不带...
+		if (m_FontProp.ShowMode == FSM_ONE_ROW_POINT)
+		{
+		//	// 单行显示，超过显示范围显示...
+		//	dwFlags |= DT_WORDBREAK;
+		}
+	}
+	else
+	{
+		// 自动换行
+		dwFlags |= DT_WORDBREAK | DT_EDITCONTROL;
+	}
+
+	::SetBkMode(DstDc.GetSafeHdc(), TRANSPARENT);
+
+	LOGFONTA* pFont = &m_FontProp.Font;
+	HFONT hNewFont = ::CreateFontA(pFont->lfHeight, pFont->lfWidth, pFont->lfEscapement, pFont->lfOrientation, pFont->lfWeight, pFont->lfItalic, pFont->lfUnderline, pFont->lfStrikeOut,
+		pFont->lfCharSet, pFont->lfOutPrecision, pFont->lfClipPrecision, pFont->lfQuality, pFont->lfPitchAndFamily, pFont->lfFaceName);
+	HFONT hOldFont = (HFONT)::SelectObject(DstDc.GetSafeHdc(), hNewFont);
+
+	WCHAR* pText = A2W(pszOutText);
+	bool bRet = (GetUiKernel()->GetUiEngine()->DrawShadowText(DstDc.GetSafeHdc(), pText, wcslen(pText), &DstRct, dwFlags, m_FontProp.FontColor, RGB(0, 0, 0), 0, 0) != 0);
+
+	::SelectObject(DstDc.GetSafeHdc(), hOldFont);
+	::DeleteObject(hNewFont);
+	return bRet;
+}
+
+// 设置图片文字重绘标志，设置完成后，将在下次绘制的时候重新创建图片文字
+void IPropertyFontBase::SetPictureTextRedrawSign()
+{
+	m_bRecreatePicText = true;
 }

@@ -128,9 +128,10 @@ void CFontBaseNameList::DeleteCurrentFontBase()
 	if (pFontBaseProp == NULL)
 		return;
 
-	m_pUiKernel->GetSkinManager()->DeletePropetryBaseProp(pFontBaseProp);
-	m_pOwnerDlg->UpdateCurrentFontBaseProp(NULL);
+	if (!m_pUiKernel->GetSkinManager()->DeletePropetryBaseProp(pFontBaseProp))
+		return;
 
+	m_pOwnerDlg->UpdateCurrentFontBaseProp(NULL);
 	this->DeleteItem(m_nSelectItem);
 	m_nSelectItem = -1;
 }

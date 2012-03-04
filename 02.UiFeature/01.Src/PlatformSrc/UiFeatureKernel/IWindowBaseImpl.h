@@ -85,6 +85,8 @@ public:
 	void UpdateWindow();
 	// 立即重绘窗口
 	virtual void RedrawWindow(RECT *pDrawRect = NULL);
+	// 强迫立刻重绘窗口，强迫所有控件均重绘
+	virtual void CompelRedrawWindow(RECT *pDrawRect = NULL);
 
 	// 显示自定义光标
 	void SetWindowCursor(int nCursor);
@@ -105,6 +107,7 @@ public:
 	virtual LRESULT SendMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam);
 	// 发送消息:Post方式
 	virtual bool PostMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam);
+
 protected:
 	// 本窗口的消息处理函数，bPassOn参数为true是，消息会继续传递处理；false时，处理完毕，不再下传
 	virtual LRESULT WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, bool &bPassOn);
@@ -158,6 +161,8 @@ private:
 	POINT GetCtrlMouseOffset(POINT WndPt, IControlBase* pCtrl);
 	// 取得桌面工作区域大小
 	RECT GetWorkAreaRect();
+	// 强迫子控件重绘
+	void CompelRedrawControl(CHILD_CTRLS_VEC *pCtrlVec);
 
 private:
 	// 循环遍历每个控件的绘制

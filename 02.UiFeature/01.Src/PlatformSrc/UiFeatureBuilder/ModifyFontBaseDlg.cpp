@@ -162,6 +162,7 @@ void CModifyFontBaseDlg::UpdateCurrentFontBaseProp(IPropertyFontBase* pCurFontBa
 		m_EffectObscure.SetCheck(bSet ? 1 : 0);
 
 		m_PictureTextCheckBox.SetCheck(pFontProp->bIsPicText ? 1 : 0);
+		m_pCurFontBaseProp->SetPictureTextRedrawSign();
 	}
 	else
 	{
@@ -185,6 +186,7 @@ void CModifyFontBaseDlg::OnCbnSelchangeValigningCombo()
 
 	FONT_PROP* pFontProp = m_pCurFontBaseProp->GetFontProp();
 	pFontProp->VAligning = (FONT_ALIGNING)m_VAligningCombo.GetCurSel();
+	m_pCurFontBaseProp->SetPictureTextRedrawSign();
 	m_FontProViewStatic.RedrawView(m_pCurFontBaseProp);
 }
 
@@ -195,6 +197,7 @@ void CModifyFontBaseDlg::OnCbnSelchangeHaligningCombo()
 
 	FONT_PROP* pFontProp = m_pCurFontBaseProp->GetFontProp();
 	pFontProp->HAligning = (FONT_ALIGNING)m_HAligningCombo.GetCurSel();
+	m_pCurFontBaseProp->SetPictureTextRedrawSign();
 	m_FontProViewStatic.RedrawView(m_pCurFontBaseProp);
 }
 
@@ -216,6 +219,7 @@ void CModifyFontBaseDlg::OnBnClickedZhehangXianshi()
 
 	FONT_PROP* pFontProp = m_pCurFontBaseProp->GetFontProp();
 	pFontProp->ShowMode = (FONT_SHOW_MODE)m_nXianshiMode;
+	m_pCurFontBaseProp->SetPictureTextRedrawSign();
 	m_FontProViewStatic.RedrawView(m_pCurFontBaseProp);
 }
 
@@ -226,6 +230,7 @@ void CModifyFontBaseDlg::OnBnClickedShadowEffect()
 
 	int nCheck = m_EffectShadow.GetCheck();
 	m_pCurFontBaseProp->SetEffect(FE_SHADOW, (nCheck == 1));
+	m_pCurFontBaseProp->SetPictureTextRedrawSign();
 	m_FontProViewStatic.RedrawView(m_pCurFontBaseProp);
 }
 
@@ -236,6 +241,7 @@ void CModifyFontBaseDlg::OnBnClickedObscureEffect()
 
 	int nCheck = m_EffectShadow.GetCheck();
 	m_pCurFontBaseProp->SetEffect(FE_OBSCURE, (nCheck == 1));
+	m_pCurFontBaseProp->SetPictureTextRedrawSign();
 	m_FontProViewStatic.RedrawView(m_pCurFontBaseProp);
 }
 
@@ -260,6 +266,7 @@ void CModifyFontBaseDlg::OnBnClickedSelectFont()
 		strFontInfo.Format(_T("%s£¬%d"), A2W(pFontProp->Font.lfFaceName), pFontProp->Font.lfHeight);
 		this->GetDlgItem(IDE_FONT_INFO_EDIT)->SetWindowText(strFontInfo);
 
+		m_pCurFontBaseProp->SetPictureTextRedrawSign();
 		m_FontProViewStatic.RedrawView(m_pCurFontBaseProp);
 	}
 }
@@ -313,6 +320,7 @@ void CModifyFontBaseDlg::OnBnClickedSelectTextColor()
 	if (ColorDlg.DoModal() == IDOK)
 	{
 		pFontProp->FontColor = ColorDlg.GetColor();
+		m_pCurFontBaseProp->SetPictureTextRedrawSign();
 		m_FontProViewStatic.RedrawView(m_pCurFontBaseProp);
 	}
 }
@@ -325,5 +333,6 @@ void CModifyFontBaseDlg::OnBnClickedPictureText()
 	int nCheck = m_PictureTextCheckBox.GetCheck();
 	FONT_PROP* pFontProp = m_pCurFontBaseProp->GetFontProp();
 	pFontProp->bIsPicText = (nCheck == 1);
+	m_pCurFontBaseProp->SetPictureTextRedrawSign();
 	m_FontProViewStatic.RedrawView(m_pCurFontBaseProp);
 }

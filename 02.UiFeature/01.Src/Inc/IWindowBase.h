@@ -58,8 +58,10 @@ public:
 
 	virtual void InvalidateRect(RECT *lpRect) = 0;
 	virtual void UpdateWindow() = 0;
-	// 立即重绘窗口
+	// 立即重绘窗口，只有需要重绘的控件才重绘
 	virtual void RedrawWindow(RECT *pDrawRect = NULL) = 0;
+	// 强迫立刻重绘窗口，强迫所有控件均重绘
+	virtual void CompelRedrawWindow(RECT *pDrawRect = NULL) = 0;
 	// 设置轻量级通用动画定时器
 	virtual void SetAnimationTimer() = 0;
 	// 设置普通定时器

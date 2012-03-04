@@ -18,6 +18,8 @@
 #include "IWindowBaseImpl.h"
 #include "CriSec.h"
 
+// 系统默认字体
+#define SYS_DEFAULT_FONT_NAME								"SystemDefaultFont"
 
 IPropertySkinManager *GetSkinManagerInterface()
 {
@@ -1734,9 +1736,9 @@ bool IPropertySkinManagerImpl::DeletePropetryBaseProp(IPropertyBase *pPropBase)
 		if (pFontBaseProp == NULL)
 			return false;
 
-		// 删除默认字体
-		if (pFontBaseProp == m_pDefaultFontBase)
-			m_pDefaultFontBase = NULL;
+		// 不允许删除默认字体
+		if (pFontBaseProp == m_pDefaultFontBase || lstrcmpA(pFontBaseProp->GetObjectName(), SYS_DEFAULT_FONT_NAME) == 0)
+			return false;
 
 		return DeleteFontBaseProp(pFontBaseProp);
 	}
@@ -1891,6 +1893,10 @@ bool IPropertySkinManagerImpl::BD_ModifyPropetryName(IPropertyBase *pPropBase, c
 	{
 		IPropertyFontBase *pFontBaseProp = dynamic_cast<IPropertyFontBase*>(pPropBase);
 		if (pFontBaseProp == NULL)
+			return false;
+
+		// 不允许修改默认字体名称
+		if (pFontBaseProp == m_pDefaultFontBase || lstrcmpA(pFontBaseProp->GetObjectName(), SYS_DEFAULT_FONT_NAME) == 0)
 			return false;
 
 		return ModifyFontBaseProp(pFontBaseProp, pszNewPropName);
@@ -2269,9 +2275,31 @@ IPropertyFontBase* IPropertySkinManagerImpl::GetDefaultFontBase()
 {
 	if (m_pDefaultFontBase == NULL)
 	{
+		if (m_pFontBasePropMap == NULL)
+			m_pFontBasePropMap = GetOneResourcePropMap(PROP_TYPE_FONT_BASE_NAME, false);
+
+		if (m_pFontBasePropMap != NULL)
+		{
+			for (ONE_RESOURCE_PROP_MAP::iterator pFontBaseItem = m_pFontBasePropMap->begin(); pFontBaseItem != m_pFontBasePropMap->end(); pFontBaseItem++)
+			{
+				IPropertyFontBase* pFontBaseProp = dynamic_cast<IPropertyFontBase*>(pFontBaseItem->second);
+				if (pFontBaseProp == NULL)
+					continue;
+
+				if (lstrcmpA(pFontBaseProp->GetObjectName(), SYS_DEFAULT_FONT_NAME) == 0)
+				{
+					m_pDefaultFontBase = pFontBaseProp;
+					break;
+				}
+			}
+		}
+	}
+
+	if (m_pDefaultFontBase == NULL)
+	{
 		m_pDefaultFontBase = dynamic_cast<IPropertyFontBase*>(CreateEmptyBaseProp(OTID_FONT_BASE));
 		if (m_pDefaultFontBase != NULL)
-			m_pDefaultFontBase->SetObjectName("系统默认字体");
+			m_pDefaultFontBase->SetObjectName(SYS_DEFAULT_FONT_NAME);
 	}
 
 	return m_pDefaultFontBase;
