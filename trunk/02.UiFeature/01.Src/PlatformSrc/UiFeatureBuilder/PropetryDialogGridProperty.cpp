@@ -89,6 +89,7 @@ void CPropetryDialogGridProperty::ImageBaseDialog()
 	}
 
 	SetValue(varValue);
+	RefreshMainView();
 }
 
 void CPropetryDialogGridProperty::CursorBaseDialog()
@@ -107,6 +108,7 @@ void CPropetryDialogGridProperty::CursorBaseDialog()
 	if (pParentCursorProp->GetRelevancyProp() != NULL)
 		varValue = A2W(pParentCursorProp->GetRelevancyPropName());
 	SetValue(varValue);
+	RefreshMainView();
 }
 
 void CPropetryDialogGridProperty::FontBaseDialog()
@@ -125,4 +127,18 @@ void CPropetryDialogGridProperty::FontBaseDialog()
 	if (pParentFontProp->GetRelevancyProp() != NULL)
 		varValue = A2W(pParentFontProp->GetRelevancyPropName());
 	SetValue(varValue);
+	RefreshMainView();
+}
+
+void CPropetryDialogGridProperty::RefreshMainView()
+{
+	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
+	if (pMain != NULL && pMain->GetView() != NULL)
+	{
+		// 强迫重新绘制整个窗口
+		if (pMain->GetView()->GetCurrentWindow() != NULL)
+			pMain->GetView()->GetCurrentWindow()->CompelRedrawWindow();
+
+		pMain->GetView()->RedrawWindow();
+	}
 }

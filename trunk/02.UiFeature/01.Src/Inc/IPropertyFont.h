@@ -27,6 +27,9 @@ public:
 	// 绘制文字
 	bool DrawFontText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct);
 
+	// 设置图片文字重绘标志，设置完成后，将在下次绘制的时候重新创建图片文字
+	void SetPictureTextRedrawSign();
+
 private:
 	void SetNeedRedraw();
 };

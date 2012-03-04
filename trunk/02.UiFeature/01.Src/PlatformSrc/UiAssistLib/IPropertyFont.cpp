@@ -102,3 +102,13 @@ bool IPropertyFont::DrawFontText(CDrawingBoard &DstDc, char *pszOutText, RECT Ds
 
 	return pPropBase->DrawFontText(DstDc, pszOutText, DstRct);
 }
+
+// 设置图片文字重绘标志，设置完成后，将在下次绘制的时候重新创建图片文字
+void IPropertyFont::SetPictureTextRedrawSign()
+{
+	IPropertyFontBase* pPropBase = dynamic_cast<IPropertyFontBase*>(this->GetRelevancyProp());
+	if (pPropBase == NULL)
+		return;
+
+	return pPropBase->SetPictureTextRedrawSign();
+}

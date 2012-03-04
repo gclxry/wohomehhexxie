@@ -486,7 +486,9 @@ void CPropertyViewCtrl::OnPropertyChanged(CMFCPropertyGridProperty* pProperty)
 		IWindowBase* pWndBase = dynamic_cast<IWindowBase*>(pOwnerObj);
 		if (pWndBase != NULL)
 		{
+			// 先重新计算运行时态控件的位置
 			pWndBase->BD_RefreshWindowPropetry();
+			// 再计算Builder时态控件的位置
 			CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
 			if (pMain != NULL && pMain->GetView() != NULL)
 				pMain->GetView()->ResetViewShowSize();
@@ -520,6 +522,9 @@ void CPropertyViewCtrl::RefreshCursorProp(CMFCPropertyGridProperty* pProperty, I
 void CPropertyViewCtrl::RefreshFontProp(CMFCPropertyGridProperty* pProperty, IPropertyFont *pFontProp)
 {
 	RefreshHaveBasePropPropetry(pProperty, dynamic_cast<IPropertyBase*>(pFontProp));
+
+	if (pFontProp != NULL)
+		pFontProp->SetPictureTextRedrawSign();
 }
 
 void CPropertyViewCtrl::RefreshHaveBasePropPropetry(CMFCPropertyGridProperty* pProperty, IPropertyBase *pBaseProp)

@@ -18,6 +18,7 @@ protected:
 	void ImageBaseDialog();
 	void CursorBaseDialog();
 	void FontBaseDialog();
+	void RefreshMainView();
 
 private:
 	IUiFeatureKernel* m_pUiKernel;

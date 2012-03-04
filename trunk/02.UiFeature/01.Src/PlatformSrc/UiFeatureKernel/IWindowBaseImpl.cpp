@@ -1757,6 +1757,12 @@ void IWindowBaseImpl::KillHighAccuracyTimer(int nId)
 	m_HighTimer.KillTimer();
 }
 
+// 设置控件回调函数
+void IWindowBaseImpl::SetCtrlMsgCallBack(IControlMessage* pCtrlMsg)
+{
+	m_pCtrlMsgCallBack = pCtrlMsg;
+}
+
 // 取得整个程序默认的字体信息
 IPropertyFontBase* IWindowBaseImpl::GetDefaultFontBase()
 {
@@ -1764,12 +1770,6 @@ IPropertyFontBase* IWindowBaseImpl::GetDefaultFontBase()
 		return NULL;
 
 	return m_pUiKernel->GetDefaultFontBase();
-}
-
-// 设置控件回调函数
-void IWindowBaseImpl::SetCtrlMsgCallBack(IControlMessage* pCtrlMsg)
-{
-	m_pCtrlMsgCallBack = pCtrlMsg;
 }
 
 // 控件消息回调函数
@@ -1882,4 +1882,29 @@ bool IWindowBaseImpl::PostMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam)
 		bRet = (::PostMessage(m_hWnd, nMsgId, wParam, lParam) == TRUE);
 
 	return bRet;
+}
+
+// 强迫重绘窗口，所有控件均重绘
+void IWindowBaseImpl::CompelRedrawWindow(RECT *pDrawRect)
+{
+	CompelRedrawControl(&m_ChildCtrlsVec);
+	RedrawWindow();
+}
+
+// 强迫子控件重绘
+void IWindowBaseImpl::CompelRedrawControl(CHILD_CTRLS_VEC *pCtrlVec)
+{
+	if (pCtrlVec == NULL)
+		return;
+
+	int nCtns = pCtrlVec->size();
+	for (int i = 0; i < nCtns; i++)
+	{
+		IControlBase* pCtrl = (*pCtrlVec)[i];
+		if (pCtrl != NULL)
+		{
+			pCtrl->RedrawControl();
+			CompelRedrawControl(pCtrl->GetChildControlsVec());
+		}
+	}
 }

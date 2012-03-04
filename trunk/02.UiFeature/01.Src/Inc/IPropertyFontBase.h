@@ -80,10 +80,20 @@ public:
 	// 绘制文字
 	bool DrawFontText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct);
 
+	// 设置图片文字重绘标志，设置完成后，将在下次绘制的时候重新创建图片文字
+	void SetPictureTextRedrawSign();
+
 private:
 	// 绘制到指定内存DC上
 	bool DrawToBoard(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct);
+	// 绘制阴影文字到指定内存DC上
+	bool DrawShadowText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct);
+	// 绘制图片文字
+	bool DrawPictureText(CDrawingBoard &DstDc, char *pszOutText, RECT DstRct);
 
 private:
+	bool m_bRecreatePicText;
 	FONT_PROP m_FontProp;
+	// 图片文字内存DC
+	CDrawingBoard m_PicTextBorad;
 };
