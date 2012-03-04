@@ -20,7 +20,7 @@ public:
 	void Delete();
 	HBITMAP& GetBmpHandle();
 	HDC& GetSafeHdc();
-	// 按照RGBA顺序排布的32位位图信息
+	// 按照 BGRA 顺序排布的32位位图信息
 	BYTE* GetBits();
 	SIZE GetDcSize();
 	// 绘制到另外一个内存DC上
