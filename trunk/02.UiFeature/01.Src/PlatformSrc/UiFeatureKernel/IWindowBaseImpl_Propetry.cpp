@@ -182,20 +182,20 @@ void IWindowBaseImpl::CreateWindowPropetry(bool bSetDftProp)
 	if (m_pPropBase_TopMost == NULL)
 		return;
 
-	// base-sysbase
-	m_pPropGroupSysBase = (IPropertyGroup*)CreateWindowOnePropetry(m_pPropGroupBase, OTID_GROUP, "SysBase", "窗口系统属性，只限于窗口，其他类型不适用");
-	if (m_pPropGroupSysBase == NULL)
-		return;
-
-	// base-sysbase-最大化
-	m_pPropSysBase_CanFullScreen = (IPropertyBool*)CreateWindowOnePropetry(m_pPropGroupSysBase, OTID_BOOL, "CanFullScreen", "是否可以最大化");
-	if (m_pPropSysBase_CanFullScreen == NULL)
-		return;
-
-	// base-sysbase-最小化
-	m_pPropSysBase_CanMiniSize = (IPropertyBool*)CreateWindowOnePropetry(m_pPropGroupSysBase, OTID_BOOL, "CanMiniSize", "是否可以最小化");
-	if (m_pPropSysBase_CanMiniSize == NULL)
-		return;
+//	// base-sysbase
+//	m_pPropGroupSysBase = (IPropertyGroup*)CreateWindowOnePropetry(m_pPropGroupBase, OTID_GROUP, "SysBase", "窗口系统属性，只限于窗口，其他类型不适用");
+//	if (m_pPropGroupSysBase == NULL)
+//		return;
+//
+//	// base-sysbase-最大化
+//	m_pPropSysBase_CanFullScreen = (IPropertyBool*)CreateWindowOnePropetry(m_pPropGroupSysBase, OTID_BOOL, "CanFullScreen", "是否可以最大化");
+//	if (m_pPropSysBase_CanFullScreen == NULL)
+//		return;
+//
+//	// base-sysbase-最小化
+//	m_pPropSysBase_CanMiniSize = (IPropertyBool*)CreateWindowOnePropetry(m_pPropGroupSysBase, OTID_BOOL, "CanMiniSize", "是否可以最小化");
+//	if (m_pPropSysBase_CanMiniSize == NULL)
+//		return;
 
 	// Group-WindowSize
 	m_pPropGroupWindowSize = (IPropertyGroup*)CreateWindowOnePropetry(NULL, OTID_GROUP, "WindowSize", "窗口/面板大小");
@@ -203,12 +203,12 @@ void IWindowBaseImpl::CreateWindowPropetry(bool bSetDftProp)
 		return;
 
 	// size-width
-	m_pPropSize_WindowWidth = (IPropertyInt*)CreateWindowOnePropetry(m_pPropGroupWindowSize, OTID_INT, "Width", "窗口宽度");
+	m_pPropSize_WindowWidth = (IPropertyInt*)CreateWindowOnePropetry(m_pPropGroupWindowSize, OTID_INT, NAME_WINDOW_WIDTH, "窗口宽度");
 	if (m_pPropSize_WindowWidth == NULL)
 		return;
 
 	// size-height
-	m_pPropSize_WindowHeight = (IPropertyInt*)CreateWindowOnePropetry(m_pPropGroupWindowSize, OTID_INT, "Height", "窗口高度");
+	m_pPropSize_WindowHeight = (IPropertyInt*)CreateWindowOnePropetry(m_pPropGroupWindowSize, OTID_INT, NAME_WINDOW_HEIGHT, "窗口高度");
 	if (m_pPropSize_WindowHeight == NULL)
 		return;
 
@@ -360,4 +360,13 @@ PROP_CONTROL_VEC* IWindowBaseImpl::GetChildPropControlVec()
 		return NULL;
 
 	return m_pXmlPropWindow->GetChildPropControlVec();
+}
+
+// Builder有属性修改，重新刷新界面
+void IWindowBaseImpl::BD_RefreshWindowPropetry()
+{
+	// 重新计算所有控件的位置
+	if (m_pPropSize_WindowWidth == NULL || m_pPropSize_WindowHeight == NULL)
+		return;
+	OnSize(-1, m_pPropSize_WindowWidth->GetValue(), m_pPropSize_WindowHeight->GetValue());
 }

@@ -33,6 +33,8 @@ using namespace std;
 #define NAME_SKIN_PROJ_EX_NAME						".ufp"
 #define NAME_SKIN_FILE_EX_NAME						".ufd"
 
+#define NAME_WINDOW_WIDTH							"@WindowWidth"
+#define NAME_WINDOW_HEIGHT							"@WindowHeight"
 #define NAME_SKIN_PROP_NAME_OBJ_ID					"@Object_Id"
 #define NAME_SKIN_PROP_NAME_TYPE					"@Object_Type"
 #define NAME_SKIN_PROP_NAME							"@Object_Name"

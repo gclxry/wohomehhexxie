@@ -1082,6 +1082,7 @@ void IWindowBaseImpl::SetControlWindowPostion(IControlBase* pCtrl, RECT ParentRc
 	INIT_RECT(RctInWnd);
 	CONTROL_LAYOUT_INFO CtrlLayout = pCtrl->GetLayout();
 
+	// 用户自定义位置需要父控件自行设置
 	if (CtrlLayout.clType == CL_L_USER_DEF)
 		return;
 

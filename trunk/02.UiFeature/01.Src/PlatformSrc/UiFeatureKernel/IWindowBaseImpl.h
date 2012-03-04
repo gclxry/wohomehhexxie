@@ -39,6 +39,8 @@ public:
 	virtual void BD_SetAllCtrlRectInView();
 	// 设置指定控件在Builder中的显示位置
 	virtual void BD_SetControlRectInView(CHILD_CTRLS_VEC *pChildCtrlsVec);
+	// Builder有属性修改，重新刷新界面
+	virtual void BD_RefreshWindowPropetry();
 	// 重新计算子控件的位置和大小，参数：bMemToProp 是否记录到属性中，Builder时为true
 	virtual void ResetChildCtrlPostion(CHILD_CTRLS_VEC* pChildVec, bool bMemToProp = false);
 	// 是否为设计模式

@@ -4,6 +4,7 @@
 #pragma once
 #include "IPropertyBase.h"
 
+// int 在Builder中的值范围：-(0x7FFFFFFF), 0x7FFFFFFF
 class IPropertyInt : public IPropertyBase
 {
 public:
@@ -17,6 +18,7 @@ public:
 
 	void SetValue(int nValue);
 	int GetValue();
+
 private:
 	int m_nIntData;
 };
