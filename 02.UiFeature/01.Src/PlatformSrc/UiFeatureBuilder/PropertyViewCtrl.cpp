@@ -228,6 +228,8 @@ void CPropertyViewCtrl::AppendColorProp(CMFCPropertyGridProperty* pParentPropGro
 
 void CPropertyViewCtrl::ClearAll()
 {
+	m_pWindowHeightProp = NULL;
+	m_pWindowWidthProp = NULL;
 	InitSetCtrlProp();
 	m_pCurrentPropGroup = NULL;
 	this->RemoveAll();
@@ -382,6 +384,14 @@ void CPropertyViewCtrl::AppendIntProp(CMFCPropertyGridProperty* pParentPropGroup
 	{
 		m_pCtrlBottomSpaceProp = pNewProp;
 	}
+	else if (lstrcmpiA(pObjName, NAME_WINDOW_WIDTH) == 0)
+	{
+		m_pWindowWidthProp = pNewProp;
+	}
+	else if (lstrcmpiA(pObjName, NAME_WINDOW_HEIGHT) == 0)
+	{
+		m_pWindowHeightProp = pNewProp;
+	}
 }
 
 void CPropertyViewCtrl::AppendStringProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyString *pStringProp)
@@ -472,6 +482,15 @@ void CPropertyViewCtrl::OnPropertyChanged(CMFCPropertyGridProperty* pProperty)
 			pCtrlBase->PropetyValueToMemberValue();
 			pCtrlBase->RedrawControl(true);
 		}
+
+		IWindowBase* pWndBase = dynamic_cast<IWindowBase*>(pOwnerObj);
+		if (pWndBase != NULL)
+		{
+			pWndBase->BD_RefreshWindowPropetry();
+			CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
+			if (pMain != NULL && pMain->GetView() != NULL)
+				pMain->GetView()->ResetViewShowSize();
+		}
 	}
 
 	CMainFrame* pMain = (CMainFrame*)AfxGetMainWnd();
@@ -521,6 +540,20 @@ void CPropertyViewCtrl::RefreshIntProp(CMFCPropertyGridProperty* pProperty, IPro
 	if (pProperty == NULL || pIntProp == NULL)
 		return;
 
+	// 改变了窗口的大小
+	if (m_pWindowWidthProp == pProperty || m_pCtrlHeightProp == pProperty)
+	{
+		COleVariant NewVariant = pProperty->GetValue();
+		if (NewVariant.lVal < 0)
+		{
+			NewVariant.lVal = 0;
+			pProperty->SetValue(NewVariant);
+			pIntProp->SetValue(NewVariant.lVal);
+			return;
+		}
+	}
+
+	// 改变了控件的大小
 	if (m_pCtrlWidthProp == pProperty || m_pCtrlHeightProp == pProperty)
 	{
 		COleVariant NewVariant = pProperty->GetValue();

@@ -36,6 +36,8 @@ public:
 	void RefreshLayoutData();
 
 private:
+	CMFCPropertyGridProperty* m_pWindowWidthProp;
+	CMFCPropertyGridProperty* m_pWindowHeightProp;
 	CMFCPropertyGridProperty* m_pCtrlLayoutTypeProp;
 	CMFCPropertyGridProperty* m_pCtrlWidthProp;
 	CMFCPropertyGridProperty* m_pCtrlHeightProp;

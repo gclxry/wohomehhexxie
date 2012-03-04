@@ -42,6 +42,7 @@ protected:
 	virtual void OnDraw(CDC* pDC);  // 重写以绘制该视图
 
 public:
+	void ResetViewShowSize();
 	void SetNewControl(bool bIsNew);
 	void SetProjectInitState(bool bInitOk);
 
@@ -59,7 +60,6 @@ private:
 	// 设置光标
 	void SetViewCursor(int nCursor);
 
-	void ResetViewShowSize();
 	// 是否在窗口的8个方块内移动
 	SIZE_CTRL_TYPE OnMouseMove_FangKuai8(CPoint point, bool bIsWnd);
 	void OnMouseMove_LButtonDown(CPoint point);
