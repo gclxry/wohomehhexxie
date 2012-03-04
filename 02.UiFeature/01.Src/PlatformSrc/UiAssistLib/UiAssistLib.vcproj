@@ -510,6 +510,18 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="09.MMX"
+			>
+			<File
+				RelativePath=".\MmxBase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MmxBase.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\Inc\UiFeatureDefs.h"
 			>

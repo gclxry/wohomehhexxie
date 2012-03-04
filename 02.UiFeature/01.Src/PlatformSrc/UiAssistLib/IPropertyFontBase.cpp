@@ -5,6 +5,7 @@
 #include "..\..\Inc\ICommonFun.h"
 #include "..\..\Inc\IUiFeatureKernel.h"
 #include "..\..\Inc\IUiEngine.h"
+#include "MmxBase.h"
 #include <atlconv.h>
 using namespace ATL;
 
@@ -416,6 +417,15 @@ bool IPropertyFontBase::DrawShadowText(CDrawingBoard &DstDc, char *pszOutText, R
 
 	::SelectObject(DstDc.GetSafeHdc(), hOldFont);
 	::DeleteObject(hNewFont);
+
+	if (bRet)
+	{
+		// …Ë÷√GDIµƒaplha÷µ
+		CMmxBase Mmx;
+		RECT SetRct = {0, 0, DstDc.GetDcSize().cx, DstDc.GetDcSize().cy};
+		Mmx.BGRA32_CoverAlpha(DstDc.GetBits(), DstDc.GetDcSize(), SetRct, 0, 255);
+	}
+
 	return bRet;
 }
 
