@@ -153,3 +153,17 @@ bool CDrawingBoard::StretchBltFrom(HDC hDc, RECT FromRct, RECT ToRct)
 	return (::StretchBlt(m_hDC, ToRct.left, ToRct.top, RECT_WIDTH(ToRct), RECT_HEIGHT(ToRct),
 		hDc, FromRct.left, FromRct.top, RECT_WIDTH(FromRct), RECT_HEIGHT(FromRct), SRCCOPY) == TRUE);
 }
+
+// 从另一个内存DC克隆
+bool CDrawingBoard::Clone(CDrawingBoard& FromBoard)
+{
+	if (FromBoard.GetSafeHdc() == NULL || FromBoard.GetDcSize().cx <= 0 || FromBoard.GetDcSize().cy <= 0)
+		return false;
+
+	this->Create(FromBoard.GetDcSize().cx, FromBoard.GetDcSize().cy, 0, true, false);
+	if (m_hDC == NULL)
+		return false;
+	
+	RECT fromRct = {0, 0, FromBoard.GetDcSize().cx, FromBoard.GetDcSize().cy};
+	return BitBltFrom(FromBoard.GetSafeHdc(), fromRct, fromRct);
+}
