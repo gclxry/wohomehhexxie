@@ -295,8 +295,8 @@ void IWindowBaseImpl::CreateWindowPropetry(bool bSetDftProp)
 		m_pPropBase_ShowInTaskbar->SetValue(true);
 		m_pPropBase_Layered->SetValue(false);
 		m_pPropBase_TopMost->SetValue(false);
-		m_pPropSysBase_CanFullScreen->SetValue(false);
-		m_pPropSysBase_CanMiniSize->SetValue(false);
+//		m_pPropSysBase_CanFullScreen->SetValue(false);
+//		m_pPropSysBase_CanMiniSize->SetValue(false);
 
 		m_pPropSize_WindowWidth->SetValue(500);
 		m_pPropSize_WindowHeight->SetValue(500);
