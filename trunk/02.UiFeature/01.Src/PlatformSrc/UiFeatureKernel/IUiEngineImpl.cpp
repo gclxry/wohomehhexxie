@@ -93,16 +93,6 @@ bool IUiEngineImpl::AlphaBlend(CDrawingBoard &DestMemDc, int nXOriginDest, int n
 
 	return (AlphaBlendImpl(DestMemDc.GetSafeHdc(), nXOriginDest, nYOriginDest, nWidthDest, nHeightDest,
 		SrcMemDc.GetSafeHdc(), nXOriginSrc, nYOriginSrc, nWidthSrc, nHeightSrc, Blend) == TRUE);
-
-	//Graphics DoGrap(DestMemDc.GetSafeHdc());
-	//Bitmap *pImg = Bitmap::FromHBITMAP(SrcMemDc.GetBmpHandle(), 0);
-	//if (pImg == NULL)
-	//	return false;
-
-	//RectF DestRect(nXOriginDest, nYOriginDest, nWidthDest, nHeightDest);
-	//DoGrap.DrawImage(pImg, DestRect, nXOriginSrc, nYOriginSrc, nWidthSrc, nHeightSrc, UnitPixel);
-	//delete pImg;
-	//return true;
 }
 
 bool IUiEngineImpl::AlphaBlend(HDC DestMemDc, int nXOriginDest, int nYOriginDest, int nWidthDest, int nHeightDest,
@@ -122,16 +112,6 @@ bool IUiEngineImpl::AlphaBlend(HDC DestMemDc, int nXOriginDest, int nYOriginDest
 
 	return (AlphaBlendImpl(DestMemDc, nXOriginDest, nYOriginDest, nWidthDest, nHeightDest,
 		SrcMemDc.GetSafeHdc(), nXOriginSrc, nYOriginSrc, nWidthSrc, nHeightSrc, Blend) == TRUE);
-
-	//Graphics DoGrap(DestMemDc);
-	//Bitmap *pImg = Bitmap::FromHBITMAP(SrcMemDc.GetBmpHandle(), 0);
-	//if (pImg == NULL)
-	//	return false;
-
-	//RectF DestRect(nXOriginDest, nYOriginDest, nWidthDest, nHeightDest);
-	//DoGrap.DrawImage(pImg, DestRect, nXOriginSrc, nYOriginSrc, nWidthSrc, nHeightSrc, UnitPixel);
-	//delete pImg;
-	//return true;
 }
 
 // ªÊ÷∆“ı”∞Œƒ◊÷
