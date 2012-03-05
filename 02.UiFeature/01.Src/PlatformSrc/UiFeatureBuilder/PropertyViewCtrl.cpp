@@ -253,6 +253,9 @@ void CPropertyViewCtrl::AppendComboBoxProp(CMFCPropertyGridProperty* pParentProp
 	if (pComboData == NULL)
 		return;
 
+	if (pComboData->nSelect < 0 || pComboData->nSelect >= (int)pComboData->DataVec.size())
+		pComboData->nSelect = 0;
+
 	string strData = pComboData->DataVec[pComboData->nSelect];
 	CMFCPropertyGridProperty* pNewProp = new CMFCPropertyGridProperty(strName, A2W(strData.c_str()), strInfo);
 	for (STRING_VEC::iterator pVecItem = pComboData->DataVec.begin(); pVecItem != pComboData->DataVec.end(); pVecItem++)
