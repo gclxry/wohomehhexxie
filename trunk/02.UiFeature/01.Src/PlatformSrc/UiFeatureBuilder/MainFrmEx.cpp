@@ -126,6 +126,13 @@ void CMainFrame::OnFileOpen()
 	if (!OpenSkinProject(false, m_strNewSkinDir, m_strNewSkinName))
 		return;
 
+	CString strTitle(_T(""));
+	strTitle.Format(_T("当前工程：%s"), m_strCurSkinName);
+	// 改标题
+	this->SetWindowText(strTitle);
+	this->SendMessage(WM_NCPAINT, NULL, NULL);
+
+
 //	CString strInfo(_T(""));
 //	strInfo.Format(_T("打开皮肤工程文件【%s%s】成功！"), m_strCurSkinName, _T(NAME_SKIN_FILE_EX_NAME));
 //	AfxMessageBox(strInfo, MB_OK | MB_ICONINFORMATION);
@@ -194,6 +201,10 @@ void CMainFrame::OnFileClose()
 	// 关闭老工程
 	if (!CloseSkinProject())
 		return;
+
+	// 改标题
+	this->SetWindowText(_T("UiFeatureBuilder"));
+	this->SendMessage(WM_NCPAINT, NULL, NULL);
 }
 
 void CMainFrame::OnFileSave()

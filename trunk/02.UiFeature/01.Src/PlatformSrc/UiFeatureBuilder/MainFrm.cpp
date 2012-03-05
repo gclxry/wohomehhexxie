@@ -248,6 +248,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	::SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(LOGFONT), &logfont, 0);
 	afxGlobalData.SetMenuFont(&logfont, true);
 
+	// 改文档名称
+	this->SetWindowText(_T("UiFeatureBuilder"));
 //////////////////////////////////////////////////////////////////////////
 	InitUiFeatureKernel();
 //////////////////////////////////////////////////////////////////////////
@@ -256,8 +258,12 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
+	// 把cs.style中的FWS_ADDTOTITLE风格去掉
+	cs.style &= ~FWS_ADDTOTITLE;
+
 	if( !CFrameWndEx::PreCreateWindow(cs) )
 		return FALSE;
+
 	// TODO: 在此处通过修改
 	//  CREATESTRUCT cs 来修改窗口类或样式
 
