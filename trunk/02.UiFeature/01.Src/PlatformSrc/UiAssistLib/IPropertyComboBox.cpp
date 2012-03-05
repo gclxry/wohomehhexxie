@@ -23,7 +23,7 @@ void IPropertyComboBox::Clear()
 
 bool IPropertyComboBox::IsRightData()
 {
-	return (m_ComboBoxPro.DataVec.size() > 0 && m_ComboBoxPro.nSelect >= 0);
+	return (m_ComboBoxPro.DataVec.size() > 0 && m_ComboBoxPro.nSelect >= 0 && m_ComboBoxPro.nSelect < (int)m_ComboBoxPro.DataVec.size());
 }
 
 COMBOBOX_PROP* IPropertyComboBox::GetComboBoxData()
