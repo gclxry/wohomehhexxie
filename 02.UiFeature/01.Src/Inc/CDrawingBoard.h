@@ -31,7 +31,8 @@ public:
 	bool BitBltFrom(HDC hDc, RECT FromRct, RECT ToRct);
 	// 从一个DC进行复制
 	bool StretchBltFrom(HDC hDc, RECT FromRct, RECT ToRct);
-
+	// 从另一个内存DC克隆
+	bool Clone(CDrawingBoard& FromBoard);
 protected:
 	HBITMAP m_hBmp;
 	HBITMAP m_hOldBmp;
