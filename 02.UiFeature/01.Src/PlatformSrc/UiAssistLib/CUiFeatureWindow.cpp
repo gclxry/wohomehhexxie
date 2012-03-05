@@ -141,7 +141,7 @@ void CUiFeatureWindow::OnInitWindowEnd(int nErrorCode)
 // RECT WndRect：窗口显示位置，坐标为屏幕位置
 // int nShow：显示模式，如：SW_SHOW、SW_HIDE
 // LPARAM lParam：创建窗口时传入的参数，可以通过 GetCreateWindowParam 函数取得
-bool CUiFeatureWindow::CreateFeatureWindow(char* pszKernelDllPath, char* pszSkinPath, char *pszSkinWndName, HWND hParent, RECT WndRect, int nShow, int nStyle, LPARAM lParam)
+bool CUiFeatureWindow::CreateFeatureWindow(char* pszKernelDllPath, char* pszSkinPath, char *pszSkinWndName, HWND hParent, RECT WndRect, int nShow, int nStyle, LPARAM lParam, bool bNewUiThread)
 {
 	if (pszKernelDllPath == NULL || pszSkinPath == NULL || pszSkinWndName == NULL)
 		return false;
@@ -168,5 +168,8 @@ bool CUiFeatureWindow::CreateFeatureWindow(char* pszKernelDllPath, char* pszSkin
 		return false;
 	}
 
-	return CWin32Window::CreateWindowWithNewThread(hParent, WndRect, "Welcome UiFeature", nShow, nStyle, lParam);
+	if (bNewUiThread)
+		return CWin32Window::CreateWindowWithNewThread(hParent, WndRect, "Welcome UiFeature", nShow, nStyle, lParam);
+	else
+		return CWin32Window::CreateWindowWithoutThread(hParent, WndRect, "Welcome UiFeature", nShow, nStyle, lParam);
 }

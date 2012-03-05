@@ -21,7 +21,7 @@ public:
 	// RECT WndRect：窗口显示位置，坐标为屏幕位置
 	// int nShow：显示模式，如：SW_SHOW、SW_HIDE
 	// LPARAM lParam：创建窗口时传入的参数，可以通过 GetCreateWindowParam 函数取得
-	bool CreateFeatureWindow(char* pszKernelDllPath, char* pszSkinPath, char *pszSkinWndName, HWND hParent, RECT WndRect, int nShow, int nStyle = WS_OVERLAPPED | WS_THICKFRAME, LPARAM lParam = NULL);
+	bool CreateFeatureWindow(char* pszKernelDllPath, char* pszSkinPath, char *pszSkinWndName, HWND hParent, RECT WndRect, int nShow, int nStyle = WS_OVERLAPPED | WS_THICKFRAME, LPARAM lParam = NULL, bool bNewUiThread = true);
 	virtual bool CreateWindowWithNewThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, int nStyle = WS_OVERLAPPED | WS_THICKFRAME, LPARAM lParam = NULL);
 	// 本窗口的消息处理函数
 	virtual LRESULT WndProc(UINT nMsgId, WPARAM wParam, LPARAM lParam);
