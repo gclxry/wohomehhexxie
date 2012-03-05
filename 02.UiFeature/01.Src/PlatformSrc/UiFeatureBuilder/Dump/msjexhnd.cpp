@@ -340,9 +340,9 @@ void ShowMyErrorDialog(EXCEPTION_POINTERS* pep)
 		SYSTEMTIME tm = { 0 };
 		GetLocalTime(&tm);
 		char str[MAX_PATH] = { 0 };
-		sprintf_s(str, sizeof(str), "%s\\%s%04d%02d%02d%02d%02d%02d%03d.dmp", szPath, szFileName, tm.wYear, tm.wMonth, tm.wDay, tm.wHour, tm.wMinute, tm.wSecond, tm.wMilliseconds);
+		sprintf_s(str, sizeof(str), "%s\\UiFeatureBuilder_%s%04d%02d%02d%02d%02d%02d%03d.dmp", szPath, szFileName, tm.wYear, tm.wMonth, tm.wDay, tm.wHour, tm.wMinute, tm.wSecond, tm.wMilliseconds);
 		LOGINFOITEM li = { 0 };
-		strcpy_s(li.szInfo, sizeof(li.szInfo),  "在这儿添加你的注释");
+		strcpy_s(li.szInfo, sizeof(li.szInfo),  "杯具了！还好有Dump！");
 		CreateMiniDumpA(pep, str, &li, 1);
 	}
 	
