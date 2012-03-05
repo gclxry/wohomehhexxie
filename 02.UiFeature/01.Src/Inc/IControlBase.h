@@ -132,50 +132,6 @@ typedef map<string, CONTROL_REG>	CONTROL_REG_MAP;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 控件能够收到的消息
-enum CONTROL_MSG
-{
-	// 初始化控件
-	CM_Create	= 1,
-	// 控件初始化完毕
-	CM_FinalCreate,
-	// Builder刷新属性
-	CM_BuilderRefreshProp,
-	// 鼠标进入
-	CM_MouseEnter,
-	// 鼠标移出
-	CM_MouseLeave,
-	// 鼠标移动
-	CM_MouseMove,
-	// 鼠标左键点击
-	CM_LButtonDown,
-	// 鼠标左键抬起
-	CM_LButtonUp,
-	// 鼠标左键双击
-	CM_LButtonDbClick,
-	// 鼠标右键点击
-	CM_RButtonDown,
-	// 移动、设置控件位置
-	CM_Size,
-	// 绘制控件
-	CM_Paint,
-	// 移动窗口开始
-	CM_EnterSizeMove,
-	// 移动窗口结束
-	CM_ExitSizeMove,
-	// 销毁控件
-	CM_Destroy,
-	// 控件取得焦点，通过Tab键跳转，激活控件
-	CM_SetFocus,
-	// 控件失去焦点
-	CM_KillFocus,
-	// 控件取得键盘输入消息
-	CM_Char,
-	// 接受到默认回车键信息
-	CM_DefaultEnterCtrl
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 子控件列表
 typedef vector<IControlBase*>			CHILD_CTRLS_VEC;
 
@@ -205,12 +161,26 @@ public:
 	PROP_CONTROL_VEC* GetChildPropControlVec();
 
 	// 重绘控件
-	void RedrawControl(bool bDrawImmediately = false);
+	virtual void RedrawControl(bool bDrawImmediately = false);
 
 	// 控件显示位置和大小，这个位置是相对于附着的窗口的，不会改变布局信息
-	void SetWindowRect(RECT CtrlInWndRct);
-	RECT GetWindowRect();
-	RECT GetClientRect();
+	virtual void SetWindowRect(RECT CtrlInWndRct);
+	virtual RECT GetWindowRect();
+	virtual RECT GetClientRect();
+	// 控件显示位置和大小，会根据布局信息连带修改子控件的位置
+	virtual void SetWindowRectLayoutWithChild(RECT CtrlInWndRct);
+
+	// 可见属性
+	virtual void SetVisible(bool bVisible, bool bSetChild = true);
+	virtual bool IsVisible();
+
+	// 可用属性
+	virtual void SetEnable(bool bEnable, bool bSetChild = true);
+	virtual bool IsEnable();
+
+	// 绘制控件到指定的DC上
+	virtual void PrintTo(CDrawingBoard &DstBoard, RECT ToRct, int nAlpha = 255);
+
 	// 取得父窗口的句柄
 	HWND GetOwnerWindowHwnd();
 
@@ -219,14 +189,6 @@ public:
 	// 是否接受鼠标消息
 	void SetReceiveMouseMessage(bool bIsReceive);
 	bool GetReceiveMouseMessage();
-
-	// 可见属性
-	void SetVisible(bool bVisible, bool bSetChild = true);
-	bool IsVisible();
-
-	// 可用属性
-	void SetEnable(bool bEnable, bool bSetChild = true);
-	bool IsEnable();
 
 	CONTROL_LAYOUT_INFO GetLayout();
 
@@ -238,10 +200,8 @@ public:
 
 	// 从属性更新数据到成员变量
 	void PropetyValueToMemberValue();
-	// 整个控件绘制完成后，再绘制到父控件上的alpha值
-	void SetControlAlpha(int nCtrlAlpha);
-	// 整个控件绘制完成后，再绘制到父控件上的alpha值，设为默认255
-	void ResetControlAlpha();
+	// 整个控件绘制完成后，再绘制到父控件上的alpha值，默认255
+	void SetControlAlpha(int nCtrlAlpha = 255);
 	int GetControlAlpha();
 
 	// 取得绘制控件的内存DC
@@ -358,6 +318,8 @@ private:
 	void MemberValueToPropetyValue();
 	// 重新计算子控件的位置和大小
 	void ResetChildPropetyValueToMemberValue(IControlBase* pParentCtrl);
+	// 控件显示位置和大小，会根据布局信息连带修改子控件的位置
+	void SetChildWindowPostion(CHILD_CTRLS_VEC* pVec);
 
 protected:
 	// 整个控件的内存DC

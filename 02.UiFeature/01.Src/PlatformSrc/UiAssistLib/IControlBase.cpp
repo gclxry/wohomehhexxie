@@ -17,7 +17,7 @@ IControlBase::IControlBase()
 
 	m_bNeedRedraw = true;
 	m_bMouseHover = false;
-	ResetControlAlpha();
+	SetControlAlpha();
 
 	memset(&m_BD_FangKuai8, 0, sizeof(FANGKUAI_8));
 	// 皮肤包管理类
@@ -178,13 +178,6 @@ void IControlBase::SetControlAlpha(int nCtrlAlpha)
 	if (m_nCtrlAlpha < 0)
 		m_nCtrlAlpha = 0;
 
-	m_bNeedRedraw = true;
-}
-
-// 整个控件绘制完成后，再绘制到父控件上的alpha值，设为默认255
-void IControlBase::ResetControlAlpha()
-{
-	m_nCtrlAlpha = 255;
 	m_bNeedRedraw = true;
 }
 

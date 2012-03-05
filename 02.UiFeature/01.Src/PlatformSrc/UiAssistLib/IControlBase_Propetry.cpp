@@ -446,3 +446,34 @@ bool IControlBase::GetLockControl()
 
 	return m_pPropBase_Lock->GetValue();
 }
+
+// 控件显示位置和大小，会根据布局信息连带修改子控件的位置
+void IControlBase::SetWindowRectLayoutWithChild(RECT CtrlInWndRct)
+{
+	this->SetWindowRect(CtrlInWndRct);
+	SetChildWindowPostion(&m_ChildCtrlsVec);
+}
+
+// 控件显示位置和大小，会根据布局信息连带修改子控件的位置
+void IControlBase::SetChildWindowPostion(CHILD_CTRLS_VEC* pVec)
+{
+	if (m_pWindowBase == NULL || pVec == NULL)
+		return;
+
+	int nCtns = pVec->size();
+	for (int i = 0; i < nCtns; i++)
+	{
+		IControlBase* pCtrl = (*pVec)[i];
+		if (pCtrl == NULL || pCtrl->GetParentControl() == NULL)
+			continue;
+
+		RECT ParentRctInWnd = pCtrl->GetParentControl()->GetWindowRect();
+
+		// 计算当前控件的位置
+		m_pWindowBase->SetControlWindowPostion(pCtrl, ParentRctInWnd);
+		pCtrl->RedrawControl();
+
+		// 设置子控件的位置
+		SetChildWindowPostion(pCtrl->GetChildControlsVec());
+	}
+}
