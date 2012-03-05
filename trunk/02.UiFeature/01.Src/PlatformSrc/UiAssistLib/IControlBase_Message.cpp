@@ -5,6 +5,25 @@
 #include "..\..\Inc\IControlBase.h"
 #include "..\..\Inc\IWindowBase.h"
 
+// 绘制控件到指定的DC上
+void IControlBase::PrintTo(CDrawingBoard &DstBoard, RECT ToRct, int nAlpha)
+{
+	if (DstBoard.GetSafeHdc() == NULL || RECT_WIDTH(ToRct) <= 0 || RECT_HEIGHT(ToRct) <= 0 || m_pUiEngine == NULL)
+		return;
+
+	if (RECT_WIDTH(m_RectInWindow) <= 0 || RECT_HEIGHT(m_RectInWindow) <= 0)
+		return;
+
+	m_CtrlMemDc.Create(RECT_WIDTH(m_RectInWindow), RECT_HEIGHT(m_RectInWindow), 0, false, true);
+	if (m_CtrlMemDc.GetBits() == NULL)
+		return;
+
+	OnPaint(m_CtrlMemDc);
+
+	m_pUiEngine->AlphaBlend(DstBoard, ToRct.left, ToRct.top, RECT_WIDTH(ToRct), RECT_HEIGHT(ToRct),
+		m_CtrlMemDc, 0, 0, RECT_WIDTH(m_RectInWindow), RECT_HEIGHT(m_RectInWindow), nAlpha);
+}
+
 // 绘制当前控件，参数为父窗口/父控件的内存DC
 void IControlBase::OnPaintControl(CDrawingBoard &WndMemDc, RECT ActiveDrawRct)
 {
