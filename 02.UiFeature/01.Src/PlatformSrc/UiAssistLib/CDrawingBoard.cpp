@@ -155,9 +155,9 @@ bool CDrawingBoard::StretchBltFrom(HDC hDc, RECT FromRct, RECT ToRct)
 }
 
 // 从另一个内存DC克隆
-bool CDrawingBoard::Clone(CDrawingBoard& FromBoard)
+bool CDrawingBoard::Clone(CDrawingBoard& FromBoard, IUiFeatureKernel* pUiKernel)
 {
-	if (FromBoard.GetSafeHdc() == NULL || FromBoard.GetDcSize().cx <= 0 || FromBoard.GetDcSize().cy <= 0)
+	if (FromBoard.GetSafeHdc() == NULL || FromBoard.GetDcSize().cx <= 0 || FromBoard.GetDcSize().cy <= 0 || pUiKernel == NULL)
 		return false;
 
 	this->Create(FromBoard.GetDcSize().cx, FromBoard.GetDcSize().cy, 0, true, false);
@@ -165,5 +165,6 @@ bool CDrawingBoard::Clone(CDrawingBoard& FromBoard)
 		return false;
 	
 	RECT fromRct = {0, 0, FromBoard.GetDcSize().cx, FromBoard.GetDcSize().cy};
-	return BitBltFrom(FromBoard.GetSafeHdc(), fromRct, fromRct);
+
+	return FromBoard.AlphaBlendTo(*this, fromRct, fromRct, pUiKernel);
 }
