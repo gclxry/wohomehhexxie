@@ -219,7 +219,7 @@ public:
 	IPropertyControl *PP_GetControlPropetry();
 
 	// 从属性更新数据到成员变量
-	void PropetyValueToMemberValue();
+	void PropetyValueToMemberValue(bool bCallRefresh);
 	// 整个控件绘制完成后，再绘制到父控件上的alpha值，默认255
 	void SetControlAlpha(int nCtrlAlpha = 255);
 	int GetControlAlpha();
@@ -261,12 +261,12 @@ protected:
 	virtual void OnCreate() = 0;
 	// 控件初始化完毕
 	virtual void OnFinalCreate() = 0;
+	// Builder刷新属性，此函数中只要重新加载控件属性即可
+	virtual void OnBuilderRefreshProp() = 0;
 	// 销毁控件
 	virtual void OnDestroy() = 0;
 	// 绘制控件
 	virtual void OnPaint(CDrawingBoard &DrawBoard) = 0;
-	// Builder刷新属性
-	virtual void OnBuilderRefreshProp() = 0;
 	// 鼠标进入
 	virtual void OnMouseEnter(POINT pt) = 0;
 	// 鼠标移出
@@ -337,7 +337,7 @@ private:
 	// 从成员变量更新数据到属性
 	void MemberValueToPropetyValue();
 	// 重新计算子控件的位置和大小
-	void ResetChildPropetyValueToMemberValue(IControlBase* pParentCtrl);
+	void ResetChildPropetyValueToMemberValue(IControlBase* pParentCtrl, bool bCallRefresh);
 	// 控件显示位置和大小，会根据布局信息连带修改子控件的位置
 	void SetChildWindowPostion(CHILD_CTRLS_VEC* pVec);
 
