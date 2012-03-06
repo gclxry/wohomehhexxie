@@ -186,7 +186,7 @@ void IControlBase::CreateCtrlAllPropetry(bool bNeedSetDftProp)
 	}
 
 	// 从属性更新数据到成员变量
-	PropetyValueToMemberValue();
+	PropetyValueToMemberValue(false);
 
 	// 控件创建自定义的属性
 	CreateControlPropetry(bNeedSetDftProp);
@@ -204,7 +204,7 @@ IPropertyBase* IControlBase::CreatePropetry(IPropertyGroup* pPropGroup, OBJECT_T
 }
 
 // 从属性更新数据到成员变量
-void IControlBase::PropetyValueToMemberValue()
+void IControlBase::PropetyValueToMemberValue(bool bCallRefresh)
 {
 	if (m_pWindowBase == NULL)
 		return;
@@ -233,14 +233,14 @@ void IControlBase::PropetyValueToMemberValue()
 	m_BD_FangKuai8.EntityRct.top = pFk8->EntityRct.top + (m_RectInWindow.top - ParentRct.top);
 	m_BD_FangKuai8.EntityRct.bottom = m_BD_FangKuai8.EntityRct.top + RECT_HEIGHT(m_RectInWindow);
 
-	// 通知控件属性刷新了
-	this->OnBuilderRefreshProp();
+	ResetChildPropetyValueToMemberValue(this, bCallRefresh);
 
-	ResetChildPropetyValueToMemberValue(this);
+	if (bCallRefresh)
+		this->OnBuilderRefreshProp();
 }
 
 // 重新计算子控件的位置和大小
-void IControlBase::ResetChildPropetyValueToMemberValue(IControlBase* pParentCtrl)
+void IControlBase::ResetChildPropetyValueToMemberValue(IControlBase* pParentCtrl, bool bCallRefresh)
 {
 	if (pParentCtrl == NULL)
 		return;
@@ -255,7 +255,7 @@ void IControlBase::ResetChildPropetyValueToMemberValue(IControlBase* pParentCtrl
 		if (pCtrl == NULL || pCtrl->GetOwnerWindow() == NULL)
 			continue;
 
-		pCtrl->PropetyValueToMemberValue();
+		pCtrl->PropetyValueToMemberValue(bCallRefresh);
 	}
 }
 
