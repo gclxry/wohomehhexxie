@@ -39,6 +39,11 @@ bool CUiFeatureWindow::CreateWindowWithNewThread(HWND hParent, RECT WndRect, cha
 	return false;
 }
 
+bool CUiFeatureWindow::CreateWindowWithoutThread(HWND hParent, RECT WndRect, char *pszWndText, int nShow, int nStyle, LPARAM lParam)
+{
+	return false;
+}
+
 // 控件发送消息接口
 LRESULT CUiFeatureWindow::OnCtrlMessage(IControlBase* pCtrl, int nMsgId, WPARAM wParam, LPARAM lParam)
 {
@@ -87,6 +92,8 @@ bool CUiFeatureWindow::InitInstance()
 			this->CenterWindow();
 		}
 
+		// 设置参数，通过句柄，外部可以得到 IWindowBase 指针
+		::SetPropA(m_hWnd, "featurewindowpoint", (HANDLE)m_pWindowBase);
 		OnCreate();
 		this->ShowWindow(SW_HIDE);
 	}
