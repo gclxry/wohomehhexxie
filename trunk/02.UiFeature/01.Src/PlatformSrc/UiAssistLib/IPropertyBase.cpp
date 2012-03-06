@@ -13,6 +13,7 @@ IPropertyBase::IPropertyBase()
 	m_strRelevancyPropName = "";
 	// 关联属性
 	m_pRelevancyProp = NULL;
+	m_pBuilderCtrl = NULL;
 }
 
 IPropertyBase::~IPropertyBase()
@@ -81,4 +82,16 @@ bool IPropertyBase::AppendToXmlNode(CUiXmlWrite &XmlStrObj, CUiXmlWriteNode* pPa
 		return true;
 
 	return true;
+}
+
+// 在Builder中禁用
+void IPropertyBase::EnableInBuilder(bool bEnable)
+{
+	if (m_pBuilderCtrl != NULL)
+		m_pBuilderCtrl->EnableBuilderCtrl(bEnable);
+}
+
+void IPropertyBase::SetPropBuilderCtrl(IPropertyBuilderCtrl* pBuilderCtrl)
+{
+	m_pBuilderCtrl = pBuilderCtrl;
 }

@@ -8,7 +8,7 @@
 #include "UiFeatureBuilderView.h"
 #include "MainFrm.h"
 
-CPropetryDialogGridProperty::CPropetryDialogGridProperty(const CString& strName, const COleVariant& varValue, CString& strInfo) : CMFCPropertyGridProperty(strName, varValue, strInfo)
+CPropetryDialogGridProperty::CPropetryDialogGridProperty(const CString& strName, const COleVariant& varValue, CString& strInfo) : CUiFeaturePropertyGrid(strName, varValue, strInfo)
 {
 	m_ObjType = OTID_NONE;
 	m_pUiKernel = NULL;

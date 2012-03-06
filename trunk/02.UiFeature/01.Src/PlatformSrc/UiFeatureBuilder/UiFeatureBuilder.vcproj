@@ -444,6 +444,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Inc\IPropertyBuilderCtrl.h"
+					>
+				</File>
+				<File
 					RelativePath=".\PropertiesWnd.cpp"
 					>
 				</File>
@@ -457,6 +461,14 @@
 				</File>
 				<File
 					RelativePath=".\PropertyViewCtrl.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UiFeaturePropertyGrid.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\UiFeaturePropertyGrid.h"
 					>
 				</File>
 				<Filter

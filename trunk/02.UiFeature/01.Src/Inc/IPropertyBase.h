@@ -5,6 +5,7 @@
 #include "CUiXmlParser.h"
 #include "IFeatureObject.h"
 #include "CUiXmlWrite.h"
+#include "IPropertyBuilderCtrl.h"
 
 class IPropertyBase;
 class IUiFeatureKernel;
@@ -63,10 +64,15 @@ public:
 	void SetUiKernel(IUiFeatureKernel *pUiKernel);
 	IUiFeatureKernel *GetUiKernel();
 	
+	// 在Builder中禁用
+	void EnableInBuilder(bool bEnable);
+	void SetPropBuilderCtrl(IPropertyBuilderCtrl* pBuilderCtrl);
+
 private:
 	IUiFeatureKernel *m_pUiKernel;
 	// 关联属性名称
 	string m_strRelevancyPropName;
 	// 关联属性
 	IPropertyBase *m_pRelevancyProp;
+	IPropertyBuilderCtrl* m_pBuilderCtrl;
 };
