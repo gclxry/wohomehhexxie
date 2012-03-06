@@ -68,6 +68,15 @@ void IPropertySkinManagerImpl::ReleaseSkinManagerPropetry()
 	ReleasePropMap(m_AllCtrlPropMap, false);
 	ReleasePropMap(m_AllPropMap, true);
 	m_AllWindowPropMap.clear();
+
+	m_pImageBasePropMap = NULL;
+	m_pImagePropMap = NULL;
+	m_pFontBasePropMap = NULL;
+	m_pFontPropMap = NULL;
+	m_pCursorBasePropMap = NULL;
+	m_pCursorPropMap = NULL;
+	m_pColorBasePropMap = NULL;
+	m_pColorPropMap = NULL;
 }
 
 void IPropertySkinManagerImpl::ReleasePropMap(RESOURCE_PROP_MAP &PropMap, bool bReleaseChild)
