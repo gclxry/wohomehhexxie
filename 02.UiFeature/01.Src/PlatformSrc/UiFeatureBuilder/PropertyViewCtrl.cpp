@@ -777,6 +777,9 @@ void CPropertyViewCtrl::EnableLayoutState()
 
 		if (nSel == CL_G_RIGHT_TOP || nSel == CL_G_RIGHT_BOTTOM || nSel == CL_L_RIGHT)
 			m_pCtrlLeftSpaceProp->Enable(FALSE);
+
+		if (nSel == CL_G_TOP_MIDDLE || nSel == CL_G_BOTTOM_MIDDLE || nSel == CL_G_RIGHT_MIDDLE || nSel == CL_G_MID_MIDDLE)
+			m_pCtrlLeftSpaceProp->Enable(FALSE);
 	}
 
 	if (m_pCtrlRightSpaceProp != NULL)
@@ -790,6 +793,9 @@ void CPropertyViewCtrl::EnableLayoutState()
 
 		if (nSel == CL_G_LEFT_TOP || nSel == CL_G_LEFT_BOTTOM || nSel == CL_L_LEFT)
 			m_pCtrlRightSpaceProp->Enable(FALSE);
+
+		if (nSel == CL_G_TOP_MIDDLE || nSel == CL_G_BOTTOM_MIDDLE || nSel == CL_G_LEFT_MIDDLE || nSel == CL_G_MID_MIDDLE)
+			m_pCtrlLeftSpaceProp->Enable(FALSE);
 	}
 
 	if (m_pCtrlTopSpaceProp != NULL)
@@ -803,6 +809,9 @@ void CPropertyViewCtrl::EnableLayoutState()
 
 		if (nSel == CL_G_LEFT_BOTTOM || nSel == CL_G_RIGHT_BOTTOM || nSel == CL_L_BOTTOM)
 			m_pCtrlTopSpaceProp->Enable(FALSE);
+
+		if (nSel == CL_G_LEFT_MIDDLE || nSel == CL_G_RIGHT_MIDDLE || nSel == CL_G_BOTTOM_MIDDLE || nSel == CL_G_MID_MIDDLE)
+			m_pCtrlLeftSpaceProp->Enable(FALSE);
 	}
 
 	if (m_pCtrlBottomSpaceProp != NULL)
@@ -816,6 +825,9 @@ void CPropertyViewCtrl::EnableLayoutState()
 
 		if (nSel == CL_G_LEFT_TOP || nSel == CL_G_RIGHT_TOP || nSel == CL_L_TOP)
 			m_pCtrlBottomSpaceProp->Enable(FALSE);
+
+		if (nSel == CL_G_LEFT_MIDDLE || nSel == CL_G_RIGHT_MIDDLE || nSel == CL_G_TOP_MIDDLE || nSel == CL_G_MID_MIDDLE)
+			m_pCtrlLeftSpaceProp->Enable(FALSE);
 	}
 }
 
