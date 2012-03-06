@@ -49,7 +49,7 @@ void CPropertyViewCtrl::RefreshLayoutData()
 	this->RedrawWindow();
 }
 
-void CPropertyViewCtrl::RefreshToPropViewIntProp(CMFCPropertyGridProperty* pProperty)
+void CPropertyViewCtrl::RefreshToPropViewIntProp(CUiFeaturePropertyGrid* pProperty)
 {
 	if (pProperty == NULL)
 		return;
@@ -107,7 +107,7 @@ void CPropertyViewCtrl::SetShowPropGroup(IPropertyGroup *pPropGroup)
 	this->RedrawWindow();
 }
 
-void CPropertyViewCtrl::AppendPropGroup(CMFCPropertyGridProperty* pParentPropGroup, IPropertyGroup *pPropGroup)
+void CPropertyViewCtrl::AppendPropGroup(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyGroup *pPropGroup)
 {
 	USES_CONVERSION;
 	if (pPropGroup == NULL)
@@ -129,9 +129,12 @@ void CPropertyViewCtrl::AppendPropGroup(CMFCPropertyGridProperty* pParentPropGro
 		{
 			// 创建一个属性组
 			CString strName = A2W(pProp->GetObjectName());
-			CMFCPropertyGridProperty* pShowPropGroup = new CMFCPropertyGridProperty(strName);
+			CUiFeaturePropertyGrid* pShowPropGroup = new CUiFeaturePropertyGrid(strName);
 			if (pShowPropGroup == NULL)
 				continue;
+
+			IPropertyBuilderCtrl* pBuilderCtrl = dynamic_cast<IPropertyBuilderCtrl*>(pShowPropGroup);
+			pProp->SetPropBuilderCtrl(pBuilderCtrl);
 
 			pShowPropGroup->SetData((DWORD_PTR)pProp);
 			AppendPropGroup(pShowPropGroup, (IPropertyGroup*)pProp);
@@ -184,7 +187,7 @@ void CPropertyViewCtrl::AppendPropGroup(CMFCPropertyGridProperty* pParentPropGro
 	}
 }
 
-void CPropertyViewCtrl::AppendBoolProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyBool *pBoolProp)
+void CPropertyViewCtrl::AppendBoolProp(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyBool *pBoolProp)
 {
 	USES_CONVERSION;
 	if (pParentPropGroup == NULL || pBoolProp == NULL)
@@ -197,15 +200,18 @@ void CPropertyViewCtrl::AppendBoolProp(CMFCPropertyGridProperty* pParentPropGrou
 	CString strName = A2W(pPropBase->GetObjectName());
 	CString strInfo = A2W(pPropBase->GetObjectInfo());
 
-	CMFCPropertyGridProperty *pNewProp = new CMFCPropertyGridProperty(strName, (_variant_t)pBoolProp->GetValue(), strInfo);
+	CUiFeaturePropertyGrid *pNewProp = new CUiFeaturePropertyGrid(strName, (_variant_t)pBoolProp->GetValue(), strInfo);
 	if (pNewProp == NULL)
 		return;
+
+	IPropertyBuilderCtrl* pBuilderCtrl = dynamic_cast<IPropertyBuilderCtrl*>(pNewProp);
+	pBoolProp->SetPropBuilderCtrl(pBuilderCtrl);
 
 	pNewProp->SetData((DWORD_PTR)pPropBase);
 	pParentPropGroup->AddSubItem(pNewProp);
 }
 
-void CPropertyViewCtrl::AppendColorProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyColor *pColorProp)
+void CPropertyViewCtrl::AppendColorProp(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyColor *pColorProp)
 {
 	USES_CONVERSION;
 	if (pParentPropGroup == NULL || pColorProp == NULL)
@@ -217,13 +223,6 @@ void CPropertyViewCtrl::AppendColorProp(CMFCPropertyGridProperty* pParentPropGro
 
 	CString strName = A2W(pPropBase->GetObjectName());
 	CString strInfo = A2W(pPropBase->GetObjectInfo());
-
-	//CMFCPropertyGridProperty *pNewProp = new CMFCPropertyGridProperty(strName, (_variant_t)pColorProp->GetValue(), strInfo);
-	//if (pNewProp == NULL)
-	//	return;
-
-	//pNewProp->SetData((DWORD_PTR)pPropBase);
-	//pParentPropGroup->AddSubItem(pNewProp);
 }
 
 void CPropertyViewCtrl::ClearAll()
@@ -236,7 +235,7 @@ void CPropertyViewCtrl::ClearAll()
 	this->RedrawWindow();
 }
 
-void CPropertyViewCtrl::AppendComboBoxProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyComboBox *pComboboxProp)
+void CPropertyViewCtrl::AppendComboBoxProp(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyComboBox *pComboboxProp)
 {
 	USES_CONVERSION;
 	if (pParentPropGroup == NULL || pComboboxProp == NULL)
@@ -254,10 +253,10 @@ void CPropertyViewCtrl::AppendComboBoxProp(CMFCPropertyGridProperty* pParentProp
 		return;
 
 	string strData = "";
-	CMFCPropertyGridProperty* pNewProp = NULL;
+	CUiFeaturePropertyGrid* pNewProp = NULL;
 	if (pComboData->DataVec.size() <= 0)
 	{
-		pNewProp = new CMFCPropertyGridProperty(strName, _T(""), strInfo);
+		pNewProp = new CUiFeaturePropertyGrid(strName, _T(""), strInfo);
 	}
 	else
 	{
@@ -265,8 +264,14 @@ void CPropertyViewCtrl::AppendComboBoxProp(CMFCPropertyGridProperty* pParentProp
 			pComboData->nSelect = 0;
 
 		strData = pComboData->DataVec[pComboData->nSelect];
-		pNewProp = new CMFCPropertyGridProperty(strName, A2W(strData.c_str()), strInfo);
+		pNewProp = new CUiFeaturePropertyGrid(strName, A2W(strData.c_str()), strInfo);
 	}
+
+	if (pNewProp == NULL)
+		return;
+
+	IPropertyBuilderCtrl* pBuilderCtrl = dynamic_cast<IPropertyBuilderCtrl*>(pNewProp);
+	pComboboxProp->SetPropBuilderCtrl(pBuilderCtrl);
 
 	for (STRING_VEC::iterator pVecItem = pComboData->DataVec.begin(); pVecItem != pComboData->DataVec.end(); pVecItem++)
 	{
@@ -282,7 +287,7 @@ void CPropertyViewCtrl::AppendComboBoxProp(CMFCPropertyGridProperty* pParentProp
 		m_pCtrlLayoutTypeProp = pNewProp;
 }
 
-void CPropertyViewCtrl::AppendCursorProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyCursor *pCursorProp)
+void CPropertyViewCtrl::AppendCursorProp(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyCursor *pCursorProp)
 {
 	USES_CONVERSION;
 	if (pParentPropGroup == NULL || pCursorProp == NULL)
@@ -299,13 +304,17 @@ void CPropertyViewCtrl::AppendCursorProp(CMFCPropertyGridProperty* pParentPropGr
 	CPropetryDialogGridProperty *pNewProp = new CPropetryDialogGridProperty(strName, (_variant_t)strData, strInfo);
 	if (pNewProp == NULL)
 		return;
+
+	IPropertyBuilderCtrl* pBuilderCtrl = dynamic_cast<IPropertyBuilderCtrl*>(pNewProp);
+	pCursorProp->SetPropBuilderCtrl(pBuilderCtrl);
+
 	pNewProp->InitDialogPropetry(this, m_pUiKernel, OTID_CURSOR_BASE);
 	pNewProp->AllowEdit(FALSE);
 	pNewProp->SetData((DWORD_PTR)pPropBase);
 	pParentPropGroup->AddSubItem(pNewProp);
 }
 
-void CPropertyViewCtrl::AppendFontProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyFont *pFontProp)
+void CPropertyViewCtrl::AppendFontProp(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyFont *pFontProp)
 {
 	USES_CONVERSION;
 	if (pParentPropGroup == NULL || pFontProp == NULL)
@@ -322,13 +331,17 @@ void CPropertyViewCtrl::AppendFontProp(CMFCPropertyGridProperty* pParentPropGrou
 	CPropetryDialogGridProperty *pNewProp = new CPropetryDialogGridProperty(strName, (_variant_t)strData, strInfo);
 	if (pNewProp == NULL)
 		return;
+
+	IPropertyBuilderCtrl* pBuilderCtrl = dynamic_cast<IPropertyBuilderCtrl*>(pNewProp);
+	pFontProp->SetPropBuilderCtrl(pBuilderCtrl);
+
 	pNewProp->InitDialogPropetry(this, m_pUiKernel, OTID_FONT_BASE);
 	pNewProp->AllowEdit(FALSE);
 	pNewProp->SetData((DWORD_PTR)pPropBase);
 	pParentPropGroup->AddSubItem(pNewProp);
 }
 
-void CPropertyViewCtrl::AppendImageProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyImage *pImageProp)
+void CPropertyViewCtrl::AppendImageProp(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyImage *pImageProp)
 {
 	USES_CONVERSION;
 	if (pParentPropGroup == NULL || pImageProp == NULL)
@@ -351,7 +364,7 @@ void CPropertyViewCtrl::AppendImageProp(CMFCPropertyGridProperty* pParentPropGro
 	pParentPropGroup->AddSubItem(pNewProp);
 }
 
-void CPropertyViewCtrl::AppendIntProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyInt *pIntProp)
+void CPropertyViewCtrl::AppendIntProp(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyInt *pIntProp)
 {
 	USES_CONVERSION;
 	if (pParentPropGroup == NULL || pIntProp == NULL)
@@ -364,9 +377,12 @@ void CPropertyViewCtrl::AppendIntProp(CMFCPropertyGridProperty* pParentPropGroup
 	CString strName = A2W(pPropBase->GetObjectName());
 	CString strInfo = A2W(pPropBase->GetObjectInfo());
 
-	CMFCPropertyGridProperty *pNewProp = new CMFCPropertyGridProperty(strName, (_variant_t)pIntProp->GetValue(), strInfo);
+	CUiFeaturePropertyGrid *pNewProp = new CUiFeaturePropertyGrid(strName, (_variant_t)pIntProp->GetValue(), strInfo);
 	if (pNewProp == NULL)
 		return;
+
+	IPropertyBuilderCtrl* pBuilderCtrl = dynamic_cast<IPropertyBuilderCtrl*>(pNewProp);
+	pIntProp->SetPropBuilderCtrl(pBuilderCtrl);
 
 	pNewProp->EnableSpinControl(TRUE, -(0x7FFFFFFF), 0x7FFFFFFF);
 	pNewProp->SetData((DWORD_PTR)pPropBase);
@@ -407,7 +423,7 @@ void CPropertyViewCtrl::AppendIntProp(CMFCPropertyGridProperty* pParentPropGroup
 	}
 }
 
-void CPropertyViewCtrl::AppendStringProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyString *pStringProp)
+void CPropertyViewCtrl::AppendStringProp(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyString *pStringProp)
 {
 	USES_CONVERSION;
 	if (pParentPropGroup == NULL || pStringProp == NULL)
@@ -421,9 +437,12 @@ void CPropertyViewCtrl::AppendStringProp(CMFCPropertyGridProperty* pParentPropGr
 	CString strInfo = A2W(pPropBase->GetObjectInfo());
 	CString strData = A2W(pStringProp->GetString());
 
-	CMFCPropertyGridProperty *pNewProp = new CMFCPropertyGridProperty(strName, (_variant_t)strData, strInfo);
+	CUiFeaturePropertyGrid *pNewProp = new CUiFeaturePropertyGrid(strName, (_variant_t)strData, strInfo);
 	if (pNewProp == NULL)
 		return;
+
+	IPropertyBuilderCtrl* pBuilderCtrl = dynamic_cast<IPropertyBuilderCtrl*>(pNewProp);
+	pStringProp->SetPropBuilderCtrl(pBuilderCtrl);
 
 	if ((lstrcmpA(pPropBase->GetObjectName(), NAME_SKIN_PROP_NAME_OBJ_ID) == 0)
 	|| (lstrcmpA(pPropBase->GetObjectName(), NAME_SKIN_PROP_NAME_TYPE) == 0))
@@ -436,7 +455,7 @@ void CPropertyViewCtrl::AppendStringProp(CMFCPropertyGridProperty* pParentPropGr
 	pParentPropGroup->AddSubItem(pNewProp);
 }
 
-void CPropertyViewCtrl::OnPropertyChanged(CMFCPropertyGridProperty* pProperty)
+void CPropertyViewCtrl::OnPropertyChanged(CUiFeaturePropertyGrid* pProperty)
 {
 	SetNeedSave();
 	if (pProperty == NULL)
@@ -513,7 +532,7 @@ void CPropertyViewCtrl::OnPropertyChanged(CMFCPropertyGridProperty* pProperty)
 		pMain->GetView()->RedrawWindow();
 }
 
-void CPropertyViewCtrl::RefreshBoolProp(CMFCPropertyGridProperty* pProperty, IPropertyBool *pBoolProp)
+void CPropertyViewCtrl::RefreshBoolProp(CUiFeaturePropertyGrid* pProperty, IPropertyBool *pBoolProp)
 {
 	if (pProperty == NULL || pBoolProp == NULL)
 		return;
@@ -522,17 +541,17 @@ void CPropertyViewCtrl::RefreshBoolProp(CMFCPropertyGridProperty* pProperty, IPr
 	pBoolProp->SetValue(NewVariant.boolVal != VARIANT_FALSE);
 }
 
-void CPropertyViewCtrl::RefreshColorProp(CMFCPropertyGridProperty* pProperty, IPropertyColor *pColorProp)
+void CPropertyViewCtrl::RefreshColorProp(CUiFeaturePropertyGrid* pProperty, IPropertyColor *pColorProp)
 {
 	RefreshHaveBasePropPropetry(pProperty, dynamic_cast<IPropertyBase*>(pColorProp));
 }
 
-void CPropertyViewCtrl::RefreshCursorProp(CMFCPropertyGridProperty* pProperty, IPropertyCursor *pCursorProp)
+void CPropertyViewCtrl::RefreshCursorProp(CUiFeaturePropertyGrid* pProperty, IPropertyCursor *pCursorProp)
 {
 	RefreshHaveBasePropPropetry(pProperty, dynamic_cast<IPropertyBase*>(pCursorProp));
 }
 
-void CPropertyViewCtrl::RefreshFontProp(CMFCPropertyGridProperty* pProperty, IPropertyFont *pFontProp)
+void CPropertyViewCtrl::RefreshFontProp(CUiFeaturePropertyGrid* pProperty, IPropertyFont *pFontProp)
 {
 	RefreshHaveBasePropPropetry(pProperty, dynamic_cast<IPropertyBase*>(pFontProp));
 
@@ -540,7 +559,7 @@ void CPropertyViewCtrl::RefreshFontProp(CMFCPropertyGridProperty* pProperty, IPr
 		pFontProp->SetPictureTextRedrawSign();
 }
 
-void CPropertyViewCtrl::RefreshHaveBasePropPropetry(CMFCPropertyGridProperty* pProperty, IPropertyBase *pBaseProp)
+void CPropertyViewCtrl::RefreshHaveBasePropPropetry(CUiFeaturePropertyGrid* pProperty, IPropertyBase *pBaseProp)
 {
 	USES_CONVERSION;
 	if (pProperty == NULL || pBaseProp == NULL)
@@ -548,12 +567,12 @@ void CPropertyViewCtrl::RefreshHaveBasePropPropetry(CMFCPropertyGridProperty* pP
 	// 不需要二次设置，已经在图片编辑对话框中设置完成
 }
 
-void CPropertyViewCtrl::RefreshImageProp(CMFCPropertyGridProperty* pProperty, IPropertyImage *pImageProp)
+void CPropertyViewCtrl::RefreshImageProp(CUiFeaturePropertyGrid* pProperty, IPropertyImage *pImageProp)
 {
 	RefreshHaveBasePropPropetry(pProperty, dynamic_cast<IPropertyBase*>(pImageProp));
 }
 
-void CPropertyViewCtrl::RefreshIntProp(CMFCPropertyGridProperty* pProperty, IPropertyInt *pIntProp)
+void CPropertyViewCtrl::RefreshIntProp(CUiFeaturePropertyGrid* pProperty, IPropertyInt *pIntProp)
 {
 	if (pProperty == NULL || pIntProp == NULL)
 		return;
@@ -634,7 +653,7 @@ void CPropertyViewCtrl::RefreshIntProp(CMFCPropertyGridProperty* pProperty, IPro
 	pIntProp->SetValue(NewVariant.lVal);
 }
 
-void CPropertyViewCtrl::RefreshStringProp(CMFCPropertyGridProperty* pProperty, IPropertyString *pStringProp)
+void CPropertyViewCtrl::RefreshStringProp(CUiFeaturePropertyGrid* pProperty, IPropertyString *pStringProp)
 {
 	USES_CONVERSION;
 	if (pProperty == NULL || pStringProp == NULL)
@@ -667,7 +686,7 @@ void CPropertyViewCtrl::RefreshStringProp(CMFCPropertyGridProperty* pProperty, I
 		m_pViewTree->RefreshObjectName();
 }
 
-void CPropertyViewCtrl::RefreshComboBoxProp(CMFCPropertyGridProperty* pProperty, IPropertyComboBox *pComboboxProp)
+void CPropertyViewCtrl::RefreshComboBoxProp(CUiFeaturePropertyGrid* pProperty, IPropertyComboBox *pComboboxProp)
 {
 	USES_CONVERSION;
 	if (pProperty == NULL || pComboboxProp == NULL)
@@ -687,7 +706,7 @@ void CPropertyViewCtrl::RefreshComboBoxProp(CMFCPropertyGridProperty* pProperty,
 		EnableLayoutState();
 }
 
-void CPropertyViewCtrl::SetIntValueToPropView(int nValue, CMFCPropertyGridProperty* pGridProp)
+void CPropertyViewCtrl::SetIntValueToPropView(int nValue, CUiFeaturePropertyGrid* pGridProp)
 {
 	if (pGridProp == NULL)
 		return;
@@ -795,7 +814,7 @@ void CPropertyViewCtrl::EnableLayoutState()
 			m_pCtrlRightSpaceProp->Enable(FALSE);
 
 		if (nSel == CL_G_TOP_MIDDLE || nSel == CL_G_BOTTOM_MIDDLE || nSel == CL_G_LEFT_MIDDLE || nSel == CL_G_MID_MIDDLE)
-			m_pCtrlLeftSpaceProp->Enable(FALSE);
+			m_pCtrlRightSpaceProp->Enable(FALSE);
 	}
 
 	if (m_pCtrlTopSpaceProp != NULL)
@@ -811,7 +830,7 @@ void CPropertyViewCtrl::EnableLayoutState()
 			m_pCtrlTopSpaceProp->Enable(FALSE);
 
 		if (nSel == CL_G_LEFT_MIDDLE || nSel == CL_G_RIGHT_MIDDLE || nSel == CL_G_BOTTOM_MIDDLE || nSel == CL_G_MID_MIDDLE)
-			m_pCtrlLeftSpaceProp->Enable(FALSE);
+			m_pCtrlTopSpaceProp->Enable(FALSE);
 	}
 
 	if (m_pCtrlBottomSpaceProp != NULL)
@@ -827,7 +846,7 @@ void CPropertyViewCtrl::EnableLayoutState()
 			m_pCtrlBottomSpaceProp->Enable(FALSE);
 
 		if (nSel == CL_G_LEFT_MIDDLE || nSel == CL_G_RIGHT_MIDDLE || nSel == CL_G_TOP_MIDDLE || nSel == CL_G_MID_MIDDLE)
-			m_pCtrlLeftSpaceProp->Enable(FALSE);
+			m_pCtrlBottomSpaceProp->Enable(FALSE);
 	}
 }
 

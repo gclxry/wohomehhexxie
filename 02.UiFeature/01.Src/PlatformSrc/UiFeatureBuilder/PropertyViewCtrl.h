@@ -1,5 +1,5 @@
 #pragma once
-#include "afxpropertygridctrl.h"
+#include "UiFeaturePropertyGrid.h"
 #include "..\..\Inc\IPropertyGroup.h"
 #include "..\..\Inc\IPropertyBool.h"
 #include "..\..\Inc\IPropertyColor.h"
@@ -22,7 +22,7 @@ public:
 	// 清空所有的属性
 	void ClearAll();
 	// 属性发生改变的时候
-	void OnPropertyChanged(CMFCPropertyGridProperty* pProperty);
+	void OnPropertyChanged(CUiFeaturePropertyGrid* pProperty);
 	void Init(IUiFeatureKernel* pKernelWindow, CWindowsViewTree *pViewTree);
 	void SetProjectInitState(bool bInitOk);
 
@@ -36,42 +36,42 @@ public:
 	void RefreshLayoutData();
 
 private:
-	CMFCPropertyGridProperty* m_pWindowWidthProp;
-	CMFCPropertyGridProperty* m_pWindowHeightProp;
-	CMFCPropertyGridProperty* m_pCtrlLayoutTypeProp;
-	CMFCPropertyGridProperty* m_pCtrlWidthProp;
-	CMFCPropertyGridProperty* m_pCtrlHeightProp;
-	CMFCPropertyGridProperty* m_pCtrlLeftSpaceProp;
-	CMFCPropertyGridProperty* m_pCtrlRightSpaceProp;
-	CMFCPropertyGridProperty* m_pCtrlTopSpaceProp;
-	CMFCPropertyGridProperty* m_pCtrlBottomSpaceProp;
+	CUiFeaturePropertyGrid* m_pWindowWidthProp;
+	CUiFeaturePropertyGrid* m_pWindowHeightProp;
+	CUiFeaturePropertyGrid* m_pCtrlLayoutTypeProp;
+	CUiFeaturePropertyGrid* m_pCtrlWidthProp;
+	CUiFeaturePropertyGrid* m_pCtrlHeightProp;
+	CUiFeaturePropertyGrid* m_pCtrlLeftSpaceProp;
+	CUiFeaturePropertyGrid* m_pCtrlRightSpaceProp;
+	CUiFeaturePropertyGrid* m_pCtrlTopSpaceProp;
+	CUiFeaturePropertyGrid* m_pCtrlBottomSpaceProp;
 
 private:
-	void AppendPropGroup(CMFCPropertyGridProperty* pParentPropGroup, IPropertyGroup *pPropGroup);
-	void AppendBoolProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyBool *pBoolProp);
-	void AppendColorProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyColor *pColorProp);
-	void AppendComboBoxProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyComboBox *pComboboxProp);
-	void AppendCursorProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyCursor *pCursorProp);
-	void AppendFontProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyFont *pFontProp);
-	void AppendImageProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyImage *pImageProp);
-	void AppendIntProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyInt *pIntProp);
-	void AppendStringProp(CMFCPropertyGridProperty* pParentPropGroup, IPropertyString *pStringProp);
+	void AppendPropGroup(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyGroup *pPropGroup);
+	void AppendBoolProp(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyBool *pBoolProp);
+	void AppendColorProp(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyColor *pColorProp);
+	void AppendComboBoxProp(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyComboBox *pComboboxProp);
+	void AppendCursorProp(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyCursor *pCursorProp);
+	void AppendFontProp(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyFont *pFontProp);
+	void AppendImageProp(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyImage *pImageProp);
+	void AppendIntProp(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyInt *pIntProp);
+	void AppendStringProp(CUiFeaturePropertyGrid* pParentPropGroup, IPropertyString *pStringProp);
 
-	void RefreshBoolProp(CMFCPropertyGridProperty* pProperty, IPropertyBool *pBoolProp);
-	void RefreshColorProp(CMFCPropertyGridProperty* pProperty, IPropertyColor *pColorProp);
-	void RefreshComboBoxProp(CMFCPropertyGridProperty* pProperty, IPropertyComboBox *pComboboxProp);
-	void RefreshCursorProp(CMFCPropertyGridProperty* pProperty, IPropertyCursor *pCursorProp);
-	void RefreshFontProp(CMFCPropertyGridProperty* pProperty, IPropertyFont *pFontProp);
-	void RefreshImageProp(CMFCPropertyGridProperty* pProperty, IPropertyImage *pImageProp);
-	void RefreshIntProp(CMFCPropertyGridProperty* pProperty, IPropertyInt *pIntProp);
-	void RefreshStringProp(CMFCPropertyGridProperty* pProperty, IPropertyString *pStringProp);
-	void RefreshHaveBasePropPropetry(CMFCPropertyGridProperty* pProperty, IPropertyBase *pBaseProp);
+	void RefreshBoolProp(CUiFeaturePropertyGrid* pProperty, IPropertyBool *pBoolProp);
+	void RefreshColorProp(CUiFeaturePropertyGrid* pProperty, IPropertyColor *pColorProp);
+	void RefreshComboBoxProp(CUiFeaturePropertyGrid* pProperty, IPropertyComboBox *pComboboxProp);
+	void RefreshCursorProp(CUiFeaturePropertyGrid* pProperty, IPropertyCursor *pCursorProp);
+	void RefreshFontProp(CUiFeaturePropertyGrid* pProperty, IPropertyFont *pFontProp);
+	void RefreshImageProp(CUiFeaturePropertyGrid* pProperty, IPropertyImage *pImageProp);
+	void RefreshIntProp(CUiFeaturePropertyGrid* pProperty, IPropertyInt *pIntProp);
+	void RefreshStringProp(CUiFeaturePropertyGrid* pProperty, IPropertyString *pStringProp);
+	void RefreshHaveBasePropPropetry(CUiFeaturePropertyGrid* pProperty, IPropertyBase *pBaseProp);
 
 	void SetNeedSave();
 	void InitSetCtrlProp();
 	void EnableLayoutState();
-	void SetIntValueToPropView(int nValue, CMFCPropertyGridProperty* pGridProp);
-	void RefreshToPropViewIntProp(CMFCPropertyGridProperty* pProperty);
+	void SetIntValueToPropView(int nValue, CUiFeaturePropertyGrid* pGridProp);
+	void RefreshToPropViewIntProp(CUiFeaturePropertyGrid* pProperty);
 private:
 	bool m_bProjectInitOk;
 	IPropertyGroup* m_pCurrentPropGroup;

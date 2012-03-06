@@ -221,6 +221,10 @@
 				RelativePath="..\..\Inc\IPropertyBase.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\Inc\IPropertyBuilderCtrl.h"
+				>
+			</File>
 			<Filter
 				Name="Bool"
 				>

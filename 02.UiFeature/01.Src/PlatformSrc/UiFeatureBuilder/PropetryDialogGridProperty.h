@@ -1,10 +1,10 @@
 #pragma once
-#include "afxpropertygridctrl.h"
+#include "UiFeaturePropertyGrid.h"
 #include "..\..\Inc\IUiFeatureKernel.h"
 #include "..\..\Inc\IFeatureObject.h"
 
 class CPropertyViewCtrl;
-class CPropetryDialogGridProperty : public CMFCPropertyGridProperty
+class CPropetryDialogGridProperty : public CUiFeaturePropertyGrid
 {
 public:
 	CPropetryDialogGridProperty(const CString& strName, const COleVariant& varValueconst, CString& strInfo);
