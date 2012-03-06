@@ -328,19 +328,16 @@ void ShowMyErrorDialog(EXCEPTION_POINTERS* pep)
 {
 //#ifndef _DEBUG
 	{
-		char szPath[MAX_PATH] = { 0 };
-		GetModuleFileNameA(NULL, szPath, sizeof(szPath));
-		char *pEnd = szPath + lstrlenA(szPath) - 1;
-		while (*pEnd != '.' && pEnd > szPath) pEnd--;
-		*pEnd = 0;
-		while (*pEnd != '\\' && pEnd > szPath) pEnd--;
-		char szFileName[80] = { 0 };
-		strcpy_s(szFileName, sizeof(szFileName), pEnd+1);
-		*pEnd = 0;
+		char szPath[MAX_PATH + 1];
+		memset(szPath, 0, MAX_PATH + 1);
+		::GetModuleFileNameA(NULL, szPath, MAX_PATH);
+		while (strlen(szPath) > 0 && szPath[strlen(szPath) - 1] != '\\')
+			szPath[strlen(szPath) - 1] = '\0';
+
 		SYSTEMTIME tm = { 0 };
 		GetLocalTime(&tm);
 		char str[MAX_PATH] = { 0 };
-		sprintf_s(str, sizeof(str), "%s\\UiFeatureBuilder_%s%04d%02d%02d%02d%02d%02d%03d.dmp", szPath, szFileName, tm.wYear, tm.wMonth, tm.wDay, tm.wHour, tm.wMinute, tm.wSecond, tm.wMilliseconds);
+		sprintf_s(str, sizeof(str), "%s%s%04d%02d%02d%02d%02d%02d%03d.dmp", szPath, "(UiFeatureBuilder.exe)", tm.wYear, tm.wMonth, tm.wDay, tm.wHour, tm.wMinute, tm.wSecond, tm.wMilliseconds);
 		LOGINFOITEM li = { 0 };
 		strcpy_s(li.szInfo, sizeof(li.szInfo),  "杯具了！还好有Dump！");
 		CreateMiniDumpA(pep, str, &li, 1);

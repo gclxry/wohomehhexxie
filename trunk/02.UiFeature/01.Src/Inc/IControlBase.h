@@ -68,6 +68,16 @@ struct FANGKUAI_8
 #define TN_CL_L_MIDDLE					"居中"
 // 拉伸变动大小：用户自定义位置
 #define TN_CL_L_USER_DEF				"用户自定义位置"
+// 固定大小：靠上居中
+#define TN_CL_G_TOP_MIDDLE				"固定大小：靠上居中"
+// 固定大小：靠下居中
+#define TN_CL_G_BOTTOM_MIDDLE			"固定大小：靠下居中"
+// 固定大小：靠左居中
+#define TN_CL_G_LEFT_MIDDLE				"固定大小：靠左居中"
+// 固定大小：靠右居中
+#define TN_CL_G_RIGHT_MIDDLE			"固定大小：靠右居中"
+// 固定大小：居中
+#define TN_CL_G_MID_MIDDLE				"固定大小：居中"
 
 enum CONTROL_LAYOUT
 {
@@ -93,6 +103,16 @@ enum CONTROL_LAYOUT
 	CL_L_MIDDLE			= 9,
 	// 拉伸变动大小：用户自定义位置
 	CL_L_USER_DEF		= 10,
+	// 固定大小：靠上居中
+	CL_G_TOP_MIDDLE		= 11,
+	// 固定大小：靠下居中
+	CL_G_BOTTOM_MIDDLE	= 12,
+	// 固定大小：靠左居中
+	CL_G_LEFT_MIDDLE	= 13,
+	// 固定大小：靠右居中
+	CL_G_RIGHT_MIDDLE	= 14,
+	// 固定大小：居中
+	CL_G_MID_MIDDLE		= 15,
 };
 // 当前控件相对于父控件的布局信息
 struct CONTROL_LAYOUT_INFO

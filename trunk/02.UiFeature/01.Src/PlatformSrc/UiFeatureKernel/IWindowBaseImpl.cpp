@@ -1078,13 +1078,17 @@ void IWindowBaseImpl::SetControlWindowPostion(IControlBase* pCtrl, RECT ParentRc
 	if (pCtrl == NULL)
 		return;
 
-	RECT RctInWnd;
-	INIT_RECT(RctInWnd);
 	CONTROL_LAYOUT_INFO CtrlLayout = pCtrl->GetLayout();
 
 	// 用户自定义位置需要父控件自行设置
 	if (CtrlLayout.clType == CL_L_USER_DEF)
 		return;
+
+	RECT RctInWnd = pCtrl->GetWindowRect();
+	int nCtrlW = RECT_WIDTH(RctInWnd);
+	int nCtrlH = RECT_HEIGHT(RctInWnd);
+	int nParentW = RECT_WIDTH(ParentRctInWnd);
+	int nParentH = RECT_HEIGHT(ParentRctInWnd);
 
 	if (CtrlLayout.clType == CL_G_LEFT_TOP)
 	{
@@ -1162,6 +1166,46 @@ void IWindowBaseImpl::SetControlWindowPostion(IControlBase* pCtrl, RECT ParentRc
 		RctInWnd.right = ParentRctInWnd.right - CtrlLayout.nRightSpace;
 		RctInWnd.top = ParentRctInWnd.top + CtrlLayout.nTopSpace;
 		RctInWnd.bottom = ParentRctInWnd.bottom - CtrlLayout.nBottomSpace;
+	}
+	else if (CtrlLayout.clType == CL_G_TOP_MIDDLE)
+	{
+		// 固定大小：靠上居中
+		RctInWnd.top = ParentRctInWnd.top + CtrlLayout.nTopSpace;
+		RctInWnd.bottom = RctInWnd.top + nCtrlH;
+		RctInWnd.left = ParentRctInWnd.left + (nParentW - nCtrlW) / 2;
+		RctInWnd.right = RctInWnd.left + nCtrlW;
+	}
+	else if (CtrlLayout.clType == CL_G_BOTTOM_MIDDLE)
+	{
+		// 固定大小：靠下居中
+		RctInWnd.bottom = ParentRctInWnd.bottom - CtrlLayout.nBottomSpace;
+		RctInWnd.top = RctInWnd.bottom - nCtrlH;
+		RctInWnd.left = ParentRctInWnd.left + (nParentW - nCtrlW) / 2;
+		RctInWnd.right = RctInWnd.left + nCtrlW;
+	}
+	else if (CtrlLayout.clType == CL_G_LEFT_MIDDLE)
+	{
+		// 固定大小：靠左居中
+		RctInWnd.left = ParentRctInWnd.left + CtrlLayout.nLeftSpace;
+		RctInWnd.right = RctInWnd.left + nCtrlW;
+		RctInWnd.top = ParentRctInWnd.top + (nParentH - nCtrlH) / 2;
+		RctInWnd.bottom = RctInWnd.top + nCtrlH;
+	}
+	else if (CtrlLayout.clType == CL_G_RIGHT_MIDDLE)
+	{
+		// 固定大小：靠右居中
+		RctInWnd.right = ParentRctInWnd.right - CtrlLayout.nRightSpace;
+		RctInWnd.left = RctInWnd.right - nCtrlW;
+		RctInWnd.top = ParentRctInWnd.top + (nParentH - nCtrlH) / 2;
+		RctInWnd.bottom = RctInWnd.top + nCtrlH;
+	}
+	else if (CtrlLayout.clType == CL_G_MID_MIDDLE)
+	{
+		// 固定大小：居中
+		RctInWnd.left = ParentRctInWnd.left + (nParentW - nCtrlW) / 2;
+		RctInWnd.right = RctInWnd.left + nCtrlW;
+		RctInWnd.top = ParentRctInWnd.top + (nParentH - nCtrlH) / 2;
+		RctInWnd.bottom = RctInWnd.top + nCtrlH;
 	}
 
 	pCtrl->SetWindowRect(RctInWnd);
