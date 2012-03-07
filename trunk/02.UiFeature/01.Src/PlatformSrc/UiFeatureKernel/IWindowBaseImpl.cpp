@@ -322,12 +322,15 @@ void IWindowBaseImpl::PG_InitWindowBase(HWND hWnd, char *pszSkinPath, char *pszW
 	if (m_hWnd != NULL || hWnd == NULL || pszSkinPath == NULL || pszWndName == NULL)
 		return;
 
+	// 设置参数，通过句柄，外部可以得到 IWindowBase 指针
+	IWindowBase* pThis = dynamic_cast<IWindowBase*>(this);
+	::SetPropA(m_hWnd, "featurewindowpoint", (HANDLE)pThis);
+
 	m_hWnd = hWnd;
 	m_strSkinPath = pszSkinPath;
 	m_strWindowObjectName = pszWndName;
 
-//	// 发送初始化消息
-//	::PostMessage(hWnd, UM_INIT_WINDOW_BASE, NULL, NULL);
+	// 初始化
 	OnInitWindowBase();
 }
 

@@ -92,8 +92,6 @@ bool CUiFeatureWindow::InitInstance()
 			this->CenterWindow();
 		}
 
-		// 设置参数，通过句柄，外部可以得到 IWindowBase 指针
-		::SetPropA(m_hWnd, "featurewindowpoint", (HANDLE)m_pWindowBase);
 		OnCreate();
 		this->ShowWindow(SW_HIDE);
 	}
