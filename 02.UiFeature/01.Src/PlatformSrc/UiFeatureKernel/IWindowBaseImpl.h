@@ -275,6 +275,8 @@ private:
 	void ReleaseChildVec(CHILD_CTRLS_VEC *pChildCtrlsVec);
 	// 绘制窗口和被选中的控件的边框的8个方块
 	void BD_DrawSelectRect(CDrawingBoard &MemDc, FANGKUAI_8 &FangKuai8, bool bIsWndFrame);
+	// 向所有控件发送对话框初始化完成的消息
+	void SendWindowInitOkMsgToCtrl(CHILD_CTRLS_VEC *pChildCtrlsVec);
 
 private:
 	IUiFeatureKernel *m_pUiKernel;

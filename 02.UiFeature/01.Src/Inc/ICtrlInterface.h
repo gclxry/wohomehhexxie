@@ -22,6 +22,8 @@ protected:
 	virtual void OnFinalCreate() = 0;
 	// 销毁控件
 	virtual void OnDestroy() = 0;
+	// 整个对话框包括对话框上的控件都初始化完毕
+	virtual void OnWindowFinalCreate();
 	// 绘制控件
 	virtual void OnPaint(CDrawingBoard &DrawBoard) = 0;
 	// 控件需要处理的一些自定义的消息，消息基本上会由对话框或者其他控件传入

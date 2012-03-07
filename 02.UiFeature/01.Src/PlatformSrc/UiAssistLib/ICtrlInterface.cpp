@@ -137,3 +137,8 @@ bool ICtrlInterface::OnCheckMouseInRgn(POINT pt)
 {
 	return true;
 }
+
+// 整个对话框包括对话框上的控件都初始化完毕
+void ICtrlInterface::OnWindowFinalCreate()
+{
+}
