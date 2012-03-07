@@ -17,7 +17,7 @@ void ICtrlInterface::OnCtrlNotify(int nMsgId, WPARAM wParam, LPARAM lParam)
 }
 
 // Builder刷新属性，此函数中只要重新加载控件属性即可
-void ICtrlInterface::OnBuilderRefreshProp()
+void ICtrlInterface::OnBuilderRefreshProp(IPropertyBase* pPropBase)
 {
 }
 

@@ -511,7 +511,7 @@ void CPropertyViewCtrl::OnPropertyChanged(CUiFeaturePropertyGrid* pProperty)
 		if (pCtrlBase != NULL)
 		{
 			// 从属性更新数据到成员变量
-			pCtrlBase->PropetyValueToMemberValue(true);
+			pCtrlBase->PropetyValueToMemberValue(true, pPropBase);
 			pCtrlBase->RedrawControl(true);
 		}
 
