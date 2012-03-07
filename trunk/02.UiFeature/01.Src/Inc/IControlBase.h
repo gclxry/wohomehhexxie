@@ -261,6 +261,8 @@ protected:
 	virtual void OnCreate() = 0;
 	// 控件初始化完毕
 	virtual void OnFinalCreate() = 0;
+	// 整个对话框包括对话框上的控件都初始化完毕
+	virtual void OnWindowFinalCreate() = 0;
 	// Builder刷新属性，此函数中只要重新加载控件属性即可
 	virtual void OnBuilderRefreshProp(IPropertyBase* pPropBase) = 0;
 	// 销毁控件

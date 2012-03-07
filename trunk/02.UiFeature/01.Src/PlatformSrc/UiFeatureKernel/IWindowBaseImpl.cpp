@@ -203,6 +203,25 @@ void IWindowBaseImpl::OnInitWindowBase()
 
 	// 向窗口发送通知：初始化皮肤完成
 	::PostMessage(m_hWnd, UM_INIT_WINDOW_SUCCESS, NULL, NULL);
+
+	SendWindowInitOkMsgToCtrl(&m_ChildCtrlsVec);
+}
+
+// 向所有控件发送对话框初始化完成的消息
+void IWindowBaseImpl::SendWindowInitOkMsgToCtrl(CHILD_CTRLS_VEC *pChildCtrlsVec)
+{
+	if (pChildCtrlsVec == NULL)
+		return;
+
+	for (CHILD_CTRLS_VEC::iterator pCtrlItem = pChildCtrlsVec->begin(); pCtrlItem != pChildCtrlsVec->end(); pCtrlItem++)
+	{
+		IControlBase* pCtrl = *pCtrlItem;
+		if (pCtrl == NULL)
+			continue;
+
+		SendWindowInitOkMsgToCtrl(pCtrl->GetChildControlsVec());
+		pCtrl->OnWindowFinalCreate();
+	}
 }
 
 // 根据窗口基本属性，设置窗口基本样式
