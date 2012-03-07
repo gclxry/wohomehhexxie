@@ -131,3 +131,9 @@ void ICtrlInterface::OnHScroll(UINT nSBCode, UINT nPos, IControlBase* pScrollBar
 void ICtrlInterface::OnMouseWheel(WPARAM wParam, LPARAM lParam)
 {
 }
+
+// 鼠标是否落在了控件指定的RGN区域，默认返回true，整个控件就是RGN区域
+bool ICtrlInterface::OnCheckMouseInRgn(POINT pt)
+{
+	return true;
+}

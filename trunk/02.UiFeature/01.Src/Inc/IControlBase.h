@@ -302,6 +302,8 @@ protected:
 	virtual void OnKeyUp(WPARAM wParam, LPARAM lParam) = 0;
 	// 鼠标滚轮消息
 	virtual void OnMouseWheel(WPARAM wParam, LPARAM lParam) = 0;
+	// 鼠标是否落在了控件指定的RGN区域，默认返回true，整个控件就是RGN区域
+	virtual bool OnCheckMouseInRgn(POINT pt) = 0;
 
 	// 向内核注册一个想要取到的消息
 	void RegisterControlMessage(int nMsgId);
