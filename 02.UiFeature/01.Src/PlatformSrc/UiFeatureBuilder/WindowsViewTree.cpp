@@ -39,6 +39,9 @@ BEGIN_MESSAGE_MAP(CWindowsViewTree, CTreeCtrl)
 	ON_COMMAND(ID_CREATE_WINDOW_PANEL, &CWindowsViewTree::OnCreateWindowPanel)
 	ON_NOTIFY_REFLECT(TVN_SELCHANGED, &CWindowsViewTree::OnTvnSelchanged)
 	ON_COMMAND(IDM_DELETE_WNDCTRL, &CWindowsViewTree::OnDeleteWndctrl)
+	ON_NOTIFY_REFLECT(TVN_BEGINDRAG, &CWindowsViewTree::OnTvnBegindrag)
+	ON_WM_MOUSEMOVE()
+	ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -577,4 +580,25 @@ void CWindowsViewTree::SetViewEditControl_Child(HTREEITEM hParentItem, IControlB
 		SetViewEditControl_Child(hChild, pCtrl);
 		hChild = this->GetNextItem(hChild, TVGN_NEXT);
 	}
+}
+
+void CWindowsViewTree::OnTvnBegindrag(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
+	// TODO: Add your control notification handler code here
+	*pResult = 0;
+}
+
+void CWindowsViewTree::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CTreeCtrl::OnMouseMove(nFlags, point);
+}
+
+void CWindowsViewTree::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CTreeCtrl::OnLButtonUp(nFlags, point);
 }

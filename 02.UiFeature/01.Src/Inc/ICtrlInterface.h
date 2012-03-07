@@ -71,4 +71,6 @@ protected:
 	// 滚动条消息
 	virtual void OnVScroll(UINT nSBCode, UINT nPos, IControlBase* pScrollBar);
 	virtual void OnHScroll(UINT nSBCode, UINT nPos, IControlBase* pScrollBar);
+	// 鼠标是否落在了控件指定的RGN区域，默认返回true，整个控件就是RGN区域
+	virtual bool OnCheckMouseInRgn(POINT pt);
 };

@@ -729,7 +729,7 @@ bool IWindowBaseImpl::CheckMouseInControl(CHILD_CTRLS_VEC *pCtrlVec, POINT pt, I
 			if (pCtrl->GetReceiveMouseMessage())
 			{
 				RECT CtrlRct = pCtrl->GetWindowRect();
-				if (::PtInRect(&CtrlRct, pt))
+				if ((::PtInRect(&CtrlRct, pt)) && (pCtrl->OnCheckMouseInRgn(GetCtrlMouseOffset(pt, pCtrl))))
 				{
 					*ppControl = pCtrl;
 					CHILD_CTRLS_VEC *pCtrlsVec = pCtrl->GetChildControlsVec();
