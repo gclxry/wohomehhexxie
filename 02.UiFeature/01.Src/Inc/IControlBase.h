@@ -219,7 +219,7 @@ public:
 	IPropertyControl *PP_GetControlPropetry();
 
 	// 从属性更新数据到成员变量
-	void PropetyValueToMemberValue(bool bCallRefresh);
+	void PropetyValueToMemberValue(bool bCallRefresh, IPropertyBase* pPropBase);
 	// 整个控件绘制完成后，再绘制到父控件上的alpha值，默认255
 	void SetControlAlpha(int nCtrlAlpha = 255);
 	int GetControlAlpha();
@@ -262,7 +262,7 @@ protected:
 	// 控件初始化完毕
 	virtual void OnFinalCreate() = 0;
 	// Builder刷新属性，此函数中只要重新加载控件属性即可
-	virtual void OnBuilderRefreshProp() = 0;
+	virtual void OnBuilderRefreshProp(IPropertyBase* pPropBase) = 0;
 	// 销毁控件
 	virtual void OnDestroy() = 0;
 	// 绘制控件
@@ -337,7 +337,7 @@ private:
 	// 从成员变量更新数据到属性
 	void MemberValueToPropetyValue();
 	// 重新计算子控件的位置和大小
-	void ResetChildPropetyValueToMemberValue(IControlBase* pParentCtrl, bool bCallRefresh);
+	void ResetChildPropetyValueToMemberValue(IControlBase* pParentCtrl, bool bCallRefresh, IPropertyBase* pPropBase);
 	// 控件显示位置和大小，会根据布局信息连带修改子控件的位置
 	void SetChildWindowPostion(CHILD_CTRLS_VEC* pVec);
 
