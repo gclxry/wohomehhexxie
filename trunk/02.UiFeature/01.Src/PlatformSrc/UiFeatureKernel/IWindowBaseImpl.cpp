@@ -554,7 +554,15 @@ LRESULT IWindowBaseImpl::WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, b
 		break;
 
 	case WM_KEYDOWN:
-		OnKeyDown((int)wParam, (int)lParam);
+		OnKeyDown(wParam, lParam);
+		break;
+
+	case WM_KEYUP:
+		OnKeyUp(wParam, lParam);
+		break;
+
+	case WM_CHAR:
+		OnChar(wParam, lParam);
 		break;
 
 	case WM_SYSCOMMAND:
@@ -1367,11 +1375,31 @@ void IWindowBaseImpl::UpdateWindow()
 	}
 }
 
-void IWindowBaseImpl::OnKeyDown(int nVirtKey, int nFlag)
+void IWindowBaseImpl::OnChar(WPARAM wParam, LPARAM lParam)
 {
 	if (!IsInit())
 		return;
 
+	if (m_pFocusCtrl != NULL)
+		m_pFocusCtrl->OnChar(wParam, lParam);
+}
+
+void IWindowBaseImpl::OnKeyDown(WPARAM wParam, LPARAM lParam)
+{
+	if (!IsInit())
+		return;
+
+	if (m_pFocusCtrl != NULL)
+		m_pFocusCtrl->OnKeyDown(wParam, lParam);
+}
+
+void IWindowBaseImpl::OnKeyUp(WPARAM wParam, LPARAM lParam)
+{
+	if (!IsInit())
+		return;
+
+	if (m_pFocusCtrl != NULL)
+		m_pFocusCtrl->OnKeyUp(wParam, lParam);
 }
 
 bool IWindowBaseImpl::OnSysCommand(int nSysCommand, int xPos, int yPos)
@@ -1404,12 +1432,16 @@ void IWindowBaseImpl::OnEnterSizeMove()
 {
 	if (!IsInit())
 		return;
+
+	SendEnterOrExitSizeMsgToCtrl(true, &m_ChildCtrlsVec);
 }
 
 void IWindowBaseImpl::OnExitSizeMove()
 {
 	if (!IsInit())
 		return;
+
+	SendEnterOrExitSizeMsgToCtrl(false, &m_ChildCtrlsVec);
 }
 
 void IWindowBaseImpl::OnPopupSystemMenu(POINT pt)
@@ -1972,5 +2004,26 @@ void IWindowBaseImpl::CompelRedrawControl(CHILD_CTRLS_VEC *pCtrlVec)
 			pCtrl->RedrawControl();
 			CompelRedrawControl(pCtrl->GetChildControlsVec());
 		}
+	}
+}
+
+// 向所有控件发送进入/离开对话框移动/拉伸消息
+void IWindowBaseImpl::SendEnterOrExitSizeMsgToCtrl(bool bIsEnter, CHILD_CTRLS_VEC *pChildCtrlsVec)
+{
+	if (pChildCtrlsVec == NULL)
+		return;
+
+	for (CHILD_CTRLS_VEC::iterator pCtrlItem = pChildCtrlsVec->begin(); pCtrlItem != pChildCtrlsVec->end(); pCtrlItem++)
+	{
+		IControlBase* pCtrl = *pCtrlItem;
+		if (pCtrl == NULL)
+			continue;
+
+		SendEnterOrExitSizeMsgToCtrl(bIsEnter, pCtrl->GetChildControlsVec());
+
+		if (bIsEnter)
+			pCtrl->OnEnterSizeMove();
+		else
+			pCtrl->OnExitSizeMove();
 	}
 }
