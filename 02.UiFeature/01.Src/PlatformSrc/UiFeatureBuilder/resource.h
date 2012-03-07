@@ -196,6 +196,8 @@
 #define IDC_PICTURE_TEXT                1042
 #define IDC_CHECK1                      1042
 #define IDC_DRAW_MID_AREA_CHECKBOX      1042
+#define IDC_CHECK2                      1043
+#define IDC_ZHILI_CHECK                 1043
 #define ID_32771                        32771
 #define ID_Menu                         32772
 #define ID_CREATE_WINDOW_PANEL          32773
@@ -211,7 +213,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        326
 #define _APS_NEXT_COMMAND_VALUE         32778
-#define _APS_NEXT_CONTROL_VALUE         1043
+#define _APS_NEXT_CONTROL_VALUE         1044
 #define _APS_NEXT_SYMED_VALUE           319
 #endif
 #endif

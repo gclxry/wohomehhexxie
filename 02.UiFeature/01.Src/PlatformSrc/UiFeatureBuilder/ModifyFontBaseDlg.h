@@ -67,4 +67,7 @@ protected:
 	CButton m_EffectObscure;
 	CFontProViewStatic m_FontProViewStatic;
 	CButton m_PictureTextCheckBox;
+public:
+	afx_msg void OnBnClickedZhiliCheck();
+	CButton m_ZhiLiTextCheckBox;
 };

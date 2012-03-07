@@ -42,6 +42,8 @@ struct FONT_PROP
 {
 	// 是否为图片文字
 	bool bIsPicText;
+	// 是否为直立文字
+	bool bIsZhiLiText;
 	// 字体信息
 	LOGFONTA Font;
 	// 字体颜色
