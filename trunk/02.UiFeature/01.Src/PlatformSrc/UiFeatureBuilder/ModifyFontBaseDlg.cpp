@@ -35,6 +35,7 @@ void CModifyFontBaseDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDS_FONT_PROVIEW_STRTIC, m_FontProViewStatic);
 	DDX_Control(pDX, IDC_PICTURE_TEXT, m_PictureTextCheckBox);
 	DDX_Control(pDX, IDL_FONT_BASE_NAME_LIST, m_FontBaseNameList);
+	DDX_Control(pDX, IDC_ZHILI_CHECK, m_ZhiLiTextCheckBox);
 }
 
 
@@ -54,6 +55,7 @@ BEGIN_MESSAGE_MAP(CModifyFontBaseDlg, CDialog)
 	ON_BN_CLICKED(IDC_SHADOW_EFFECT, &CModifyFontBaseDlg::OnBnClickedShadowEffect)
 	ON_BN_CLICKED(IDC_OBSCURE_EFFECT, &CModifyFontBaseDlg::OnBnClickedObscureEffect)
 	ON_BN_CLICKED(IDC_PICTURE_TEXT, &CModifyFontBaseDlg::OnBnClickedPictureText)
+	ON_BN_CLICKED(IDC_ZHILI_CHECK, &CModifyFontBaseDlg::OnBnClickedZhiliCheck)
 END_MESSAGE_MAP()
 
 
@@ -162,6 +164,8 @@ void CModifyFontBaseDlg::UpdateCurrentFontBaseProp(IPropertyFontBase* pCurFontBa
 		m_EffectObscure.SetCheck(bSet ? 1 : 0);
 
 		m_PictureTextCheckBox.SetCheck(pFontProp->bIsPicText ? 1 : 0);
+		m_ZhiLiTextCheckBox.SetCheck(pFontProp->bIsZhiLiText ? 1 : 0);
+
 		m_pCurFontBaseProp->SetPictureTextRedrawSign();
 	}
 	else
@@ -173,6 +177,7 @@ void CModifyFontBaseDlg::UpdateCurrentFontBaseProp(IPropertyFontBase* pCurFontBa
 		m_EffectShadow.SetCheck(0);
 		m_EffectObscure.SetCheck(0);
 		m_PictureTextCheckBox.SetCheck(0);
+		m_ZhiLiTextCheckBox.SetCheck(0);
 	}
 
 	this->UpdateData(FALSE);
@@ -333,6 +338,18 @@ void CModifyFontBaseDlg::OnBnClickedPictureText()
 	int nCheck = m_PictureTextCheckBox.GetCheck();
 	FONT_PROP* pFontProp = m_pCurFontBaseProp->GetFontProp();
 	pFontProp->bIsPicText = (nCheck == 1);
+	m_pCurFontBaseProp->SetPictureTextRedrawSign();
+	m_FontProViewStatic.RedrawView(m_pCurFontBaseProp);
+}
+
+void CModifyFontBaseDlg::OnBnClickedZhiliCheck()
+{
+	if (m_pCurFontBaseProp == NULL || m_pCurFontBaseProp->GetFontProp() == NULL)
+		return;
+
+	int nCheck = m_ZhiLiTextCheckBox.GetCheck();
+	FONT_PROP* pFontProp = m_pCurFontBaseProp->GetFontProp();
+	pFontProp->bIsZhiLiText = (nCheck == 1);
 	m_pCurFontBaseProp->SetPictureTextRedrawSign();
 	m_FontProViewStatic.RedrawView(m_pCurFontBaseProp);
 }

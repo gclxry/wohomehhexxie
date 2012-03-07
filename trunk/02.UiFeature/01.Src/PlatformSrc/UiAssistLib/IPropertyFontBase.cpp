@@ -19,6 +19,7 @@ IPropertyFontBase::IPropertyFontBase()
 	m_bIsActiveProp = true;
 
 	m_bRecreatePicText = true;
+	m_FontProp.bIsZhiLiText = false;
 	m_FontProp.bIsPicText = false;
 	m_FontProp.FontColor = 0;
 
