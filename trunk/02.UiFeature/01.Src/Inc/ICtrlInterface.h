@@ -22,8 +22,6 @@ protected:
 	virtual void OnFinalCreate() = 0;
 	// 销毁控件
 	virtual void OnDestroy() = 0;
-	// 整个对话框包括对话框上的控件都初始化完毕
-	virtual void OnWindowFinalCreate();
 	// 绘制控件
 	virtual void OnPaint(CDrawingBoard &DrawBoard) = 0;
 	// 控件需要处理的一些自定义的消息，消息基本上会由对话框或者其他控件传入
@@ -75,4 +73,7 @@ protected:
 	virtual void OnHScroll(UINT nSBCode, UINT nPos, IControlBase* pScrollBar);
 	// 鼠标是否落在了控件指定的RGN区域，默认返回true，整个控件就是RGN区域
 	virtual bool OnCheckMouseInRgn(POINT pt);
+	// 这个接口会在整个对话框初始化完成的时候调用
+	// 控件通过派生这个接口，可以在这个接口函数里通过其他控件的名称取得当前对话框里的其他控件。
+	virtual void OnWindowFinalCreate();
 };
