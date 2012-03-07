@@ -115,7 +115,9 @@ protected:
 	virtual void OnCreate();
 	virtual void BD_OnTimer(UINT nTimerId, HWND hView);
 	virtual void OnTimer(UINT nTimerId);
-	virtual void OnKeyDown(int nVirtKey, int nFlag);
+	virtual void OnKeyDown(WPARAM wParam, LPARAM lParam);
+	virtual void OnKeyUp(WPARAM wParam, LPARAM lParam);
+	virtual void OnChar(WPARAM wParam, LPARAM lParam);
 	// 系统消息，返回true说明不需要返回给调用继续调用
 	virtual bool OnSysCommand(int nSysCommand, int xPos, int yPos);
 	virtual void OnKillFocus(WPARAM wParam, LPARAM lParam);
@@ -277,6 +279,8 @@ private:
 	void BD_DrawSelectRect(CDrawingBoard &MemDc, FANGKUAI_8 &FangKuai8, bool bIsWndFrame);
 	// 向所有控件发送对话框初始化完成的消息
 	void SendWindowInitOkMsgToCtrl(CHILD_CTRLS_VEC *pChildCtrlsVec);
+	// 向所有控件发送进入/离开对话框移动/拉伸消息
+	void SendEnterOrExitSizeMsgToCtrl(bool bIsEnter, CHILD_CTRLS_VEC *pChildCtrlsVec);
 
 private:
 	IUiFeatureKernel *m_pUiKernel;
