@@ -16,6 +16,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+#define DRAG_DELAY								(60)
 /////////////////////////////////////////////////////////////////////////////
 // CWindowsViewTree
 
@@ -28,10 +29,21 @@ CWindowsViewTree::CWindowsViewTree()
 	m_bProjectInitOk = false;
 	m_hRBtnSelItem = NULL;
 	m_bFromViewSel = false;
+
+	m_TimerTicks = 0;
+	m_nScrollTimerID = 0;
+	m_HoverPoint.x = m_HoverPoint.y = 0;
+	m_nHoverTimerID = 0;
+	m_dwDragStart = 0;
+	m_hItemDragS = NULL;
+	m_hItemDragD = NULL;
+	m_pDragImage = NULL;
+	m_bDragging = false;
 }
 
 CWindowsViewTree::~CWindowsViewTree()
 {
+	SAFE_DELETE(m_pDragImage);
 }
 
 BEGIN_MESSAGE_MAP(CWindowsViewTree, CTreeCtrl)
@@ -42,6 +54,8 @@ BEGIN_MESSAGE_MAP(CWindowsViewTree, CTreeCtrl)
 	ON_NOTIFY_REFLECT(TVN_BEGINDRAG, &CWindowsViewTree::OnTvnBegindrag)
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONUP()
+	ON_WM_TIMER()
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -582,23 +596,199 @@ void CWindowsViewTree::SetViewEditControl_Child(HTREEITEM hParentItem, IControlB
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////
+void CWindowsViewTree::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// 处理无意拖曳
+	m_dwDragStart = GetTickCount();
+	CTreeCtrl::OnLButtonDown(nFlags, point);
+}
+
 void CWindowsViewTree::OnTvnBegindrag(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
 	// TODO: Add your control notification handler code here
 	*pResult = 0;
+
+	if (pNMTreeView == NULL)
+		return;
+
+	//如果是无意拖曳，则放弃操作
+	if((GetTickCount() - m_dwDragStart) < DRAG_DELAY)
+		return;
+
+	m_hItemDragS = pNMTreeView->itemNew.hItem;
+	m_hItemDragD = NULL;
+
+	if (m_hItemDragS == NULL)
+		return;
+
+	//得到用于拖动时显示的图象列表
+	m_pDragImage = CreateDragImage( m_hItemDragS );
+	if (m_pDragImage == NULL)
+		return;
+
+	m_bDragging = true;
+
+	m_pDragImage->BeginDrag(0, CPoint(8, 8));
+
+	CPoint pt = pNMTreeView->ptDrag;
+	this->ClientToScreen(&pt);
+	// "this"将拖曳动作限制在该窗口
+	m_pDragImage->DragEnter(this,pt);
+
+	this->SetCapture();
+
+	m_nScrollTimerID = this->SetTimer(2, 40, NULL);
 }
 
 void CWindowsViewTree::OnMouseMove(UINT nFlags, CPoint point)
 {
-	// TODO: Add your message handler code here and/or call default
+	HTREEITEM  hItem = NULL;
+	UINT       flags;
+
+	//检测鼠标敏感定时器是否存在,如果存在则删除,删除后再定时
+	if (m_nHoverTimerID != 0)
+	{
+		this->KillTimer(m_nHoverTimerID);
+		m_nHoverTimerID = 0;
+	}
+
+	// 定时为 0.8 秒则自动展开
+	m_nHoverTimerID = this->SetTimer(1, 800, NULL);
+	m_HoverPoint = point;
+
+	if (m_bDragging)
+	{
+		CPoint pt = point;
+		CImageList::DragMove(pt);
+
+		// 鼠标经过时高亮显示
+
+		// 避免鼠标经过时留下难看的痕迹
+		CImageList::DragShowNolock(false);
+		if ((hItem = HitTest(point,&flags)) != NULL)
+		{
+			this->SelectDropTarget(hItem);
+			m_hItemDragD = hItem;
+		}
+		CImageList::DragShowNolock(true);
+
+		// 当条目被拖曳到左边缘时，将条目放在根下
+		CRect rect;
+		this->GetClientRect(&rect);
+		if (point.x < rect.left + 20)
+			m_hItemDragD = NULL;
+	}
 
 	CTreeCtrl::OnMouseMove(nFlags, point);
 }
 
 void CWindowsViewTree::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	// TODO: Add your message handler code here and/or call default
-
 	CTreeCtrl::OnLButtonUp(nFlags, point);
+
+	if (m_bDragging)
+	{
+		m_bDragging = false;
+		CImageList::DragLeave(this);
+		CImageList::EndDrag();
+		::ReleaseCapture();
+		SAFE_DELETE(m_pDragImage);
+
+		this->SelectDropTarget(NULL);
+
+		if (m_hItemDragS == m_hItemDragD)
+		{
+			this->KillTimer(m_nScrollTimerID);
+			return;
+		}
+
+		this->Expand(m_hItemDragD, TVE_EXPAND);
+
+		HTREEITEM htiParent = m_hItemDragD;
+		//while( (htiParent = GetParentItem(htiParent)) != NULL )
+		//{
+		//	if( htiParent == m_hItemDragS )
+		//	{
+		//		HTREEITEM  htiNewTemp = CopyBranch( m_hItemDragS,NULL,TVI_LAST );
+		//		HTREEITEM  htiNew = CopyBranch( htiNewTemp,m_hItemDragD,TVI_LAST );
+		//		DeleteItem( htiNewTemp );
+		//		SelectItem( htiNew );
+		//		KillTimer( m_nScrollTimerID );
+		//		return;
+		//	}
+		//}
+
+		//HTREEITEM  htiNew = CopyBranch( m_hItemDragS,m_hItemDragD,TVI_LAST );
+		//DeleteItem( m_hItemDragS );
+		//SelectItem( htiNew );
+		this->KillTimer(m_nScrollTimerID);
+	}
+}
+
+void CWindowsViewTree::OnTimer(UINT_PTR nIDEvent)
+{
+	// 鼠标敏感节点
+	if (nIDEvent == m_nHoverTimerID)
+	{
+		this->KillTimer(m_nHoverTimerID);
+		m_nHoverTimerID = 0;
+
+		HTREEITEM trItem = 0;
+		UINT uFlag = 0;
+		trItem = this->HitTest(m_HoverPoint, &uFlag);
+		if (trItem && m_bDragging)
+		{
+			this->SelectItem(trItem);
+			this->Expand(trItem, TVE_EXPAND);
+		}
+	}
+	//处理拖曳过程中的滚动问题
+	else if (nIDEvent == m_nScrollTimerID)
+	{
+		m_TimerTicks++;
+		CPoint pt;
+		::GetCursorPos(&pt);
+		CRect rect;
+		this->GetClientRect(&rect);
+		this->ClientToScreen(&rect);
+
+		HTREEITEM hItem = GetFirstVisibleItem();
+
+		if (pt.y < rect.top + 10)
+		{
+			// 向上滚动
+			int slowscroll = 6 - (rect.top + 10 - pt.y )/20;
+			if (0 == (m_TimerTicks % ((slowscroll > 0) ? slowscroll : 1)))
+			{
+				CImageList::DragShowNolock(false);
+				this->SendMessage(WM_VSCROLL, SB_LINEUP);
+				this->SelectDropTarget(hItem);
+				m_hItemDragD = hItem;
+				CImageList::DragShowNolock(true);
+			}
+		}
+		else if (pt.y > rect.bottom - 10)
+		{
+			// 向下滚动
+			int slowscroll = 6 - (pt.y - rect.bottom + 10)/20;
+			if (0 == (m_TimerTicks % ((slowscroll > 0) ? slowscroll : 1)))
+			{
+				CImageList::DragShowNolock ( false );
+				this->SendMessage(WM_VSCROLL,SB_LINEDOWN);
+				int nCount = this->GetVisibleCount();
+				for (int i=0 ; i<nCount-1 ; i++)
+					hItem = this->GetNextVisibleItem(hItem);
+				if (hItem)
+					this->SelectDropTarget(hItem);
+				m_hItemDragD = hItem;
+				CImageList::DragShowNolock(true);
+			}
+		}
+	}
+	else
+	{
+		CTreeCtrl::OnTimer(nIDEvent);
+	}
 }
