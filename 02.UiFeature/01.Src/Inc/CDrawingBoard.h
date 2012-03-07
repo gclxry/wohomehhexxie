@@ -23,16 +23,26 @@ public:
 	// 按照 BGRA 顺序排布的32位位图信息
 	BYTE* GetBits();
 	SIZE GetDcSize();
-	// 绘制到另外一个内存DC上
-	bool BitBltTo(CDrawingBoard& ToBoard, RECT ToRct, RECT FromRct);
-	// 绘制到另外一个内存DC上
-	bool AlphaBlendTo(CDrawingBoard& ToBoard, RECT ToRct, RECT FromRct, IUiFeatureKernel* pUiKernel, int nAlpha = 255);
-	// 从一个DC进行复制
-	bool BitBltFrom(HDC hDc, RECT FromRct, RECT ToRct);
-	// 从一个DC进行复制
-	bool StretchBltFrom(HDC hDc, RECT FromRct, RECT ToRct);
+
 	// 从另一个内存DC克隆
 	bool Clone(CDrawingBoard& FromBoard, IUiFeatureKernel* pUiKernel);
+
+	// 绘制到另外一个内存DC上
+	bool AlphaBlendTo(CDrawingBoard& ToBoard, RECT ToRct, RECT FromRct, IUiFeatureKernel* pUiKernel, int nAlpha = 255);
+	bool AlphaBlendTo(HDC hDc, RECT ToRct, RECT FromRct, IUiFeatureKernel* pUiKernel, int nAlpha = 255);
+
+	// 从一个DC进行复制
+	bool StretchBltFrom(CDrawingBoard& FromBoard, RECT FromRct, RECT ToRct);
+	bool StretchBltFrom(HDC hDc, RECT FromRct, RECT ToRct);
+
+	// 绘制到另外一个内存DC上
+	bool BitBltTo(CDrawingBoard& ToBoard, RECT ToRct, RECT FromRct);
+	bool BitBltTo(HDC hDc, RECT ToRct, RECT FromRct);
+
+	// 从一个DC进行复制
+	bool BitBltFrom(CDrawingBoard& FromBoard, RECT FromRct, RECT ToRct);
+	bool BitBltFrom(HDC hDc, RECT FromRct, RECT ToRct);
+
 protected:
 	HBITMAP m_hBmp;
 	HBITMAP m_hOldBmp;
