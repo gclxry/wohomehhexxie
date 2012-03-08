@@ -5,6 +5,7 @@
 #include "IPropertyBase.h"
 #include "IPropertyCursorBase.h"
 
+class IWindowBase;
 class IPropertyCursor : public IPropertyBase
 {
 public:
@@ -24,4 +25,8 @@ public:
 	void SetCursorBaseProp(IPropertyCursorBase *pCursorProp);
 	IPropertyCursorBase* GetCursorBaseProp();
 
+	// 显示鼠标手势
+	bool ShowCursor(IWindowBase *pWndBase);
+	// 恢复鼠标手势
+	bool RecoverCursor(IWindowBase *pWndBase);
 };

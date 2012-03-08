@@ -3,6 +3,7 @@
 #include "..\..\Inc\IPropertyCursorBase.h"
 #include "..\..\Inc\UiFeatureDefs.h"
 #include "..\..\Inc\ICommonFun.h"
+#include "..\..\Inc\IWindowBase.h"
 
 IPropertyCursorBase::IPropertyCursorBase()
 {
@@ -13,6 +14,7 @@ IPropertyCursorBase::IPropertyCursorBase()
 	m_bIsSysCursor = true;
 	// 光标ID
 	m_nCursorId = 0;
+	m_pOldCursorProp = NULL;
 }
 
 IPropertyCursorBase::~IPropertyCursorBase()
@@ -90,4 +92,24 @@ void IPropertyCursorBase::SetCursorId(int nId)
 int IPropertyCursorBase::GetCursorId()
 {
 	return m_nCursorId;
+}
+
+// 显示鼠标手势
+bool IPropertyCursorBase::ShowCursor(IWindowBase *pWndBase)
+{
+	if (pWndBase == NULL)
+		return false;
+
+	m_pOldCursorProp = pWndBase->ShowCursor(this);
+	return true;
+}
+
+// 恢复鼠标手势
+bool IPropertyCursorBase::RecoverCursor(IWindowBase *pWndBase)
+{
+	if (pWndBase == NULL)
+		return false;
+
+	pWndBase->ShowCursor(m_pOldCursorProp);
+	return true;
 }

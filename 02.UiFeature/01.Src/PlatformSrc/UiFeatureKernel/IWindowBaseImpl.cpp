@@ -45,6 +45,7 @@ IWindowBaseImpl::IWindowBaseImpl()
 
 	m_strSkinPath = "";
 	m_strWindowObjectName = "";
+	m_pCurrentCursorBase = NULL;
 
 	m_pUiKernel = IUiFeatureKernelImpl::GetInstance();
 	m_pSkinPropMgr = IPropertySkinManagerImpl::GetInstance();
@@ -219,8 +220,8 @@ void IWindowBaseImpl::SendWindowInitOkMsgToCtrl(CHILD_CTRLS_VEC *pChildCtrlsVec)
 		if (pCtrl == NULL)
 			continue;
 
-		SendWindowInitOkMsgToCtrl(pCtrl->GetChildControlsVec());
 		pCtrl->OnWindowFinalCreate();
+		SendWindowInitOkMsgToCtrl(pCtrl->GetChildControlsVec());
 	}
 }
 
@@ -2019,11 +2020,25 @@ void IWindowBaseImpl::SendEnterOrExitSizeMsgToCtrl(bool bIsEnter, CHILD_CTRLS_VE
 		if (pCtrl == NULL)
 			continue;
 
-		SendEnterOrExitSizeMsgToCtrl(bIsEnter, pCtrl->GetChildControlsVec());
-
 		if (bIsEnter)
 			pCtrl->OnEnterSizeMove();
 		else
 			pCtrl->OnExitSizeMove();
+
+		SendEnterOrExitSizeMsgToCtrl(bIsEnter, pCtrl->GetChildControlsVec());
 	}
+}
+
+// ÏÔÊ¾¹â±ê
+IPropertyCursorBase* IWindowBaseImpl::ShowCursor(IPropertyCursorBase *pCursorBase)
+{
+	IPropertyCursorBase* pOldCursorBase = m_pCurrentCursorBase;
+	m_pCurrentCursorBase = pCursorBase;
+
+	if (m_pCurrentCursorBase == NULL)
+		this->SetWindowCursor(UF_IDC_ARROW);
+	else
+		this->SetWindowCursor(m_pCurrentCursorBase->GetCursorId());
+
+	return pOldCursorBase;
 }

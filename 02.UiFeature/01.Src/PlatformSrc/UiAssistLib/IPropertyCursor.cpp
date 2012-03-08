@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "..\..\Inc\IPropertyCursor.h"
 #include "..\..\Inc\UiFeatureDefs.h"
+#include "..\..\Inc\IWindowBase.h"
 
 IPropertyCursor::IPropertyCursor()
 {
@@ -77,4 +78,22 @@ void IPropertyCursor::SetCursorBaseProp(IPropertyCursorBase *pCursorProp)
 IPropertyCursorBase* IPropertyCursor::GetCursorBaseProp()
 {
 	return dynamic_cast<IPropertyCursorBase*>(GetRelevancyProp());
+}
+
+// 显示鼠标手势
+bool IPropertyCursor::ShowCursor(IWindowBase *pWndBase)
+{
+	if (GetCursorBaseProp() == NULL)
+		return false;
+
+	return GetCursorBaseProp()->ShowCursor(pWndBase);
+}
+
+// 恢复鼠标手势
+bool IPropertyCursor::RecoverCursor(IWindowBase *pWndBase)
+{
+	if (GetCursorBaseProp() == NULL)
+		return false;
+
+	return GetCursorBaseProp()->RecoverCursor(pWndBase);
 }
