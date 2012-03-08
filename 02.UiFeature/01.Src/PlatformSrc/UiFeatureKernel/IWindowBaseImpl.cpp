@@ -857,7 +857,7 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 				if (m_pMouseHoverCtrl->IsMousehover())
 				{
 					m_pMouseHoverCtrl->SetMouseHover(false);
-					m_pMouseHoverCtrl->OnMouseLeave();
+					m_pMouseHoverCtrl->OnMouseLeave(GetCtrlMouseOffset(pt, m_pMouseHoverCtrl));
 				}
 			}
 		}
@@ -878,7 +878,7 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 			if (m_pMouseHoverCtrl != NULL)
 			{
 				m_pMouseHoverCtrl->SetMouseHover(false);
-				m_pMouseHoverCtrl->OnMouseLeave();
+				m_pMouseHoverCtrl->OnMouseLeave(GetCtrlMouseOffset(pt, m_pMouseHoverCtrl));
 				m_pMouseHoverCtrl = NULL;
 			}
 			return;
@@ -894,7 +894,7 @@ void IWindowBaseImpl::OnMouseMove(int nVirtKey, POINT pt)
 			if (m_pMouseHoverCtrl != NULL)
 			{
 				m_pMouseHoverCtrl->SetMouseHover(false);
-				m_pMouseHoverCtrl->OnMouseLeave();
+				m_pMouseHoverCtrl->OnMouseLeave(GetCtrlMouseOffset(pt, m_pMouseHoverCtrl));
 			}
 
 			m_pMouseHoverCtrl = pControl;
