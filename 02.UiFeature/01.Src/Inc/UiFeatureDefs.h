@@ -93,6 +93,7 @@ using namespace std;
 #define INIT_RECT(SetEmRect)						((SetEmRect).left=(SetEmRect).right=(SetEmRect).top=(SetEmRect).bottom=0)
 // 设置矩形
 #define SET_RECT(SetRct,nL,nT,nR,nB)				(SetRct.left=nL,SetRct.top=nT,SetRct.right=nR,SetRct.bottom=nB)
+#define SET_RECT_WH(SetRct,nL,nT,nWidth,nHeight)	(SetRct.left=nL,SetRct.top=nT,SetRct.right=nL+nWidth,SetRct.bottom=nT+nHeight)
 // 判断矩形是否不为空
 #define IS_RECT_NOT_EMPTY(CheckRect)				((RECT_WIDTH(CheckRect)>0)&&((RECT_HEIGHT(CheckRect)>0))
 // 判断矩形是否为空
