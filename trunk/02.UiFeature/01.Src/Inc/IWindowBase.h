@@ -3,6 +3,7 @@
 #include "IControlBase.h"
 #include "IFeatureObject.h"
 #include "IPropertyWindow.h"
+#include "IPropertyCursor.h"
 
 
 class IUiFeatureKernel;
@@ -86,6 +87,8 @@ public:
 	virtual LRESULT SendMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam) = 0;
 	// 发送消息:Post方式
 	virtual bool PostMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam) = 0;
+	// 显示光标，返回的是原有的鼠标手势
+	virtual IPropertyCursorBase* ShowCursor(IPropertyCursorBase *pCursorBase) = 0;
 
 public:
 ////// 以下函数非外部窗口调用 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

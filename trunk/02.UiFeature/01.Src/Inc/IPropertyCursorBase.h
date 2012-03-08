@@ -4,6 +4,7 @@
 #pragma once
 #include "IPropertyBase.h"
 
+class IWindowBase;
 class IPropertyCursorBase : public IPropertyBase
 {
 public:
@@ -27,9 +28,16 @@ public:
 	// 得到光标id
 	int GetCursorId();
 
+	// 显示鼠标手势
+	bool ShowCursor(IWindowBase *pWndBase);
+	// 恢复鼠标手势
+	bool RecoverCursor(IWindowBase *pWndBase);
+
 private:
 	// 是否是系统默认光标
 	bool m_bIsSysCursor;
 	// 光标ID
 	int m_nCursorId;
+	// 用于恢复的鼠标手势
+	IPropertyCursorBase* m_pOldCursorProp;
 };

@@ -108,6 +108,9 @@ public:
 	// 发送消息:Post方式
 	virtual bool PostMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam);
 
+	// 显示光标，返回的是原有的鼠标手势
+	virtual IPropertyCursorBase* ShowCursor(IPropertyCursorBase *pCursorBase);
+
 protected:
 	// 本窗口的消息处理函数，bPassOn参数为true是，消息会继续传递处理；false时，处理完毕，不再下传
 	virtual LRESULT WindowProc(UINT nMsgId, WPARAM wParam, LPARAM lParam, bool &bPassOn);
@@ -194,6 +197,7 @@ private:
 	void DispatchRegisterMessage(UINT nMsgId, WPARAM wParam, LPARAM lParam);
 
 	bool OnTimerToChild(CHILD_CTRLS_VEC &ChildCtrlsVec, UINT nTimerId);
+
 protected:
 	// 控件注册需要取得的消息
 	REG_MSG_MAP m_CtrlRegMsgMap;
@@ -288,6 +292,8 @@ private:
 	IPropertySkinManager* m_pSkinPropMgr;
 	// 控制拉伸窗口操作的类
 	CWindowResize m_WndResize;
+	// 当前显示的鼠标手势
+	IPropertyCursorBase *m_pCurrentCursorBase;
 
 	bool m_bIsFullScreen;
 	// 当前鼠标样式宏
