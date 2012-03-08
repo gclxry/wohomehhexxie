@@ -36,7 +36,7 @@ protected:
 	// 鼠标进入
 	virtual void OnMouseEnter(POINT pt);
 	// 鼠标移出
-	virtual void OnMouseLeave();
+	virtual void OnMouseLeave(POINT pt);
 	// 鼠标移动
 	virtual void OnMouseMove(POINT pt);
 	// 鼠标左键点击

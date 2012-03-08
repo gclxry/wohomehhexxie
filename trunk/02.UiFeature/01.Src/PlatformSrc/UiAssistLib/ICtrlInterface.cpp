@@ -27,7 +27,7 @@ void ICtrlInterface::OnMouseEnter(POINT pt)
 }
 
 // Êó±êÒÆ³ö
-void ICtrlInterface::OnMouseLeave()
+void ICtrlInterface::OnMouseLeave(POINT pt)
 {
 }
 
