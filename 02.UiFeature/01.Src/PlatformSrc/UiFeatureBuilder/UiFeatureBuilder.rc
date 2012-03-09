@@ -91,7 +91,7 @@ IDI_PROPERTIES_WND_HC   ICON                    "res\\properties_wnd_hc.ico"
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
 IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
-IDR_SORT                BITMAP                  "res\\sort.bmp"
+IDT_WINDOW_VIEW_UP_DOWN BITMAP                  "res\\sort.bmp"
 IDB_SORT_24             BITMAP                  "res\\sort_hc.bmp"
 IDB_FILE_VIEW           BITMAP                  "res\\fileview.bmp"
 IDB_FILE_VIEW_24        BITMAP                  "res\\fileview_hc.bmp"
@@ -125,10 +125,10 @@ BEGIN
     BUTTON      ID_FILE_SAVE
 END
 
-IDR_SORT TOOLBAR  16, 16
+IDT_WINDOW_VIEW_UP_DOWN TOOLBAR  16, 16
 BEGIN
-    BUTTON      ID_SORT_MENU
-    BUTTON      ID_NEW_FOLDER
+    BUTTON      IDM_CONTROY_TO_UP
+    BUTTON      IDM_CONTROY_TO_DOWN
 END
 
 IDR_EXPLORER TOOLBAR  16, 16
@@ -228,17 +228,6 @@ BEGIN
     END
 END
 
-IDR_POPUP_SORT MENU 
-BEGIN
-    POPUP "排序"
-    BEGIN
-        MENUITEM "按字母顺序排序(&S)",                 ID_SORTING_SORTALPHABETIC
-        MENUITEM "按类型排序(&T)",                   ID_SORTING_SORTBYTYPE
-        MENUITEM "按访问排序(&E)",                   ID_SORTING_SORTBYACCESS
-        MENUITEM "按类型分组(&Y)",                   ID_SORTING_GROUPBYTYPE
-    END
-END
-
 IDR_POPUP_EXPLORER MENU 
 BEGIN
     POPUP "资源管理器"
@@ -288,6 +277,15 @@ BEGIN
     POPUP "删除一个"
     BEGIN
         MENUITEM "删除(&D)",                      IDM_DELETE_WNDCTRL
+    END
+END
+
+IDM_CONTROY_UP_DOWN MENU 
+BEGIN
+    POPUP "调整控件"
+    BEGIN
+        MENUITEM "往上",                          IDM_CONTROY_TO_UP
+        MENUITEM "往下",                          IDM_CONTROY_TO_DOWN
     END
 END
 

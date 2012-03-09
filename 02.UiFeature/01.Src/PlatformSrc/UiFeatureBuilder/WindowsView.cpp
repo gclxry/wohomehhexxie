@@ -5,33 +5,6 @@
 #include "Resource.h"
 #include "UiFeatureBuilder.h"
 
-class CClassViewMenuButton : public CMFCToolBarMenuButton
-{
-	friend class CWindowsView;
-
-	DECLARE_SERIAL(CClassViewMenuButton)
-
-public:
-	CClassViewMenuButton(HMENU hMenu = NULL) : CMFCToolBarMenuButton((UINT)-1, hMenu, -1)
-	{
-	}
-
-	virtual void OnDraw(CDC* pDC, const CRect& rect, CMFCToolBarImages* pImages, BOOL bHorz = TRUE,
-		BOOL bCustomizeMode = FALSE, BOOL bHighlight = FALSE, BOOL bDrawBorder = TRUE, BOOL bGrayDisabledButtons = TRUE)
-	{
-		pImages = CMFCToolBar::GetImages();
-
-		CAfxDrawState ds;
-		pImages->PrepareDrawImage(ds);
-
-		CMFCToolBarMenuButton::OnDraw(pDC, rect, pImages, bHorz, bCustomizeMode, bHighlight, bDrawBorder, bGrayDisabledButtons);
-
-		pImages->EndDrawImage(ds);
-	}
-};
-
-IMPLEMENT_SERIAL(CClassViewMenuButton, CMFCToolBarMenuButton, 1)
-
 //////////////////////////////////////////////////////////////////////
 // ¹¹Ôì/Îö¹¹
 //////////////////////////////////////////////////////////////////////
@@ -51,6 +24,10 @@ BEGIN_MESSAGE_MAP(CWindowsView, CDockablePane)
 	ON_WM_CONTEXTMENU()
 	ON_WM_PAINT()
 	ON_WM_SETFOCUS()
+	ON_UPDATE_COMMAND_UI(IDM_CONTROY_TO_DOWN, &CWindowsView::OnUpdateControyToDown)
+	ON_COMMAND(IDM_CONTROY_TO_DOWN, &CWindowsView::OnControyToDown)
+	ON_COMMAND(IDM_CONTROY_TO_UP, &CWindowsView::OnControyToUp)
+	ON_UPDATE_COMMAND_UI(IDM_CONTROY_TO_UP, &CWindowsView::OnUpdateControyToUp)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -78,8 +55,8 @@ int CWindowsView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 //////////////////////////////////////////////////////////////////////////
 	// Load images:
-	m_TreeToolBar.Create(this, AFX_DEFAULT_TOOLBAR_STYLE, IDR_SORT);
-	m_TreeToolBar.LoadToolBar(IDR_SORT, 0, 0, TRUE /* Is locked */);
+	m_TreeToolBar.Create(this, AFX_DEFAULT_TOOLBAR_STYLE, IDT_WINDOW_VIEW_UP_DOWN);
+	m_TreeToolBar.LoadToolBar(IDT_WINDOW_VIEW_UP_DOWN, 0, 0, TRUE /* Is locked */);
 
 	m_TreeToolBar.SetPaneStyle(m_TreeToolBar.GetPaneStyle() | CBRS_TOOLTIPS | CBRS_FLYBY);
 	m_TreeToolBar.SetPaneStyle(m_TreeToolBar.GetPaneStyle() & ~(CBRS_GRIPPER | CBRS_SIZE_DYNAMIC | CBRS_BORDER_TOP | CBRS_BORDER_BOTTOM | CBRS_BORDER_LEFT | CBRS_BORDER_RIGHT));
@@ -88,21 +65,6 @@ int CWindowsView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	// All commands will be routed via this control , not via the parent frame:
 	m_TreeToolBar.SetRouteCommandsViaFrame(FALSE);
-
-	//CMenu menuSort;
-	//menuSort.LoadMenu(IDR_POPUP_SORT);
-
-	//m_TreeToolBar.ReplaceButton(ID_SORT_MENU, CClassViewMenuButton(menuSort.GetSubMenu(0)->GetSafeHmenu()));
-
-	//CClassViewMenuButton* pButton =  DYNAMIC_DOWNCAST(CClassViewMenuButton, m_TreeToolBar.GetButton(0));
-
-	//if (pButton != NULL)
-	//{
-	//	pButton->m_bText = FALSE;
-	//	pButton->m_bImage = TRUE;
-	//	pButton->SetImage(GetCmdMgr()->GetCmdImage(ID_SORTING_GROUPBYTYPE));
-	//	pButton->SetMessageWnd(this);
-	//}
 
 	return 0;
 }
@@ -234,9 +196,32 @@ void CWindowsView::OnChangeVisualStyle()
 	m_WindowViewImages.Add(&bmp, RGB(255, 0, 0));
 
 	m_wndWindowTree.SetImageList(&m_WindowViewImages, TVSIL_NORMAL);
+
+	m_TreeToolBar.CleanUpLockedImages();
+	m_TreeToolBar.LoadBitmap(theApp.m_bHiColorIcons ? IDB_SORT_24 : IDT_WINDOW_VIEW_UP_DOWN, 0, 0, TRUE /* Locked */);
 }
 
 void CWindowsView::InitShowNewProject()
 {
 	m_wndWindowTree.InitShowNewProject();
+}
+
+void CWindowsView::OnUpdateControyToDown(CCmdUI *pCmdUI)
+{
+	m_wndWindowTree.OnUpdateControyToDown(pCmdUI);
+}
+
+void CWindowsView::OnUpdateControyToUp(CCmdUI *pCmdUI)
+{
+	m_wndWindowTree.OnUpdateControyToUp(pCmdUI);
+}
+
+void CWindowsView::OnControyToDown()
+{
+	m_wndWindowTree.OnControyToDown();
+}
+
+void CWindowsView::OnControyToUp()
+{
+	m_wndWindowTree.OnControyToUp();
 }
