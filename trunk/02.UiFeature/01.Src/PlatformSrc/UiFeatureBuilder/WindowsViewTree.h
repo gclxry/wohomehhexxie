@@ -57,6 +57,11 @@ private:
 
 	HTREEITEM GetFirstChildItem(HTREEITEM hItem);
 	HTREEITEM GetLastChildItem(HTREEITEM hItem);
+	HTREEITEM GetNextBrother(HTREEITEM hItem);
+	void DeleteChildItem(HTREEITEM hItem);
+	void ChangeTreeItem(HTREEITEM hToUpItem, HTREEITEM hToDownItem);
+	// 向树中插入一个新节点
+	void InsertTreeItemByControlVec(HTREEITEM hParentItem, CHILD_CTRLS_VEC* pCtrlVec);
 
 private:
 	bool m_bProjectInitOk;

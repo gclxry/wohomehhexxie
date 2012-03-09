@@ -315,7 +315,6 @@ void CWindowsViewTree::RefreshItemObjectName(HTREEITEM hParentItem)
 
 		// 更新子控件的名称
 		RefreshItemObjectName(hChild);
-
 		hChild = this->GetNextItem(hChild, TVGN_NEXT);
 	}
 }
@@ -887,6 +886,30 @@ HTREEITEM CWindowsViewTree::GetFirstChildItem(HTREEITEM hItem)
 	return this->GetChildItem(hItem);
 }
 
+HTREEITEM CWindowsViewTree::GetNextBrother(HTREEITEM hItem)
+{
+	if (hItem == NULL)
+		return NULL;
+
+	HTREEITEM hParentItem = this->GetParentItem(hItem);
+	if (hParentItem == NULL)
+		return NULL;
+
+	HTREEITEM hNextBrother = NULL;
+	HTREEITEM hChild = this->GetChildItem(hParentItem);
+	while (hChild != NULL)
+	{
+		if (hChild == hItem)
+		{
+			hNextBrother = this->GetNextItem(hChild, TVGN_NEXT);
+			break;
+		}
+		hChild = this->GetNextItem(hChild, TVGN_NEXT);
+	}
+
+	return hNextBrother;
+}
+
 void CWindowsViewTree::ControyToDown(HTREEITEM hItem)
 {
 	if (hItem == NULL)
@@ -903,7 +926,105 @@ void CWindowsViewTree::ControyToDown(HTREEITEM hItem)
 		return;
 	}
 
+	HTREEITEM hNextBrother = GetNextBrother(hItem);
+	if (hNextBrother == NULL)
+	{
+		AfxMessageBox(_T("居然没有找到下一个兄弟控件节点！"), MB_OK | MB_ICONWARNING);
+		return;
+	}
 
+	ChangeTreeItem(hNextBrother, hItem);
+	this->SelectItem(hNextBrother);
+}
+
+void CWindowsViewTree::DeleteChildItem(HTREEITEM hItem)
+{
+	if (hItem == NULL)
+		return;
+
+	HTREEITEM hChild = this->GetChildItem(hItem);
+	while (hChild != NULL)
+	{
+		HTREEITEM hNextChild = this->GetNextItem(hChild, TVGN_NEXT);
+		this->DeleteItem(hChild);
+		hChild = hNextChild;
+	}
+}
+
+void CWindowsViewTree::ChangeTreeItem(HTREEITEM hToUpItem, HTREEITEM hToDownItem)
+{
+	IFeatureObject *pToUpObj = (IFeatureObject*)this->GetItemData(hToUpItem);
+	IFeatureObject *pToDownObj = (IFeatureObject*)this->GetItemData(hToDownItem);
+	if (pToUpObj == NULL || pToDownObj == NULL)
+		return;
+
+	IControlBase *pToUpCtrl = dynamic_cast<IControlBase*>(pToUpObj);
+	IControlBase *pToDownCtrl = dynamic_cast<IControlBase*>(pToDownObj);
+	if (pToUpCtrl == NULL || pToDownCtrl == NULL)
+		return;
+
+	DeleteChildItem(hToUpItem);
+	DeleteChildItem(hToDownItem);
+
+	CHILD_CTRLS_VEC* pChildVec = NULL;
+	IControlBase* pParentCtrl = pToUpCtrl->GetParentControl();
+	if (pParentCtrl == NULL)
+	{
+		IWindowBase* pWndBase = pToUpCtrl->GetOwnerWindow();
+		pChildVec = pWndBase->GetChildControlsVec();
+	}
+	else
+	{
+		pChildVec = pParentCtrl->GetChildControlsVec();
+	}
+
+	if (pChildVec == NULL)
+		return;
+
+	for (CHILD_CTRLS_VEC::iterator pCtrlItem = pChildVec->begin(); pCtrlItem != pChildVec->end(); pCtrlItem++)
+	{
+		IControlBase* pCtrl = *pCtrlItem;
+		if (pCtrl == NULL)
+			continue;
+
+		if (pCtrl == pToDownCtrl)
+		{
+			*pCtrlItem = pToUpCtrl;
+			pCtrlItem++;
+			*pCtrlItem = pToDownCtrl;
+			break;
+		}
+	}
+
+	this->SetItemData(hToUpItem, (DWORD_PTR)pToDownCtrl);
+	this->SetItemData(hToDownItem, (DWORD_PTR)pToUpCtrl);
+
+	InsertTreeItemByControlVec(hToDownItem, pToUpCtrl->GetChildControlsVec());
+	InsertTreeItemByControlVec(hToUpItem, pToDownCtrl->GetChildControlsVec());
+
+	// 重新显示名称
+	HTREEITEM hRoot = this->GetRootItem();
+	RefreshItemObjectName(hRoot);
+}
+
+// 向树中插入一个新节点
+void CWindowsViewTree::InsertTreeItemByControlVec(HTREEITEM hParentItem, CHILD_CTRLS_VEC* pCtrlVec)
+{
+	if (hParentItem == NULL || pCtrlVec == NULL)
+		return;
+
+	for (CHILD_CTRLS_VEC::iterator pCtrlItem = pCtrlVec->begin(); pCtrlItem != pCtrlVec->end(); pCtrlItem++)
+	{
+		IControlBase* pCtrl = *pCtrlItem;
+		if (pCtrl == NULL)
+			continue;
+
+		HTREEITEM hItem = InsertControlNodeToEnd(hParentItem, pCtrl);
+		if (hItem == NULL)
+			continue;
+
+		InsertTreeItemByControlVec(hItem, pCtrl->GetChildControlsVec());
+	}
 }
 
 void CWindowsViewTree::ControyToUp(HTREEITEM hItem)
