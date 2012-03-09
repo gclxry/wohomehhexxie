@@ -54,6 +54,10 @@ private:
 	void SetViewEditControl_Child(HTREEITEM hParentItem, IControlBase *pCtrl);
 	void ControyToDown(HTREEITEM hItem);
 	void ControyToUp(HTREEITEM hItem);
+
+	HTREEITEM GetFirstChildItem(HTREEITEM hItem);
+	HTREEITEM GetLastChildItem(HTREEITEM hItem);
+
 private:
 	bool m_bProjectInitOk;
 	IPropertySkinManager *m_pSkinMgr;
@@ -62,7 +66,6 @@ private:
 	CUiFeatureBuilderView *m_pWindowView;
 
 	HTREEITEM m_hRBtnSelItem;
-
 	bool m_bFromViewSel;
 
 //////////////////////////////////////////////////////////////////////////

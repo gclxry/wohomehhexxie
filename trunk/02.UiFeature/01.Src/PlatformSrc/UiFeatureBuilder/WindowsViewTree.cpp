@@ -775,7 +775,7 @@ void CWindowsViewTree::OnTimer(UINT_PTR nIDEvent)
 			int slowscroll = 6 - (pt.y - rect.bottom + 10)/20;
 			if (0 == (m_TimerTicks % ((slowscroll > 0) ? slowscroll : 1)))
 			{
-				CImageList::DragShowNolock ( false );
+				CImageList::DragShowNolock(false);
 				this->SendMessage(WM_VSCROLL,SB_LINEDOWN);
 				int nCount = this->GetVisibleCount();
 				for (int i=0 ; i<nCount-1 ; i++)
@@ -863,12 +863,52 @@ void CWindowsViewTree::OnControyToUp()
 	ControyToUp(hItem);
 }
 
+HTREEITEM CWindowsViewTree::GetLastChildItem(HTREEITEM hItem)
+{
+	if (hItem == NULL)
+		return NULL;
+
+	HTREEITEM hLastChild = NULL;
+	HTREEITEM hChild = this->GetChildItem(hItem);
+	while (hChild != NULL)
+	{
+		hLastChild = hChild;
+		hChild = this->GetNextItem(hChild, TVGN_NEXT);
+	}
+
+	return hLastChild;
+}
+
+HTREEITEM CWindowsViewTree::GetFirstChildItem(HTREEITEM hItem)
+{
+	if (hItem == NULL)
+		return NULL;
+
+	return this->GetChildItem(hItem);
+}
+
 void CWindowsViewTree::ControyToDown(HTREEITEM hItem)
 {
+	if (hItem == NULL)
+		return;
+
+	HTREEITEM hParentItem = this->GetParentItem(hItem);
+	if (hParentItem == NULL)
+		return;
+
+	HTREEITEM hLast = GetLastChildItem(hParentItem);
+	if (hLast == hItem)
+	{
+		AfxMessageBox(_T("已经将控件设置到最顶层了！"), MB_OK | MB_ICONWARNING);
+		return;
+	}
+
 
 }
 
 void CWindowsViewTree::ControyToUp(HTREEITEM hItem)
 {
+	if (hItem == NULL)
+		return;
 
 }
