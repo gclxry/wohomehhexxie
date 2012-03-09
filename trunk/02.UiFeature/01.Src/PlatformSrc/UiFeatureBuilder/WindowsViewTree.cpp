@@ -792,3 +792,83 @@ void CWindowsViewTree::OnTimer(UINT_PTR nIDEvent)
 		CTreeCtrl::OnTimer(nIDEvent);
 	}
 }
+
+void CWindowsViewTree::OnUpdateControyToDown(CCmdUI *pCmdUI)
+{
+	pCmdUI->Enable(TRUE);
+}
+
+void CWindowsViewTree::OnUpdateControyToUp(CCmdUI *pCmdUI)
+{
+	pCmdUI->Enable(TRUE);
+}
+
+void CWindowsViewTree::OnControyToDown()
+{
+	HTREEITEM hItem = this->GetSelectedItem();
+	if (!IS_SAFE_HANDLE(hItem))
+		return;
+
+	// 选择了根
+	HTREEITEM hRootItem = this->GetRootItem();
+	if (hRootItem == hItem)
+	{
+		AfxMessageBox(_T("调整控件的层次关系前，请先选择控件节点！"), MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	IFeatureObject *pObj = (IFeatureObject*)this->GetItemData(hItem);
+	if (pObj == NULL)
+	{
+		AfxMessageBox(_T("居然有无效节点！"), MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	if (lstrcmpA(pObj->GetObjectType(), PROP_TYPE_WINDOW_NAME) == 0)
+	{
+		AfxMessageBox(_T("调整控件的层次关系前，请先选择控件节点！"), MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	ControyToDown(hItem);
+}
+
+void CWindowsViewTree::OnControyToUp()
+{
+	HTREEITEM hItem = this->GetSelectedItem();
+	if (!IS_SAFE_HANDLE(hItem))
+		return;
+
+	// 选择了根
+	HTREEITEM hRootItem = this->GetRootItem();
+	if (hRootItem == hItem)
+	{
+		AfxMessageBox(_T("调整控件的层次关系前，请先选择控件节点！"), MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	IFeatureObject *pObj = (IFeatureObject*)this->GetItemData(hItem);
+	if (pObj == NULL)
+	{
+		AfxMessageBox(_T("居然有无效节点！"), MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	if (lstrcmpA(pObj->GetObjectType(), PROP_TYPE_WINDOW_NAME) == 0)
+	{
+		AfxMessageBox(_T("调整控件的层次关系前，请先选择控件节点！"), MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	ControyToUp(hItem);
+}
+
+void CWindowsViewTree::ControyToDown(HTREEITEM hItem)
+{
+
+}
+
+void CWindowsViewTree::ControyToUp(HTREEITEM hItem)
+{
+
+}

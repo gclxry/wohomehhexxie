@@ -39,5 +39,10 @@ protected:
 	afx_msg LRESULT OnChangeActiveTab(WPARAM, LPARAM);
 
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnUpdateControyToDown(CCmdUI *pCmdUI);
+	afx_msg void OnControyToDown();
+	afx_msg void OnControyToUp();
+	afx_msg void OnUpdateControyToUp(CCmdUI *pCmdUI);
 };
 

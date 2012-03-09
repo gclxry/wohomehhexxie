@@ -26,7 +26,9 @@
 #define ID_CLASS_DEFINITION             141
 #define ID_CLASS_PROPERTIES             142
 #define ID_NEW_FOLDER                   143
+#define IDT_WINDOW_VIEW_DOWN            143
 #define ID_SORT_MENU                    144
+#define IDT_WINDOW_VIEW_UP              144
 #define ID_SORTING_GROUPBYTYPE          145
 #define ID_SORTING_SORTALPHABETIC       146
 #define ID_SORTING_SORTBYTYPE           147
@@ -50,7 +52,7 @@
 #define IDI_PROPERTIES_WND_HC           168
 #define IDR_EXPLORER                    169
 #define IDB_EXPLORER_24                 170
-#define IDR_SORT                        171
+#define IDT_WINDOW_VIEW_UP_DOWN         171
 #define IDB_SORT_24                     172
 #define IDR_POPUP_SORT                  173
 #define IDR_POPUP_EXPLORER              174
@@ -103,6 +105,7 @@
 #define IDR_RUN_TEST_TOOLBAR            322
 #define IDB_BITMAP1                     325
 #define IDB_CURSOR_BITMAP               325
+#define IDM_CONTROY_UP_DOWN             326
 #define IDB_BROWER_BTN                  1000
 #define IDE_DIR                         1001
 #define IDC_EDIT2                       1002
@@ -196,7 +199,6 @@
 #define IDC_PICTURE_TEXT                1042
 #define IDC_CHECK1                      1042
 #define IDC_DRAW_MID_AREA_CHECKBOX      1042
-#define IDC_CHECK2                      1043
 #define IDC_ZHILI_CHECK                 1043
 #define ID_32771                        32771
 #define ID_Menu                         32772
@@ -206,13 +208,16 @@
 #define IDM_DELETE_WNDCTRL              32776
 #define ID_RUN_TOOL_BAR                 32777
 #define IDTB_RUN_TEST                   32777
+#define IDM_CONTROY_TO_UP               32779
+#define IDM_CONTROY_TO_DOWN             32780
+#define IDM_CONTROY_TO_DO               32781
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        326
-#define _APS_NEXT_COMMAND_VALUE         32778
+#define _APS_NEXT_RESOURCE_VALUE        327
+#define _APS_NEXT_COMMAND_VALUE         32782
 #define _APS_NEXT_CONTROL_VALUE         1044
 #define _APS_NEXT_SYMED_VALUE           319
 #endif

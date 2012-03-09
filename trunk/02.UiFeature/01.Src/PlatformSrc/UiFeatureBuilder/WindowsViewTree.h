@@ -28,11 +28,16 @@ public:
 
 	void SetViewEditControl(IControlBase *pCtrl);
 
+	void OnUpdateControyToDown(CCmdUI *pCmdUI);
+	void OnControyToDown();
+	void OnControyToUp();
+	void OnUpdateControyToUp(CCmdUI *pCmdUI);
+
 // ÖØÐ´
 protected:
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
-
 	void SetNeedSave();
+
 private:
 	void OnTvnSelchanged_SelectRoot();
 	void OnTvnSelchanged_SelectWindow(IWindowBase *pWndBase);
@@ -47,7 +52,8 @@ private:
 	void InsertCtrlVecByPropCtrlVec(HTREEITEM hParentItem, IWindowBase *pParentWnd, IControlBase *pParentCtrl, PROP_CONTROL_VEC* pPropCtrlVec, CHILD_CTRLS_VEC* pCtrlVec);
 	
 	void SetViewEditControl_Child(HTREEITEM hParentItem, IControlBase *pCtrl);
-
+	void ControyToDown(HTREEITEM hItem);
+	void ControyToUp(HTREEITEM hItem);
 private:
 	bool m_bProjectInitOk;
 	IPropertySkinManager *m_pSkinMgr;
