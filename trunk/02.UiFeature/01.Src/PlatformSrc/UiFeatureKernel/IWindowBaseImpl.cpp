@@ -966,8 +966,9 @@ void IWindowBaseImpl::OnLButtonDbClick(int nVirtKey, POINT pt)
 	if (pControl == NULL)
 		return;
 
-	pControl->OnLButtonDbClick(GetCtrlMouseOffset(pt, pControl));
-	SetFocusCtrl(pControl);
+	m_pLButtonDownCtrl = pControl;
+	m_pLButtonDownCtrl->OnLButtonDbClick(GetCtrlMouseOffset(pt, m_pLButtonDownCtrl));
+	SetFocusCtrl(m_pLButtonDownCtrl);
 }
 
 void IWindowBaseImpl::OnRButtonDown(int nVirtKey, POINT pt)
