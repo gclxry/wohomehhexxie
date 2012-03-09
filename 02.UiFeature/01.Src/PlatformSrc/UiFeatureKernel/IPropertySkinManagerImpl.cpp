@@ -1400,6 +1400,7 @@ bool IPropertySkinManagerImpl::SaveLayoutXml(const char *pszSavePath, string &st
 			return false;
 
 		pWndNode->AddAttribute(SKIN_OBJECT_ID, pPropWnd->GetObjectId());
+		pWndNode->AddAttribute("name", pPropWnd->GetObjectName());
 
 		PROP_CONTROL_VEC* pWndChildVec = pPropWnd->GetChildPropControlVec();
 		if (!SaveLayoutXml_ChildCtrl(XmlStrObj, pWndNode, pWndChildVec))
@@ -1430,6 +1431,7 @@ bool IPropertySkinManagerImpl::SaveLayoutXml_ChildCtrl(CUiXmlWrite &XmlStrObj, C
 			return false;
 
 		pCtrlNode->AddAttribute(SKIN_OBJECT_ID, pPropCtrl->GetObjectId());
+		pCtrlNode->AddAttribute("name", pPropCtrl->GetObjectName());
 
 		PROP_CONTROL_VEC* pCtrlChildVec = pPropCtrl->GetChildPropControlVec();
 		if (!SaveLayoutXml_ChildCtrl(XmlStrObj, pCtrlNode, pCtrlChildVec))
