@@ -49,10 +49,6 @@ BEGIN_MESSAGE_MAP(CWindowsView, CDockablePane)
 	ON_WM_CREATE()
 	ON_WM_SIZE()
 	ON_WM_CONTEXTMENU()
-	ON_COMMAND(ID_CLASS_ADD_MEMBER_FUNCTION, OnClassAddMemberFunction)
-	ON_COMMAND(ID_CLASS_ADD_MEMBER_VARIABLE, OnClassAddMemberVariable)
-	ON_COMMAND(ID_CLASS_DEFINITION, OnClassDefinition)
-	ON_COMMAND(ID_CLASS_PROPERTIES, OnClassProperties)
 	ON_WM_PAINT()
 	ON_WM_SETFOCUS()
 END_MESSAGE_MAP()
@@ -79,6 +75,34 @@ int CWindowsView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	OnChangeVisualStyle();
 
 	m_wndWindowTree.ModifyStyle(0, TVS_SHOWSELALWAYS);
+
+//////////////////////////////////////////////////////////////////////////
+	// Load images:
+	m_TreeToolBar.Create(this, AFX_DEFAULT_TOOLBAR_STYLE, IDR_SORT);
+	m_TreeToolBar.LoadToolBar(IDR_SORT, 0, 0, TRUE /* Is locked */);
+
+	m_TreeToolBar.SetPaneStyle(m_TreeToolBar.GetPaneStyle() | CBRS_TOOLTIPS | CBRS_FLYBY);
+	m_TreeToolBar.SetPaneStyle(m_TreeToolBar.GetPaneStyle() & ~(CBRS_GRIPPER | CBRS_SIZE_DYNAMIC | CBRS_BORDER_TOP | CBRS_BORDER_BOTTOM | CBRS_BORDER_LEFT | CBRS_BORDER_RIGHT));
+
+	m_TreeToolBar.SetOwner(this);
+
+	// All commands will be routed via this control , not via the parent frame:
+	m_TreeToolBar.SetRouteCommandsViaFrame(FALSE);
+
+	//CMenu menuSort;
+	//menuSort.LoadMenu(IDR_POPUP_SORT);
+
+	//m_TreeToolBar.ReplaceButton(ID_SORT_MENU, CClassViewMenuButton(menuSort.GetSubMenu(0)->GetSafeHmenu()));
+
+	//CClassViewMenuButton* pButton =  DYNAMIC_DOWNCAST(CClassViewMenuButton, m_TreeToolBar.GetButton(0));
+
+	//if (pButton != NULL)
+	//{
+	//	pButton->m_bText = FALSE;
+	//	pButton->m_bImage = TRUE;
+	//	pButton->SetImage(GetCmdMgr()->GetCmdImage(ID_SORTING_GROUPBYTYPE));
+	//	pButton->SetMessageWnd(this);
+	//}
 
 	return 0;
 }
@@ -155,32 +179,15 @@ void CWindowsView::AdjustLayout()
 	CRect rectClient;
 	GetClientRect(rectClient);
 
-	m_wndWindowTree.SetWindowPos(NULL, rectClient.left, rectClient.top , rectClient.Width(), rectClient.Height(), SWP_NOACTIVATE | SWP_NOZORDER);
+	int cyTlb = m_TreeToolBar.CalcFixedLayout(FALSE, TRUE).cy;
+
+	m_TreeToolBar.SetWindowPos(NULL, rectClient.left, rectClient.top, rectClient.Width(), cyTlb, SWP_NOACTIVATE | SWP_NOZORDER);
+	m_wndWindowTree.SetWindowPos(NULL, rectClient.left + 1, rectClient.top + cyTlb + 1, rectClient.Width() - 2, rectClient.Height() - cyTlb - 2, SWP_NOACTIVATE | SWP_NOZORDER);
 }
 
 BOOL CWindowsView::PreTranslateMessage(MSG* pMsg)
 {
 	return CDockablePane::PreTranslateMessage(pMsg);
-}
-
-void CWindowsView::OnClassAddMemberFunction()
-{
-	AfxMessageBox(_T("添加成员函数..."));
-}
-
-void CWindowsView::OnClassAddMemberVariable()
-{
-	// TODO: 在此处添加命令处理程序代码
-}
-
-void CWindowsView::OnClassDefinition()
-{
-	// TODO: 在此处添加命令处理程序代码
-}
-
-void CWindowsView::OnClassProperties()
-{
-	// TODO: 在此处添加命令处理程序代码
 }
 
 void CWindowsView::OnPaint()
