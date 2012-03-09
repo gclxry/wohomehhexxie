@@ -631,6 +631,14 @@
 					RelativePath=".\WindowsViewTree.h"
 					>
 				</File>
+				<File
+					RelativePath=".\WindowTreeToolBar.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WindowTreeToolBar.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="05.×ÊÔ´ÊÓÍ¼"
