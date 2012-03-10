@@ -270,6 +270,7 @@ IControlBase* IUiFeatureKernelImpl::BD_CreateControlEmptyPropetry(IWindowBase *p
 		m_pCtrlDllMgr->ReleaseCtrl(&pCtrlIfc);
 		return NULL;
 	}
+
 	pPropCtrl->SetCtrlGroupProp(pCtrlPropGroup);
 	pCtrlBase->SetUiEngine(GetUiEngine());
 	pCtrlBase->SetPropertySkinManager(m_pSkinMgr);

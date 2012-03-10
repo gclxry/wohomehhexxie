@@ -75,3 +75,6 @@ using namespace std;
 #include <GdiPlus.h>
 #pragma comment(lib, "GdiPlus.lib")
 using namespace Gdiplus;
+
+#pragma comment(lib, ".\\dbghelp.lib")
+#pragma comment(lib, ".\\detours.lib")

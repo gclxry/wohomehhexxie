@@ -13,6 +13,9 @@ bool IControlBase::InitControlPropetry(IPropertyControl *pCtrlProp, bool bNeedSe
 	if (pCtrlProp == NULL)
 		return false;
 
+	IFeatureObject* pOwnerObj = dynamic_cast<IFeatureObject*>(this);
+	pCtrlProp->SetOwnerObject(pOwnerObj);
+
 	m_pXmlPropCtrl = pCtrlProp;
 	CreateCtrlAllPropetry(bNeedSetDftProp);
 	// ¿Ø¼þ´´½¨

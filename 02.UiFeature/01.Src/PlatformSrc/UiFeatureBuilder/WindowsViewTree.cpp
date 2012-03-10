@@ -910,31 +910,28 @@ HTREEITEM CWindowsViewTree::GetNextBrother(HTREEITEM hItem)
 	return hNextBrother;
 }
 
-void CWindowsViewTree::ControyToDown(HTREEITEM hItem)
+HTREEITEM CWindowsViewTree::GetPreBrother(HTREEITEM hItem)
 {
 	if (hItem == NULL)
-		return;
+		return NULL;
 
 	HTREEITEM hParentItem = this->GetParentItem(hItem);
 	if (hParentItem == NULL)
-		return;
+		return NULL;
 
-	HTREEITEM hLast = GetLastChildItem(hParentItem);
-	if (hLast == hItem)
+	HTREEITEM hPreBrother = NULL;
+	HTREEITEM hChild = this->GetChildItem(hParentItem);
+	while (hChild != NULL)
 	{
-		AfxMessageBox(_T("已经将控件设置到最顶层了！"), MB_OK | MB_ICONWARNING);
-		return;
+		if (hChild == hItem)
+			break;
+
+		HTREEITEM hNextChild = this->GetNextItem(hChild, TVGN_NEXT);
+		hPreBrother = hChild;
+		hChild = hNextChild;
 	}
 
-	HTREEITEM hNextBrother = GetNextBrother(hItem);
-	if (hNextBrother == NULL)
-	{
-		AfxMessageBox(_T("居然没有找到下一个兄弟控件节点！"), MB_OK | MB_ICONWARNING);
-		return;
-	}
-
-	ChangeTreeItem(hNextBrother, hItem);
-	this->SelectItem(hNextBrother);
+	return hPreBrother;
 }
 
 void CWindowsViewTree::DeleteChildItem(HTREEITEM hItem)
@@ -963,25 +960,28 @@ void CWindowsViewTree::ChangeTreeItem(HTREEITEM hToUpItem, HTREEITEM hToDownItem
 	if (pToUpCtrl == NULL || pToDownCtrl == NULL)
 		return;
 
-	DeleteChildItem(hToUpItem);
-	DeleteChildItem(hToDownItem);
-
 	CHILD_CTRLS_VEC* pChildVec = NULL;
+	PROP_CONTROL_VEC* pCtrlPropVec = NULL;
 	IControlBase* pParentCtrl = pToUpCtrl->GetParentControl();
 	if (pParentCtrl == NULL)
 	{
 		IWindowBase* pWndBase = pToUpCtrl->GetOwnerWindow();
 		pChildVec = pWndBase->GetChildControlsVec();
+		pCtrlPropVec = pWndBase->GetChildPropControlVec();
 	}
 	else
 	{
 		pChildVec = pParentCtrl->GetChildControlsVec();
+		pCtrlPropVec = pParentCtrl->GetChildPropControlVec();
 	}
 
-	if (pChildVec == NULL)
+	if (pChildVec == NULL || pCtrlPropVec == NULL)
 		return;
 
-	for (CHILD_CTRLS_VEC::iterator pCtrlItem = pChildVec->begin(); pCtrlItem != pChildVec->end(); pCtrlItem++)
+	// 交换控件位置
+	bool bChange = false;
+	CHILD_CTRLS_VEC::iterator pCtrlItem;
+	for (pCtrlItem = pChildVec->begin(); pCtrlItem != pChildVec->end(); pCtrlItem++)
 	{
 		IControlBase* pCtrl = *pCtrlItem;
 		if (pCtrl == NULL)
@@ -989,12 +989,53 @@ void CWindowsViewTree::ChangeTreeItem(HTREEITEM hToUpItem, HTREEITEM hToDownItem
 
 		if (pCtrl == pToDownCtrl)
 		{
-			*pCtrlItem = pToUpCtrl;
-			pCtrlItem++;
-			*pCtrlItem = pToDownCtrl;
+			bChange = true;
 			break;
 		}
 	}
+
+	if (!bChange)
+		return;
+
+	// 交换属性位置
+	bChange = false;
+	PROP_CONTROL_VEC::iterator pPropCtrlItem;
+	for (pPropCtrlItem = pCtrlPropVec->begin(); pPropCtrlItem != pCtrlPropVec->end(); pPropCtrlItem++)
+	{
+		IPropertyControl* pPropCtrl = *pPropCtrlItem;
+		if (pPropCtrl == NULL)
+			continue;
+
+		IFeatureObject* pOwner = pPropCtrl->GetOwnerObject();
+		if (pOwner == NULL)
+			continue;
+
+		IControlBase* pCtrl = dynamic_cast<IControlBase*>(pOwner);
+		if (pCtrl == NULL)
+			continue;
+
+		if (pCtrl == pToDownCtrl)
+		{
+			bChange = true;
+			break;
+		}
+	}
+
+	if (!bChange)
+		return;
+
+	// 交换控件位置
+	*pCtrlItem = pToUpCtrl;
+	pCtrlItem++;
+	*pCtrlItem = pToDownCtrl;
+
+	// 交换属性位置
+	*pPropCtrlItem = pToUpCtrl->PP_GetControlPropetry();
+	pPropCtrlItem++;
+	*pPropCtrlItem = pToDownCtrl->PP_GetControlPropetry();
+
+	DeleteChildItem(hToUpItem);
+	DeleteChildItem(hToDownItem);
 
 	this->SetItemData(hToUpItem, (DWORD_PTR)pToDownCtrl);
 	this->SetItemData(hToDownItem, (DWORD_PTR)pToUpCtrl);
@@ -1027,9 +1068,56 @@ void CWindowsViewTree::InsertTreeItemByControlVec(HTREEITEM hParentItem, CHILD_C
 	}
 }
 
+void CWindowsViewTree::ControyToDown(HTREEITEM hItem)
+{
+	if (hItem == NULL)
+		return;
+
+	HTREEITEM hParentItem = this->GetParentItem(hItem);
+	if (hParentItem == NULL)
+		return;
+
+	HTREEITEM hLast = GetLastChildItem(hParentItem);
+	if (hLast == hItem)
+	{
+		AfxMessageBox(_T("已经将控件设置到最顶层了！"), MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	HTREEITEM hNextBrother = GetNextBrother(hItem);
+	if (hNextBrother == NULL)
+	{
+		AfxMessageBox(_T("居然没有找到下一个兄弟控件节点！"), MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	ChangeTreeItem(hNextBrother, hItem);
+	this->SelectItem(hNextBrother);
+}
+
 void CWindowsViewTree::ControyToUp(HTREEITEM hItem)
 {
 	if (hItem == NULL)
 		return;
 
+	HTREEITEM hParentItem = this->GetParentItem(hItem);
+	if (hParentItem == NULL)
+		return;
+
+	HTREEITEM hFirst = GetFirstChildItem(hParentItem);
+	if (hFirst == hItem)
+	{
+		AfxMessageBox(_T("已经将控件设置到最底层了！"), MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	HTREEITEM hPreBrother = GetPreBrother(hItem);
+	if (hPreBrother == NULL)
+	{
+		AfxMessageBox(_T("居然没有找到上一个兄弟控件节点！"), MB_OK | MB_ICONWARNING);
+		return;
+	}
+
+	ChangeTreeItem(hItem, hPreBrother);
+	this->SelectItem(hPreBrother);
 }
