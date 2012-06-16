@@ -1,0 +1,4 @@
+LIBRARY	"_XXXX_Ctrl_Dll_"
+
+EXPORTS
+	GetControlManager			@1

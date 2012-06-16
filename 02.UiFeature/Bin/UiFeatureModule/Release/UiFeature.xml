@@ -1,0 +1,5 @@
+<uifeature>
+	<controldll>
+		<item path="ControlDemoProj.dll"/>
+	</controldll>
+</uifeature>

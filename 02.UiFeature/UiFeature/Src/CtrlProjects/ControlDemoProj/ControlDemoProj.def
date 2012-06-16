@@ -1,0 +1,4 @@
+LIBRARY	"ControlDemoProj"
+
+EXPORTS
+	GetControlManager			@1
