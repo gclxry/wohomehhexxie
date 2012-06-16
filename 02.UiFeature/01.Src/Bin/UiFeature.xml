@@ -1,6 +1,0 @@
-<uifeature>
-	<controldll>
-		<item path="UiFeatureAnimationControl.dll"/>
-		<item path="UiFeatureControl.dll"/>
-	</controldll>
-</uifeature>
