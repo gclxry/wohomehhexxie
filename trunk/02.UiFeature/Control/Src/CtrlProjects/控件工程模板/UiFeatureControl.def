@@ -1,4 +1,0 @@
-LIBRARY	"UiFeatureControl"
-
-EXPORTS
-	GetControlManager			@1
