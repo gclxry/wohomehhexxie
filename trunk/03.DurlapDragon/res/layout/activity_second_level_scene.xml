@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/SecondSceneLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <com.burlapdragon.main.secondlevelscene.SecondLevelSceneSurfaceView
+        android:id="@+id/SecondLevelSceneView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+</FrameLayout>
