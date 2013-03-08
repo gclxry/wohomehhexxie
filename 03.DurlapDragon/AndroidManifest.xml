@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.burlapdragon.main"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="17" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        
+		<!-- android:screenOrientation="landscape" 这个属性代表强制横屏 -->
+        <activity
+            android:name="com.burlapdragon.main.gameentry.GameEntryActivity"
+            android:label="@string/app_name"
+			android:screenOrientation="landscape" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+             android:label="@string/app_name" 
+             android:name="com.burlapdragon.main.firstlevelscene.FirstLevelSceneActivity"
+			android:screenOrientation="landscape" >
+            
+        </activity>
+        <activity
+             android:name=".secondlevelscene.SecondLevelSceneActivity" 
+             android:label="@string/app_name"
+			android:screenOrientation="landscape" >
+            
+        </activity>
+        <activity
+             android:name=".gameentry.bigmap.ModeTollGateBigMapSelectActivity"
+			android:screenOrientation="landscape">
+            
+        </activity>
+        <activity
+             android:name=".gameentry.smallmap.ModeTollGateSmallMapSelectActivity"
+			android:screenOrientation="landscape">
+            
+        </activity>
+        <activity
+			android:name=".gameentry.helper.GameHelperActivity"
+			android:screenOrientation="landscape">
+            
+        </activity>
+    </application>
+
+</manifest>

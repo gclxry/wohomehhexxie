@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 通关模式大地图选择界面 -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/TollGateModeBigMapLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <ImageView
+        android:id="@+id/TGMBML_Background"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:contentDescription="@string/desc"
+        android:src="@drawable/ic_launcher" />
+
+    <LinearLayout
+        android:id="@+id/TGMBML_CtrlLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/TGMBML_TopLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_weight="0.1"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/TGMBML_HomeBtn"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="false"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="30dp"
+                android:contentDescription="@string/desc"
+                android:src="@drawable/ic_launcher" />
+
+            <ImageButton
+                android:id="@+id/TGMBBL_HelperBtn"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="false"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="30dp"
+                android:contentDescription="@string/desc"
+                android:src="@drawable/ic_launcher" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/TGMBML_MidLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_weight="0.8"
+            android:contentDescription="@string/desc" >
+
+            <FrameLayout
+                android:id="@+id/TGMBML_M_LeftLayout"
+                android:layout_width="40dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="left|fill_vertical"
+                android:layout_marginLeft="0dp"
+                android:contentDescription="@string/desc" >
+
+                <ImageButton
+                    android:id="@+id/TGMBML_LeftMapBtn"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:contentDescription="@string/desc"
+                    android:src="@drawable/ic_launcher" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/TGMBML_M_MidLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="left|right|fill"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp" >
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/TGMBML_M_RightLayout"
+                android:layout_width="40dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="right|fill_vertical"
+                android:layout_marginRight="0dp" >
+
+                <ImageButton
+                    android:id="@+id/TGMBML_RightMapBtn"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:contentDescription="@string/desc"
+                    android:src="@drawable/ic_launcher" />
+            </FrameLayout>
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/TGMBML_BottomLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.1"
+            android:orientation="horizontal" >
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
