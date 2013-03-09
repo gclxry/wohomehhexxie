@@ -2,29 +2,29 @@ package utility.method;
 
 import android.view.MotionEvent;
 
-// ÅĞ¶Ïµ±Ç°ÊÖÖ¸»¬¶¯µÄ·½Ïò£¬½á¹ûÊä³ö£ºÉÏ¡¢ÏÂ¡¢×ó¡¢ÓÒ
+// åˆ¤æ–­å½“å‰æ‰‹æŒ‡æ»‘åŠ¨çš„æ–¹å‘ï¼Œç»“æœè¾“å‡ºï¼šä¸Šã€ä¸‹ã€å·¦ã€å³
 public class CheckDirectionEvent {
 
 	// ////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// ÊÖÖ¸ÏòÉÏ»¬¶¯
+	// æ‰‹æŒ‡å‘ä¸Šæ»‘åŠ¨
 	public static final int DIRECTION_UP = 1;
-	// ÊÖÖ¸ÏòÏÂ»¬¶¯
+	// æ‰‹æŒ‡å‘ä¸‹æ»‘åŠ¨
 	public static final int DIRECTION_DOWN = 2;
 	public static final int DIRECTION_LEFT = 3;
 	public static final int DIRECTION_RIGHT = 4;
-	// ÎŞ·½Ïò
+	// æ— æ–¹å‘
 	public static final int DIRECTION_NONE = 5;
-	// ²ÎÊı¡¢¼ÆËã½á¹û´íÎó
+	// å‚æ•°ã€è®¡ç®—ç»“æœé”™è¯¯
 	public static final int DIRECTION_ERROR = 6;
 	// ////////////////////////////////////////////////////////////////////////////////////////////////////////
 	private int m_nCheckRule = 50;
 	private boolean m_bIsDown = false;
-	// µ±Ç°ÕâÒ»ÂÖDOWN¡¢MOVE¡¢UPµÄ·µ»ØÖµ
+	// å½“å‰è¿™ä¸€è½®DOWNã€MOVEã€UPçš„è¿”å›å€¼
 	private int m_nCurrentEventReturn = DIRECTION_NONE;
 	private int m_nDownX = 0;
 	private int m_nDownY = 0;
 
-	// ÉèÖÃ´¥¿ØÅĞ¶Ï·½ÏòµÄ·¥Öµ
+	// è®¾ç½®è§¦æ§åˆ¤æ–­æ–¹å‘çš„ä¼å€¼
 	public void SetCheckRule(int nRule) {
 		m_nCheckRule = nRule;
 	}
@@ -37,11 +37,11 @@ public class CheckDirectionEvent {
 	}
 
 	public int onTouchEventCheck(MotionEvent objEvent, int nIndex) {
-		// ÏÈ¹ıÂË¶àµã´¥Ãş
+		// å…ˆè¿‡æ»¤å¤šç‚¹è§¦æ‘¸
 		if (objEvent.getActionIndex() != nIndex)
 			return DIRECTION_ERROR;
 
-		// Ö»È¡µÃ´¥ÃşµÄÓĞĞ§Öµ
+		// åªå–å¾—è§¦æ‘¸çš„æœ‰æ•ˆå€¼
 		int nMotion = objEvent.getActionMasked();
 		if (nMotion == MotionEvent.ACTION_DOWN) {
 			Reset();

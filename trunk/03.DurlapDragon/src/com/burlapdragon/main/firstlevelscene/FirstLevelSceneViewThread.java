@@ -17,37 +17,37 @@ import android.view.SurfaceHolder;
 import utility.method.*;
 import com.burlapdragon.common.*;
 
-// äÖÈ¾Ïß³Ì
+// æ¸²æŸ“çº¿ç¨‹
 public class FirstLevelSceneViewThread extends Thread {
 	private SurfaceHolder m_sHolder = null;
-	// ÉÏÏÂÎÄ,·½±ã»ñÈ¡µ½Ó¦ÓÃµÄ¸÷Ïî×ÊÔ´,ÈçÍ¼Æ¬¡¢ÒôÀÖ¡¢×Ö·û´®µÈ
+	// ä¸Šä¸‹æ–‡,æ–¹ä¾¿è·å–åˆ°åº”ç”¨çš„å„é¡¹èµ„æº,å¦‚å›¾ç‰‡ã€éŸ³ä¹ã€å­—ç¬¦ä¸²ç­‰
 	private Context m_Context = null;
-	// UIÏß³ÌµÄHandler
+	// UIçº¿ç¨‹çš„Handler
 	private FirstLevelSceneHandler m_ActiveHandler = null;
-	// ÓÎÏ·ÊÇ·ñÔİÍ£
+	// æ¸¸æˆæ˜¯å¦æš‚åœ
 	private boolean m_bIsPaused = false;
-	// ÓÎÏ·Ïß³ÌÔËĞĞ¿ª¹Ø
+	// æ¸¸æˆçº¿ç¨‹è¿è¡Œå¼€å…³
 	private boolean m_bRunning = false;
-	// µ±Ç°surface/canvasµÄ¸ß¶È,ÔÚsurfaceChanged·½·¨ÖĞ±»ÉèÖÃ
+	// å½“å‰surface/canvasçš„é«˜åº¦,åœ¨surfaceChangedæ–¹æ³•ä¸­è¢«è®¾ç½®
 	private int m_nCanvasHeight = 0;
-	// µ±Ç°surface/canvasµÄ¿í¶È,ÔÚsurfaceChanged·½·¨ÖĞ±»ÉèÖÃ
+	// å½“å‰surface/canvasçš„å®½åº¦,åœ¨surfaceChangedæ–¹æ³•ä¸­è¢«è®¾ç½®
 	private int m_nCanvasWidth = 0;
 	private Paint m_paint = null;
-	// Ò»¸ö»î¶¯µ¥Ôª¸ñµÄ³ß´ç
+	// ä¸€ä¸ªæ´»åŠ¨å•å…ƒæ ¼çš„å°ºå¯¸
 	private Rect m_CellSize = null;
-	// Êó±êÊÖÊÆÅĞ¶Ï
+	// é¼ æ ‡æ‰‹åŠ¿åˆ¤æ–­
 	private CheckDirectionEvent m_DObj = null;
 
-	// ±³¾°µØÍ¼
+	// èƒŒæ™¯åœ°å›¾
 	private Bitmap m_bmpBackgroundMap = null;
 	private Rect m_BkMapRect = null;
 	private Rect m_tmpRect = null;
 	
-	// Áú½Ú
+	// é¾™èŠ‚
 	private DragonManager m_DragonManager = null;
 
 
-	// ×Ô¶¨Òå¹¹Ôìº¯Êı£¬½ÓÊÜActiveµÄUIÏß³ÌµÄÏà¹Ø²ÎÊı
+	// è‡ªå®šä¹‰æ„é€ å‡½æ•°ï¼Œæ¥å—Activeçš„UIçº¿ç¨‹çš„ç›¸å…³å‚æ•°
 	public FirstLevelSceneViewThread(SurfaceHolder holder, Context context,
 			FirstLevelSceneHandler handler) {
 		m_sHolder = holder;
@@ -56,14 +56,14 @@ public class FirstLevelSceneViewThread extends Thread {
 		doStart();
 	}
 
-	// ³õÊ¼»¯ÓÎÏ·¿ªÊ¼Ê±µÄ²ÎÊı
+	// åˆå§‹åŒ–æ¸¸æˆå¼€å§‹æ—¶çš„å‚æ•°
 	private void doStart() {
 		
-		// ´´½¨Paint
+		// åˆ›å»ºPaint
 		m_paint = new Paint();
-		// ÉèÖÃ¿¹¾â³İĞ§¹û
+		// è®¾ç½®æŠ—é”¯é½¿æ•ˆæœ
 		// m_paint.setAntiAlias(true);
-		// ÉèÖÃ»­Ë¢µÄÑÕÉ«
+		// è®¾ç½®ç”»åˆ·çš„é¢œè‰²
 		// m_paint.setColor(Color.BLUE);
 
 		m_CellSize = new Rect(0, 0 ,0 ,0);
@@ -74,12 +74,12 @@ public class FirstLevelSceneViewThread extends Thread {
 		m_DragonManager = new DragonManager(m_Context);
 	}
 
-	// ÓÎÏ·½áÊøµÄ²ÎÊı
+	// æ¸¸æˆç»“æŸçš„å‚æ•°
 	private void doEnd() {
 		// TODO
 	}
 
-	// ÉèÖÃsurface/canvasµÄ¿í¶ÈºÍ¸ß¶È
+	// è®¾ç½®surface/canvasçš„å®½åº¦å’Œé«˜åº¦
 	public void setSurfaceSize(int nWidth, int nHeight) {
 		synchronized (m_sHolder) {
 			m_nCanvasWidth = nWidth;
@@ -99,7 +99,7 @@ public class FirstLevelSceneViewThread extends Thread {
 				}
 			}
 			
-			// ³õÊ¼»¯Manager
+			// åˆå§‹åŒ–Manager
 			if (m_DragonManager != null && !m_DragonManager.isInit()){
 				Rect rct = new Rect(0, 0, m_nCanvasWidth, m_nCanvasHeight);
 				m_DragonManager.initManager(m_CellSize.right, m_CellSize.bottom, rct);
@@ -107,7 +107,7 @@ public class FirstLevelSceneViewThread extends Thread {
 		}
 	}
 
-	// ÉèÖÃÓÎÏ·Ïß³ÌÔËĞĞ¿ª¹Ø
+	// è®¾ç½®æ¸¸æˆçº¿ç¨‹è¿è¡Œå¼€å…³
 	public void setRunning(boolean bRunning) {
 		m_bRunning = bRunning;
 	}
@@ -126,13 +126,13 @@ public class FirstLevelSceneViewThread extends Thread {
 
 	public boolean onTouchEvent(MotionEvent event) {
 		synchronized (m_sHolder) {
-			// ÏÈ¹ıÂË¶àµã´¥Ãş
+			// å…ˆè¿‡æ»¤å¤šç‚¹è§¦æ‘¸
 			int nIndex = event.getActionIndex();
 			if (nIndex != 0)
 				return true;
 
 
-			// Ö»È¡µÃ´¥ÃşµÄÓĞĞ§Öµ
+			// åªå–å¾—è§¦æ‘¸çš„æœ‰æ•ˆå€¼
 			int nMotion = event.getActionMasked();
 			if (nMotion == MotionEvent.ACTION_DOWN) {
 			} else if (nMotion == MotionEvent.ACTION_UP) {
@@ -162,22 +162,22 @@ public class FirstLevelSceneViewThread extends Thread {
 		}
 	}
 
-	// ÔİÍ£ÓÎÏ·Âß¼­
+	// æš‚åœæ¸¸æˆé€»è¾‘
 	public void pause() {
 		synchronized (m_sHolder) {
 			m_bIsPaused = true;
 		}
 	}
 
-	// »Ö¸´ÔËĞĞÓÎÏ·Âß¼­
+	// æ¢å¤è¿è¡Œæ¸¸æˆé€»è¾‘
 	public void unpause() {
-		// Èç¹ûÓÎÏ·ÖĞÓĞÊ±¼ä,±ğÍü¼ÇÓ¦½«ÆäÔÚÕâÀïµ÷Õûµ½Õı³£
+		// å¦‚æœæ¸¸æˆä¸­æœ‰æ—¶é—´,åˆ«å¿˜è®°åº”å°†å…¶åœ¨è¿™é‡Œè°ƒæ•´åˆ°æ­£å¸¸
 		synchronized (m_sHolder) {
 			m_bIsPaused = false;
 		}
 	}
 
-	// Ïß³ÌµÄÖ´ĞĞº¯Êı
+	// çº¿ç¨‹çš„æ‰§è¡Œå‡½æ•°
 	@Override
 	public void run() {
 		while (m_bRunning) {
@@ -209,7 +209,7 @@ public class FirstLevelSceneViewThread extends Thread {
 			long lEndTime = SystemClock.uptimeMillis();
 			long lSleepTime = lEndTime - lBeginTime;
 			
-			// Ò»Ö¡µÄÊ±¼ä³¬ÁË
+			// ä¸€å¸§çš„æ—¶é—´è¶…äº†
 			if ((int)lSleepTime >= CommonDefines.GAME_ONE_FRAME_TIME)
 				continue;
 			
@@ -222,11 +222,11 @@ public class FirstLevelSceneViewThread extends Thread {
 			}
 		}
 
-		// Ïß³Ì½áÊø
+		// çº¿ç¨‹ç»“æŸ
 		doEnd();
 	}
 
-	// ÓÎÏ·»æ»­
+	// æ¸¸æˆç»˜ç”»
 	private void doDraw(Canvas runCanvas) {
 		runCanvas.drawColor(Color.BLACK);
 		
@@ -240,12 +240,12 @@ public class FirstLevelSceneViewThread extends Thread {
 		m_DragonManager.doDraw(runCanvas, m_paint);
 	}
 
-	// ÓÎÏ·Âß¼­´¦Àí
+	// æ¸¸æˆé€»è¾‘å¤„ç†
 	private void onBeforeDrawLogic() {
 		if (m_DragonManager != null)
 			m_DragonManager.onBeforeDrawLogic();
 	}
-	// ÓÎÏ·Âß¼­´¦Àí
+	// æ¸¸æˆé€»è¾‘å¤„ç†
 	private void onAfterDrawLogic() {
 		if (m_DragonManager != null)
 			m_DragonManager.onAfterDrawLogic();

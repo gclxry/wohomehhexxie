@@ -18,21 +18,21 @@ public class ModeTollGateBigMapView extends ViewGroup {
 	private Handler m_Handler = null;
 	private Scroller m_Scroller = null;
 	private VelocityTracker m_VelocityTracker = null;
-	// ´¥ÃşÆÁ°´ÏÂµÄµãµÄX×ø±ê
+	// è§¦æ‘¸å±æŒ‰ä¸‹çš„ç‚¹çš„Xåæ ‡
 	private float m_fTouchDownX = 0.0f;
 	private float m_fTouchDownY = 0.0f;
-	// ×îºó½ÓÊÕµ½µÄTouchµÄX×ø±ê
+	// æœ€åæ¥æ”¶åˆ°çš„Touchçš„Xåæ ‡
 	private float m_fLastionMotionX = 0.0f;
-	// µ±Ç°Ñ¡ÖĞµÄView
+	// å½“å‰é€‰ä¸­çš„View
 	private int m_nCurScreen = 0;
-	// ×îĞ¡µÄ»¬¶¯ËÙÂÊ
+	// æœ€å°çš„æ»‘åŠ¨é€Ÿç‡
 	public final static int SNAP_VELOCITY = 600;
 
-	// ´ò¿ªÍ¨¹ØÄ£Ê½Ğ¡µØÍ¼Ñ¡Ôñ½çÃæ
+	// æ‰“å¼€é€šå…³æ¨¡å¼å°åœ°å›¾é€‰æ‹©ç•Œé¢
 	public final static int OPEN_SMALL_MAP_VIEW = 1;
 	private int m_nTouchSlop = 0;
 
-	// ²»ÄÜÊ¹ÓÃ´Ë¹¹Ôìº¯Êı½øĞĞnew²Ù×÷
+	// ä¸èƒ½ä½¿ç”¨æ­¤æ„é€ å‡½æ•°è¿›è¡Œnewæ“ä½œ
 	public ModeTollGateBigMapView(Context context) {
 		super(context);
 	}
@@ -43,10 +43,10 @@ public class ModeTollGateBigMapView extends ViewGroup {
 		m_Context = context;
 		m_Handler = handlerObj;
 		m_Scroller = new Scroller(m_Context);
-		// ³õÊ¼»¯Ò»¸ö×îĞ¡»¬¶¯¾àÀë
+		// åˆå§‹åŒ–ä¸€ä¸ªæœ€å°æ»‘åŠ¨è·ç¦»
 		m_nTouchSlop = ViewConfiguration.get(m_Context).getScaledTouchSlop();
 
-		// Ìí¼ÓÒ»¼¶µØÍ¼
+		// æ·»åŠ ä¸€çº§åœ°å›¾
 		for (int i = 1; i <= ModeTollGateBigMapViewItem.BIG_MAP_TYPE_CTNS; i++) {
 			ModeTollGateBigMapViewItem mapItem = new ModeTollGateBigMapViewItem(
 					m_Context);
@@ -73,31 +73,31 @@ public class ModeTollGateBigMapView extends ViewGroup {
 		}
 	}
 
-	// ¿ØÖÆ´¥ÃşÊÂ¼şµÄ·Ö·¢£¬ÀıÈçÊÇ×ÓÊÓÍ¼µÄµã»÷ÊÂ¼ş»¹ÊÇ»¬¶¯ÊÂ¼ş
+	// æ§åˆ¶è§¦æ‘¸äº‹ä»¶çš„åˆ†å‘ï¼Œä¾‹å¦‚æ˜¯å­è§†å›¾çš„ç‚¹å‡»äº‹ä»¶è¿˜æ˜¯æ»‘åŠ¨äº‹ä»¶
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		// ÏÈ¹ıÂË¶àµã´¥Ãş
+		// å…ˆè¿‡æ»¤å¤šç‚¹è§¦æ‘¸
 		if (event.getActionIndex() != 0)
 			return true;
 
-		// Ìí¼Ó´¥Ãş¶ÔÏóMotionEvent £¬ ÓÃÓÚ¼ÆËã´¥ÃşËÙÂÊ
+		// æ·»åŠ è§¦æ‘¸å¯¹è±¡MotionEvent ï¼Œ ç”¨äºè®¡ç®—è§¦æ‘¸é€Ÿç‡
 		if (m_VelocityTracker == null)
 			m_VelocityTracker = VelocityTracker.obtain();
 
 		if (m_VelocityTracker != null)
 			m_VelocityTracker.addMovement(event);
 
-		// Ö»È¡µÃ´¥ÃşµÄÓĞĞ§Öµ
+		// åªå–å¾—è§¦æ‘¸çš„æœ‰æ•ˆå€¼
 		int nMotion = event.getActionMasked();
 
-		// ÏÈÅĞ¶ÏÊÇ·ñÎª´¿´âµÄµã»÷
+		// å…ˆåˆ¤æ–­æ˜¯å¦ä¸ºçº¯ç²¹çš„ç‚¹å‡»
 		if (nMotion == MotionEvent.ACTION_UP) {
 			int nStepX = Math.abs((int) (m_fTouchDownX - event.getX()));
 			int nStepY = Math.abs((int) (m_fTouchDownY - event.getY()));
 			if (nStepX <= m_nTouchSlop && nStepY <= m_nTouchSlop) {
-				// ´¿´âµÄµã»÷
+				// çº¯ç²¹çš„ç‚¹å‡»
 				recycleVelocityTracker();
-				// ´ò¿ªĞ¡µØÍ¼
+				// æ‰“å¼€å°åœ°å›¾
 				openSmallMapActivity(m_nCurScreen + 1);
 				return true;
 			}
@@ -108,9 +108,9 @@ public class ModeTollGateBigMapView extends ViewGroup {
 			m_fTouchDownY = event.getY();
 			m_fLastionMotionX = m_fTouchDownX;
 		} else if (nMotion == MotionEvent.ACTION_MOVE) {
-			// Ã¿´Î»¬¶¯ÆÁÄ»£¬ÆÁÄ»Ó¦¸ÃÒÆ¶¯µÄ¾àÀë
+			// æ¯æ¬¡æ»‘åŠ¨å±å¹•ï¼Œå±å¹•åº”è¯¥ç§»åŠ¨çš„è·ç¦»
 			int nDetaX = (int) (m_fLastionMotionX - event.getX());
-			// ¿ªÊ¼»ºÂı»¬ÆÁ¡£ detaX > 0 ÏòÓÒ»¬¶¯ £¬ detaX < 0 Ïò×ó»¬¶¯
+			// å¼€å§‹ç¼“æ…¢æ»‘å±ã€‚ detaX > 0 å‘å³æ»‘åŠ¨ ï¼Œ detaX < 0 å‘å·¦æ»‘åŠ¨
 			scrollBy(nDetaX, 0);
 
 			m_fLastionMotionX = event.getX();
@@ -119,18 +119,18 @@ public class ModeTollGateBigMapView extends ViewGroup {
 
 			final VelocityTracker velocityTracker = m_VelocityTracker;
 			velocityTracker.computeCurrentVelocity(1000);
-			// ¼ÆËãËÙÂÊ
+			// è®¡ç®—é€Ÿç‡
 			int velocityX = (int) velocityTracker.getXVelocity();
 
 			if (velocityX > SNAP_VELOCITY && m_nCurScreen > 0) {
-				// »¬¶¯ËÙÂÊ´ïµ½ÁËÒ»¸ö±ê×¼(¿ìËÙÏòÓÒ»¬ÆÁ£¬·µ»ØÉÏÒ»¸öÆÁÄ») ÂíÉÏ½øĞĞÇĞÆÁ´¦Àí
+				// æ»‘åŠ¨é€Ÿç‡è¾¾åˆ°äº†ä¸€ä¸ªæ ‡å‡†(å¿«é€Ÿå‘å³æ»‘å±ï¼Œè¿”å›ä¸Šä¸€ä¸ªå±å¹•) é©¬ä¸Šè¿›è¡Œåˆ‡å±å¤„ç†
 				snapToScreen(m_nCurScreen - 1);
 			} else if (velocityX < -SNAP_VELOCITY
 					&& m_nCurScreen < (getChildCount() - 1)) {
-				// ¿ìËÙÏò×ó»¬ÆÁ£¬·µ»ØÏÂÒ»¸öÆÁÄ»)
+				// å¿«é€Ÿå‘å·¦æ»‘å±ï¼Œè¿”å›ä¸‹ä¸€ä¸ªå±å¹•)
 				snapToScreen(m_nCurScreen + 1);
 			} else {
-				// µ±Ç°Îª»ºÂıÒÆ¶¯µÄ£¬Òò´ËÏÈÅĞ¶ÏÊÇ±£ÁôÔÚ±¾ÆÁÄ»»¹ÊÇµ½ÏÂÒ»ÆÁÄ»
+				// å½“å‰ä¸ºç¼“æ…¢ç§»åŠ¨çš„ï¼Œå› æ­¤å…ˆåˆ¤æ–­æ˜¯ä¿ç•™åœ¨æœ¬å±å¹•è¿˜æ˜¯åˆ°ä¸‹ä¸€å±å¹•
 				snapToDestination();
 			}
 
@@ -140,41 +140,41 @@ public class ModeTollGateBigMapView extends ViewGroup {
 		return true;
 	}
 
-	// »ØÊÕVelocityTracker¶ÔÏó
+	// å›æ”¶VelocityTrackerå¯¹è±¡
 	private void recycleVelocityTracker() {
-		// »ØÊÕVelocityTracker¶ÔÏó
+		// å›æ”¶VelocityTrackerå¯¹è±¡
 		if (m_VelocityTracker != null) {
 			m_VelocityTracker.recycle();
 			m_VelocityTracker = null;
 		}
 	}
 
-	// »ºÂıÒÆ¶¯£¬Òò´ËĞèÒª¸ù¾İÆ«ÒÆÖµÅĞ¶ÏÄ¿±êÆÁÊÇÄÄ¸ö£¿
+	// ç¼“æ…¢ç§»åŠ¨ï¼Œå› æ­¤éœ€è¦æ ¹æ®åç§»å€¼åˆ¤æ–­ç›®æ ‡å±æ˜¯å“ªä¸ªï¼Ÿ
 	private void snapToDestination() {
-		// ÅĞ¶ÏÊÇ·ñ³¬¹ıÏÂÒ»ÆÁµÄÖĞ¼äÎ»ÖÃ£¬Èç¹û´ïµ½¾ÍµÖ´ïÏÂÒ»ÆÁ£¬·ñÔò±£³ÖÔÚÔ­ÆÁÄ»
-		// ÕâÑùµÄÒ»¸ö¼òµ¥¹«Ê½ÒâË¼ÊÇ£º¼ÙÉèµ±Ç°»¬ÆÁÆ«ÒÆÖµ¼´ scrollCurX ¼ÓÉÏÃ¿¸öÆÁÄ»Ò»°ëµÄ¿í¶È£¬³ıÒÔÃ¿¸öÆÁÄ»µÄ¿í¶È¾ÍÊÇ
+		// åˆ¤æ–­æ˜¯å¦è¶…è¿‡ä¸‹ä¸€å±çš„ä¸­é—´ä½ç½®ï¼Œå¦‚æœè¾¾åˆ°å°±æŠµè¾¾ä¸‹ä¸€å±ï¼Œå¦åˆ™ä¿æŒåœ¨åŸå±å¹•
+		// è¿™æ ·çš„ä¸€ä¸ªç®€å•å…¬å¼æ„æ€æ˜¯ï¼šå‡è®¾å½“å‰æ»‘å±åç§»å€¼å³ scrollCurX åŠ ä¸Šæ¯ä¸ªå±å¹•ä¸€åŠçš„å®½åº¦ï¼Œé™¤ä»¥æ¯ä¸ªå±å¹•çš„å®½åº¦å°±æ˜¯
 		int destScreen = (getScrollX() + this.getWidth() / 2) / this.getWidth();
 		snapToScreen(destScreen);
 	}
 
-	// ÕæÕıµÄÊµÏÖÌø×ªÆÁÄ»µÄ·½·¨
+	// çœŸæ­£çš„å®ç°è·³è½¬å±å¹•çš„æ–¹æ³•
 	private void snapToScreen(int whichScreen) {
 		m_nCurScreen = whichScreen;
 
-		// ·ÀÖ¹ÆÁÄ»Ô½½ç£¬¼´³¬¹ıÆÁÄ»Êı
+		// é˜²æ­¢å±å¹•è¶Šç•Œï¼Œå³è¶…è¿‡å±å¹•æ•°
 		if (m_nCurScreen >= getChildCount())
 			m_nCurScreen = getChildCount() - 1;
 		if (m_nCurScreen < 0)
 			m_nCurScreen = 0;
 
-		// ÎªÁË´ïµ½ÏÂÒ»ÆÁÄ»»òÕßµ±Ç°ÆÁÄ»£¬ÎÒÃÇĞèÒª¼ÌĞø»¬¶¯µÄ¾àÀë.¸ù¾İdxÖµ£¬¿ÉÄÜÏë×ó»¬¶¯£¬Ò²¿ÉÄÜÏñÓÒ»¬¶¯
+		// ä¸ºäº†è¾¾åˆ°ä¸‹ä¸€å±å¹•æˆ–è€…å½“å‰å±å¹•ï¼Œæˆ‘ä»¬éœ€è¦ç»§ç»­æ»‘åŠ¨çš„è·ç¦».æ ¹æ®dxå€¼ï¼Œå¯èƒ½æƒ³å·¦æ»‘åŠ¨ï¼Œä¹Ÿå¯èƒ½åƒå³æ»‘åŠ¨
 		int nDx = m_nCurScreen * this.getWidth() - getScrollX();
 		m_Scroller.startScroll(getScrollX(), 0, nDx, 0, Math.abs(nDx) * 2);
-		// ÓÉÓÚ´¥ÃşÊÂ¼ş²»»áÖØĞÂ»æÖÆView£¬ËùÒÔ´ËÊ±ĞèÒªÊÖ¶¯Ë¢ĞÂView ·ñÔòÃ»Ğ§¹û
+		// ç”±äºè§¦æ‘¸äº‹ä»¶ä¸ä¼šé‡æ–°ç»˜åˆ¶Viewï¼Œæ‰€ä»¥æ­¤æ—¶éœ€è¦æ‰‹åŠ¨åˆ·æ–°View å¦åˆ™æ²¡æ•ˆæœ
 		invalidate();
 	}
 
-	// ´ò¿ªĞ¡µØÍ¼£¬²ÎÊı nMapTypeId ÊÇĞ¡µØÍ¼ÀàĞÍ
+	// æ‰“å¼€å°åœ°å›¾ï¼Œå‚æ•° nMapTypeId æ˜¯å°åœ°å›¾ç±»å‹
 	private void openSmallMapActivity(int nMapTypeId) {
 
 		Log.v("MTGBMV_INFO", "openSmallMapActivity");
@@ -190,13 +190,13 @@ public class ModeTollGateBigMapView extends ViewGroup {
 	public void computeScroll() {
 		Log.v("MTGBMV_INFO", "computeScroll");
 
-		// Èç¹û·µ»Øtrue£¬±íÊ¾¶¯»­»¹Ã»ÓĞ½áÊø
-		// ÒòÎªÇ°ÃæstartScroll£¬ËùÒÔÖ»ÓĞÔÚstartScrollÍê³ÉÊ±²Å»áÎªfalse
+		// å¦‚æœè¿”å›trueï¼Œè¡¨ç¤ºåŠ¨ç”»è¿˜æ²¡æœ‰ç»“æŸ
+		// å› ä¸ºå‰é¢startScrollï¼Œæ‰€ä»¥åªæœ‰åœ¨startScrollå®Œæˆæ—¶æ‰ä¼šä¸ºfalse
 		if (m_Scroller.computeScrollOffset()) {
-			// ²úÉúÁË¶¯»­Ğ§¹û£¬¸ù¾İµ±Ç°Öµ Ã¿´Î¹ö¶¯Ò»µã
+			// äº§ç”Ÿäº†åŠ¨ç”»æ•ˆæœï¼Œæ ¹æ®å½“å‰å€¼ æ¯æ¬¡æ»šåŠ¨ä¸€ç‚¹
 			scrollTo(m_Scroller.getCurrX(), m_Scroller.getCurrY());
 
-			// ´ËÊ±Í¬ÑùÒ²ĞèÒªË¢ĞÂView £¬·ñÔòĞ§¹û¿ÉÄÜÓĞÎó²î
+			// æ­¤æ—¶åŒæ ·ä¹Ÿéœ€è¦åˆ·æ–°View ï¼Œå¦åˆ™æ•ˆæœå¯èƒ½æœ‰è¯¯å·®
 			postInvalidate();
 		}
 	}

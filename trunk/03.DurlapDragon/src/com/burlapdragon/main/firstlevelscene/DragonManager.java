@@ -14,25 +14,25 @@ import android.graphics.Rect;
 public class DragonManager {
 
 	private Context m_Context = null;
-	// ÁúÍ·
+	// é¾™å¤´
 	private Bitmap m_bmpDragonHead = null;
-	// ÁúÉí
+	// é¾™èº«
 	private Bitmap m_bmpDragonBady = null;
-	// ÁúÎ²
+	// é¾™å°¾
 	private Bitmap m_bmpDragonTail = null;
-	// Ò»¸öÁúItemµÄ´óÐ¡
+	// ä¸€ä¸ªé¾™Itemçš„å¤§å°
 	private int m_nCellWidth = 0;
 	private int m_nCellHeight = 0;
-	// ×ÜÊý
+	// æ€»æ•°
 	private int m_nDragonCtns = 2;
-	// Õû¸öµØÍ¼ÔÚÆÁÄ»ÖÐµÄ×ø±êÎ»ÖÃ
+	// æ•´ä¸ªåœ°å›¾åœ¨å±å¹•ä¸­çš„åæ ‡ä½ç½®
 	private Rect m_mapInScreenRect = null;
-	// µ±Ç°µ¥Ôª¸ñÔËÐÐµ½Ö¡Êý
+	// å½“å‰å•å…ƒæ ¼è¿è¡Œåˆ°å¸§æ•°
 	private int m_nCurCellRunFrame = 0;
 
-	// ÁúÍ·½Úµã
+	// é¾™å¤´èŠ‚ç‚¹
 	private DragonItem m_DragonHead = null;
-	// ÁúÎ²½Úµã
+	// é¾™å°¾èŠ‚ç‚¹
 	private DragonItem m_DragonTail = null;
 
 	public DragonManager(Context context) {
@@ -64,7 +64,7 @@ public class DragonManager {
 		m_nDragonCtns = 0;
 	}
 
-	// ÉèÖÃÒ»¸öitemµÄ´óÐ¡
+	// è®¾ç½®ä¸€ä¸ªitemçš„å¤§å°
 	public void initManager(int nWidth, int nHeight, Rect mapInScreenRect) {
 		if (isInit())
 			return;
@@ -121,12 +121,12 @@ public class DragonManager {
 		return (m_bmpDragonHead != null && m_bmpDragonBady != null && m_bmpDragonTail != null);
 	}
 
-	// È¡µÃµ±Ç°½Úµã×ÜÊý
+	// å–å¾—å½“å‰èŠ‚ç‚¹æ€»æ•°
 	public int getDragonCounts(){
 		return m_nDragonCtns;
 	}
 	
-	// ÔÚ¶ÔÎ»Ìí¼ÓÒ»¸ö½Úµã
+	// åœ¨å¯¹ä½æ·»åŠ ä¸€ä¸ªèŠ‚ç‚¹
 	public boolean appendDragonItem() {
 		if (!isInit())
 			return false;
@@ -147,7 +147,7 @@ public class DragonManager {
 		return true;
 	}
 
-	// ÓÎÏ·Âß¼­´¦Àí
+	// æ¸¸æˆé€»è¾‘å¤„ç†
 	public void onBeforeDrawLogic() {
 		for (DragonItem drawDragon = m_DragonHead; drawDragon != null;) {
 			drawDragon.onBeforeDrawLogic(m_nCurCellRunFrame);
@@ -155,7 +155,7 @@ public class DragonManager {
 		}
 	}
 
-	// ÓÎÏ·Âß¼­´¦Àí
+	// æ¸¸æˆé€»è¾‘å¤„ç†
 	public void onAfterDrawLogic() {
 		for (DragonItem drawDragon = m_DragonHead; drawDragon != null;) {
 			drawDragon.onAfterDrawLogic(m_nCurCellRunFrame);
@@ -163,7 +163,7 @@ public class DragonManager {
 		}
 		
 		m_nCurCellRunFrame++;
-		// ÔËÐÐµ½ÁËÏÂÒ»¸öµ¥Ôª¸ñÁË
+		// è¿è¡Œåˆ°äº†ä¸‹ä¸€ä¸ªå•å…ƒæ ¼äº†
 		if (m_nCurCellRunFrame >= CommonDefines.ONE_CELL_FRAME_CTNS){
 			m_nCurCellRunFrame = 0;
 		}

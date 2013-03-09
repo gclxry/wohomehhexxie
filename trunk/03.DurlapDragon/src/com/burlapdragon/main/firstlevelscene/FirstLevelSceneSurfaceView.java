@@ -11,21 +11,21 @@ import android.view.SurfaceView;
 import android.view.SurfaceHolder.Callback;
 
 public class FirstLevelSceneSurfaceView extends SurfaceView implements Callback {
-	// äÖÈ¾Ïß³Ì
+	// æ¸²æŸ“çº¿ç¨‹
 	private FirstLevelSceneViewThread m_FirstSceneViewThread;
-	// ActiveÖ÷Ïß³ÌµÄHandler
+	// Activeä¸»çº¿ç¨‹çš„Handler
 	private FirstLevelSceneHandler m_ActiveHandler;
 
-	// ¹¹Ôìº¯Êı
+	// æ„é€ å‡½æ•°
 	public FirstLevelSceneSurfaceView(Context context, AttributeSet attrs) {
-		// µ÷ÓÃ»ùÀà¹¹Ôì
+		// è°ƒç”¨åŸºç±»æ„é€ 
 		super(context, attrs);
 
-		// ÉèÖÃ»Øµ÷
+		// è®¾ç½®å›è°ƒ
 		SurfaceHolder sHolder = this.getHolder();
 		sHolder.addCallback(this);
 
-		// ´´½¨äÖÈ¾Ïß³Ì
+		// åˆ›å»ºæ¸²æŸ“çº¿ç¨‹
 		m_ActiveHandler = new FirstLevelSceneHandler(this);
 		if (m_ActiveHandler == null)
 			return;
@@ -34,9 +34,9 @@ public class FirstLevelSceneSurfaceView extends SurfaceView implements Callback 
 		if (m_FirstSceneViewThread == null)
 			return;
 
-		// ÉèÖÃ¿É»ñµÃ½¹µã,È·±£ÄÜ²¶»ñµ½KeyEvent
+		// è®¾ç½®å¯è·å¾—ç„¦ç‚¹,ç¡®ä¿èƒ½æ•è·åˆ°KeyEvent
 		this.setFocusable(true);
-		// ±£³ÖÆÁÄ»³£ÁÁ
+		// ä¿æŒå±å¹•å¸¸äº®
 		this.setKeepScreenOn(true);
 	}
 
@@ -47,12 +47,12 @@ public class FirstLevelSceneSurfaceView extends SurfaceView implements Callback 
 		}
 	}
 
-	// µ¼³öÏß³Ì¶ÔÏó
+	// å¯¼å‡ºçº¿ç¨‹å¯¹è±¡
 	public FirstLevelSceneViewThread getViewThread() {
 		return m_FirstSceneViewThread;
 	}
 
-	// implements Callback ºóĞèÒªÖØÔØµÄº¯Êı
+	// implements Callback åéœ€è¦é‡è½½çš„å‡½æ•°
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
@@ -61,7 +61,7 @@ public class FirstLevelSceneSurfaceView extends SurfaceView implements Callback 
 		m_FirstSceneViewThread.setSurfaceSize(width, height);
 		m_FirstSceneViewThread.setRunning(true);
 
-		// ÅĞ¶ÏäÖÈ¾Ïß³ÌÊÇ·ñÒÑ¾­ÔÚÔËĞĞÁË
+		// åˆ¤æ–­æ¸²æŸ“çº¿ç¨‹æ˜¯å¦å·²ç»åœ¨è¿è¡Œäº†
 		if (m_FirstSceneViewThread.isAlive()) {
 			Log.v(this.getClass().getName(), "unpause gameThread");
 			m_FirstSceneViewThread.unpause();
@@ -71,38 +71,38 @@ public class FirstLevelSceneSurfaceView extends SurfaceView implements Callback 
 		}
 	}
 
-	// implements Callback ºóĞèÒªÖØÔØµÄº¯Êı
+	// implements Callback åéœ€è¦é‡è½½çš„å‡½æ•°
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		Log.v(this.getClass().getName(), "surfaceCreated()");
 	}
 
-	// implements Callback ºóĞèÒªÖØÔØµÄº¯Êı
+	// implements Callback åéœ€è¦é‡è½½çš„å‡½æ•°
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		Log.v(this.getClass().getName(), "surfaceDestroyed");
 		m_FirstSceneViewThread.setRunning(false);
 	}
 
-	// ²¶×½ÊÖ»ú¼üÅÌ±»°´ÏÂµÄÊÂ¼ş
+	// æ•æ‰æ‰‹æœºé”®ç›˜è¢«æŒ‰ä¸‹çš„äº‹ä»¶
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		return m_FirstSceneViewThread.onKeyDown(keyCode, event);
 	}
 
-	// ²¶×½ÊÖ»ú¼üÅÌÌ§ÆğµÄÊÂ¼ş
+	// æ•æ‰æ‰‹æœºé”®ç›˜æŠ¬èµ·çš„äº‹ä»¶
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		return m_FirstSceneViewThread.onKeyUp(keyCode, event);
 	}
 
-	// ²¶×½ÊÖ»ú´¥ÃşÆÁµÄ°´ÏÂ¡¢Ì§ÆğÊÂ¼ş
+	// æ•æ‰æ‰‹æœºè§¦æ‘¸å±çš„æŒ‰ä¸‹ã€æŠ¬èµ·äº‹ä»¶
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		return m_FirstSceneViewThread.onTouchEvent(event);
 	}
 
-	// µ±SurfaceViewµÃµ½»òÊ§È¥½¹µãÊ±µ÷ÓÃ,Ê¹ÓÎÏ·ÔİÍ£/»Ö¸´ÔËĞĞ,
+	// å½“SurfaceViewå¾—åˆ°æˆ–å¤±å»ç„¦ç‚¹æ—¶è°ƒç”¨,ä½¿æ¸¸æˆæš‚åœ/æ¢å¤è¿è¡Œ,
 	@Override
 	public void onWindowFocusChanged(boolean hasWindowFocus) {
 		if (hasWindowFocus) {

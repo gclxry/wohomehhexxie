@@ -13,26 +13,26 @@ import utility.method.*;
 
 public class ModeTollGateBigMapViewItem extends View {
 
-	// µØÍ¼ÀàĞÍ
+	// åœ°å›¾ç±»å‹
 	private int m_nMapTypeId = 0;
-	// µØÍ¼
+	// åœ°å›¾
 	private Bitmap m_MapBmp = null;
 	private Paint m_paint = null;
 	private Context m_Context = null;
 
-	// Ã¿¸öitem¾àÀë±ß¿òµÄ¾àÀë
+	// æ¯ä¸ªitemè·ç¦»è¾¹æ¡†çš„è·ç¦»
 	private final static int VIEW_ITEM_SPACE = 5;
-	// Æ½Ô­µØÍ¼
+	// å¹³åŸåœ°å›¾
 	public final static int BIG_MAP_TYPE_PLAIN = 1;
-	// ±ùÑ©µØÍ¼
+	// å†°é›ªåœ°å›¾
 	public final static int BIG_MAP_TYPE_SNOW = 2;
-	// Îíö²µØÍ¼
+	// é›¾éœ¾åœ°å›¾
 	public final static int BIG_MAP_TYPE_HAZE = 3;
-	// É³Ä®µØÍ¼
+	// æ²™æ¼ åœ°å›¾
 	public final static int BIG_MAP_TYPE_DESERT = 4;
-	// É½µØµØÍ¼
+	// å±±åœ°åœ°å›¾
 	public final static int BIG_MAP_TYPE_HILL = 5;
-	// µØÍ¼ÀàĞÍ×ÜÊı
+	// åœ°å›¾ç±»å‹æ€»æ•°
 	public final static int BIG_MAP_TYPE_CTNS = 5;
 
 	private Rect m_drawSrcRct = null;
@@ -41,7 +41,7 @@ public class ModeTollGateBigMapViewItem extends View {
 	public ModeTollGateBigMapViewItem(Context context) {
 		super(context);
 		m_Context = context;
-		// ´´½¨Paint
+		// åˆ›å»ºPaint
 		m_paint = new Paint();
 
 		m_drawSrcRct = new Rect(0, 0, 0, 0);
@@ -55,23 +55,23 @@ public class ModeTollGateBigMapViewItem extends View {
 		m_nMapTypeId = nMapTypeId;
 
 		if (m_nMapTypeId == BIG_MAP_TYPE_PLAIN) {
-			// Æ½Ô­µØÍ¼
+			// å¹³åŸåœ°å›¾
 			m_MapBmp = Plotting.decodeResourceNoScaled(
 					m_Context.getResources(), R.drawable.map_type_01);
 		} else if (m_nMapTypeId == BIG_MAP_TYPE_SNOW) {
-			// ±ùÑ©µØÍ¼
+			// å†°é›ªåœ°å›¾
 			m_MapBmp = Plotting.decodeResourceNoScaled(
 					m_Context.getResources(), R.drawable.map_type_02);
 		} else if (m_nMapTypeId == BIG_MAP_TYPE_HAZE) {
-			// Îíö²µØÍ¼
+			// é›¾éœ¾åœ°å›¾
 			m_MapBmp = Plotting.decodeResourceNoScaled(
 					m_Context.getResources(), R.drawable.map_type_03);
 		} else if (m_nMapTypeId == BIG_MAP_TYPE_DESERT) {
-			// É³Ä®µØÍ¼
+			// æ²™æ¼ åœ°å›¾
 			m_MapBmp = Plotting.decodeResourceNoScaled(
 					m_Context.getResources(), R.drawable.map_type_04);
 		} else if (m_nMapTypeId == BIG_MAP_TYPE_HILL) {
-			// É½µØµØÍ¼
+			// å±±åœ°åœ°å›¾
 			m_MapBmp = Plotting.decodeResourceNoScaled(
 					m_Context.getResources(), R.drawable.map_type_05);
 		}

@@ -6,13 +6,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.util.TypedValue;
 
-// ²â»æÖ®ÀàµÄ·½±ãº¯ÊıµÄÀà
+// æµ‹ç»˜ä¹‹ç±»çš„æ–¹ä¾¿å‡½æ•°çš„ç±»
 public class Plotting
 {
 	/* 
-	 * ´Ó¹¤³Ì×ÊÔ´ÖĞµ¼ÈëÒ»ÕÅÍ¼Æ¬
-	 * Ê¹ÓÃ´Ëº¯Êı¿ÉÒÔ½â¾öÈçÏÂÎÊÌâ£º
-	 * ½â¾ö´Ódrawable×ÊÔ´ÖĞ¶ÁÈëÍ¼Æ¬ÓÉÓÚËõ·Å±ÈÀıÎÊÌâµ¼ÖÂµÄÍ¼Æ¬±»Ëõ·Å
+	 * ä»å·¥ç¨‹èµ„æºä¸­å¯¼å…¥ä¸€å¼ å›¾ç‰‡
+	 * ä½¿ç”¨æ­¤å‡½æ•°å¯ä»¥è§£å†³å¦‚ä¸‹é—®é¢˜ï¼š
+	 * è§£å†³ä»drawableèµ„æºä¸­è¯»å…¥å›¾ç‰‡ç”±äºç¼©æ”¾æ¯”ä¾‹é—®é¢˜å¯¼è‡´çš„å›¾ç‰‡è¢«ç¼©æ”¾
 	 */
 	public static Bitmap decodeResourceNoScaled(Resources resObj,  int nId)
 	{
@@ -20,14 +20,14 @@ public class Plotting
 	    resObj.openRawResource(nId, value);
 	    
 	    Options opts = new Options();
-	    // ´Ë²ÎÊıÊÇ¹Ø¼ü£¬Ö¸»ÓÄÚ²¿µ¼ÈëÍ¼Æ¬µÄÊ±ºò²»ÔÙÊ¹ÓÃËõ·Å±ÈÀı
+	    // æ­¤å‚æ•°æ˜¯å…³é”®ï¼ŒæŒ‡æŒ¥å†…éƒ¨å¯¼å…¥å›¾ç‰‡çš„æ—¶å€™ä¸å†ä½¿ç”¨ç¼©æ”¾æ¯”ä¾‹
 	    opts.inScaled = false;
 	    
 	    return BitmapFactory.decodeResource(resObj, nId, opts);
 	}
 
 	/* 
-	 * ½«¹¤³ÌÖĞµÄÍ¼Æ¬°´ÕÕÖ¸¶¨´óĞ¡¶ÁÈë
+	 * å°†å·¥ç¨‹ä¸­çš„å›¾ç‰‡æŒ‰ç…§æŒ‡å®šå¤§å°è¯»å…¥
 	 */
 	public static Bitmap decodeResourceBySize(Resources resObj,  int nId, int nWidth, int nHeight)
 	{

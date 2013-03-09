@@ -14,44 +14,44 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import utility.method.*;
 
-// äÖÈ¾Ïß³Ì
+// æ¸²æŸ“çº¿ç¨‹
 public class SecondLevelSceneViewThread extends Thread {
 	private SurfaceHolder m_sHolder;
-	// ÉÏÏÂÎÄ,·½±ã»ñÈ¡µ½Ó¦ÓÃµÄ¸÷Ïî×ÊÔ´,ÈçÍ¼Æ¬¡¢ÒôÀÖ¡¢×Ö·û´®µÈ
+	// ä¸Šä¸‹æ–‡,æ–¹ä¾¿è·å–åˆ°åº”ç”¨çš„å„é¡¹èµ„æº,å¦‚å›¾ç‰‡ã€éŸ³ä¹ã€å­—ç¬¦ä¸²ç­‰
 	private Context m_Context;
-	// UIÏß³ÌµÄHandler
+	// UIçº¿ç¨‹çš„Handler
 	private SecondLevelSceneHandler m_ActiveHandler;
-	// ÓÎÏ·ÊÇ·ñÔİÍ£
+	// æ¸¸æˆæ˜¯å¦æš‚åœ
 	private boolean m_bIsPaused = false;
-	// ÓÎÏ·Ïß³ÌÔËĞĞ¿ª¹Ø
+	// æ¸¸æˆçº¿ç¨‹è¿è¡Œå¼€å…³
 	private boolean m_bRunning = false;
-	// µ±Ç°surface/canvasµÄ¸ß¶È,ÔÚsurfaceChanged·½·¨ÖĞ±»ÉèÖÃ
+	// å½“å‰surface/canvasçš„é«˜åº¦,åœ¨surfaceChangedæ–¹æ³•ä¸­è¢«è®¾ç½®
 	private int m_nCanvasHeight = 0;
-	// µ±Ç°surface/canvasµÄ¿í¶È,ÔÚsurfaceChanged·½·¨ÖĞ±»ÉèÖÃ
+	// å½“å‰surface/canvasçš„å®½åº¦,åœ¨surfaceChangedæ–¹æ³•ä¸­è¢«è®¾ç½®
 	private int m_nCanvasWidth = 0;
 	private Paint m_paint;
 
-	// ²âÊÔPNGĞòÁĞÍ¼Æ¬
+	// æµ‹è¯•PNGåºåˆ—å›¾ç‰‡
 	private Bitmap m_bmpAnimation;
 	private int m_nCurPalyId = 0;
 
-	// ×Ô¶¨Òå¹¹Ôìº¯Êı£¬½ÓÊÜActiveµÄUIÏß³ÌµÄÏà¹Ø²ÎÊı
+	// è‡ªå®šä¹‰æ„é€ å‡½æ•°ï¼Œæ¥å—Activeçš„UIçº¿ç¨‹çš„ç›¸å…³å‚æ•°
 	public SecondLevelSceneViewThread(SurfaceHolder holder, Context context,
 			SecondLevelSceneHandler handler) {
 		m_sHolder = holder;
 		m_Context = context;
 		m_ActiveHandler = handler;
-		// ´´½¨Paint
+		// åˆ›å»ºPaint
 		m_paint = new Paint();
-		// ÉèÖÃ¿¹¾â³İĞ§¹û
+		// è®¾ç½®æŠ—é”¯é½¿æ•ˆæœ
 		// m_paint.setAntiAlias(true);
-		// ÉèÖÃ»­Ë¢µÄÑÕÉ«
+		// è®¾ç½®ç”»åˆ·çš„é¢œè‰²
 		// m_paint.setColor(Color.BLUE);
 
 		doStart();
 	}
 
-	// ³õÊ¼»¯ÓÎÏ·¿ªÊ¼Ê±µÄ²ÎÊı
+	// åˆå§‹åŒ–æ¸¸æˆå¼€å§‹æ—¶çš„å‚æ•°
 	private void doStart() {
 		m_DObj = new CheckDirectionEvent();
 		m_strMoveString = "";
@@ -60,23 +60,23 @@ public class SecondLevelSceneViewThread extends Thread {
 				m_Context.getResources(), R.drawable.v7);
 	}
 
-	// ÓÎÏ·½áÊøµÄ²ÎÊı
+	// æ¸¸æˆç»“æŸçš„å‚æ•°
 	private void doEnd() {
 		// TODO
 	}
 
-	// ÉèÖÃsurface/canvasµÄ¿í¶ÈºÍ¸ß¶È
+	// è®¾ç½®surface/canvasçš„å®½åº¦å’Œé«˜åº¦
 	public void setSurfaceSize(int nWidth, int nHeight) {
 		synchronized (m_sHolder) {
 			m_nCanvasWidth = nWidth;
 			m_nCanvasHeight = nHeight;
 
-			// ²»ÒªÍü¼ÇÃ¿´Î»­²¼µÄ¿í¶ÈºÍ¸ß¶È¸Ä±äÊ±, ÔÚÕâÀï¶ÔÍ¼Æ¬µÈ×ÊÔ´×öËõ·ÅµÈÏà¹ØÊÊÅäÆÁÄ»µÄ´¦Àí
+			// ä¸è¦å¿˜è®°æ¯æ¬¡ç”»å¸ƒçš„å®½åº¦å’Œé«˜åº¦æ”¹å˜æ—¶, åœ¨è¿™é‡Œå¯¹å›¾ç‰‡ç­‰èµ„æºåšç¼©æ”¾ç­‰ç›¸å…³é€‚é…å±å¹•çš„å¤„ç†
 			// TODO
 		}
 	}
 
-	// ÉèÖÃÓÎÏ·Ïß³ÌÔËĞĞ¿ª¹Ø
+	// è®¾ç½®æ¸¸æˆçº¿ç¨‹è¿è¡Œå¼€å…³
 	public void setRunning(boolean bRunning) {
 		m_bRunning = bRunning;
 	}
@@ -98,14 +98,14 @@ public class SecondLevelSceneViewThread extends Thread {
 
 	public boolean onTouchEvent(MotionEvent event) {
 		synchronized (m_sHolder) {
-			// ÏÈ¹ıÂË¶àµã´¥Ãş
+			// å…ˆè¿‡æ»¤å¤šç‚¹è§¦æ‘¸
 			int nIndex = event.getActionIndex();
 			if (nIndex != 0)
 				return true;
 
 			Display("NO", event);
 
-			// Ö»È¡µÃ´¥ÃşµÄÓĞĞ§Öµ
+			// åªå–å¾—è§¦æ‘¸çš„æœ‰æ•ˆå€¼
 			int nMotion = event.getActionMasked();
 			if (nMotion == MotionEvent.ACTION_DOWN) {
 				m_nCurPalyId = 0;
@@ -120,23 +120,23 @@ public class SecondLevelSceneViewThread extends Thread {
 			nD = m_DObj.onTouchEventCheck(event, 0);
 			switch (nD) {
 			case CheckDirectionEvent.DIRECTION_UP:
-				m_strD = "ÉÏ";
+				m_strD = "ä¸Š";
 				break;
 
 			case CheckDirectionEvent.DIRECTION_DOWN:
-				m_strD = "ÏÂ";
+				m_strD = "ä¸‹";
 				break;
 
 			case CheckDirectionEvent.DIRECTION_LEFT:
-				m_strD = "×ó";
+				m_strD = "å·¦";
 				break;
 
 			case CheckDirectionEvent.DIRECTION_RIGHT:
-				m_strD = "ÓÒ";
+				m_strD = "å³";
 				break;
 
 			default:
-				m_strD = "Ã»ÓĞ";
+				m_strD = "æ²¡æœ‰";
 				break;
 			}
 
@@ -147,45 +147,45 @@ public class SecondLevelSceneViewThread extends Thread {
 	private String m_strMoveString;
 
 	public void Display(String eventType, MotionEvent event) {
-		// ´¥µãÏà¶Ô×ø±êµÄĞÅÏ¢
+		// è§¦ç‚¹ç›¸å¯¹åæ ‡çš„ä¿¡æ¯
 		int x = (int) event.getX();
 		int y = (int) event.getY();
-		// ±íÊ¾´¥ÆÁÑ¹Á¦´óĞ¡
+		// è¡¨ç¤ºè§¦å±å‹åŠ›å¤§å°
 		float pressure = event.getPressure();
-		// ±íÊ¾´¥µã³ß´ç
+		// è¡¨ç¤ºè§¦ç‚¹å°ºå¯¸
 		float size = event.getSize();
-		// »ñÈ¡¾ø¶Ô×ø±êĞÅÏ¢
+		// è·å–ç»å¯¹åæ ‡ä¿¡æ¯
 		int RawX = (int) event.getRawX();
 		int RawY = (int) event.getRawY();
 
 		String msg = "";
 
-		msg += "ÊÂ¼şÀàĞÍ" + eventType + "\r\n";
-		msg += "Ïà¶Ô×ø±ê" + String.valueOf(x) + "," + String.valueOf(y) + "\r\n";
-		msg += "¾ø¶Ô×ø±ê" + String.valueOf(RawX) + "," + String.valueOf(RawY)
+		msg += "äº‹ä»¶ç±»å‹" + eventType + "\r\n";
+		msg += "ç›¸å¯¹åæ ‡" + String.valueOf(x) + "," + String.valueOf(y) + "\r\n";
+		msg += "ç»å¯¹åæ ‡" + String.valueOf(RawX) + "," + String.valueOf(RawY)
 				+ "\r\n";
-		msg += "´¥µãÑ¹Á¦" + String.valueOf(pressure) + ",";
-		msg += "´¥µã³ß´ç" + String.valueOf(size) + "\r\n";
+		msg += "è§¦ç‚¹å‹åŠ›" + String.valueOf(pressure) + ",";
+		msg += "è§¦ç‚¹å°ºå¯¸" + String.valueOf(size) + "\r\n";
 
 		m_strMoveString = msg;
 	}
 
-	// ÔİÍ£ÓÎÏ·Âß¼­
+	// æš‚åœæ¸¸æˆé€»è¾‘
 	public void pause() {
 		synchronized (m_sHolder) {
 			m_bIsPaused = true;
 		}
 	}
 
-	// »Ö¸´ÔËĞĞÓÎÏ·Âß¼­
+	// æ¢å¤è¿è¡Œæ¸¸æˆé€»è¾‘
 	public void unpause() {
-		// Èç¹ûÓÎÏ·ÖĞÓĞÊ±¼ä,±ğÍü¼ÇÓ¦½«ÆäÔÚÕâÀïµ÷Õûµ½Õı³£
+		// å¦‚æœæ¸¸æˆä¸­æœ‰æ—¶é—´,åˆ«å¿˜è®°åº”å°†å…¶åœ¨è¿™é‡Œè°ƒæ•´åˆ°æ­£å¸¸
 		synchronized (m_sHolder) {
 			m_bIsPaused = false;
 		}
 	}
 
-	// Ïß³ÌµÄÖ´ĞĞº¯Êı
+	// çº¿ç¨‹çš„æ‰§è¡Œå‡½æ•°
 	@Override
 	public void run() {
 		while (m_bRunning) {
@@ -214,11 +214,11 @@ public class SecondLevelSceneViewThread extends Thread {
 			}
 		}
 
-		// Ïß³Ì½áÊø
+		// çº¿ç¨‹ç»“æŸ
 		doEnd();
 	}
 
-	// ÓÎÏ·»æ»­
+	// æ¸¸æˆç»˜ç”»
 	private void doDraw(Canvas runCanvas) {
 		Log.v(this.getClass().getName(), "doDraw");
 		runCanvas.drawColor(Color.BLUE);
@@ -251,7 +251,7 @@ public class SecondLevelSceneViewThread extends Thread {
 		}
 	}
 
-	// ÓÎÏ·Âß¼­´¦Àí
+	// æ¸¸æˆé€»è¾‘å¤„ç†
 	public void logic() {
 		Log.v(this.getClass().getName(), "logic");
 		// TODO

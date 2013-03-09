@@ -13,16 +13,16 @@ import utility.method.*;
 
 public class ModeTollGateSmallMapViewItem extends View {
 
-	// µØÍ¼ÀàĞÍ
+	// åœ°å›¾ç±»å‹
 	private int m_nMapTypeId = 0;
-	// µØÍ¼id
+	// åœ°å›¾id
 	private int m_nMapId = 0;
-	// µØÍ¼
+	// åœ°å›¾
 	private Bitmap m_MapBmp = null;
 	private Paint m_paint = null;
 	private Context m_Context = null;
 
-	// Ã¿¸öitem¾àÀë±ß¿òµÄ¾àÀë
+	// æ¯ä¸ªitemè·ç¦»è¾¹æ¡†çš„è·ç¦»
 	private final static int VIEW_ITEM_SPACE = 50;
 
 	private Rect m_drawSrcRct = null;
@@ -31,7 +31,7 @@ public class ModeTollGateSmallMapViewItem extends View {
 	public ModeTollGateSmallMapViewItem(Context context) {
 		super(context);
 		m_Context = context;
-		// ´´½¨Paint
+		// åˆ›å»ºPaint
 		m_paint = new Paint();
 
 		m_drawSrcRct = new Rect(0, 0, 0, 0);
@@ -46,23 +46,23 @@ public class ModeTollGateSmallMapViewItem extends View {
 		m_nMapId = nMapId;
 
 		if (m_nMapId == 1) {
-			// Æ½Ô­µØÍ¼
+			// å¹³åŸåœ°å›¾
 			m_MapBmp = Plotting.decodeResourceNoScaled(
 					m_Context.getResources(), R.drawable.map_type_01);
 		} else if (m_nMapId == 2) {
-			// ±ùÑ©µØÍ¼
+			// å†°é›ªåœ°å›¾
 			m_MapBmp = Plotting.decodeResourceNoScaled(
 					m_Context.getResources(), R.drawable.map_type_02);
 		} else if (m_nMapId == 3) {
-			// Îíö²µØÍ¼
+			// é›¾éœ¾åœ°å›¾
 			m_MapBmp = Plotting.decodeResourceNoScaled(
 					m_Context.getResources(), R.drawable.map_type_03);
 		} else if (m_nMapId == 4) {
-			// É³Ä®µØÍ¼
+			// æ²™æ¼ åœ°å›¾
 			m_MapBmp = Plotting.decodeResourceNoScaled(
 					m_Context.getResources(), R.drawable.map_type_04);
 		} else if (m_nMapId == 5) {
-			// É½µØµØÍ¼
+			// å±±åœ°åœ°å›¾
 			m_MapBmp = Plotting.decodeResourceNoScaled(
 					m_Context.getResources(), R.drawable.map_type_05);
 		}
