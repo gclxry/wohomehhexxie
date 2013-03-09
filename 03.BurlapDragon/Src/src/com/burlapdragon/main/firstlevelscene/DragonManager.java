@@ -4,6 +4,7 @@ import utility.method.Plotting;
 
 import com.burlapdragon.common.CommonDefines;
 import com.burlapdragon.main.R;
+import com.burlapdragon.main.firstlevelscene.map.FirstLevelMapManager;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -34,13 +35,16 @@ public class DragonManager {
 	private DragonItem m_DragonTail = null;
 	
 	// 运行的速度：走一个格子的速度，可变值
-	private float m_fBaseTime = 500.0f;
 	private float m_fCurSpeed = 0.0f;
 	private long m_lPreTime = 0;
+	
+	// 二维地图数据
+	private FirstLevelMapManager m_MapManager = null;
 	
 
 	public DragonManager(Context context) {
 		m_Context = context;
+		m_MapManager = new FirstLevelMapManager();
 	}
 
 	public void clearDragonManager() {
@@ -73,8 +77,7 @@ public class DragonManager {
 		if (fTime <= 0.0f)
 			return;
 		
-		m_fBaseTime = fTime;
-		m_fCurSpeed = ((float)(m_nCellWidth)) / m_fBaseTime;
+		m_fCurSpeed = ((float)(m_nCellWidth)) / fTime;
 	}
 
 	// 设置一个item的大小
@@ -116,7 +119,7 @@ public class DragonManager {
 			Rect tmpRct = new Rect(0, 0, 0, 0);
 			tmpRct.left = m_nCellWidth;
 			tmpRct.right = tmpRct.left + m_nCellWidth;
-			tmpRct.top = m_mapInScreenRect.top + m_nCellHeight * (CommonDefines.FIRST_LEVEL_CELL_V_CTNS - 2);
+			tmpRct.top = m_mapInScreenRect.top;// + m_nCellHeight * (CommonDefines.FIRST_LEVEL_CELL_V_CTNS - 2);
 			tmpRct.bottom = tmpRct.top + m_nCellHeight;
 			m_DragonHead.setCurrentCellRect(tmpRct);
 			m_DragonHead.setImageSize(m_nCellWidth, m_nCellHeight);
