@@ -52,12 +52,9 @@ public class DragonItem {
 	private Rect m_CurCellRect = null;
 	// 需要绘制的图片的位置矩形
 	private Rect m_bmpDrawRect = null;
-	private int m_nCellWidth = 0;
-	private int m_nCellHeight = 0;
+
 	private int m_nImageWidth = 0;
 	private int m_nImageHeight = 0;
-	// 当前帧位于单元格的偏移
-	private int m_nCurFrameOffset = 0;
 	
 	public DragonItem(Bitmap bmpToLeft, Bitmap bmpToRight, Bitmap bmpToUp, Bitmap bmpToDown,
 			Bitmap bmpFromLeftToUp, Bitmap bmpFromUpToRight, Bitmap bmpFromRightToDown, Bitmap bmpFromDownToLeft,
@@ -88,16 +85,19 @@ public class DragonItem {
 		m_CurCellRect.right = rct.right;
 		m_CurCellRect.top = rct.top;
 		m_CurCellRect.bottom = rct.bottom;
+		
+		if (m_ItemDrawRect.isEmpty())
+		{
+			m_ItemDrawRect.left = m_CurCellRect.left;
+			m_ItemDrawRect.right = m_CurCellRect.right;
+			m_ItemDrawRect.top = m_CurCellRect.top;
+			m_ItemDrawRect.bottom = m_CurCellRect.bottom;
+		}
 	}
 
 	public void setImageSize(int nWidth, int nHeight) {
 		m_nImageWidth = nWidth;
 		m_nImageHeight = nHeight;
-	}
-
-	public void setCellSize(int nWidth, int nHeight) {
-		m_nCellWidth = nWidth;
-		m_nCellHeight = nHeight;
 	}
 
 	// 游戏绘画
@@ -108,18 +108,14 @@ public class DragonItem {
 	}
 
 	// 游戏逻辑处理
-	public void onBeforeDrawLogic(int nCurCellRunFrame) {
-		int nStep = m_nCellHeight / CommonDefines.ONE_CELL_FRAME_CTNS;
-		m_nCurFrameOffset = 0 - nCurCellRunFrame * nStep;
-
-		m_ItemDrawRect.left = m_CurCellRect.left;
-		m_ItemDrawRect.right = m_CurCellRect.right;
-		m_ItemDrawRect.top = m_CurCellRect.top + m_nCurFrameOffset;
-		m_ItemDrawRect.bottom = m_ItemDrawRect.top + m_nCellHeight;
+	// nJourney：本次绘制需要走动的路程
+	public void onBeforeDrawLogic(int nJourney) {
+		m_ItemDrawRect.top = m_ItemDrawRect.top + nJourney;
+		m_ItemDrawRect.bottom = m_ItemDrawRect.top + m_CurCellRect.height();
 	}
 
 	// 游戏逻辑处理
-	public void onAfterDrawLogic(int nCurCellRunFrame) {
+	public void onAfterDrawLogic() {
 	}
 
 }

@@ -183,15 +183,16 @@ public class FirstLevelSceneViewThread extends Thread {
 		while (m_bRunning) {
 			if (m_bIsPaused) {
 				try {
-					Thread.sleep(CommonDefines.GAME_ONE_FRAME_TIME);
+					Thread.sleep(30);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				continue;
 			}
 			
+			// 初始化上一次操作的耗时导致的本轮绘制的初始值，如：运行的距离
 			long lBeginTime = SystemClock.uptimeMillis();
-			onBeforeDrawLogic();
+			onBeforeDrawLogic(lBeginTime);
 
 			Canvas runCanvas = null;
 			try {
@@ -205,18 +206,17 @@ public class FirstLevelSceneViewThread extends Thread {
 				}
 			}
 
+			// 绘制完成后的响应接口
 			onAfterDrawLogic();
+			
 			long lEndTime = SystemClock.uptimeMillis();
+			// 准备下一次的绘制速度
 			long lSleepTime = lEndTime - lBeginTime;
-			
-			// 一帧的时间超了
-			if ((int)lSleepTime >= CommonDefines.GAME_ONE_FRAME_TIME)
+			if (lSleepTime > 0)
 				continue;
-			
-			int nSleep = (int)(CommonDefines.GAME_ONE_FRAME_TIME - lSleepTime);
 
 			try {
-				Thread.sleep(nSleep);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -241,9 +241,9 @@ public class FirstLevelSceneViewThread extends Thread {
 	}
 
 	// 游戏逻辑处理
-	private void onBeforeDrawLogic() {
+	private void onBeforeDrawLogic(long lCurTime) {
 		if (m_DragonManager != null)
-			m_DragonManager.onBeforeDrawLogic();
+			m_DragonManager.onBeforeDrawLogic(lCurTime);
 	}
 	// 游戏逻辑处理
 	private void onAfterDrawLogic() {

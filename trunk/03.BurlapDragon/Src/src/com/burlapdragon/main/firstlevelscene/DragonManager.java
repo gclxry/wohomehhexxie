@@ -27,13 +27,17 @@ public class DragonManager {
 	private int m_nDragonCtns = 2;
 	// 整个地图在屏幕中的坐标位置
 	private Rect m_mapInScreenRect = null;
-	// 当前单元格运行到帧数
-	private int m_nCurCellRunFrame = 0;
 
 	// 龙头节点
 	private DragonItem m_DragonHead = null;
 	// 龙尾节点
 	private DragonItem m_DragonTail = null;
+	
+	// 运行的速度：走一个格子的速度，可变值
+	private float m_fBaseTime = 500.0f;
+	private float m_fCurSpeed = 0.0f;
+	private long m_lPreTime = 0;
+	
 
 	public DragonManager(Context context) {
 		m_Context = context;
@@ -62,6 +66,15 @@ public class DragonManager {
 		m_DragonHead = null;
 		m_DragonTail = null;
 		m_nDragonCtns = 0;
+	}
+	
+	// 设置走完一个格子的时间，这个决定了运动的速度
+	public void setRunOneCellTime(float fTime){
+		if (fTime <= 0.0f)
+			return;
+		
+		m_fBaseTime = fTime;
+		m_fCurSpeed = ((float)(m_nCellWidth)) / m_fBaseTime;
 	}
 
 	// 设置一个item的大小
@@ -107,14 +120,14 @@ public class DragonManager {
 			tmpRct.bottom = tmpRct.top + m_nCellHeight;
 			m_DragonHead.setCurrentCellRect(tmpRct);
 			m_DragonHead.setImageSize(m_nCellWidth, m_nCellHeight);
-			m_DragonHead.setCellSize(m_nCellWidth, m_nCellHeight);
 			
 			tmpRct.top = tmpRct.bottom;
 			tmpRct.bottom = tmpRct.top + m_nCellHeight;
 			m_DragonTail.setCurrentCellRect(tmpRct);
 			m_DragonTail.setImageSize(m_nCellWidth, m_nCellHeight);
-			m_DragonTail.setCellSize(m_nCellWidth, m_nCellHeight);
 		}
+		
+		setRunOneCellTime(500.0f);
 	}
 
 	public boolean isInit() {
@@ -148,9 +161,15 @@ public class DragonManager {
 	}
 
 	// 游戏逻辑处理
-	public void onBeforeDrawLogic() {
+	public void onBeforeDrawLogic(long lCurTime) {
+		if (m_lPreTime <= 0)
+			m_lPreTime = lCurTime;
+		
+		int nJourney = (int)((float)(lCurTime - m_lPreTime) * m_fCurSpeed);
+		m_lPreTime = lCurTime;
+			
 		for (DragonItem drawDragon = m_DragonHead; drawDragon != null;) {
-			drawDragon.onBeforeDrawLogic(m_nCurCellRunFrame);
+			drawDragon.onBeforeDrawLogic(nJourney);
 			drawDragon = drawDragon.m_nextItem;
 		}
 	}
@@ -158,14 +177,8 @@ public class DragonManager {
 	// 游戏逻辑处理
 	public void onAfterDrawLogic() {
 		for (DragonItem drawDragon = m_DragonHead; drawDragon != null;) {
-			drawDragon.onAfterDrawLogic(m_nCurCellRunFrame);
+			drawDragon.onAfterDrawLogic();
 			drawDragon = drawDragon.m_nextItem;
-		}
-		
-		m_nCurCellRunFrame++;
-		// 运行到了下一个单元格了
-		if (m_nCurCellRunFrame >= CommonDefines.ONE_CELL_FRAME_CTNS){
-			m_nCurCellRunFrame = 0;
 		}
 	}
 
