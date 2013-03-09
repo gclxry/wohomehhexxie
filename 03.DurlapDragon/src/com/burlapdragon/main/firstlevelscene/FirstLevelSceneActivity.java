@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.app.Activity;
 
 public class FirstLevelSceneActivity extends Activity {
-	// 游戏入口视图成员变量
+	// 娓告垙鍏ュ彛瑙嗗浘鎴愬憳鍙橀噺
 	private FirstLevelSceneSurfaceView m_FirstSceneView = null;
 	private FirstLevelSceneViewThread m_FirstSceneViewThread = null;
 	private int m_nMapTypeId = 0;
@@ -21,7 +21,7 @@ public class FirstLevelSceneActivity extends Activity {
 		m_nMapTypeId = cbData.getInt("map_type_id");
 		m_nMapTypeId = cbData.getInt("map_id");
 		
-		// 取得游戏入口视图
+		// 鍙栧緱娓告垙鍏ュ彛瑙嗗浘
 		m_FirstSceneView = (FirstLevelSceneSurfaceView) this
 				.findViewById(R.id.FirstLevelSceneView);
 		if (m_FirstSceneView == null)

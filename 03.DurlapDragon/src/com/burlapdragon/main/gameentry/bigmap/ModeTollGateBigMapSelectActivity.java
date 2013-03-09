@@ -1,4 +1,4 @@
-// Í¨¹ØÄ£Ê½´óµØÍ¼Ñ¡Ôñ½çÃæÀà
+// é€šå…³æ¨¡å¼å¤§åœ°å›¾é€‰æ‹©ç•Œé¢ç±»
 package com.burlapdragon.main.gameentry.bigmap;
 
 import com.burlapdragon.main.R;
@@ -12,7 +12,7 @@ import android.widget.FrameLayout;
 
 public class ModeTollGateBigMapSelectActivity extends Activity {
 
-	// ÖĞ¼äµÄ¿ÉÒÔ¹ö¶¯µÄÊÓÍ¼
+	// ä¸­é—´çš„å¯ä»¥æ»šåŠ¨çš„è§†å›¾
 	private ModeTollGateBigMapView m_nBigMapView = null;
 	private ModeTollGateBigMapHandler m_Handler = null;
 
@@ -27,7 +27,7 @@ public class ModeTollGateBigMapSelectActivity extends Activity {
 				.findViewById(R.id.TGMBML_M_MidLayout);
 		m_nBigMapView = new ModeTollGateBigMapView(this, m_Handler);
 
-		// ÉèÖÃ²¼¾ÖÑùÊ½£¬³äÂú¸¸ÊÓÍ¼
+		// è®¾ç½®å¸ƒå±€æ ·å¼ï¼Œå……æ»¡çˆ¶è§†å›¾
 		FrameLayout.LayoutParams layoutP = new FrameLayout.LayoutParams(
 				FrameLayout.LayoutParams.MATCH_PARENT,
 				FrameLayout.LayoutParams.MATCH_PARENT);
@@ -37,7 +37,7 @@ public class ModeTollGateBigMapSelectActivity extends Activity {
 
 	public void onHandleMessage(Message msg) {
 		if (msg.what == ModeTollGateBigMapView.OPEN_SMALL_MAP_VIEW) {
-			// ´ò¿ª¶ş¼¶µØÍ¼½çÃæ
+			// æ‰“å¼€äºŒçº§åœ°å›¾ç•Œé¢
 			showSmallMapActivity(msg);
 		}
 	}

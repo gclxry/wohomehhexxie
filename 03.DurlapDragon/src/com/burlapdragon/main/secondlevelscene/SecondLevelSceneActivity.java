@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.app.Activity;
 
 public class SecondLevelSceneActivity extends Activity {
-	// 游戏入口视图成员变量
+	// 娓告垙鍏ュ彛瑙嗗浘鎴愬憳鍙橀噺
 	private SecondLevelSceneSurfaceView m_SecondSceneView;
 	private SecondLevelSceneViewThread m_SecondSceneViewThread;
 
@@ -15,7 +15,7 @@ public class SecondLevelSceneActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_second_level_scene);
 
-		// 取得游戏入口视图
+		// 鍙栧緱娓告垙鍏ュ彛瑙嗗浘
 		m_SecondSceneView = (SecondLevelSceneSurfaceView) this
 				.findViewById(R.id.SecondLevelSceneView);
 		if (m_SecondSceneView == null)

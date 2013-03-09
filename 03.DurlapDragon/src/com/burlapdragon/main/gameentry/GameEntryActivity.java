@@ -18,12 +18,12 @@ public class GameEntryActivity extends Activity {
 		
 	}
 	
-	// µã»÷ÁËĞÂÀËÎ¢²©°´Å¥
+	// ç‚¹å‡»äº†æ–°æµªå¾®åšæŒ‰é’®
     public void onClickButtonSinaWeibo(View v)
     {
     }
 
-    // µã»÷ÁËÍ¨¹ØÄ£Ê½°´Å¥
+    // ç‚¹å‡»äº†é€šå…³æ¨¡å¼æŒ‰é’®
     public void onClickButtonTollGateMode(View v)
     {
     	Intent TGM_Intent = new Intent();

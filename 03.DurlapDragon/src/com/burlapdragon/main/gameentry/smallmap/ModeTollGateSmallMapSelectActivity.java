@@ -12,7 +12,7 @@ import android.widget.FrameLayout;
 
 public class ModeTollGateSmallMapSelectActivity extends Activity {
 
-	// 中间的可以滚动的视图
+	// 涓棿鐨勫彲浠ユ粴鍔ㄧ殑瑙嗗浘
 	private ModeTollGateSmallMapView m_nSmallMapView = null;
 	private ModeTollGateSmallMapHandler m_Handler = null;
 	private int m_nMapTypeId = 0;
@@ -31,7 +31,7 @@ public class ModeTollGateSmallMapSelectActivity extends Activity {
 		m_nMapTypeId = cbData.getInt("map_type_id");
 		m_nSmallMapView = new ModeTollGateSmallMapView(this, m_Handler, m_nMapTypeId);
 
-		// 设置布局样式，充满父视图
+		// 璁剧疆甯冨眬鏍峰紡锛屽厖婊＄埗瑙嗗浘
 		FrameLayout.LayoutParams layoutP = new FrameLayout.LayoutParams(
 				FrameLayout.LayoutParams.MATCH_PARENT,
 				FrameLayout.LayoutParams.MATCH_PARENT);

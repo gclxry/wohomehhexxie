@@ -9,54 +9,54 @@ import android.graphics.Rect;
 
 public class DragonItem {
 
-	// ÏÂÒ»¸ö½Úµã
+	// ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
 	public DragonItem m_nextItem = null;
-	// ÉÏÒ»¸ö½Úµã
+	// ä¸Šä¸€ä¸ªèŠ‚ç‚¹
 	public DragonItem m_preItem = null;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Õı³£·½ÏòÍ¼Æ¬
-	// Íù×ó×ßÍ¼Æ¬
+	// æ­£å¸¸æ–¹å‘å›¾ç‰‡
+	// å¾€å·¦èµ°å›¾ç‰‡
 	private Bitmap m_bmpToLeft = null;
-	// ÍùÓÒ×ßÍ¼Æ¬
+	// å¾€å³èµ°å›¾ç‰‡
 	private Bitmap m_bmpToRight = null;
-	// ÍùÉÏ×ßÍ¼Æ¬
+	// å¾€ä¸Šèµ°å›¾ç‰‡
 	private Bitmap m_bmpToUp = null;
-	// ÍùÏÂ×ßÍ¼Æ¬
+	// å¾€ä¸‹èµ°å›¾ç‰‡
 	private Bitmap m_bmpToDown = null;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// ¹ÕÍäÍ¼Ïñ
-	// Ë³Ê±Õë·½Ïò
-	// ×ó -> ÉÏ
+	// æ‹å¼¯å›¾åƒ
+	// é¡ºæ—¶é’ˆæ–¹å‘
+	// å·¦ -> ä¸Š
 	private Bitmap m_bmpFromLeftToUp = null;
-	// ÉÏ -> ÓÒ
+	// ä¸Š -> å³
 	private Bitmap m_bmpFromUpToRight = null;
-	// ÓÒ -> ÏÂ
+	// å³ -> ä¸‹
 	private Bitmap m_bmpFromRightToDown = null;
-	// ÏÂ -> ×ó
+	// ä¸‹ -> å·¦
 	private Bitmap m_bmpFromDownToLeft = null;
-	// ÄæÊ±Õë·½Ïò
-	// ×ó -> ÏÂ
+	// é€†æ—¶é’ˆæ–¹å‘
+	// å·¦ -> ä¸‹
 	private Bitmap m_bmpFromLeftToDown = null;
-	// ÏÂ -> ÓÒ
+	// ä¸‹ -> å³
 	private Bitmap m_bmpFromDownToRight = null;
-	// ÓÒ -> ÉÏ
+	// å³ -> ä¸Š
 	private Bitmap m_bmpFromRightToUp = null;
-	// ÉÏ -> ×ó
+	// ä¸Š -> å·¦
 	private Bitmap m_bmpFromUpToLeft = null;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// ÔÚ»­²¼ÖĞµÄÎ»ÖÃ
+	// åœ¨ç”»å¸ƒä¸­çš„ä½ç½®
 	private Rect m_ItemDrawRect = null;
-	// Ëù´¦ÔÚµÄµ±Ç°µ¥Ôª¸ñµÄÎ»ÖÃ
+	// æ‰€å¤„åœ¨çš„å½“å‰å•å…ƒæ ¼çš„ä½ç½®
 	private Rect m_CurCellRect = null;
-	// ĞèÒª»æÖÆµÄÍ¼Æ¬µÄÎ»ÖÃ¾ØĞÎ
+	// éœ€è¦ç»˜åˆ¶çš„å›¾ç‰‡çš„ä½ç½®çŸ©å½¢
 	private Rect m_bmpDrawRect = null;
 	private int m_nCellWidth = 0;
 	private int m_nCellHeight = 0;
 	private int m_nImageWidth = 0;
 	private int m_nImageHeight = 0;
-	// µ±Ç°Ö¡Î»ÓÚµ¥Ôª¸ñµÄÆ«ÒÆ
+	// å½“å‰å¸§ä½äºå•å…ƒæ ¼çš„åç§»
 	private int m_nCurFrameOffset = 0;
 	
 	public DragonItem(Bitmap bmpToLeft, Bitmap bmpToRight, Bitmap bmpToUp, Bitmap bmpToDown,
@@ -100,14 +100,14 @@ public class DragonItem {
 		m_nCellHeight = nHeight;
 	}
 
-	// ÓÎÏ·»æ»­
+	// æ¸¸æˆç»˜ç”»
 	public void doDraw(Canvas runCanvas, Paint paint) {
 		m_bmpDrawRect.right = m_nImageWidth;
 		m_bmpDrawRect.bottom = m_nImageHeight;
 		runCanvas.drawBitmap(m_bmpToLeft, m_bmpDrawRect, m_ItemDrawRect, paint);
 	}
 
-	// ÓÎÏ·Âß¼­´¦Àí
+	// æ¸¸æˆé€»è¾‘å¤„ç†
 	public void onBeforeDrawLogic(int nCurCellRunFrame) {
 		int nStep = m_nCellHeight / CommonDefines.ONE_CELL_FRAME_CTNS;
 		m_nCurFrameOffset = 0 - nCurCellRunFrame * nStep;
@@ -118,7 +118,7 @@ public class DragonItem {
 		m_ItemDrawRect.bottom = m_ItemDrawRect.top + m_nCellHeight;
 	}
 
-	// ÓÎÏ·Âß¼­´¦Àí
+	// æ¸¸æˆé€»è¾‘å¤„ç†
 	public void onAfterDrawLogic(int nCurCellRunFrame) {
 	}
 
