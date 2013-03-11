@@ -53,6 +53,7 @@
 			android:screenOrientation="landscape">
             
         </activity>
+        <activity android:name=".gameentry.recommend.RecommendDownList"></activity>
     </application>
 
 </manifest>
