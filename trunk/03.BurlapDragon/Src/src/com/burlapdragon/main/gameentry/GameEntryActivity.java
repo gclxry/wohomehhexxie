@@ -2,7 +2,7 @@ package com.burlapdragon.main.gameentry;
 
 import com.burlapdragon.main.R;
 import com.burlapdragon.main.gameentry.bigmap.ModeTollGateBigMapSelectActivity;
-import com.burlapdragon.main.gameentry.recommend.RecommendDownList;
+import com.burlapdragon.main.gameentry.recommend.RecommendDownListActivity;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -28,7 +28,7 @@ public class GameEntryActivity extends Activity {
     public void onClickButtonRecommend(View v)
     {
     	Intent TGM_Intent = new Intent();
-    	TGM_Intent.setClass(this, RecommendDownList.class);
+    	TGM_Intent.setClass(this, RecommendDownListActivity.class);
     	startActivity(TGM_Intent);
     	this.finish();
     }
