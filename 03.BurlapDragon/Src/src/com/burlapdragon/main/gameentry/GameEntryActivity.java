@@ -2,6 +2,7 @@ package com.burlapdragon.main.gameentry;
 
 import com.burlapdragon.main.R;
 import com.burlapdragon.main.gameentry.bigmap.ModeTollGateBigMapSelectActivity;
+import com.burlapdragon.main.gameentry.recommend.RecommendDownList;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -17,10 +18,19 @@ public class GameEntryActivity extends Activity {
 		setContentView(R.layout.activity_game_entry);
 		
 	}
-	
+
 	// 点击了新浪微博按钮
     public void onClickButtonSinaWeibo(View v)
     {
+    }
+
+	// 点击了新浪微博按钮
+    public void onClickButtonRecommend(View v)
+    {
+    	Intent TGM_Intent = new Intent();
+    	TGM_Intent.setClass(this, RecommendDownList.class);
+    	startActivity(TGM_Intent);
+    	this.finish();
     }
 
     // 点击了通关模式按钮

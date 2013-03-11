@@ -2,7 +2,6 @@ package com.burlapdragon.main.firstlevelscene;
 
 import utility.method.Plotting;
 
-import com.burlapdragon.common.CommonDefines;
 import com.burlapdragon.main.R;
 import com.burlapdragon.main.firstlevelscene.map.FirstLevelMapManager;
 
@@ -11,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 public class DragonManager {
 
@@ -182,6 +182,7 @@ public class DragonManager {
 		for (DragonItem drawDragon = m_DragonHead; drawDragon != null;) {
 			drawDragon.onAfterDrawLogic();
 			drawDragon = drawDragon.m_nextItem;
+			Log.v("DM_INFO", "onAfterDrawLogic");
 		}
 	}
 
