@@ -10,21 +10,21 @@ import com.burlapdragon.main.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class RecommendDownList extends Activity {
+public class RecommendDownListActivity extends Activity{
 
 	private List<Map<String, Object>> mData = null;
 	private ListView m_RecommendList = null;
@@ -40,6 +40,19 @@ public class RecommendDownList extends Activity {
 		
 		m_RecommendList = (ListView)this.findViewById(R.id.RecommendList);
 		m_RecommendList.setAdapter(adapter);
+		
+		m_RecommendList.setOnItemClickListener(new OnItemClickListener() {                            
+		    @Override  
+		    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,  long arg3)
+		    { 
+		        //其中arg0包含了你所有的数据星系，通过其配合arg2（被选中的项）即可得到你要的map信息了
+		        Map<String, Object> itemAtPosition = (Map<String, Object>)arg0.getItemAtPosition(arg2);
+		        //然后通过map，使用关键词查找你需要的列表中的数据项，我是示例代码，后面的要自己改
+		        //String str = (String)itemAtPosition.get("info");
+		        
+		        showInfo("List", "---------");
+		    }
+		});
 	}
 
 	private List<Map<String, Object>> getData() {
@@ -73,7 +86,6 @@ public class RecommendDownList extends Activity {
 		Log.v("MyListView4-click", (String) mData.get(position).get("title"));
 	}
 */
-	
 	public class RecommendAdapter extends BaseAdapter {
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,7 +154,7 @@ public class RecommendDownList extends Activity {
 
 				@Override
 				public void onClick(View v) {
-					showInfo();
+					showInfo("....", "点击了按钮");
 				}
 			});
 
@@ -150,12 +162,9 @@ public class RecommendDownList extends Activity {
 		}
 	}
 
-	/**
-	 * listview中点击按键弹出对话框
-	 */
-	public void showInfo() {
-		new AlertDialog.Builder(this).setTitle("我的listview")
-				.setMessage("介绍...")
+	public void showInfo(String strTitle, String strInfo) {
+		new AlertDialog.Builder(this).setTitle(strTitle)
+				.setMessage(strInfo)
 				.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
