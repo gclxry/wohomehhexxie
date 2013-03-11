@@ -1,43 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/itemLyaout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants"
-    android:orientation="horizontal" >
+    android:layout_width="fill_parent"
+    android:layout_height="160dp"
+    android:descendantFocusability="blocksDescendants" >
 
-    <ImageView
-        android:id="@+id/itemImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/desc"
-        android:src="@drawable/dragon1" />
+    <FrameLayout
+        android:id="@+id/ListViewTopPanel"
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="top" >
 
-    <LinearLayout
-        android:id="@+id/itemTextLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/desc"
-        android:orientation="vertical" >
+        <ImageView
+            android:id="@+id/itemImg"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:contentDescription="@string/desc" />
 
-        <TextView
-            android:id="@+id/itemText1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+        <LinearLayout
+            android:id="@+id/itemTextLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="80dp"
+            android:layout_marginTop="0dp"
+            android:contentDescription="@string/desc"
+            android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/itemText2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            <TextView
+                android:id="@+id/itemText1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:text="TextView" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/itemText2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:contentDescription="@string/desc"
+                android:text="TextView" />
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/itemButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button" />
+        <Button
+            android:id="@+id/itemButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="top|right"
+            android:text="Button" />
 
-</LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/ListViewBottomPanel"
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="80dp" >
+
+        <ImageButton
+            android:id="@+id/imageButton1"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/dragon1" />
+
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:src="@drawable/dragon2" />
+
+        <ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/dragon3" />
+
+    </FrameLayout>
+
+</FrameLayout>

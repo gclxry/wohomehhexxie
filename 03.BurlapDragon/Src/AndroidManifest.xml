@@ -53,7 +53,8 @@
 			android:screenOrientation="landscape">
             
         </activity>
-        <activity android:name=".gameentry.recommend.RecommendDownListActivity"></activity>
+        <activity android:name=".gameentry.recommend.RecommendDownListActivity"
+			android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
