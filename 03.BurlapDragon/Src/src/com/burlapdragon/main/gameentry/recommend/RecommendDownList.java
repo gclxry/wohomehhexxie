@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.burlapdragon.main.R;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Context;
@@ -23,18 +24,22 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class RecommendDownList extends ListActivity {
+public class RecommendDownList extends Activity {
 
 	private List<Map<String, Object>> mData = null;
+	private ListView m_RecommendList = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_recommend_list);
 
 		mData = getData();
 		
 		RecommendAdapter adapter = new RecommendAdapter(this);
-        setListAdapter(adapter);
+		
+		m_RecommendList = (ListView)this.findViewById(R.id.RecommendList);
+		m_RecommendList.setAdapter(adapter);
 	}
 
 	private List<Map<String, Object>> getData() {
@@ -60,14 +65,14 @@ public class RecommendDownList extends ListActivity {
 
 		return list;
 	}
-
+/*
 	// ListView 中某项被选中后的逻辑
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 
 		Log.v("MyListView4-click", (String) mData.get(position).get("title"));
 	}
-
+*/
 	
 	public class RecommendAdapter extends BaseAdapter {
 
