@@ -46,6 +46,7 @@
     <OutDir>$(SolutionDir)$(Configuration).win32\</OutDir>
     <IntDir>$(Configuration).win32\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\cocos2dx\platform\win32;D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\cocos2dx\include;D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\cocos2dx;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
