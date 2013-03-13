@@ -1,8 +1,10 @@
 package uif.burlapdragon.gameentry.smallmap;
 
 import uif.burlapdragon.R;
+import uif.burlapdragon.playgame.PlayInCocos2DActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.widget.FrameLayout;
@@ -43,8 +45,8 @@ public class ModeTollGateSmallMapSelectActivity extends Activity {
 	}
 
 	private void openGame(Message msg) {
-  /*  	Intent TGMS_Intent = new Intent();
-    	TGMS_Intent.setClass(this, FirstLevelSceneActivity.class);
+    	Intent TGMS_Intent = new Intent();
+    	TGMS_Intent.setClass(this, PlayInCocos2DActivity.class);
 
 		Bundle cbData = new Bundle();
 		cbData.putInt("map_type_id", msg.arg1);
@@ -52,6 +54,6 @@ public class ModeTollGateSmallMapSelectActivity extends Activity {
 		TGMS_Intent.putExtras(cbData);
 		
     	startActivity(TGMS_Intent);
-    	this.finish();*/
+    	this.finish();
 	}
 }

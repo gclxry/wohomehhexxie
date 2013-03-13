@@ -21,16 +21,23 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-package uif.burlapdragon;
+package uif.burlapdragon.playgame;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 
 import android.os.Bundle;
 
-public class BurlapDragon extends Cocos2dxActivity{
+public class PlayInCocos2DActivity extends Cocos2dxActivity{
 
+	private int m_nMapTypeId = 0;
+	private int m_nMapId = 0;
+	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+
+		Bundle cbData = this.getIntent().getExtras();
+		m_nMapTypeId = cbData.getInt("map_type_id");
+		m_nMapTypeId = cbData.getInt("map_id");
 	}
 	
     static {
