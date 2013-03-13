@@ -15,11 +15,17 @@
                   android:screenOrientation="landscape"
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
                   android:configChanges="orientation">
+        </activity>
+        <activity android:name=".gameentry.GameEntryActivity" android:theme="@style/AppTheme" android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".gameentry.helper.GameHelperActivity" android:theme="@style/AppTheme" android:screenOrientation="landscape"></activity>
+        <activity android:name=".gameentry.bigmap.ModeTollGateBigMapSelectActivity" android:theme="@style/AppTheme" android:screenOrientation="landscape"></activity>
+        <activity android:name=".gameentry.smallmap.ModeTollGateSmallMapSelectActivity" android:theme="@style/AppTheme" android:screenOrientation="landscape"></activity>
+        <activity android:name=".gameentry.recommend.RecommendDownListActivity" android:theme="@style/AppTheme" android:screenOrientation="portrait"></activity>
     </application>
     <supports-screens android:largeScreens="true"
                       android:smallScreens="true"
