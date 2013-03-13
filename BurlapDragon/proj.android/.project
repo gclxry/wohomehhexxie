@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>BurlapDragon</name>
+	<name>BurlapDragon_Cocos2D</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -30,4 +30,11 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>Cocos2D</name>
+			<type>2</type>
+			<location>D:/02.WINDOWS/01.MyWork/02.Android/cocos2d-2.1beta3-x-2.1.1/cocos2dx/platform/android/java/src</location>
+		</link>
+	</linkedResources>
 </projectDescription>
