@@ -1,12 +1,15 @@
 package uif.burlapdragon.gameentry.smallmap;
 
 import uif.burlapdragon.R;
+import uif.burlapdragon.gameentry.GameEntryActivity;
+import uif.burlapdragon.gameentry.bigmap.ModeTollGateBigMapSelectActivity;
 import uif.burlapdragon.playgame.PlayInCocos2DActivity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.widget.FrameLayout;
 
 public class ModeTollGateSmallMapSelectActivity extends Activity {
@@ -55,5 +58,23 @@ public class ModeTollGateSmallMapSelectActivity extends Activity {
 		
     	startActivity(TGMS_Intent);
     	this.finish();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+		// 如果是返回键,直接返回到桌面
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			showBigMapActivity();
+		}
+
+		return super.onKeyDown(keyCode, event);
+	}
+
+	private void showBigMapActivity() {
+		Intent TGMS_Intent = new Intent();
+		TGMS_Intent.setClass(this, ModeTollGateBigMapSelectActivity.class);
+		startActivity(TGMS_Intent);
+		this.finish();
 	}
 }

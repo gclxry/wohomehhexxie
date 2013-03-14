@@ -73,15 +73,21 @@ bool HelloWorld::init()
         // Add the label to HelloWorld layer as a child layer.
         this->addChild(pLabel, 1);
 
-        // 3. Add add a splash screen, show the cocos2d splash image.
-        CCSprite* pSprite = CCSprite::create("HelloWorld.png");
-        CC_BREAK_IF(! pSprite);
+		// 取得屏幕大小
+		CCSize winSize = CCDirector::sharedDirector()->getWinSize();
 
+        // 3. Add add a splash screen, show the cocos2d splash image.
+		CCSprite* pSprite = CCSprite::create("HelloWorld.png");
+        CC_BREAK_IF(!pSprite);
         // Place the sprite on the center of the screen
         pSprite->setPosition(ccp(size.width/2, size.height/2));
-
         // Add the sprite to HelloWorld layer as a child layer.
-        this->addChild(pSprite, 0);
+        this->addChild(pSprite, 1);
+
+		CCSprite *pPlayer = CCSprite::create("fairy.png");
+        pPlayer->setPosition(ccp(100, 100));
+        this->addChild(pPlayer, 0);
+
 
         bRet = true;
     } while (0);
@@ -92,6 +98,19 @@ bool HelloWorld::init()
 void HelloWorld::menuCloseCallback(CCObject* pSender)
 {
     // "close" menu item clicked
-    CCDirector::sharedDirector()->end();
+    // CCDirector::sharedDirector()->end();
 }
 
+
+bool HelloWorld::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
+{
+	return true;
+}
+
+void HelloWorld::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
+{
+}
+
+void HelloWorld::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
+{
+}
