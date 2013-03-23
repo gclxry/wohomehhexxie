@@ -75,6 +75,5 @@ public class ModeTollGateSmallMapSelectActivity extends Activity {
 		Intent TGMS_Intent = new Intent();
 		TGMS_Intent.setClass(this, ModeTollGateBigMapSelectActivity.class);
 		startActivity(TGMS_Intent);
-		this.finish();
 	}
 }

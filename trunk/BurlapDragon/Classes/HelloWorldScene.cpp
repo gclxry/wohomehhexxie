@@ -1,4 +1,5 @@
 #include "HelloWorldScene.h"
+#include "AES.h"
 
 using namespace cocos2d;
 
@@ -29,6 +30,9 @@ bool HelloWorld::init()
     bool bRet = false;
     do 
     {
+		// 打开对返回键的支持
+		this->setKeypadEnabled(true);
+
         //////////////////////////////////////////////////////////////////////////
         // super init first
         //////////////////////////////////////////////////////////////////////////
@@ -85,8 +89,12 @@ bool HelloWorld::init()
         this->addChild(pSprite, 1);
 
 		CCSprite *pPlayer = CCSprite::create("fairy.png");
-        pPlayer->setPosition(ccp(100, 100));
-        this->addChild(pPlayer, 0);
+		if (pPlayer != NULL)
+		{
+			pPlayer->setPosition(ccp(100, 100));
+			//pPlayer->setPosition(ccp(size.width/2, size.height/2));
+			this->addChild(pPlayer, 2);
+		}
 
 
         bRet = true;
@@ -98,7 +106,7 @@ bool HelloWorld::init()
 void HelloWorld::menuCloseCallback(CCObject* pSender)
 {
     // "close" menu item clicked
-    // CCDirector::sharedDirector()->end();
+    CCDirector::sharedDirector()->end();
 }
 
 
@@ -113,4 +121,19 @@ void HelloWorld::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 
 void HelloWorld::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 {
+}
+
+void HelloWorld::keyBackClicked(void) 
+{
+	CCLayer::keyBackClicked();
+
+	CCDirector::sharedDirector()->popToRootScene();
+	//CCDirector::sharedDirector()->end();
+	//CCDirector::sharedDirector()->resume();
+	//CCDirector::sharedDirector()->pause();
+}
+
+void HelloWorld::keyMenuClicked(void) 
+{
+	CCLayer::keyMenuClicked();
 }

@@ -85,7 +85,8 @@
       <DllDataFileName />
     </Midl>
     <PostBuildEvent>
-      <Command>copy ..\Resources Debug.win32</Command>
+      <Command>copy ..\Resources Debug.win32
+copy ..\Resources .\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -132,12 +133,14 @@
     <ResourceCompile Include="BurlapDragon_Win32.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Classes\AES.h" />
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Classes\AES.cpp" />
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="main.cpp" />
