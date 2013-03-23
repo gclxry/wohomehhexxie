@@ -33,6 +33,9 @@ bool HelloWorld::init()
 		// 打开对返回键的支持
 		this->setKeypadEnabled(true);
 
+		// 读取xml信息
+		ReadMapInfo();
+
         //////////////////////////////////////////////////////////////////////////
         // super init first
         //////////////////////////////////////////////////////////////////////////
@@ -136,4 +139,21 @@ void HelloWorld::keyBackClicked(void)
 void HelloWorld::keyMenuClicked(void) 
 {
 	CCLayer::keyMenuClicked();
+}
+
+void HelloWorld::ReadMapInfo(void) 
+{
+	CCFileUtils *pPathUtil = CCFileUtils::sharedFileUtils();
+	if (pPathUtil == NULL)
+		return;
+
+	const char* pcszPath = pPathUtil->fullPathFromRelativePath("big_map.xml");
+	if (pcszPath == NULL || strlen(pcszPath) <= 0)
+		return;
+	
+	CCSAXParser saxXml;
+	if (!saxXml.parse(pcszPath))
+		return;
+	
+
 }
