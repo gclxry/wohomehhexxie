@@ -11,14 +11,14 @@
 
 using namespace cocos2d;
 
-class HelloWorld : public cocos2d::CCLayer
+class HelloWorld : public CCLayer
 {
 public:
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
     virtual bool init();  
 
     // there's no 'id' in cpp, so we recommand to return the exactly class pointer
-    static cocos2d::CCScene* scene();
+    static CCScene* scene();
     
     // a selector callback
     void menuCloseCallback(CCObject* pSender);
@@ -26,6 +26,9 @@ public:
     // implement the "static node()" method manually
     CREATE_FUNC(HelloWorld);
 
+	// 接受到返回键
+    virtual void keyBackClicked(void);
+    virtual void keyMenuClicked(void);
 	
     virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
     virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);

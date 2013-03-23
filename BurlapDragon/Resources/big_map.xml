@@ -1,0 +1,6 @@
+<bigmap>
+	<!-- 平原 -->
+	<map id="1" xml="big_map_plain.xml" name="plain" image=""/>
+	<!-- 山地 -->
+	<map id="2" xml="big_map_hill.xml" name="hill" image=""/>
+</bigmap>
