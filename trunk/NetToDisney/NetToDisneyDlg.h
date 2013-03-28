@@ -25,10 +25,13 @@ protected:
 	HICON m_hIcon;
 	CExplorer1 m_WebCtrl;
 	CStringArray m_UrlList;
+	int m_nTimerId;
+	int m_nCurrentPost;
 
 	bool InitUrl();
 	const WCHAR* PathHelperW(LPCWSTR pszFileName);
 	int GetTime();
+	void BeginTimer();
 
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
@@ -41,4 +44,5 @@ public:
 	afx_msg void OnBnClickedBegin();
 	DECLARE_EVENTSINK_MAP()
 	void FileDownloadExplorer1(BOOL ActiveDocument, BOOL* Cancel);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

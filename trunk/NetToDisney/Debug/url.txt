@@ -1,9 +1,31 @@
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1497754&swid=F0690C88-573B-470F-99DE-895F8EFDBC79&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1497907&swid=0F43E2AC-0262-4564-83A9-01C640EF9DFF&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1501187&swid=15E18501-C20D-4345-82CA-D48BD073C347&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1501200&swid=BE3FF5B4-393B-40A4-BD82-09DA861B1115&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=2206400&swid=B0D2F7E5-C9BA-452B-AF12-8A2172CBBCFE&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1501203&swid=11383282-1D60-4D25-A64B-A2933698F073&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1501212&swid=A7C2A9B4-7711-4F7B-8A67-73AD2CE5B5B5&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1501222&swid=15A83D86-8493-408E-B872-3A84A14CEF92&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1501226&swid=73CD47E6-200F-4973-8919-DD7B0B48B778&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1501234&swid=D5724DC0-A376-4079-8C86-5002EEA53426&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1501242&swid=58F54D7A-D9CB-4D25-8760-D72565257BAB&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1501246&swid=C83A387B-C88B-4120-9F08-E3C018972288&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1501258&swid=7E1065A4-D3B3-4646-99A1-933320C00380&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1501353&swid=93A4706C-65B1-4C5C-A2D4-87AF495ED0E2&rand=
 
 
-
-http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1497754&swid=F0690C88-573B-470F-99DE-895F8EFDBC79&rand=618
-http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1497907&swid=0F43E2AC-0262-4564-83A9-01C640EF9DFF&rand=4715
-
-http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1497754&swid=F0690C88-573B-470F-99DE-895F8EFDBC79&rand=3919
-http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1497907&swid=0F43E2AC-0262-4564-83A9-01C640EF9DFF&rand=3161
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1497754&swid=F0690C88-573B-470F-99DE-895F8EFDBC79&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1497907&swid=0F43E2AC-0262-4564-83A9-01C640EF9DFF&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1501187&swid=15E18501-C20D-4345-82CA-D48BD073C347&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1501200&swid=BE3FF5B4-393B-40A4-BD82-09DA861B1115&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=2206400&swid=B0D2F7E5-C9BA-452B-AF12-8A2172CBBCFE&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1501203&swid=11383282-1D60-4D25-A64B-A2933698F073&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1501212&swid=A7C2A9B4-7711-4F7B-8A67-73AD2CE5B5B5&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1501222&swid=15A83D86-8493-408E-B872-3A84A14CEF92&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1501226&swid=73CD47E6-200F-4973-8919-DD7B0B48B778&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1501234&swid=D5724DC0-A376-4079-8C86-5002EEA53426&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1501242&swid=58F54D7A-D9CB-4D25-8760-D72565257BAB&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1501246&swid=C83A387B-C88B-4120-9F08-E3C018972288&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1501258&swid=7E1065A4-D3B3-4646-99A1-933320C00380&rand=
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1501353&swid=93A4706C-65B1-4C5C-A2D4-87AF495ED0E2&rand=
 

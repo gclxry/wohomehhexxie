@@ -13,9 +13,6 @@
 
 // CNetToDisneyDlg 对话框
 
-#define BEGIN_TIME		30
-#define BEGIN_END		60
-
 
 
 
@@ -23,6 +20,8 @@ CNetToDisneyDlg::CNetToDisneyDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CNetToDisneyDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	m_nTimerId = 0;
+	m_nCurrentPost = 0;
 }
 
 void CNetToDisneyDlg::DoDataExchange(CDataExchange* pDX)
@@ -38,6 +37,7 @@ BEGIN_MESSAGE_MAP(CNetToDisneyDlg, CDialog)
 	ON_BN_CLICKED(IDCANCEL, &CNetToDisneyDlg::OnBnClickedCancel)
 	ON_BN_CLICKED(IDOK, &CNetToDisneyDlg::OnBnClickedOk)
 	ON_BN_CLICKED(IDB_BEGIN, &CNetToDisneyDlg::OnBnClickedBegin)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -107,6 +107,7 @@ void CNetToDisneyDlg::OnBnClickedCancel()
 
 void CNetToDisneyDlg::OnBnClickedOk()
 {
+	OnBnClickedBegin();
 }
 
 BEGIN_EVENTSINK_MAP(CNetToDisneyDlg, CDialog)
@@ -121,8 +122,8 @@ void CNetToDisneyDlg::FileDownloadExplorer1(BOOL ActiveDocument, BOOL* Cancel)
 
 void CNetToDisneyDlg::OnBnClickedBegin()
 {
-	m_WebCtrl.Navigate(L"http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1497754&swid=F0690C88-573B-470F-99DE-895F8EFDBC79&rand=3919", NULL, NULL, NULL, NULL);
-
+	BeginTimer();
+	this->GetDlgItem(IDB_BEGIN)->EnableWindow(FALSE);
 }
 
 const WCHAR* CNetToDisneyDlg::PathHelperW(LPCWSTR pszFileName)
@@ -168,15 +169,58 @@ int CNetToDisneyDlg::GetTime()
 	srand((unsigned int)time(0));
 	while(true)
 	{
-		nTime = rand() % 40;
-		if (nTime >= 20)
+		nTime = rand() % 10;//40;
+		if (nTime >= 5)//20)
 			break;
 	}
 
-	return nTime;
+	CString strData = L"";
+	strData.Format(L"下一票的投票时间：%d 秒", nTime);
+	this->SetDlgItemText(IDE_INFO, strData);
+	return (nTime * 1000);
 }
 
-int CNetToDisneyDlg::BeginTimer()
+void CNetToDisneyDlg::BeginTimer()
 {
+	m_nTimerId = 1;
+	this->SetTimer(m_nTimerId, GetTime(), NULL);
+}
 
+void CNetToDisneyDlg::OnTimer(UINT_PTR nIDEvent)
+{
+	if (m_nTimerId == nIDEvent)
+	{
+		if (m_nCurrentPost < m_UrlList.GetSize())
+		{
+			CString strData = m_UrlList[m_nCurrentPost++];
+
+			CString strUrl = L"";
+
+			srand((unsigned int)time(0));
+			int nR = rand() % 8000;
+
+			strUrl.Format(L"%s%d", strData, nR);
+			m_WebCtrl.Navigate(strUrl, NULL, NULL, NULL, NULL);
+
+			strData.Format(L"%d", m_nCurrentPost);
+			this->SetDlgItemText(IDE_TOULEDE, strData);
+		}
+
+		this->KillTimer(m_nTimerId);
+		m_nTimerId = 0;
+
+		if (m_nCurrentPost < m_UrlList.GetSize())
+		{
+			BeginTimer();
+		}
+		else
+		{
+			CString strData = L"";
+			strData.Format(L"投票完毕，一共投了 %d 票", m_nCurrentPost);
+			this->SetDlgItemText(IDE_TOULEDE, strData);
+			this->SetDlgItemText(IDE_INFO, strData);
+		}
+	}
+
+	CDialog::OnTimer(nIDEvent);
 }
