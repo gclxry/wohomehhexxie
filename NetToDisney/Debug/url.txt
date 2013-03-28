@@ -1,0 +1,9 @@
+
+
+
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1497754&swid=F0690C88-573B-470F-99DE-895F8EFDBC79&rand=618
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497754&actId=1&optionItem=1&voteItem=1497754&user=1497907&swid=0F43E2AC-0262-4564-83A9-01C640EF9DFF&rand=4715
+
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1497754&swid=F0690C88-573B-470F-99DE-895F8EFDBC79&rand=3919
+http://www.dol.cn/concern/vote/cast.w?beVotedUid=vote1497868&actId=1&optionItem=1&voteItem=1497868&user=1497907&swid=0F43E2AC-0262-4564-83A9-01C640EF9DFF&rand=3161
+
