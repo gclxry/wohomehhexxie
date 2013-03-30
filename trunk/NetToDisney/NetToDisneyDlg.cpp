@@ -122,6 +122,8 @@ void CNetToDisneyDlg::FileDownloadExplorer1(BOOL ActiveDocument, BOOL* Cancel)
 
 void CNetToDisneyDlg::OnBnClickedBegin()
 {
+	srand((unsigned int)time(0));
+
 	BeginTimer();
 	this->GetDlgItem(IDB_BEGIN)->EnableWindow(FALSE);
 }
@@ -166,11 +168,10 @@ bool CNetToDisneyDlg::InitUrl()
 int CNetToDisneyDlg::GetTime()
 {
 	int nTime = 30;
-	srand((unsigned int)time(0));
 	while(true)
 	{
-		nTime = rand() % 10;//40;
-		if (nTime >= 5)//20)
+		nTime = rand() % 33;
+		if (nTime >= 17)
 			break;
 	}
 
@@ -196,10 +197,11 @@ void CNetToDisneyDlg::OnTimer(UINT_PTR nIDEvent)
 
 			CString strUrl = L"";
 
-			srand((unsigned int)time(0));
 			int nR = rand() % 8000;
 
 			strUrl.Format(L"%s%d", strData, nR);
+			this->SetDlgItemText(IDE_URL, strUrl);
+
 			m_WebCtrl.Navigate(strUrl, NULL, NULL, NULL, NULL);
 
 			strData.Format(L"%d", m_nCurrentPost);
@@ -216,9 +218,11 @@ void CNetToDisneyDlg::OnTimer(UINT_PTR nIDEvent)
 		else
 		{
 			CString strData = L"";
-			strData.Format(L"投票完毕，一共投了 %d 票", m_nCurrentPost);
+			strData.Format(L"投票完毕，一共投了 %d 票，请明天再来！", m_nCurrentPost);
 			this->SetDlgItemText(IDE_TOULEDE, strData);
 			this->SetDlgItemText(IDE_INFO, strData);
+
+			this->MessageBox(strData);
 		}
 	}
 
