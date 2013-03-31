@@ -1,5 +1,5 @@
-#ifndef __HELLOWORLD_SCENE_H__
-#define __HELLOWORLD_SCENE_H__
+#ifndef __GAME_SCREEN_H__
+#define __GAME_SCREEN_H__
 
 #include "cocos2d.h"
 
@@ -11,7 +11,7 @@
 
 using namespace cocos2d;
 
-class HelloWorld : public CCLayer
+class CGameScreen : public CCLayer
 {
 public:
     // Here's a difference. Method 'init' in cocos2d-x returns bool, instead of returning 'id' in cocos2d-iphone
@@ -24,7 +24,7 @@ public:
     void menuCloseCallback(CCObject* pSender);
 
     // implement the "static node()" method manually
-    CREATE_FUNC(HelloWorld);
+    CREATE_FUNC(CGameScreen);
 
 	// 接受到返回键
     virtual void keyBackClicked(void);
@@ -38,4 +38,4 @@ public:
 	void ReadMapInfo(void);
 };
 
-#endif  // __HELLOWORLD_SCENE_H__
+#endif  // __GAME_SCREEN_H__
