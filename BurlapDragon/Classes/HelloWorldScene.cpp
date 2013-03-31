@@ -3,7 +3,7 @@
 
 using namespace cocos2d;
 
-CCScene* HelloWorld::scene()
+CCScene* CGameScreen::scene()
 {
     CCScene * scene = NULL;
     do 
@@ -13,7 +13,7 @@ CCScene* HelloWorld::scene()
         CC_BREAK_IF(! scene);
 
         // 'layer' is an autorelease object
-        HelloWorld *layer = HelloWorld::create();
+        CGameScreen *layer = CGameScreen::create();
         CC_BREAK_IF(! layer);
 
         // add layer as a child to scene
@@ -25,7 +25,7 @@ CCScene* HelloWorld::scene()
 }
 
 // on "init" you need to initialize your instance
-bool HelloWorld::init()
+bool CGameScreen::init()
 {
     bool bRet = false;
     do 
@@ -53,7 +53,7 @@ bool HelloWorld::init()
             "CloseNormal.png",
             "CloseSelected.png",
             this,
-            menu_selector(HelloWorld::menuCloseCallback));
+            menu_selector(CGameScreen::menuCloseCallback));
         CC_BREAK_IF(! pCloseItem);
 
         // Place the menu item bottom-right conner.
@@ -64,7 +64,7 @@ bool HelloWorld::init()
         pMenu->setPosition(CCPointZero);
         CC_BREAK_IF(! pMenu);
 
-        // Add the menu to HelloWorld layer as a child layer.
+        // Add the menu to CGameScreen layer as a child layer.
         this->addChild(pMenu, 1);
 
         // 2. Add a label shows "Hello World".
@@ -77,7 +77,7 @@ bool HelloWorld::init()
         CCSize size = CCDirector::sharedDirector()->getWinSize();
         pLabel->setPosition(ccp(size.width / 2, size.height - 50));
 
-        // Add the label to HelloWorld layer as a child layer.
+        // Add the label to CGameScreen layer as a child layer.
         this->addChild(pLabel, 1);
 
 		// 取得屏幕大小
@@ -88,7 +88,7 @@ bool HelloWorld::init()
         CC_BREAK_IF(!pSprite);
         // Place the sprite on the center of the screen
         pSprite->setPosition(ccp(size.width/2, size.height/2));
-        // Add the sprite to HelloWorld layer as a child layer.
+        // Add the sprite to CGameScreen layer as a child layer.
         this->addChild(pSprite, 1);
 
 		CCSprite *pPlayer = CCSprite::create("fairy.png");
@@ -106,27 +106,27 @@ bool HelloWorld::init()
     return bRet;
 }
 
-void HelloWorld::menuCloseCallback(CCObject* pSender)
+void CGameScreen::menuCloseCallback(CCObject* pSender)
 {
     // "close" menu item clicked
     CCDirector::sharedDirector()->end();
 }
 
 
-bool HelloWorld::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
+bool CGameScreen::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 {
 	return true;
 }
 
-void HelloWorld::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
+void CGameScreen::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
 {
 }
 
-void HelloWorld::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
+void CGameScreen::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 {
 }
 
-void HelloWorld::keyBackClicked(void) 
+void CGameScreen::keyBackClicked(void) 
 {
 	CCLayer::keyBackClicked();
 
@@ -136,12 +136,12 @@ void HelloWorld::keyBackClicked(void)
 	//CCDirector::sharedDirector()->pause();
 }
 
-void HelloWorld::keyMenuClicked(void) 
+void CGameScreen::keyMenuClicked(void) 
 {
 	CCLayer::keyMenuClicked();
 }
 
-void HelloWorld::ReadMapInfo(void) 
+void CGameScreen::ReadMapInfo(void) 
 {
 	CCFileUtils *pPathUtil = CCFileUtils::sharedFileUtils();
 	if (pPathUtil == NULL)
@@ -151,6 +151,10 @@ void HelloWorld::ReadMapInfo(void)
 	if (pcszPath == NULL || strlen(pcszPath) <= 0)
 		return;
 	
+	//NSLog("CGameScreen::ReadMapInfo xmlPath=%s", pcszPath);
+	CCLog("CGameScreen::ReadMapInfo xmlPath=%s", pcszPath);
+
+
 	CCSAXParser saxXml;
 	if (!saxXml.parse(pcszPath))
 		return;

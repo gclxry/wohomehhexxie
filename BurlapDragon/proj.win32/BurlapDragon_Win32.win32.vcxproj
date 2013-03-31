@@ -40,13 +40,13 @@
     <OutDir>$(SolutionDir)$(Configuration).win32\</OutDir>
     <IntDir>$(Configuration).win32\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\cocos2dx\platform\win32;D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\cocos2dx\include;D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\cocos2dx;D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\CocosDenshion\include;D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\external\chipmunk\include\chipmunk;D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\cocos2dx\kazmath\include;D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\external;D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\cocos2dx\platform\third_party\win32\opengl_sdk_v3.0\glew_v1.5.1\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(COCOS2DX_ROOT)\cocos2dx\platform\win32;$(COCOS2DX_ROOT)\cocos2dx\include;$(COCOS2DX_ROOT)\cocos2dx;$(COCOS2DX_ROOT)\CocosDenshion\include;$(COCOS2DX_ROOT)\external\chipmunk\include\chipmunk;$(COCOS2DX_ROOT)\cocos2dx\kazmath\include;$(COCOS2DX_ROOT)\external;$(COCOS2DX_ROOT)\cocos2dx\platform\third_party\win32\opengl_sdk_v3.0\glew_v1.5.1\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Configuration).win32\</OutDir>
     <IntDir>$(Configuration).win32\</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\cocos2dx\platform\win32;D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\cocos2dx\include;D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\cocos2dx;D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\CocosDenshion\include;D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\external\chipmunk\include\chipmunk;D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\cocos2dx\kazmath\include;D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\external;D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\cocos2dx\platform\third_party\win32\opengl_sdk_v3.0\glew_v1.5.1\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(COCOS2DX_ROOT)\cocos2dx\platform\win32;$(COCOS2DX_ROOT)\cocos2dx\include;$(COCOS2DX_ROOT)\cocos2dx;$(COCOS2DX_ROOT)\CocosDenshion\include;$(COCOS2DX_ROOT)\external\chipmunk\include\chipmunk;$(COCOS2DX_ROOT)\cocos2dx\kazmath\include;$(COCOS2DX_ROOT)\external;$(COCOS2DX_ROOT)\cocos2dx\platform\third_party\win32\opengl_sdk_v3.0\glew_v1.5.1\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -65,7 +65,7 @@
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(OutDir);D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\$(Configuration).win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir);$(COCOS2DX_ROOT)\$(Configuration).win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libcocos2d.lib;opengl32.lib;glew32.lib;libBox2d.lib;libchipmunk.lib;libCocosDenshion.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
@@ -103,7 +103,7 @@ copy ..\Resources .\</Command>
     <Link>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(OutDir);D:\02.WINDOWS\01.MyWork\02.Android\cocos2d-2.1beta3-x-2.1.1\$(Configuration).win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir);$(COCOS2DX_ROOT)\$(Configuration).win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libcocos2d.lib;opengl32.lib;glew32.lib;libBox2d.lib;libchipmunk.lib;libCocosDenshion.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
