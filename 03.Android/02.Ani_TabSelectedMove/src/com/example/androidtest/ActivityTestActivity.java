@@ -3,7 +3,9 @@ package com.example.androidtest;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
+import android.view.View;
 
 public class ActivityTestActivity extends Activity {
 
@@ -20,4 +22,9 @@ public class ActivityTestActivity extends Activity {
         return true;
     }
 
+    public void onGotoBtnClick(View v){
+
+        Intent intent = new Intent(this, AnimationSelectedTab.class);
+        this.startActivity(intent);
+    }
 }
