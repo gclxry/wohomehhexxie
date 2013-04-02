@@ -37,6 +37,22 @@
             </FrameLayout>
         </FrameLayout>
 
+        <FrameLayout
+            android:id="@+id/AST_MoveAniLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="0dp" >
+
+            <ImageView
+                android:id="@+id/AST_MoveImage"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="top|left"
+                android:src="@drawable/ic_launcher" />
+
+        </FrameLayout>
+
         <TabWidget
             android:id="@android:id/tabs"
             android:layout_width="match_parent"
