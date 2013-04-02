@@ -4,14 +4,20 @@ package com.example.androidtest;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import android.view.View;
+
 import com.ani.flyimageview.R;
 
 public class ActivityTestActivity extends Activity {
 
+    private AnimationFlyView mFly = new AnimationFlyView();
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activity_test);
+        
+        mFly.setFlyView(this.findViewById(R.id.FlyImageView));
     }
 
     @Override
@@ -21,4 +27,7 @@ public class ActivityTestActivity extends Activity {
         return true;
     }
 
+    public void onFlyBtnClick(View v){
+        mFly.fly();
+    }
 }
