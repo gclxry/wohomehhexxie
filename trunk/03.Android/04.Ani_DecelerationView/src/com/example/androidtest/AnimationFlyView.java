@@ -4,6 +4,7 @@ package com.example.androidtest;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
 
 public class AnimationFlyView implements Animation.AnimationListener {
@@ -30,20 +31,21 @@ public class AnimationFlyView implements Animation.AnimationListener {
                 Animation.ABSOLUTE, 0,
                 Animation.ABSOLUTE, 220,
                 Animation.ABSOLUTE, 0,
-                Animation.ABSOLUTE, 0);
+                Animation.ABSOLUTE, -280);
         translateAnimationx.setDuration(1000);
+        translateAnimationx.setInterpolator(new DecelerateInterpolator());
         translateAnimationx.setAnimationListener(this);
         
         // Y轴回滚运动
-        translateAnimationy = new TranslateAnimation(
-                Animation.ABSOLUTE, 0,
-                Animation.ABSOLUTE, 0,
-                Animation.ABSOLUTE, 0,
-                Animation.ABSOLUTE, 600);
-        translateAnimationy.setDuration(1000);
-        translateAnimationy.setInterpolator(new AnimationFlyViewInterpolator());
+//        translateAnimationy = new TranslateAnimation(
+//                Animation.ABSOLUTE, 0,
+//                Animation.ABSOLUTE, 0,
+//                Animation.ABSOLUTE, 0,
+//                Animation.ABSOLUTE, 600);
+//        translateAnimationy.setDuration(1000);
+//        translateAnimationy.setInterpolator(new AnimationFlyViewInterpolator());
         animationSet.addAnimation(translateAnimationx);
-        animationSet.addAnimation(translateAnimationy);
+        //animationSet.addAnimation(translateAnimationy);
 
         mFlyView.setAnimation(animationSet);
         animationSet.start();

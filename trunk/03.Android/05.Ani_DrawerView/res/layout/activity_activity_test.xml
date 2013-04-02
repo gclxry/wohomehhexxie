@@ -1,0 +1,38 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/FrameLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActivityTestActivity" >
+
+    <FrameLayout
+        android:id="@+id/BottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FF0000" >
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DownButton" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/TopLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00FF00" >
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="78dp"
+            android:layout_gravity="bottom"
+            android:onClick="onTopButtonClick"
+            android:text="TopButton" />
+
+    </FrameLayout>
+
+</FrameLayout>
