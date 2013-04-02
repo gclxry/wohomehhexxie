@@ -34,7 +34,7 @@ public class AnimationFlyView implements Animation.AnimationListener {
         translateAnimationx.setDuration(1000);
         translateAnimationx.setAnimationListener(this);
         
-        // Y轴回滚运动，600 为抛物线顶点的高度
+        // Y轴回滚运动
         translateAnimationy = new TranslateAnimation(
                 Animation.ABSOLUTE, 0,
                 Animation.ABSOLUTE, 0,
