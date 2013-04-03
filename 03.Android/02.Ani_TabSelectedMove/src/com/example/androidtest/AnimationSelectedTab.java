@@ -54,7 +54,6 @@ public class AnimationSelectedTab extends TabActivity implements OnTabChangeList
         mTabHost.addTab(mTabHost.newTabSpec("Second").setIndicator(tabViewItem2)
                 .setContent(R.id.AST_SecondLayout));
         
-
         mTabHost.addTab(mTabHost.newTabSpec("Third").setIndicator(tabViewItem3)
                 .setContent(R.id.AST_ThirdLayout));
 
