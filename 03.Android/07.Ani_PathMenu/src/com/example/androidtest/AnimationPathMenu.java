@@ -8,7 +8,6 @@ import com.ani.pathmenu.R;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
@@ -21,7 +20,6 @@ import android.view.animation.TranslateAnimation;
 
 public class AnimationPathMenu implements OnClickListener {
 
-    private String TAG = "Animation.PathMenu";
     private View mBaseMenu = null;
     private List<AnimationViewItem> mMenuItemList = new ArrayList<AnimationViewItem>();
     private int mMenuWidth = 120;
@@ -85,6 +83,14 @@ public class AnimationPathMenu implements OnClickListener {
             aniMenuItem.nOffsetX = getItemOffset(true, nNo, nCtns, mMenuWidth);
             aniMenuItem.nOffsetY = -(getItemOffset(false, nNo, nCtns, mMenuWidth));
         }
+        
+        menuItem.setOnClickListener(new OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                // 按下了小菜单
+                beginMenuAnimation(false);
+            }
+        });
 
         mMenuItemList.add(aniMenuItem);
     }
@@ -92,8 +98,7 @@ public class AnimationPathMenu implements OnClickListener {
     @Override
     public void onClick(View v) {
         if (mBaseMenu == v) {
-            mIsOpen = !mIsOpen;
-            beginMenuAnimation(mIsOpen);
+            beginMenuAnimation(!mIsOpen);
         }
     }
 
@@ -126,9 +131,10 @@ public class AnimationPathMenu implements OnClickListener {
     }
 
     private void openAnimation(final AnimationViewItem aniView) {
-        if (aniView == null || aniView.viewObj == null)
+        if (aniView == null || aniView.viewObj == null || aniView.viewObj.getAnimation() != null)
             return;
-        
+
+        mIsOpen = true;
         // 旋转动画
         RotateAnimation rotateAni = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
@@ -171,9 +177,10 @@ public class AnimationPathMenu implements OnClickListener {
     }
 
     private void closeAnimation(final AnimationViewItem aniView) {
-        if (aniView == null || aniView.viewObj == null)
+        if (aniView == null || aniView.viewObj == null || aniView.viewObj.getAnimation() != null)
             return;
-        
+
+        mIsOpen = false;
         // 旋转动画
         RotateAnimation rotateAni = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f);
