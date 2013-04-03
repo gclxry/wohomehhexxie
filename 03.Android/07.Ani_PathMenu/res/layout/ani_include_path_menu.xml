@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true" >
+
+    <ImageView
+        android:id="@+id/PM_MenuItem1"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="bottom|left"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="7dp"
+        android:clickable="true"
+        android:src="@drawable/ani_include_path_menu_selector" />
+
+    <ImageView
+        android:id="@+id/PM_MenuItem2"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="bottom|left"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="7dp"
+        android:clickable="true"
+        android:src="@drawable/ani_include_path_menu_selector" />
+
+    <ImageView
+        android:id="@+id/PM_MenuItem3"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="bottom|left"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="7dp"
+        android:clickable="true"
+        android:src="@drawable/ani_include_path_menu_selector" />
+
+    <ImageView
+        android:id="@+id/PM_MenuItem4"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="bottom|left"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="7dp"
+        android:clickable="true"
+        android:src="@drawable/ani_include_path_menu_selector" />
+
+    <ImageView
+        android:id="@+id/PM_MenuItem5"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="bottom|left"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="7dp"
+        android:clickable="true"
+        android:src="@drawable/ani_include_path_menu_selector" />
+
+    <ImageView
+        android:id="@+id/PM_MenuItem6"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="bottom|left"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="7dp"
+        android:clickable="true"
+        android:src="@drawable/ani_include_path_menu_selector" />
+
+    <ImageView
+        android:id="@+id/PM_BaseMenu"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|left"
+        android:clickable="true"
+        android:src="@drawable/ani_include_path_menu_selector" />
+
+</FrameLayout>
