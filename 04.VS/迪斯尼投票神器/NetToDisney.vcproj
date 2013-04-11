@@ -267,6 +267,14 @@
 				RelativePath=".\res\NetToDisney.rc2"
 				>
 			</File>
+			<File
+				RelativePath=".\res\qianqian.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\ranran.bmp"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
