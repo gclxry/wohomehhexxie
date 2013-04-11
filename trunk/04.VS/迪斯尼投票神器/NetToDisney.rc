@@ -83,7 +83,7 @@ EXSTYLE WS_EX_APPWINDOW
 CAPTION "大阿哥的投票神器！"
 FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    CONTROL         "",IDC_EXPLORER1,"{8856F961-340A-11D0-A96B-00C04FD705A2}",WS_TABSTOP,158,0,297,81
+    CONTROL         "",IDC_EXPLORER1,"{8856F961-340A-11D0-A96B-00C04FD705A2}",WS_TABSTOP,262,0,193,81
     PUSHBUTTON      "开始",IDB_BEGIN,15,66,128,16
     EDITTEXT        IDE_ZONGSHU,49,10,94,17,ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER
     EDITTEXT        IDE_TOULEDE,49,37,94,17,ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER
@@ -91,6 +91,7 @@ BEGIN
     LTEXT           "已投票数：",IDC_STATIC,14,40,34,11,0,WS_EX_RIGHT
     EDITTEXT        IDE_INFO,0,94,454,14,ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDE_URL,0,118,455,36,ES_MULTILINE | ES_READONLY
+    CONTROL         130,IDC_STATIC,"Static",SS_BITMAP,166,0,83,83
 END
 
 
@@ -141,7 +142,7 @@ END
 IDD_NETTODISNEY_DIALOG DLGINIT
 BEGIN
     IDC_EXPLORER1, 0x376, 160, 0
-0x0000, 0x0000, 0x004c, 0x0000, 0x35be, 0x0000, 0x0ead, 0x0000, 0x0000, 
+0x0000, 0x0000, 0x004c, 0x0000, 0x22ef, 0x0000, 0x0ead, 0x0000, 0x0000, 
 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 
 0x0000, 0x0000, 0x004c, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0001, 
 0x0000, 0xd0e0, 0x0057, 0x3573, 0x11cf, 0x69ae, 0x0008, 0x2e2b, 0x6212, 
@@ -170,6 +171,14 @@ BEGIN
 END
 #endif    // APSTUDIO_INVOKED
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_QIANQIAN            BITMAP                  "res\\qianqian.bmp"
+IDB_RANRAN              BITMAP                  "res\\ranran.bmp"
 #endif    // Chinese (P.R.C.) resources
 /////////////////////////////////////////////////////////////////////////////
 
