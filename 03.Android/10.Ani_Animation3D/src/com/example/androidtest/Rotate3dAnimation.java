@@ -17,6 +17,8 @@ public class Rotate3dAnimation extends Animation {
     private final float mDepthZ;
     // 是否需要扭曲
     private final boolean mReverse;
+    // 是否围绕着Y轴转
+    private final boolean mRotateY;
     // 摄像头
     private Camera mCamera = null;
 
@@ -25,14 +27,16 @@ public class Rotate3dAnimation extends Animation {
     // centerX、centerY：旋转的中心点
     // depthZ：旋转的Z轴的深度，这个可以营造出围绕旋转中心远近的效果
     // reverse：是否需要扭曲
+    // rotateY：是否围绕着Y轴转，true：围绕着Y轴转（centerX参数将失效）；false：围绕着X轴转（centerY参数将失效）
     public Rotate3dAnimation(float fromDegrees, float toDegrees, float centerX,
-            float centerY, float depthZ, boolean reverse) {
+            float centerY, float depthZ, boolean reverse, boolean rotateY) {
         mFromDegrees = fromDegrees;
         mToDegrees = toDegrees;
         mCenterX = centerX;
         mCenterY = centerY;
         mDepthZ = depthZ;
         mReverse = reverse;
+        mRotateY = rotateY;
     }
 
     @Override
@@ -55,12 +59,20 @@ public class Rotate3dAnimation extends Animation {
         final Matrix matrix = trans.getMatrix();
         camera.save();
         
+        // TBD：扭曲，还没搞懂这个扭曲是干什么的，先放着
         if (mReverse) {
             camera.translate(0.0f, 0.0f, mDepthZ * interpolatedTime);
         } else {
             camera.translate(0.0f, 0.0f, mDepthZ * (1.0f - interpolatedTime));
         }
-        camera.rotateY(degrees);
+        
+        // 要修改成不同角度的旋转，需要修改这个地方，下面这个是水平旋转或者垂直旋转        
+        // 看是围绕着哪个轴转
+        if (mRotateY)
+            camera.rotateX(degrees);
+        else
+            camera.rotateY(degrees);
+        
         // 取得变换后的矩阵
         camera.getMatrix(matrix);
         camera.restore();

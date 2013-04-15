@@ -34,7 +34,7 @@ public class ActivityTestActivity extends Activity {
         if (mBtn == null)
             return;
 
-        applyRotation(0, 180);
+        applyRotation(0.0f, 180.0f);
     }
 
     private void applyRotation(float start, float end) {
@@ -42,7 +42,7 @@ public class ActivityTestActivity extends Activity {
         final float centerX = mBtn.getWidth() / 2.0f;
         final float centerY = mBtn.getHeight() / 2.0f;
         final Rotate3dAnimation rotation = new Rotate3dAnimation(start, end,
-                centerX, centerY, 0.0f, false);
+                centerX, centerY, 0.0f, false, false);
         
         rotation.setDuration(500);
         rotation.setFillAfter(true);
@@ -76,8 +76,8 @@ public class ActivityTestActivity extends Activity {
             final float centerY = mBtn.getHeight() / 2.0f;
             Rotate3dAnimation rotation = null;
             mBtn.requestFocus();
-            rotation = new Rotate3dAnimation(180, 0, centerX, centerY, 0.0f,
-                    false);
+            rotation = new Rotate3dAnimation(180.0f, 0.0f, centerX, centerY, 0.0f,
+                    false, false);
             rotation.setDuration(500);
             rotation.setFillAfter(true);
             rotation.setInterpolator(new DecelerateInterpolator());
