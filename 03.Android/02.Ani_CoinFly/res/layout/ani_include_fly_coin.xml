@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/FC_BaseLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <View
+        android:id="@+id/FC_Coin1"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_gravity="top|left"
+        android:background="@drawable/coin" />
+
+    <View
+        android:id="@+id/FC_Coin2"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_gravity="top|left"
+        android:background="@drawable/coin" />
+
+    <View
+        android:id="@+id/FC_Coin3"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_gravity="top|left"
+        android:background="@drawable/coin" />
+
+    <View
+        android:id="@+id/FC_Coin4"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_gravity="top|left"
+        android:background="@drawable/coin" />
+
+    <View
+        android:id="@+id/FC_Coin5"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_gravity="top|left"
+        android:background="@drawable/coin" />
+
+    <View
+        android:id="@+id/FC_Coin6"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_gravity="top|left"
+        android:background="@drawable/coin" />
+
+    <View
+        android:id="@+id/FC_Coin7"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_gravity="top|left"
+        android:background="@drawable/coin" />
+    
+    <View
+        android:id="@+id/FC_Coin8"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_gravity="top|left"
+        android:background="@drawable/coin" />
+    
+</FrameLayout>
