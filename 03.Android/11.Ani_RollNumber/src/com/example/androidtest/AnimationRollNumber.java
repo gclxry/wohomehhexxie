@@ -19,8 +19,8 @@ public class AnimationRollNumber {
     // 显示的数字的位数
     private final int NUMBER_COUNTS = 6;
     // 个位数动画时间
-    private final int ROLL_TIME = 1000;
-    private final int ROLL_TIME_STEP = 200;
+    private final int ROLL_TIME = 600;
+    private final int ROLL_TIME_STEP = 0;
     // 索引
     private final int OFFSET_G = 0;
     private final int OFFSET_S = 1;
