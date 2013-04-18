@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RN_BaseLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <FrameLayout
+        android:id="@+id/RN_MidLayout"
+        android:layout_width="72dp"
+        android:layout_height="12dp"
+        android:layout_gravity="center" >
+
+        <View
+            android:id="@+id/RN_G_2"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="12dp" />
+
+        <View
+            android:id="@+id/RN_G_1"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="60dp" />
+
+        <View
+            android:id="@+id/RN_S_2"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="48dp"
+            android:layout_marginTop="12dp" />
+
+        <View
+            android:id="@+id/RN_S_1"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="48dp" />
+
+        <View
+            android:id="@+id/RN_B_2"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="12dp" />
+
+        <View
+            android:id="@+id/RN_B_1"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="36dp" />
+
+        <View
+            android:id="@+id/RN_Q_2"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="12dp" />
+
+        <View
+            android:id="@+id/RN_Q_1"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="24dp" />
+
+        <View
+            android:id="@+id/RN_W_2"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="12dp" />
+
+        <View
+            android:id="@+id/RN_W_1"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="top|left"
+            android:layout_marginLeft="12dp" />
+
+        <View
+            android:id="@+id/RN_SW_2"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="top|left"
+            android:layout_marginTop="12dp" />
+
+        <View
+            android:id="@+id/RN_SW_1"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="top|left" />
+
+    </FrameLayout>
+
+</FrameLayout>
