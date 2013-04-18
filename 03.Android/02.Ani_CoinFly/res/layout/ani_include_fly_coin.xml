@@ -60,4 +60,18 @@
         android:layout_gravity="top|left"
         android:background="@drawable/coin" />
     
+    <View
+        android:id="@+id/FC_Coin9"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_gravity="top|left"
+        android:background="@drawable/coin" />
+    
+    <View
+        android:id="@+id/FC_Coin10"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_gravity="top|left"
+        android:background="@drawable/coin" />
+    
 </FrameLayout>
