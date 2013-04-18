@@ -7,6 +7,14 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
 public class Rotate3dAnimation extends Animation {
+    // 围绕着X轴转
+    public final static int ROTATE_X = 1;
+    // 围绕着Y轴转
+    public final static int ROTATE_Y = 2;
+    // 围绕着XY轴同时转
+    public final static int ROTATE_X_Y = 3;
+    private int mRotate = ROTATE_X;
+    
     // 开始角度
     private final float mFromDegrees;
     // 结束角度
@@ -17,8 +25,6 @@ public class Rotate3dAnimation extends Animation {
     private final float mDepthZ;
     // 是否需要扭曲
     private final boolean mReverse;
-    // 是否围绕着Y轴转
-    private final boolean mRotateY;
     // 摄像头
     private Camera mCamera = null;
 
@@ -27,16 +33,17 @@ public class Rotate3dAnimation extends Animation {
     // centerX、centerY：旋转的中心点
     // depthZ：旋转的Z轴的深度，这个可以营造出围绕旋转中心远近的效果
     // reverse：是否需要扭曲
-    // rotateY：是否围绕着Y轴转，true：围绕着Y轴转（centerX参数将失效）；false：围绕着X轴转（centerY参数将失效）
+    // nRotate：围绕转轴方向，ROTATE_Y：围绕着Y轴转（centerX参数将失效）；ROTATE_X：围绕着X轴转（centerY参数将失效）
+    // ROTATE_X_Y：同时围绕x、y轴转
     public Rotate3dAnimation(float fromDegrees, float toDegrees, float centerX,
-            float centerY, float depthZ, boolean reverse, boolean rotateY) {
+            float centerY, float depthZ, boolean reverse, int nRotate) {
         mFromDegrees = fromDegrees;
         mToDegrees = toDegrees;
         mCenterX = centerX;
         mCenterY = centerY;
         mDepthZ = depthZ;
         mReverse = reverse;
-        mRotateY = rotateY;
+        mRotate = nRotate;
     }
 
     @Override
@@ -68,10 +75,14 @@ public class Rotate3dAnimation extends Animation {
         
         // 要修改成不同角度的旋转，需要修改这个地方，下面这个是水平旋转或者垂直旋转        
         // 看是围绕着哪个轴转
-        if (mRotateY)
-            camera.rotateX(degrees);
-        else
+        if (mRotate == ROTATE_X) {
             camera.rotateY(degrees);
+        } else if (mRotate == ROTATE_Y) {
+            camera.rotateX(degrees);
+        } else {
+            camera.rotateX(degrees);
+            camera.rotateY(degrees);
+        }
         
         // 取得变换后的矩阵
         camera.getMatrix(matrix);
