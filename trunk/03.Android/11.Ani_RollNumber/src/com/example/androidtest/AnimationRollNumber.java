@@ -5,22 +5,21 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
+import android.graphics.Rect;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.TranslateAnimation;
 import android.view.animation.Animation.AnimationListener;
+import android.view.animation.TranslateAnimation;
 
 public class AnimationRollNumber {
 
-    public final static int CONTINUE_ANIMATION = 101;
     // 显示的数字的位数
     private final int NUMBER_COUNTS = 6;
+    private final int MOVE_VIEW_COUNTS = 2;
+    // 数字高度
+    private final int NUMBER_HEIGHT = 12;
     // 个位数动画时间
-    private final int ROLL_TIME = 600;
-    private final int ROLL_TIME_STEP = 0;
+    private final int ROLL_TIME = 1000;
     // 索引
     private final int OFFSET_G = 0;
     private final int OFFSET_S = 1;
@@ -30,32 +29,34 @@ public class AnimationRollNumber {
     private final int OFFSET_SW = 5;
     // 当前显示的数字
     private int mCurNum = 0;
-    // 当前是否为增加动画
-    private boolean mbUpAni = true;
     // 动画数字列表
     private int mAniNumList[] = new int[NUMBER_COUNTS];
+    // 10个数字的Rect的位置，位于图片中的
+    private Rect[] mNumRctInImg = new Rect[10];
 
     private Context mContext = null;
-    private Handler mHandler = null;
 
-    // 存储0-9图片的十张图的资源id
-    private int mNumImgResIdList[] = new int[10];
-    private ArrayList<NumberView> mViewList1 = new ArrayList<NumberView>();
-    private ArrayList<NumberView> mViewList2 = new ArrayList<NumberView>();
+    // 所有数字的列表信息
+    private ArrayList<OneNumberList> mAllNumList = new ArrayList<OneNumberList>();
+
+    // 数字中的一位数字信息
+    public class OneNumberList {
+        // 最终要显示的数字
+        public int nDstNum = 0;
+        // 从哪个数字开始滚动
+        public int nFromNum = 0;
+        // 滚动一个数字的动画时间
+        public int nAniTime = 0;
+        public int nLastShowViewIndex = 0;
+        public NumberView[] vList = new NumberView[MOVE_VIEW_COUNTS];
+    }
 
     public class NumberView {
+        public Rect fromRct = new Rect(0, 0, 0, 0);
+        public Rect dstRct = new Rect(0, 0, 0, 0);
         public View numView = null;
-        public int nCurNum = 0;
-        public int nLoopCtns = 0;
         public int nAniTime = 0;
-        public int nIndex = 0;
         public boolean bAniEnd = true;
-        public NumberView braView = null;
-        // 是否为上升动画
-        public boolean bIsUpAni = true;
-        // 是否为辅助动画View
-        public boolean bHelpView = false;
-        // 位置
 
         public void setViewImage(int nResId) {
             if (numView == null)
@@ -64,99 +65,92 @@ public class AnimationRollNumber {
         }
     }
 
-    public AnimationRollNumber(Context context, Handler handler) {
+    public AnimationRollNumber(Context context) {
         mContext = context;
-        mHandler = handler;
-
-        mNumImgResIdList[0] = R.drawable.num_0;
-        mNumImgResIdList[1] = R.drawable.num_1;
-        mNumImgResIdList[2] = R.drawable.num_2;
-        mNumImgResIdList[3] = R.drawable.num_3;
-        mNumImgResIdList[4] = R.drawable.num_4;
-        mNumImgResIdList[5] = R.drawable.num_5;
-        mNumImgResIdList[6] = R.drawable.num_6;
-        mNumImgResIdList[7] = R.drawable.num_7;
-        mNumImgResIdList[8] = R.drawable.num_8;
-        mNumImgResIdList[9] = R.drawable.num_9;
-
-        if (mContext != null) {
-            Activity acti = (Activity) mContext;
-            if (acti != null) {
-                View v1_1 = acti.findViewById(R.id.RN_G_1);
-                View v1_2 = acti.findViewById(R.id.RN_S_1);
-                View v1_3 = acti.findViewById(R.id.RN_B_1);
-                View v1_4 = acti.findViewById(R.id.RN_Q_1);
-                View v1_5 = acti.findViewById(R.id.RN_W_1);
-                View v1_6 = acti.findViewById(R.id.RN_SW_1);
-
-                View v2_1 = acti.findViewById(R.id.RN_G_2);
-                View v2_2 = acti.findViewById(R.id.RN_S_2);
-                View v2_3 = acti.findViewById(R.id.RN_B_2);
-                View v2_4 = acti.findViewById(R.id.RN_Q_2);
-                View v2_5 = acti.findViewById(R.id.RN_W_2);
-                View v2_6 = acti.findViewById(R.id.RN_SW_2);
-
-                appendView(v1_1, v2_1, OFFSET_G);
-                appendView(v1_2, v2_2, OFFSET_S);
-                appendView(v1_3, v2_3, OFFSET_B);
-                appendView(v1_4, v2_4, OFFSET_Q);
-                appendView(v1_5, v2_5, OFFSET_W);
-                appendView(v1_6, v2_6, OFFSET_SW);
-            }
-        }
     }
 
-    private void appendView(View v1, View v2, int nIndex) {
-        if (v1 == null || v2 == null)
+    public void initAnimation() {
+        if (mContext == null || mAllNumList == null)
+            return;
+
+        Activity acti = (Activity) mContext;
+        if (acti == null)
+            return;
+
+        View v1_1 = acti.findViewById(R.id.RN_G_1);
+        View v1_2 = acti.findViewById(R.id.RN_S_1);
+        View v1_3 = acti.findViewById(R.id.RN_B_1);
+        View v1_4 = acti.findViewById(R.id.RN_Q_1);
+        View v1_5 = acti.findViewById(R.id.RN_W_1);
+        View v1_6 = acti.findViewById(R.id.RN_SW_1);
+
+        View v2_1 = acti.findViewById(R.id.RN_G_2);
+        View v2_2 = acti.findViewById(R.id.RN_S_2);
+        View v2_3 = acti.findViewById(R.id.RN_B_2);
+        View v2_4 = acti.findViewById(R.id.RN_Q_2);
+        View v2_5 = acti.findViewById(R.id.RN_W_2);
+        View v2_6 = acti.findViewById(R.id.RN_SW_2);
+
+        for (int i = 0; i < 10; i++) {
+            Rect rct = new Rect(0, 0, 0, 0);
+            rct.left = 0;
+            rct.right = NUMBER_HEIGHT;
+            rct.top = NUMBER_HEIGHT * i;
+            rct.bottom = rct.top + NUMBER_HEIGHT;
+            mNumRctInImg[i] = rct;
+        }
+
+        for (int i = 0; i < NUMBER_COUNTS; i++) {
+            OneNumberList oneView = new OneNumberList();
+            mAllNumList.add(oneView);
+        }
+
+        appendView(mAllNumList.get(OFFSET_G), v1_1, v2_1, OFFSET_G);
+        appendView(mAllNumList.get(OFFSET_S), v1_2, v2_2, OFFSET_S);
+        appendView(mAllNumList.get(OFFSET_B), v1_3, v2_3, OFFSET_B);
+        appendView(mAllNumList.get(OFFSET_Q), v1_4, v2_4, OFFSET_Q);
+        appendView(mAllNumList.get(OFFSET_W), v1_5, v2_5, OFFSET_W);
+        appendView(mAllNumList.get(OFFSET_SW), v1_6, v2_6, OFFSET_SW);
+    }
+
+    private void appendView(OneNumberList oneNumList, View v1, View v2, int nIndex) {
+        if (v1 == null || v2 == null || nIndex < 0 || nIndex > NUMBER_COUNTS)
             return;
 
         NumberView newView1 = new NumberView();
         newView1.numView = v1;
-        newView1.nIndex = nIndex;
-        newView1.bHelpView = false;
-        newView1.nCurNum = 0;
-        newView1.setViewImage(mNumImgResIdList[0]);
 
         NumberView newView2 = new NumberView();
         newView2.numView = v2;
-        newView2.nIndex = nIndex;
-        newView2.bHelpView = true;
-        newView2.nCurNum = 0;
-        newView2.setViewImage(mNumImgResIdList[0]);
 
-        newView1.braView = newView2;
-        newView2.braView = newView1;
-
-        mViewList1.add(newView1);
-        mViewList2.add(newView2);
+        oneNumList.vList[0] = newView1;
+        oneNumList.vList[1] = newView2;
     }
 
     public void clearToZero() {
 
     }
 
-    public void addNumber(int nNum) {
-        if (nNum == 0)
+    // 增加/减少一个数字，可以是正数，也可以是负数
+    public void cutNumber(int nCutNum) {
+        if (nCutNum == 0)
             return;
 
-        mbUpAni = (nNum > 0);
-        mCurNum = mCurNum + nNum;
-        if (mbUpAni)
-            upAnimation(mCurNum);
+        mCurNum = mCurNum + nCutNum;
+        RollToNumber(mCurNum);
     }
 
-    public void setToNumber(int nNum) {
-        int nCutNum = nNum - mCurNum;
-        if (nCutNum == 0 || mHandler == null)
+    // 设置一个数字，可以增加，也可以减少
+    public void setNumber(int nDstNum) {
+        int nCutNum = nDstNum - mCurNum;
+        if (nCutNum == 0)
             return;
 
-        mCurNum = nNum;
-        mbUpAni = nCutNum > 0;
-        if (mbUpAni)
-            upAnimation(mCurNum);
+        mCurNum = nDstNum;
+        RollToNumber(mCurNum);
     }
 
-    private void upAnimation(int nDstNum) {
+    private void RollToNumber(int nDstNum) {
         if (nDstNum <= 0)
             return;
 
@@ -172,62 +166,162 @@ public class AnimationRollNumber {
         nDstNum = nDstNum % 10;
         mAniNumList[OFFSET_G] = nDstNum;
 
-        upAnimationByIndex(mAniNumList[OFFSET_G], OFFSET_G);
-        upAnimationByIndex(mAniNumList[OFFSET_S], OFFSET_S);
-        upAnimationByIndex(mAniNumList[OFFSET_B], OFFSET_B);
-        upAnimationByIndex(mAniNumList[OFFSET_Q], OFFSET_Q);
-        upAnimationByIndex(mAniNumList[OFFSET_W], OFFSET_W);
-        upAnimationByIndex(mAniNumList[OFFSET_SW], OFFSET_SW);
+        int nRet = RollAnimationByIndex(mAniNumList[OFFSET_SW], OFFSET_SW, true);
+        // 是否需要强制滚动，即便数字是一样的
+        boolean bNotNeedRoll = (nRet == 0);
+        nRet = RollAnimationByIndex(mAniNumList[OFFSET_W], OFFSET_W, bNotNeedRoll);
+        bNotNeedRoll = bNotNeedRoll ? (nRet == 0) : false;
+        nRet = RollAnimationByIndex(mAniNumList[OFFSET_Q], OFFSET_Q, bNotNeedRoll);
+        bNotNeedRoll = bNotNeedRoll ? (nRet == 0) : false;
+        nRet = RollAnimationByIndex(mAniNumList[OFFSET_B], OFFSET_B, bNotNeedRoll);
+        bNotNeedRoll = bNotNeedRoll ? (nRet == 0) : false;
+        nRet = RollAnimationByIndex(mAniNumList[OFFSET_S], OFFSET_S, bNotNeedRoll);
+        bNotNeedRoll = bNotNeedRoll ? (nRet == 0) : false;
+        nRet = RollAnimationByIndex(mAniNumList[OFFSET_G], OFFSET_G, bNotNeedRoll);
     }
 
-    private void upAnimationByIndex(int nToNum, int nIndex) {
-        if (nToNum == 0 || nIndex < 0 || nIndex >= NUMBER_COUNTS || mHandler == null)
-            return;
+    private int RollAnimationByIndex(int nDstOneNum, int nIndex, boolean bNotNeedRoll) {
 
-        NumberView viewN1 = mViewList1.get(nIndex);
-        NumberView viewN2 = mViewList2.get(nIndex);
-        if (viewN1 == null || viewN1.numView == null || viewN2 == null || viewN2.numView == null)
-            return;
+        if (nIndex < 0 || nIndex >= NUMBER_COUNTS)
+            return -1;
 
-        if (nToNum == viewN1.nCurNum)
-            return;
+        OneNumberList oneNumList = mAllNumList.get(nIndex);
+        if (oneNumList == null)
+            return -1;
 
-        viewN1.bIsUpAni = true;
-        viewN1.nAniTime = ROLL_TIME + nIndex * ROLL_TIME_STEP;
-        viewN1.nLoopCtns = (nToNum > viewN1.nCurNum) ? (nToNum - viewN1.nCurNum)
-                : (nToNum + 10 - viewN1.nCurNum);
-        viewN1.nAniTime = viewN1.nAniTime / viewN1.nLoopCtns;
+        // 不强制滚动的话，只要数字一样就返回
+        if (bNotNeedRoll) {
+            if (oneNumList.nDstNum == nDstOneNum)
+                return 0;
+        }
 
-        viewN2.bIsUpAni = true;
-        viewN2.nLoopCtns = viewN1.nLoopCtns;
-        viewN2.nAniTime = viewN1.nAniTime;
+        NumberView numView1 = oneNumList.vList[0];
+        NumberView numView2 = oneNumList.vList[1];
 
-        viewN2.nCurNum = viewN1.nCurNum + 1;
-        if (viewN2.nCurNum > 9)
-            viewN2.nCurNum = 0;
-        viewN2.setViewImage(mNumImgResIdList[viewN2.nCurNum]);
+        if (numView1 == null || numView1.numView == null ||
+                numView2 == null || numView2.numView == null)
+            return -1;
 
-        beginUpAnimation(viewN1);
-        beginUpAnimation(viewN2);
+        // 滚动开始数和目标数
+        oneNumList.nFromNum = oneNumList.nDstNum;
+        oneNumList.nDstNum = nDstOneNum;
+
+        // 滚动次数
+        int nLoopCtns = 0;
+        if (oneNumList.nFromNum == oneNumList.nDstNum) {
+            nLoopCtns = 10;
+        } else if (oneNumList.nFromNum > oneNumList.nDstNum) {
+            nLoopCtns = oneNumList.nDstNum + 10 - oneNumList.nFromNum;
+        } else if (oneNumList.nFromNum < oneNumList.nDstNum) {
+            nLoopCtns = oneNumList.nDstNum - oneNumList.nFromNum;
+        }
+
+        // 每次的滚动时间
+        oneNumList.nAniTime = ROLL_TIME;
+        oneNumList.nAniTime = oneNumList.nAniTime / nLoopCtns;
+
+        // 先初始化每个view的位置
+        if (oneNumList.nLastShowViewIndex > 0 && oneNumList.nLastShowViewIndex < MOVE_VIEW_COUNTS) {
+            NumberView cV = oneNumList.vList[0];
+            oneNumList.vList[0] = oneNumList.vList[oneNumList.nLastShowViewIndex];
+            oneNumList.vList[oneNumList.nLastShowViewIndex] = cV;
+        }
+
+        numView1 = oneNumList.vList[0];
+        numView2 = oneNumList.vList[1];
+
+        numView1.fromRct.left = numView1.numView.getLeft();
+        numView1.fromRct.top = numView1.numView.getTop();
+        numView1.fromRct.right = numView1.numView.getRight();
+        numView1.fromRct.bottom = numView1.numView.getBottom();
+
+        numView2.fromRct.left = numView1.numView.getLeft();
+        numView2.fromRct.top = numView1.numView.getBottom();
+        numView2.fromRct.right = numView1.numView.getRight();
+        numView2.fromRct.bottom = numView2.fromRct.top + 10 * NUMBER_HEIGHT;
+
+        numView2.numView.layout(numView2.fromRct.left, numView2.fromRct.top,
+                numView2.fromRct.right, numView2.fromRct.bottom);
+
+        if (oneNumList.nDstNum == oneNumList.nFromNum) {
+            rollViewToTopEnd(numView1, oneNumList.nAniTime);
+            rollViewToTopShow(numView2, oneNumList.nDstNum);
+            oneNumList.nLastShowViewIndex = 1;
+        } else if (oneNumList.nDstNum > oneNumList.nFromNum) {
+            onlyOneViewRoll(numView1, oneNumList.nDstNum);
+            oneNumList.nLastShowViewIndex = 0;
+        } else if (oneNumList.nDstNum < oneNumList.nFromNum) {
+            rollViewToTopEnd(numView1, oneNumList.nAniTime);
+            rollViewToTopShow(numView2, oneNumList.nDstNum);
+            oneNumList.nLastShowViewIndex = 1;
+        }
+
+        return 1;
     }
 
-    private void beginUpAnimation(final NumberView viewN) {
-        if (mHandler == null)
+    // 两个View滚动时，其中一个滚到最顶端
+    private void rollViewToTopShow(final NumberView numView, int nDstNum) {
+        if (numView == null)
+            return;
+
+        numView.nAniTime = ROLL_TIME;
+
+        Rect dstRct = mNumRctInImg[nDstNum];
+        numView.dstRct.left = numView.fromRct.left;
+        numView.dstRct.right = numView.fromRct.right;
+        numView.dstRct.top = -dstRct.top;
+        numView.dstRct.bottom = numView.dstRct.top + 10 * NUMBER_HEIGHT;;
+
+        startAnimation(numView, numView.fromRct, numView.dstRct, false);
+    }
+
+    // 两个View滚动时，其中一个滚到最顶端
+    private void rollViewToTopEnd(final NumberView numView, final int nOneNumAniTime) {
+        if (numView == null)
+            return;
+
+        numView.dstRct.left = numView.fromRct.left;
+        numView.dstRct.right = numView.fromRct.right;
+        numView.dstRct.bottom = 0;
+        numView.dstRct.top = numView.dstRct.bottom - 10 * NUMBER_HEIGHT;
+        
+        numView.nAniTime = ((numView.fromRct.top - numView.dstRct.top) / NUMBER_HEIGHT) * nOneNumAniTime;
+
+        startAnimation(numView, numView.fromRct, numView.dstRct, true);
+    }
+
+    // 就一个单一的View在滚动
+    private void onlyOneViewRoll(final NumberView numView, final int nDstNum) {
+        if (numView == null || nDstNum < 0 || nDstNum >= 10)
+            return;
+
+        numView.nAniTime = ROLL_TIME;
+        
+        Rect dstRct = mNumRctInImg[nDstNum];
+        numView.dstRct.left = numView.fromRct.left;
+        numView.dstRct.right = numView.fromRct.right;
+        numView.dstRct.top = -dstRct.top;
+        numView.dstRct.bottom = numView.dstRct.top + 10 * NUMBER_HEIGHT;
+
+        startAnimation(numView, numView.fromRct, numView.dstRct, false);
+    }
+
+    private void startAnimation(final NumberView numView, final Rect fromRct, final Rect dstRct,
+            final boolean bHide) {
+        if (numView == null)
             return;
 
         // 动画集合
-        AnimationSet aniSet = new AnimationSet(false);
+        TranslateAnimation tranAni = new TranslateAnimation(0, 0, 0, dstRct.bottom - fromRct.bottom);
+        tranAni.setDuration(numView.nAniTime);
 
-        // X轴、Y轴移动动画
-        TranslateAnimation tranAni = new TranslateAnimation(0, 0, 0, -viewN.numView.getHeight());
-        // tranAni.setInterpolator(new AccelerateInterpolator());
-        tranAni.setDuration(viewN.nAniTime);
-        aniSet.addAnimation(tranAni);
+        tranAni.setFillEnabled(true);
+        tranAni.setFillAfter(true);
 
-        aniSet.setAnimationListener(new AnimationListener() {
+        tranAni.setAnimationListener(new AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                viewN.bAniEnd = false;
+                numView.bAniEnd = false;
             }
 
             @Override
@@ -236,42 +330,18 @@ public class AnimationRollNumber {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                if (viewN.bAniEnd)
+                if (numView.bAniEnd)
                     return;
-                
-                viewN.bAniEnd = true;
-                numberAddOne(viewN);
+                numView.bAniEnd = true;
+                numView.numView.clearAnimation();
 
-                if (viewN.nLoopCtns > 0 && !viewN.bHelpView) {
-                    // 先停止辅助View的动画
-                    numberAddOne(viewN.braView);
-                    Message msg = mHandler.obtainMessage(CONTINUE_ANIMATION);
-                    msg.obj = viewN;
-                    mHandler.sendMessage(msg);
-                }
-            }
-
-            private void numberAddOne(NumberView viewN) {
-                if (viewN != null && viewN.numView != null) {
-                    viewN.numView.clearAnimation();
-                    viewN.nCurNum++;
-                    if (viewN.nCurNum > 9)
-                        viewN.nCurNum = 0;
-                    viewN.setViewImage(mNumImgResIdList[viewN.nCurNum]);
-                    viewN.nLoopCtns--;
-                }
+                numView.numView.setVisibility(bHide ? View.INVISIBLE : View.VISIBLE);
+                numView.numView.layout(numView.dstRct.left, numView.dstRct.top,
+                        numView.dstRct.right, numView.dstRct.bottom);
             }
         });
 
         // 开始动画
-        viewN.numView.startAnimation(aniSet);
-    }
-
-    public void continueAnimation(NumberView viewN) {
-        if (viewN == null)
-            return;
-
-        beginUpAnimation(viewN);
-        beginUpAnimation(viewN.braView);
+        numView.numView.startAnimation(tranAni);
     }
 }

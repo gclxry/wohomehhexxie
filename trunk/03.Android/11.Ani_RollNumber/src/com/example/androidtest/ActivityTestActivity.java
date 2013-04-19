@@ -18,9 +18,9 @@ public class ActivityTestActivity extends Activity {
     static class RollMsgHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            if (mRollAni != null && msg.what == AnimationRollNumber.CONTINUE_ANIMATION){
-                mRollAni.continueAnimation((AnimationRollNumber.NumberView)msg.obj);
-            }
+//            if (mRollAni != null && msg.what == AnimationRollNumber.CONTINUE_ANIMATION){
+//                mRollAni.continueAnimation((AnimationRollNumber.NumberView)msg.obj);
+//            }
             super.handleMessage(msg);
         }
     }
@@ -30,7 +30,7 @@ public class ActivityTestActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activity_test);
         
-        mRollAni = new AnimationRollNumber(this, mHandler);
+        mRollAni = new AnimationRollNumber(this);
         mEdit = (EditText) this.findViewById(R.id.editText1);
     }
 
@@ -39,6 +39,14 @@ public class ActivityTestActivity extends Activity {
         getMenuInflater().inflate(R.menu.activity_activity_test, menu);
         return true;
     }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (mRollAni == null || !hasFocus)
+            return;
+        
+        mRollAni.initAnimation();
+    }
     
     public void onClick(View v){
         if (mRollAni == null || mEdit == null)
@@ -46,6 +54,6 @@ public class ActivityTestActivity extends Activity {
 
         String strInt = mEdit.getText().toString();
         int nToInt = Integer.valueOf(strInt);
-        mRollAni.addNumber(nToInt);
+        mRollAni.cutNumber(nToInt);
     }
 }
