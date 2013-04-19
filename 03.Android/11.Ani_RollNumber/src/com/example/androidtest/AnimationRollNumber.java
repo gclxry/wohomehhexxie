@@ -8,6 +8,8 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
 
@@ -56,6 +58,7 @@ public class AnimationRollNumber {
         public Rect dstRct = new Rect(0, 0, 0, 0);
         public View numView = null;
         public int nAniTime = 0;
+        public boolean bEndHide = true;
         public boolean bAniEnd = true;
 
         public void setViewImage(int nResId) {
@@ -119,16 +122,21 @@ public class AnimationRollNumber {
 
         NumberView newView1 = new NumberView();
         newView1.numView = v1;
+        newView1.numView.setVisibility(View.VISIBLE);
+        newView1.bEndHide = false;
 
         NumberView newView2 = new NumberView();
         newView2.numView = v2;
+        newView2.numView.setVisibility(View.INVISIBLE);
+        newView2.bEndHide = true;
 
         oneNumList.vList[0] = newView1;
         oneNumList.vList[1] = newView2;
     }
 
     public void clearToZero() {
-
+        mCurNum = 0;
+        RollToNumber(mCurNum);
     }
 
     // 增加/减少一个数字，可以是正数，也可以是负数
@@ -142,18 +150,43 @@ public class AnimationRollNumber {
 
     // 设置一个数字，可以增加，也可以减少
     public void setNumber(int nDstNum) {
-        int nCutNum = nDstNum - mCurNum;
-        if (nCutNum == 0)
+        if (nDstNum == mCurNum)
             return;
 
         mCurNum = nDstNum;
         RollToNumber(mCurNum);
     }
+    
+    // 停止所有动画，并直接跳到最终状态
+    private void stopAnimation(){
+        for (int i = 0; i < mAllNumList.size(); i++){
+            OneNumberList numItem = mAllNumList.get(i);
+            if (numItem == null)
+                continue;
 
-    private void RollToNumber(int nDstNum) {
-        if (nDstNum <= 0)
+            stopOneAnimation(numItem.vList[0]);
+            stopOneAnimation(numItem.vList[1]);
+        }
+    }
+
+    private void stopOneAnimation(NumberView numView){
+        if (numView == null || numView.numView == null || numView.bAniEnd)
             return;
 
+        numView.bAniEnd = true;
+        numView.numView.clearAnimation();
+
+        numView.numView.setVisibility(numView.bEndHide ? View.INVISIBLE : View.VISIBLE);
+        numView.numView.layout(numView.dstRct.left, numView.dstRct.top,
+                numView.dstRct.right, numView.dstRct.bottom);
+        
+        numView.numView.invalidate();
+    }
+
+    private void RollToNumber(int nDstNum) {
+        // 先停止所有动画
+        stopAnimation();
+        
         mAniNumList[OFFSET_SW] = nDstNum / 100000;
         nDstNum = nDstNum % 100000;
         mAniNumList[OFFSET_W] = nDstNum / 10000;
@@ -259,7 +292,7 @@ public class AnimationRollNumber {
         return 1;
     }
 
-    // 两个View滚动时，其中一个滚到最顶端
+    // 两个View滚动时，其中一个滚到顶端，并且显示
     private void rollViewToTopShow(final NumberView numView, int nDstNum) {
         if (numView == null)
             return;
@@ -272,10 +305,11 @@ public class AnimationRollNumber {
         numView.dstRct.top = -dstRct.top;
         numView.dstRct.bottom = numView.dstRct.top + 10 * NUMBER_HEIGHT;;
 
-        startAnimation(numView, numView.fromRct, numView.dstRct, false);
+        numView.bEndHide = false;
+        startAnimation(numView, numView.fromRct, numView.dstRct);
     }
 
-    // 两个View滚动时，其中一个滚到最顶端
+    // 两个View滚动时，其中一个滚到最顶端，同时隐藏
     private void rollViewToTopEnd(final NumberView numView, final int nOneNumAniTime) {
         if (numView == null)
             return;
@@ -287,7 +321,8 @@ public class AnimationRollNumber {
         
         numView.nAniTime = ((numView.fromRct.top - numView.dstRct.top) / NUMBER_HEIGHT) * nOneNumAniTime;
 
-        startAnimation(numView, numView.fromRct, numView.dstRct, true);
+        numView.bEndHide = true;
+        startAnimation(numView, numView.fromRct, numView.dstRct);
     }
 
     // 就一个单一的View在滚动
@@ -303,20 +338,19 @@ public class AnimationRollNumber {
         numView.dstRct.top = -dstRct.top;
         numView.dstRct.bottom = numView.dstRct.top + 10 * NUMBER_HEIGHT;
 
-        startAnimation(numView, numView.fromRct, numView.dstRct, false);
+        numView.bEndHide = false;
+        startAnimation(numView, numView.fromRct, numView.dstRct);
     }
 
-    private void startAnimation(final NumberView numView, final Rect fromRct, final Rect dstRct,
-            final boolean bHide) {
+    private void startAnimation(final NumberView numView, final Rect fromRct, final Rect dstRct) {
         if (numView == null)
             return;
 
         // 动画集合
         TranslateAnimation tranAni = new TranslateAnimation(0, 0, 0, dstRct.bottom - fromRct.bottom);
+        tranAni.setInterpolator(new DecelerateInterpolator());
+        //tranAni.setInterpolator(new OvershootInterpolator());
         tranAni.setDuration(numView.nAniTime);
-
-        tranAni.setFillEnabled(true);
-        tranAni.setFillAfter(true);
 
         tranAni.setAnimationListener(new AnimationListener() {
             @Override
@@ -330,14 +364,7 @@ public class AnimationRollNumber {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                if (numView.bAniEnd)
-                    return;
-                numView.bAniEnd = true;
-                numView.numView.clearAnimation();
-
-                numView.numView.setVisibility(bHide ? View.INVISIBLE : View.VISIBLE);
-                numView.numView.layout(numView.dstRct.left, numView.dstRct.top,
-                        numView.dstRct.right, numView.dstRct.bottom);
+                stopOneAnimation(numView);
             }
         });
 
