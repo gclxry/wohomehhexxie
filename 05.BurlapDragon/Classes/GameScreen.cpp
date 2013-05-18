@@ -163,8 +163,3 @@ void CGameScreen::ReadMapInfo(void)
 	
 
 }
-
-void CGameScreen::Android360SdkResult(int nMsgId, const char* pszRet)
-{
-	CCLog(pszRet);
-}

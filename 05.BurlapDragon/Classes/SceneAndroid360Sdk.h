@@ -9,11 +9,11 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-class CAndroid360Sdk
+class CSceneAndroid360Sdk
 {
 public:
-	CAndroid360Sdk();
-	~CAndroid360Sdk();
+	CSceneAndroid360Sdk();
+	~CSceneAndroid360Sdk();
 };
 
 #endif  // __ANDROID_360_SDK_H__

@@ -38,8 +38,6 @@ public:
 	
 	void ReadMapInfo(void);
 
-	// 360SDK µÄ»Øµ÷
-	void Android360SdkResult(int nMsgId, const char* pszRet);
 
 private:
 	static CCScene* ms_BaseScene;
