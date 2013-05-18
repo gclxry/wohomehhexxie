@@ -5,7 +5,7 @@
 #include "cocos2d.h"
 USING_NS_CC;
 
-class CGameScreen;
+class CSceneGameEnter;
 
 /**
 @brief    The cocos2d Application.
@@ -38,21 +38,19 @@ public:
 	virtual void applicationWillEnterForeground();
 	
 	/**
-	@brief  
+	@brief  取得游戏入口场景
 	@param  
 	*/
-	CCScene* GetBaseScene();
+	CSceneGameEnter* GetGameEnterScene();
 	
 	/**
 	@brief  
 	@param  
 	*/
-	CGameScreen* GetGameScreen();
-
+	void Android360SdkResult(int nMsgId, const char* pszRet);
 
 private:
-	CCScene* m_pBaseScene;
-	CGameScreen* m_pGameScreen;
+	CSceneGameEnter* m_pSceneGameEnter;
 };
 
 extern AppDelegate* g_pAppDelegate;
