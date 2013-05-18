@@ -167,13 +167,13 @@ bool CNetToDisneyDlg::InitUrl()
 
 int CNetToDisneyDlg::GetTime()
 {
-	int nTime = 30;
-	while(true)
-	{
-		nTime = rand() % 33;
-		if (nTime >= 17)
-			break;
-	}
+	int nTime = 5;
+	//while(true)
+	//{
+	//	nTime = rand() % 33;
+	//	if (nTime >= 17)
+	//		break;
+	//}
 
 	CString strData = L"";
 	strData.Format(L"下一票的投票时间：%d 秒", nTime);

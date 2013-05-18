@@ -1,34 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="uif.burlapdragon"
-      android:versionCode="1"
-      android:versionName="1.0">
+    package="uif.burlapdragon"
+    android:versionCode="1"
+    android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="8"/>
+    <uses-sdk android:minSdkVersion="8" />
+
     <uses-feature android:glEsVersion="0x00020000" />
 
-    <application android:label="@string/app_name"
-        android:icon="@drawable/icon">
+    <!-- 添加360SDK必需要的权限开始。 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- 添加360SDK必需要的权限结束。 -->
 
-        <activity android:name=".playgame.PlayInCocos2DActivity"
-                  android:label="@string/app_name"
-                  android:screenOrientation="landscape"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-                  android:configChanges="orientation">
+    <application
+        android:name="uif.burlapdragon.BurlapDragonApplication"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name" >
+        <activity
+            android:name=".playgame.PlayInCocos2DActivity"
+            android:configChanges="orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
-        <activity android:name=".gameentry.GameEntryActivity" android:theme="@style/AppTheme" android:screenOrientation="landscape">
+        <activity
+            android:name=".gameentry.GameEntryActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".gameentry.helper.GameHelperActivity" android:theme="@style/AppTheme" android:screenOrientation="landscape"></activity>
-        <activity android:name=".gameentry.bigmap.ModeTollGateBigMapSelectActivity" android:theme="@style/AppTheme" android:screenOrientation="landscape"></activity>
-        <activity android:name=".gameentry.smallmap.ModeTollGateSmallMapSelectActivity" android:theme="@style/AppTheme" android:screenOrientation="landscape"></activity>
-        <activity android:name=".gameentry.recommend.RecommendDownListActivity" android:theme="@style/AppTheme" android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".gameentry.helper.GameHelperActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name=".gameentry.bigmap.ModeTollGateBigMapSelectActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name=".gameentry.smallmap.ModeTollGateSmallMapSelectActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name=".gameentry.recommend.RecommendDownListActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name="sdk360.Activity360Friend"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme" >
+        </activity>
+        
+        <!-- 添加360SDK必需的activity：com.qihoo.gamecenter.sdk.buildin.activity.ContainerActivity -->
+        <activity
+            android:name="com.qihoo.gamecenter.sdk.buildin.activity.ContainerActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+        </activity>
+
+        <!-- 添加360SDK必需的meta-data：QIHOO_SDK_APPKEY。此处value为app_key。请在360应用开放平台http://open.app.360.cn/?from=open_dt注册申请app_key和app_secret -->
+        <meta-data
+            android:name="QIHOO_SDK_APPKEY"
+            android:value="8689e00460eabb1e66277eb4232fde6f" >
+        </meta-data>
+
+        <!-- 添加360SDK可选的meta-data：QIHOO_SDK_CHANNEL。此处value由应用方自定义，用于标识应用方的子渠道。 -->
+        <meta-data
+            android:name="QIHOO_SDK_CHANNEL"
+            android:value="UiFeature_Channel" >
+        </meta-data>
     </application>
-    <supports-screens android:largeScreens="true"
-                      android:smallScreens="true"
-                      android:anyDensity="true"
-                      android:normalScreens="true"/>
-</manifest> 
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true" />
+
+</manifest>

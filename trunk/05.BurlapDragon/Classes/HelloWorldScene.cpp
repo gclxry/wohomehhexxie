@@ -155,9 +155,9 @@ void CGameScreen::ReadMapInfo(void)
 	CCLog("CGameScreen::ReadMapInfo xmlPath=%s", pcszPath);
 
 
-	CCSAXParser saxXml;
-	if (!saxXml.parse(pcszPath))
-		return;
+//	CCSAXParser saxXml;
+//	if (!saxXml.parse(pcszPath))
+//		return;
 	
 
 }

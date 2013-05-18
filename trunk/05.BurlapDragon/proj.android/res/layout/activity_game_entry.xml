@@ -54,8 +54,8 @@
                 android:contentDescription="@string/desc"
                 android:src="@android:drawable/btn_star" />
 
-            <ImageButton
-                android:id="@+id/recommendBtn"
+            <Button
+                android:id="@+id/FriendBtn"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignBaseline="@id/sinaWeiboBtn"
@@ -65,10 +65,10 @@
                 android:layout_marginTop="20dp"
                 android:layout_toRightOf="@id/txWeiboBtn"
                 android:contentDescription="@string/desc"
-                android:onClick="onClickButtonRecommend"
-                android:src="@drawable/ic_launcher" />
+                android:onClick="onClickButtonFriend"
+                android:background="@drawable/ic_launcher" />
 
-            <ImageButton
+            <Button
                 android:id="@+id/loginBtn"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -76,9 +76,9 @@
                 android:layout_marginRight="20dp"
                 android:layout_toLeftOf="@+id/rechargeBtn"
                 android:contentDescription="@string/desc"
-                android:src="@drawable/ic_launcher" />
+                android:background="@drawable/ic_launcher" />
 
-            <ImageButton
+            <Button
                 android:id="@+id/rechargeBtn"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -86,7 +86,7 @@
                 android:layout_marginRight="20dp"
                 android:layout_toLeftOf="@id/discussBtn"
                 android:contentDescription="@string/desc"
-                android:src="@drawable/ic_launcher" />
+                android:background="@drawable/ic_launcher" />
 
             <ImageButton
                 android:id="@+id/discussBtn"

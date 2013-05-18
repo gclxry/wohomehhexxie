@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <FrameLayout
+        android:id="@+id/W8PB_Layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <View
+            android:id="@+id/W8PB_V1"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:background="@drawable/wpb_point" />
+
+        <View
+            android:id="@+id/W8PB_V2"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:background="@drawable/wpb_point" />
+
+        <View
+            android:id="@+id/W8PB_V3"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:background="@drawable/wpb_point" />
+
+        <View
+            android:id="@+id/W8PB_V4"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:background="@drawable/wpb_point" />
+
+        <View
+            android:id="@+id/W8PB_V5"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:background="@drawable/wpb_point" />
+    </FrameLayout>
+
+</FrameLayout>
