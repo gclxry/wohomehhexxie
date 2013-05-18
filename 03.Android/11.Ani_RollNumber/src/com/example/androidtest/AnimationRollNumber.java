@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.TranslateAnimation;
 
@@ -18,8 +18,8 @@ public class AnimationRollNumber {
     // 显示的数字的位数
     private final int NUMBER_COUNTS = 6;
     private final int MOVE_VIEW_COUNTS = 2;
-    // 数字高度
-    private final int NUMBER_HEIGHT = 12;
+    // 数字宽度和高度
+    private int mNumSize = 0;
     // 个位数动画时间
     private final int ROLL_TIME = 1000;
     // 索引
@@ -73,7 +73,7 @@ public class AnimationRollNumber {
     }
 
     public void initAnimation() {
-        if (mContext == null || mAllNumList == null)
+        if (mContext == null || mAllNumList == null || mAllNumList.size() > 0)
             return;
 
         Activity acti = (Activity) mContext;
@@ -93,13 +93,17 @@ public class AnimationRollNumber {
         View v2_4 = acti.findViewById(R.id.RN_Q_2);
         View v2_5 = acti.findViewById(R.id.RN_W_2);
         View v2_6 = acti.findViewById(R.id.RN_SW_2);
+        
+        mNumSize = v1_1.getWidth();
+
+        Log.v("TTTTT", "*****=====******** height = ----------------------- " + mNumSize);
 
         for (int i = 0; i < 10; i++) {
             Rect rct = new Rect(0, 0, 0, 0);
             rct.left = 0;
-            rct.right = NUMBER_HEIGHT;
-            rct.top = NUMBER_HEIGHT * i;
-            rct.bottom = rct.top + NUMBER_HEIGHT;
+            rct.right = mNumSize;
+            rct.top = mNumSize * i;
+            rct.bottom = rct.top + mNumSize;
             mNumRctInImg[i] = rct;
         }
 
@@ -134,8 +138,15 @@ public class AnimationRollNumber {
         oneNumList.vList[1] = newView2;
     }
 
+    // 初始化到0
     public void clearToZero() {
         mCurNum = 0;
+        RollToNumber(mCurNum);
+    }
+    
+    // 重新显示数字
+    public void resetNumber() {
+        RollToNumber(0);
         RollToNumber(mCurNum);
     }
 
@@ -156,7 +167,7 @@ public class AnimationRollNumber {
         mCurNum = nDstNum;
         RollToNumber(mCurNum);
     }
-    
+
     // 停止所有动画，并直接跳到最终状态
     private void stopAnimation(){
         for (int i = 0; i < mAllNumList.size(); i++){
@@ -179,6 +190,9 @@ public class AnimationRollNumber {
         numView.numView.setVisibility(numView.bEndHide ? View.INVISIBLE : View.VISIBLE);
         numView.numView.layout(numView.dstRct.left, numView.dstRct.top,
                 numView.dstRct.right, numView.dstRct.bottom);
+
+        Log.v("TTTTT", "width = ----------------------- " + numView.dstRct.width());
+        Log.v("TTTTT", "height = ----------------------- " + numView.dstRct.height());
         
         numView.numView.invalidate();
     }
@@ -268,10 +282,13 @@ public class AnimationRollNumber {
         numView1.fromRct.right = numView1.numView.getRight();
         numView1.fromRct.bottom = numView1.numView.getBottom();
 
+        Log.v("TTTTT", "******kk*ff******** width = ----------------------- " + numView1.fromRct.width());
+        Log.v("TTTTT", "*****kk**ff******** height = ----------------------- " + numView1.fromRct.height());
+
         numView2.fromRct.left = numView1.numView.getLeft();
         numView2.fromRct.top = numView1.numView.getBottom();
         numView2.fromRct.right = numView1.numView.getRight();
-        numView2.fromRct.bottom = numView2.fromRct.top + 10 * NUMBER_HEIGHT;
+        numView2.fromRct.bottom = numView2.fromRct.top + 10 * mNumSize;
 
         numView2.numView.layout(numView2.fromRct.left, numView2.fromRct.top,
                 numView2.fromRct.right, numView2.fromRct.bottom);
@@ -303,7 +320,12 @@ public class AnimationRollNumber {
         numView.dstRct.left = numView.fromRct.left;
         numView.dstRct.right = numView.fromRct.right;
         numView.dstRct.top = -dstRct.top;
-        numView.dstRct.bottom = numView.dstRct.top + 10 * NUMBER_HEIGHT;;
+        numView.dstRct.bottom = numView.dstRct.top + 10 * mNumSize;
+
+        Log.v("TTTTT", "*******dd******** width = ----------------------- " + numView.dstRct.width());
+        Log.v("TTTTT", "*******dd******** height = ----------------------- " + numView.dstRct.height());
+        Log.v("TTTTT", "*******ff******** width = ----------------------- " + numView.fromRct.width());
+        Log.v("TTTTT", "*******ff******** height = ----------------------- " + numView.fromRct.height());
 
         numView.bEndHide = false;
         startAnimation(numView, numView.fromRct, numView.dstRct);
@@ -317,9 +339,9 @@ public class AnimationRollNumber {
         numView.dstRct.left = numView.fromRct.left;
         numView.dstRct.right = numView.fromRct.right;
         numView.dstRct.bottom = 0;
-        numView.dstRct.top = numView.dstRct.bottom - 10 * NUMBER_HEIGHT;
+        numView.dstRct.top = numView.dstRct.bottom - 10 * mNumSize;
         
-        numView.nAniTime = ((numView.fromRct.top - numView.dstRct.top) / NUMBER_HEIGHT) * nOneNumAniTime;
+        numView.nAniTime = ((numView.fromRct.top - numView.dstRct.top) / mNumSize) * nOneNumAniTime;
 
         numView.bEndHide = true;
         startAnimation(numView, numView.fromRct, numView.dstRct);
@@ -336,7 +358,7 @@ public class AnimationRollNumber {
         numView.dstRct.left = numView.fromRct.left;
         numView.dstRct.right = numView.fromRct.right;
         numView.dstRct.top = -dstRct.top;
-        numView.dstRct.bottom = numView.dstRct.top + 10 * NUMBER_HEIGHT;
+        numView.dstRct.bottom = numView.dstRct.top + 10 * mNumSize;
 
         numView.bEndHide = false;
         startAnimation(numView, numView.fromRct, numView.dstRct);

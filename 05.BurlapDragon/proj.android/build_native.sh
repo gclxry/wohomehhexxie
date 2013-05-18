@@ -37,7 +37,7 @@ fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # ... use paths relative to current directory
-COCOS2DX_ROOT="/cygdrive/d/02.WINDOWS/01.MyWork/02.Android/cocos2d-2.1beta3-x-2.1.1"
+COCOS2DX_ROOT="/cygdrive/d/02.WINDOWS/01.MyWork/03.MyDevLib/trunk/cocos2d"
 APP_ROOT="$DIR/.."
 APP_ANDROID_ROOT="$DIR"
 
