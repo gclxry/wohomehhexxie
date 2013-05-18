@@ -1,15 +1,21 @@
+
 #include "cocos2d.h"
-#include "CCEGLView.h"
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "CCEGLView.h"
+#include "GameScreen.h"
 #include "SimpleAudioEngine.h"
 
 using namespace CocosDenshion;
 
-USING_NS_CC;
+AppDelegate* GetApp()
+{
+	return g_pAppDelegate;
+}
 
 AppDelegate::AppDelegate()
 {
+	m_pBaseScene = NULL;
+	m_pGameScreen = NULL;
 }
 
 AppDelegate::~AppDelegate()
@@ -21,6 +27,9 @@ bool AppDelegate::applicationDidFinishLaunching()
 {
     // initialize director
     CCDirector *pDirector = CCDirector::sharedDirector();
+	if (pDirector == NULL)
+		return false;
+
     pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
 
     // turn on display FPS
@@ -30,10 +39,12 @@ bool AppDelegate::applicationDidFinishLaunching()
     pDirector->setAnimationInterval(1.0 / 60);
 
     // create a scene. it's an autorelease object
-    CCScene *pScene = CGameScreen::scene();
+    m_pBaseScene = CGameScreen::scene(&m_pGameScreen);
+	if (m_pBaseScene == NULL)
+		return false;
 
     // run
-    pDirector->runWithScene(pScene);
+    pDirector->runWithScene(m_pBaseScene);
     return true;
 }
 
@@ -51,4 +62,14 @@ void AppDelegate::applicationWillEnterForeground()
     CCDirector::sharedDirector()->startAnimation();
 
     SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+}
+
+CCScene* AppDelegate::GetBaseScene()
+{
+	return m_pBaseScene;
+}
+
+CGameScreen* AppDelegate::GetGameScreen()
+{
+	return m_pGameScreen;
 }

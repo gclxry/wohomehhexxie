@@ -1,9 +1,9 @@
-#include "HelloWorldScene.h"
+#include "GameScreen.h"
 #include "AES.h"
 
-using namespace cocos2d;
 
-CCScene* CGameScreen::scene()
+
+CCScene* CGameScreen::scene(CGameScreen** ppGameScreen)
 {
     CCScene * scene = NULL;
     do 
@@ -15,6 +15,8 @@ CCScene* CGameScreen::scene()
         // 'layer' is an autorelease object
         CGameScreen *layer = CGameScreen::create();
         CC_BREAK_IF(! layer);
+		if (ppGameScreen != NULL)
+			*ppGameScreen = layer;
 
         // add layer as a child to scene
         scene->addChild(layer);
@@ -160,4 +162,9 @@ void CGameScreen::ReadMapInfo(void)
 //		return;
 	
 
+}
+
+void CGameScreen::Android360SdkResult(int nMsgId, const char* pszRet)
+{
+	CCLog(pszRet);
 }
